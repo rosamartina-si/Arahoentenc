@@ -62,15 +62,16 @@
 
     <script>
 	// Mostrar una alerta amb instruccions abans de començar
-    	alert("📢 Benvingut al joc d'ortografia! ✏️\n\n" +
+	alert("📢 Benvingut al joc d'ortografia! ✏️\n\n" +
       "🔹 Escriu cada síl·laba separada amb un guionet.\n" +
       "🔹 Per exemple, si apareix 'rosa', has d'escriure 'ro-sa'.\n\n" +
       "📖 Recorda aquestes regles bàsiques de separació de síl·labes:\n" +
-      "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.\n” +
+      "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.\n" + // <--- CORRECCIÓ
       "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.\n" +
-      "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).\n” +
+      "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).\n" + // <--- CORRECCIÓ
       "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.\n\n" +
       "🎯 Prepara't i molta sort! 🍀");
+
 
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
