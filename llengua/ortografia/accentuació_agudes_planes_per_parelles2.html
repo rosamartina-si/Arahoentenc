@@ -5,403 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercici de Paraules</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            overflow: hidden;
-        }
-        canvas {
-            background-color: #f0f0f0;
-            display: block;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; overflow: hidden; }
+        canvas { background-color: #f0f0f0; display: block; }
         #inputContainer {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%); text-align: center;
         }
-        input {
-            font-size: 18px;
-            padding: 10px;
-            margin: 5px;
-            width: 300px;
-        }
-        button {
-            font-size: 18px;
-            padding: 10px;
-        }
+        input { font-size: 18px; padding: 10px; margin: 5px; width: 300px; }
         #feedback {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-            font-weight: bold;
-            display: none;
-            text-align: center;
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; display: none;
         }
-        #feedback.correct {
-            color: green;
-        }
-        #feedback.incorrect {
-            color: red;
-        }
-        #feedback.tryAgain {
-            color: orange;
-        }
+        .correct { color: green; }
+        .incorrect { color: red; }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div id="inputContainer">
-        <input type="text" id="userInput" placeholder="Escriu la paraula amb guionets">
-        <button onclick="checkAnswer()">Comprovar</button>
-    </div>
-    <div id="feedback"></div>
+<canvas id="gameCanvas"></canvas>
+<div id="inputContainer">
+    <input type="text" id="userInput" placeholder="Escriu cada paraula i prem Enter">
+</div>
+<div id="feedback"></div>
 
-    <script>
-    // Mostrar una alerta amb instruccions abans de començar
+<script>
+
+// El missatge inicial
 alert("📢 Benvingut al joc d'ortografia! ✏️\n\n" +
-      "🔹 Escriu la paraula amb accent quan calgui.\n" +
-      "🔹 Per exemple, si apareix 'examens', has d'escriure 'exàmens'.\n\n" +
+      "🔹 Escriu cada paraula que baixa, amb accent quan calgui.\n" +
+      "🔹 Escriu una paraula i prem Enter, després la següent, fins que hagis escrit totes les paraules que cauen.\n\n" +
       "📖 Recorda aquestes regles bàsiques d'accentuació:\n" +
-      
-      "✅ Accentuem les paraules agudes quan acaben en una d'aquestes 12 terminacions: a, e, i, o, u, as, es, is, os, us, en, in.\n" +
-      "   ✨ **⚠️ Compte amb aquestes parelles:**\n" +
-      "      - **acció** però **accions** (el plural ja no acaba en una d'aquestes 12 terminacions, per tant NO s'accentua!)\n" +
-      "      - **entén** però **entens**\n\n" +
+      "✅ Accentuem les paraules agudes quan acaben en a, e, i, o, u, as, es, is, os, us, en, in.\n" +
+      "   ✨⚠️ Exemple: acció però accions, entén però entens.\n\n" +
+      "✅ Accentuem les paraules planes quan NO acaben en a, e, i, o, u, as, es, is, os, us, en, in.\n" +
+      "   ✨⚠️ Exemple: examen però exàmens, origen però orígens, jugaven però jugàvem i jugàveu.\n\n" +
+      "🎯 Prepara't i molta sort! 🍀");
 
-      "✅ Accentuem les paraules planes quan NO acaben en aquestes 12 terminacions: a, e, i, o, u, as, es, is, os, us, en, in.\n" +
-      "   ✨ **⚠️ Compte amb aquestes parelles:**\n" +
-      "      - **examen** però **exàmens** (el plural ja no acaba en -en, per tant s'accentua!)\n" +
-      "      - **origen** però **orígens**\n" +
-      "      - **jugaven** però **jugàvem** i **\"jugàveu\"**\n\n" +
+// Configuració del canvas
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-      "🎯 Prepara't i molta sort! 🍀"); 
+// Llista completa de grups de paraules
+const allWordGroups = [
+    { words: ["accio", "accions"].sort(() => Math.random() - 0.5), solutions: ["acció", "accions"] },
+    { words: ["examen", "examens"].sort(() => Math.random() - 0.5), solutions: ["examen", "exàmens"] },
+    { words: ["origen", "origens"].sort(() => Math.random() - 0.5), solutions: ["origen", "orígens"] },
+    { words: ["telefon", "telefons"].sort(() => Math.random() - 0.5), solutions: ["telèfon", "telèfons"] },
+    { words: ["menjaven", "menjavem", "menjaveu"].sort(() => Math.random() - 0.5), solutions: ["menjaven", "menjàvem", "menjàveu"] },
+    { words: ["divan", "divans"].sort(() => Math.random() - 0.5), solutions: ["divan", "divans"] },
+    { words: ["relacio", "relacions"].sort(() => Math.random() - 0.5), solutions: ["relació", "relacions"] },
+    { words: ["opinions", "opinio"].sort(() => Math.random() - 0.5), solutions: ["opinions", "opinió"] },
+    { words: ["nacions", "nacio"].sort(() => Math.random() - 0.5), solutions: ["nacions", "nació"] },
+    { words: ["condicions", "condicio"].sort(() => Math.random() - 0.5), solutions: ["condicions", "condició"] },
+    { words: ["depen", "depens"].sort(() => Math.random() - 0.5), solutions: ["depèn", "depens"] },
+    { words: ["enten", "entens"].sort(() => Math.random() - 0.5), solutions: ["entén", "entens"] },
+    { words: ["compren", "comprens"].sort(() => Math.random() - 0.5), solutions: ["comprèn", "comprens"] },
+    { words: ["parlaven", "parlavem", "parlaveu"].sort(() => Math.random() - 0.5), solutions: ["parlaven", "parlàvem", "parlàveu"] },
+    { words: ["jugaven", "jugaveu", "jugavem"].sort(() => Math.random() - 0.5), solutions: ["jugaven", "jugàveu", "jugàvem"] },
+    { words: ["vivien", "viviem", "vivieu"].sort(() => Math.random() - 0.5), solutions: ["vivien", "vivíem", "vivíeu"] },
+    { words: ["llegien", "llegiem", "llegieu"].sort(() => Math.random() - 0.5), solutions: ["llegien", "llegíem", "llegíeu"] },
+    { words: ["tenien", "teniem", "tenieu"].sort(() => Math.random() - 0.5), solutions: ["tenien", "teníem", "teníeu"] },
+    { words: ["venien", "veniem", "venieu"].sort(() => Math.random() - 0.5), solutions: ["venien", "veníem", "veníeu"] },
+    { words: ["feien", "feiem", "feieu"].sort(() => Math.random() - 0.5), solutions: ["feien", "fèiem", "fèieu"] },
+    { words: ["deien", "deiem", "deieu"].sort(() => Math.random() - 0.5), solutions: ["deien", "dèiem", "dèieu"] },
+    { words: ["fessis", "fessim", "fessiu"].sort(() => Math.random() - 0.5), solutions: ["fessis", "féssim", "féssiu"] },
+    { words: ["anessin", "anessim", "anessiu"].sort(() => Math.random() - 0.5), solutions: ["anessin", "anéssim", "anéssiu"] },
+    { words: ["regim", "regims"].sort(() => Math.random() - 0.5), solutions: ["règim", "règims"] },
+    { words: ["malson", "malsons"].sort(() => Math.random() - 0.5), solutions: ["malson", "malsons"] },
+    { words: ["pentagon", "pentagons"].sort(() => Math.random() - 0.5), solutions: ["pentàgon", "pentàgons"] },
+    { words: ["segon", "segons"].sort(() => Math.random() - 0.5), solutions: ["segon", "segons"] },
+    { words: ["caiman", "caimans"].sort(() => Math.random() - 0.5), solutions: ["caiman", "caimans"] },
+    { words: ["organ", "organs"].sort(() => Math.random() - 0.5), solutions: ["òrgan", "òrgans"] },
+    { words: ["platan", "platans"].sort(() => Math.random() - 0.5), solutions: ["plàtan", "plàtans"] },
+    { words: ["tobogan", "tobogans"].sort(() => Math.random() - 0.5), solutions: ["tobogan", "tobogans"] },
+    { words: ["algun", "alguns"].sort(() => Math.random() - 0.5), solutions: ["algun", "alguns"] },
+    { words: ["Berlin"].sort(() => Math.random() - 0.5), solutions: ["Berlín"] },
+    { words: ["havien", "haviem", "havieu"].sort(() => Math.random() - 0.5), solutions: ["havien", "havíem", "havíeu"] }
+];
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+// Barregem tots els grups i només n'agafem 10
+const wordGroups = allWordGroups.sort(() => Math.random() - 0.5).slice(0, 10);
 
-        // Paraules disponibles
-        const allWords = [
-    	    { word: "accio",      solution: "acció" },
-       	    { word: "relacio",    solution: "relació" },
-            { word: "relacions",  solution: "relacions" },
-            { word: "opinio",     solution: "opinió" },
-            { word: "opinions",   solution: "opinions" },
-            { word: "educacio",   solution: "educació" },
-            { word: "educacions", solution: "educacions" },
-            { word: "nacio",      solution: "nació" },
-            { word: "nacions",    solution: "nacions" },
-            { word: "tradicio",   solution: "tradició" },
-            { word: "tradicions", solution: "tradicions" },
-            { word: "definicions", solution: "definicions" },
-            { word: "direccio", solution: "direcció" },
-            { word: "direccions", solution: "direccions" },
-            { word: "produccio", solution: "producció" },
-            { word: "produccions", solution: "produccions" },
-            { word: "col·leccio", solution: "col·lecció" },
-            { word: "col·leccions", solution: "col·leccions" },
-            { word: "decisio", solution: "decisió" },
-            { word: "decisions", solution: "decisions" },
-            { word: "professio", solution: "professió" },
-            { word: "professions", solution: "professions" },
-            { word: "condicio", solution: "condició" },
-            { word: "condicions", solution: "condicions" },
-            { word: "instruccio", solution: "instrucció" },
-            { word: "instruccions", solution: "instruccions" },
-            { word: "informacio", solution: "informació" },
-            { word: "informacions", solution: "informacions" },
-            { word: "conversio", solution: "conversió" },
-            { word: "conversions", solution: "conversions" },
-            { word: "destruccio", solution: "destrucció" },
-            { word: "destruccions", solution: "destruccions" },
-            { word: "investigacio", solution: "investigació" },
-            { word: "investigacions", solution: "investigacions" },
-            { word: "delegacio", solution: "delegació" },
-            { word: "delegacions", solution: "delegacions" },
-            { word: "depen",   solution: "depèn" },    
-            { word: "enten",   solution: "entén" },    
-            { word: "compren", solution: "comprèn" },
-            { word: "depens",   solution: "depens" },    
-            { word: "entens",   solution: "entens" },    
-            { word: "comprens", solution: "comprens" },
-            { word: "examen",      solution: "examen" },
-            { word: "examens",    solution: "examens" },
-            { word: "dormen", solution: "dormen" },  
-            { word: "element", solution: "element" },  
-            { word: "diferent", solution: "diferent" },  
-            { word: "ocurrent", solution: "ocurrent" },  
-            { word: "present", solution: "present" },  
-            { word: "recent", solution: "recent" },  
-            { word: "urgent", solution: "urgent" },  
-            { word: "potent", solution: "potent" },  
-            { word: "consistent", solution: "consistent" },  
-            { word: "influent", solution: "influent" },  
-            { word: "insistent", solution: "insistent" },  
-            { word: "persistent", solution: "persistent" },  
-            { word: "suficient", solution: "suficient" }, 
-            { word: "elements", solution: "elements" },  
-            { word: "diferents", solution: "diferents" },  
-            { word: "ocurrents", solution: "ocurrents" },  
-            { word: "presents", solution: "presents" },  
-            { word: "recents", solution: "recents" },  
-            { word: "urgents", solution: "urgents" },  
-            { word: "potent", solution: "potent" },  
-            { word: "consistent", solution: "consistent" },  
-            { word: "influent", solution: "influent" },  
-            { word: "insistent", solution: "insistent" },  
-            { word: "persistent", solution: "persistent" },  
-            { word: "suficient", solution: "suficient" }, 
-            { word: "elements", solution: "elements" },  
-            { word: "diferents", solution: "diferents" },  
-            { word: "ocurrents", solution: "ocurrents" },  
-            { word: "presents", solution: "presents" },  
-            { word: "recents", solution: "recents" },  
-            { word: "urgents", solution: "urgents" },  
-            { word: "potents", solution: "potents" },  
-            { word: "consistents", solution: "consistents" },  
-            { word: "influents", solution: "influents" },  
-            { word: "insistents", solution: "insistents" },  
-            { word: "persistents", solution: "persistents" },  
-            { word: "suficients", solution: "suficients" }, 
-            { word: "origen", solution: "origen" },
-            { word: "origens", solution: "orígens" },
-            { word: "arriben", solution: "arriben" },
-            { word: "menjaven", solution: "menjaven" }, 
-            { word: "menjavem", solution: "menjàvem" }, 
-            { word: "menjaveu", solution: "menjàveu" }, 
-            { word: "parlaven", solution: "parlaven" },
-            { word: "parlavem", solution: "parlàvem" },
-            { word: "parlaveu", solution: "parlàveu" },
-            { word: "jugaven", solution: "jugaven" },
-            { word: "jugavem", solution: "jugàvem" },
-            { word: "jugaveu", solution: "jugàveu" },
-            { word: "corrien", solution: "corrien" }, 
-            { word: "corriem", solution: "corríem" }, 
-            { word: "corrieu", solution: "corríeu" }, 
-            { word: "vivien", solution: "vivien" },
-            { word: "viviem", solution: "vivíem" },
-            { word: "vivieu", solution: "vivíeu" },
-            { word: "cantaven", solution: "cantaven" },
-            { word: "cantavem", solution: "cantàvem" },
-            { word: "cantaveu", solution: "cantàveu" },
-            { word: "ballaven", solution: "ballaven" },
-            { word: "ballavem", solution: "ballàvem" },
-            { word: "ballaveu", solution: "ballàveu" },
-            { word: "escrivien", solution: "escrivien" },
-            { word: "escriviem", solution: "escrivíem" },
-            { word: "escrivieu", solution: "escrivíeu" },
-            { word: "llegien", solution: "llegien" },
-            { word: "llegiem", solution: "llegíem" },
-            { word: "llegieu", solution: "llegíeu" },
-            { word: "pintaven", solution: "pintaven" },
-            { word: "pintavem", solution: "pintàvem" },
-            { word: "pintaveu", solution: "pintàveu" },
-            { word: "regaven", solution: "regaven" },
-            { word: "regavem", solution: "regàvem" },
-            { word: "regaveu", solution: "regàveu" },
-            { word: "saltaven", solution: "saltaven" },
-            { word: "saltavem", solution: "saltàvem" },
-            { word: "saltaveu", solution: "saltàveu" },
-            { word: "caminaven", solution: "caminaven" },
-            { word: "caminavem", solution: "caminàvem" },
-            { word: "caminaveu", solution: "caminàveu" },
-            { word: "havien", solution: "havien" },
-            { word: "haviem", solution: "havíem" },
-            { word: "havieu", solution: "havíeu" },
-            { word: "tenien", solution: "tenien" },
-            { word: "teniem", solution: "teníem" },
-            { word: "tenieu", solution: "teníeu" },
-            { word: "anaven", solution: "anaven" },
-            { word: "anavem", solution: "anàvem" },
-            { word: "anaveu", solution: "anàveu" },
-            { word: "acabaven", solution: "acabaven" },
-            { word: "acabavem", solution: "acabàvem" },
-            { word: "acabaveu", solution: "acabàveu" },
-            { word: "agafaven", solution: "agafaven" },
-            { word: "agafavem", solution: "agafàvem" },
-            { word: "agafaveu", solution: "agafàveu" },
-            { word: "arribaven", solution: "arribaven" },
-            { word: "arribavem", solution: "arribàvem" },
-            { word: "arribaveu", solution: "arribàveu" },
-            { word: "queien", solution: "queien" },
-            { word: "queiem", solution: "quèiem" },
-            { word: "queieu", solution: "quèieu" },
-            { word: "començaven", solution: "començaven" },
-            { word: "començavem", solution: "començàvem" },
-            { word: "començaveu", solution: "començàveu" },
-            { word: "compraven", solution: "compraven" },
-            { word: "compravem", solution: "compràvem" },
-            { word: "compraveu", solution: "compràveu" },
-            { word: "venien", solution: "venien" },
-            { word: "veniem", solution: "veníem" },
-            { word: "venieu", solution: "veníeu" },
-            { word: "conduien", solution: "conduien" },
-            { word: "conduiem", solution: "conduíem" },
-            { word: "conduieu", solution: "conduíeu" },
-            { word: "coneixien", solution: "coneixien" },
-            { word: "coneixiem", solution: "coneixíem" },
-            { word: "coneixieu", solution: "coneixíeu" },
-            { word: "demanaven", solution: "demanaven" },
-            { word: "demanavem", solution: "demanàvem" },
-            { word: "demanaveu", solution: "demanàveu" },
-            { word: "feien", solution: "feien" },
-            { word: "feiem", solution: "fèiem" },
-            { word: "feieu", solution: "fèieu" },
-            { word: "deien", solution: "deien" },
-            { word: "deiem", solution: "dèiem" },
-            { word: "deieu", solution: "dèieu" },
-            { word: "dormien", solution: "dormien" },
-            { word: "dormiem", solution: "dormíem" },
-            { word: "dormieu", solution: "dormíeu" },
-            { word: "decidien", solution: "decidien" },
-            { word: "decidiem", solution: "decidíem" },
-            { word: "decidieu", solution: "decidíeu" },
-            { word: "sentien", solution: "sentien" },
-            { word: "sentiem", solution: "sentíem" },
-            { word: "sentieu", solution: "sentíeu" },
-            { word: "fessis", solution: "fessis" },
-            { word: "fessim", solution: "féssim" },
-            { word: "fessiu", solution: "féssiu" },
-            { word: "anessis", solution: "anessis" },
-            { word: "anessim", solution: "anéssim" },
-            { word: "anessiu", solution: "anéssiu" },
-            { word: "tinguessis", solution: "tinguessis" },
-            { word: "tinguessim", solution: "tinguéssim" },
-            { word: "tinguessiu", solution: "tinguéssiu" },
-            { word: "haguessis", solution: "haguessis" },
-            { word: "haguessim", solution: "haguéssim" },
-            { word: "haguessiu", solution: "haguéssiu" },
-            { word: "regim", solution: "règim" },  
-            { word: "regims", solution: "règims" }, 
-            { word: "aborigen", solution: "aborigen" },
-            { word: "aborigens", solution: "aborígens" },
-            { word: "abdomen", solution: "abdomen" },
-            { word: "abdomens", solution: "abdòmens" },
-            { word: "fenomen", solution: "fenomen" },
-            { word: "fenomens", solution: "fenòmens" },
-            { word: "germen", solution: "germen" },
-            { word: "germens", solution: "gèrmens" },
-            { word: "canons", solution: "canons" },
-            { word: "Ramon", solution: "Ramon" },
-            { word: "malson", solution: "malson" },
-            { word: "malsons", solution: "malsons" },
-            { word: "pentagon", solution: "pentàgon" },
-            { word: "pentagons", solution: "pentàgons" },
-            { word: "rodamon", solution: "rodamon" },
-            { word: "rodamons", solution: "rodamons" },
-            { word: "segon", solution: "segon" },
-            { word: "segons", solution: "segons" },
-            { word: "telefon", solution: "telèfon" },
-            { word: "telefons", solution: "telèfons" },
-            { word: "arran", solution: "arran" },
-            { word: "caiman", solution: "caiman" },
-            { word: "caimans", solution: "caimans" },
-            { word: "durant", solution: "durant" },
-            { word: "organ", solution: "òrgan" },
-            { word: "organs", solution: "òrgans" },
-            { word: "platan", solution: "plàtan" },
-            { word: "platans", solution: "plàtans" },
-            { word: "tobogan", solution: "tobogan" },
-            { word: "tobogans", solution: "tobogans" },
-            { word: "algun", solution: "algun" },
-            { word: "alguns", solution: "alguns" },
-            { word: "Berlin", solution: "Berlín" },
-            { word: "Dublin", solution: "Dublín" }
-        ];
+// Variables de control
+let fallingWords = [];
+let currentGroupIndex = 0;
+let userAnswers = [];
+let gameFinished = false;   // Indica quan el joc finalitza
+let score = 0;             // Contador de grups encertats
 
-        // Seleccionem 20 paraules a l'atzar
-        let words = allWords.sort(() => 0.5 - Math.random()).slice(0, 20);
+// Inicia un nou grup de paraules
+function startNewWords() {
+    if (currentGroupIndex < wordGroups.length) {
+        const baseX = Math.random() * (canvas.width - 200);
+        fallingWords = wordGroups[currentGroupIndex].words.map((word, i) => ({
+            word,
+            x: baseX,
+            y: -30 - (i * 100)
+        }));
+        userAnswers = [];
+        currentGroupIndex++;
+    } else {
+        // Quan hem exhaurit tots els grups, finalitzem
+        finalizeGame();
+    }
+}
 
-        let incorrectWords = [];
-        let currentWordObj = null;
-        let fallingWord = { x: 0, y: 0, speed: 0.2 };
-        let isGameActive = true;
+// Comprova la paraula de l'usuari
+function checkAnswer() {
+    const inputWord = userInput.value.trim();
+    userAnswers.push(inputWord);
 
-        const userInput = document.getElementById('userInput');
-        const feedback = document.getElementById('feedback');
+    // Un cop hem respost tantes paraules com cauen en aquest grup
+    if (userAnswers.length === fallingWords.length) {
+        const correctSolutions = wordGroups[currentGroupIndex - 1].solutions;
+        const isCorrect = userAnswers.every(ans => correctSolutions.includes(ans));
 
-        function focusInput() {
-            userInput.focus();
+        if (isCorrect) {
+            showFeedback("Correcte!", "correct");
+            score++; // augmenta puntuació si tot el grup és correcte
+        } else {
+            showFeedback("Incorrecte! Era: " + correctSolutions.join(", "), "incorrect");
         }
 
-        function showFeedback(message, className) {
-            feedback.textContent = message;
-            feedback.className = className;
-            feedback.style.display = 'block';
-
-            setTimeout(() => {
-                feedback.style.display = 'none';
-            }, 2000);
-        }
-
-        function startNewWord() {
-            if (!currentWordObj && words.length > 0) {
-                currentWordObj = words.shift();
-            } else if (!currentWordObj && incorrectWords.length > 0) {
-                currentWordObj = incorrectWords.shift();
-            } else if (!currentWordObj) {
-                isGameActive = false;
-                showFeedback('Exercici completat! 🏆', 'correct');
-                return;
+        // Després d'uns segons, passem al següent grup o finalitzem el joc
+        setTimeout(() => {
+            if (currentGroupIndex < wordGroups.length) {
+                startNewWords();
+            } else {
+                finalizeGame();
             }
-            fallingWord = {
-                x: Math.random() * (canvas.width - 100),
-                y: 0,
-                speed: 0.2 + Math.random() * 0.3,
-            };
-        }
+        }, 2000);
+    }
+    userInput.value = "";
+}
 
-        function updateGame() {
-            if (!isGameActive) return;
+// Mostra missatges a la pantalla
+function showFeedback(message, className) {
+    const feedback = document.getElementById("feedback");
+    feedback.innerText = message;
+    feedback.className = className;
+    feedback.style.display = "block";
+    setTimeout(() => {
+        feedback.style.display = "none";
+    }, 2000);
+}
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Quan hem acabat tots els grups
+function finalizeGame() {
+    // Marca el joc com finalitzat i neteja la pantalla
+    gameFinished = true;
+    fallingWords = []; // així no es dibuixen més paraules
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (currentWordObj) {
-                fallingWord.y += fallingWord.speed;
-                ctx.font = '24px Arial';
-                ctx.fillStyle = 'black';
-                ctx.fillText(currentWordObj.word, fallingWord.x, fallingWord.y);
+    // Mostra la puntuació final
+    showFeedback(`Joc completat! Has encertat ${score} de ${wordGroups.length} grups.`, "correct");
+}
 
-                if (fallingWord.y > canvas.height) {
-                    showFeedback(`Solució: ${currentWordObj.solution}`, 'incorrect');
-                    incorrectWords.push(currentWordObj);
-                    currentWordObj = null;
-                    setTimeout(() => startNewWord(), 2000);
-                }
-            }
+// Animació de la caiguda de paraules
+function updateGame() {
+    // Si el joc s'ha acabat, no continuem
+    if (gameFinished) return;
 
-            requestAnimationFrame(updateGame);
-        }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        function checkAnswer() {
-            const userInputValue = userInput.value.trim();
+    fallingWords.forEach(obj => {
+        obj.y += 0.5; // velocitat de caiguda
+        ctx.font = "24px Arial";
+        ctx.fillText(obj.word, obj.x, obj.y);
+    });
 
-            if (currentWordObj && userInputValue === currentWordObj.solution) {
-                showFeedback('✓ Correcte!', 'correct');
-                currentWordObj = null;
-                startNewWord();
-            } else if (currentWordObj) {
-                showFeedback('Segueix-ho intentant! 💪', 'tryAgain');
-            }
+    requestAnimationFrame(updateGame);
+}
 
-            userInput.value = '';
-            focusInput();
-        }
+// Event listener per Enter a l'input
+const userInput = document.getElementById("userInput");
+userInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") checkAnswer();
+});
 
-        userInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        focusInput();
-        startNewWord();
-        updateGame();
-    </script>
+// Quan es carrega la pàgina, engeguem el joc
+window.onload = () => {
+    userInput.focus();
+    startNewWords();
+    updateGame();
+};
+</script>
 </body>
 </html>
