@@ -1,3 +1,6 @@
+Aquí tens un **index.html** on s’ha eliminat l’estil de “botó” i s’ha deixat només un enllaç en text, però mantenint l’estètica general de la fitxa de l’oxímoron (tipografia Georgia, color #003366, amplada de pàgina, etc.):
+
+```html
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -29,20 +32,15 @@
       margin-top: 30px;
       margin-bottom: 30px;
     }
-    /* Enllaç gran que crida l’atenció */
-    .link-box {
-      display: inline-block;
-      text-decoration: none;
+    /* Enllaç principal */
+    a.link-text {
       font-size: 18px;
-      color: #fff;
-      background-color: #003366;
-      padding: 15px 25px;
-      border-radius: 8px;
-      margin: 10px;
-      transition: 0.3s;
+      color: #003366;
+      text-decoration: none;
+      font-weight: bold;
     }
-    .link-box:hover {
-      background-color: #0056b3;
+    a.link-text:hover {
+      text-decoration: underline;
     }
     /* Enllaç de tornada */
     a.back-link {
@@ -58,15 +56,18 @@
 </head>
 <body>
 
-  <h1>Redacció</h1>
-  <p>Selecciona un exercici per practicar la redacció:</p>
+  <h1>Sintaxi</h1>
+  <p>Selecciona un exercici per practicar la sintaxi:</p>
 
   <div class="container">
-    <a href="oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
+    <p>
+      <a href="oximoron.html" class="link-text">Oxímoron: quan les paraules xoquen</a>
+    </p>
   </div>
 
   <p><a href="../index.html" class="back-link">🔙 Tornar a Llengua</a></p>
 
 </body>
 </html>
+```
 
