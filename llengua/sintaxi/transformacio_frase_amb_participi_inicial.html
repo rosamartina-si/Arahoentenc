@@ -2,156 +2,89 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8">
-  <title>Exercici Sintàctic: Transformació de Frases</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitxa de mostra</title>
   <style>
-    /* Ajust de la pàgina per a DIN A4 amb marges raonables */
-    @page {
-      size: A4;
-      margin: 20mm; /* Pots ajustar-ho segons convingui */
-    }
-
+    /* Estil adaptat de la fitxa d'oxímorons */
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'Georgia', serif;
+      background-color: white;
+      color: #000;
+      margin: 0 auto;
+      padding: 40px;
+      width: 210mm;
+      max-width: 100%;
+      height: auto;
+      box-sizing: border-box;
     }
-
-    h1, h2 {
-      text-align: center;
-      margin: 1em 0 0.5em 0;
+    h1, h2, h3 {
+      color: #003366;
     }
-
-    h3 {
-      margin-top: 1.2em;
-      margin-bottom: 0.5em;
-    }
-
-    p, li {
-      line-height: 1.5;
-      margin: 0.4em 0;
-    }
-
-    hr {
-      margin: 2em 0;
-      border: none;
-      border-top: 1px solid #ccc;
-    }
-
-    ol {
-      margin: 0.5em 0;
-      padding-left: 2em;
-    }
-
-    /* Classe per forçar un salt de pàgina abans de la secció (en imprimir) */
-    .page-break {
-      page-break-before: always;
-    }
-
-    /* Dibuix de línies per respondre:
-       Cada línia és un <span> amb un border-bottom de punts.
-       Pots afegir-ne més o menys segons el que vulguis. */
-    .answer-line {
-      border-bottom: 1px dotted #000;
-      display: block;
+    textarea {
       width: 100%;
-      margin-bottom: 8px;
-      height: 1.2em; /* Alçada de la línia */
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .quote {
+      font-style: italic;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-left: 4px solid #ccc;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Exercici Sintàctic: Transformació de Frases</h1>
+  <!-- Títol principal de la fitxa -->
+  <h1>Fitxa: Títol de l'activitat</h1>
+  <h2>Subtítol o breu descripció</h2>
+  <p><strong>Nom:</strong> _________________________ <strong>Data:</strong> ________________</p>
 
-  <h2>Explicació breu de la construcció</h2>
-  <ol>
-    <li><strong>Identifica el subjecte comú</strong> a les dues frases.<br>
-      <em>Ex.: «Ell va néixer a Girona. Ell va estudiar a Barcelona.»</em>
-    </li>
-    <li><strong>Transforma el verb de la primera frase</strong> en un <strong>participi</strong> (o construcció equivalent).<br>
-      <em>Ex.: «Va néixer» → «Nascut».</em>
-    </li>
-    <li><strong>Comença la nova oració</strong> amb aquesta forma en participi, segueix-la d’una coma i a continuació la segona oració, sense repetir el subjecte.<br>
-      <em>Ex.: «Nascut a Girona el 2 d’octubre de 1990, va estudiar a Barcelona.»</em>
-    </li>
-  </ol>
+  <!-- Primera secció -->
+  <div class="section">
+    <h3>1. Introducció o lectura</h3>
+    <p class="quote">
+      Aquí podries posar una citació o un fragment de lectura, amb aquest estil de fons clar 
+      i la franja grisa a l'esquerra, tal com passa a la fitxa de l’oxímoron.
+    </p>
+    <p>
+      Explicació breu de la tasca, indicacions per a l'alumnat i qualsevol informació rellevant.
+    </p>
+  </div>
 
-  <p>
-    Aquesta estructura és molt habitual en contextos formals o semi-formals, i s’utilitza per 
-    <strong>comprimir informació</strong> que, en dues oracions, quedaria repetitiva.
-  </p>
+  <!-- Segona secció -->
+  <div class="section">
+    <h3>2. Exercici o activitat</h3>
+    <p>
+      Indica aquí què han de fer els alumnes. Pots fer servir llistes, com ara:
+    </p>
+    <ul>
+      <li>Primera instrucció</li>
+      <li>Segona instrucció</li>
+      <li>Tercera instrucció</li>
+    </ul>
+    <p><strong>Escriu la teva resposta:</strong></p>
+    <textarea></textarea>
+  </div>
 
-  <hr>
-
-  <h2>Exercicis de transformació</h2>
-
-  <h3>1</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>Va néixer a Reus l’any 1900. Va morir a Barcelona el 1980.</p>
-  <p><strong>Transforma-ho:</strong> (Comença amb «Nascut/da…»)</p>
-  
-  <!-- Espais per la resposta -->
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <h3>2</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>La catedral es va construir al segle XII. És un dels monuments més emblemàtics del país.</p>
-  <p><strong>Transforma-ho:</strong> (El participi de «construir» és «construïda»…)</p>
-  
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <h3>3</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>L’aeroport es va inaugurar fa només deu anys. Ja rep més de cinc milions de passatgers anuals.</p>
-  <p><strong>Transforma-ho:</strong> (El participi de «inaugurar» és «inaugurat/da»…)</p>
-  
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <h3>4</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>El seu primer llibre es va publicar el 1995. Va tenir molt d’èxit.</p>
-  <p><strong>Transforma-ho:</strong> (El participi de «publicar» és «publicat/da»…)</p>
-  
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <h3>5</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>El quadre va ser pintat per Dalí. Es troba actualment en un museu de Nova York.</p>
-  <p><strong>Transforma-ho:</strong> (El participi de «pintar» és «pintat/da»…)</p>
-  
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <h3>6</h3>
-  <p><strong>Oracions originals:</strong></p>
-  <p>Aquest assaig va ser escrit per Maria. Parla sobre la importància de la diversitat cultural.</p>
-  <p><strong>Transforma-ho:</strong> (El participi de «escriure» és «escrit/a»…)</p>
-  
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-  <div class="answer-line"></div>
-
-  <!-- SALT DE PÀGINA per a la secció de solucions -->
-  <div class="page-break"></div>
-
-  <h2>Proposta de solucions (exemple)</h2>
-  <ol>
-    <li><strong>Nascut</strong> a Reus l’any 1900, va morir a Barcelona el 1980.</li>
-    <li><strong>Construïda</strong> al segle XII, la catedral és un dels monuments més emblemàtics del país.</li>
-    <li><strong>Inaugurat</strong> fa només deu anys, l’aeroport ja rep més de cinc milions de passatgers anuals.</li>
-    <li><strong>Publicat</strong> el 1995, el seu primer llibre va tenir molt d’èxit.</li>
-    <li><strong>Pintat</strong> per Dalí, el quadre es troba actualment en un museu de Nova York.</li>
-    <li><strong>Escrit</strong> per Maria, aquest assaig parla sobre la importància de la diversitat cultural.</li>
-  </ol>
+  <!-- Tercera secció -->
+  <div class="section">
+    <h3>3. Reflexió o síntesi</h3>
+    <p>
+      Planteja preguntes per a la reflexió final, la síntesi de continguts o la valoració personal de l'alumnat.
+    </p>
+    <textarea style="height: 150px;"></textarea>
+  </div>
 
 </body>
 </html>
+
