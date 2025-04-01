@@ -1,52 +1,72 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expressió escrita</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            font-size: 18px;
-            color: #555;
-        }
-        .container {
-            margin-top: 30px;
-        }
-        .link-box {
-            display: inline-block;
-            text-decoration: none;
-            font-size: 20px;
-            color: white;
-            background-color: #007BFF;
-            padding: 15px 25px;
-            border-radius: 8px;
-            margin: 10px;
-            transition: 0.3s;
-        }
-        .link-box:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expressió escrita</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: white;
+      color: #000;
+      margin: 0 auto;
+      padding: 40px;
+      width: 210mm;
+      max-width: 100%;
+      height: auto;
+      box-sizing: border-box;
+    }
+    h1, h2, h3 {
+      color: #003366;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .container {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    /* Enllaç gran que crida l’atenció */
+    .link-box {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 18px;
+      color: #fff;
+      background-color: #003366;
+      padding: 15px 25px;
+      border-radius: 8px;
+      margin: 10px;
+      transition: 0.3s;
+    }
+    .link-box:hover {
+      background-color: #0056b3;
+    }
+    /* Enllaç de tornada */
+    a.back-link {
+      color: #003366;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Sintaxi</h1>
-    <p>Selecciona un exercici per practicar la sintaxi:</p>
+  <h1>Sintaxi</h1>
+  <p>Selecciona un exercici per practicar la redacció:</p>
 
-    <div class="container">
-        <a href="oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
-    </div>
+  <div class="container">
+    <a href="oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
+  </div>
 
-    <p><a href="../index.html">🔙 Tornar a Llengua</a></p>
+  <p><a href="../index.html" class="back-link">🔙 Tornar a Llengua</a></p>
 
 </body>
 </html>
+
