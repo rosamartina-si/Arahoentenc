@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercici: Distinció entre "hi ha" i "n'hi ha"</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2cm;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .exercici {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .correcte {
+            background-color: #c8e6c9;
+        }
+        .incorrecte {
+            background-color: #ffcdd2;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function comprovarRespostes() {
+            const respostesCorrectes = [
+                "hi ha", "n'hi ha", "hi ha", "hi ha", "n'hi ha"
+            ];
+            const inputs = document.querySelectorAll(".exercici input");
+            inputs.forEach((input, index) => {
+                const respostaUsuari = input.value.trim().toLowerCase().replace("’", "'");
+                if (
+                    respostaUsuari === respostesCorrectes[index] || 
+                    respostaUsuari.startsWith(respostesCorrectes[index])
+                ) {
+                    input.classList.add("correcte");
+                    input.classList.remove("incorrecte");
+                } else {
+                    input.classList.add("incorrecte");
+                    input.classList.remove("correcte");
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Exercici: Distinció entre "hi ha" i "n'hi ha"</h1>
+    
+    <h2>Explicació</h2>
+    <p><strong>"Hi ha"</strong> s'utilitza per indicar l'existència d'alguna cosa:</p>
+    <ul>
+        <li>Hi ha una poma a la taula.</li>
+        <li>Hi ha moltes persones al carrer.</li>
+        <li>No hi ha cap llibre sobre la taula.</li>
+    </ul>
+    <p><strong>"N'hi ha"</strong> es fa servir quan es vol evitar repetir el nom del que ja s'ha mencionat abans:</p>
+    <ul>
+        <li>Quantes pomes hi ha? N'hi ha tres.</li>
+        <li>No n'hi ha cap (poma).</li>
+    </ul>
+    
+    <h2>Exercicis</h2>
+    <div class="exercici">
+        <p>1. Completa les frases amb "hi ha" o "n'hi ha":</p>
+        <label>a) __________ moltes cadires a la sala. <input type="text"></label>
+        <label>b) Quants llibres hi ha a la biblioteca? __________ deu. <input type="text"></label>
+        <label>c) No __________ cap problema. <input type="text"></label>
+        <label>d) Al parc __________ molts nens jugant. <input type="text"></label>
+        <label>e) Tinc tres gats, però a casa dels meus avis __________ dos més. <input type="text"></label>
+    </div>
+    
+    <button onclick="comprovarRespostes()">Comprovar Respostes</button>
+    
+    <div class="exercici">
+        <p>2. Escriu una pregunta i una resposta utilitzant "hi ha" i "n'hi ha".</p>
+        <textarea rows="4"></textarea>
+    </div>
+    
+    <div class="exercici">
+        <p>3. Escriu una frase amb "hi ha" i transforma-la fent servir "n'hi ha".</p>
+        <textarea rows="4"></textarea>
+    </div>
+    
+    <p><em>Quan hagis acabat, revisa les respostes i imprimeix la fitxa si cal!</em></p>
+</body>
+</html>
