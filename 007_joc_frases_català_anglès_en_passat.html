@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Joc de Traducció amb Àudio i Marges Ajustats</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      background-color: #f0f0f0;
+      display: block;
+    }
+    #inputContainer {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    input {
+      font-size: 18px;
+      padding: 10px;
+      margin: 5px;
+      width: 300px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 5px;
+    }
+    #feedback {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+      white-space: pre-wrap; /* Permet salts de línia */
+    }
+    #feedback.correct {
+      color: green;
+    }
+    #feedback.incorrect {
+      color: red;
+    }
+    #feedback.tryAgain {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<div id="inputContainer">
+  <input type="text" id="userInput" placeholder="Escriu la traducció en anglès">
+  <button onclick="checkAnswer()">Comprovar</button>
+  <button onclick="skipQuestion()">No ho sé / Passo</button>
+</div>
+
+<div id="feedback"></div>
+
+<script>
+// --------------------------------------------------------------------
+// 1) Llista de frases (frases en català -> traducció en anglès, passat)
+// --------------------------------------------------------------------
+const allSentences = [
+            { sentence: "Vaig jugar a futbol", solution: "I played football" },
+            { sentence: "Ell va menjar pizza", solution: "He ate pizza" },
+            { sentence: "Vam visitar en Joan ahir", solution: "We visited John yesterday" },
+            { sentence: "Ella va beure suc", solution: "She drank juice" },
+            { sentence: "Ells van estudiar molt", solution: "They studied a lot" },
+            { sentence: "Vaig mirar una pel·lícula", solution: "I watched a movie" },
+            { sentence: "Vam pintar un dibuix", solution: "We painted a picture" },
+            { sentence: "Ell va córrer al parc", solution: "He ran in the park" },
+            { sentence: "Vaig escriure una carta", solution: "I wrote a letter" },
+            { sentence: "Vaig escoltar música", solution: "I listened to music" },
+            { sentence: "Ella va llegir un llibre", solution: "She read a book" },
+            { sentence: "Vam parlar amb la mestra", solution: "We talked to the teacher" },
+            { sentence: "Ells van ajudar a casa", solution: "They helped at home" },
+            { sentence: "Vaig obrir la porta", solution: "I opened the door" },
+            { sentence: "Ell va tancar la finestra", solution: "He closed the window" },
+            { sentence: "Vam dibuixar un mapa", solution: "We drew a map" },
+            { sentence: "Ella va cuinar arròs", solution: "She cooked rice" },
+            { sentence: "Ells van nedar al riu", solution: "They swam in the river" },
+            { sentence: "Vaig perdre les claus", solution: "I lost the keys" },
+            { sentence: "Vam arribar tard a classe", solution: "We arrived late to class" },
+            { sentence: "Jo era a casa", solution: "I was at home" },
+            { sentence: "Ell era tímid", solution: "He was shy" },
+            { sentence: "Ella era molt amable", solution: "She was very kind" },
+            { sentence: "Nosaltres érem al parc", solution: "We were at the park" },
+            { sentence: "Ells eren veïns", solution: "They were neighbors" },
+            { sentence: "Vam pintar la paret", solution: "We painted the wall" },
+            { sentence: "Ell va menjar fruita", solution: "He ate fruit" },
+            { sentence: "Ella va beure llet", solution: "She drank milk" },
+            { sentence: "Van escoltar música", solution: "They listened to music" },
+            { sentence: "Vaig nedar al llac", solution: "I swam in the lake" },
+            { sentence: "Ell va visitar la meva escola", solution: "He visited my school" },
+            { sentence: "Ella va tallar el pa", solution: "She cut the bread" },
+            { sentence: "Vam trobar un tresor", solution: "We found a treasure" },
+            { sentence: "Ells van ajudar a casa", solution: "They helped at home" },
+            { sentence: "Vaig conèixer un amic nou", solution: "I met a new friend" },
+            { sentence: "Ell va comprar una samarreta", solution: "He bought a T-shirt" },
+            { sentence: "Ella va descobrir un llibre", solution: "She discovered a book" },
+            { sentence: "Jo vaig escriure una carta", solution: "I wrote a letter" },
+            { sentence: "Ell va obrir la finestra", solution: "He opened the window" },
+            { sentence: "Ella va tancar la porta", solution: "She closed the door" },
+            { sentence: "Ell va ser el millor", solution: "He was the best" },
+            { sentence: "Ella va ser la guanyadora", solution: "She was the winner" },
+            { sentence: "Vam ser bons amics", solution: "We were good friends" },
+            { sentence: "Jo estava content", solution: "I was happy" },
+            { sentence: "Vaig perdre les claus", solution: "I lost the keys" },
+            { sentence: "Ells van veure una pel·lícula", solution: "They watched a movie" },
+            { sentence: "Van arribar tard", solution: "They arrived late" },
+            { sentence: "Em vaig llevar d'hora", solution: "I woke up early" },
+            { sentence: "Vam guanyar el partit", solution: "We won the match" },
+            { sentence: "Vaig comprar una flor", solution: "I bought a flower" },
+            { sentence: "Ella va cantar una cançó", solution: "She sang a song" },
+            { sentence: "Ell va dir un secret", solution: "He told a secret" },
+            { sentence: "Vam jugar a escacs", solution: "We played chess" },
+            { sentence: "Ells van sortir junts", solution: "They went out together" },
+            { sentence: "Vaig fer una manualitat", solution: "I made a craft" },
+            { sentence: "Ella va estudiar anglès", solution: "She studied English" },
+            { sentence: "Ell va veure un arc de Sant Martí", solution: "He saw a rainbow" },
+            { sentence: "Vam seure al sofà", solution: "We sat on the couch" },
+            { sentence: "Van dibuixar un mapa", solution: "They drew a map" },
+            { sentence: "Jo era petit", solution: "I was small" },
+            { sentence: "Ell era valent", solution: "He was brave" },
+            { sentence: "Nosaltres érem bons cuiners", solution: "We were good cooks" },
+            { sentence: "Ells eren als afores", solution: "They were outside" },
+            { sentence: "Vaig estar malalt ahir", solution: "I was sick yesterday" },
+            { sentence: "Ella va estar contenta", solution: "She was happy" },
+            { sentence: "Ell era el més ràpid", solution: "He was the fastest" },
+            { sentence: "Ella va ser una heroïna", solution: "She was a hero" },
+            { sentence: "Nosaltres érem molt curiosos", solution: "We were very curious" },
+            { sentence: "Ells van ser campions", solution: "They were champions" },
+            { sentence: "Vaig tancar el llibre", solution: "I closed the book" },
+            { sentence: "Vam netejar la taula", solution: "We cleaned the table" },
+            { sentence: "Ell va llegir una revista", solution: "He read a magazine" },
+            { sentence: "Ella va trobar un anell", solution: "She found a ring" },
+            { sentence: "Van jugar a fet i amagar", solution: "They played hide and seek" },
+            { sentence: "Vaig plantar una llavor", solution: "I planted a seed" },
+            { sentence: "Ell va conduir un cotxe", solution: "He drove a car" },
+            { sentence: "Ella va trencar un got", solution: "She broke a glass" },
+            { sentence: "Vam cantar a la festa", solution: "We sang at the party" },
+            { sentence: "Ells van marxar aviat", solution: "They left early" },
+];
+
+// 2) Seleccionem 10 frases aleatòries
+let sentences = allSentences.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+// 3) Variables de joc
+let correctCount = 0;
+let incorrectCount = 0;
+let currentSentenceObj = null;
+let fallingSentence = { x: 0, y: 0, speed: 0.2 };
+let isGameActive = true;
+const totalQuestions = sentences.length; // 10
+
+// 4) Accés als elements del DOM i configuració Canvas
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const userInput = document.getElementById('userInput');
+const feedback = document.getElementById('feedback');
+
+// --------------------------------------------------------------------
+// FUNCIONS AUXILIARS
+// --------------------------------------------------------------------
+function focusInput() {
+  userInput.focus();
+}
+
+/** 
+ * Funció per llegir en veu alta la frase en anglès amb la Web Speech API 
+ */
+function speakEnglishSentence(text) {
+  if (!window.speechSynthesis) {
+    // Si el navegador no suporta speechSynthesis, no fem res
+    return;
+  }
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';  // Pots canviar a 'en-GB', etc.
+  speechSynthesis.speak(utterance);
+}
+
+/**
+ * Mostra un missatge de 'feedback' al centre de la pantalla
+ * durant un temps determinat (per defecte, 1500ms).
+ * També reprodueix l’àudio amb la frase en anglès (si englishText != "").
+ */
+function showFeedback(message, className, duration = 1500, englishText = "") {
+  feedback.textContent = message;
+  feedback.className = className;
+  feedback.style.display = 'block';
+
+  // Si hi ha text en anglès, el "parlem"
+  if (englishText) {
+    speakEnglishSentence(englishText);
+  }
+
+  setTimeout(() => {
+    feedback.style.display = 'none';
+  }, duration);
+}
+
+/**
+ * Mostra la puntuació final en un missatge i atura el joc.
+ */
+function showFinalScore() {
+  const finalMsg = `Exercici completat!\nEncerts: ${correctCount} | Errors: ${incorrectCount}`;
+  showFeedback(finalMsg, "correct", 6000);
+}
+
+// --------------------------------------------------------------------
+// FUNCIONS DE JOC
+// --------------------------------------------------------------------
+/**
+ * Selecciona i prepara una nova frase, o mostra la puntuació final si ja no en queden.
+ * Aquí ens assegurem que la frase no quedi tallada pels marges.
+ */
+function startNewSentence() {
+  if (sentences.length === 0) {
+    isGameActive = false;
+    showFinalScore();
+    return;
+  }
+
+  currentSentenceObj = sentences.shift();
+
+  // 1) Fixem la mateixa font usada a updateGame per mesurar correctament.
+  ctx.font = '24px Arial';
+
+  // 2) Mesurem l'amplada del text en píxels
+  const textWidth = ctx.measureText(currentSentenceObj.sentence).width;
+
+  // 3) Definim un marge de seguretat
+  const margin = 10;
+
+  // 4) Calculem la posició màxima on podem situar el text
+  let xMax = canvas.width - textWidth - margin;
+
+  // Si xMax < margin vol dir que la frase és més ampla que la pantalla.
+  // Podem forçar-la a estar en un sol punt (ex. al marge), o reduir la mida de font, etc.
+  // De moment, simplement evitem un valor negatiu.
+  if (xMax < margin) {
+    xMax = margin;
+  }
+
+  // 5) Generem una x aleatòria, assegurant que no surti de [margin, xMax]
+  const randomX = Math.random() * (xMax - margin) + margin;
+
+  // 6) Creem l’objecte de la frase caient
+  fallingSentence = {
+    x: randomX,
+    y: 0,
+    speed: 0.2 + Math.random() * 0.3,
+  };
+}
+
+/**
+ * Bucle principal: dibuixa i mou la frase.
+ * Si arriba al final, es compta com a error i es mostra la solució.
+ */
+function updateGame() {
+  if (!isGameActive) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (currentSentenceObj) {
+    // Dibuixem la frase caient
+    fallingSentence.y += fallingSentence.speed;
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(currentSentenceObj.sentence, fallingSentence.x, fallingSentence.y);
+
+    // Si la frase surt de la pantalla sense resposta
+    if (fallingSentence.y > canvas.height) {
+      incorrectCount++;
+      showFeedback(
+        `Solució:\nCatalà: ${currentSentenceObj.sentence}\nAnglès: ${currentSentenceObj.solution}`,
+        'incorrect',
+        3000,
+        currentSentenceObj.solution
+      );
+      currentSentenceObj = null;
+      setTimeout(() => startNewSentence(), 3000);
+    }
+  }
+
+  requestAnimationFrame(updateGame);
+}
+
+/**
+ * Comprova la resposta de l'usuari en prémer "Comprovar" o Enter.
+ */
+function checkAnswer() {
+  if (!currentSentenceObj) return;
+
+  const userInputValue = userInput.value.trim().toLowerCase();
+  const correctSolution = currentSentenceObj.solution.toLowerCase();
+
+  if (userInputValue === correctSolution) {
+    correctCount++;
+    showFeedback(
+      `✓ Correcte!\nCatalà: ${currentSentenceObj.sentence}\nAnglès: ${currentSentenceObj.solution}`,
+      'correct',
+      3000,
+      currentSentenceObj.solution
+    );
+  } else {
+    incorrectCount++;
+    showFeedback(
+      `Solució:\nCatalà: ${currentSentenceObj.sentence}\nAnglès: ${currentSentenceObj.solution}`,
+      'incorrect',
+      3000,
+      currentSentenceObj.solution
+    );
+  }
+
+  userInput.value = '';
+  currentSentenceObj = null;
+  setTimeout(() => startNewSentence(), 3000);
+}
+
+/**
+ * En prémer "No ho sé / Passo"
+ */
+function skipQuestion() {
+  if (!currentSentenceObj) return;
+
+  incorrectCount++;
+  showFeedback(
+    `Solució:\nCatalà: ${currentSentenceObj.sentence}\nAnglès: ${currentSentenceObj.solution}`,
+    'incorrect',
+    3000,
+    currentSentenceObj.solution
+  );
+  userInput.value = '';
+  currentSentenceObj = null;
+  setTimeout(() => startNewSentence(), 3000);
+}
+
+// --------------------------------------------------------------------
+// INICI DEL FLUX
+// --------------------------------------------------------------------
+alert(
+  "Benvingut/da al joc de traducció!\n\n" +
+  "Tens 10 frases curtes en català (passat). S'escriu la traducció a l'anglès.\n" +
+  "Si no ho saps, prem 'No ho sé / Passo'.\n" +
+  "Veureu la correcció i escoltareu la frase en anglès.\n\n" +
+  "Molta sort! 🍀"
+);
+
+focusInput();
+startNewSentence();
+updateGame();
+
+userInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    checkAnswer();
+  }
+});
+</script>
+</body>
+</html>

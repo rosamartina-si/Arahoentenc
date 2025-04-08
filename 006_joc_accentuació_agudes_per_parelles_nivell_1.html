@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercici de Paraules</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; overflow: hidden; }
+        canvas { background-color: #f0f0f0; display: block; }
+        #inputContainer {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%); text-align: center;
+        }
+        input { font-size: 18px; padding: 10px; margin: 5px; width: 300px; }
+        #feedback {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; display: none;
+        }
+        .correct { color: green; }
+        .incorrect { color: red; }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="inputContainer">
+    <input type="text" id="userInput" placeholder="Escriu cada paraula i prem Enter">
+</div>
+<div id="feedback"></div>
+
+<script>
+
+// El missatge inicial
+alert(`📢 Benvingut al joc d'ortografia! ✏️
+
+🔹 Escriu cada paraula que baixa, amb accent quan calgui.
+🔹 Escriu una paraula i prem Enter, després la següent, fins que hagis escrit totes les paraules que cauen.
+
+📖 Recorda aquestes regles bàsiques d'accentuació:
+✅ Accentuem les paraules agudes quan acaben en a, e, i, o, u, as, es, is, os, us, en, in.
+   ✨⚠️ Exemple: petó però petons, matí però matins.
+   ✨⚠️ Exemple: segon i segons, tobogan i tobogans.
+
+🎯 Prepara't i molta sort! 🍀`);
+
+// Configuració del canvas
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Llista completa de grups de paraules
+const allWordGroups = [
+    { words: ["accio", "accions"].sort(() => Math.random() - 0.5), solutions: ["acció", "accions"] },
+    { words: ["camio", "camions"].sort(() => Math.random() - 0.5), solutions: ["camió", "camions"] },
+    { words: ["basto", "bastons"].sort(() => Math.random() - 0.5), solutions: ["bastó", "bastons"] },
+    { words: ["estacio", "estacions"].sort(() => Math.random() - 0.5), solutions: ["estació", "estacions"] },
+    { words: ["relacio", "relacions"].sort(() => Math.random() - 0.5), solutions: ["relació", "relacions"] },
+    { words: ["opinions", "opinio"].sort(() => Math.random() - 0.5), solutions: ["opinions", "opinió"] },
+    { words: ["nacions", "nacio"].sort(() => Math.random() - 0.5), solutions: ["nacions", "nació"] },
+    { words: ["condicions", "condicio"].sort(() => Math.random() - 0.5), solutions: ["condicions", "condició"] },
+    { words: ["malson", "malsons"].sort(() => Math.random() - 0.5), solutions: ["malson", "malsons"] },
+    { words: ["segon", "segons"].sort(() => Math.random() - 0.5), solutions: ["segon", "segons"] },
+    { words: ["caiman", "caimans"].sort(() => Math.random() - 0.5), solutions: ["caiman", "caimans"] },
+    { words: ["tobogan", "tobogans"].sort(() => Math.random() - 0.5), solutions: ["tobogan", "tobogans"] },
+    { words: ["algun", "alguns"].sort(() => Math.random() - 0.5), solutions: ["algun", "alguns"] },
+    { words: ["tauro", "taurons"].sort(() => Math.random() - 0.5), solutions: ["tauró", "taurons"] },
+    { words: ["raco", "racons"].sort(() => Math.random() - 0.5), solutions: ["racó", "racons"] },
+    { words: ["nado", "nadons"].sort(() => Math.random() - 0.5), solutions: ["nadó", "nadons"] },
+    { words: ["panta", "pantans"].sort(() => Math.random() - 0.5), solutions: ["pantà", "pantans"] },
+    { words: ["melo", "melons"].sort(() => Math.random() - 0.5), solutions: ["meló", "melons"] },
+    { words: ["definicio", "definicions"].sort(() => Math.random() - 0.5), solutions: ["definició", "definicions"] },
+    { words: ["situacio", "situacions"].sort(() => Math.random() - 0.5), solutions: ["situació", "situacions"] },
+    { words: ["animacio", "animacions"].sort(() => Math.random() - 0.5), solutions: ["animació", "animacions"] },
+    { words: ["aparicio", "aparicions"].sort(() => Math.random() - 0.5), solutions: ["aparició", "aparicions"] },
+    { words: ["atencio", "atencions"].sort(() => Math.random() - 0.5), solutions: ["atenció", "atencions"] },
+    { words: ["aviacio", "aviacions"].sort(() => Math.random() - 0.5), solutions: ["aviació", "aviacions"] },
+    { words: ["celebracio", "celebracions"].sort(() => Math.random() - 0.5), solutions: ["celebració", "celebracions"] },
+    { words: ["coccio", "coccions"].sort(() => Math.random() - 0.5), solutions: ["cocció", "coccions"] },
+    { words: ["creacio", "creacions"].sort(() => Math.random() - 0.5), solutions: ["creació", "creacions"] },
+    { words: ["excursio", "excursions"].sort(() => Math.random() - 0.5), solutions: ["excursió", "excursions"] },
+    { words: ["missio", "missions"].sort(() => Math.random() - 0.5), solutions: ["missió", "missions"] },
+    { words: ["impressio", "impressions"].sort(() => Math.random() - 0.5), solutions: ["impressió", "impressions"] },
+    { words: ["tio", "tions"].sort(() => Math.random() - 0.5), solutions: ["tió", "tions"] },
+    { words: ["qüestio", "qüestions"].sort(() => Math.random() - 0.5), solutions: ["qüestió", "qüestions"] },
+    { words: ["agla", "aglans"].sort(() => Math.random() - 0.5), solutions: ["aglà", "aglans"] },
+    { words: ["content", "contents"].sort(() => Math.random() - 0.5), solutions: ["content", "contents"] },
+    { words: ["casola", "casolans"].sort(() => Math.random() - 0.5), solutions: ["casolà", "casolans"] },
+    { words: ["huma", "humans"].sort(() => Math.random() - 0.5), solutions: ["humà", "humans"] },
+    { words: ["italia", "italians"].sort(() => Math.random() - 0.5), solutions: ["italià", "italians"] },
+    { words: ["llunya", "llunyans"].sort(() => Math.random() - 0.5), solutions: ["llunyà", "llunyans"] },
+    { words: ["ocea", "oceans"].sort(() => Math.random() - 0.5), solutions: ["oceà", "oceans"] },
+    { words: ["roma", "romans"].sort(() => Math.random() - 0.5), solutions: ["romà", "romans"] },
+    { words: ["urba", "urbans"].sort(() => Math.random() - 0.5), solutions: ["urbà", "urbans"] },
+    { words: ["volca", "volcans"].sort(() => Math.random() - 0.5), solutions: ["volcà", "volcans"] },
+    { words: ["mati", "matins"].sort(() => Math.random() - 0.5), solutions: ["matí", "matins"] },
+    { words: ["mati", "matins"].sort(() => Math.random() - 0.5), solutions: ["matí", "matins"] },
+    { words: ["cami", "camins"].sort(() => Math.random() - 0.5), solutions: ["camí", "camins"] },
+    { words: ["coixi", "coixins"].sort(() => Math.random() - 0.5), solutions: ["coixí", "coixins"] },
+    { words: ["intesti", "intestins"].sort(() => Math.random() - 0.5), solutions: ["intestí", "intestins"] },
+    { words: ["jardi", "jardins"].sort(() => Math.random() - 0.5), solutions: ["jardí", "jardins"] },
+    { words: ["moli", "molins"].sort(() => Math.random() - 0.5), solutions: ["molí", "molins"] },
+    { words: ["padri", "padrins"].sort(() => Math.random() - 0.5), solutions: ["padrí", "padrins"] },
+    { words: ["ratoli", "ratolins"].sort(() => Math.random() - 0.5), solutions: ["ratolí", "ratolins"] },
+    { words: ["violi", "violins"].sort(() => Math.random() - 0.5), solutions: ["violí", "violins"] },
+    { words: ["comu", "comuns"].sort(() => Math.random() - 0.5), solutions: ["comú", "comuns"] },
+];
+
+// Barregem tots els grups i només n'agafem 10
+const wordGroups = allWordGroups.sort(() => Math.random() - 0.5).slice(0, 10);
+
+// Variables de control
+let fallingWords = [];
+let currentGroupIndex = 0;
+let userAnswers = [];
+let gameFinished = false;   // Indica quan el joc finalitza
+let score = 0;             // Contador de grups encertats
+
+// Inicia un nou grup de paraules
+function startNewWords() {
+    if (currentGroupIndex < wordGroups.length) {
+        const baseX = Math.random() * (canvas.width - 200);
+        fallingWords = wordGroups[currentGroupIndex].words.map((word, i) => ({
+            word,
+            x: baseX,
+            y: -30 - (i * 100)
+        }));
+        userAnswers = [];
+        currentGroupIndex++;
+    } else {
+        // Quan hem exhaurit tots els grups, finalitzem
+        finalizeGame();
+    }
+}
+
+// Comprova la paraula de l'usuari
+function checkAnswer() {
+    const inputWord = userInput.value.trim();
+    userAnswers.push(inputWord);
+
+    // Un cop hem respost tantes paraules com cauen en aquest grup
+    if (userAnswers.length === fallingWords.length) {
+        const correctSolutions = wordGroups[currentGroupIndex - 1].solutions;
+        const isCorrect = userAnswers.every(ans => correctSolutions.includes(ans));
+
+        if (isCorrect) {
+            showFeedback("Correcte!", "correct");
+            score++; // augmenta puntuació si tot el grup és correcte
+        } else {
+            showFeedback("Incorrecte! Era: " + correctSolutions.join(", "), "incorrect");
+        }
+
+        // Després d'uns segons, passem al següent grup o finalitzem el joc
+        setTimeout(() => {
+            if (currentGroupIndex < wordGroups.length) {
+                startNewWords();
+            } else {
+                finalizeGame();
+            }
+        }, 2000);
+    }
+    userInput.value = "";
+}
+
+// Mostra missatges a la pantalla
+function showFeedback(message, className) {
+    const feedback = document.getElementById("feedback");
+    feedback.innerText = message;
+    feedback.className = className;
+    feedback.style.display = "block";
+    setTimeout(() => {
+        feedback.style.display = "none";
+    }, 2000);
+}
+
+// Quan hem acabat tots els grups
+function finalizeGame() {
+    // Marca el joc com finalitzat i neteja la pantalla
+    gameFinished = true;
+    fallingWords = []; // així no es dibuixen més paraules
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Mostra la puntuació final
+    showFeedback(`Joc completat! Has encertat ${score} de ${wordGroups.length} grups.`, "correct");
+}
+
+// Animació de la caiguda de paraules
+function updateGame() {
+    // Si el joc s'ha acabat, no continuem
+    if (gameFinished) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    fallingWords.forEach(obj => {
+        obj.y += 0.5; // velocitat de caiguda
+        ctx.font = "24px Arial";
+        ctx.fillText(obj.word, obj.x, obj.y);
+    });
+
+    requestAnimationFrame(updateGame);
+}
+
+// Event listener per Enter a l'input
+const userInput = document.getElementById("userInput");
+userInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") checkAnswer();
+});
+
+// Quan es carrega la pàgina, engeguem el joc
+window.onload = () => {
+    userInput.focus();
+    startNewWords();
+    updateGame();
+};
+</script>
+</body>
+</html>

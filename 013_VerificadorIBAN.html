@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador IBAN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            text-transform: uppercase;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Verificador d'IBAN</h2>
+    <input type="text" id="iban" placeholder="Introdueix l'IBAN" maxlength="34" value="ES" oninput="this.value = this.value.toUpperCase(); esborrarMissatge()" onkeypress="if(event.key === 'Enter') validarIBAN()">
+    <button onclick="validarIBAN()">Comprovar</button>
+    <button onclick="copiarIBAN()">Copiar</button>
+    <button onclick="esborrarIBAN()">Esborrar</button>
+    <p id="resultat"></p>
+
+    <script>
+        function validarIBAN() {
+            let iban = document.getElementById("iban").value.replace(/\s+/g, "").toUpperCase();
+            if (iban.length < 15 || iban.length > 34) {
+                document.getElementById("resultat").innerText = "L'IBAN introduït no té una longitud vàlida.";
+                return;
+            }
+            
+            let ibanReordenat = iban.substring(4) + iban.substring(0, 4);
+            let ibanNumeric = "";
+            for (let i = 0; i < ibanReordenat.length; i++) {
+                ibanNumeric += parseInt(ibanReordenat.charAt(i), 36);
+            }
+            
+            let mod = BigInt(ibanNumeric) % 97n;
+            
+            if (mod === 1n) {
+                document.getElementById("resultat").innerText = "IBAN vàlid ✅";
+            } else {
+                document.getElementById("resultat").innerText = "IBAN invàlid ❌";
+            }
+        }
+
+        function copiarIBAN() {
+            let ibanInput = document.getElementById("iban");
+            ibanInput.select();
+            ibanInput.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(ibanInput.value);
+        }
+
+        function esborrarIBAN() {
+            let ibanInput = document.getElementById("iban");
+            ibanInput.value = "ES";
+            document.getElementById("resultat").innerText = "";
+            ibanInput.setSelectionRange(2, 2);
+            ibanInput.focus();
+        }
+
+        function esborrarMissatge() {
+            let ibanInput = document.getElementById("iban");
+            if (ibanInput.value.trim() === "") {
+                ibanInput.value = "ES";
+                ibanInput.setSelectionRange(2, 2);
+                ibanInput.focus();
+                document.getElementById("resultat").innerText = "";
+            }
+        }
+    </script>
+</body>
+</html>
