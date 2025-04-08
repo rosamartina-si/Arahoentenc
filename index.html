@@ -1,129 +1,148 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expressió escrita</title>
-  <style>
-    body {
-      font-family: 'Georgia', serif;
-      background-color: white;
-      color: #000;
-      margin: 0 auto;
-      padding: 40px;
-      width: 210mm;
-      max-width: 100%;
-      height: auto;
-      box-sizing: border-box;
-    }
-    h1, h2, h3 {
-      color: #003366;
-      margin-bottom: 20px;
-    }
-    p {
-      font-size: 16px;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-    .container {
-      margin-top: 30px;
-      margin-bottom: 30px;
-    }
-    /* Enllaç principal */
-    a.link-text {
-      font-size: 18px;
-      color: #003366;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.link-text:hover {
-      text-decoration: underline;
-    }
-    /* Enllaç de tornada */
-    a.back-link {
-      color: #003366;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    a.back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Ara ho entenc</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        header img {
+            height: 60px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .link-box {
+            display: block;
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #000;
+            transition: background-color 0.2s;
+        }
+
+        .link-box:hover {
+            background-color: #e0e0e0;
+        }
+
+        .category {
+            margin: 30px 0;
+        }
+
+        .category h2 {
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
 
-  <p>Selecciona un exercici per practicar la redacció:</p>
-  
-  <h1>Anglès</h1>
+    <header>
+        <h1>Ara ho entenc</h1>
+    </header>
 
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-
-  <h1>Ciència</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-  
-<h1>Ètica</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-
-  
-<h1>Llengua</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-
-  
-  <h1>Matemàtiques</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-
-<h1>Meditació</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
-
-  
-  <h1>Eines</h1>
-
-  <div class="container">
-    <ul>
-      <li><a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a></li>
-      <li><a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple -  futbol</a></li>
-    </ul>
-  </div>
+    <div class="category" id="anglès">
+    	<h2>🇬🇧 Anglès</h2>
+        <a href="joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a>
+        <a href="fitxa_futbol_passat_simple.html" class="link-box">Fitxa - frases en passat simple - futbol</a>
+    </div>
 
 
-  <p><a href="../index.html" class="back-link">🔙 Tornar a Llengua</a></p>
+<div class="category" id="ciencia">
+    <h2>🧪 Ciència</h2>
+
+    <div class="subcategory" id="biologia">
+        <h3>🧬 Biologia</h3>
+    </div>
+
+    <div class="subcategory" id="fisica-quimica">
+        <h3>⚗️ Física i química</h3>
+    </div>
+
+    <div class="subcategory" id="medi-ambient">
+        <h3>🌱 Medi ambient</h3>
+    </div>
+
+    <div class="subcategory" id="astronomia">
+        <h3>🌌 Astronomia</h3>
+    </div>
+</div>
+
+
+    <div class="category" id="ètica">
+        <h2>🧠 Ètica</h2>
+        <h3>📄 Documents PDF</h3>
+        <a href="ciencia_oberta.html" class="link-box">Ciència oberta</a>
+        <a href="Bregman_Rutger_escombriaires_i_banquers.pdf" 
+           class="link-box" 
+           target="_blank" 
+           title="Obre el PDF en una nova pestanya">
+           Rutger Bregman: Escombriaires i banquers (PDF)
+        </a>
+    </div>
+
+
+<div class="category" id="llengua">
+    <h2>📘 Llengua</h2>
+
+    <div class="subcategory" id="ortografia">
+        <h3>✏️ Ortografia</h3>
+        <a href="joc-separacio-sil.labes.html" class="link-box">Joc: Separació de Síl·labes</a>
+        <a href="joc_accentuació_agudes_per_parelles_nivell_1.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 1</a>
+        <a href="accentuació_agudes_planes_per_parelles2.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 2</a>
+    </div>
+
+    <div class="subcategory" id="gramatica">
+        <h3>📖 Gramàtica</h3>
+        <a href="Distinció_entre_hi_ha_i_n_hi_ha.html" class="link-box">Distinció entre 'hi ha' i 'n'hi ha</a>
+    </div>
+
+    <div class="subcategory" id="redaccio">
+        <h3>📝 Redacció</h3>
+        <a href="oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
+        <a href="transformacio_frase_amb_participi_inicial.html" class="link-box">Transformació de frases amb participi inicial</a>
+    </div>
+</div>
+
+
+    <div class="category" id="matematiques">
+        <h2>🧮 Matemàtiques</h2>
+        <h3>📄 Documents PDF</h3>
+        <a href="01_Sesamath_Sise_Nombres_enters_i_decimals.pdf" 
+           class="link-box" 
+           target="_blank" 
+           title="Obre el PDF en una nova pestanya">
+           01 - Nombres enters i decimals (PDF)
+        </a>
+    </div>
+
+<div class="category" id="meditacio">
+    <h2>🧘‍♀️ Meditació</h2>
+    <a href="Pantalles.html" class="link-box">Ús pantalles</a>
+</div>
+
+    <div class="category" id="eines">
+        <h2>🛠️ Eines</h2>
+        <a href="VerificadorIBAN.html" class="link-box">Verificar IBAN</a>
+    </div>
 
 </body>
 </html>
-
