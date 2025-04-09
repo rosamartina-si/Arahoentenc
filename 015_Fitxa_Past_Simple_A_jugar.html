@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traducció: Expressar obligacions passades</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+    }
+
+    h1 {
+      color: #003366;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    input.correct {
+      border: 2px solid green;
+      background-color: #e8fbe8;
+    }
+
+    input.incorrect {
+      border: 2px solid red;
+      background-color: #ffeaea;
+    }
+
+    button {
+      margin: 5px 5px 15px 0;
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #003366;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005599;
+    }
+
+    .phrase-block {
+      margin-bottom: 25px;
+    }
+
+    .correction {
+      margin-top: 4px;
+      color: #006600;
+      font-style: italic;
+    }
+
+    #resultat {
+      font-weight: bold;
+      color: #003366;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Traducció: Expressar obligacions passades</h1>
+<p>Observa la situació i tradueix les frases del català a l'anglès. Les frases expliquen accions que el nen <strong>havia de fer abans de sortir a jugar</strong>. Utilitza el modal <code>had to</code>.</p>
+<p><strong>Exemple:</strong> Abans de sortir a jugar, havia de fer els deures. → <em>Before going out to play, I had to do my homework.</em></p>
+
+
+<div class="image">
+  <img src="015_1_imatge_a_jugar.png" alt="Nen ensenyant foto d'aniversari" />
+</div>
+
+<div id="exercici"></div>
+
+<div>
+  <button onclick="comprovaTotes()">Comprova-ho tot</button>
+  <button onclick="reinicia()">Esborra-ho tot</button>
+  <div id="resultat"></div>
+</div>
+
+<script>
+  const frases = [
+    ["Abans de sortir, havia de fer el llit.", ["before going out, i had to make the bed"]],
+    ["Abans de jugar, havia de preparar la motxilla.", ["before playing, i had to pack my backpack"]],
+    ["Abans d'anar al parc, havia de rentar els plats.", ["before going to the park, i had to wash the dishes"]],
+    ["Abans de veure els meus amics, havia de trucar la meva àvia.", ["before seeing my friends, i had to call my grandmother"]],
+    ["Abans de sortir, havia de posar-me les sabates.", ["before going out, i had to put on my shoes"]],
+    ["Abans de sortir, havia de rentar-me la cara.", ["before going out, i had to wash my face"]],
+    ["Abans de jugar, havia de recollir els meus joguets.", ["before playing, i had to pick up my toys"]],
+    ["Abans d'anar al parc, havia de posar la taula.", ["before going to the park, i had to set the table"]],
+    ["Abans de veure els meus amics, havia de fer una trucada.", ["before seeing my friends, i had to make a phone call"]],
+    ["Abans de sortir, havia de canviar-me de roba.", ["before going out, i had to change my clothes"]]
+  ];
+
+  const contenidor = document.getElementById('exercici');
+  frases.forEach((f, i) => {
+    const bloc = document.createElement('div');
+    bloc.className = 'phrase-block';
+    bloc.innerHTML = `
+      <p>${i + 1}. ${f[0]}</p>
+      <input type="text" data-correct='${JSON.stringify(f[1])}'>
+      <button>Comprova</button>
+      <div class="correction"></div>
+    `;
+    contenidor.appendChild(bloc);
+    const btn = bloc.querySelector('button');
+    btn.addEventListener('click', () => comprovaIndividual(btn));
+
+    const input = bloc.querySelector('input');
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        comprovaIndividual(btn);
+      }
+    });
+  });
+
+  function normalitza(text) {
+    return text.trim().toLowerCase().replace(/[.,!?]/g, '');
+  }
+
+  function parla(text) {
+    const synth = window.speechSynthesis;
+    if (synth) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-GB';
+      synth.speak(utter);
+    }
+  }
+
+  function comprovaIndividual(button) {
+    const bloc = button.closest('.phrase-block');
+    const input = bloc.querySelector('input');
+    const correctes = JSON.parse(input.dataset.correct);
+    const resposta = normalitza(input.value);
+    const correccio = bloc.querySelector('.correction');
+
+    if (correctes.includes(resposta)) {
+      input.classList.add('correct');
+      input.classList.remove('incorrect');
+      correccio.textContent = '';
+      parla(resposta);
+    } else {
+      input.classList.add('incorrect');
+      input.classList.remove('correct');
+      correccio.textContent = `❌ Resposta correcta: ${correctes[0]}`;
+      parla(correctes[0]);
+    }
+  }
+
+  function comprovaTotes() {
+    let encerts = 0;
+    document.querySelectorAll('.phrase-block').forEach(bloc => {
+      const input = bloc.querySelector('input');
+      const button = bloc.querySelector('button');
+      comprovaIndividual(button);
+      if (input.classList.contains('correct')) encerts++;
+    });
+    document.getElementById('resultat').textContent = `Has encertat ${encerts} de 10.`;
+  }
+
+  function reinicia() {
+    document.querySelectorAll('.phrase-block').forEach(bloc => {
+      const input = bloc.querySelector('input');
+      input.value = '';
+      input.classList.remove('correct', 'incorrect');
+      bloc.querySelector('.correction').textContent = '';
+    });
+    document.getElementById('resultat').textContent = '';
+  }
+</script>
+
+</body>
+</html>
