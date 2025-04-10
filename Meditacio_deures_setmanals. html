@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meditació per començar els deures</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2, h3, h4 {
+      color: #2c3e50;
+    }
+    blockquote {
+      font-style: italic;
+      margin: 1em 0;
+      padding-left: 1em;
+      border-left: 4px solid #ccc;
+    }
+    hr {
+      margin: 2em 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Meditació per començar els deures amb ganes, confiança i orgull</h1>
+
+  <h2>1️⃣ Troba la teva posició de concentració</h2>
+  <p>Seu bé, amb l’esquena dreta però relaxada. Tanca suaument els ulls o abaixa la mirada. Ara farem <strong>tres respiracions profundes</strong> per preparar el teu cervell:</p>
+  <ul>
+    <li>Inspira pel nas... i sent com entra aire fresc i net.</li>
+    <li>Exhala per la boca... i deixa anar la mandra, les presses o el mal humor.</li>
+  </ul>
+  <p>Repeteix-ho dues vegades més, i nota com el teu cos es va calmant, com si s’anés despertant per dins.</p>
+  <hr>
+
+  <h2>2️⃣ Ara és el moment de créixer</h2>
+  <p>Aquest moment, aquesta mitja hora de deures, <strong>no és només una obligació</strong>. És una oportunitat per <strong>fer créixer la teva ment</strong>, per fer coses que <strong>no tothom pot fer tan bé com tu</strong>, i per <strong>entrenar-te com si fossis un atleta del cervell</strong>.</p>
+  <blockquote>
+    Fer els deures no és patir, és progressar.<br>
+    No cal fer-ho perfecte, només posar-hi ganes i anar millorant.
+  </blockquote>
+  <hr>
+
+  <h2>3️⃣ Visualitza cada tasca com un repte que pots superar</h2>
+
+  <h3>SÉSAMATH – El desafiament de les matemàtiques</h3>
+  <p>Quan fas una fitxa de <strong>Sésamath</strong>, estàs entrenant el teu cervell per pensar més ràpid, per ser més precís, per resoldre problemes. És un <strong>nivell alt</strong>, i això vol dir que és un desafiament <strong>que val la pena</strong>.</p>
+  <blockquote>
+    Cada problema que entens, és una victòria.<br>
+    I tu tens tot el que cal per aconseguir-ho.
+  </blockquote>
+
+  <h3>EL DICTAT – Entrenar l’ortografia i la memòria</h3>
+  <p>Quan fas un <strong>dictat</strong>, el teu cervell aprèn com s’escriuen les paraules, com sona cada lletra, com es construeix el llenguatge.</p>
+  <blockquote>
+    Cada error és una pista per aprendre.<br>
+    I cada dictat et fa millor.
+  </blockquote>
+
+  <h3>LA REDACCIÓ – Expressar les teves idees, crear, inventar</h3>
+  <p><strong>La redacció</strong> és com una finestra oberta a tot el que tens dins. Tens idees, pensaments, històries. I pots aprendre a expressar-les de forma divertida o profunda.</p>
+  <blockquote>
+    Pots escriure textos genials. Històries que sorprenguin, pensaments que emocionin.<br>
+    Quan escrius, et coneixes millor a tu mateix.
+  </blockquote>
+
+  <h3>LECTURA EN VEU ALTA – Parlar millor, entendre millor</h3>
+  <p>Quan llegeixes en veu alta, <strong>t’escoltes a tu mateix, practiques la fluïdesa, millores la comprensió</strong>. La teva veu aprèn a sonar clara, segura, amb ritme.</p>
+  <blockquote>
+    És com fer música amb les paraules.<br>
+    I això t’ajudarà a parlar millor en públic, o a explicar idees amb més seguretat.
+  </blockquote>
+
+  <h3>LECTURA EN ANGLÈS – “The Bad Guys”: diverteix-te i aprèn ràpid</h3>
+  <p>Amb <strong>"The Bad Guys"</strong> tens sort: és un llibre divertit, amb personatges genials, i el millor de tot: <strong>aprens anglès sense adonar-te’n</strong>.</p>
+  <blockquote>
+    Cada paraula nova és una clau per entendre el món.<br>
+    I quan acabes un capítol, has guanyat molt més del que et penses.
+  </blockquote>
+  <hr>
+
+  <h2>4️⃣ Repeteix una frase per activar la ment</h2>
+  <blockquote>
+    “Sóc capaç.”<br>
+    “Ara és el meu moment d’aprendre.”<br>
+    “Puc fer-ho amb calma, amb ganes i amb orgull.”
+  </blockquote>
+  <hr>
+
+  <h2>6️⃣ Obre els ulls i comença la teva petita gran missió</h2>
+  <ul>
+    <li>Mira el material que tens al davant.</li>
+    <li>Tria la tasca d’avui.</li>
+    <li>Comença pas a pas, amb una actitud de repte, no de queixa.</li>
+    <li>Si alguna cosa et costa, fes una pausa curta, respira, i torna-hi.</li>
+  </ul>
+  <blockquote>
+    Tu ets més fort del que creus.<br>
+    I quan acabis, et sentiràs orgullós de tu mateix.
+  </blockquote>
+
+  <h2>✨ Cada dia, una mica millor. I això és el que realment importa.</h2>
+</body>
+</html>
