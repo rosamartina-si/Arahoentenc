@@ -90,7 +90,7 @@
     ["Vam jugar a jocs.", ["We played games"]],
     ["Vam ballar plegats.", ["We danced together"]],
     // Només acceptem pictures
-    ["Els meus pares van fer fotos.", ["My parents took pictures"]],
+    ["Els meus pares van fer fotos.", ["My parents took pictures","My parents took photos"]],
     // Acceptem everyone/everybody was happy
     ["Tothom estava content.", ["Everyone was happy","Everybody was happy"]],
     ["Vaig tenir un gran dia.", ["I had a great day"]]
@@ -139,17 +139,6 @@
     // Verifiquem si la resposta és correcta (en la seva versió normalitzada)
     const correctNormalized = correctes.map(c => normalitza(c));
     let isCorrect = correctNormalized.includes(resposta);
-
-    // Cas especial: frase 8 => "my parents took photos"
-    if (index === 7 && resposta === "my parents took photos") {
-      isCorrect = false;
-      setLineAndComment(
-        correccio,
-        `❌ Resposta correcta: My parents took pictures`, 'red',
-        `Tot i que «take photos» és correcte, normalment fem servir «take pictures» en el llenguatge de cada dia. 
-L’expressió «take photos» pot transmetre la idea de fer-ho d’una manera més professional, com si es fos fotògraf.`
-      );
-    }
 
     // Cas especial: frase 9 => "everyone were happy"/"everybody were happy"
     if (index === 8 && (
