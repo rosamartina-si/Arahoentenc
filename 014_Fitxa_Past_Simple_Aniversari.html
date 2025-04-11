@@ -13,6 +13,7 @@
       color: #000;
     }
     h1 { color: #003366; }
+
     input[type="text"] {
       width: 100%;
       padding: 6px;
@@ -21,6 +22,7 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
+
     /* Colors de fons */
     input.correct {
       border: 2px solid green;
@@ -34,6 +36,7 @@
       border: 2px solid orange;
       background-color: #fffacc; /* Groc clar */
     }
+
     button {
       margin: 5px 5px 15px 0;
       padding: 6px 12px;
@@ -46,7 +49,19 @@
     button:hover {
       background-color: #005599;
     }
-    .phrase-block { margin-bottom: 25px; }
+
+    .image {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .image img {
+      max-width: 70%;
+      height: auto;
+    }
+
+    .phrase-block {
+      margin-bottom: 25px;
+    }
 
     .correction {
       margin-top: 4px;
@@ -89,20 +104,20 @@
     ["Vaig obrir regals.", ["I opened presents","I opened gifts"]],
     ["Vam jugar a jocs.", ["We played games"]],
     ["Vam ballar plegats.", ["We danced together"]],
-    // Només acceptem pictures
-    ["Els meus pares van fer fotos.", ["My parents took pictures","My parents took photos"]],
-    // Acceptem everyone/everybody was happy
+    // ARA acceptem tant "pictures" com "photos"
+    ["Els meus pares van fer fotos.", ["My parents took pictures", "My parents took photos"]],
     ["Tothom estava content.", ["Everyone was happy","Everybody was happy"]],
     ["Vaig tenir un gran dia.", ["I had a great day"]]
   ];
 
+  // Generar la llista de frases
   const contenidor = document.getElementById('exercici');
   frases.forEach((f, i) => {
     const bloc = document.createElement('div');
     bloc.className = 'phrase-block';
     bloc.innerHTML = `
       <p>${i + 1}. ${f[0]}</p>
-      <input type="text" data-correct='${JSON.stringify(f[1])}' data-index='${i}' data-state="unchecked">
+      <input type="text" data-index='${i}' data-state="unchecked" data-correct='${JSON.stringify(f[1])}'>
       <button>Comprova</button>
       <div class="correction"></div>
     `;
@@ -111,7 +126,6 @@
     const btn = bloc.querySelector('button');
     btn.addEventListener('click', () => comprovaIndividual(btn));
 
-    // Validació amb ENTER
     const input = bloc.querySelector('input');
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -121,7 +135,7 @@
     });
   });
 
-  // Funció auxiliar: treu signes i passa a minúscules per comparar
+  // Normalitza text
   function normalitza(text) {
     return text.trim().toLowerCase().replace(/[.,!?]/g, '');
   }
@@ -136,11 +150,19 @@
     const previousState = input.dataset.state;
     let correccio = bloc.querySelector('.correction');
 
-    // Verifiquem si la resposta és correcta (en la seva versió normalitzada)
+    // Llista de correctes normalitzades
     const correctNormalized = correctes.map(c => normalitza(c));
     let isCorrect = correctNormalized.includes(resposta);
 
-    // Cas especial: frase 9 => "everyone were happy"/"everybody were happy"
+    // Si l'usuari posa "my parents took photos", és correct (ja a l'array),
+    // però afegim un comentari explicatiu
+    if (index === 7 && resposta === "my parents took photos") {
+      // encara isCorrect = true, però amb comentari
+      // generem la línia "Ara ja és correcte" o "✔️ Correcte!" i un extra en negre
+      // ho farem just després de la lògica isCorrect
+    }
+
+    // CAS especial: if user posa "everyone were happy" => incorrect, comentari
     if (index === 8 && (
       resposta === "everyone were happy" ||
       resposta === "everybody were happy"
@@ -148,34 +170,42 @@
       isCorrect = false;
       setLineAndComment(
         correccio,
-        `❌ Resposta correcta: ${correctes[0]}`, 'red',
+        `❌ Resposta correcta: ${correctes[0]}`, 
+        'red',
         `"Everyone" i "everybody" semblen parlar de molta gent, però gramaticalment són singulars. 
 Han d'anar amb «was», no «were». Funcionen com "tothom". 
 Una pista que et pot ser útil és recordar que acaben en "one" i "body", que són paraules singulars.`
       );
     }
 
-    // Marcant correct/incorrect
+    // Avaluem isCorrect
     if (isCorrect) {
+      // check si era incorrect => "corrected"
       if (previousState === 'incorrect' || previousState === 'corrected') {
         input.classList.remove('incorrect','correct');
         input.classList.add('corrected');
         correccio.innerHTML = `<span style="color:green;">✔️ Ara ja és correcte</span>`;
         input.dataset.state = 'corrected';
+
       } else {
         input.classList.remove('incorrect','corrected');
         input.classList.add('correct');
         correccio.innerHTML = `<span style="color:green;">✔️ Correcte!</span>`;
         input.dataset.state = 'correct';
       }
+
+      // Si la frase és la 8 i l'usuari posa "my parents took photos", afegim comentari extra
+      if (index === 7 && resposta === "my parents took photos") {
+        correccio.innerHTML += `<br><span style="color:black;">
+“Take photos” és correcte, però “take pictures” és més comú en anglès del dia a dia.
+</span>`;
+      }
+
     } else {
-      // Només si no tenim error ja
+      // si encara no hem posat "Resposta correcta"
       if (!correccio.textContent.includes("❌ Resposta correcta:")) {
-        setLineAndComment(
-          correccio, 
-          `❌ Resposta correcta: ${correctes[0]}`, 
-          'red'
-        );
+        // posem la resposta principal
+        correccio.innerHTML = `<span style="color:red;">❌ Resposta correcta: ${correctes[0]}</span>`;
       }
       input.classList.remove('correct','corrected');
       input.classList.add('incorrect');
@@ -183,21 +213,12 @@ Una pista que et pot ser útil és recordar que acaben en "one" i "body", que s�
     }
   }
 
-  // Helper: posa la línia principal i un possible comentari extra
-  function setLineAndComment(correccioElem, mainLine, mainColor, comment="") {
-    let html = `<span style="color:${mainColor};">${mainLine}</span>`;
-    if (comment) {
-      html += `<br><span style="color:black;">${comment}</span>`;
-    }
-    correccioElem.innerHTML = html;
-  }
-
-  // Comprova tot => Només sumem correct (verd)
   function comprovaTotes() {
     let encerts = 0;
     document.querySelectorAll('.phrase-block').forEach(bloc => {
       const input = bloc.querySelector('input');
       const button = bloc.querySelector('button');
+
       comprovaIndividual(button);
       if (input.classList.contains('correct')) {
         encerts++;
@@ -206,18 +227,17 @@ Una pista que et pot ser útil és recordar que acaben en "one" i "body", que s�
     document.getElementById('resultat').textContent = `Has encertat ${encerts} de 10.`;
   }
 
-  // Reinicia
   function reinicia() {
     document.querySelectorAll('.phrase-block').forEach(bloc => {
       const input = bloc.querySelector('input');
       input.value = '';
       input.classList.remove('correct','incorrect','corrected');
       input.dataset.state = 'unchecked';
-      let correccio = bloc.querySelector('.correction');
-      correccio.textContent = '';
+      bloc.querySelector('.correction').textContent = '';
     });
     document.getElementById('resultat').textContent = '';
   }
 </script>
 </body>
 </html>
+
