@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>They / Them / Their Exercise</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      background-color: #f0f0f0;
+      display: block;
+    }
+    #buttonContainer {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+    #feedback {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+    }
+    #feedback.correct {
+      color: green;
+    }
+    #feedback.incorrect {
+      color: red;
+    }
+    #explanation {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      max-width: 90%;
+    }
+    #scoreDisplay {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 18px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #pauseButton, #restartButton {
+      font-size: 18px;
+      padding: 10px 20px;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #pauseButton {
+      bottom: 80px;
+    }
+    #restartButton {
+      bottom: 140px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="explanation">
+    <strong>they</strong> = subject (e.g. They are happy)<br />
+    <strong>them</strong> = object (e.g. I saw them)<br />
+    <strong>their</strong> = possessive (e.g. Their dog is cute)
+  </div>
+  <div id="scoreDisplay">Score: 0 / 0</div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer">
+    <button onclick="handleClick('they')">they</button>
+    <button onclick="handleClick('them')">them</button>
+    <button onclick="handleClick('their')">their</button>
+  </div>
+  <button id="pauseButton" onclick="togglePause()">Pause</button>
+  <button id="restartButton" onclick="restartGame()">🔁 Restart</button>
+  <div id="feedback"></div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const pauseButton = document.getElementById('pauseButton');
+    const restartButton = document.getElementById('restartButton');
+    const feedback = document.getElementById('feedback');
+
+    const fullSentences = [
+      { sentence: "___ are my friends from school.", answer: "they" },
+      { sentence: "I saw ___ at the cinema yesterday.", answer: "them" },
+      { sentence: "This is ___ house.", answer: "their" },
+      { sentence: "___ play football every weekend.", answer: "they" },
+      { sentence: "I helped ___ with homework.", answer: "them" },
+      { sentence: "We visited ___ grandparents last week.", answer: "their" },
+      { sentence: "Can you give this to ___?", answer: "them" },
+      { sentence: "Do you know ___ names?", answer: "their" },
+      { sentence: "___ are always late!", answer: "they" },
+      { sentence: "___ cat is very playful.", answer: "their" },
+      { sentence: "___ went to the zoo yesterday.", answer: "they" },
+      { sentence: "I want to go with ___.", answer: "them" },
+      { sentence: "This is ___ favorite book.", answer: "their" },
+      { sentence: "The teacher asked ___ a question.", answer: "them" },
+      { sentence: "___ live next to my house.", answer: "they" },
+      { sentence: "I gave the present to ___.", answer: "them" },
+      { sentence: "The children forgot ___ lunch.", answer: "their" },
+      { sentence: "___ don't want to come with us.", answer: "they" },
+      { sentence: "We need to call ___ now.", answer: "them" },
+      { sentence: "I like ___ new car.", answer: "their" },
+      { sentence: "___ love to play games.", answer: "they" },
+      { sentence: "Tell ___ to be careful!", answer: "them" },
+      { sentence: "Do you think ___ will come to the party?", answer: "they" },
+      { sentence: "The teacher told ___ to sit down.", answer: "them" },
+      { sentence: "Why did you call ___ so early?", answer: "them" },
+      { sentence: "___ don't understand the question.", answer: "they" }
+    ];
+
+    let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
+
+    function initGame(fromIncorrect = false) {
+      const source = fromIncorrect && incorrectSentences.length > 0 ? incorrectSentences : fullSentences;
+      sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
+      current = null;
+      y = 0;
+      speed = window.innerHeight < 600 ? 0.2 : 0.4;
+      active = true;
+      paused = false;
+      canAdvance = true;
+      score = 0;
+      total = 0;
+      if (!fromIncorrect) incorrectSentences = [];
+      reviewMode = fromIncorrect;
+      restartButton.textContent = fromIncorrect ? '🔁 Review incorrect answers' : '🔁 Restart';
+      restartButton.style.display = 'none';
+      updateScore();
+      nextSentence();
+      draw();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `Score: ${score} / ${total}`;
+    }
+
+    function showFeedback(message, className) {
+      feedback.textContent = message;
+      feedback.className = className;
+      feedback.style.display = 'block';
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 2000);
+    }
+
+    function speak(text, callback) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.onend = () => callback && callback();
+      speechSynthesis.speak(utterance);
+    }
+
+    function nextSentence() {
+      if (sentences.length === 0) {
+        showFeedback(`Final Score: ${score} / ${total}`, 'correct');
+        active = false;
+        restartButton.style.display = 'block';
+        restartButton.onclick = () => {
+          if (!reviewMode && incorrectSentences.length > 0) {
+            initGame(true);
+          } else {
+            initGame(false);
+          }
+        };
+        return;
+      }
+      current = sentences.shift();
+      y = 0;
+      canAdvance = true;
+    }
+
+    function draw() {
+      if (!active || paused) return requestAnimationFrame(draw);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (current) {
+        if (canAdvance) y += speed;
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText(current.sentence, 50, y);
+        if (y > canvas.height) {
+          showFeedback(`Answer: ${current.answer}`, 'incorrect');
+          speak("The correct answer is " + current.answer + ".");
+          total++;
+          updateScore();
+          nextSentence();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    function handleClick(userAnswer) {
+      if (paused) {
+        paused = false;
+        pauseButton.textContent = 'Pause';
+        draw();
+      }
+      checkAnswer(userAnswer);
+    }
+
+    function checkAnswer(userAnswer) {
+      speak(userAnswer);
+      if (current && userAnswer === current.answer) {
+        showFeedback('✓ Correct!', 'correct');
+        const fullSentence = current.sentence.replace("___", userAnswer);
+        canAdvance = false;
+        speak(fullSentence, () => {
+          score++;
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      } else {
+        showFeedback(`✗ Incorrect. Answer: ${current.answer}`, 'incorrect');
+        canAdvance = false;
+        const fullSentence = current.sentence.replace("___", current.answer);
+        const explanation = `The correct answer is ${current.answer}. ${fullSentence}`;
+        incorrectSentences.push({ ...current, userAnswer });
+        speak(explanation, () => {
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      }
+    }
+
+    function togglePause() {
+      paused = !paused;
+      pauseButton.textContent = paused ? 'Resume' : 'Pause';
+      if (!paused) draw();
+    }
+
+    function restartGame() {
+      initGame();
+    }
+
+    initGame();
+  </script>
+</body>
+</html>
