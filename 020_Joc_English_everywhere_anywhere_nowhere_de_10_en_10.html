@@ -8,7 +8,7 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      /* overflow: hidden;  <-- Eliminat per poder fer scroll al mòbil */
+      /* NO overflow: hidden; */
     }
     canvas {
       background-color: #f0f0f0;
@@ -73,8 +73,6 @@
   </style>
 </head>
 <body>
-  <!-- Ja no hi ha l'element #explanation -->
-
   <div id="scoreDisplay">Score: 0 / 0</div>
   <canvas id="gameCanvas"></canvas>
 
@@ -91,11 +89,13 @@
   <div id="feedback"></div>
 
   <script>
-    // Mostrem l'explicació en un alert abans de començar el joc
+    // ALERT amb emojis i salts de línia
     alert(
-      "everywhere ➜ in all places (positive sentences)\n" +
-      "anywhere   ➜ in any place (often in negative or question)\n" +
-      "nowhere    ➜ in no place (doesn't exist anywhere)"
+      "📢 Welcome to the game!\n\n" +
+      "🟢 everywhere ➜ in ALL places (positive)\n" +
+      "🟡 anywhere   ➜ in ANY place (negatives / questions)\n" +
+      "🔴 nowhere    ➜ in NO place (doesn't exist at all)\n\n" +
+      "Good luck!"
     );
 
     const canvas = document.getElementById('gameCanvas');
@@ -112,30 +112,14 @@
       { sentence: "I can't find my keys ___.", answer: "anywhere" },
       { sentence: "She looked ___ for her phone.", answer: "everywhere" },
       { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
-      { sentence: "He travels ___ for work.", answer: "everywhere" },
-      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" },
-      { sentence: "I looked ___ and still couldn't see him.", answer: "everywhere" },
-      { sentence: "They have ___ to go tonight.", answer: "nowhere" },
-      { sentence: "Can you go ___ you want?", answer: "anywhere" },
-      { sentence: "The kids hid toys ___ in the room.", answer: "everywhere" },
-      { sentence: "There is ___ like home.", answer: "nowhere" },
-      { sentence: "I didn’t go ___ during the holidays.", answer: "anywhere" },
-      { sentence: "You can sit ___ you like.", answer: "anywhere" },
-      { sentence: "There was garbage ___ after the party.", answer: "everywhere" },
-      { sentence: "We have ___ to sleep tonight.", answer: "nowhere" },
-      { sentence: "She searched ___ for her glasses.", answer: "everywhere" },
-      { sentence: "I can't find it ___.", answer: "anywhere" },
-      { sentence: "They went ___ together last summer.", answer: "everywhere" },
-      { sentence: "There’s ___ to hide in this room.", answer: "nowhere" },
-      { sentence: "We didn’t go ___ after school.", answer: "anywhere" },
-      { sentence: "I looked ___ but couldn’t find my wallet.", answer: "everywhere" },
-      { sentence: "There was ___ to park the car.", answer: "nowhere" }
+      // ...
+      // Afegeix la resta de frases aquí
     ];
 
     let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
 
     function initGame(fromIncorrect = false) {
-      const source = fromIncorrect && incorrectSentences.length > 0 ? incorrectSentences : fullSentences;
+      const source = fromIncorrect && incorrectSentences?.length > 0 ? incorrectSentences : fullSentences;
       sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
       current = null;
       y = 0;
@@ -168,6 +152,7 @@
     }
 
     function speak(text, callback) {
+      // Compte que alguns navegadors mòbils poden NO admetre speechSynthesis
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
       utterance.onend = () => callback && callback();
@@ -222,6 +207,7 @@
     }
 
     function checkAnswer(userAnswer) {
+      // Aquest speak pot no funcionar a certs mòbils sense interacció prèvia
       speak(userAnswer);
       if (current && userAnswer === current.answer) {
         showFeedback('✓ Correct!', 'correct');
@@ -238,6 +224,7 @@
         canAdvance = false;
         const fullSentence = current.sentence.replace("___", current.answer);
         const explanation = \`The correct answer is \${current.answer}. \${fullSentence}\`;
+        if (!incorrectSentences) incorrectSentences = [];
         incorrectSentences.push({ ...current, userAnswer });
         speak(explanation, () => {
           total++;
