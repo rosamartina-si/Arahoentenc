@@ -358,7 +358,7 @@
         function checkAnswer() {
             const userInputValue = userInput.value.trim();
 
-            if (currentWordObj && userInputValue === currentWordObj.solution) {
+	if (currentWordObj && userInputValue.toLowerCase() === currentWordObj.solution.toLowerCase()) {
                 showFeedback('✓ Correcte!', 'correct');
                 currentWordObj = null;
                 startNewWord();
