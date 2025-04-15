@@ -1,268 +1,263 @@
- 1 <!DOCTYPE html>
- 2 <html lang="en">
- 3 <head>
- 4   <meta charset="UTF-8" />
- 5   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
- 6   <title>Anywhere / Nowhere / Everywhere Game</title>
- 7   <style>
- 8     body {
- 9       font-family: Arial, sans-serif;
-10       margin: 0;
-11       overflow: hidden; /* <--- ELIMINA o COMENTA AQUESTA LÍNIA */
-12     }
-13     canvas {
-14       background-color: #f0f0f0;
-15       display: block;
-16     }
-17     #buttonContainer {
-18       position: fixed;
-19       bottom: 20px;
-20       left: 50%;
-21       transform: translateX(-50%);
-22       text-align: center;
-23     }
-24     button {
-25       font-size: 18px;
-26       padding: 10px 20px;
-27       margin: 5px;
-28     }
-29     #feedback {
-30       position: fixed;
-31       top: 50%;
-32       left: 50%;
-33       transform: translate(-50%, -50%);
-34       font-size: 32px;
-35       font-weight: bold;
-36       display: none;
-37       text-align: center;
-38     }
-39     #feedback.correct {
-40       color: green;
-41     }
-42     #feedback.incorrect {
-43       color: red;
-44     }
-45     #scoreDisplay {
-46       position: fixed;
-47       top: 10px;
-48       right: 20px;
-49       font-size: 18px;
-50       background: #fff;
-51       padding: 10px;
-52       border-radius: 10px;
-53       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-54     }
-55     #pauseButton, #restartButton {
-56       font-size: 18px;
-57       padding: 10px 20px;
-58       position: fixed;
-59       left: 50%;
-60       transform: translateX(-50%);
-61     }
-62     #pauseButton {
-63       bottom: 80px;
-64     }
-65     #restartButton {
-66       bottom: 140px;
-67       display: none;
-68     }
-69     #explanation {
-70       position: fixed;
-71       top: 10px;
-72       left: 50%;
-73       transform: translateX(0);
-74       width: 300px;
-75       font-size: 16px;
-76       background: #ffffffee;
-77       padding: 10px 20px;
-78       border-radius: 10px;
-79       text-align: left;
-80       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-81     }
-82 
-83   </style>
-84 </head>
-85 <body>
-86 <div id="explanation">
-87   <strong>everywhere</strong> ➜ in all places. Used in positive sentences.<br>
-88   <strong>anywhere</strong> ➜ in any place. Often used with negative or question sentences.<br>
-89   <strong>nowhere</strong> ➜ in no place. Used to express that something doesn’t exist anywhere.
-90 </div>
-91 <div id="scoreDisplay">Score: 0 / 0</div>
-92 <canvas id="gameCanvas"></canvas>
-93 <div id="buttonContainer">
-94   <button onclick="handleClick('anywhere')">anywhere</button>
-95   <button onclick="handleClick('nowhere')">nowhere</button>
-96   <button onclick="handleClick('everywhere')">everywhere</button>
-97 </div>
-98 <button id="pauseButton" onclick="togglePause()">Pause</button>
-99 <button id="restartButton" onclick="restartGame()">🔁 Restart</button>
-100 <div id="feedback"></div>
-101 
-102 <script>
-103 const canvas = document.getElementById('gameCanvas');
-104 const ctx = canvas.getContext('2d');
-105 canvas.width = window.innerWidth;
-106 canvas.height = window.innerHeight;
-107 
-108 const scoreDisplay = document.getElementById('scoreDisplay');
-109 const pauseButton = document.getElementById('pauseButton');
-110 const restartButton = document.getElementById('restartButton');
-111 const feedback = document.getElementById('feedback');
-112 
-113 const fullSentences = [
-114   { sentence: "I can't find my keys ___.", answer: "anywhere" },
-115   { sentence: "She looked ___ for her phone.", answer: "everywhere" },
-116   { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
-117   { sentence: "He travels ___ for work.", answer: "everywhere" },
-118   { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" },
-119   { sentence: "I looked ___ and still couldn't see him.", answer: "everywhere" },
-120   { sentence: "They have ___ to go tonight.", answer: "nowhere" },
-121   { sentence: "Can you go ___ you want?", answer: "anywhere" },
-122   { sentence: "The kids hid toys ___ in the room.", answer: "everywhere" },
-123   { sentence: "There is ___ like home.", answer: "nowhere" },
-124   { sentence: "I didn’t go ___ during the holidays.", answer: "anywhere" },
-125   { sentence: "You can sit ___ you like.", answer: "anywhere" },
-126   { sentence: "There was garbage ___ after the party.", answer: "everywhere" },
-127   { sentence: "We have ___ to sleep tonight.", answer: "nowhere" },
-128   { sentence: "She searched ___ for her glasses.", answer: "everywhere" },
-129   { sentence: "I can't find it ___.", answer: "anywhere" },
-130   { sentence: "They went ___ together last summer.", answer: "everywhere" },
-131   { sentence: "There’s ___ to hide in this room.", answer: "nowhere" },
-132   { sentence: "We didn’t go ___ after school.", answer: "anywhere" },
-133   { sentence: "I looked ___ but couldn’t find my wallet.", answer: "everywhere" },
-134   { sentence: "There was ___ to park the car.", answer: "nowhere" }
-135 ];
-136 
-137 let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
-138 
-139 function initGame(fromIncorrect = false) {
-140   const source = fromIncorrect && incorrectSentences.length > 0 ? incorrectSentences : fullSentences;
-141   sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
-142   current = null;
-143   y = 0;
-144   speed = window.innerHeight < 600 ? 0.2 : 0.4;
-145   active = true;
-146   paused = false;
-147   canAdvance = true;
-148   score = 0;
-149   total = 0;
-150   if (!fromIncorrect) incorrectSentences = [];
-151   reviewMode = fromIncorrect;
-152   restartButton.textContent = fromIncorrect ? '🔁 Review incorrect answers' : '🔁 Restart';
-153   restartButton.style.display = 'none';
-154   updateScore();
-155   nextSentence();
-156   draw();
-157 }
-158 
-159 function updateScore() {
-160   scoreDisplay.textContent = \`Score: \${score} / \${total}\`;
-161 }
-162 
-163 function showFeedback(message, className) {
-164   feedback.textContent = message;
-165   feedback.className = className;
-166   feedback.style.display = 'block';
-167   setTimeout(() => {
-168     feedback.style.display = 'none';
-169   }, 2000);
-170 }
-171 
-172 function speak(text, callback) {
-173   const utterance = new SpeechSynthesisUtterance(text);
-174   utterance.lang = 'en-US';
-175   utterance.onend = () => callback && callback();
-176   speechSynthesis.speak(utterance);
-177 }
-178 
-179 function nextSentence() {
-180   if (sentences.length === 0) {
-181     showFeedback(\`Final Score: \${score} / \${total}\`, 'correct');
-182     active = false;
-183     restartButton.style.display = 'block';
-184     restartButton.onclick = () => {
-185       if (!reviewMode && incorrectSentences.length > 0) {
-186         initGame(true);
-187       } else {
-188         initGame(false);
-189       }
-190     };
-191     return;
-192   }
-193   current = sentences.shift();
-194   y = 0;
-195   canAdvance = true;
-196 }
-197 
-198 function draw() {
-199   if (!active || paused) return requestAnimationFrame(draw);
-200   ctx.clearRect(0, 0, canvas.width, canvas.height);
-201   if (current) {
-202     if (canAdvance) y += speed;
-203     ctx.font = '24px Arial';
-204     ctx.fillStyle = 'black';
-205     ctx.fillText(current.sentence, 50, y);
-206     if (y > canvas.height) {
-207       showFeedback(\`Answer: \${current.answer}\`, 'incorrect');
-208       speak("The correct answer is " + current.answer + ".");
-209       total++;
-210       updateScore();
-211       nextSentence();
-212     }
-213   }
-214   requestAnimationFrame(draw);
-215 }
-216 
-217 function handleClick(userAnswer) {
-218   if (paused) {
-219     paused = false;
-220     pauseButton.textContent = 'Pause';
-221     draw();
-222   }
-223   checkAnswer(userAnswer);
-224 }
-225 
-226 function checkAnswer(userAnswer) {
-227   speak(userAnswer);
-228   if (current && userAnswer === current.answer) {
-229     showFeedback('✓ Correct!', 'correct');
-230     const fullSentence = current.sentence.replace("___", userAnswer);
-231     canAdvance = false;
-232     speak(fullSentence, () => {
-233       score++;
-234       total++;
-235       updateScore();
-236       nextSentence();
-237     });
-238   } else {
-239     showFeedback(\`✗ Incorrect. Answer: \${current.answer}\`, 'incorrect');
-240     canAdvance = false;
-241     const fullSentence = current.sentence.replace("___", current.answer);
-242     const explanation = \`The correct answer is \${current.answer}. \${fullSentence}\`;
-243     incorrectSentences.push({ ...current, userAnswer });
-244     speak(explanation, () => {
-245       total++;
-246       updateScore();
-247       nextSentence();
-248     });
-249   }
-250 }
-251 
-252 function togglePause() {
-253   paused = !paused;
-254   pauseButton.textContent = paused ? 'Resume' : 'Pause';
-255   if (!paused) draw();
-256 }
-257 
-258 function restartGame() {
-259   initGame();
-260 }
-261 
-262 initGame();
-263 </script>
-264 </body>
-265 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anywhere / Nowhere / Everywhere Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      /* overflow: hidden;  <-- Eliminat per poder fer scroll al mòbil */
+    }
+    canvas {
+      background-color: #f0f0f0;
+      display: block;
+    }
+    /* Contenidor dels 3 botons principals */
+    #buttonContainer {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;       /* Fa que els botons estiguin en línia */
+      flex-wrap: nowrap;   /* Evita que saltin de línia */
+      gap: 10px;           /* Espai entre botons */
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+    #feedback {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+    }
+    #feedback.correct {
+      color: green;
+    }
+    #feedback.incorrect {
+      color: red;
+    }
+    #scoreDisplay {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 18px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    /* Botó pause i restart */
+    #pauseButton, #restartButton {
+      font-size: 18px;
+      padding: 10px 20px;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #pauseButton {
+      bottom: 80px;  /* Ajustat per no sobreposar-se als altres botons */
+    }
+    #restartButton {
+      bottom: 140px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ja no hi ha l'element #explanation -->
 
+  <div id="scoreDisplay">Score: 0 / 0</div>
+  <canvas id="gameCanvas"></canvas>
 
+  <!-- Botons principals en una línia -->
+  <div id="buttonContainer">
+    <button onclick="handleClick('anywhere')">anywhere</button>
+    <button onclick="handleClick('nowhere')">nowhere</button>
+    <button onclick="handleClick('everywhere')">everywhere</button>
+  </div>
 
+  <button id="pauseButton" onclick="togglePause()">Pause</button>
+  <button id="restartButton" onclick="restartGame()">🔁 Restart</button>
+
+  <div id="feedback"></div>
+
+  <script>
+    // Mostrem l'explicació en un alert abans de començar el joc
+    alert(
+      "everywhere ➜ in all places (positive sentences)\n" +
+      "anywhere   ➜ in any place (often in negative or question)\n" +
+      "nowhere    ➜ in no place (doesn't exist anywhere)"
+    );
+
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const pauseButton = document.getElementById('pauseButton');
+    const restartButton = document.getElementById('restartButton');
+    const feedback = document.getElementById('feedback');
+
+    const fullSentences = [
+      { sentence: "I can't find my keys ___.", answer: "anywhere" },
+      { sentence: "She looked ___ for her phone.", answer: "everywhere" },
+      { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
+      { sentence: "He travels ___ for work.", answer: "everywhere" },
+      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" },
+      { sentence: "I looked ___ and still couldn't see him.", answer: "everywhere" },
+      { sentence: "They have ___ to go tonight.", answer: "nowhere" },
+      { sentence: "Can you go ___ you want?", answer: "anywhere" },
+      { sentence: "The kids hid toys ___ in the room.", answer: "everywhere" },
+      { sentence: "There is ___ like home.", answer: "nowhere" },
+      { sentence: "I didn’t go ___ during the holidays.", answer: "anywhere" },
+      { sentence: "You can sit ___ you like.", answer: "anywhere" },
+      { sentence: "There was garbage ___ after the party.", answer: "everywhere" },
+      { sentence: "We have ___ to sleep tonight.", answer: "nowhere" },
+      { sentence: "She searched ___ for her glasses.", answer: "everywhere" },
+      { sentence: "I can't find it ___.", answer: "anywhere" },
+      { sentence: "They went ___ together last summer.", answer: "everywhere" },
+      { sentence: "There’s ___ to hide in this room.", answer: "nowhere" },
+      { sentence: "We didn’t go ___ after school.", answer: "anywhere" },
+      { sentence: "I looked ___ but couldn’t find my wallet.", answer: "everywhere" },
+      { sentence: "There was ___ to park the car.", answer: "nowhere" }
+    ];
+
+    let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
+
+    function initGame(fromIncorrect = false) {
+      const source = fromIncorrect && incorrectSentences.length > 0 ? incorrectSentences : fullSentences;
+      sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
+      current = null;
+      y = 0;
+      speed = window.innerHeight < 600 ? 0.2 : 0.4;
+      active = true;
+      paused = false;
+      canAdvance = true;
+      score = 0;
+      total = 0;
+      if (!fromIncorrect) incorrectSentences = [];
+      reviewMode = fromIncorrect;
+      restartButton.textContent = fromIncorrect ? '🔁 Review incorrect answers' : '🔁 Restart';
+      restartButton.style.display = 'none';
+      updateScore();
+      nextSentence();
+      draw();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = \`Score: \${score} / \${total}\`;
+    }
+
+    function showFeedback(message, className) {
+      feedback.textContent = message;
+      feedback.className = className;
+      feedback.style.display = 'block';
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 2000);
+    }
+
+    function speak(text, callback) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.onend = () => callback && callback();
+      speechSynthesis.speak(utterance);
+    }
+
+    function nextSentence() {
+      if (sentences.length === 0) {
+        showFeedback(\`Final Score: \${score} / \${total}\`, 'correct');
+        active = false;
+        restartButton.style.display = 'block';
+        restartButton.onclick = () => {
+          if (!reviewMode && incorrectSentences.length > 0) {
+            initGame(true);
+          } else {
+            initGame(false);
+          }
+        };
+        return;
+      }
+      current = sentences.shift();
+      y = 0;
+      canAdvance = true;
+    }
+
+    function draw() {
+      if (!active || paused) return requestAnimationFrame(draw);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (current) {
+        if (canAdvance) y += speed;
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText(current.sentence, 50, y);
+        if (y > canvas.height) {
+          showFeedback(\`Answer: \${current.answer}\`, 'incorrect');
+          speak("The correct answer is " + current.answer + ".");
+          total++;
+          updateScore();
+          nextSentence();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    function handleClick(userAnswer) {
+      if (paused) {
+        paused = false;
+        pauseButton.textContent = 'Pause';
+        draw();
+      }
+      checkAnswer(userAnswer);
+    }
+
+    function checkAnswer(userAnswer) {
+      speak(userAnswer);
+      if (current && userAnswer === current.answer) {
+        showFeedback('✓ Correct!', 'correct');
+        const fullSentence = current.sentence.replace("___", userAnswer);
+        canAdvance = false;
+        speak(fullSentence, () => {
+          score++;
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      } else {
+        showFeedback(\`✗ Incorrect. Answer: \${current.answer}\`, 'incorrect');
+        canAdvance = false;
+        const fullSentence = current.sentence.replace("___", current.answer);
+        const explanation = \`The correct answer is \${current.answer}. \${fullSentence}\`;
+        incorrectSentences.push({ ...current, userAnswer });
+        speak(explanation, () => {
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      }
+    }
+
+    function togglePause() {
+      paused = !paused;
+      pauseButton.textContent = paused ? 'Resume' : 'Pause';
+      if (!paused) draw();
+    }
+
+    function restartGame() {
+      initGame();
+    }
+
+    initGame();
+  </script>
+</body>
+</html>
