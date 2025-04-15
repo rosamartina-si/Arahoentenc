@@ -355,20 +355,29 @@
             requestAnimationFrame(updateGame);
         }
 
-        function checkAnswer() {
-            const userInputValue = userInput.value.trim();
+function checkAnswer() {
+    const userInputValue = userInput.value
+        .trim()
+        // Substitueix guions llargs (–, —) per guions simples (-)
+        .replace(/[\u2013\u2014]/g, '-')
+        // Converteix a minúscules per ignorar majúscules
+        .toLowerCase();
 
-	if (currentWordObj && userInputValue.toLowerCase() === currentWordObj.solution.toLowerCase()) {
-                showFeedback('✓ Correcte!', 'correct');
-                currentWordObj = null;
-                startNewWord();
-            } else if (currentWordObj) {
-                showFeedback('Segueix-ho intentant! 💪', 'tryAgain');
-            }
+    if (
+        currentWordObj &&
+        userInputValue === currentWordObj.solution.toLowerCase()
+    ) {
+        showFeedback('✓ Correcte!', 'correct');
+        currentWordObj = null;
+        startNewWord();
+    } else if (currentWordObj) {
+        showFeedback('Segueix-ho intentant! 💪', 'tryAgain');
+    }
 
-            userInput.value = '';
-            focusInput();
-        }
+    userInput.value = '';
+    focusInput();
+}
+
 
         userInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
