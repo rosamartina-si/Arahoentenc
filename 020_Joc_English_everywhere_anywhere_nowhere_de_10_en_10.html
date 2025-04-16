@@ -10,10 +10,14 @@
       margin: 0;
       overflow: hidden;
     }
+
     canvas {
       background-color: #f0f0f0;
       display: block;
+      width: 100vw;
+      height: 50vh;
     }
+
     #scoreDisplay {
       position: fixed;
       top: 10px;
@@ -23,17 +27,29 @@
       padding: 10px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 10;
     }
-    #pauseButton, #restartButton {
-      font-size: 18px;
-      padding: 10px 20px;
+
+    #pauseButton {
       position: fixed;
+      bottom: 140px;
       left: 50%;
       transform: translateX(-50%);
-      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 18px;
+      z-index: 10;
     }
-    #pauseButton { bottom: 80px; }
-    #restartButton { bottom: 140px; display: none; }
+
+    #restartButton {
+      position: fixed;
+      bottom: 190px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      display: none;
+    }
+
     #feedback {
       position: fixed;
       top: 50%;
@@ -43,26 +59,31 @@
       font-weight: bold;
       display: none;
       text-align: center;
+      z-index: 10;
     }
+
     #feedback.correct { color: green; }
     #feedback.incorrect { color: red; }
+
     #buttonContainer {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 90%;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 500px;
+      z-index: 10;
     }
+
     #buttonContainer button {
       flex: 1;
       margin: 0 5px;
       padding: 10px;
       font-size: 16px;
     }
+
     #modalOverlay {
       position: fixed;
       top: 0;
@@ -79,15 +100,18 @@
       padding: 20px;
       box-sizing: border-box;
     }
+
     #modalOverlay h2, #modalOverlay h3 {
       font-size: 24px;
       margin-bottom: 10px;
     }
+
     #modalOverlay p {
       font-size: 16px;
       margin: 8px 0;
-      max-width: 500px;
+      max-width: 90%;
     }
+
     #startButton {
       margin-top: 30px;
       font-size: 20px;
@@ -98,6 +122,7 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
     #startButton:hover {
       background-color: #388e3c;
     }
@@ -105,7 +130,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici8</h2>
+    <h2>🎯 Objectiu de l'exercici</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -159,7 +184,7 @@
       const source = fromIncorrect && incorrectSentences?.length > 0 ? incorrectSentences : fullSentences;
       sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
       current = null;
-      y = 0;
+      y = 70; // inícia just sota el marcador
       speed = window.innerHeight < 600 ? 0.2 : 0.4;
       active = true;
       paused = false;
@@ -209,7 +234,7 @@
         return;
       }
       current = sentences.shift();
-      y = 0;
+      y = 70;
       canAdvance = true;
     }
 
@@ -218,9 +243,27 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (current) {
         if (canAdvance) y += speed;
-        ctx.font = '24px Arial';
+        ctx.font = window.innerWidth < 500 ? '18px Arial' : '24px Arial';
         ctx.fillStyle = 'black';
-        ctx.fillText(current.sentence, 50, y);
+        ctx.textAlign = 'center';
+        ctx.wrapText = function (text, x, y, maxWidth, lineHeight) {
+          const words = text.split(' ');
+          let line = '';
+          for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = ctx.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+              ctx.fillText(line, x, y);
+              line = words[n] + ' ';
+              y += lineHeight;
+            } else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line, x, y);
+        };
+        ctx.wrapText(current.sentence, canvas.width / 2, y, canvas.width * 0.8, 30);
         if (y > canvas.height) {
           showFeedback(`Resposta: ${current.answer}`, 'incorrect');
           speak("The correct answer is " + current.answer + ".");
