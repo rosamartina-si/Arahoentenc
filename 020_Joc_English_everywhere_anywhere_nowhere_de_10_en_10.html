@@ -32,7 +32,7 @@
       transform: translateX(-50%);
       cursor: pointer;
     }
-    #pauseButton { bottom: 80px; }
+    #pauseButton { bottom: 20px; }
     #restartButton { bottom: 140px; display: none; }
     #feedback {
       position: fixed;
@@ -46,23 +46,25 @@
     }
     #feedback.correct { color: green; }
     #feedback.incorrect { color: red; }
+
     #buttonContainer {
       position: fixed;
-      bottom: 20px;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
-      max-width: 90%;
+      max-width: 100%;
     }
     #buttonContainer button {
-      flex: 1;
-      margin: 0 5px;
+      flex: 1 1 auto;
       padding: 10px;
       font-size: 16px;
+      min-width: 100px;
     }
+
     #modalOverlay {
       position: fixed;
       top: 0;
@@ -105,7 +107,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici13</h2>
+    <h2>🎯 Objectiu de l'exercici14</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -119,14 +121,15 @@
   <div id="scoreDisplay">Score: 0 / 0</div>
   <canvas id="gameCanvas"></canvas>
 
-  <button id="pauseButton" onclick="togglePause()">Pausa</button>
-  <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
-
   <div id="buttonContainer">
     <button onclick="handleClick('anywhere')">anywhere</button>
     <button onclick="handleClick('nowhere')">nowhere</button>
     <button onclick="handleClick('everywhere')">everywhere</button>
   </div>
+
+  <button id="pauseButton" onclick="togglePause()">Pausa</button>
+  <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
+
   <div id="feedback"></div>
 
   <script>
@@ -141,11 +144,11 @@
     const feedback = document.getElementById('feedback');
 
     const fullSentences = [
-      { sentence: "I can't find my keys ___.", answer: "anywhere" },
-      { sentence: "She looked ___ for her phone.", answer: "everywhere" },
-      { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
-      { sentence: "He travels ___ for work.", answer: "everywhere" },
-      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" }
+      { sentence: "I can't find my keys ___", answer: "anywhere" },
+      { sentence: "She looked ___ for her phone", answer: "everywhere" },
+      { sentence: "There was ___ to sit in the park", answer: "nowhere" },
+      { sentence: "He travels ___ for work", answer: "everywhere" },
+      { sentence: "We couldn't go ___ because of the rain", answer: "anywhere" }
     ];
 
     let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
@@ -213,6 +216,24 @@
       canAdvance = true;
     }
 
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          context.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      context.fillText(line, x, y);
+    }
+
     function draw() {
       if (!active || paused) return requestAnimationFrame(draw);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -220,9 +241,9 @@
         if (canAdvance) y += speed;
         ctx.font = '24px Arial';
         ctx.fillStyle = 'black';
-        const textWidth = ctx.measureText(current.sentence).width;
-        const x = (canvas.width - textWidth) / 2;
-        ctx.fillText(current.sentence, x, y);
+        const maxTextWidth = canvas.width * 0.8;
+        const x = (canvas.width - maxTextWidth) / 2;
+        wrapText(ctx, current.sentence, x, y, maxTextWidth, 30);
         if (y > canvas.height) {
           showFeedback(`Resposta: ${current.answer}`, 'incorrect');
           speak("The correct answer is " + current.answer + ".");
