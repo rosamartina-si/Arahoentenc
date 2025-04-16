@@ -13,23 +13,36 @@
     canvas {
       background-color: #f0f0f0;
       display: block;
+      width: 100vw;
+      height: 50vh;
     }
-    #buttonContainer {
+    #scoreDisplay {
       position: fixed;
-      bottom: 20px;
+      top: 10px;
+      right: 20px;
+      font-size: 18px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #pauseButton {
+      position: fixed;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 90%;
-    }
-    button {
-      font-size: 18px;
       padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
+      font-size: 18px;
+      z-index: 10;
+    }
+    #restartButton {
+      position: fixed;
+      bottom: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      display: none;
     }
     #feedback {
       position: fixed;
@@ -43,29 +56,22 @@
     }
     #feedback.correct { color: green; }
     #feedback.incorrect { color: red; }
-
-    #scoreDisplay {
+    #buttonContainer {
       position: fixed;
-      top: 10px;
-      right: 20px;
-      font-size: 18px;
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-
-    #pauseButton, #restartButton {
-      font-size: 18px;
-      padding: 10px 20px;
-      position: fixed;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 500px;
     }
-    #pauseButton { bottom: 80px; }
-    #restartButton { bottom: 140px; display: none; }
-
+    #buttonContainer button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
     #modalOverlay {
       position: fixed;
       top: 0;
@@ -80,6 +86,7 @@
       flex-direction: column;
       text-align: center;
       padding: 20px;
+      box-sizing: border-box;
     }
     #modalOverlay h2, #modalOverlay h3 {
       font-size: 24px;
@@ -103,57 +110,32 @@
     #startButton:hover {
       background-color: #388e3c;
     }
-
-    @media (max-width: 600px) {
-      #buttonContainer {
-        flex-direction: column;
-        align-items: center;
-      }
-      button {
-        width: 80%;
-        font-size: 16px;
-      }
-      #modalOverlay h2, #modalOverlay h3 {
-        font-size: 20px;
-      }
-      #modalOverlay p {
-        font-size: 15px;
-      }
-      #startButton {
-        font-size: 18px;
-        width: 80%;
-      }
-      #feedback {
-        font-size: 24px;
-      }
-      #scoreDisplay {
-        font-size: 16px;
-      }
-    }
   </style>
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici6</h2>
+    <h2>🎯 Objectiu de l'exercici7</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
     <h3>📘 Explicació gramatical</h3>
-    <p><strong>everywhere</strong> ➜ a tot arreu. Es fa servir en frases afirmatives.</p>
-    <p><strong>anywhere</strong> ➜ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.</p>
-    <p><strong>nowhere</strong> ➜ en cap lloc. Expressa que alguna cosa no existeix enlloc.</p>
+    <p><strong>everywhere</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.</p>
+    <p><strong>anywhere</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.</p>
+    <p><strong>nowhere</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc.</p>
     <button id="startButton">Entesos! Comencem</button>
   </div>
 
   <div id="scoreDisplay">Score: 0 / 0</div>
   <canvas id="gameCanvas"></canvas>
+
+  <button id="pauseButton" onclick="togglePause()">Pausa</button>
+  <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
+
   <div id="buttonContainer">
     <button onclick="handleClick('anywhere')">anywhere</button>
     <button onclick="handleClick('nowhere')">nowhere</button>
     <button onclick="handleClick('everywhere')">everywhere</button>
   </div>
-  <button id="pauseButton" onclick="togglePause()">Pausa</button>
-  <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
   <div id="feedback"></div>
 
   <script>
@@ -170,7 +152,9 @@
     const fullSentences = [
       { sentence: "I can't find my keys ___.", answer: "anywhere" },
       { sentence: "She looked ___ for her phone.", answer: "everywhere" },
-      { sentence: "There was ___ to sit in the park.", answer: "nowhere" }
+      { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
+      { sentence: "He travels ___ for work.", answer: "everywhere" },
+      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" }
     ];
 
     let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
@@ -221,7 +205,7 @@
 
     function nextSentence() {
       if (sentences.length === 0) {
-        showFeedback(`Final Score: ${score} / ${total}`, 'correct');
+        showFeedback(`Puntuació final: ${score} / ${total}`, 'correct');
         active = false;
         restartButton.style.display = 'block';
         restartButton.onclick = () => {
@@ -247,7 +231,7 @@
         ctx.fillStyle = 'black';
         ctx.fillText(current.sentence, 50, y);
         if (y > canvas.height) {
-          showFeedback(`Answer: ${current.answer}`, 'incorrect');
+          showFeedback(`Resposta: ${current.answer}`, 'incorrect');
           speak("The correct answer is " + current.answer + ".");
           total++;
           updateScore();
