@@ -13,8 +13,6 @@
     canvas {
       background-color: #f0f0f0;
       display: block;
-      width: 100vw;
-      height: 50vh;
     }
     #scoreDisplay {
       position: fixed;
@@ -26,24 +24,16 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    #pauseButton {
+    #pauseButton, #restartButton {
+      font-size: 18px;
+      padding: 10px 20px;
       position: fixed;
-      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 18px;
-      z-index: 10;
+      cursor: pointer;
     }
-    #restartButton {
-      position: fixed;
-      bottom: 150px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 18px;
-      display: none;
-    }
+    #pauseButton { bottom: 80px; }
+    #restartButton { bottom: 140px; display: none; }
     #feedback {
       position: fixed;
       top: 50%;
@@ -62,9 +52,10 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      justify-content: space-between;
-      width: 90%;
-      max-width: 500px;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90%;
     }
     #buttonContainer button {
       flex: 1;
@@ -114,7 +105,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici7</h2>
+    <h2>🎯 Objectiu de l'exercici8</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
