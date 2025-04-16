@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>They / Them / Their Exercise</title>
+  <title>Anywhere / Nowhere / Everywhere Exercise</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
       font-size: 18px;
       padding: 10px 20px;
       margin: 5px;
+      cursor: pointer;
     }
     #feedback {
       position: fixed;
@@ -71,6 +72,7 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
+      cursor: pointer;
     }
     #pauseButton {
       bottom: 80px;
@@ -83,16 +85,16 @@
 </head>
 <body>
   <div id="explanation">
-    <strong>they</strong> = subject (e.g. They are happy)<br />
-    <strong>them</strong> = object (e.g. I saw them)<br />
-    <strong>their</strong> = possessive (e.g. Their dog is cute)
+    <strong>everywhere</strong> ➜ in all places. Used in positive sentences.<br />
+    <strong>anywhere</strong> ➜ in any place. Often used in negative or question sentences.<br />
+    <strong>nowhere</strong> ➜ in no place. Used to express that something doesn’t exist anywhere.
   </div>
   <div id="scoreDisplay">Score: 0 / 0</div>
   <canvas id="gameCanvas"></canvas>
   <div id="buttonContainer">
-    <button onclick="handleClick('they')">they</button>
-    <button onclick="handleClick('them')">them</button>
-    <button onclick="handleClick('their')">their</button>
+    <button onclick="handleClick('anywhere')">anywhere</button>
+    <button onclick="handleClick('nowhere')">nowhere</button>
+    <button onclick="handleClick('everywhere')">everywhere</button>
   </div>
   <button id="pauseButton" onclick="togglePause()">Pause</button>
   <button id="restartButton" onclick="restartGame()">🔁 Restart</button>
@@ -110,32 +112,27 @@
     const feedback = document.getElementById('feedback');
 
     const fullSentences = [
-      { sentence: "___ are my friends from school.", answer: "they" },
-      { sentence: "I saw ___ at the cinema yesterday.", answer: "them" },
-      { sentence: "This is ___ house.", answer: "their" },
-      { sentence: "___ play football every weekend.", answer: "they" },
-      { sentence: "I helped ___ with homework.", answer: "them" },
-      { sentence: "We visited ___ grandparents last week.", answer: "their" },
-      { sentence: "Can you give this to ___?", answer: "them" },
-      { sentence: "Do you know ___ names?", answer: "their" },
-      { sentence: "___ are always late!", answer: "they" },
-      { sentence: "___ cat is very playful.", answer: "their" },
-      { sentence: "___ went to the zoo yesterday.", answer: "they" },
-      { sentence: "I want to go with ___.", answer: "them" },
-      { sentence: "This is ___ favorite book.", answer: "their" },
-      { sentence: "The teacher asked ___ a question.", answer: "them" },
-      { sentence: "___ live next to my house.", answer: "they" },
-      { sentence: "I gave the present to ___.", answer: "them" },
-      { sentence: "The children forgot ___ lunch.", answer: "their" },
-      { sentence: "___ don't want to come with us.", answer: "they" },
-      { sentence: "We need to call ___ now.", answer: "them" },
-      { sentence: "I like ___ new car.", answer: "their" },
-      { sentence: "___ love to play games.", answer: "they" },
-      { sentence: "Tell ___ to be careful!", answer: "them" },
-      { sentence: "Do you think ___ will come to the party?", answer: "they" },
-      { sentence: "The teacher told ___ to sit down.", answer: "them" },
-      { sentence: "Why did you call ___ so early?", answer: "them" },
-      { sentence: "___ don't understand the question.", answer: "they" }
+      { sentence: "I can't find my keys ___.", answer: "anywhere" },
+      { sentence: "She looked ___ for her phone.", answer: "everywhere" },
+      { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
+      { sentence: "He travels ___ for work.", answer: "everywhere" },
+      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" },
+      { sentence: "I looked ___ and still couldn't see him.", answer: "everywhere" },
+      { sentence: "They have ___ to go tonight.", answer: "nowhere" },
+      { sentence: "Can you go ___ you want?", answer: "anywhere" },
+      { sentence: "The kids hid toys ___ in the room.", answer: "everywhere" },
+      { sentence: "There is ___ like home.", answer: "nowhere" },
+      { sentence: "I didn’t go ___ during the holidays.", answer: "anywhere" },
+      { sentence: "You can sit ___ you like.", answer: "anywhere" },
+      { sentence: "There was garbage ___ after the party.", answer: "everywhere" },
+      { sentence: "We have ___ to sleep tonight.", answer: "nowhere" },
+      { sentence: "She searched ___ for her glasses.", answer: "everywhere" },
+      { sentence: "I can't find it ___.", answer: "anywhere" },
+      { sentence: "They went ___ together last summer.", answer: "everywhere" },
+      { sentence: "There’s ___ to hide in this room.", answer: "nowhere" },
+      { sentence: "We didn’t go ___ after school.", answer: "anywhere" },
+      { sentence: "I looked ___ but couldn’t find my wallet.", answer: "everywhere" },
+      { sentence: "There was ___ to park the car.", answer: "nowhere" }
     ];
 
     let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
