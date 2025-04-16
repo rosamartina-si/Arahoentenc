@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anywhere / Nowhere / Everywhere Exercise</title>
+  <title>Anywhere / Nowhere / Everywhere - Joc</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,15 +21,15 @@
       transform: translateX(-50%);
       display: flex;
       gap: 10px;
-      max-width: 500px;
-      width: 90%;
+      flex-wrap: wrap;
       justify-content: center;
+      max-width: 90%;
     }
     button {
       font-size: 18px;
       padding: 10px 20px;
+      margin: 5px;
       cursor: pointer;
-      flex: 1;
     }
     #feedback {
       position: fixed;
@@ -41,12 +41,9 @@
       display: none;
       text-align: center;
     }
-    #feedback.correct {
-      color: green;
-    }
-    #feedback.incorrect {
-      color: red;
-    }
+    #feedback.correct { color: green; }
+    #feedback.incorrect { color: red; }
+
     #scoreDisplay {
       position: fixed;
       top: 10px;
@@ -57,6 +54,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
+
     #pauseButton, #restartButton {
       font-size: 18px;
       padding: 10px 20px;
@@ -65,50 +63,85 @@
       transform: translateX(-50%);
       cursor: pointer;
     }
-    #pauseButton {
-      bottom: 80px;
-    }
-    #restartButton {
-      bottom: 140px;
-      display: none;
-    }
+    #pauseButton { bottom: 80px; }
+    #restartButton { bottom: 140px; display: none; }
+
     #modalOverlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #ffffffee;
+      background-color: #ffffffee;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      padding: 20px;
+      flex-direction: column;
       text-align: center;
+      padding: 20px;
+    }
+    #modalOverlay h2, #modalOverlay h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
     #modalOverlay p {
-      max-width: 500px;
-      margin: 5px 0;
       font-size: 16px;
+      margin: 8px 0;
+      max-width: 500px;
     }
-    #modalOverlay button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 18px;
+    #startButton {
+      margin-top: 30px;
+      font-size: 20px;
+      padding: 10px 30px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #startButton:hover {
+      background-color: #388e3c;
+    }
+
+    @media (max-width: 600px) {
+      #buttonContainer {
+        flex-direction: column;
+        align-items: center;
+      }
+      button {
+        width: 80%;
+        font-size: 16px;
+      }
+      #modalOverlay h2, #modalOverlay h3 {
+        font-size: 20px;
+      }
+      #modalOverlay p {
+        font-size: 15px;
+      }
+      #startButton {
+        font-size: 18px;
+        width: 80%;
+      }
+      #feedback {
+        font-size: 24px;
+      }
+      #scoreDisplay {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🌟 Objectiu de l'exercici5</h2>
+    <h2>🎯 Objectiu de l'exercici6</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
     <h3>📘 Explicació gramatical</h3>
-    <p><strong>everywhere</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.</p>
-    <p><strong>anywhere</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.</p>
-    <p><strong>nowhere</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc.</p>
+    <p><strong>everywhere</strong> ➜ a tot arreu. Es fa servir en frases afirmatives.</p>
+    <p><strong>anywhere</strong> ➜ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.</p>
+    <p><strong>nowhere</strong> ➜ en cap lloc. Expressa que alguna cosa no existeix enlloc.</p>
     <button id="startButton">Entesos! Comencem</button>
   </div>
 
@@ -119,8 +152,8 @@
     <button onclick="handleClick('nowhere')">nowhere</button>
     <button onclick="handleClick('everywhere')">everywhere</button>
   </div>
-  <button id="pauseButton" onclick="togglePause()">Pause</button>
-  <button id="restartButton" onclick="restartGame()">🔁 Restart</button>
+  <button id="pauseButton" onclick="togglePause()">Pausa</button>
+  <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
   <div id="feedback"></div>
 
   <script>
@@ -227,7 +260,7 @@
     function handleClick(userAnswer) {
       if (paused) {
         paused = false;
-        pauseButton.textContent = 'Pause';
+        pauseButton.textContent = 'Pausa';
         draw();
       }
       checkAnswer(userAnswer);
@@ -236,7 +269,7 @@
     function checkAnswer(userAnswer) {
       speak(userAnswer);
       if (current && userAnswer === current.answer) {
-        showFeedback('✓ Correct!', 'correct');
+        showFeedback('✓ Correcte!', 'correct');
         const fullSentence = current.sentence.replace("___", userAnswer);
         canAdvance = false;
         speak(fullSentence, () => {
@@ -246,7 +279,7 @@
           nextSentence();
         });
       } else {
-        showFeedback(`✗ Incorrect. Answer: ${current.answer}`, 'incorrect');
+        showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
         canAdvance = false;
         const fullSentence = current.sentence.replace("___", current.answer);
         const explanation = `The correct answer is ${current.answer}. ${fullSentence}`;
@@ -261,7 +294,7 @@
 
     function togglePause() {
       paused = !paused;
-      pauseButton.textContent = paused ? 'Resume' : 'Pause';
+      pauseButton.textContent = paused ? 'Continua' : 'Pausa';
       if (!paused) draw();
     }
 
