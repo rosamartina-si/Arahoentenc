@@ -10,14 +10,10 @@
       margin: 0;
       overflow: hidden;
     }
-
     canvas {
-      background-color: #fff;
+      background-color: #f0f0f0;
       display: block;
-      width: 100vw;
-      height: 65vh;
     }
-
     #scoreDisplay {
       position: fixed;
       top: 10px;
@@ -27,29 +23,17 @@
       padding: 10px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      z-index: 10;
     }
-
-    #pauseButton {
+    #pauseButton, #restartButton {
+      font-size: 18px;
+      padding: 10px 20px;
       position: fixed;
-      bottom: 140px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 18px;
-      z-index: 10;
+      cursor: pointer;
     }
-
-    #restartButton {
-      position: fixed;
-      bottom: 190px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 18px;
-      display: none;
-    }
-
+    #pauseButton { bottom: 80px; }
+    #restartButton { bottom: 140px; display: none; }
     #feedback {
       position: fixed;
       top: 50%;
@@ -59,31 +43,26 @@
       font-weight: bold;
       display: none;
       text-align: center;
-      z-index: 10;
     }
-
     #feedback.correct { color: green; }
     #feedback.incorrect { color: red; }
-
     #buttonContainer {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      justify-content: space-between;
-      width: 90%;
-      max-width: 500px;
-      z-index: 10;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90%;
     }
-
     #buttonContainer button {
       flex: 1;
       margin: 0 5px;
       padding: 10px;
       font-size: 16px;
     }
-
     #modalOverlay {
       position: fixed;
       top: 0;
@@ -100,18 +79,15 @@
       padding: 20px;
       box-sizing: border-box;
     }
-
     #modalOverlay h2, #modalOverlay h3 {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
     #modalOverlay p {
       font-size: 16px;
       margin: 8px 0;
-      max-width: 90%;
+      max-width: 500px;
     }
-
     #startButton {
       margin-top: 30px;
       font-size: 20px;
@@ -122,7 +98,6 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
     #startButton:hover {
       background-color: #388e3c;
     }
@@ -130,7 +105,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici11</h2>
+    <h2>🎯 Objectiu de l'exercici12</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -155,7 +130,152 @@
   <div id="feedback"></div>
 
   <script>
-    // El codi JavaScript ja està preparat dins del fitxer i no necessita canvis aquí per aquestes correccions visuals
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const pauseButton = document.getElementById('pauseButton');
+    const restartButton = document.getElementById('restartButton');
+    const feedback = document.getElementById('feedback');
+
+    const fullSentences = [
+      { sentence: "I can't find my keys ___.", answer: "anywhere" },
+      { sentence: "She looked ___ for her phone.", answer: "everywhere" },
+      { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
+      { sentence: "He travels ___ for work.", answer: "everywhere" },
+      { sentence: "We couldn't go ___ because of the rain.", answer: "anywhere" }
+    ];
+
+    let sentences, current, y, speed, active, paused, canAdvance, score, total, incorrectSentences, reviewMode = false;
+
+    document.getElementById('startButton').addEventListener('click', () => {
+      document.getElementById('modalOverlay').style.display = 'none';
+      initGame();
+    });
+
+    function initGame(fromIncorrect = false) {
+      const source = fromIncorrect && incorrectSentences?.length > 0 ? incorrectSentences : fullSentences;
+      sentences = source.sort(() => 0.5 - Math.random()).slice(0, 10);
+      current = null;
+      y = 0;
+      speed = window.innerHeight < 600 ? 0.2 : 0.4;
+      active = true;
+      paused = false;
+      canAdvance = true;
+      score = 0;
+      total = 0;
+      if (!fromIncorrect) incorrectSentences = [];
+      reviewMode = fromIncorrect;
+      restartButton.style.display = 'none';
+      updateScore();
+      nextSentence();
+      draw();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `Score: ${score} / ${total}`;
+    }
+
+    function showFeedback(message, className) {
+      feedback.textContent = message;
+      feedback.className = className;
+      feedback.style.display = 'block';
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 2000);
+    }
+
+    function speak(text, callback) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.onend = () => callback && callback();
+      speechSynthesis.speak(utterance);
+    }
+
+    function nextSentence() {
+      if (sentences.length === 0) {
+        showFeedback(`Puntuació final: ${score} / ${total}`, 'correct');
+        active = false;
+        restartButton.style.display = 'block';
+        restartButton.onclick = () => {
+          if (!reviewMode && incorrectSentences.length > 0) {
+            initGame(true);
+          } else {
+            initGame(false);
+          }
+        };
+        return;
+      }
+      current = sentences.shift();
+      y = 0;
+      canAdvance = true;
+    }
+
+    function draw() {
+      if (!active || paused) return requestAnimationFrame(draw);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (current) {
+        if (canAdvance) y += speed;
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText(current.sentence, 50, y);
+        if (y > canvas.height) {
+          showFeedback(`Resposta: ${current.answer}`, 'incorrect');
+          speak("The correct answer is " + current.answer + ".");
+          total++;
+          updateScore();
+          nextSentence();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    function handleClick(userAnswer) {
+      if (paused) {
+        paused = false;
+        pauseButton.textContent = 'Pausa';
+        draw();
+      }
+      checkAnswer(userAnswer);
+    }
+
+    function checkAnswer(userAnswer) {
+      speak(userAnswer);
+      if (current && userAnswer === current.answer) {
+        showFeedback('✓ Correcte!', 'correct');
+        const fullSentence = current.sentence.replace("___", userAnswer);
+        canAdvance = false;
+        speak(fullSentence, () => {
+          score++;
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      } else {
+        showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
+        canAdvance = false;
+        const fullSentence = current.sentence.replace("___", current.answer);
+        const explanation = `The correct answer is ${current.answer}. ${fullSentence}`;
+        incorrectSentences.push({ ...current, userAnswer });
+        speak(explanation, () => {
+          total++;
+          updateScore();
+          nextSentence();
+        });
+      }
+    }
+
+    function togglePause() {
+      paused = !paused;
+      pauseButton.textContent = paused ? 'Continua' : 'Pausa';
+      if (!paused) draw();
+    }
+
+    function restartGame() {
+      initGame();
+    }
   </script>
 </body>
 </html>
