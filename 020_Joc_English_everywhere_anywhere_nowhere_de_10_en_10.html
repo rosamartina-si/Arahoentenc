@@ -107,7 +107,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici14</h2>
+    <h2>🎯 Objectiu de l'exercici12</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -216,22 +216,23 @@
       canAdvance = true;
     }
 
-    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    function wrapText(context, text, y, maxWidth, lineHeight) {
       const words = text.split(' ');
       let line = '';
       for (let n = 0; n < words.length; n++) {
         const testLine = line + words[n] + ' ';
-        const metrics = context.measureText(testLine);
-        const testWidth = metrics.width;
+        const testWidth = context.measureText(testLine).width;
         if (testWidth > maxWidth && n > 0) {
-          context.fillText(line, x, y);
+          const lineX = (canvas.width - context.measureText(line).width) / 2;
+          context.fillText(line, lineX, y);
           line = words[n] + ' ';
           y += lineHeight;
         } else {
           line = testLine;
         }
       }
-      context.fillText(line, x, y);
+      const lineX = (canvas.width - context.measureText(line).width) / 2;
+      context.fillText(line, lineX, y);
     }
 
     function draw() {
@@ -242,8 +243,7 @@
         ctx.font = '24px Arial';
         ctx.fillStyle = 'black';
         const maxTextWidth = canvas.width * 0.8;
-        const x = (canvas.width - maxTextWidth) / 2;
-        wrapText(ctx, current.sentence, x, y, maxTextWidth, 30);
+        wrapText(ctx, current.sentence, y, maxTextWidth, 30);
         if (y > canvas.height) {
           showFeedback(`Resposta: ${current.answer}`, 'incorrect');
           speak("The correct answer is " + current.answer + ".");
