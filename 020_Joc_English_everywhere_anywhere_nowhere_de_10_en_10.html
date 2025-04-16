@@ -20,7 +20,7 @@
       position: fixed;
       font-size: 18px;
       background: #fff;
-      padding: 10px;
+      padding: 10px 20px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       z-index: 1000;
@@ -28,28 +28,61 @@
       top: 10px;
     }
 
-    /* Mòbil: mou el marcador a la part inferior */
     @media (max-width: 600px) {
       #scoreDisplay {
         top: auto;
-        bottom: 70px;
+        bottom: 80px;
         left: 50%;
         right: auto;
         transform: translateX(-50%);
       }
     }
 
-    #pauseButton, #restartButton {
-      font-size: 18px;
-      padding: 10px 20px;
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-    }
 
-    #pauseButton { bottom: 20px; }
-    #restartButton { bottom: 140px; display: none; }
+  #pauseButton {
+    bottom: 20px;
+    font-size: 18px;
+    padding: 10px 30px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  #pauseButton:hover {
+    background-color: #fb8c00;
+    transform: translateX(-50%) scale(1.05);
+  }
+
+  #restartButton {
+    bottom: 180px;
+    display: none;
+    font-size: 20px;
+    padding: 12px 30px;
+    background-color: #607d8b;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  #restartButton:hover {
+    background-color: #455a64;
+    transform: translateX(-50%) scale(1.05);
+  }
+
+
 
     #feedback {
       position: fixed;
@@ -142,7 +175,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici21</h2>
+    <h2>🎯 Objectiu de l'exercici23</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -150,21 +183,20 @@
     <p><strong>everywhere</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.</p>
     <p><strong>anywhere</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.</p>
     <p><strong>nowhere</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc.</p>
+    <hr style="margin: 20px 0; width: 80%;" />
+    <p>🔄 Cada vegada l’exercici és diferent. Hi ha més de <strong>200 frases possibles</strong> i el pots reiniciar al final.</p>
     <button id="startButton">Entesos! Comencem</button>
   </div>
-
   <div id="scoreDisplay">Score: 0 / 10</div>
   <canvas id="gameCanvas"></canvas>
-
-  <div id="buttonContainer">
-    <button onclick="handleClick('anywhere')">anywhere</button>
-    <button onclick="handleClick('nowhere')">nowhere</button>
-    <button onclick="handleClick('everywhere')">everywhere</button>
-  </div>
+<div id="buttonContainer">
+  <button onclick="handleClick('nowhere')">nowhere</button>
+  <button onclick="handleClick('anywhere')">anywhere</button>
+  <button onclick="handleClick('everywhere')">everywhere</button>
+</div>
 
   <button id="pauseButton" onclick="togglePause()">Pausa</button>
   <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
-
   <div id="feedback"></div>
 
   <script>
@@ -234,7 +266,6 @@
 
     function nextSentence() {
       if (sentences.length === 0) {
-        showFeedback(`Puntuació final: ${score} / 10`, 'correct');
         active = false;
         restartButton.style.display = 'block';
         restartButton.onclick = () => {
