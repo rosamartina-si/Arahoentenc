@@ -21,7 +21,6 @@
       transform: translateX(-50%);
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
       justify-content: center;
       max-width: 90%;
     }
@@ -63,8 +62,13 @@
       transform: translateX(-50%);
       cursor: pointer;
     }
-    #pauseButton { bottom: 80px; }
-    #restartButton { bottom: 140px; display: none; }
+    #pauseButton {
+      bottom: 100px;
+    }
+    #restartButton {
+      bottom: 160px;
+      display: none;
+    }
 
     /* MODAL */
     #modalOverlay {
@@ -81,6 +85,7 @@
       flex-direction: column;
       text-align: center;
       padding: 20px;
+      box-sizing: border-box;
     }
     #modalOverlay h2, #modalOverlay h3 {
       font-size: 24px;
@@ -105,21 +110,35 @@
       background-color: #388e3c;
     }
 
-    /* 📱 RESPONSIVE */
+    /* RESPONSIVE MÒBIL */
     @media (max-width: 600px) {
       #buttonContainer {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
         align-items: center;
+        gap: 6px;
+        bottom: 20px;
       }
-      button {
-        width: 80%;
-        font-size: 16px;
+      #buttonContainer button {
+        font-size: 15px;
+        padding: 8px 10px;
+        flex: 1 1 auto;
+        max-width: 33%;
+      }
+      #pauseButton {
+        bottom: 100px;
+      }
+      #restartButton {
+        bottom: 160px;
       }
       #modalOverlay h2, #modalOverlay h3 {
         font-size: 20px;
       }
       #modalOverlay p {
         font-size: 15px;
+        max-width: 100%;
+        word-wrap: break-word;
       }
       #startButton {
         font-size: 18px;
@@ -320,7 +339,6 @@
       initGame();
     }
 
-    // Quan es clica el botó de la modal, es tanca i s'inicia el joc
     document.getElementById('startButton').addEventListener('click', () => {
       document.getElementById('modalOverlay').style.display = 'none';
       initGame();
