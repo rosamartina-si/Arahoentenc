@@ -35,6 +35,7 @@
         left: 50%;
         right: auto;
         transform: translateX(-50%);
+        font-size: 16px;
       }
     }
 
@@ -140,15 +141,10 @@
       flex-direction: column;
       text-align: center;
       padding: 20px;
+      padding-top: 40px;
       box-sizing: border-box;
       overflow-y: auto;
       max-height: 100vh;
-    }
-
-    @media (min-width: 601px) {
-      #modalOverlay {
-        padding-top: 40px;
-      }
     }
 
     #modalOverlay h2, #modalOverlay h3 {
@@ -181,7 +177,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici30</h2>
+    <h2>🎯 Objectiu de l'exercici31</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -196,24 +192,25 @@
 
   <div id="scoreDisplay">Score: 0 / 10</div>
   <canvas id="gameCanvas"></canvas>
-
-  <!-- 🔁 Botons reordenats -->
   <div id="buttonContainer">
     <button onclick="handleClick('nowhere')">nowhere</button>
     <button onclick="handleClick('anywhere')">anywhere</button>
     <button onclick="handleClick('everywhere')">everywhere</button>
   </div>
-
   <button id="pauseButton" onclick="togglePause()">Pausa</button>
   <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
   <div id="feedback"></div>
-
 
   <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
 
     const scoreDisplay = document.getElementById('scoreDisplay');
     const pauseButton = document.getElementById('pauseButton');
@@ -276,6 +273,7 @@
 
     function nextSentence() {
       if (sentences.length === 0) {
+        showFeedback(`Puntuació final: ${score} / 10`, 'correct');
         active = false;
         restartButton.style.display = 'block';
         restartButton.onclick = () => {
