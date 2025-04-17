@@ -31,58 +31,55 @@
     @media (max-width: 600px) {
       #scoreDisplay {
         top: auto;
-        bottom: 80px;
+        bottom: 160px;
         left: 50%;
         right: auto;
         transform: translateX(-50%);
       }
     }
 
+    #pauseButton {
+      bottom: 20px;
+      font-size: 18px;
+      padding: 10px 30px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
 
-  #pauseButton {
-    bottom: 20px;
-    font-size: 18px;
-    padding: 10px 30px;
-    background-color: #ff9800;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
+    #pauseButton:hover {
+      background-color: #fb8c00;
+      transform: translateX(-50%) scale(1.05);
+    }
 
-  #pauseButton:hover {
-    background-color: #fb8c00;
-    transform: translateX(-50%) scale(1.05);
-  }
+    #restartButton {
+      bottom: 180px;
+      display: none;
+      font-size: 20px;
+      padding: 12px 30px;
+      background-color: #607d8b;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
 
-  #restartButton {
-    bottom: 180px;
-    display: none;
-    font-size: 20px;
-    padding: 12px 30px;
-    background-color: #607d8b;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  #restartButton:hover {
-    background-color: #455a64;
-    transform: translateX(-50%) scale(1.05);
-  }
-
-
+    #restartButton:hover {
+      background-color: #455a64;
+      transform: translateX(-50%) scale(1.05);
+    }
 
     #feedback {
       position: fixed;
@@ -144,6 +141,14 @@
       text-align: center;
       padding: 20px;
       box-sizing: border-box;
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+
+    @media (min-width: 601px) {
+      #modalOverlay {
+        padding-top: 40px;
+      }
     }
 
     #modalOverlay h2, #modalOverlay h3 {
@@ -159,6 +164,7 @@
 
     #startButton {
       margin-top: 30px;
+      margin-bottom: 40px;
       font-size: 20px;
       padding: 10px 30px;
       background-color: #4caf50;
@@ -175,7 +181,7 @@
 </head>
 <body>
   <div id="modalOverlay">
-    <h2>🎯 Objectiu de l'exercici23</h2>
+    <h2>🎯 Objectiu de l'exercici30</h2>
     <p>Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.</p>
     <p>Després de respondre, escoltaràs la frase completa.</p>
     <hr style="margin: 20px 0; width: 80%;" />
@@ -187,17 +193,21 @@
     <p>🔄 Cada vegada l’exercici és diferent. Hi ha més de <strong>200 frases possibles</strong> i el pots reiniciar al final.</p>
     <button id="startButton">Entesos! Comencem</button>
   </div>
+
   <div id="scoreDisplay">Score: 0 / 10</div>
   <canvas id="gameCanvas"></canvas>
-<div id="buttonContainer">
-  <button onclick="handleClick('nowhere')">nowhere</button>
-  <button onclick="handleClick('anywhere')">anywhere</button>
-  <button onclick="handleClick('everywhere')">everywhere</button>
-</div>
+
+  <!-- 🔁 Botons reordenats -->
+  <div id="buttonContainer">
+    <button onclick="handleClick('nowhere')">nowhere</button>
+    <button onclick="handleClick('anywhere')">anywhere</button>
+    <button onclick="handleClick('everywhere')">everywhere</button>
+  </div>
 
   <button id="pauseButton" onclick="togglePause()">Pausa</button>
   <button id="restartButton" onclick="restartGame()">🔁 Reinicia</button>
   <div id="feedback"></div>
+
 
   <script>
     const canvas = document.getElementById('gameCanvas');
