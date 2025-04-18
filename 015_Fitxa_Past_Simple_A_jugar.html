@@ -13,11 +13,9 @@
       background: #fff;
       color: #000;
     }
-
     h1 {
       color: #003366;
     }
-
     input[type="text"] {
       width: 100%;
       padding: 6px;
@@ -26,17 +24,18 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
-
     input.correct {
       border: 2px solid green;
       background-color: #e8fbe8;
     }
-
     input.incorrect {
       border: 2px solid red;
       background-color: #ffeaea;
     }
-
+    input.corrected {
+      border: 2px solid orange;
+      background-color: #fffacc;
+    }
     button {
       margin: 5px 5px 15px 0;
       padding: 6px 12px;
@@ -46,21 +45,17 @@
       border: none;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #005599;
     }
-
     .phrase-block {
       margin-bottom: 25px;
     }
-
     .correction {
       margin-top: 4px;
-      color: #006600;
       font-style: italic;
+      white-space: pre-line;
     }
-
     #resultat {
       font-weight: bold;
       color: #003366;
@@ -71,9 +66,10 @@
 <body>
 
 <h1>Traducció: Expressar obligacions passades</h1>
-<p>Observa la situació i tradueix les frases del català a l'anglès. Les frases expliquen accions que el nen <strong>havia de fer abans de sortir a jugar</strong>. Utilitza el modal <code>had to</code>.</p>
+<p>
+  Observa la situació i tradueix les frases del català a l'anglès. Les frases expliquen accions que el nen <strong>havia de fer abans de sortir a jugar</strong>. Utilitza el modal <code>had to</code>.
+</p>
 <p><strong>Exemple:</strong> Abans de sortir a jugar, havia de fer els deures. → <em>Before going out to play, I had to do my homework.</em></p>
-
 
 <div class="image">
   <img src="015_1_imatge_a_jugar.PNG" alt="Nen a jugar" />
@@ -107,11 +103,12 @@
     bloc.className = 'phrase-block';
     bloc.innerHTML = `
       <p>${i + 1}. ${f[0]}</p>
-      <input type="text" data-correct='${JSON.stringify(f[1])}'>
+      <input type="text" data-correct='${JSON.stringify(f[1])}' data-index="${i}" data-state="unchecked">
       <button>Comprova</button>
       <div class="correction"></div>
     `;
     contenidor.appendChild(bloc);
+
     const btn = bloc.querySelector('button');
     btn.addEventListener('click', () => comprovaIndividual(btn));
 
@@ -143,16 +140,26 @@
     const correctes = JSON.parse(input.dataset.correct);
     const resposta = normalitza(input.value);
     const correccio = bloc.querySelector('.correction');
+    const previousState = input.dataset.state;
 
-    if (correctes.includes(resposta)) {
-      input.classList.add('correct');
-      input.classList.remove('incorrect');
-      correccio.textContent = '';
-      parla(resposta);
+    if (correctes.map(r => normalitza(r)).includes(resposta)) {
+      if (previousState === 'incorrect' || previousState === 'corrected') {
+        input.classList.remove('incorrect', 'correct');
+        input.classList.add('corrected');
+        correccio.innerHTML = `<span style="color:green;">✔️ Ara ja és correcte</span>`;
+        input.dataset.state = 'corrected';
+      } else {
+        input.classList.add('correct');
+        input.classList.remove('incorrect', 'corrected');
+        correccio.innerHTML = `<span style="color:green;">✔️ Correcte!</span>`;
+        input.dataset.state = 'correct';
+      }
+      parla(correctes[0]);
     } else {
       input.classList.add('incorrect');
-      input.classList.remove('correct');
-      correccio.textContent = `❌ Resposta correcta: ${correctes[0]}`;
+      input.classList.remove('correct', 'corrected');
+      correccio.innerHTML = `<span style="color:red;">❌ Resposta correcta: ${correctes[0]}</span>`;
+      input.dataset.state = 'incorrect';
       parla(correctes[0]);
     }
   }
@@ -172,12 +179,12 @@
     document.querySelectorAll('.phrase-block').forEach(bloc => {
       const input = bloc.querySelector('input');
       input.value = '';
-      input.classList.remove('correct', 'incorrect');
+      input.classList.remove('correct', 'incorrect', 'corrected');
+      input.dataset.state = 'unchecked';
       bloc.querySelector('.correction').textContent = '';
     });
     document.getElementById('resultat').textContent = '';
   }
 </script>
-
 </body>
 </html>
