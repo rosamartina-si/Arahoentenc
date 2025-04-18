@@ -70,7 +70,7 @@
 </head>
 <body>
 
-<h1>Traducció: Jo i el nadó2</h1>
+<h1>Traducció: Jo i el nadó4</h1>
 <p>Tradueix aquestes frases del català a l'anglès. Compara què pot o no pot fer el nadó i què pots o no pots fer tu.</p>
 
 <div class="image">
@@ -86,6 +86,7 @@
 </div>
 
 <script>
+
   const frases = [
     ["Vaig anar d'excursió amb els meus amics.", ["i went hiking with my friends"]],
     ["Estava caminant per la muntanya.", ["i was walking on the mountain"]],
@@ -103,12 +104,13 @@
   frases.forEach((f, i) => {
     const bloc = document.createElement('div');
     bloc.className = 'phrase-block';
-    bloc.innerHTML = `
-      <p>${i + 1}. ${f[0]}</p>
-      <input type="text" data-correct='${JSON.stringify(f[1])}'>
-      <button>Comprova</button>
-      <div class="correction"></div>
-    `;
+bloc.innerHTML = `
+  <p>${i + 1}. ${f[0]}</p>
+  <input type="text" data-correct="${JSON.stringify(f[1]).replace(/"/g, '&quot;')}">
+  <button>Comprova</button>
+  <div class="correction"></div>
+`;
+
     contenidor.appendChild(bloc);
     const btn = bloc.querySelector('button');
     btn.addEventListener('click', () => comprovaIndividual(btn));
