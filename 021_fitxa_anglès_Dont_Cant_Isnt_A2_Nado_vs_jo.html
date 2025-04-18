@@ -2,7 +2,6 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Traducció: Jo i el nadó</title>
   <style>
     body {
@@ -13,10 +12,7 @@
       background: #fff;
       color: #000;
     }
-
-    h1 {
-      color: #003366;
-    }
+    h1 { color: #003366; }
 
     input[type="text"] {
       width: 100%;
@@ -27,38 +23,38 @@
       box-sizing: border-box;
     }
 
-    input.correct {
-      border: 2px solid green;
-      background-color: #e8fbe8;
-    }
-
-    input.incorrect {
-      border: 2px solid red;
-      background-color: #ffeaea;
-    }
+    input.correct   { border: 2px solid green; background: #e8fbe8; }
+    input.incorrect { border: 2px solid red;   background: #ffeaea; }
+    input.corrected { border: 2px solid orange; background: #fffacc; }
 
     button {
       margin: 5px 5px 15px 0;
       padding: 6px 12px;
       font-size: 14px;
-      background-color: #003366;
+      background: #003366;
       color: #fff;
       border: none;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #005599;
+    button:hover { background: #005599; }
+
+    .image {
+      text-align: left;
+      margin: 20px 0;
     }
 
-    .phrase-block {
-      margin-bottom: 25px;
+    .image img {
+      max-width: 70%;
+      height: auto;
     }
+
+    .phrase-block { margin-bottom: 25px; }
 
     .correction {
       margin-top: 4px;
-      color: #006600;
       font-style: italic;
+      white-space: pre-line;
     }
 
     #resultat {
@@ -76,7 +72,7 @@
 <div class="image">
   <img src="021_1_imatge_nado.png" alt="Nadó i nen gran" />
 </div>
-  
+
 <div id="exercici"></div>
 
 <div>
@@ -86,98 +82,112 @@
 </div>
 
 <script>
-
 const frases = [
-  ["El nadó no pot llegir llibres.", ["the baby can't read books"]],
-  ["Jo no puc dormir tot el dia.", ["i can't sleep all day"]],
-  ["El nadó no pot menjar pizza.", ["the baby can't eat pizza"]],
-  ["Jo no puc ficar-me els peus a la boca.", ["i can't put my feet in my mouth"]],
-  ["El nadó no porta sabates.", ["the baby doesn't wear shoes"]],
-  ["Jo no jugo amb sonalls.", ["i don't play with rattles"]],
-  ["El nadó no sap anar amb bicicleta.", ["the baby can't ride a bike"]],
-  ["Jo no bec del biberó.", ["i don't drink from a baby bottle"]],
-  ["El nadó no va a l'escola.", ["the baby doesn't go to school"]],
-  ["Jo no ploro cada vegada que tinc gana.", ["i don't cry every time i'm hungry", "i don't cry every time i am hungry"]]
+  ["El nadó no pot llegir llibres.", ["The baby can't read books."]],
+  ["Jo no puc dormir tot el dia.", ["I can't sleep all day."]],
+  ["El nadó no pot menjar pizza.", ["The baby can't eat pizza."]],
+  ["Jo no puc ficar-me els peus a la boca.", ["I can't put my feet in my mouth."]],
+  ["El nadó no porta sabates.", ["The baby doesn't wear shoes."]],
+  ["Jo no jugo amb sonalls.", ["I don't play with rattles."]],
+  ["El nadó no sap anar amb bicicleta.", ["The baby can't ride a bike."]],
+  ["Jo no bec del biberó.", ["I don't drink from a baby bottle."]],
+  ["El nadó no va a l'escola.", ["The baby doesn't go to school."]],
+  ["Jo no ploro cada vegada que tinc gana.", ["I don't cry every time I'm hungry.", "I don't cry every time I am hungry."]]
 ];
 
+const contenidor = document.getElementById('exercici');
+frases.forEach((f, i) => {
+  const bloc = document.createElement('div');
+  bloc.className = 'phrase-block';
 
-    const contenidor = document.getElementById('exercici');
-  frases.forEach((f, i) => {
-    const bloc = document.createElement('div');
-    bloc.className = 'phrase-block';
-bloc.innerHTML = `
-  <p>${i + 1}. ${f[0]}</p>
-  <input type="text" data-correct="${JSON.stringify(f[1]).replace(/"/g, '&quot;')}">
-  <button>Comprova</button>
-  <div class="correction"></div>
-`;
+  const safeJSON = JSON.stringify(f[1]).replace(/"/g, '&quot;');
 
-    contenidor.appendChild(bloc);
-    const btn = bloc.querySelector('button');
-    btn.addEventListener('click', () => comprovaIndividual(btn));
+  bloc.innerHTML = `
+    <p>${i + 1}. ${f[0]}</p>
+    <input type="text" data-correct="${safeJSON}" data-state="unchecked">
+    <button>Comprova</button>
+    <div class="correction"></div>
+  `;
+  contenidor.appendChild(bloc);
 
-    const input = bloc.querySelector('input');
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        comprovaIndividual(btn);
-      }
-    });
+  const btn = bloc.querySelector('button');
+  const input = bloc.querySelector('input');
+
+  btn.addEventListener('click', () => comprovaIndividual(btn, false));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      comprovaIndividual(btn, false);
+    }
   });
+});
 
-  function normalitza(text) {
-    return text.trim().toLowerCase().replace(/[.,!?]/g, '');
+function normalitza(text) {
+  return text.trim().toLowerCase().replace(/[.,!?']/g, '');
+}
+
+function parla(text) {
+  const synth = window.speechSynthesis;
+  if (synth) {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-GB';
+    synth.speak(utter);
   }
+}
 
-  function parla(text) {
-    const synth = window.speechSynthesis;
-    if (synth) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'en-GB';
-      synth.speak(utter);
-    }
-  }
+function comprovaIndividual(button, silenciar) {
+  const bloc = button.closest('.phrase-block');
+  const input = bloc.querySelector('input');
+  const correctes = JSON.parse(input.dataset.correct.replace(/&quot;/g, '"'));
+  const resposta = normalitza(input.value);
+  const correccio = bloc.querySelector('.correction');
+  const previousState = input.dataset.state;
 
-  function comprovaIndividual(button) {
-    const bloc = button.closest('.phrase-block');
-    const input = bloc.querySelector('input');
-    const correctes = JSON.parse(input.dataset.correct);
-    const resposta = normalitza(input.value);
-    const correccio = bloc.querySelector('.correction');
+  const correctNormalized = correctes.map(normalitza);
+  const isCorrect = correctNormalized.includes(resposta);
 
-    if (correctes.includes(resposta)) {
-      input.classList.add('correct');
-      input.classList.remove('incorrect');
-      correccio.textContent = '';
-      parla(resposta);
+  if (isCorrect) {
+    if (previousState === 'incorrect' || previousState === 'corrected') {
+      input.className = 'corrected';
+      correccio.innerHTML = '<span style="color:green;">✔️ Ara ja és correcte</span>';
+      input.dataset.state = 'corrected';
     } else {
-      input.classList.add('incorrect');
-      input.classList.remove('correct');
-      correccio.textContent = `❌ Resposta correcta: ${correctes[0]}`;
-      parla(correctes[0]);
+      input.className = 'correct';
+      correccio.innerHTML = '<span style="color:green;">✔️ Correcte!</span>';
+      input.dataset.state = 'correct';
     }
+    if (!silenciar) parla(correctes[0]);
+  } else {
+    input.className = 'incorrect';
+    correccio.innerHTML = `<span style="color:red;">❌ Resposta correcta: ${correctes[0]}</span>`;
+    input.dataset.state = 'incorrect';
+    if (!silenciar) parla(correctes[0]);
   }
 
-  function comprovaTotes() {
-    let encerts = 0;
-    document.querySelectorAll('.phrase-block').forEach(bloc => {
-      const input = bloc.querySelector('input');
-      const button = bloc.querySelector('button');
-      comprovaIndividual(button);
-      if (input.classList.contains('correct')) encerts++;
-    });
-    document.getElementById('resultat').textContent = `Has encertat ${encerts} de 10.`;
-  }
+  return isCorrect;
+}
 
-  function reinicia() {
-    document.querySelectorAll('.phrase-block').forEach(bloc => {
-      const input = bloc.querySelector('input');
-      input.value = '';
-      input.classList.remove('correct', 'incorrect');
-      bloc.querySelector('.correction').textContent = '';
-    });
-    document.getElementById('resultat').textContent = '';
-  }
+function comprovaTotes() {
+  let encerts = 0;
+  document.querySelectorAll('.phrase-block').forEach(bloc => {
+    const input = bloc.querySelector('input');
+    const btn = bloc.querySelector('button');
+    const correcte = comprovaIndividual(btn, true);
+    if (correcte && input.classList.contains('correct')) encerts++;
+  });
+  document.getElementById('resultat').textContent = `Has encertat ${encerts} de 10.`;
+}
+
+function reinicia() {
+  document.querySelectorAll('.phrase-block').forEach(bloc => {
+    const input = bloc.querySelector('input');
+    input.value = '';
+    input.className = '';
+    input.dataset.state = 'unchecked';
+    bloc.querySelector('.correction').textContent = '';
+  });
+  document.getElementById('resultat').textContent = '';
+}
 </script>
 
 </body>
