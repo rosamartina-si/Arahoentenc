@@ -149,11 +149,11 @@ function comprovaIndividual(button, silenciar) {
   if (isCorrect) {
     if (previousState === 'incorrect' || previousState === 'corrected') {
       input.className = 'corrected';
-      correccio.innerHTML = '<span style="color:green;">✔️ Ara ja és correcte</span>';
+      correccio.innerHTML = '<span style="color:orange;">✓ Ara ja és correcte</span>';
       input.dataset.state = 'corrected';
     } else {
       input.className = 'correct';
-      correccio.innerHTML = '<span style="color:green;">✔️ Correcte!</span>';
+      correccio.innerHTML = '<span style="color:green;">✓ Correcte!</span>';
       input.dataset.state = 'correct';
     }
     if (!silenciar) parla(correctes[0]);
