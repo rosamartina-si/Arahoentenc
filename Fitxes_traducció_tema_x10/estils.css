@@ -49,10 +49,23 @@ button:hover {
   background-color: #005599;
 }
 
+/* ─── Estils per al posicionament de la imatge ─── */
 .image {
-  text-align: center;
   margin: 20px 0;
 }
+
+.image.center {
+  text-align: center;
+}
+
+.image.left {
+  text-align: left;
+}
+
+.image.right {
+  text-align: right;
+}
+
 
 .image img {
   max-width: 70%;
