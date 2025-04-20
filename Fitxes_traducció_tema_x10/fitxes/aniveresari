@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traducció: L’aniversari</title>
+  <link rel="stylesheet" href="../estils.css" />
+</head>
+<body>
+
+<h1>Traducció: L’aniversari</h1>
+<p>
+  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
+</p>
+
+<div class="image">
+  <img src=“../Img/aniversari.png" alt="Nen ensenyant foto d'aniversari" />
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<div class="nota">
+  <strong>Nota lingüística:</strong>
+  <ul>
+    <li><strong>everyone / everybody </strong>: semblen parlar de molta gent, però gramaticalment són singulars. 
+Han d'anar amb «was», no «were». Funcionen com "tothom". 
+Una pista que et pot ser útil és recordar que acaben en "one" i "body", que són paraules singulars.`
+</li>
+    <li><strong>take photos / take pictures</strong>: "Take photos" és correcte, però “take pictures” és més comú en anglès del dia a dia.</li>
+  </ul>
+</div>
+
+
+<!-- Primer carreguem les frases -->
+<script>
+  const frases = [
+    ["Vaig fer una festa d'aniversari.", ["I had a birthday party."]],
+    ["Els meus amics van venir a la festa.", ["My friends came to the party."]],
+    ["Vam menjar pastis d'aniversari.", ["We ate birthday cake."]],
+    ["Vam cantar cancons.", ["We sang songs."]],
+    ["Vaig obrir regals.", ["I opened presents.","I opened gifts."]],
+    ["Vam jugar a jocs.", ["We played games."]],
+    ["Vam ballar plegats.", ["We danced together."]],
+    // ARA acceptem tant "pictures" com "photos"
+    ["Els meus pares van fer fotos.", ["My parents took pictures.", "My parents took photos."]],
+    ["Tothom estava content.", ["Everyone was happy.","Everybody was happy."]],
+    ["Vaig tenir un gran dia.", ["I had a great day."]]
+  ];
+</script>
+
+<!-- Després carreguem la lògica -->
+<script src="../script.js"></script>
+
+</body>
+</html>
