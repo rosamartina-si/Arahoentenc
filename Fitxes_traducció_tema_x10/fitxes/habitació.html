@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traducció: On són les coses</title>
+  <link rel="stylesheet" href="../estils.css" />
+</head>
+<body>
+
+<h1>Traducció: On són les coses</h1>
+<p>
+  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
+</p>
+
+<!-- Pots triar: center (per defecte), left o right -->
+<div class="image left">
+  <img src="../Img/habitacio.png" alt="Habitació d'un nen o nena" />
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<div class="nota">
+  <strong>Nota lingüística:</strong>
+  <ul>
+    <li><strong>There is / There are</strong>: "There is" per al singular, "There are" per al plural.</li>
+    <li><strong>In / On / Under / Next to / Behind / Between</strong>: preposicions comunes per descriure llocs.</li>
+    <li><strong>Is / Are</strong>: "Is" amb noms singulars, "Are" amb noms plurals.</li>
+  </ul>
+</div>
+
+<!-- Primer carreguem les frases -->
+<script>
+  const frases = [
+    ["La motxilla és sobre la cadira.", ["The backpack is on the chair."]],
+    ["Hi ha una llibreta sobre l’escriptori.", ["There is a notebook on the desk."]],
+    ["La llum de l'escriptori és al costat de la finestra.", ["The desk lamp is next to the window."]],
+    ["El patinet és darrere de l’armari.", ["The scooter is behind the wardrobe."]],
+    ["El llit és a l'esquerra de l'armari.", ["The bed is to the left of the wardrobe."]],
+    ["La cadira està davant de l’escriptori.", ["The chair is in front of the desk."]],
+    ["Hi ha una finestra entre l’armari i l’escriptori.", ["There is a window between the wardrobe and the desk."]],
+    ["Les sabatilles són sota el llit.", ["The slippers are under the bed."]],
+    ["El radiador és sota la finestra.", ["The radiator is under the window."]],
+    ["L’armari està a la cantonada de l’habitació.", ["The wardrobe is in the corner of the room."]]
+  ];
+</script>
+
+<!-- Després carreguem la lògica -->
+<script src="../script.js"></script>
+
+</body>
+</html>
