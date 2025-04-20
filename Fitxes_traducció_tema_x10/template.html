@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traducció: [TÍTOL DE LA FITXA]</title>
+  <link rel="stylesheet" href="../estils.css" />
+</head>
+<body>
+
+<h1>Traducció: [TÍTOL DE LA FITXA]</h1>
+<p>[INSTRUCCIONS DE LA FITXA]</p>
+
+<div class="image">
+  <img src="../img/NOM_IMATGE.png" alt="[ALT DE LA IMATGE]">
+</div>
+
+<div id="exercici"></div>
+
+<div id="controls"></div>
+
+<script>
+  // Frases a traduir (actualitza aquest array a cada fitxa)
+  const frases = [
+    ["Frase en català 1", ["Traducció 1"]],
+    ["Frase en català 2", ["Traducció 2"]]
+    // ...
+  ];
+
+  const contenidor = document.getElementById('exercici');
+  frases.forEach((f, i) => {
+    const bloc = document.createElement('div');
+    bloc.className = 'phrase-block';
+    bloc.innerHTML = `
+      <p>${i + 1}. ${f[0]}</p>
+      <input type="text" data-index="${i}" data-state="unchecked" data-correct='${JSON.stringify(f[1]).replace(/"/g, '&quot;')}'>
+      <button>Comprova</button>
+      <div class="correction"></div>
+    `;
+    contenidor.appendChild(bloc);
+
+    const btn = bloc.querySelector('button');
+    btn.addEventListener('click', () => comprovaIndividual(btn));
+
+    const input = bloc.querySelector('input');
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        comprovaIndividual(btn);
+      }
+    });
+  });
+</script>\>
+<script src="../script.js"></script>
+</body>
+</html>
