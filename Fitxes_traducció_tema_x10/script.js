@@ -8,7 +8,13 @@ function generaExercici(frases) {
     bloc.className = 'phrase-block';
     bloc.innerHTML = `
       <p>${i + 1}. ${f[0]}</p>
-      <input type="text" data-index="${i}" data-state="unchecked" data-correct='${JSON.stringify(f[1]).replace(/"/g, '&quot;')}'>
+      <input type="text"
+             data-index="${i}"
+             data-state="unchecked"
+             data-correct="${JSON.stringify(f[1])
+               .replace(/"/g, '&quot;')
+               .replace(/'/g, '&#39;')}"
+      >
       <button>Comprova</button>
       <div class="correction"></div>
     `;
