@@ -2,33 +2,27 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Traducció: Jo i el nadó1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traducció: Jo i el nadó</title>
   <link rel="stylesheet" href="../estils.css" />
 </head>
 <body>
 
-<h1>Traducció: Jo i el nadó</h1>
-<p>
-  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
+<h1>Traducció: Jo i el nadó20</h1>
+<p>Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
 </p>
 
 <div class="image">
-  <img src="../Img/nado.png" alt=“Nadó i nen gran" />
+  <img src="../Img/nado.png" alt="Nadó i nen gran">
 </div>
 
 <div id="exercici"></div>
+
 <div id="controls"></div>
 
-<div class="nota">
-  <strong>Nota lingüística:</strong>
-  <ul>
-    <li></li>
-  </ul>
-</div>
-
-
-<!-- Primer carreguem les frases -->
 <script>
+  // Frases a traduir (actualitza aquest array a cada fitxa)
+  const frases = [
 const frases = [
   ["El nadó no pot llegir llibres.", ["The baby can't read books."]],
   ["Jo no puc dormir tot el dia.", ["I can't sleep all day."]],
@@ -41,10 +35,31 @@ const frases = [
   ["El nadó no va a l'escola.", ["The baby doesn't go to school."]],
   ["Jo no ploro cada vegada que tinc gana.", ["I don't cry every time I'm hungry.", "I don't cry every time I am hungry."]]
 ];
-</script>
 
-<!-- Després carreguem la lògica -->
+  const contenidor = document.getElementById('exercici');
+  frases.forEach((f, i) => {
+    const bloc = document.createElement('div');
+    bloc.className = 'phrase-block';
+    bloc.innerHTML = `
+      <p>${i + 1}. ${f[0]}</p>
+      <input type="text" data-index="${i}" data-state="unchecked" data-correct='${JSON.stringify(f[1]).replace(/"/g, '&quot;')}'>
+      <button>Comprova</button>
+      <div class="correction"></div>
+    `;
+    contenidor.appendChild(bloc);
+
+    const btn = bloc.querySelector('button');
+    btn.addEventListener('click', () => comprovaIndividual(btn));
+
+    const input = bloc.querySelector('input');
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        comprovaIndividual(btn);
+      }
+    });
+  });
+</script>\>
 <script src="../script.js"></script>
-
 </body>
 </html>
