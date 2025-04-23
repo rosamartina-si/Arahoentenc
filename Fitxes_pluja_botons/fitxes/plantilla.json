@@ -1,4 +1,15 @@
 {
+    /* ───── CONFIGURACIÓ GENERAL ───── */
+  // idioma de la interfície i (si s'activa) de la veu
+  //  "ca" → missatges en català, veu ca-ES
+  //  "en" → missatges en anglès, veu en-US
+  "lang": "ca",
+
+  // àudio: true  → el joc llegirà la paraula i la frase completa
+  //         false → sense veu (ideal si no hi ha TTS per a l'idioma)
+  //  (si omets el camp, el valor per defecte és true)
+  "audio": false,
+  
   "title": "Text1 / Text2 / Text3 / ...",
   "objective": "Llegeix cada frase i tria la paraula correcta: <strong>text1</strong>, <strong>text2</strong> o <strong>text3</strong>.",
   "explanation": [
@@ -7,7 +18,10 @@
     "<strong>text3</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc."
   ],
 
-  /* ─────────────── Botons de resposta ─────────────── */
+   /* ───── BOTONS DE RESPOSTA ─────
+     - Escriu tants valors com vulguis (mínim 2).
+     - L'ordre defineix l'ordre visual dels botons.
+  */
   "buttons": ["OPCIÓ_1", "OPCIÓ_2", "OPCIÓ_3", "OPCIÓ_4"],
 
   /* ─────────────── Llista de frases ─────────────── */
