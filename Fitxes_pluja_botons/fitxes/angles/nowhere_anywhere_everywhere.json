@@ -19,7 +19,7 @@
     { "sentence": "I have looked ___, but I can't find it", "answer": "everywhere" },
     { "sentence": "You can't find help ___ these days", "answer": "anywhere" },
     { "sentence": "There is ___ to run", "answer": "nowhere" },
-    { "sentence": "We went ___ looking for the dog", "answer": "everywhere" },
+    { "sentence": "We went ___ looking for the dog", "answer": "everywhere" }
 
   ]
 }
