@@ -1,216 +1,175 @@
-// script.js modularitzat amb suport per fitxes i modal
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Activitats per matèries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
 
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+        header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+        header img {
+            height: 60px;
+        }
 
-const scoreDisplay = document.getElementById('scoreDisplay');
-const restartButton = document.getElementById('restartButton');
-const feedback = document.getElementById('feedback');
-const buttonContainer = document.getElementById('buttonContainer');
-const modalOverlay = document.getElementById('modalOverlay');
-const startButton = document.getElementById('startButton');
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
 
-let config = null;
-let sentences = [], current = null;
-let y = 0, speed = 0.4, active = false, paused = false, canAdvance = true;
-let score = 0, total = 0, incorrectSentences = [];
-let animationFrameId;
+        .link-box {
+            display: block;
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #000;
+            transition: background-color 0.2s;
+        }
 
-function getParams() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return {
-    tipus: urlParams.get('tipus') || 'fitxes_pluja_botons',
-    fitxa: urlParams.get('fitxa') || 'anywhere-nowhere-everywhere'
-  };
-}
+        .link-box:hover {
+            background-color: #e0e0e0;
+        }
 
-async function loadConfig() {
-  const { tipus, fitxa } = getParams();
-  const response = await fetch(`${tipus}/${fitxa}.json`);
-  config = await response.json();
-  renderModal();
-}
+        .category {
+            margin: 30px 0;
+        }
 
-function renderModal() {
-  const { title, objective, explanation } = config;
-  modalOverlay.innerHTML = `
-    <h2>🎯 ${title}</h2>
-    <p>${objective}</p>
-    <hr style="margin: 20px 0; width: 80%;" />
-    <h3>📘 Explicació gramatical</h3>
-    ${explanation.map(p => `<p>${p}</p>`).join('')}
-    <hr style="margin: 20px 0; width: 80%;" />
-    <p>🔄 Cada vegada l’exercici és diferent.</p>
-    <button id="startButton">Entesos! Comencem</button>
-  `;
-  document.getElementById('startButton').addEventListener('click', () => {
-    modalOverlay.style.display = 'none';
-    createButtons();
-    initGame();
-  });
-}
+        .category h2 {
+            margin-bottom: 10px;
+        }
 
-function createButtons() {
-  buttonContainer.innerHTML = '';
-  config.buttons.forEach(option => {
-    const btn = document.createElement('button');
-    btn.textContent = option;
-    btn.onclick = () => handleClick(option, btn);
-    buttonContainer.appendChild(btn);
-  });
-}
+        h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
 
-function initGame() {
-  cancelAnimationFrame(animationFrameId);
-  sentences = config.questions.sort(() => 0.5 - Math.random()).slice(0, 10);
-  current = null;
-  y = 0;
-  active = true;
-  paused = false;
-  canAdvance = true;
-  score = 0;
-  total = 0;
-  incorrectSentences = [];
-  restartButton.style.display = 'none';
-  updateScore();
-  nextSentence();
-  draw();
-}
+    <header>
+        <h1>Activitats per matèries</h1>
+    </header>
 
-function updateScore() {
-  scoreDisplay.textContent = `Score: ${score} / 10`;
-}
+    <div class="category" id="anglès">
+    	<h2>🇬🇧 Anglès</h2>
+        <!-- <a href="007_joc_frases_català_anglès_en_passat.html" class="link-box">Joc de traducció del català a l'anglès - frases en passat simple</a> -->
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/futbol.html">⚽ El partit de futbol</a></p>
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/aniversari.html">🎂 La festa d'aniversari</a></p>
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/nado.html">👶 El nadó i jo</a></p>
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/muntanya.html">🏔️ L'excursió</a></p>
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/abans_jugar.html">🏃 Surto a jugar</a></p>
+        <p><a href="Fitxes_traducció_tema_x10/fitxes/habitacio.html">🛏️ La meva habitació</a></p>
+        <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=nowhere_anywhere_everywhere">🌍 Anywhere / Nowhere / Everywhere12</a></p>
 
-function showFeedback(message, className) {
-  feedback.textContent = message;
-  feedback.className = className;
-  feedback.style.display = 'block';
-  setTimeout(() => {
-    feedback.style.display = 'none';
-  }, 2000);
-}
+        
+        <a href="Fitxes_traducció_tema_x10/fitxes/futbol.html">⚽ El partit de futbol</a>
+        <a href="Fitxes_traducció_tema_x10/fitxes/aniversari.html">⚽ La festa d'aniversari</a>
+        <a href="Fitxes_traducció_tema_x10/fitxes/nado.html">⚽ El nadó i jo</a>
+        <a href="Fitxes_traducció_tema_x10/fitxes/muntanya.html">⚽ L'excursió</a>
+        <a href="Fitxes_traducció_tema_x10/fitxes/abans_jugar.html">⚽ Surto a jugar</a>
+        <a href="Fitxes_traducció_tema_x10/fitxes/habitacio.html">⚽ La meva habitació</a>
+        
+        <a href="017_Past_simple_de_10_en_10.html" class="link-box">Fitxa - frases en passat simple - de 10 en 10</a>
+        <a href="019_Joc_English_they_their_them_de_10_en_10.html" class="link-box">They Their Them - de 10 en 10</a>
+        <a href="020_Joc_English_everywhere_anywhere_nowhere_de_10_en_10.html" class="link-box">Tria: Everywhere Anywhere Nowhere</a>        
+    </div>
 
-function speak(text, callback) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'en-US';
-  utterance.onend = () => callback && callback();
-  speechSynthesis.speak(utterance);
-}
 
-function nextSentence() {
-  if (sentences.length === 0) {
-    showFeedback(`Puntuació final: ${score} / 10`, 'correct');
-    active = false;
-    restartButton.style.display = 'block';
-    restartButton.onclick = () => initGame();
-    return;
-  }
-  current = sentences.shift();
-  y = 0;
-  canAdvance = true;
-  setAnswerButtonsEnabled(true);
-}
+<div class="category" id="ciencia">
+    <h2>🧪 Ciència</h2>
+    <p><a href="Ciencia/Ciencia_oberta/ambulancies_i_expansio_univers.html">⚽ El partit de futbol</a></p>
 
-function draw() {
-  if (!active || paused) {
-    animationFrameId = requestAnimationFrame(draw);
-    return;
-  }
+    <div class="subcategory" id="biologia">
+        <h3>🧬 Biologia</h3>
+    </div>
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (current) {
-    if (canAdvance) y += speed;
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    wrapText(ctx, current.sentence, y, canvas.width * 0.8, 30);
+    <div class="subcategory" id="fisica-quimica">
+        <h3>⚗️ Física i química</h3>
+    </div>
 
-    if (y > canvas.height && canAdvance) {
-      canAdvance = false;
-      showFeedback(`Resposta: ${current.answer}`, 'incorrect');
-      const fullSentence = current.sentence.replace("___", current.answer);
-      speak("The correct answer is " + current.answer + ".", () => {
-        speak(fullSentence, () => {
-          total++;
-          updateScore();
-          nextSentence();
-        });
-      });
-    }
-  }
+    <div class="subcategory" id="medi-ambient">
+        <h3>🌱 Medi ambient</h3>
+    </div>
 
-  animationFrameId = requestAnimationFrame(draw);
-}
+    <div class="subcategory" id="astronomia">
+        <h3>🌌 Astronomia</h3>
+    </div>
+</div>
 
-function handleClick(userAnswer, button) {
-  setAnswerButtonsEnabled(false);
-  animateButtonClick(button);
-  checkAnswer(userAnswer);
-}
 
-function checkAnswer(userAnswer) {
-  speak(userAnswer);
-  if (current && userAnswer === current.answer) {
-    showFeedback('✓ Correcte!', 'correct');
-    const fullSentence = current.sentence.replace("___", userAnswer);
-    canAdvance = false;
-    speak(fullSentence, () => {
-      score++;
-      total++;
-      updateScore();
-      nextSentence();
-    });
-  } else {
-    showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
-    canAdvance = false;
-    const fullSentence = current.sentence.replace("___", current.answer);
-    incorrectSentences.push({ ...current, userAnswer });
-    speak(`The correct answer is ${current.answer}. ${fullSentence}`, () => {
-      total++;
-      updateScore();
-      nextSentence();
-    });
-  }
-}
+    <div class="category" id="ètica">
+        <h2>🧠 Ètica</h2>
+        <h3>📄 Documents PDF</h3>
+        <a href="003_Bregman_Rutger_escombriaires_i_banquers.pdf" 
+           class="link-box" 
+           target="_blank" 
+           title="Obre el PDF en una nova pestanya">
+           Rutger Bregman: Escombriaires i banquers (PDF)
+        <a href="012_Trump_i_aranzels.html" class="link-box">Trump i aranzels</a>
+        </a>
+    </div>
 
-function animateButtonClick(button) {
-  button.style.transition = 'transform 0.1s, background-color 0.3s';
-  button.style.transform = 'scale(0.95)';
-  button.style.backgroundColor = '#ffc107';
-  setTimeout(() => {
-    button.style.transform = 'scale(1)';
-    button.style.backgroundColor = '';
-  }, 150);
-}
 
-function setAnswerButtonsEnabled(enabled) {
-  const buttons = buttonContainer.querySelectorAll('button');
-  buttons.forEach(btn => btn.disabled = !enabled);
-}
+<div class="category" id="llengua">
+    <h2>📘 Llengua</h2>
 
-function wrapText(context, text, y, maxWidth, lineHeight) {
-  const words = text.split(' ');
-  let line = '';
-  for (let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + ' ';
-    const testWidth = context.measureText(testLine).width;
-    if (testWidth > maxWidth && n > 0) {
-      const lineX = (canvas.width - context.measureText(line).width) / 2;
-      context.fillText(line, lineX, y);
-      line = words[n] + ' ';
-      y += lineHeight;
-    } else {
-      line = testLine;
-    }
-  }
-  const lineX = (canvas.width - context.measureText(line).width) / 2;
-  context.fillText(line, lineX, y);
-}
+    <div class="subcategory" id="ortografia">
+        <h3>✏️ Ortografia</h3>
+        <a href="008_joc-separacio-sil.labes.html" class="link-box">Joc: Separació de Síl·labes</a>
+        <a href="006_joc_accentuacio_agudes_per_parelles_nivell_1.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 1</a>
+        <a href="002_accentuacio_agudes_planes_per_parelles2.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 2</a>
+    </div>
 
-loadConfig();
+    <div class="subcategory" id="gramatica">
+        <h3>📖 Gramàtica</h3>
+        <a href="004_Distincio_entre_hi_ha_i_n_hi_ha.html" class="link-box">Distinció entre 'hi ha' i 'n'hi ha</a>
+    </div>
+
+    <div class="subcategory" id="redaccio">
+        <h3>📝 Redacció</h3>
+        <a href="009_oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
+        <a href="011_transformacio_frase_amb_participi_inicial.html" class="link-box">Transformació de frases amb participi inicial</a>
+    </div>
+</div>
+
+
+    <div class="category" id="matematiques">
+        <h2>🧮 Matemàtiques</h2>
+        <h3>📄 Documents PDF</h3>
+        <a href="001_Sesamath_Sise_Nombres_enters_i_decimals.pdf" 
+           class="link-box" 
+           target="_blank" 
+           title="Obre el PDF en una nova pestanya">
+           01 - Nombres enters i decimals (PDF)
+        </a>
+    </div>
+
+<!--    
+<div class="category" id="meditacio">
+    <h2>🧘‍♀️ Meditació</h2>
+    <a href="010_Pantalles.html" class="link-box">Ús pantalles</a>
+    <!-- <a href="018_Meditacio_deures_setmanals.html" class="link-box">Deures setmanals</a> -->
+-->
+
+
+</div>
+
+<!--
+<div class="category" id="eines">
+    <h2>🛠️ Eines</h2>
+    <a href="013_VerificadorIBAN.html" class="link-box">Verificar IBAN</a>
+</div>
+-->
+
+
+</body>
+</html>
