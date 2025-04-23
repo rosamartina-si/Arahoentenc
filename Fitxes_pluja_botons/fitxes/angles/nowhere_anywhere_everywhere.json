@@ -20,6 +20,7 @@
     { "sentence": "You can't find help ___ these days", "answer": "anywhere" },
     { "sentence": "There is ___ to run", "answer": "nowhere" },
     { "sentence": "We went ___ looking for the dog", "answer": "everywhere" },
+    /*
     { "sentence": "There is ___ to run",                      "answer": "nowhere" },
     { "sentence": "I can't see my phone ___",                 "answer": "anywhere" },
     { "sentence": "They searched ___ for their lost cat",     "answer": "everywhere" },
@@ -41,5 +42,6 @@
     { "sentence": "There’s ___ to escape from the noise",     "answer": "nowhere" },
     { "sentence": "Can we go ___ on a weekend trip?",         "answer": "anywhere" },
     { "sentence": "The kids are hiding ___ in the house",     "answer": "everywhere" }
+    */
   ]
 }
