@@ -18,6 +18,8 @@ const modalOverlay = document.getElementById('modalOverlay');
 const startButton = document.getElementById('startButton');
 
 let config = null;
+let currentLang = 'en';   // 'en' per defecte
+let useAudio    = true;   // true per defecte
 let sentences = [], current = null;
 let y = 0, speed = 0.4, active = false, paused = false, canAdvance = true;
 let score = 0, total = 0, incorrectSentences = [];
@@ -35,6 +37,10 @@ async function loadConfig() {
   const { tipus, fitxa } = getParams();
   const response = await fetch(`${tipus}/${fitxa}.json`);
   config = await response.json();
+
+  // ←➤ llegim opcions de la fitxa
+  currentLang = config.lang  || 'en';      // 'ca', 'en', …
+  useAudio    = config.audio !== false;    // qualsevol valor ≠ false activa l’àudio
   renderModal();
 }
 
@@ -98,10 +104,14 @@ function showFeedback(message, className) {
 }
 
 function speak(text, callback) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'en-US';
-  utterance.onend = () => callback && callback();
-  speechSynthesis.speak(utterance);
+  if (!useAudio) {          // veu desactivada per a aquesta fitxa
+     if (callback) callback();
+     return;
+   }
+   const utterance = new SpeechSynthesisUtterance(text);
+   utterance.lang  = currentLang === 'ca' ? 'ca-ES' : 'en-US';
+   utterance.onend = () => callback && callback();
+   speechSynthesis.speak(utterance);
 }
 
 function nextSentence() {
