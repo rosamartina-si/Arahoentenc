@@ -1,6 +1,6 @@
 {
   "title": "Text1 / Text2 / Text3 / ...",
-  "objective": ""Llegeix cada frase i tria la paraula correcta: <strong>text1</strong>, <strong>text2</strong> o <strong>text3</strong>.",
+  "objective": "Llegeix cada frase i tria la paraula correcta: <strong>text1</strong>, <strong>text2</strong> o <strong>text3</strong>.",
   "explanation": [
     "<strong>text1</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.",
     "<strong>text2</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.",
