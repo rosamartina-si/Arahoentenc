@@ -1,10 +1,10 @@
 {
-  "title": "TÍTOL DE L’EXERCICI",
-  "objective": "OBJECTIU resumit que veureu al modal inicial.",
+  "title": "Text1 / Text2 / Text3 / ...",
+  "objective": ""Llegeix cada frase i tria la paraula correcta: <strong>text1</strong>, <strong>text2</strong> o <strong>text3</strong>.",
   "explanation": [
-    "PUNT 1 d'explicació gramatical o lèxica.",
-    "PUNT 2…",
-    "PUNT 3…"
+    "<strong>text1</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.",
+    "<strong>text2</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.",
+    "<strong>text3</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc."
   ],
 
   /* ─────────────── Botons de resposta ─────────────── */
