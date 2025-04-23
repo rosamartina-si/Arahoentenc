@@ -165,29 +165,37 @@ function handleClick(userAnswer, button) {
 }
 
 function checkAnswer(userAnswer) {
-  speak(userAnswer);
+  /* ↓ Només parla si l’idioma NO és català */
+  if (currentLang !== 'ca') speak(userAnswer);
+
+  const fullSentenceOk = current.sentence.replace('___', userAnswer);
+  const fullSentenceKo = current.sentence.replace('___', current.answer);
+
   if (current && userAnswer === current.answer) {
-    showFeedback('✓ Correcte!', 'correct');
-    const fullSentence = current.sentence.replace("___", userAnswer);
+    showFeedback(currentLang==='ca' ? '✓ Correcte!' : '✓ Correct!', 'correct');
     canAdvance = false;
-    speak(fullSentence, () => {
-      score++;
-      total++;
-      updateScore();
-      nextSentence();
-    });
+
+    /* Quan és anglès → llegir la frase completa; en català només seguir */
+    const afterSpeak = () => { score++; total++; updateScore(); nextSentence(); };
+    currentLang !== 'ca' ? speak(fullSentenceOk, afterSpeak) : afterSpeak();
+
   } else {
-    showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
+    const wrongTxt = currentLang==='ca'
+        ? `✗ Incorrecte. Resposta: ${current.answer}`
+        : `✗ Incorrect. Answer: ${current.answer}`;
+    showFeedback(wrongTxt, 'incorrect');
     canAdvance = false;
-    const fullSentence = current.sentence.replace("___", current.answer);
     incorrectSentences.push({ ...current, userAnswer });
-    speak(`The correct answer is ${current.answer}. ${fullSentence}`, () => {
-      total++;
-      updateScore();
-      nextSentence();
-    });
+
+    const afterSpeak = () => { total++; updateScore(); nextSentence(); };
+    if (currentLang !== 'ca') {
+      speak(`The correct answer is ${current.answer}. ${fullSentenceKo}`, afterSpeak);
+    } else {
+      afterSpeak();  // sense àudio en català
+    }
   }
 }
+
 
 function animateButtonClick(button) {
   button.style.transition = 'transform 0.1s, background-color 0.3s';
