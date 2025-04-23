@@ -1,0 +1,21 @@
+{
+  "title": "TÍTOL DE L’EXERCICI",
+  "objective": "OBJECTIU resumit que veureu al modal inicial.",
+  "explanation": [
+    "PUNT 1 d'explicació gramatical o lèxica.",
+    "PUNT 2…",
+    "PUNT 3…"
+  ],
+
+  /* ─────────────── Botons de resposta ─────────────── */
+  "buttons": ["OPCIÓ_1", "OPCIÓ_2", "OPCIÓ_3", "OPCIÓ_4"],
+
+  /* ─────────────── Llista de frases ─────────────── */
+  "questions": [
+    { "sentence": "Frase amb ___ buit.",          "answer": "OPCIÓ_1" },
+    { "sentence": "Una altra ___ frase.",         "answer": "OPCIÓ_3" },
+    { "sentence": "Recorda col·locar ___ només.", "answer": "OPCIÓ_2" }
+
+    /* afegeix tantes frases com vulguis */
+  ]
+}
