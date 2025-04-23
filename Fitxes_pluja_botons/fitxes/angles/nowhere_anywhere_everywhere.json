@@ -17,7 +17,7 @@
     { "sentence": "We can't go ___ this weekend.",           "answer": "anywhere" },
     { "sentence": "He travels ___ for work.",                "answer": "everywhere" },
     { "sentence": "The dog must be hiding ___ in the house.", "answer": "somewhere" },
-    { "sentence": "I could not find help ___",               "answer": "anywhere" },
+    { "sentence": "I couldn't find help ___",               "answer": "anywhere" },
     { "sentence": "There is ___ to hide from the rain.",     "answer": "nowhere" },
     { "sentence": "She put her glasses ___ and forgot.",     "answer": "somewhere" },
     { "sentence": "I've looked ___, but I can't see him.",   "answer": "everywhere" },
