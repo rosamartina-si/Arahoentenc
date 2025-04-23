@@ -165,36 +165,53 @@ function handleClick(userAnswer, button) {
 }
 
 function checkAnswer(userAnswer) {
-  /* ↓ Només parla si l’idioma NO és català */
-  if (currentLang !== 'ca') speak(userAnswer);
+  // Llegeix la paraula triada (si l’àudio està activat)
+  speak(userAnswer);
 
   const fullSentenceOk = current.sentence.replace('___', userAnswer);
   const fullSentenceKo = current.sentence.replace('___', current.answer);
 
   if (current && userAnswer === current.answer) {
-    showFeedback(currentLang==='ca' ? '✓ Correcte!' : '✓ Correct!', 'correct');
+    /* ✓ Correcte */
+    showFeedback(
+      currentLang === 'ca' ? '✓ Correcte!' : '✓ Correct!',
+      'correct'
+    );
     canAdvance = false;
 
-    /* Quan és anglès → llegir la frase completa; en català només seguir */
-    const afterSpeak = () => { score++; total++; updateScore(); nextSentence(); };
-    currentLang !== 'ca' ? speak(fullSentenceOk, afterSpeak) : afterSpeak();
+    const afterSpeak = () => {
+      score++;
+      total++;
+      updateScore();
+      nextSentence();
+    };
+
+    // Llegeix la frase completa si useAudio = true
+    speak(fullSentenceOk, afterSpeak);
 
   } else {
-    const wrongTxt = currentLang==='ca'
+    /* ✗ Incorrecte */
+    const wrongTxt = currentLang === 'ca'
         ? `✗ Incorrecte. Resposta: ${current.answer}`
         : `✗ Incorrect. Answer: ${current.answer}`;
     showFeedback(wrongTxt, 'incorrect');
     canAdvance = false;
     incorrectSentences.push({ ...current, userAnswer });
 
-    const afterSpeak = () => { total++; updateScore(); nextSentence(); };
-    if (currentLang !== 'ca') {
-      speak(`The correct answer is ${current.answer}. ${fullSentenceKo}`, afterSpeak);
-    } else {
-      afterSpeak();  // sense àudio en català
-    }
+    const afterSpeak = () => {
+      total++;
+      updateScore();
+      nextSentence();
+    };
+
+    const intro = currentLang === 'ca'
+        ? 'La resposta correcta és'
+        : 'The correct answer is';
+
+    speak(`${intro} ${current.answer}. ${fullSentenceKo}`, afterSpeak);
   }
 }
+
 
 
 function animateButtonClick(button) {
