@@ -2,9 +2,9 @@
   "title": "Anywhere / Nowhere / Everywhere",
   "objective": "Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.",
   "explanation": [
-    "<strong>everywhere</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.",
-    "<strong>anywhere</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.",
-    "<strong>nowhere</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc."
+    "<strong>anywhere</strong> ➔ ‘a qualsevol lloc’. S'empra sobretot en frases negatives o interrogatives (We aren't going anywhere). En afirmatives pot significar ‘a qualsevol lloc del món’ / ‘pertot arreu’ (He can go anywhere in the world).",
+    "<strong>nowhere</strong> ➔ ‘enlloc’. Expressa absència total (It's nowhere to be seen, You're going nowhere) i també s'usa en sentit figurat (‘no progressar’).",
+    "<strong>everywhere</strong> ➔ ‘a tot arreu’ o ‘pertot arreu’. Indica presència universal en frases afirmatives (There was sand everywhere)."
   ],
   "buttons": ["anywhere", "nowhere", "everywhere"],
   "questions": [
