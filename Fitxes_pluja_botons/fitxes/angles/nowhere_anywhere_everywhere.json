@@ -1,0 +1,22 @@
+{
+  "title": "Anywhere / Nowhere / Everywhere",
+  "objective": "Llegeix cada frase i tria la paraula correcta: <strong>anywhere</strong>, <strong>nowhere</strong> o <strong>everywhere</strong>.",
+  "explanation": [
+    "<strong>everywhere</strong> ➔ a tot arreu. Es fa servir en frases afirmatives.",
+    "<strong>anywhere</strong> ➔ en qualsevol lloc. S'utilitza sovint en frases negatives o interrogatives.",
+    "<strong>nowhere</strong> ➔ en cap lloc. Expressa que alguna cosa no existeix enlloc."
+  ],
+  "buttons": ["anywhere", "nowhere", "everywhere"],
+  "questions": [
+    { "sentence": "I can't find my keys ___", "answer": "anywhere" },
+    { "sentence": "She looked ___ for her phone", "answer": "everywhere" },
+    { "sentence": "There was ___ to sit in the park", "answer": "nowhere" },
+    { "sentence": "He travels ___ for work", "answer": "everywhere" },
+    { "sentence": "We couldn't go ___ because of the rain", "answer": "anywhere" },
+    { "sentence": "He went ___ without telling anyone", "answer": "nowhere" },
+    { "sentence": "I have looked ___, but I can't find it", "answer": "everywhere" },
+    { "sentence": "You can't find help ___ these days", "answer": "anywhere" },
+    { "sentence": "There is ___ to run", "answer": "nowhere" },
+    { "sentence": "We went ___ looking for the dog", "answer": "everywhere" }
+  ]
+}
