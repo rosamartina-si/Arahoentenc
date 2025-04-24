@@ -23,7 +23,7 @@
   "• En paraules amb <em>nn</em>, sovint no es pronuncien com a geminades (dobles), malgrat que ho siguin: <em>Anna, annals, annex, Anníbal, bienni, connectar, connexió, decenni, enneàgon, enneasíl·lab, ennuegar, ennuvolar, escànner, innocent, innocu, innecessari, innat, innovar, mil·lenni, perenne, Susanna, quinquenni, tarannà, tennis, trienni</em> i derivats."
 ]
 
-  "buttons": ["m", "n", "mm", "nn", "mp", "mn",],
+  "buttons": ["m", "n", "mm", "nn", "mp", "mn"],
   "questions": [
     { "sentence": "e___ig",         "answer": "nm" },
     { "sentence": "e___arcat",     "answer": "mm" },
