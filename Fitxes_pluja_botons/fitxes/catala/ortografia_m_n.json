@@ -1,0 +1,45 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "title": "Paraules amb m / n / mm / nn / mp / mn",
+  "objective": "Tria la lletra que falta: <strong>m</strong> o <strong>n</strong>. La paraula apareix amb un espai en blanc al lloc de la <em>m</em>, <em>n</em>, <em>mm</em>, <em>nn</em>, <em>mp</em> o <em>mn</em>.",
+"explanation": [ 
+  "<u><strong>S’escriu <em>m</em></strong></u>",
+  "• Davant de <strong>b</strong>: <em>bomba, àmbit</em>.<br> Excepcions: <em>Canberra, Istanbul</em>.",
+  "• Davant de <strong>p</strong>: <em>emplear, camp, llamp</em>.<br> Excepcions: compostos amb el prefix <em>ben-</em>, com <em>benplantat, benparlat</em>.",
+  "• Davant de <strong>m</strong>: <em>emmarcar, immens, commoció</em>.<br> Excepcions: compostos formats amb <em>ben-, tan-, gran-, en-</em>, com <em>benmirat, tanmateix, granment, enmig</em>.",
+  "• Davant de <strong>f</strong>: <em>emfatitzar, emfàtic</em>.<br> Excepcions: <em>fanfarró</em> i paraules que semblen tenir el prefix <em>en-</em> però deriven realment de <em>con-, en-, in-, ben-</em>, com <em>èmfasi</em> i derivats.",
+  "• Amb el prefix <strong>circum-</strong>: <em>circumferència, circumstància</em>.",
+  "",
+  "<u><strong>S’escriu <em>n</em></strong></u>",
+  "• Davant de la resta de consonants: <em>enviar, encendre, endins, enganxar, enriquir, enllaç, enquadrat, enxaular, enrere, ensenyar, entre</em>.<br> Excepcions: <em>tramvia, gimcana, somriure, hàmster, premsa, comte, empremta, femta, impremta, zumzeig</em> i derivats.", 
+  "",
+  "<u><strong>Cas especial: el grup <em>mn</em></strong></u>",
+  "• S'escriu <em>mn</em> en paraules com: <em>alumne, amnèsia, amnistia, calúmnia, columna, condemna, somni, somnàmbul, gimnàs, himne, indemne, indemnitzar, solemne</em>.",
+  "• També en mots amb els prefixos <em>mnemo-</em> (‘memòria’) i <em>omni-</em> (‘tot’), com per exemple: <em>mnemotècnic, omnipresent, omnipotent</em>.",
+  "",
+  "<u><strong>Observacions de pronunciació</strong></u>",
+  "• En paraules amb els grups –mpt– i –mpc–, la <em>p</em> no es pronuncia tot i que s’escriu: <em>assumpte, Assumpta, atemptar, exempció, exempt, presumpte, presumpció, símptoma, sumptuós, temptar, temps, camp, llamp</em>.",
+  "• En paraules amb <em>nn</em>, sovint no es pronuncien com a geminades (dobles), malgrat que ho siguin: <em>Anna, annals, annex, Anníbal, bienni, connectar, connexió, decenni, enneàgon, enneasíl·lab, ennuegar, ennuvolar, escànner, innocent, innocu, innecessari, innat, innovar, mil·lenni, perenne, Susanna, quinquenni, tarannà, tennis, trienni</em> i derivats."
+]
+
+  "buttons": ["m", "n", "mm", "nn", "mp", "mn",],
+  "questions": [
+    { "sentence": "e___ig",         "answer": "nm" },
+    { "sentence": "e___arcat",     "answer": "mm" },
+    { "sentence": "i___ens",        "answer": "mm" },
+    { "sentence": "e___arcar",     "answer": "mm" },
+    { "sentence": "a___istat",      "answer": "m" },
+    { "sentence": "co___oció",      "answer": "mm" },
+    { "sentence": "i___ediat",      "answer": "mm" },
+    { "sentence": "e___urallar",   "answer": "mm" },
+    { "sentence": "i___ortal",      "answer": "mm" },
+    { "sentence": "a___b",          "answer": "m" },
+    { "sentence": "e___plenar",     "answer": "m" },
+    { "sentence": "i___utable",     "answer": "mm" },
+    { "sentence": "i___ensitat",    "answer": "mm" },
+    { "sentence": "e___mtllat",    "answer": "mm" },
+    { "sentence": "e___blema",     "answer": "m" },
+    { "sentence": "a___biguetat",   "answer": "m" }
+  ]
+}
