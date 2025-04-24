@@ -1,14 +1,15 @@
 {
   "lang": "en",
   "audio": true,
-  "title": "Nowhere / Anywhere / Everywhere",
-  "objective": "Tria la paraula correcta: <strong>nowhere</strong>, <strong>anywhere</strong> o <strong>everywhere</strong>.",
+  "title": "Nowhere / Somewhere / Anywhere / Everywhere",
+  "objective": "Tria la paraula correcta: <strong>nowhere</strong>, <strong>somewhere</strong>, <strong>anywhere</strong> o <strong>everywhere</strong>.",
   "explanation": [
     "<strong>nowhere</strong> ➔ ‘enlloc’. Expressa absència total (It's nowhere to be seen, You're going nowhere) i també s'usa en sentit figurat (‘no progressar’).",
+    "<strong>somewhere</strong> ➔ ‘en algun lloc, en alguna (part / banda)'. (Somewhere else en algun altre lloc, I left it somewhere or other ho vaig deixar en un lloc o altre, somewhere near us prop de nosaltres, no gaire lluny de casa nostra).",
     "<strong>anywhere</strong> ➔ ‘a qualsevol lloc’. S'empra sobretot en frases negatives o interrogatives (We aren't going anywhere). En afirmatives pot significar ‘a qualsevol lloc del món’ / ‘pertot arreu’ (He can go anywhere in the world).",
     "<strong>everywhere</strong> ➔ ‘a tot arreu’ o ‘pertot arreu’. Indica presència universal en frases afirmatives (There was sand everywhere)."
   ],
-  "buttons": ["nowhere", "anywhere", "everywhere"],
+  "buttons": ["nowhere", "someywhere", "anywhere", "everywhere"],
   "questions": [
     { "sentence": "I left my keys ___ in the house.",       "answer": "somewhere" },
     { "sentence": "She looked ___ for her phone.",           "answer": "everywhere" },
