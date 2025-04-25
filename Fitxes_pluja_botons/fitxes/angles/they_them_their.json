@@ -4,11 +4,12 @@
   
   "title": "They / Them / Their",
   "objective": "Llegeix cada frase i tria la paraula correcta: <strong>they</strong>, <strong>them</strong> o <strong>their</strong>.",
-  "explanation": [
-    "<strong>text1</strong> ➔ subject (e.g. They are happy).",
-    "<strong>text2</strong> ➔ object (e.g. I saw them).",
-    "<strong>text3</strong> ➔ possessive (e.g. Their dog is cute)."
-  ],
+"explanation": [
+  "<strong>they</strong> ➔ subject (e.g. <em>They are happy</em>).",
+  "<strong>them</strong> ➔ object (e.g. <em>I saw them</em>).",
+  "<strong>their</strong> ➔ possessive (e.g. <em>Their dog is cute</em>)."
+],
+
 
   "buttons": ["they", "them", "their"],
 
