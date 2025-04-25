@@ -3,25 +3,28 @@
   "audio": false,
   "title": "Paraules amb m / n / mm / nn / mp / mn",
   "objective": "Tria la lletra que falta: <strong>m</strong> o <strong>n</strong>. La paraula apareix amb un espai en blanc al lloc de la <em>m</em>, <em>n</em>, <em>mm</em>, <em>nn</em>, <em>mp</em> o <em>mn</em>.",
-"explanation": [ 
-  "<u><strong>S’escriu <em>m</em></strong></u>",
-  "• Davant de <strong>b</strong>: <em>bomba, àmbit</em>.<br> Excepcions: <em>Canberra, Istanbul</em>.",
-  "• Davant de <strong>p</strong>: <em>emplear, camp, llamp</em>.<br> Excepcions: compostos amb el prefix <em>ben-</em>, com <em>benplantat, benparlat</em>.",
-  "• Davant de <strong>m</strong>: <em>emmarcar, immens, commoció</em>.<br> Excepcions: compostos formats amb <em>ben-, tan-, gran-, en-</em>, com <em>benmirat, tanmateix, granment, enmig</em>.",
-  "• Davant de <strong>f</strong>: <em>emfatitzar, emfàtic</em>.<br> Excepcions: <em>fanfarró</em> i paraules que semblen tenir el prefix <em>en-</em> però deriven realment de <em>con-, en-, in-, ben-</em>, com <em>èmfasi</em> i derivats.",
-  "• Amb el prefix <strong>circum-</strong>: <em>circumferència, circumstància</em>.",
+"explanation": [
+  "<u><strong>Regles ortogràfiques per a l'ús de les grafies M i N</strong></u>",
+  "L'escriptura correcta de les consonants <strong>m</strong> i <strong>n</strong> davant altres consonants pot generar dubtes perquè els seus sons tendeixen a confondre's en aquestes posicions. A continuació, es presenta la normativa detallada, incloent-hi les excepcions pertinents:",
   "",
-  "<u><strong>S’escriu <em>n</em></strong></u>",
-  "• Davant de la resta de consonants: <em>enviar, encendre, endins, enganxar, enriquir, enllaç, enquadrat, enxaular, enrere, ensenyar, entre</em>.<br> Excepcions: <em>tramvia, gimcana, somriure, hàmster, premsa, comte, empremta, femta, impremta, zumzeig</em> i derivats.", 
+  "<u><strong>Quan s'escriu <em>m</em>?</strong></u>",
+  "• Davant de <strong>b</strong>: <em>bomba, àmbit, ombra, cambra</em>.<br>Excepcions: <em>Canberra, Istanbul</em>.",
+  "• Davant de <strong>p</strong>: <em>comprar, company, ample, camperol</em>.<br>Excepcions: compostos amb prefixos que acaben en <em>n</em>: <em>benplantat, benparlat, benmereixent, tanmateix, granment, enmig</em>.",
+  "• Davant de <strong>m</strong> (so geminat): <em>commoure, emmarcar, immens</em>.",
+  "• Davant de <strong>f</strong>: generalment amb <em>m</em>: <em>amfiteatre, àmfora, nimfa, triomf, èmfasi, simfonia, samfaina</em>.<br>Excepcions: paraules que comencen amb els prefixos <em>con-, en-, in-</em> (<em>confessió, enfocar, infant</em>) i altres mots especials: <em>fanfarró, fanfara, fanfàrria, gonfanó</em>.",
+  "• Amb el prefix <strong>circum-</strong>: <em>circumferència, circumscripció</em>.",
+  "• Casos especials amb <strong>mp</strong> (amb <em>p</em> muda): <em>assumpte, compte, temptar, temps, exempció, redempció, símptoma, presumpció, peremptori</em>.",
   "",
-  "<u><strong>Cas especial: el grup <em>mn</em></strong></u>",
-  "• S'escriu <em>mn</em> en paraules com: <em>alumne, amnèsia, amnistia, calúmnia, columna, condemna, somni, somnàmbul, gimnàs, himne, indemne, indemnitzar, solemne</em>.",
-  "• També en mots amb els prefixos <em>mnemo-</em> (‘memòria’) i <em>omni-</em> (‘tot’), com per exemple: <em>mnemotècnic, omnipresent, omnipotent</em>.",
+  "<u><strong>Quan s'escriu <em>n</em>?</strong></u>",
+  "• Davant de <strong>v</strong>: normalment amb <em>n</em>: <em>canvi, convent, envestir, invent</em>.<br>Excepcions: <em>tramvia, triumvir, triumvirat, circumval·lació, circumveí</em>.",
+  "• Davant de <strong>f</strong> amb prefixos <em>con-, en-, in-</em>: <em>conferència, enfadar, infermer</em>.",
+  "• Davant de <strong>n</strong> (segons la pronúncia):<br> - Grups <em>mn</em>: <em>alumne, amnistia, columna, solemne, somni</em>.<br> - Grups <em>nn</em> (geminats): <em>Anna, annex, innocent, perenne, innat, connectar</em>.",
+  "• Davant de la resta de consonants: generalment amb <em>n</em>: <em>enviar, encendre, enriquir, endins, enganxar, enllaç, enrere, entre</em>.<br>Excepcions: <em>comte, empremta, impremta, premsa, somriure, gimcana, zumzeig, femta, Samsó</em>.",
   "",
-  "<u><strong>Observacions de pronunciació</strong></u>",
-  "• En paraules amb els grups –mpt– i –mpc–, la <em>p</em> no es pronuncia tot i que s’escriu: <em>assumpte, Assumpta, atemptar, exempció, exempt, presumpte, presumpció, símptoma, sumptuós, temptar, temps, camp, llamp</em>.",
-  "• En paraules amb <em>nn</em>, sovint no es pronuncien com a geminades (dobles), malgrat que ho siguin: <em>Anna, annals, annex, Anníbal, bienni, connectar, connexió, decenni, enneàgon, enneasíl·lab, ennuegar, ennuvolar, escànner, innocent, innocu, innecessari, innat, innovar, mil·lenni, perenne, Susanna, quinquenni, tarannà, tennis, trienni</em> i derivats."
+  "<u><strong>Observació especial</strong></u>",
+  "Distinció important:<br>- <em>conte</em>: narració breu (<em>El conte infantil</em>).<br>- <em>comte/comtessa</em>: títol nobiliari (<em>El comte Arnau</em>).<br>- <em>compte</em>: càlcul, suma o atenció (<em>Anar amb compte</em> o <em>Obrir un compte al banc</em>)."
 ],
+
 
   "buttons": ["m", "n", "mm", "nn", "mp", "mn"],
   "questions": [
