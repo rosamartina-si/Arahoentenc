@@ -35,14 +35,32 @@ function getParams() {
 
 async function loadConfig() {
   const { tipus, fitxa } = getParams();
-  const response = await fetch(`${tipus}/${fitxa}.json`);
-  config = await response.json();
+  try {
+    const response = await fetch(`${tipus}/${fitxa}.json`);
+    if (!response.ok) throw new Error("❌ No s'ha pogut carregar el fitxer JSON.");
 
-  // ←➤ llegim opcions de la fitxa
-  currentLang = config.lang  || 'en';      // 'ca', 'en', …
-  useAudio    = config.audio !== false;    // qualsevol valor ≠ false activa l’àudio
-  renderModal();
+    config = await response.json();
+
+    // Validació bàsica del contingut del JSON
+    if (!config.questions || !Array.isArray(config.questions)) {
+      throw new Error("⚠️ El fitxer JSON no conté cap llista vàlida de preguntes.");
+    }
+
+    currentLang = config.lang  || 'en';
+    useAudio    = config.audio !== false;
+
+    renderModal();
+
+  } catch (err) {
+    modalOverlay.innerHTML = `
+      <h2 style="color: red;">⚠️ Error carregant la fitxa</h2>
+      <p>${err.message}</p>
+      <p>Comprova que la URL sigui correcta i que el fitxer JSON existeixi i tingui el format adequat.</p>
+    `;
+    modalOverlay.style.display = 'flex';
+  }
 }
+
 
 function renderModal() {
   const { title, objective, explanation } = config;
