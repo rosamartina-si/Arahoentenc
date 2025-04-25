@@ -13,9 +13,6 @@
   "buttons": ["they", "them", "their"],
 
   "questions": [
-    { "sentence": "Frase amb ___ buit.",          "answer": "OPCIÓ_1" },
-    { "sentence": "Una altra ___ frase.",         "answer": "OPCIÓ_3" },
-    { "sentence": "Recorda col·locar ___ només.", "answer": "OPCIÓ_2" },
     { "sentence": "___ are my friends from school.", "answer": "they" },
     { "sentence": "I saw ___ at the cinema yesterday.", "answer": "them" },
     { "sentence": "This is ___ house.", "answer": "their" },
