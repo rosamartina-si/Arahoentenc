@@ -146,3 +146,15 @@ canvas {
 #startButton:hover {
   background-color: #388e3c;
 }
+
+/* Per a pantalles grans (ordinadors) */
+@media (min-width: 800px) {
+  #modalOverlay {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+
+  #modalOverlay p, #modalOverlay h2, #modalOverlay h3 {
+    max-width: 800px; /* Amplada màxima més gran */
+  }
+}
