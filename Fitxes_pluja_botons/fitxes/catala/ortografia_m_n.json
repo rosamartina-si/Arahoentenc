@@ -4,6 +4,7 @@
   "title": "Paraules amb m / n / mm / nn / mp / mn",
   "objective": "Tria la lletra que falta: <strong>m</strong> o <strong>n</strong>. La paraula apareix amb un espai en blanc al lloc de la <em>m</em>, <em>n</em>, <em>mm</em>, <em>nn</em>, <em>mp</em> o <em>mn</em>.",
 "explanation": [
+  "<div style='text-align:left;'>",
   "<h3 style='color:#2196f3;'>📘 Regles ortogràfiques per a l’ús de les grafies <strong>M</strong> i <strong>N</strong></h3>",
   "<p>L’escriptura correcta de les consonants <strong>m</strong> i <strong>n</strong> davant altres consonants en català pot generar dubtes, ja que sovint els sons s’assemblen. A continuació es presenta la normativa detallada, incloent-hi les <strong>excepcions</strong>:</p>",
 
@@ -72,7 +73,8 @@
   "<li>📖 <strong>conte:</strong> narració breu (ex. El conte infantil)</li>",
   "<li>👑 <strong>comte / comtessa:</strong> títol nobiliari (ex. El comte Arnau)</li>",
   "<li>🔢 <strong>compte:</strong> càlcul o atenció (ex. Anar amb compte, obrir un compte)</li>",
-  "</ul>"
+  "</ul>",
+  "</div>"
 ],
 
 
