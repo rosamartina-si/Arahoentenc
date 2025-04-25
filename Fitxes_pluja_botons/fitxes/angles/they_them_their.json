@@ -1,13 +1,5 @@
 {
-    /* ───── CONFIGURACIÓ GENERAL ───── */
-  // idioma de la interfície i (si s'activa) de la veu
-  //  "ca" → missatges en català, veu ca-ES
-  //  "en" → missatges en anglès, veu en-US
   "lang": "en",
-
-  // àudio: true  → el joc llegirà la paraula i la frase completa
-  //         false → sense veu (ideal si no hi ha TTS per a l'idioma)
-  //  (si omets el camp, el valor per defecte és true)
   "audio": true,
   
   "title": "They / Them / Their",
@@ -18,41 +10,37 @@
     "<strong>text3</strong> ➔ possessive (e.g. Their dog is cute)."
   ],
 
-   /* ───── BOTONS DE RESPOSTA ─────
-     - Escriu tants valors com vulguis (mínim 2).
-     - L'ordre defineix l'ordre visual dels botons.
-  */
   "buttons": ["they", "them", "their"],
 
-  /* ─────────────── Llista de frases ─────────────── */
   "questions": [
-      { "sentence": "___ are my friends from school.", answer: "they" },
-      { "sentence": "I saw ___ at the cinema yesterday.", answer: "them" },
-      { "sentence": "This is ___ house.", answer: "their" },
-      { "sentence": "___ play football every weekend.", answer: "they" },
-      { "sentence": "I helped ___ with homework.", answer: "them" },
-      { "sentence": "We visited ___ grandparents last week.", answer: "their" },
-      { "sentence": "Can you give this to ___?", answer: "them" },
-      { "sentence": "Do you know ___ names?", answer: "their" },
-      { "sentence": "___ are always late!", answer: "they" },
-      { "sentence": "___ cat is very playful.", answer: "their" },
-      { "sentence": "___ went to the zoo yesterday.", answer: "they" },
-      { "sentence": "I want to go with ___.", answer: "them" },
-      { "sentence": "This is ___ favorite book.", answer: "their" },
-      { "sentence": "The teacher asked ___ a question.", answer: "them" },
-      { "sentence": "___ live next to my house.", answer: "they" },
-      { "sentence": "I gave the present to ___.", answer: "them" },
-      { "sentence": "The children forgot ___ lunch.", answer: "their" },
-      { "sentence": "___ don't want to come with us.", answer: "they" },
-      { "sentence": "We need to call ___ now.", answer: "them" },
-      { "sentence": "I like ___ new car.", answer: "their" },
-      { "sentence": "___ love to play games.", answer: "they" },
-      { "sentence": "Tell ___ to be careful!", answer: "them" },
-      { "sentence": "Do you think ___ will come to the party?", answer: "they" },
-      { "sentence": "The teacher told ___ to sit down.", answer: "them" },
-      { "sentence": "Why did you call ___ so early?", answer: "them" },
-      { "sentence": "___ don't understand the question.", answer: "they" }
-
-    /* afegeix tantes frases com vulguis */
+    { "sentence": "Frase amb ___ buit.",          "answer": "OPCIÓ_1" },
+    { "sentence": "Una altra ___ frase.",         "answer": "OPCIÓ_3" },
+    { "sentence": "Recorda col·locar ___ només.", "answer": "OPCIÓ_2" },
+    { "sentence": "___ are my friends from school.", "answer": "they" },
+    { "sentence": "I saw ___ at the cinema yesterday.", "answer": "them" },
+    { "sentence": "This is ___ house.", "answer": "their" },
+    { "sentence": "___ play football every weekend.", "answer": "they" },
+    { "sentence": "I helped ___ with homework.", "answer": "them" },
+    { "sentence": "We visited ___ grandparents last week.", "answer": "their" },
+    { "sentence": "Can you give this to ___?", "answer": "them" },
+    { "sentence": "Do you know ___ names?", "answer": "their" },
+    { "sentence": "___ are always late!", "answer": "they" },
+    { "sentence": "___ cat is very playful.", "answer": "their" },
+    { "sentence": "___ went to the zoo yesterday.", "answer": "they" },
+    { "sentence": "I want to go with ___.", "answer": "them" },
+    { "sentence": "This is ___ favorite book.", "answer": "their" },
+    { "sentence": "The teacher asked ___ a question.", "answer": "them" },
+    { "sentence": "___ live next to my house.", "answer": "they" },
+    { "sentence": "I gave the present to ___.", "answer": "them" },
+    { "sentence": "The children forgot ___ lunch.", "answer": "their" },
+    { "sentence": "___ don't want to come with us.", "answer": "they" },
+    { "sentence": "We need to call ___ now.", "answer": "them" },
+    { "sentence": "I like ___ new car.", "answer": "their" },
+    { "sentence": "___ love to play games.", "answer": "they" },
+    { "sentence": "Tell ___ to be careful!", "answer": "them" },
+    { "sentence": "Do you think ___ will come to the party?", "answer": "they" },
+    { "sentence": "The teacher told ___ to sit down.", "answer": "them" },
+    { "sentence": "Why did you call ___ so early?", "answer": "them" },
+    { "sentence": "___ don't understand the question.", "answer": "they" }
   ]
 }
