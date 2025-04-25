@@ -33,6 +33,20 @@ canvas {
   }
 }
 
+@media (min-width: 800px) {
+  #modalOverlay {
+    padding-left: 100px;
+    padding-right: 100px;
+    text-align: left; /* ✅ Alineació a l’esquerra només per ordinadors */
+  }
+
+  #modalOverlay p,
+  #modalOverlay h2,
+  #modalOverlay h3 {
+    max-width: 800px;
+  }
+}
+
 #restartButton {
   bottom: 100px;
   display: none;
