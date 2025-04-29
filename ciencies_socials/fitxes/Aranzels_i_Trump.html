@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitxa educativa: El dèficit comercial i els aranzels de Trump</title>
+  <title>El dèficit comercial i els aranzels de Trump</title>
 
   <!-- Full d’estils extern -->
   <link rel="stylesheet" href="estil2.css">
@@ -16,75 +16,94 @@
 
   <div class="section">
     <h3>I. Lectura inicial</h3>
+    <p class="quote">
+      Quan un país com els Estats Units compra més coses (importa) de les que ven (exporta), diem que té un dèficit comercial. Això vol dir que gasta més diners en productes estrangers dels que guanya venent els seus propis productes a fora.
+    </p>
 
     <p class="quote">
-      Quan un país com els Estats Units compra més coses (importa) de les que ven (exporta), diem que té un dèficit comercial…
+       Per entendre-ho millor, imagina una persona que cada mes guanya 1.500 euros, però gasta 1.800 euros en menjar, lloguer i altres despeses. Aquesta persona està gastant 300 euros més dels que guanya. Això li crea un dèficit personal, una situació que no pot mantenir durant gaire temps.
     </p>
-    <!-- … (resta de paràgrafs .quote inalterats) … -->
+
+    <p class="quote">
+       Doncs bé, amb els països passa el mateix. Si un país importa per valor de 500.000 milions d’euros però només exporta per valor de 400.000 milions, té un dèficit comercial de 100.000 milions. Això indica que gasta més del que guanya en el comerç amb altres països.
+    </p>
+
+    <p class="quote">
+       Al principi del 2025, el president dels Estats Units, Donald Trump, va dir que volia solucionar aquest problema. Per fer-ho, va decidir aplicar aranzels, que són impostos que es posen als productes estrangers per fer-los més cars. Així esperava que la gent dels Estats Units comprés més productes nacionals.
+    </p>
+
+    <p class="quote">
+      Però, un estudi del 2019 sobre la guerra comercial de Trump contra la Xina durant el primer mandat es va centrar en empreses que importaven rentadores i va concloure que van traslladar l'increment del cost al preu final de venda. A més, els fabricants de rentadores als Estats Units, que no estaven afectats pels aranzels, també van aprofitar per augmentar els preus. Això va generar un efecte en cadena: altres productes relacionats, com les assecadores, també van incrementar el preu.
+    </p>
+
   </div>
 
   <div class="section">
     <h3>II. Càlculs matemàtics</h3>
-    <p><strong>1.&nbsp;</strong>Si un país importa 900.000 milions…</p>
+    <p><strong>1. Si un país importa 900.000 milions i exporta 600.000 milions, quin és el dèficit?</strong></p>
     <textarea></textarea>
-
-    <p><strong>2.&nbsp;</strong>Calcula l’aranzel amb la fórmula…</p>
+    <p><strong>2. Calcula l’aranzel amb la fòrmula: (Importacions - Exportacions) ÷ Importacions ÷ 2</strong></p>
     <textarea></textarea>
   </div>
 
   <div class="section">
     <h3>III. Geografia</h3>
-
+    <!-- Secció per a les Illes Heard i McDonald -->
     <div class="image-upload">
-      <label for="heard-mcdonald">Puja una imatge de les Illes Heard i McDonald:</label>
-      <input type="file" id="heard-mcdonald" accept="image/*"
-             onchange="previewImage(event,'preview-heard')">
-      <img id="preview-heard" class="image-preview"
-           alt="Previsualització de les Illes Heard i McDonald" style="display:none;">
+        <label for="heard-mcdonald">Puja una imatge de les Illes Heard i McDonald:</label>
+        <input type="file" id="heard-mcdonald" accept="image/*" onchange="previewImage(event, 'preview-heard-mcdonald')">
+        <img id="preview-heard-mcdonald" class="image-preview" src="#" alt="Previsualització de les Illes Heard i McDonald" style="display:none;">
     </div>
 
+    <p>
+    <!-- Secció per a l'illa Jan Mayen -->
     <div class="image-upload">
-      <label for="jan-mayen">Puja una imatge de l'illa Jan Mayen:</label>
-      <input type="file" id="jan-mayen" accept="image/*"
-             onchange="previewImage(event,'preview-jan')">
-      <img id="preview-jan" class="image-preview"
-           alt="Previsualització de l'illa Jan Mayen" style="display:none;">
+        <label for="jan-mayen">Puja una imatge de l'illa Jan Mayen:</label>
+        <input type="file" id="jan-mayen" accept="image/*" onchange="previewImage(event, 'preview-jan-mayen')">
+        <img id="preview-jan-mayen" class="image-preview" src="#" alt="Previsualització de l'illa Jan Mayen" style="display:none;">
     </div>
 
-    <p><strong>3.&nbsp;</strong>Per què no té sentit incloure llocs com Jan Mayen…?</p>
+    <script>
+        function previewImage(event, previewId) {
+            const input = event.target;
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+    <p><strong>3. Per què no té sentit incloure llocs com Jan Mayen o les Illes Heard i McDonald en una llista de comerç internacional?</strong></p>
     <textarea style="height:100px;"></textarea>
   </div>
 
   <div class="section">
     <h3>IV. Reflexió</h3>
-    <p><strong>4.&nbsp;</strong>Per què creus que…?</p>
+    <p><strong>4. Per què creus que, si els productes importats com les rentadores es tornen més cars a causa dels aranzels, les empreses que fabriquen rentadores dins del país també decideixen augmentar els preus?</strong></p>
     <textarea></textarea>
-    <!-- … resta de preguntes … -->
+    <p><strong>5. Per què penses que l'augment del preu de les rentadores va afectar altres productes relacionats, com les assecadores?</strong></p>
+    <textarea></textarea>
+    <p><strong>6. Quins riscos comporta utilitzar eines automàtiques per prendre decisions importants?</strong></p>
+    <textarea></textarea>
   </div>
 
   <div class="section">
     <h3>V. Vocabulari clau</h3>
     <ul>
-      <li><strong>Dèficit comercial</strong>: Diferència negativa…</li>
+      <li><strong>Dèficit comercial</strong>: Diferència negativa entre el que s’importa i el que s’exporta.</li>
       <li><strong>Aranzel</strong>: Impost als productes estrangers.</li>
-      <li><strong>Xatbot</strong>: Eina d’IA que respon preguntes.</li>
-      <li><strong>Importació / Exportació</strong>: Comprar o vendre entre països.</li>
+      <li><strong>Xatbot</strong>: Eina automàtica d’IA que respon preguntes.</li>
+      <li><strong>Importació / Exportació</strong>: Comprar o vendre productes entre països.</li>
     </ul>
   </div>
 
-  <script>
-    function previewImage(event, id) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = document.getElementById(id);
-        img.src = e.target.result;
-        img.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-  </script>
 </body>
 </html>
