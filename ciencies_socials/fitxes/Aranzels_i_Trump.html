@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitxa educativa: El dèficit comercial i els aranzels de Trump</title>
+
+  <!-- Full d’estils extern -->
+  <link rel="stylesheet" href="estil2.css">
+</head>
+
+<body>
+  <h1>Fitxa d'economia</h1>
+  <h2>El dèficit comercial i els aranzels de Trump</h2>
+  <p><strong>Nom:</strong> _________________________ <strong>Data:</strong> ________________</p>
+
+  <div class="section">
+    <h3>I. Lectura inicial</h3>
+
+    <p class="quote">
+      Quan un país com els Estats Units compra més coses (importa) de les que ven (exporta), diem que té un dèficit comercial…
+    </p>
+    <!-- … (resta de paràgrafs .quote inalterats) … -->
+  </div>
+
+  <div class="section">
+    <h3>II. Càlculs matemàtics</h3>
+    <p><strong>1.&nbsp;</strong>Si un país importa 900.000 milions…</p>
+    <textarea></textarea>
+
+    <p><strong>2.&nbsp;</strong>Calcula l’aranzel amb la fórmula…</p>
+    <textarea></textarea>
+  </div>
+
+  <div class="section">
+    <h3>III. Geografia</h3>
+
+    <div class="image-upload">
+      <label for="heard-mcdonald">Puja una imatge de les Illes Heard i McDonald:</label>
+      <input type="file" id="heard-mcdonald" accept="image/*"
+             onchange="previewImage(event,'preview-heard')">
+      <img id="preview-heard" class="image-preview"
+           alt="Previsualització de les Illes Heard i McDonald" style="display:none;">
+    </div>
+
+    <div class="image-upload">
+      <label for="jan-mayen">Puja una imatge de l'illa Jan Mayen:</label>
+      <input type="file" id="jan-mayen" accept="image/*"
+             onchange="previewImage(event,'preview-jan')">
+      <img id="preview-jan" class="image-preview"
+           alt="Previsualització de l'illa Jan Mayen" style="display:none;">
+    </div>
+
+    <p><strong>3.&nbsp;</strong>Per què no té sentit incloure llocs com Jan Mayen…?</p>
+    <textarea style="height:100px;"></textarea>
+  </div>
+
+  <div class="section">
+    <h3>IV. Reflexió</h3>
+    <p><strong>4.&nbsp;</strong>Per què creus que…?</p>
+    <textarea></textarea>
+    <!-- … resta de preguntes … -->
+  </div>
+
+  <div class="section">
+    <h3>V. Vocabulari clau</h3>
+    <ul>
+      <li><strong>Dèficit comercial</strong>: Diferència negativa…</li>
+      <li><strong>Aranzel</strong>: Impost als productes estrangers.</li>
+      <li><strong>Xatbot</strong>: Eina d’IA que respon preguntes.</li>
+      <li><strong>Importació / Exportació</strong>: Comprar o vendre entre països.</li>
+    </ul>
+  </div>
+
+  <script>
+    function previewImage(event, id) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.getElementById(id);
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
