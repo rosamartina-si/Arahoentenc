@@ -1,54 +1,30 @@
-/* ---------- Configuració del full DIN-A4 ---------- */
-body {
-  font-family: 'Georgia', serif;
-  background-color: #ffffff;
-  color: #000;
-  margin: 0 auto;
-  padding: 40px;
-  width: 210mm;          /* ample A4 per imprimir */
-  max-width: 100%;       /* que no desbordi en pantalles petites */
-  box-sizing: border-box;
-}
 
-/* ---------- Títols ---------- */
-h1, h2, h3 {
-  color: #003366;
-}
-
-/* ---------- Seccions ---------- */
-.section {
-  margin-bottom: 25px;
-}
-
-/* ---------- Quadres de cita/lectura ---------- */
-.quote {
-  font-style: italic;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border-left: 4px solid #ccc;
-  margin-bottom: 20px;
-}
-
-/* ---------- Àrees de resposta ---------- */
-textarea {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 15px;
-  font-family: 'Georgia', serif;
-  font-size: 0.95rem;
-  padding: 6px;
-  box-sizing: border-box;
-}
-
-/* ---------- Gestió d’imatges pujades per l’alumne ---------- */
-.image-upload {
-  margin: 15px 0;
-}
-
-.image-preview {
-  display: block;
-  max-width: 100%;
-  max-height: 180px;
-  margin-top: 6px;
-  border: 1px solid #ccc;
-}
+    body {
+      font-family: 'Georgia', serif;
+      background-color: white;
+      color: #000;
+      margin: 0 auto;
+      padding: 40px;
+      width: 210mm;
+      max-width: 100%;
+      height: auto;
+      box-sizing: border-box;
+    }
+    h1, h2, h3 {
+      color: #003366;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .quote {
+      font-style: italic;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-left: 4px solid #ccc;
+      margin-bottom: 20px;
+    }
