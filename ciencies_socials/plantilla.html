@@ -3,34 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitxa educativa</title>
-  <link rel="stylesheet" href="estil.css">
+  <title>{{titol_pagina}}</title>
+
+  <!-- Full d’estils extern -->
+  <link rel="stylesheet" href="../estil2.css">
 </head>
+
 <body>
 
-  <h1>Títol de la fitxa</h1>
+  <!-- Capçalera principal -->
+  <h1>Títol principal</h1>
+  <h2>Subtítol</h2>
+  <p>
+    <strong>Nom:</strong> _________________________
+    &nbsp;&nbsp;
+    <strong>Data:</strong> ________________
+  </p>
 
-  <div class="info-box">
-    Aquí pots posar la introducció o una definició clau. És un text destacat amb fons blau.
+  <!-- ==============================
+       I. Lectura inicial
+       ============================== -->
+  <div class="section">
+    <h3>I. Lectura inicial</h3>
+
+    <!-- Repetiu aquest paràgraf .quote
+         tantes vegades com calgui -->
+      <p class="quote">Text aquí</p>
+
+      <p class="quote">Text aquí</p>
+
   </div>
 
-  <h2>Subtítol</h2>
-  <p>Text explicatiu...</p>
+  <!-- ==============================
+       II. Càlculs matemàtics
+       ============================== -->
+  <div class="section">
+    <h3>II. Càlculs matemàtics</h3>
 
-  <img src="imatges/..." alt="...">
+      <p><strong>enunciat de l'exercici</strong></p>
+      <textarea></textarea>
 
-  <div class="pregunta">
-    <strong>Preguntes per pensar:</strong>
+  </div>
+
+  <!-- ==============================
+       III. Geografia
+       ============================== -->
+  <div class="section">
+    <h3>III. Geografia</h3>
+
+    <!-- Bloc per pujar imatges -->
+    {{#imatges}}
+      <div class="image-upload">
+        <label>{{label}}</label>
+        <input type="file" accept="image/*"
+               onchange="previewImage(event,'{{idPreview}}')">
+        <img id="{{idPreview}}" class="image-preview"
+             alt="Previsualització" style="display:none;">
+      </div>
+    {{/imatges}}
+
+    <!-- Pregunta oberta llarga -->
+    <p><strong>pregunta de geografia</strong></p>
+    <textarea style="height:100px;"></textarea>
+  </div>
+
+  <!-- ==============================
+       IV. Reflexió
+       ============================== -->
+  <div class="section">
+    <h3>IV. Reflexió</h3>
+
+      <p><strong>pregunta de reflexió</strong></p>
+      <textarea></textarea>
+
+  </div>
+
+  <!-- ==============================
+       V. Vocabulari clau
+       ============================== -->
+  <div class="section">
+    <h3>V. Vocabulari clau</h3>
     <ul>
-      <li>Què pot fer que la demanda real baixi de cop? Pot ser una apagada? O una altra causa?</li>
-      <li>Per què és important que la producció i el consum estiguin equilibrats?</li>
-      <li>Què poden fer els enginyers per evitar apagades?</li>
+      <li><strong>Dèficit comercial</strong>: Diferència negativa entre el que s’importa i el que s’exporta.</li>
+      <li><strong>Aranzel</strong>: Impost als productes estrangers.</li>
+      <li><strong>Xatbot</strong>: Eina automàtica d’IA que respon preguntes.</li>
+      <li><strong>Importació / Exportació</strong>: Comprar o vendre productes entre països.</li>
     </ul>
   </div>
 
-  <div class="resposta">
-    <strong>Recorda:</strong> ...
-  </div>
+  <!-- --------------------------------------------
+       Script per previsualitzar imatges pujades
+       ------------------------------------------ -->
+  <script>
+    function previewImage (event, id) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.getElementById(id);
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
 
 </body>
 </html>
