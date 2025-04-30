@@ -28,3 +28,11 @@
       border-left: 4px solid #ccc;
       margin-bottom: 20px;
     }
+/*per fer que la imatge s’adapti a l’amplada de la pantalla (i evitar que sobrepassi el contenidor.*/
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
