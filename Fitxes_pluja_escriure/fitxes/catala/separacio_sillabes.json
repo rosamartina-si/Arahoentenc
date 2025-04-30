@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercici de Paraules</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #f0f0f0;
+            display: block;
+        }
+        #inputContainer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        input {
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            width: 300px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px;
+        }
+        #feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+        }
+        #feedback.correct {
+            color: green;
+        }
+        #feedback.incorrect {
+            color: red;
+        }
+        #feedback.tryAgain {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="inputContainer">
+        <input type="text" id="userInput" placeholder="Escriu la paraula amb guionets">
+        <button onclick="checkAnswer()">Comprovar</button>
+    </div>
+    <div id="feedback"></div>
+
+    <script>
+    
+	alert("📢 Benvingut al joc d'ortografia! ✏️\n\n" +
+      "🔹 Escriu cada síl·laba separada amb un guionet.\n" +
+      "🔹 Per exemple, si apareix 'rosa', has d'escriure 'ro-sa'.\n\n" +
+      "📖 Recorda aquestes regles bàsiques de separació de síl·labes:\n" +
+      "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.\n" + // <--- CORRECCIÓ
+      "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.\n" +
+      "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).\n" + // <--- CORRECCIÓ
+      "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.\n\n" +
+      "🎯 Prepara't i molta sort! 🍀");
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Paraules disponibles
+        const allWords = [
+            { word: 'aguantar', solution: 'a-guan-tar' },
+            { word: 'adolescent', solution: 'a-do-les-cent' },
+            { word: 'aconseguir', solution: 'a-con-se-guir' },
+            { word: 'àguila', solution: 'à-gui-la' },
+            { word: 'aquari', solution: 'a-qua-ri' },
+            { word: 'aquàtic', solution: 'a-quà-tic' },
+            { word: 'aquós', solution: 'a-quós' },
+            { word: 'avantguarda', solution: 'a-vant-guar-da' },
+            { word: 'baia', solution: 'ba-ia' },
+            { word: 'baioneta', solution: 'ba-io-ne-ta' },
+            { word: 'bilingüe', solution: 'bi-lin-güe' },
+            { word: 'cinquanta', solution: 'cin-quan-ta' },
+            { word: 'creient', solution: 'cre-ient' },
+            { word: 'desigualtat', solution: 'des-i-gual-tat' },
+            { word: 'egua', solution: 'e-gua' },
+            { word: 'eloqüència', solution: 'e-lo-qüèn-ci-a' },
+            { word: 'equació', solution: 'e-qua-ci-ó' },
+            { word: 'equador', solution: 'e-qua-dor' },
+            { word: 'equatorial', solution: 'e-qua-to-ri-al' },
+            { word: 'esguard', solution: 'es-guard' },
+            { word: 'esquadra', solution: 'es-qua-dra' },
+            { word: 'freqüència', solution: 'fre-qüèn-ci-a' },
+            { word: 'freqüent', solution: 'fre-qüent' },
+            { word: 'guarderia', solution: 'guar-de-ri-a' },
+            { word: 'guardiola', solution: 'guar-di-o-la' },
+            { word: 'iguana', solution: 'i-gua-na' },
+            { word: 'ioga', solution: 'io-ga' },
+            { word: 'iogurt', solution: 'io-gurt' },
+            { word: 'joia', solution: 'jo-ia' },
+            { word: 'llengua', solution: 'llen-gua' },
+            { word: 'llengüeta', solution: 'llen-güe-ta' },
+            { word: 'maionesa', solution: 'ma-io-ne-sa' },
+            { word: 'nicaragüenc', solution: 'ni-ca-ra-güenc' },
+            { word: 'noia', solution: 'no-ia' },
+            { word: 'paranoia', solution: 'pa-ra-no-ia' },
+            { word: 'pasqua', solution: 'pas-qua' },
+            { word: 'piragüisme', solution: 'pi-ra-güis-me' },
+            { word: 'plurilingüe', solution: 'plu-ri-lin-güe' },
+            { word: 'quadern', solution: 'qua-dern' },
+            { word: 'quadrant', solution: 'qua-drant' },
+            { word: 'quadre', solution: 'qua-dre' },
+            { word: 'qualificar', solution: 'qua-li-fi-car' },
+            { word: 'qualitat', solution: 'qua-li-tat' },
+            { word: 'quocient', solution: 'quo-ci-ent' },
+            { word: 'quòrum', solution: 'quò-rum' },
+            { word: 'quota', solution: 'quo-ta' },
+            { word: 'següent', solution: 'se-güent' },
+            { word: 'seqüència', solution: 'se-qüèn-ci-a' },
+            { word: 'talaia', solution: 'ta-la-ia' },
+            { word: 'terraqüi', solution: 'ter-ra-qüi' },
+            { word: 'ungüent', solution: 'un-güent' },
+            { word: 'actriu', solution: 'ac-triu' },
+            { word: 'adhesiu', solution: 'ad-he-siu' },
+            { word: 'afaitar', solution: 'a-fai-tar' },
+            { word: 'allau', solution: 'a-llau' },
+            { word: 'aperitiu', solution: 'a-pe-ri-tiu' },
+            { word: 'arcaic', solution: 'ar-caic' },
+            { word: 'arreu', solution: 'ar-reu' },
+            { word: 'arrossaire', solution: 'ar-ros-sai-re' },
+            { word: 'asteroide', solution: 'as-te-roi-de' },
+            { word: 'astronauta', solution: 'as-tro-nau-ta' },
+            { word: 'augment', solution: 'aug-ment' },
+            { word: 'aula', solution: 'au-la' },
+            { word: 'avui', solution: 'a-vui' },
+            { word: 'boira', solution: 'boi-ra' },
+            { word: 'bordeus', solution: 'bor-deus' },
+            { word: 'bou', solution: 'bou' },
+            { word: 'buidar', solution: 'bui-dar' },
+            { word: 'caiguda', solution: 'cai-gu-da' },
+            { word: 'caliu', solution: 'ca-liu' },
+            { word: 'causa', solution: 'cau-sa' },
+            { word: 'ciutat', solution: 'ciu-tat' },
+            { word: 'clau', solution: 'clau' },
+            { word: 'coincidència', solution: 'co-in-ci-dèn-ci-a' },
+            { word: 'coure', solution: 'cou-re' },
+            { word: 'cultiu', solution: 'cul-tiu' },
+            { word: 'desmai', solution: 'des-mai' },
+            { word: 'dijous', solution: 'di-jous' },
+            { word: 'europeu', solution: 'eu-ro-peu' },
+            { word: 'feina', solution: 'fei-na' },
+            { word: 'hoquei', solution: 'ho-quei' },
+            { word: 'liceu', solution: 'li-ceu' },
+            { word: 'manlleu', solution: 'man-lleu' },
+            { word: 'moure', solution: 'mou-re' },
+            { word: 'nau', solution: 'nau' },
+            { word: 'objectiu', solution: 'ob-jec-tiu' },
+            { word: 'paisatge', solution: 'pai-sat-ge' },
+            { word: 'ploure', solution: 'plou-re' },
+            { word: 'preu', solution: 'preu' },
+            { word: 'relleu', solution: 're-lleu' },
+            { word: 'remei', solution: 're-mei' },
+            { word: 'riure', solution: 'riu-re' },
+            { word: 'roure', solution: 'rou-re' },
+            { word: 'servei', solution: 'ser-vei' },
+            { word: 'taula', solution: 'tau-la' },
+            { word: 'tauró', solution: 'tau-ró' },
+            { word: 'tiroide', solution: 'ti-roi-de' },
+            { word: 'trofeu', solution: 'tro-feu' },
+            { word: 'xiroi', solution: 'xi-roi' },
+            { word: 'aixafar', solution: 'ai-xa-far' },
+            { word: 'al·legat', solution: 'al-le-gat' },
+            { word: 'allotjar', solution: 'a-llot-jar' },
+            { word: 'al·lucinar', solution: 'al-lu-ci-nar' },
+            { word: 'amortitzar', solution: 'a-mor-tit-zar' },
+            { word: 'antecessor', solution: 'an-te-ces-sor' },
+            { word: 'aprenentatge', solution: 'a-pre-nen-tat-ge' },
+            { word: 'arraconar', solution: 'ar-ra-co-nar' },
+            { word: 'arrel', solution: 'ar-rel' },
+            { word: 'arrissar', solution: 'ar-ris-sar' },
+            { word: 'arròs', solution: 'ar-ròs' },
+            { word: 'arrossegar', solution: 'ar-ros-se-gar' },
+            { word: 'ascendència', solution: 'as-cen-dèn-ci-a' },
+            { word: 'ascensor', solution: 'as-cen-sor' },
+            { word: 'assessoria', solution: 'as-ses-so-ri-a' },
+            { word: 'associació', solution: 'as-so-ci-a-ci-ó' },
+            { word: 'atzavara', solution: 'at-za-va-ra' },
+            { word: 'avantatge', solution: 'a-van-tat-ge' },
+            { word: 'bagatge', solution: 'ba-gat-ge' },
+            { word: 'baixista', solution: 'bai-xis-ta' },
+            { word: 'bardissa', solution: 'bar-dis-sa' },
+            { word: 'barra', solution: 'bar-ra' },
+            { word: 'barreja', solution: 'bar-re-ja' },
+            { word: 'batxillerat', solution: 'bat-xi-lle-rat' },
+            { word: 'beixamel', solution: 'bei-xa-mel' },
+            { word: 'bossa', solution: 'bos-sa' },
+            { word: 'botifarra', solution: 'bo-ti-far-ra' },
+            { word: 'botzina', solution: 'bot-zi-na' },
+            { word: 'brossa', solution: 'bros-sa' },
+            { word: 'bruixa', solution: 'brui-xa' },
+            { word: 'caixa', solution: 'cai-xa' },
+            { word: 'caramel·litzar', solution: 'ca-ra-mel-lit-zar' },
+            { word: 'caravel·la', solution: 'ca-ra-vel-la' },
+            { word: 'carbassó', solution: 'car-bas-só' },
+            { word: 'càrrega', solution: 'càr-re-ga' },
+            { word: 'cartutxera', solution: 'car-tut-xe-ra' },
+            { word: 'col·legi', solution: 'col-le-gi' },
+            { word: 'coratge', solution: 'co-rat-ge' },
+            { word: 'corretja', solution: 'cor-ret-ja' },
+            { word: 'cotxe', solution: 'cot-xe' },
+            { word: 'deixar', solution: 'dei-xar' },
+            { word: 'despatxar', solution: 'des-pat-xar' },
+            { word: 'doblatge', solution: 'do-blat-ge' },
+            { word: 'dotze', solution: 'dot-ze' },
+            { word: 'escena', solution: 'es-ce-na' },
+            { word: 'fetge', solution: 'fet-ge' },
+            { word: 'gerro', solution: 'ger-ro' },
+            { word: 'heretgia', solution: 'he-ret-gi-a' },
+            { word: 'homenatge', solution: 'ho-me-nat-ge' },
+            { word: 'imatge', solution: 'i-mat-ge' },
+            { word: 'míssil', solution: 'mís-sil' },
+            { word: 'passeig', solution: 'pas-seig' },
+            { word: 'patge', solution: 'pat-ge' },
+            { word: 'peixateria', solution: 'pei-xa-te-ri-a' },
+            { word: 'pel·lícula', solution: 'pel-lí-cu-la' },
+            { word: 'petjada', solution: 'pet-ja-da' },
+            { word: 'pistatxo', solution: 'pis-tat-xo' },
+            { word: 'pitjor', solution: 'pit-jor' },
+            { word: 'platja', solution: 'plat-ja' },
+            { word: 'rebaixa', solution: 're-bai-xa' },
+            { word: 'reixa', solution: 'rei-xa' },
+            { word: 'samarreta', solution: 'sa-mar-re-ta' },
+            { word: 'serra', solution: 'ser-ra' },
+            { word: 'terra', solution: 'ter-ra' },
+            { word: 'trencadissa', solution: 'tren-ca-dis-sa' },
+            { word: 'afanyar', solution: 'a-fa-nyar' },
+            { word: 'allau', solution: 'a-llau' },
+            { word: 'anarquista', solution: 'a-nar-quis-ta' },
+            { word: 'anyada', solution: 'a-nya-da' },
+            { word: 'arbequina', solution: 'ar-be-qui-na' },
+            { word: 'arquer', solution: 'ar-quer' },
+            { word: 'arquitecte', solution: 'ar-qui-tec-te' },
+            { word: 'assenyat', solution: 'as-se-nyat' },
+            { word: 'avellana', solution: 'a-ve-lla-na' },
+            { word: 'banquer', solution: 'ban-quer' },
+            { word: 'banya', solution: 'ban-ya' },
+            { word: 'bàsquet', solution: 'bàs-quet' },
+            { word: 'batxillerat', solution: 'bat-xi-lle-rat' },
+            { word: 'bloqueig', solution: 'blo-queig' },
+            { word: 'bolquer', solution: 'bol-quer' },
+            { word: 'brànquia', solution: 'bràn-qui-a' },
+            { word: 'bunyol', solution: 'bu-nyol' },
+            { word: 'cabellera', solution: 'ca-be-lle-ra' },
+            { word: 'campanya', solution: 'cam-pa-nya' },
+            { word: 'canya', solution: 'ca-nya' },
+            { word: 'caqui', solution: 'ca-qui' },
+            { word: 'carmanyola', solution: 'car-ma-nyo-la' },
+            { word: 'castanya', solution: 'cas-ta-nya' },
+            { word: 'ceguesa', solution: 'ce-gue-sa' },
+            { word: 'cigonya', solution: 'ci-go-nya' },
+            { word: 'cloqueig', solution: 'clo-queig' },
+            { word: 'cullera', solution: 'cu-lle-ra' },
+            { word: 'enguixar', solution: 'en-gui-xar' },
+            { word: 'enllumenat', solution: 'en-llu-me-nat' },
+            { word: 'escaquer', solution: 'es-ca-quer' },
+            { word: 'esquena', solution: 'es-que-na' },
+            { word: 'festeig', solution: 'fes-teig' },
+            { word: 'figuera', solution: 'fi-gue-ra' },
+            { word: 'guineu', solution: 'gui-neu' },
+            { word: 'guinyol', solution: 'gui-nyol' },
+            { word: 'jerarquia', solution: 'je-rar-qui-a' },
+            { word: 'líquid', solution: 'lí-quid' },
+            { word: 'mareig', solution: 'ma-reig' },
+            { word: 'neguit', solution: 'ne-guit' },
+            { word: 'noguera', solution: 'no-gue-ra' },
+            { word: 'orquídia', solution: 'or-quí-di-a' },
+            { word: 'palla', solution: 'pa-lla' },
+            { word: 'passeig', solution: 'pas-seig' },
+            { word: 'pequinès', solution: 'pe-qui-nès' },
+            { word: 'raqueta', solution: 'ra-que-ta' },
+            { word: 'saltimbanqui', solution: 'sal-tim-ban-qui' }
+        ];
+
+        // Seleccionem 20 paraules a l'atzar
+        let words = allWords.sort(() => 0.5 - Math.random()).slice(0, 20);
+
+        let incorrectWords = [];
+        let currentWordObj = null;
+        let fallingWord = { x: 0, y: 0, speed: 0.2 };
+        let isGameActive = true;
+
+        const userInput = document.getElementById('userInput');
+        const feedback = document.getElementById('feedback');
+
+        function focusInput() {
+            userInput.focus();
+        }
+
+        function showFeedback(message, className) {
+            feedback.textContent = message;
+            feedback.className = className;
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+
+        function startNewWord() {
+            if (!currentWordObj && words.length > 0) {
+                currentWordObj = words.shift();
+            } else if (!currentWordObj && incorrectWords.length > 0) {
+                currentWordObj = incorrectWords.shift();
+            } else if (!currentWordObj) {
+                isGameActive = false;
+                showFeedback('Exercici completat! 🏆', 'correct');
+                return;
+            }
+            fallingWord = {
+                x: Math.random() * (canvas.width - 100),
+                y: 0,
+                speed: 0.2 + Math.random() * 0.3,
+            };
+        }
+
+        function updateGame() {
+            if (!isGameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (currentWordObj) {
+                fallingWord.y += fallingWord.speed;
+                ctx.font = '24px Arial';
+                ctx.fillStyle = 'black';
+                ctx.fillText(currentWordObj.word, fallingWord.x, fallingWord.y);
+
+                if (fallingWord.y > canvas.height) {
+                    showFeedback(`Solució: ${currentWordObj.solution}`, 'incorrect');
+                    incorrectWords.push(currentWordObj);
+                    currentWordObj = null;
+                    setTimeout(() => startNewWord(), 2000);
+                }
+            }
+
+            requestAnimationFrame(updateGame);
+        }
+
+function checkAnswer() {
+    const userInputValue = userInput.value
+        .trim()
+        // Substitueix guions llargs (–, —) per guions simples (-)
+        .replace(/[\u2013\u2014]/g, '-')
+        // Converteix a minúscules per ignorar majúscules
+        .toLowerCase();
+
+    if (
+        currentWordObj &&
+        userInputValue === currentWordObj.solution.toLowerCase()
+    ) {
+        showFeedback('✓ Correcte!', 'correct');
+        currentWordObj = null;
+        startNewWord();
+    } else if (currentWordObj) {
+        showFeedback('Segueix-ho intentant! 💪', 'tryAgain');
+    }
+
+    userInput.value = '';
+    focusInput();
+}
+
+
+        userInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        focusInput();
+        startNewWord();
+        updateGame();
+    </script>
+</body>
+</html>
