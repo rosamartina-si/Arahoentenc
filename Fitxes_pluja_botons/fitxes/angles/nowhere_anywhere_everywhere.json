@@ -31,7 +31,6 @@
     { "sentence": "You can't get good food ___ in this town", "answer": "anywhere" },
     { "sentence": "We looked ___ for the missing keys",       "answer": "everywhere" },
     { "sentence": "There is ___ to hide from the storm",      "answer": "nowhere" },
-    { "sentence": "Can we go ___ on vacation this year?",     "answer": "anywhere" },
     { "sentence": "I can't find my wallet ___",               "answer": "anywhere" },
     { "sentence": "She looked ___ for her glasses",           "answer": "everywhere" },
     { "sentence": "There's ___ to sit in this café",          "answer": "nowhere" },
