@@ -1,0 +1,174 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+canvas {
+  background-color: #ffffff;
+  display: block;
+}
+
+#scoreDisplay {
+  position: fixed;
+  font-size: 18px;
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  right: 20px;
+  top: 10px;
+}
+
+@media (max-width: 600px) {
+  #scoreDisplay {
+    top: auto;
+    bottom: 160px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 800px) {
+  #modalOverlay {
+    padding-left: 100px;
+    padding-right: 100px;
+    text-align: left; /* ✅ Alineació a l’esquerra només per ordinadors */
+  }
+
+  #modalOverlay p,
+  #modalOverlay h2,
+  #modalOverlay h3 {
+    max-width: 800px;
+  }
+}
+
+#restartButton {
+  bottom: 100px;
+  display: none;
+  font-size: 20px;
+  padding: 12px 30px;
+  background-color: #607d8b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#restartButton:hover {
+  background-color: #455a64;
+  transform: translateX(-50%) scale(1.05);
+}
+
+#feedback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: bold;
+  display: none;
+  text-align: center;
+}
+
+#feedback.correct { color: green; }
+#feedback.incorrect { color: red; }
+
+#buttonContainer {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+#buttonContainer button {
+  flex: 1 1 auto;
+  padding: 12px 18px;
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 100px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#buttonContainer button:hover {
+  background-color: #1976d2;
+  transform: scale(1.05);
+}
+
+#modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffffee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+  padding-top: 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+#modalOverlay h2, #modalOverlay h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#modalOverlay p {
+  font-size: 16px;
+  margin: 8px 0;
+  max-width: 500px;
+}
+
+#startButton {
+  margin-top: 30px;
+  margin-bottom: 40px;
+  font-size: 20px;
+  padding: 10px 30px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#startButton:hover {
+  background-color: #388e3c;
+}
+
+/* Per a pantalles grans (ordinadors) */
+@media (min-width: 800px) {
+  #modalOverlay {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+
+  #modalOverlay p, #modalOverlay h2, #modalOverlay h3 {
+    max-width: 800px; /* Amplada màxima més gran */
+  }
+}
