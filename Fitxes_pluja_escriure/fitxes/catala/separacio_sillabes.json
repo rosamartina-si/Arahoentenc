@@ -140,8 +140,7 @@
   { "sentence": "bardissa", "answer": "bar-dis-sa" },
   { "sentence": "barra", "answer": "bar-ra" },
   { "sentence": "barreja", "answer": "bar-re-ja" },
-  { "sentence": "batxillerat", "answer": "bat-xi-lle-rat" }
-
+  { "sentence": "batxillerat", "answer": "bat-xi-lle-rat" },
   { "sentence": "beixamel", "answer": "bei-xa-mel" },
   { "sentence": "bossa", "answer": "bos-sa" },
   { "sentence": "botifarra", "answer": "bo-ti-far-ra" },
@@ -171,7 +170,7 @@
   { "sentence": "míssil", "answer": "mís-sil" },
   { "sentence": "passeig", "answer": "pas-seig" },
   { "sentence": "patge", "answer": "pat-ge" },
-  { "sentence": "peixateria", "answer": "pei-xa-te-ri-a" }
+  { "sentence": "peixateria", "answer": "pei-xa-te-ri-a" },
   { "sentence": "pel·lícula", "answer": "pel-lí-cu-la" },
   { "sentence": "petjada", "answer": "pet-ja-da" },
   { "sentence": "pistatxo", "answer": "pis-tat-xo" },
@@ -202,7 +201,7 @@
   { "sentence": "bunyol", "answer": "bu-nyol" },
   { "sentence": "cabellera", "answer": "ca-be-lle-ra" },
   { "sentence": "campanya", "answer": "cam-pa-nya" },
-  { "sentence": "canya", "answer": "ca-nya" }
+  { "sentence": "canya", "answer": "ca-nya" },
   { "sentence": "caqui", "answer": "ca-qui" },
   { "sentence": "carmanyola", "answer": "car-ma-nyo-la" },
   { "sentence": "castanya", "answer": "cas-ta-nya" },
