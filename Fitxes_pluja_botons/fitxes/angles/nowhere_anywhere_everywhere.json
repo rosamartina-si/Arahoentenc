@@ -9,7 +9,7 @@
     "<strong>anywhere</strong> ➔ ‘a qualsevol lloc’. S'empra sobretot en frases negatives o interrogatives (We aren't going anywhere). En afirmatives pot significar ‘a qualsevol lloc del món’ / ‘pertot arreu’ (He can go anywhere in the world).",
     "<strong>everywhere</strong> ➔ ‘a tot arreu’ o ‘pertot arreu’. Indica presència universal en frases afirmatives (There was sand everywhere)."
   ],
-  "buttons": ["nowhere", "someywhere", "anywhere", "everywhere"],
+  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],
   "questions": [
     { "sentence": "I left my keys ___ in the house.",       "answer": "somewhere" },
     { "sentence": "She looked ___ for her phone.",           "answer": "everywhere" },
