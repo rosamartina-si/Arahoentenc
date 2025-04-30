@@ -19,10 +19,6 @@
   "_comment": "pots triar text o buttons:",	
   "inputType": "text",   
   "questions": [
-  { "sentence": "I left my keys ___ in the house.", "answer": "somewhere" },
-  { "sentence": "There was ___ to sit.", "answer": "nowhere" },
-  { "sentence": "We can't go ___ this weekend.", "answer": "anywhere" },
-  { "sentence": "He looked ___ for his phone.", "answer": "everywhere" }
   { "sentence": "aguantar", "answer": "a-guan-tar" },
   { "sentence": "adolescent", "answer": "a-do-les-cent" },
   { "sentence": "aconseguir", "answer": "a-con-se-guir" },
