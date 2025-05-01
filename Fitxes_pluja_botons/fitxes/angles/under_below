@@ -1,0 +1,194 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "title": "under / below",
+  "objective": "Llegeix cada frase i tria la paraula correcta: <strong>under</strong>, <strong>below</strong> o <strong>beneath</strong>.",
+  "explanation": [
+     "<strong>under</strong> s'utilitza més sovint i sovint és l'opció més segura si no estàs segur.",
+     "<strong>below</strong> s'utilitza habitualment per indicar 'més avall o menor que' i quan no hi ha contacte.",
+     "<strong>under</strong> pot tenir el mateix significat que <strong>below</strong> en molts casos, però també pot voler dir 'controlat per' o 'dirigit per'.",
+     "<strong>under</strong> s'utilitza en moltes expressions fixes com ara 'under control', 'under pressure', 'under the law'.",
+    "<strong>under</strong> ➔ quan alguna cosa està coberta o controlada per una altra.",
+    "<strong>below</strong> ➔ per a posicions que no són immediatament sota o en escales verticals."
+  ],
+  "buttons": [
+    "under",
+    "below",
+    "under or below"
+  ],
+  "questions": [
+    {
+      "sentence": "I hid the key ___ a rock.",
+      "answer": "under"
+    },
+    {
+      "sentence": "There was nothing ___ President Bush's jacket.",
+      "answer": "under"
+    },
+    {
+      "sentence": "Twenty miles ___ the earth's surface.",
+      "answer": "below"
+    },
+    {
+      "sentence": "___ the poverty line.",
+      "answer": "below"
+    },
+    {
+      "sentence": "___ the age of ten.",
+      "answer": "under"
+    },
+    {
+      "sentence": "An IQ ___ 80.",
+      "answer": "below"
+    },
+    {
+      "sentence": "Radio waves ___ 22 kHz can't be heard.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The house is still ___ construction.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The government is ___ pressure from the public.",
+      "answer": "under"
+    },
+    {
+      "sentence": "Open your exercise book on page 27. Just ___ the picture there are some questions. Look at the picture and answer the questions.",
+      "answer": "below"
+    },
+    {
+      "sentence": "There was a big clock ___ the painting.",
+      "answer": "below"
+    },
+    {
+      "sentence": "We lived up in the mountains and the nearest town ___ was half an hour’s drive.",
+      "answer": "under"
+    },
+    {
+      "sentence": "He had hidden the money ___ the floorboards.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The cat is ___ the table.",
+      "answer": "under"
+    },
+    {
+      "sentence": "His shoes were ___ his bed.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The wreck of the Titanic still remains ___ the sea.",
+      "answer": "under"
+    },
+    {
+      "sentence": "Venus is just ___ the moon right now.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The apartment ___ is owned by a French couple.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The liquid must be kept ___ five degrees.",
+      "answer": "below"
+    },
+    {
+      "sentence": "You have to be ___ 18 to get an allowance.",
+      "answer": "under"
+    },
+    {
+      "sentence": "We finished the project in ___ a year and a half.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The bag was just ___ 10 kilos, so I was able to bring it on the plane.",
+      "answer": "under"
+    },
+    {
+      "sentence": "Inflation has fallen ___ 5% for the first time in years.",
+      "answer": "below"
+    },
+    {
+      "sentence": "In the figure ___, the results show that 54% of the rats tested were carrying the antibody.",
+      "answer": "below"
+    },
+    {
+      "sentence": "There has been much discussion and debate about global warming (see ___).",
+      "answer": "below"
+    },
+    {
+      "sentence": "She wore an amazing red dress ___ a white coat.",
+      "answer": "under"
+    },
+    {
+      "sentence": "They have three children ___ the age of five.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The company’s profits were ___ what they had hoped for.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The results are in the figure ___ this sentence.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The roof is just ___ the height of the church.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The sun disappeared ___ the horizon.",
+      "answer": "below"
+    },
+    {
+      "sentence": "Temperatures were ___ normal all week.",
+      "answer": "below"
+    },
+    {
+      "sentence": "The game is suitable for children ___ the age of 10.",
+      "answer": "below"
+    },
+    {
+      "sentence": "There are many more fish ___ the surface of the water.",
+      "answer": "below"
+    },
+    {
+      "sentence": "We sat ___ a tree and rested.",
+      "answer": "under or below"
+    },
+    {
+      "sentence": "Draw a line ___ each word you don't know.",
+      "answer": "under or below"
+    },
+    {
+      "sentence": "The cafe is ___ new management.",
+      "answer": "under"
+    },
+    {
+      "sentence": "The army captured three forts while ___ the general's command.",
+      "answer": "under"
+    },
+    {
+      "sentence": "___ the terms of the lease, rent is due monthly.",
+      "answer": "under"
+    },
+    {
+      "sentence": "Hudson tried to get her weight ___ control.",
+      "answer": "under"
+    },
+    {
+      "sentence": "___ normal circumstances, she would have stayed longer.",
+      "answer": "under"
+    },
+    {
+      "sentence": "You have to be able to think ___ pressure.",
+      "answer": "under"
+    },
+    {
+      "sentence": "___ the law, everyone has a right to emergency care."
+      "answer": "under"
+    }
+
+  ]
+}
