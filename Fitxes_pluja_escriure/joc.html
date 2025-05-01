@@ -2,15 +2,22 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fitxa interactiva</title>
-  <link rel="stylesheet" href="estil.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fitxes pluja amb botons</title>
+
+  <!-- Full d’estils -->
+  <link rel="stylesheet" href="estil.css">
 </head>
 <body>
-  <div id="score"></div>
+  <!-- modal, canvas, marcador… -->
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
   <canvas id="gameCanvas"></canvas>
-  <div id="interaction"></div>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Reinicia</button>
   <div id="feedback"></div>
+
+  <!-- Lògica del joc -->
   <script src="script.js"></script>
 </body>
 </html>
