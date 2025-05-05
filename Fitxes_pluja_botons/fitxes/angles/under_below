@@ -8,13 +8,12 @@
      "<strong>below</strong> s'utilitza habitualment per indicar 'més avall o menor que' i quan no hi ha contacte.",
      "<strong>under</strong> pot tenir el mateix significat que <strong>below</strong> en molts casos, però també pot voler dir 'controlat per' o 'dirigit per'.",
      "<strong>under</strong> s'utilitza en moltes expressions fixes com ara 'under control', 'under pressure', 'under the law'.",
-    "<strong>under</strong> ➔ quan alguna cosa està coberta o controlada per una altra.",
-    "<strong>below</strong> ➔ per a posicions que no són immediatament sota o en escales verticals."
+     "<strong>under</strong> ➔ quan alguna cosa està coberta o controlada per una altra.",
+     "<strong>below</strong> ➔ per a posicions que no són immediatament sota o en escales verticals."
   ],
   "buttons": [
     "under",
     "below",
-    "under or below"
   ],
   "questions": [
     {
@@ -63,7 +62,7 @@
     },
     {
       "sentence": "We lived up in the mountains and the nearest town ___ was half an hour’s drive.",
-      "answer": "under"
+      "answer": "below"
     },
     {
       "sentence": "He had hidden the money ___ the floorboards.",
@@ -134,10 +133,6 @@
       "answer": "below"
     },
     {
-      "sentence": "The roof is just ___ the height of the church.",
-      "answer": "below"
-    },
-    {
       "sentence": "The sun disappeared ___ the horizon.",
       "answer": "below"
     },
@@ -147,7 +142,7 @@
     },
     {
       "sentence": "The game is suitable for children ___ the age of 10.",
-      "answer": "below"
+      "answer": "under"
     },
     {
       "sentence": "There are many more fish ___ the surface of the water.",
@@ -155,7 +150,7 @@
     },
     {
       "sentence": "We sat ___ a tree and rested.",
-      "answer": "under or below"
+      "answer": "under"
     },
     {
       "sentence": "Draw a line ___ each word you don't know.",
@@ -163,14 +158,6 @@
     },
     {
       "sentence": "The cafe is ___ new management.",
-      "answer": "under"
-    },
-    {
-      "sentence": "The army captured three forts while ___ the general's command.",
-      "answer": "under"
-    },
-    {
-      "sentence": "___ the terms of the lease, rent is due monthly.",
       "answer": "under"
     },
     {
