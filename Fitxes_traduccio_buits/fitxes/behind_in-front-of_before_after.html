@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Omple els buits: behind / in front of, before / after</title>
+  <link rel="stylesheet" href="../estil.css" />
+</head>
+<body>
+
+<h1>Omple els buits: behind / in front of, before / after</h1>
+<p>
+  Introdueix la paraula correcta a l’espai en blanc, fes clic a <strong>Comprova</strong> —o prem la tecla <strong>Retorn</strong>— i escolta la frase completa.
+</p>
+
+
+<!-- Pots triar: center (per defecte), left o right -->
+<div class="image left">
+  <img src="../Img/behind_in-front-of.jpg" alt="davant / darrere">
+  <img src="../Img/before_after.jpg" alt="abans / després">
+</div>  
+
+<div id="exercici"></div>
+
+<div id="controls"></div>
+
+  
+<script>
+  // Frases a traduir (actualitza aquest array a cada fitxa)
+  const frases = [
+  ["Hi ha un arbre darrere la casa.", "There is a tree ____ the house", "behind", "There is a tree behind the house"],
+  ["L'autobús està davant de l'escola.", "The bus is ____ the school", "in front of", "The bus is in front of the school"],
+  ["Tanca la porta abans de sortir.", "Close the door ____ you leave", "before", "Close the door before you leave"],
+  ["Renta't les mans després de dinar.", "Wash your hands ____ lunch", "after", "Wash your hands after lunch"],
+    
+  // behind
+  ["El gat s'amaga darrere la cortina.", "The cat is hiding ____ the curtain", "behind", "The cat is hiding behind the curtain"],
+  ["El cotxe és darrere l’edifici.", "The car is ____ the building", "behind", "The car is behind the building"],
+  ["Van caminar darrere la casa.", "They walked ____ the house", "behind", "They walked behind the house"],
+  ["Hi havia un soroll darrere meu.", "There was a noise ____ me", "behind", "There was a noise behind me"],
+
+  // in front of
+  ["Hi havia una cua davant de la botiga.", "There was a queue ____ the shop", "in front of", "There was a queue in front of the shop"],
+  ["Ens vam aturar davant del museu.", "We stopped ____ the museum", "in front of", "We stopped in front of the museum"],
+  ["L’estudiant va seure davant del professor.", "The student sat ____ the teacher", "in front of", "The student sat in front of the teacher"],
+  ["Vaig aparcar davant del teu cotxe.", "I parked ____ your car", "in front of", "I parked in front of your car"],
+
+  // before
+  ["Tanca el llibre abans de començar l’examen.", "Close the book ____ starting the exam", "before", "Close the book before starting the exam"],
+  ["Havia esmorzat abans d’anar a treballar.", "He had breakfast ____ going to work", "before", "He had breakfast before going to work"],
+  ["Llegeix les instruccions abans d’utilitzar-ho.", "Read the instructions ____ using it", "before", "Read the instructions before using it"],
+  ["Va arribar abans que jo.", "He arrived ____ me", "before", "He arrived before me"],
+
+  // after
+  ["Van sortir després del dinar.", "They went out ____ lunch", "after", "They went out after lunch"],
+  ["Ens vam rentar les mans després de pintar.", "We washed our hands ____ painting", "after", "We washed our hands after painting"],
+  ["Després de la pluja va sortir el sol.", "The sun came out ____ the rain", "after", "The sun came out after the rain"],
+  ["Anirem al cinema després del sopar.", "We'll go to the cinema ____ dinner", "after", "We'll go to the cinema after dinner"]
+  ];
+</script>
+  
+<script src="../script2.js"></script>
+</body>
+</html>
