@@ -25,18 +25,17 @@ function generaExercici(frases) {
 
     const [catala, anglesIncomplet, respostaCorrecta, fraseCompleta] = f;
 
-bloc.innerHTML = `
-  <p><strong>${i + 1}. ${catala}</strong></p>
-  <p>${anglesIncomplet}</p>
-  <input type="text"
-         data-index="${i}"
-         data-state="unchecked"
-         data-correct="${respostaCorrecta}"
-         data-complet="${fraseCompleta}">
-  <button>Comprova</button>
-  <div class="correction"></div>
-`;
-
+    bloc.innerHTML = `
+      <p><strong>${i + 1}. ${catala}</strong></p>
+      <p>${anglesIncomplet}</p>
+      <input type="text"
+             data-index="${i}"
+             data-state="unchecked"
+             data-correct="${respostaCorrecta}"
+             data-complet="${fraseCompleta}">
+      <button>Comprova</button>
+      <div class="correction"></div>
+    `;
 
     contenidor.appendChild(bloc);
 
@@ -60,6 +59,7 @@ bloc.innerHTML = `
     <div id="resultat"></div>
   `;
 }
+
 /**
  * Normalitza un text per comparar
  */
