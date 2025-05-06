@@ -53,7 +53,7 @@ function generaExercici(frases) {
   controls.innerHTML = `
     <button onclick="comprovaTotes()">Comprova-ho tot</button>
     <button onclick="reinicia()">Esborra-ho tot</button>
-    <button onclick="reiniciaAleatori()">🔁 Noves frases</button>
+    <button onclick="reiniciaAleatori()">🔁 Frases noves</button>
     <div id="resultat"></div>
   `;
 }
