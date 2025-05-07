@@ -1,5 +1,3 @@
-// script.js modularitzat amb suport per fitxes i modal
-
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -18,8 +16,8 @@ const modalOverlay = document.getElementById('modalOverlay');
 const startButton = document.getElementById('startButton');
 
 let config = null;
-let currentLang = 'en';   // 'en' per defecte
-let useAudio    = true;   // true per defecte
+let currentLang = 'en';
+let useAudio = true;
 let sentences = [], current = null;
 let y = 0, speed = 0.4, active = false, paused = false, canAdvance = true;
 let score = 0, total = 0, incorrectSentences = [];
@@ -41,13 +39,12 @@ async function loadConfig() {
 
     config = await response.json();
 
-    // Validació bàsica del contingut del JSON
     if (!config.questions || !Array.isArray(config.questions)) {
       throw new Error("⚠️ El fitxer JSON no conté cap llista vàlida de preguntes.");
     }
 
-    currentLang = config.lang  || 'en';
-    useAudio    = config.audio !== false;
+    currentLang = config.lang || 'en';
+    useAudio = config.audio !== false;
 
     renderModal();
 
@@ -60,7 +57,6 @@ async function loadConfig() {
     modalOverlay.style.display = 'flex';
   }
 }
-
 
 function renderModal() {
   const { title, objective, explanation } = config;
@@ -76,7 +72,6 @@ function renderModal() {
   `;
   document.getElementById('startButton').addEventListener('click', () => {
     modalOverlay.style.display = 'none';
-    createButtons();
     initGame();
   });
 }
@@ -89,6 +84,28 @@ function createButtons() {
     btn.onclick = () => handleClick(option, btn);
     buttonContainer.appendChild(btn);
   });
+}
+
+function createInputField() {
+  buttonContainer.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = currentLang === 'ca' ? 'Escriu la resposta...' : 'Type your answer...';
+  input.id = 'answerInput';
+  input.autocomplete = 'off';
+  input.style.fontSize = '1.2em';
+  input.style.padding = '0.5em';
+  input.style.width = '50%';
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && input.value.trim() !== '') {
+      checkAnswer(input.value.trim());
+      input.disabled = true;
+    }
+  });
+
+  buttonContainer.appendChild(input);
+  input.focus();
 }
 
 function initGame() {
@@ -122,14 +139,14 @@ function showFeedback(message, className) {
 }
 
 function speak(text, callback) {
-  if (!useAudio) {          // veu desactivada per a aquesta fitxa
-     if (callback) callback();
-     return;
-   }
-   const utterance = new SpeechSynthesisUtterance(text);
-   utterance.lang  = currentLang === 'ca' ? 'ca-ES' : 'en-US';
-   utterance.onend = () => callback && callback();
-   speechSynthesis.speak(utterance);
+  if (!useAudio) {
+    if (callback) callback();
+    return;
+  }
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = currentLang === 'ca' ? 'ca-ES' : 'en-US';
+  utterance.onend = () => callback && callback();
+  speechSynthesis.speak(utterance);
 }
 
 function nextSentence() {
@@ -143,7 +160,13 @@ function nextSentence() {
   current = sentences.shift();
   y = 0;
   canAdvance = true;
-  setAnswerButtonsEnabled(true);
+
+  if (config.mode === 'text') {
+    createInputField();
+  } else {
+    createButtons();
+    setAnswerButtonsEnabled(true);
+  }
 }
 
 function draw() {
@@ -183,14 +206,12 @@ function handleClick(userAnswer, button) {
 }
 
 function checkAnswer(userAnswer) {
-  // Llegeix la paraula triada (si l’àudio està activat)
   speak(userAnswer);
 
   const fullSentenceOk = current.sentence.replace('___', userAnswer);
   const fullSentenceKo = current.sentence.replace('___', current.answer);
 
   if (current && userAnswer === current.answer) {
-    /* ✓ Correcte */
     showFeedback(
       currentLang === 'ca' ? '✓ Correcte!' : '✓ Correct!',
       'correct'
@@ -204,14 +225,11 @@ function checkAnswer(userAnswer) {
       nextSentence();
     };
 
-    // Llegeix la frase completa si useAudio = true
     speak(fullSentenceOk, afterSpeak);
-
   } else {
-    /* ✗ Incorrecte */
     const wrongTxt = currentLang === 'ca'
-        ? `✗ Incorrecte. Resposta: ${current.answer}`
-        : `✗ Incorrect. Answer: ${current.answer}`;
+      ? `✗ Incorrecte. Resposta: ${current.answer}`
+      : `✗ Incorrect. Answer: ${current.answer}`;
     showFeedback(wrongTxt, 'incorrect');
     canAdvance = false;
     incorrectSentences.push({ ...current, userAnswer });
@@ -223,14 +241,12 @@ function checkAnswer(userAnswer) {
     };
 
     const intro = currentLang === 'ca'
-        ? 'La resposta correcta és'
-        : 'The correct answer is';
+      ? 'La resposta correcta és'
+      : 'The correct answer is';
 
     speak(`${intro} ${current.answer}. ${fullSentenceKo}`, afterSpeak);
   }
 }
-
-
 
 function animateButtonClick(button) {
   button.style.transition = 'transform 0.1s, background-color 0.3s';
