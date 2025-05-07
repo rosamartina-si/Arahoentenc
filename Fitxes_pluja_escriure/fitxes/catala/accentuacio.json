@@ -1,0 +1,33 @@
+{
+  "lang": "ca",
+  "audio": false, "_comment": "pots triar false o true:",
+  "mode": "text",  "_comment": "pots triar text o buttons:",
+  "title": "Accentúació de paraules",
+  "objective": "Accentua les paraules.",
+  "explanation": [
+    "📢 Benvingut al joc d'ortografia!",
+    "🔹 Escriu cada síl·laba separada amb un guionet.",
+    "🔹 Per exemple, si apareix 'rosa', cal escriure 'ro-sa'.",
+    "📖 Recorda aquestes regles bàsiques de separació de síl·labes:",
+    "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.",
+    "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.",
+    "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).",
+    "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.",
+    "🎯 Prepara't i molta sort! 🍀"
+	  
+  ], 
+  "questions": [
+  { "sentence": "aguila", "answer": "àguila" },
+  { "sentence": "aquatic", "answer": "aquàtic" },
+  { "sentence": "aquos", "answer": "aquós" },
+  { "sentence": "avantguarda", "answer": "avantguarda" },
+  { "sentence": "examen", "answer": "examen" },
+  { "sentence": "examens", "answer": "exàmens" },
+  { "sentence": "baia", "answer": "baia" },
+  { "sentence": "bilingüe", "answer": "bilingüe" },
+  { "sentence": "solucio", "answer": "solució" },
+  { "sentence": "solucions", "answer": "solucions" }	  
+  ]
+}
+
+
