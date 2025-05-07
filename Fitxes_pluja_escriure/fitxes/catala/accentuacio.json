@@ -7,9 +7,10 @@
   "_comment": "Regles_ortografia.png",	
   "explanation": [
     "📢 Benvingut al joc d'ortografia!",
-    "🔹 Escriu cada síl·laba separada amb un guionet.",
-    "🔹 Per exemple, si apareix 'rosa', cal escriure 'ro-sa'.",
-    "📖 Recorda aquestes regles bàsiques de separació de síl·labes:",
+    "🔹 Escriu cada paraula i afegeix-hi accent si cal.",
+    "🔹 Per exemple, si apareix 'camio', cal escriure 'camió'.",
+    "📖 Recorda aquestes regles bàsiques d'accentuació:",
+    "<img src='imatges/Regles_ortografia.png' alt='Regles d'ortografia' style='max-width: 100%; height: auto; margin: 20px 0;'/>",
     "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.",
     "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.",
     "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).",
