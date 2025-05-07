@@ -1,7 +1,7 @@
 {
+  "mode": "buttons",  "_comment": "pots triar text o buttons:",  
   "lang": "ca",
   "audio": false,
-
   "title": "Hi ha / N'hi ha",
   "objective": "Llegeix cada frase i tria la forma correcta: <strong>hi ha</strong> o <strong>n'hi ha</strong>.",
   "explanation": [
