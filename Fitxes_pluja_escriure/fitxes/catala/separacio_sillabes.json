@@ -16,9 +16,7 @@
     "🎯 Prepara't i molta sort! 🍀"
 	  
   ],
-  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],
-  "_comment": "pots triar text o buttons:",	
-  "inputType": "text",   
+  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],  
   "questions": [
   { "sentence": "aguantar", "answer": "a-guan-tar" },
   { "sentence": "adolescent", "answer": "a-do-les-cent" },
