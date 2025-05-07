@@ -4,18 +4,13 @@
   "mode": "text",  "_comment": "pots triar text o buttons:",
   "title": "Accentúació de paraules",
   "objective": "Accentua les paraules.",
-  "_comment": "Regles_ortografia.png",	
   "explanation": [
     "📢 Benvingut al joc d'ortografia!",
-    "🔹 Escriu cada paraula i afegeix-hi accent si cal.",
+    "🔹 Escriu cada paraula i afegeix-hi l'accent si és necessari.",
     "🔹 Per exemple, si apareix 'camio', cal escriure 'camió'.",
     "📖 Recorda aquestes regles bàsiques d'accentuació:",
     "<img src='imatges/Regles_ortografia.png' alt='Regles d'ortografia' style='max-width: 100%; height: auto; margin: 20px 0;'/>",
-    "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.",
-    "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.",
-    "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).",
-    "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.",
-    "🎯 Prepara't i molta sort! 🍀"
+     "🎯 Prepara't i molta sort! 🍀"
 	  
   ], 
   "questions": [
