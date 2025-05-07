@@ -2,6 +2,8 @@
   "mode": "buttons",  "_comment": "pots triar text o buttons:",  
   "lang": "ca",
   "audio": false,
+  "mode": "buttons",  "_comment": "pots triar text o buttons:",
+  "buttons": ["hi ha", "n'hi ha"],
   "title": "Hi ha / N'hi ha",
   "objective": "Llegeix cada frase i tria la forma correcta: <strong>hi ha</strong> o <strong>n'hi ha</strong>.",
   "explanation": [
@@ -9,9 +11,6 @@
     "<strong>n'hi ha</strong> ➔ expressa quantitat després d'una negació o d'un quantitatiu. Exemple: <em>No en queda cap, n'hi ha zero.</em>",
     "Recorda: <em>n'hi ha</em> substitueix un complement introduït per «de» o un numeral pronominal."
   ],
-
-  "buttons": ["hi ha", "n'hi ha"],
-
   "questions": [
     { "sentence": "___ moltes estrelles al cel aquesta nit.",      "answer": "hi ha" },
     { "sentence": "Quants llibres hi ha a la prestatgeria? ___ deu.", "answer": "n'hi ha" },
