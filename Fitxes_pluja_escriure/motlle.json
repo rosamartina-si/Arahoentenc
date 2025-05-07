@@ -2,6 +2,7 @@
   "lang": "ca",
   "audio": false, "_comment": "pots triar false o true:",
   "mode": "text",  "_comment": "pots triar text o buttons:",
+  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],  
   "title": "Separació de síl·labes",
   "objective": "Separa les paraules en síl·labes.",
   "explanation": [
@@ -16,10 +17,7 @@
     "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.",
     "🎯 Prepara't i molta sort! 🍀"
 	  
-  ],
-  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],
-  "_comment": "pots triar text o buttons:",	
-  "inputType": "text",   
+  ], 
   "questions": [
   { "sentence": "aguantar", "answer": "a-guan-tar" },
   { "sentence": "adolescent", "answer": "a-do-les-cent" },
