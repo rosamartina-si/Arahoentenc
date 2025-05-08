@@ -1,0 +1,29 @@
+
+{
+  "lang": "ca",
+  "audio": false,   "_meta": {"notes": "pots triar false o true"},
+  "mode": "text",  "_meta": {"notes": "pots triar text o buttons"},
+  "title": "Accentúació de paraules",
+  "objective": "Accentua les paraules.",
+  "explanation": [
+    "📢 Benvingut al joc d'ortografia!",
+    "🔹 Escriu cada paraula i afegeix-hi l'accent si és necessari.",
+    "🔹 Per exemple, si apareix 'camio', cal escriure 'camió'.",
+    "📖 Recorda aquestes regles bàsiques d'accentuació:",
+    "<img src=\"imatges/Regles_ortografia.png\" alt=\"Regles d'ortografia\" style=\"max-width: 600px; width: 90%; height: auto; margin: 20px auto; display:block;\"/>",
+     "🎯 Prepara't i molta sort! 🍀"  
+  ], 
+  "questions": [
+  { "sentence": "aguila", "answer": "àguila" },
+  { "sentence": "aquatic", "answer": "aquàtic" },
+  { "sentence": "aquos", "answer": "aquós" },
+  { "sentence": "avantguarda", "answer": "avantguarda" },
+  { "sentence": "examen", "answer": "examen" },
+  { "sentence": "examens", "answer": "exàmens" },
+  { "sentence": "baia", "answer": "baia" },
+  { "sentence": "bilingüe", "answer": "bilingüe" },
+  { "sentence": "solucio", "answer": "solució" },
+  { "sentence": "solucions", "answer": "solucions" }	  
+  ]
+}
+
