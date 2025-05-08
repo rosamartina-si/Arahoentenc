@@ -1,7 +1,7 @@
 
 {
   "lang": "ca",
-  "audio": false, "_comment": "pots triar false o true:",
+  "audio": false,   "_meta": {"notes": "pots triar false o true"},
   "mode": "text",  "_comment": "pots triar text o buttons:",
   "title": "Accentúació de paraules",
   "objective": "Accentua les paraules.",
