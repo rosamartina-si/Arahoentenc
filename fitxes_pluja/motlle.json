@@ -1,0 +1,33 @@
+{
+  "lang": "ca",
+  "audio": false,   "_meta": {"notes": "pots triar false o true"},
+  "mode": "text",  "_meta": {"notes": "pots triar text o buttons"},
+  "buttons": ["nowhere", "somewhere", "anywhere", "everywhere"],  
+  "title": "Separació de síl·labes",
+  "objective": "Separa les paraules en síl·labes.",
+  "explanation": [
+    "📢 Benvingut al joc d'ortografia!",
+    "🔹 Escriu cada síl·laba separada amb un guionet.",
+    "🔹 Per exemple, si apareix 'rosa', cal escriure 'ro-sa'.",
+    "📖 Recorda aquestes regles bàsiques de separació de síl·labes:",
+    "<img src='imatges/Regles_ortografia.png' alt='Regles d'ortografia' style='max-width: 100%; height: auto; margin: 20px 0;'/>",  
+    "<img src=\"imatges/Regles_ortografia.png\" alt=\"Regles d'ortografia\" style=\"max-width: 600px; width: 90%; height: auto; margin: 20px auto; display:block;\"/>",
+    "✅ Els grups ss, rr, tx, l·l se separen: pas-sa, car-re-te-ra, cot-xe, pel-lí-cu-la.",
+    "✅ El grup ix, quan no és final de paraula, se separa: pei-xa-te-ra, però peix.",
+    "✅ Els dígrafs ll, ny, qu i gu no se separen (ex: co-lla, ca-nya, o-ques, ai-gua).",
+    "✅ Els prefixos an-, con-, en-, in-, des-, ex-, sub-, trans- i altres elements (ad- davant h, nos- i vos- + altres) es mantenen íntegres: des-ho-nest, in-e-fi-caç, trans-at-làn-tic, nos-al-tres.",
+    "🎯 Prepara't i molta sort! 🍀"
+	  
+  ], 
+  "questions": [
+  { "sentence": "aguantar", "answer": "a-guan-tar" },
+  { "sentence": "adolescent", "answer": "a-do-les-cent" },
+  { "sentence": "aconseguir", "answer": "a-con-se-guir" },
+  { "sentence": "àguila", "answer": "à-gui-la" },
+  { "sentence": "aquari", "answer": "a-qua-ri" },
+  { "sentence": "aquàtic", "answer": "a-quà-tic" },
+  { "sentence": "saltimbanqui", "answer": "sal-tim-ban-qui" }
+  ]
+}
+
+
