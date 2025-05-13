@@ -1,199 +1,130 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <title>Activitats per matèries</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        header img {
-            height: 60px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 2em;
-        }
-
-        .link-box {
-            display: block;
-            padding: 8px;
-            margin: 4px 0;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #000;
-            transition: background-color 0.2s;
-        }
-
-        .link-box:hover {
-            background-color: #e0e0e0;
-        }
-
-        .category {
-            margin: 30px 0;
-        }
-
-        .category h2 {
-            margin-bottom: 10px;
-        }
-
-        .category h3 {
-            margin-top: 1em;
-            color: #005599;
-            font-size: 1.2em;
-        }
-
-        .category p, .category .link-box {
-            margin: 4px 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Activitats per matèries</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+    h1 { margin: 0; font-size: 2em; }
+    .link-box {
+      display: block;
+      padding: 8px 12px;
+      background-color: #f0f0f0;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #000;
+      transition: background-color 0.2s;
+      margin-bottom: 6px;
+    }
+    .link-box:hover {
+      background-color: #e0e0e0;
+    }
+    .category {
+      margin: 30px 0;
+    }
+    .category h2 {
+      margin-bottom: 10px;
+    }
+    .category h3 {
+      margin-top: 1em;
+      color: #005599;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Activitats per matèries</h1>
+  </header>
 
-    <header>
-        <h1>Activitats per matèries</h1>
-    </header>
-
-    <div class="category" id="anglès">
-        <h2>🇬🇧 Anglès</h2>
-        <h3>Com funciona</h3>
-        <p><a href="diferencia_conjugacio_angles_catala.html">Diferències dels verbs en anglès i català</a></p>
-        
-        <h3>Tradueix</h3>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/futbol.html">⚽ El partit de futbol</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/aniversari.html">🎂 La festa d'aniversari</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/nado.html">👶 El nadó i jo</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/muntanya.html">🏔️ L'excursió</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/abans_jugar.html">🏃 Surto a jugar</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/habitacio.html">🛏️ La meva habitació</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/zoo.html">🐘 Un dia al zoo</a></p>
-        <p><a href="Fitxes_traduccio_10_frases/fitxes/habits_saludables.html">🏃‍♂️ Hàbits saludables</a></p>
-        <p><a href="Fitxes_traduccio_buits/fitxes/Preposicions_de_lloc.html">Preposicions de lloc</a></p>
-        <p><a href="Fitxes_traduccio_buits/fitxes/preposicions_de_moviment.html">Preposicions de moviment</a></p>
-        <p><a href="Fitxes_traduccio_buits/fitxes/Preposicions_transport.html">Preposicions transport</a></p>
-        <p><a href="Fitxes_traduccio_buits/fitxes/behind_in-front-of_before_after.html">Davant / darrere, abans / després</a></p>
-        <a href="017_Past_simple_de_10_en_10.html" class="link-box">Fitxa - frases en passat simple - de 10 en 10</a>
-
-        <h3>Tria</h3>
-        <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=nowhere_anywhere_everywhere">
-            🌍 Anywhere / Nowhere / Everywhere
-        </a></p>
-        <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=they_them_their">
-            🧑 They / Them / Their
-        </a></p>
-        <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=under_below">
-            Under / Below 
-        </a></p>
-        
-    </div>
-
-    <div class="category" id="ciencia">
-        <h2>🧪 Ciència</h2>
-        <p><a href="Ciencia/Ciencia_oberta/ambulancies_i_expansio_univers.html">🚑 Ambulàncies i expansió universitària</a></p>
-        <div class="subcategory" id="biologia">
-            <h3>🧬 Biologia</h3>
-        </div>
-        <div class="subcategory" id="fisica-quimica">
-            <h3>⚗️ Física i química</h3>
-        </div>
-        <div class="subcategory" id="medi-ambient">
-            <h3>🌱 Medi ambient</h3>
-        </div>
-        <div class="subcategory" id="astronomia">
-            <h3>🌌 Astronomia</h3>
-        </div>
-    </div>
-
-    <div class="category" id="ètica">
-        <h2>🌍👥 Ciències socials</h2>
-        <a href="003_Bregman_Rutger_escombriaires_i_banquers.pdf" 
-           class="link-box" 
-           target="_blank" 
-           title="Obre el PDF en una nova pestanya">
-           Rutger Bregman: Escombriaires i banquers (PDF)
-        </a>
-        <p><a href="Fitxes/fitxes/Aranzels_i_Trump.html">💲 Aranzels</a></p>
-        <p><a href="Fitxes/fitxes/apagada_electrica_massiva.html">⚡ Apagada elèctrica massiva</a></p>
-        <p><a href="Fitxes/fitxes/atoms.html">⚛️ Àtoms</a></p>
+  <div class="category" id="angles">
+    <h2>🇬🇧 Anglès</h2>
+    <h3>Com funciona</h3>
+    <p><a href="diferencia_conjugacio_angles_catala.html" class="link-box">📘 Diferències verbs anglès vs català</a></p>
+    <h3>Tradueix</h3>
+    <a href="Fitxes_traduccio_10_frases/fitxes/futbol.html" class="link-box">⚽ Futbol</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/aniversari.html" class="link-box">🎂 Aniversari</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/nado.html" class="link-box">👶 Nadó</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/muntanya.html" class="link-box">🏔️ Excursió</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/abans_jugar.html" class="link-box">🏃 Surto a jugar</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/habitacio.html" class="link-box">🛏️ Habitació</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/zoo.html" class="link-box">🐘 Zoo</a>
+    <a href="Fitxes_traduccio_10_frases/fitxes/habits_saludables.html" class="link-box">🥗 Hàbits saludables</a>
+    <a href="Fitxes_traduccio_buits/fitxes/Preposicions_de_lloc.html" class="link-box">📍 Preposicions lloc</a>
+    <a href="Fitxes_traduccio_buits/fitxes/preposicions_de_moviment.html" class="link-box">↔️ Preposicions moviment</a>
+    <a href="Fitxes_traduccio_buits/fitxes/Preposicions_transport.html" class="link-box">🚌 Preposicions transport</a>
+    <a href="Fitxes_traduccio_buits/fitxes/behind_in-front-of_before_after.html" class="link-box">🔁 Davant / Darrere</a>
+    <a href="017_Past_simple_de_10_en_10.html" class="link-box">⏳ Past simple 10×10</a>
+    <h3>Tria</h3>
+    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=nowhere_anywhere_everywhere" class="link-box">🌍 Anywhere / Nowhere / Everywhere</a>
+    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=they_them_their" class="link-box">🧑 They / Them / Their</a>
+    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/angles&fitxa=under_below" class="link-box">⬇️ Under / Below</a>
   </div>
 
-    <div class="category" id="llengua">
-        <h2>📘 Llengua</h2>
-        <div class="subcategory" id="ortografia">
-            <h3>✏️ Ortografia</h3>
-            <a href="008_joc-separacio-sil.labes.html" class="link-box">Joc: Separació de Síl·labes</a>
-            <a href="006_joc_accentuacio_agudes_per_parelles_nivell_1.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 1</a>
-            <a href="002_accentuacio_agudes_planes_per_parelles2.html" class="link-box">Joc: Accentuació planes i agudes (parelles) - Nivell 2</a>
-            <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=ortografia_m_n">Tria: m / n / mm / nn / mn / mp</a></p>
-            <p><a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=separacio_sillabes">Separació de síl·labes</a></p>
-            <p><a href="Fitxes_pluja/joc.html?tipus=fitxes/catala&fitxa=accentuacio">Accentuació</a></p>
-            <p><a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=hi-ha_n-hi-ha">Hi ha / N'hi ha</a></p>
+  <div class="category" id="ciencia">
+    <h2>🧪 Ciència</h2>
+    <a href="Ciencia/Ciencia_oberta/ambulancies_i_expansio_univers.html" class="link-box">🚑 Efecte Doppler</a>
+  </div>
 
-        </div>
-        <div class="subcategory" id="gramatica">
-            <h3>📖 Gramàtica</h3>
-            <a href="004_Distincio_entre_hi_ha_i_n_hi_ha.html" class="link-box">Distinció entre 'hi ha' i 'n'hi ha</a>
-            <p><a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=hi_ha_n_hi_ha">Tria: hi ha / n'hi ha</a></p>
-        </div>
-        <div class="subcategory" id="redaccio">
-            <h3>📝 Redacció</h3>
-            <a href="009_oximoron.html" class="link-box">Oxímoron: quan les paraules xoquen</a>
-            <a href="011_transformacio_frase_amb_participi_inicial.html" class="link-box">Transformació de frases amb participi inicial</a>
-        </div>
-    </div>
+  <div class="category" id="socials">
+    <h2>🌍👥 Ciències socials</h2>
+    <a href="003_Bregman_Rutger_escombriaires_i_banquers.pdf" class="link-box" target="_blank">📄 Escombriaires i banquers</a>
+    <a href="Fitxes/fitxes/Aranzels_i_Trump.html" class="link-box">💲 Aranzels</a>
+    <a href="Fitxes/fitxes/apagada_electrica_massiva.html" class="link-box">⚡ Apagada elèctrica</a>
+    <a href="Fitxes/fitxes/atoms.html" class="link-box">⚛️ Àtoms</a>
+  </div>
 
-    <div class="category" id="matematiques">
-        <h2>🧮 Matemàtiques</h2>
-        <h3>📄 Documents PDF</h3>
-        <a href="Sesamath/001_Sesamath_Sise_Nombres_enters_i_decimals.pdf" 
-           class="link-box" 
-           target="_blank" 
-           title="Obre el PDF en una nova pestanya">
-           01 - Nombres enters i decimals (PDF)
-        </a>
-    </div>
+  <div class="category" id="llengua">
+    <h2>📘 Llengua</h2>
+    <h3>✏️ Ortografia</h3>
+    <a href="008_joc-separacio-sil.labes.html" class="link-box">📝 Separació síl·labes</a>
+    <a href="006_joc_accentuacio_agudes_per_parelles_nivell_1.html" class="link-box">🅰️ Accentuació N1</a>
+    <a href="002_accentuacio_agudes_planes_per_parelles2.html" class="link-box">🅱️ Accentuació N2</a>
+    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=ortografia_m_n" class="link-box">🧠 Ortografia M/N</a>
+    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=separacio_sillabes" class="link-box">🔤 Separació botons</a>
+    <a href="Fitxes_pluja/joc.html?tipus=fitxes/catala&fitxa=accentuacio" class="link-box">✒️ Accentuació botons</a>
+    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=hi-ha_n-hi-ha" class="link-box">🙋 Hi ha / N'hi ha</a>
+    <h3>📖 Gramàtica</h3>
+    <a href="004_Distincio_entre_hi_ha_i_n_hi_ha.html" class="link-box">🗣️ Distinció hi ha / n'hi ha</a>
+    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=hi_ha_n_hi_ha" class="link-box">💬 Hi ha / N'hi ha (botons)</a>
+    <h3>📝 Redacció</h3>
+    <a href="009_oximoron.html" class="link-box">💥 Oxímoron</a>
+    <a href="011_transformacio_frase_amb_participi_inicial.html" class="link-box">🔄 Transformació participi</a>
+  </div>
 
-    <div class="category" id="escriptura">
-        <h2>Grafomotificitat</h2>
-        <a href="escriptura/gargot_continu.html" class="link-box">Gargot continu</a> 
-        <a href="escriptura/S_de_colors.html" class="link-box">S de colors</a> 
-        <a href="escriptura/Dibuix_punts.html" class="link-box">Dibuix de punts</a> 
-        <a href="escriptura/Dibuix_espirals.html" class="link-box">Dibuix d'espirals</a> 
-        <a href="escriptura/Dibuix_eles.html" class="link-box">Dibuix d'eles</a> 
-        <a href="escriptura/a_cegues.html" class="link-box">A cegues</a> 
-        <a href="escriptura/rectangles.html" class="link-box">Rectangles</a> 
-        <a href="escriptura/rodones.html" class="link-box">Rodones</a> 
-        <a href="escriptura/ratlles.html" class="link-box">Ratlles</a> 
-        <a href="escriptura/dues_mans.html" class="link-box">"Dues mans</a> 
-    </div>
+  <div class="category" id="matematiques">
+    <h2>🧮 Matemàtiques</h2>
+    <a href="Sesamath/001_Sesamath_Sise_Nombres_enters_i_decimals.pdf" class="link-box" target="_blank">📊 Nombres enters i decimals</a>
+  </div>
 
-   
-    <div class="category" id="meditacions">
-        <h2>Meditacions</h2>
-        <a href="meditacions/deures_setmanals.html" class="link-box">Meditació: Deures setmanals</a> 
-        <a href="meditacions/Pantalles.html" class="link-box">Meditació: Ús de les pantalles</a> 
-        <a href="meditacions/ESO.html" class="link-box">Meditació: Començo la ESO</a> 
-        <a href="meditacions/obstacle.html" class="link-box">Meditació: Obstacles</a> 
-        <a href="meditacions/Mare_universal.html" class="link-box">Meditació: Mare universal</a> 
-    </div>
+  <div class="category" id="escriptura">
+    <h2>✍️ Grafomotricitat</h2>
+    <a href="escriptura/gargot_continu.html" class="link-box">🌀 Gargot continu</a>
+    <a href="escriptura/S_de_colors.html" class="link-box">🌈 S de colors</a>
+    <a href="escriptura/Dibuix_punts.html" class="link-box">🔘 Punts</a>
+    <a href="escriptura/Dibuix_espirals.html" class="link-box">🌀 Espirals</a>
+    <a href="escriptura/Dibuix_eles.html" class="link-box">♾️ Eles</a>
+    <a href="escriptura/a_cegues.html" class="link-box">🙈 A cegues</a>
+    <a href="escriptura/rectangles.html" class="link-box">🟥 Rectangles</a>
+    <a href="escriptura/rodones.html" class="link-box">🔵 Rodones</a>
+    <a href="escriptura/ratlles.html" class="link-box">📏 Ratlles</a>
+    <a href="escriptura/dues_mans.html" class="link-box">🤲 Dues mans</a>
+  </div>
 
-    <div class="category" id="eines">
-        <h2>Eines</h2>
-        <a href="Eines/VerificadorIBAN.html" class="link-box">Meditació: Deures setmanals</a> 
-    </div>
+  <div class="category" id="meditacions">
+    <h2>🧘‍♀️ Meditacions</h2>
+    <a href="meditacions/deures_setmanals.html" class="link-box">📆 Deures setmanals</a>
+    <a href="meditacions/Pantalles.html" class="link-box">📱 Ús de les pantalles</a>
+    <a href="meditacions/ESO.html" class="link-box">🏫 Començo la ESO</a>
+    <a href="meditacions/obstacle.html" class="link-box">🧱 Obstacles</a>
+    <a href="meditacions/Mare_universal.html" class="link-box">🌌 Mare universal</a>
+  </div>
 
-    
+  <div class="category" id="eines">
+    <h2>🧰 Eines</h2>
+    <a href="Eines/VerificadorIBAN.html" class="link-box">🔢 Verificador IBAN</a>
+  </div>
 
 </body>
 </html>
