@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gargots</title>
+  <style>
+    /* ---------- Estil base pantalla ---------- */
+    body {
+      font-family: 'Georgia', serif;
+      background-color: white;
+      color: #000;
+      margin: 0 auto;
+      padding: 40px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+      border: 2px solid #666;
+      box-sizing: border-box;
+    }
+    .section {
+      margin-bottom: 24px;
+      page-break-inside: avoid;
+    }
+    .exercise-box {
+      border: 2px dashed #666;
+      height: 420px; /* vista en pantalla, lleugerament més alta */
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 15px;
+    }
+
+    /* ---------- Configuració d'impressió A4 ---------- */
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    @media print {
+      body {
+        padding: 0;
+        width: auto;
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 22pt;
+      }
+      h2 {
+        font-size: 14pt;
+      }
+      p, li, textarea {
+        font-size: 11pt;
+      }
+      .section {
+        margin-bottom: 10mm;
+      }
+      .exercise-box {
+        height: 145mm; /* +15 mm per l'usuari (1,5 cm més llarga) */
+        margin-top: 8mm;
+      }
+      textarea {
+        height: 30mm;
+        border: 2px solid #666;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Gargots</h1>
+
+  <div class="section">
+    <h2>Consigna ràpida</h2>
+    <p>	Traça una “S” enorme que travessi la pàgina i llisca-hi amunt i avall —com si grimpsessis per una corda balancejant-te— sense aixecar el llapis; i, si vols, canvia de color a cada passada.</p>
+  </div>
+
+  <div class="section">
+    <h2>Camp de proves</h2>
+    <div class="exercise-box"></div>
+  </div>
+
+  <div class="section">
+    <h2>Reflexió personal</h2>
+    <textarea placeholder="Com t'has sentit mentre ho feies?"></textarea>
+  </div>
+</body>
+</html>
