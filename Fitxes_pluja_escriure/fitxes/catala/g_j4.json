@@ -1,0 +1,45 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "mode": "text",
+  "title": "G o J davant de vocal – Nivell 1",
+  "objective": "Escriu la paraula amb g o j correctament.",
+  "explanationAudio": "g_j2.m4a", 
+  "explanation": [
+    "📢 Benvingut al Nivell 4!",
+    "🔹 Ara treballaràs amb frases de context, cultismes, toponímia i manlleus.",
+    "🔸 Recorda la regla base del so de «joc / gelat»:",
+    "   • Davant de **A / O / U** → s’escriu **j** (jardí, joc, jutge, pluja).",
+    "   • Davant de **E / I** → s’escriu **g** (gel, gira, energia, estratègia).",
+    "🔸 Excepcions habituals amb **j + e**: projecte, trajecte, objecte, jerarquia, injecció…",
+    "🔸 Manlleus amb **j + i**: emoji, jujitsu, Fiji, etc.",
+    "🎯 Escriu la paraula sencera amb la grafia correcta. Bona sort! 🍀"
+  ],
+  "buttons": [],
+  "questions": [
+    { "sentence": "Va començar a estudiar ___urisprudència.",            "answer": "jurisprudència" },
+    { "sentence": "El desert acull una gran ___aima per als visitants.", "answer": "jaima" },
+    { "sentence": "El saxofonista tocava un solo de ___azz impressionant.", "answer": "jazz" },
+    { "sentence": "Va enviar un emo___i divertit al xat.",               "answer": "emoji" },
+    { "sentence": "Practiquen ___ujitsu tres cops per setmana.",         "answer": "jujitsu" },
+    { "sentence": "La ___ungla és plena de biodiversitat.",              "answer": "jungla" },
+    { "sentence": "Una ___oventut sense límits pot ser arriscada.",      "answer": "joventut" },
+    { "sentence": "Després del xàfec, la plu___a va afluixar.",          "answer": "pluja" },
+    { "sentence": "L’estructura de comandament reflecteix la ___erarquia corporativa.", "answer": "jerarquia" },
+
+    { "sentence": "La conferència tractava sobre tecno___ia quàntica.",  "answer": "tecnologia" },
+    { "sentence": "Es va especialitzar en arqueolo___ia subaquàtica.",   "answer": "arqueologia" },
+    { "sentence": "Estudia psico___ia infantil a la universitat.",       "answer": "psicologia" },
+    { "sentence": "La investigació combina bio___ia i química.",         "answer": "biologia" },
+    { "sentence": "Analitzen la socio___ia urbana de la ciutat.",        "answer": "sociologia" },
+    { "sentence": "Cal aplicar una estratè___ia ben definida.",          "answer": "estratègia" },
+    { "sentence": "El discurs estava ple de demagò___ia.",               "answer": "demagògia" },
+    { "sentence": "La direcció promou una bona ___estió del temps.",     "answer": "gestió" },
+    { "sentence": "Van detectar una neglí___ència greu.",                "answer": "negligència" },
+    { "sentence": "Ha desenvolupat una al·ler___ia severa al làtex.",    "answer": "al·lèrgia" },
+    { "sentence": "Volen crear siner___ia entre els equips.",            "answer": "sinergia" },
+    { "sentence": "El metge va prescriure una in___ecció d’antibiòtic.", "answer": "injecció" },
+    { "sentence": "El pacient va patir una hemorra___ia interna.",       "answer": "hemorràgia" },
+    { "sentence": "La cerimònia seguia una litúr___ia ancestral.",       "answer": "litúrgia" }
+  ]
+}
