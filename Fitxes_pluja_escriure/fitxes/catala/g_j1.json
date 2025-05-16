@@ -1,0 +1,32 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "mode": "text",
+  "title": "G o J davant de vocal – Nivell 1",
+  "objective": "Escriu la paraula amb g o j correctament.",
+  "explanation": [
+    "📢 Benvingut al nivell d’iniciació!",
+    "🔸 Tractarem l’ortografia del so que trobem a paraules com **joc** i **gelat**.",
+    "🔹 Cal que escriguis la lletra g o la j segons quina sigui la paraula.",
+    "✅ Davant de A, O i U escrivim **j**: jardí, joc, jugar.",
+    "✅ Davant de E i I escrivim **g**: gel, gent, gira, girafa.",
+    "🎯 Escriu bé i molta sort! 🍀"
+  ],
+  "buttons": [],
+  "questions": [
+    { "sentence": "___ardí",    "answer": "jardí" },
+    { "sentence": "___oc",      "answer": "joc" },
+    { "sentence": "___oia",     "answer": "joia" },
+    { "sentence": "___ugar",    "answer": "jugar" },
+    { "sentence": "___ulivert", "answer": "julivert" },
+
+    { "sentence": "___el",      "answer": "gel" },
+    { "sentence": "___elat",    "answer": "gelat" },
+    { "sentence": "___ener",    "answer": "gener" },
+    { "sentence": "___ent",     "answer": "gent" },
+    { "sentence": "___ira",     "answer": "gira" },
+    { "sentence": "___irafa",   "answer": "girafa" },
+    { "sentence": "___egant",   "answer": "gegant" },
+    { "sentence": "___inesta",  "answer": "ginesta" }
+  ]
+}
