@@ -1,0 +1,47 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "mode": "text",
+  "title": "G o J davant de vocal – Nivell 1",
+  "objective": "Escriu la paraula amb g o j correctament.",
+  "explanationAudio": "g_j2.m4a", 
+  "explanation": [
+    "📢 Benvingut al Nivell 3!",
+    "🔹 Ara trobaràs paraules més llargues, verbs conjugats i alguns cultismes.",
+    "🔸 Recorda:",
+    "   • Davant de A, O i U → **j** (jugar, jutjar, rajola).",
+    "   • Davant de E i I → **g** (llegir, energia, exigir).",
+    "🔸 **Verbs en -jar**: menjar → menjo, menjarem, menjaria… (la j es manté abans d’A/O/U).",
+    "🔸 **Verbs en -gir / -geix / -gir-se**: exigir, corregir, distingir… (g abans d’E/I).",
+    "🔸 Excepcions j + e (projecte, trajecte, objectiu, jersei, jeure, injecció…).",
+    "🎯 Escriu la paraula sencera amb la grafia correcta. Bona sort! 🍀"
+  ],
+  "buttons": [],
+  "questions": [
+    { "sentence": "men___ar",       "answer": "menjar" },
+    { "sentence": "men___o",        "answer": "menjo" },
+    { "sentence": "men___arem",     "answer": "menjarem" },
+    { "sentence": "men___es",        "answer": "menges" },
+    { "sentence": "ra___ola",       "answer": "rajola" },
+    { "sentence": "___utjat",       "answer": "jutjat" },
+    { "sentence": "___ersei",       "answer": "jersei" },
+    { "sentence": "pro___ecte",     "answer": "projecte" },
+    { "sentence": "tra___ecte",     "answer": "trajecte" },
+    { "sentence": "ob___ectiu",     "answer": "objectiu" },
+    { "sentence": "in___ecció",     "answer": "injecció" },
+    { "sentence": "sub___ecte",     "answer": "subjecte" },
+    { "sentence": "___eure", "answer": "jeure" },
+
+    { "sentence": "lle___ir",       "answer": "llegir" },
+    { "sentence": "corre___ir",       "answer": "corregir" },
+    { "sentence": "distin___ir",    "answer": "distingir" },
+    { "sentence": "exi___ir",       "answer": "exigir" },
+    { "sentence": "exi___eix", "answer": "exigeix" },
+    { "sentence": "ener___ia",      "answer": "energia" },
+    { "sentence": "estratè___ia",   "answer": "estratègia" },
+    { "sentence": "lò___ica",       "answer": "lògica" },
+    { "sentence": "al·ler___ia",    "answer": "al·lèrgia" },
+    { "sentence": "nostàl___ia",    "answer": "nostàlgia" },
+    { "sentence": "mà___ic", "answer": "màgic" }
+  ]
+}
