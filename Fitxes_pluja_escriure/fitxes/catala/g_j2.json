@@ -1,0 +1,42 @@
+{
+  "lang": "ca",
+  "audio": false,
+  "mode": "text",
+  "title": "G o J davant de vocal – Nivell 1",
+  "objective": "Escriu la paraula amb g o j correctament.",
+  "explanationAudio": "g_j2.m4a", 
+  "explanation": [
+    "📢 Benvingut al Nivell 2!",
+    "🔹 Ara trobaràs paraules una mica més llargues i amb algunes excepcions.",
+    "🔸 Recorda l’ortografia del so de «joc / gelat»:",
+    "   • Davant de A, O i U → s’escriu **j** (jardí, joguina, jutge).",
+    "   • Davant de E i I → s’escriu **g** (gel, gira, ginesta).",
+    "🔸 Excepcions freqüents amb **j + e**: jeure, projecte, objecte, jersei, trajecte.",
+    "🎯 Escriu la paraula sencera amb la grafia correcta. Bona sort! 🍀"
+  ],
+  "buttons": [],
+  "questions": [
+    { "sentence": "___ardiner",   "answer": "jardiner" },
+    { "sentence": "___oguina",    "answer": "joguina" },
+    { "sentence": "___utge",      "answer": "jutge" },
+    { "sentence": "___ugar",      "answer": "jugar" },
+    { "sentence": "___ersei",     "answer": "jersei" },
+    { "sentence": "___eure",      "answer": "jeure" },
+    { "sentence": "pro___ecte",   "answer": "projecte" },
+    { "sentence": "ob___ecte",    "answer": "objecte" },
+    { "sentence": "tra___ecte",   "answer": "trajecte" },
+
+    { "sentence": "___erra",      "answer": "gerra" },
+    { "sentence": "___eneral",    "answer": "general" },
+    { "sentence": "___eni",       "answer": "geni" },
+    { "sentence": "___irafa",     "answer": "girafa" },
+    { "sentence": "___irar",      "answer": "girar" },
+    { "sentence": "___imnàs",     "answer": "gimnàs" },
+    { "sentence": "___inesta",    "answer": "ginesta" },
+    { "sentence": "___elosia",    "answer": "gelosia" },
+    { "sentence": "___elós",      "answer": "gelós" },
+    { "sentence": "___ent",       "answer": "gent" },
+    { "sentence": "___enial",     "answer": "genial" },
+    { "sentence": "gran___a",     "answer": "granja" }
+  ]
+}
