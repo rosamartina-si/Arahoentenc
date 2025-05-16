@@ -1,4 +1,4 @@
-{
+,{
   "lang": "ca",
   "audio": false,
   "mode": "text",
@@ -20,6 +20,11 @@
     { "sentence": "___oia",     "answer": "joia" },
     { "sentence": "___ugar",    "answer": "jugar" },
     { "sentence": "___ulivert", "answer": "julivert" },
+    { "sentence": "___oguina", "answer": "joguina" },
+    { "sentence": "___ove",     "answer": "jove" },
+    { "sentence": "___uliol",   "answer": "juliol" },
+    { "sentence": "___utge",    "answer": "jutge" },
+    { "sentence": "___aqueta",  "answer": "jaqueta" },
 
     { "sentence": "___el",      "answer": "gel" },
     { "sentence": "___elat",    "answer": "gelat" },
@@ -28,6 +33,11 @@
     { "sentence": "___ira",     "answer": "gira" },
     { "sentence": "___irafa",   "answer": "girafa" },
     { "sentence": "___egant",   "answer": "gegant" },
-    { "sentence": "___inesta",  "answer": "ginesta" }
+    { "sentence": "___inesta",  "answer": "ginesta" },
+    { "sentence": "___enoll",   "answer": "genoll" },
+    { "sentence": "___ermà",    "answer": "germà" },
+    { "sentence": "___eni",     "answer": "geni" },
+    { "sentence": "___irar",       "answer": "girar" },
+    { "sentence": "___enial",   "answer": "genial" }
   ]
 }
