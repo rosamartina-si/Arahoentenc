@@ -25,6 +25,7 @@
     { "sentence": "pro___ecte",   "answer": "projecte" },
     { "sentence": "ob___ecte",    "answer": "objecte" },
     { "sentence": "tra___ecte",   "answer": "trajecte" },
+    { "sentence": "___apó",   "answer": "Japó" },
 
     { "sentence": "___erra",      "answer": "gerra" },
     { "sentence": "___eneral",    "answer": "general" },
