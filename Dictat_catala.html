@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercicis de Dictat en Català Online</title>
+  <style>
+    :root {
+      --primary-color: #003366;
+      --secondary-color: #f0f0f0;
+      --correct-color: #4caf50;
+      --incorrect-color: #f44336;
+      --warning-color: #ff9800;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1, h2 {
+      color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .exercise-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .voice-controls {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: opacity 0.3s;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+    }
+    
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    
+    .feedback {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .correct {
+      background-color: #e8f5e9;
+      color: var(--correct-color);
+      border: 1px solid var(--correct-color);
+    }
+    
+    .incorrect {
+      background-color: #ffebee;
+      color: var(--incorrect-color);
+      border: 1px solid var(--incorrect-color);
+    }
+    
+    .status {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    
+    .online {
+      background-color: #e3f2fd;
+    }
+    
+    .offline {
+      background-color: #fff3e0;
+    }
+    
+    .warning {
+      color: var(--warning-color);
+      font-weight: bold;
+    }
+    
+    .instructions {
+      background-color: #fff8e1;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 600px) {
+      .voice-controls {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Exercicis de Dictat en Català</h1>
+  
+  <div class="instructions">
+    <h2>Instruccions:</h2>
+    <ol>
+      <li>Fes clic a "Començar Dictat" per escoltar el text</li>
+      <li>Escriu el que sents a l'àrea de text</li>
+      <li>Fes clic a "Comprovar" per verificar la teva resposta</li>
+      <li>Pots repetir el dictat tantes vegades com necessitis</li>
+    </ol>
+    <p><strong>Mode Online:</strong> Aquesta versió utilitza serveis online per a una veu en català de qualitat.</p>
+  </div>
+  
+  <div class="exercise-container">
+    <h2>Exercici de Dictat</h2>
+    
+    <div id="connectionStatus" class="status online">
+      Mode Online: Utilitzant servei de veu en català
+    </div>
+    
+    <div class="voice-controls">
+      <button id="startDictation">Començar Dictat</button>
+      <button id="repeatDictation" disabled>Repetir Dictat</button>
+      <button id="checkAnswer" disabled>Comprovar</button>
+    </div>
+    
+    <textarea id="userAnswer" placeholder="Escriu aquí el que sents..." disabled></textarea>
+    
+    <div id="feedback" class="feedback"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements del DOM
+      const startBtn = document.getElementById('startDictation');
+      const repeatBtn = document.getElementById('repeatDictation');
+      const checkBtn = document.getElementById('checkAnswer');
+      const userAnswer = document.getElementById('userAnswer');
+      const feedback = document.getElementById('feedback');
+      const connectionStatus = document.getElementById('connectionStatus');
+      
+      // Variables d'estat
+      let currentExercise = null;
+      let audioPlayer = null;
+      let isOnline = true;
+      
+      // Exercicis de dictat
+      const exercises = [
+        {
+          id: 1,
+          text: "El gat és a la teulada i el gos és al jardí.",
+          audioUrl: "https://storage.googleapis.com/catalan-tts/exercise1.mp3",
+          difficulty: "Fàcil"
+        },
+        {
+          id: 2,
+          text: "A Barcelona hi ha molts monuments interessants com la Sagrada Família.",
+          audioUrl: "https://storage.googleapis.com/catalan-tts/exercise2.mp3", 
+          difficulty: "Mitjà"
+        },
+        {
+          id: 3,
+          text: "Els núvols són grisos i fa una mica de fred, potser aviat plourà.",
+          audioUrl: "https://storage.googleapis.com/catalan-tts/exercise3.mp3",
+          difficulty: "Mitjà"
+        }
+      ];
+      
+      // Comprovar connexió
+      function checkConnection() {
+        isOnline = navigator.onLine;
+        
+        if (isOnline) {
+          connectionStatus.textContent = "Mode Online: Utilitzant servei de veu en català";
+          connectionStatus.className = "status online";
+        } else {
+          connectionStatus.innerHTML = '<span class="warning">Mode Offline: La qualitat de veu pot ser inferior</span>';
+          connectionStatus.className = "status offline";
+          initOfflineFallback();
+        }
+      }
+      
+      // Inicialitzar fallback offline
+      function initOfflineFallback() {
+        if (!window.speechSynthesis) {
+          connectionStatus.innerHTML = '<span class="warning">No es pot utilitzar offline en aquest navegador</span>';
+          startBtn.disabled = true;
+          return;
+        }
+        
+        // Carregar veus disponibles offline
+        const voices = window.speechSynthesis.getVoices();
+        const hasCatalanVoice = voices.some(voice => voice.lang === 'ca-ES' || voice.lang === 'ca');
+        
+        if (!hasCatalanVoice) {
+          connectionStatus.innerHTML = '<span class="warning">Mode Offline: No hi ha veu en català instal·lada</span>';
+        }
+      }
+      
+      // Seleccionar exercici aleatori
+      function selectRandomExercise() {
+        currentExercise = exercises[Math.floor(Math.random() * exercises.length)];
+        return currentExercise;
+      }
+      
+      // Reproduir àudio online
+      function playOnlineAudio(url) {
+        if (audioPlayer) {
+          audioPlayer.pause();
+          audioPlayer.currentTime = 0;
+        } else {
+          audioPlayer = new Audio();
+        }
+        
+        audioPlayer.src = url;
+        audioPlayer.play();
+        
+        audioPlayer.onplay = function() {
+          startBtn.disabled = true;
+          repeatBtn.disabled = true;
+        };
+        
+        audioPlayer.onended = function() {
+          startBtn.disabled = false;
+          repeatBtn.disabled = false;
+          userAnswer.disabled = false;
+          userAnswer.focus();
+          checkBtn.disabled = false;
+        };
+        
+        audioPlayer.onerror = function() {
+          connectionStatus.innerHTML = '<span class="warning">Error en carregar l\'àudio. Provant mode offline...</span>';
+          isOnline = false;
+          playOfflineText(currentExercise.text);
+        };
+      }
+      
+      // Reproduir text offline
+      function playOfflineText(text) {
+        if (!window.speechSynthesis) {
+          feedback.textContent = "No es pot reproduir àudio en mode offline";
+          feedback.className = "feedback incorrect";
+          feedback.style.display = 'block';
+          return;
+        }
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Forçar català si és possible
+        const voices = window.speechSynthesis.getVoices();
+        const catalanVoice = voices.find(voice => voice.lang === 'ca-ES' || voice.lang === 'ca');
+        
+        if (catalanVoice) {
+          utterance.voice = catalanVoice;
+          utterance.lang = 'ca-ES';
+        } else {
+          utterance.lang = 'ca-ES'; // Intentar igualment
+        }
+        
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        
+        utterance.onstart = function() {
+          startBtn.disabled = true;
+          repeatBtn.disabled = true;
+        };
+        
+        utterance.onend = function() {
+          startBtn.disabled = false;
+          repeatBtn.disabled = false;
+          userAnswer.disabled = false;
+          userAnswer.focus();
+          checkBtn.disabled = false;
+        };
+        
+        window.speechSynthesis.speak(utterance);
+      }
+      
+      // Començar dictat
+      function startDictation() {
+        if (!currentExercise) {
+          currentExercise = selectRandomExercise();
+        }
+        
+        feedback.style.display = 'none';
+        userAnswer.value = '';
+        
+        if (isOnline) {
+          playOnlineAudio(currentExercise.audioUrl);
+        } else {
+          playOfflineText(currentExercise.text);
+        }
+      }
+      
+      // Comprovar resposta
+      function checkDictation() {
+        const userText = userAnswer.value.trim();
+        const correctText = currentExercise.text;
+        
+        if (userText === correctText) {
+          feedback.textContent = "Correcte! Has escrit perfectament el dictat.";
+          feedback.className = "feedback correct";
+        } else {
+          // Comparació tolerant (ignorar majúscules i signes de puntuació)
+          const normalizedUser = userText.toLowerCase()
+            .replace(/[.,;!?¿¡]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+            
+          const normalizedCorrect = correctText.toLowerCase()
+            .replace(/[.,;!?¿¡]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+            
+          if (normalizedUser === normalizedCorrect) {
+            feedback.textContent = "Gairebé correcte! Revisa la puntuació i les majúscules.";
+            feedback.className = "feedback correct";
+          } else {
+            feedback.innerHTML = `Hi ha alguns errors. Així és com hauria de ser:<br><br><strong>${correctText}</strong>`;
+            feedback.className = "feedback incorrect";
+          }
+        }
+        
+        feedback.style.display = 'block';
+      }
+      
+      // Configurar esdeveniments
+      startBtn.addEventListener('click', startDictation);
+      repeatBtn.addEventListener('click', startDictation);
+      checkBtn.addEventListener('click', checkDictation);
+      
+      // Comprovar canvis en la connexió
+      window.addEventListener('online', checkConnection);
+      window.addEventListener('offline', checkConnection);
+      
+      // Inicialitzar
+      checkConnection();
+    });
+  </script>
+</body>
+</html>
