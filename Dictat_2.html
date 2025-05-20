@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercicis de Dictat en Català Offline</title>
+  <style>
+    :root {
+      --primary-color: #003366;
+      --secondary-color: #f0f0f0;
+      --correct-color: #4caf50;
+      --incorrect-color: #f44336;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1, h2 {
+      color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .exercise-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .voice-controls {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+    }
+    
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+      font-size: 16px;
+    }
+    
+    .feedback {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .correct {
+      background-color: #e8f5e9;
+      color: var(--correct-color);
+      border: 1px solid var(--correct-color);
+    }
+    
+    .incorrect {
+      background-color: #ffebee;
+      color: var(--incorrect-color);
+      border: 1px solid var(--incorrect-color);
+    }
+    
+    .voice-status {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #e3f2fd;
+      border-radius: 4px;
+    }
+    
+    .warning {
+      color: #ff9800;
+      font-weight: bold;
+    }
+    
+    .instructions {
+      background-color: #fff8e1;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Exercicis de Dictat en Català</h1>
+  
+  <div class="instructions">
+    <h2>Instruccions:</h2>
+    <ol>
+      <li>Fes clic a "Començar Dictat" per escoltar el text</li>
+      <li>Escriu el que sents a l'àrea de text</li>
+      <li>Fes clic a "Comprovar" per verificar la teva resposta</li>
+      <li>Pots repetir el dictat tantes vegades com necessitis</li>
+    </ol>
+    <p><strong>Nota:</strong> Aquesta aplicació funciona completament offline, però necessita que el teu sistema tingui veus en català instal·lades per a una millor experiència.</p>
+  </div>
+  
+  <div class="exercise-container">
+    <h2>Exercici de Dictat</h2>
+    
+    <div class="voice-status" id="voiceStatus">
+      Inicialitzant sistema de veu...
+    </div>
+    
+    <div class="voice-controls">
+      <button id="startDictation">Començar Dictat</button>
+      <button id="repeatDictation" disabled>Repetir Dictat</button>
+      <button id="checkAnswer" disabled>Comprovar</button>
+    </div>
+    
+    <textarea id="userAnswer" placeholder="Escriu aquí el que sents..." disabled></textarea>
+    
+    <div id="feedback" class="feedback"></div>
+  </div>
+  
+  <div class="exercise-container">
+    <h2>Configuració de Veu</h2>
+    
+    <label for="voiceSelect">Selecciona la veu:</label>
+    <select id="voiceSelect" disabled></select>
+    
+    <div style="margin-top: 15px;">
+      <label for="voiceRate">Velocitat:</label>
+      <input type="range" id="voiceRate" min="0.5" max="2" step="0.1" value="1">
+      <span id="rateValue">1</span>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements del DOM
+      const startBtn = document.getElementById('startDictation');
+      const repeatBtn = document.getElementById('repeatDictation');
+      const checkBtn = document.getElementById('checkAnswer');
+      const userAnswer = document.getElementById('userAnswer');
+      const feedback = document.getElementById('feedback');
+      const voiceSelect = document.getElementById('voiceSelect');
+      const voiceRate = document.getElementById('voiceRate');
+      const rateValue = document.getElementById('rateValue');
+      const voiceStatus = document.getElementById('voiceStatus');
+      
+      // Variables d'estat
+      let currentExercise = null;
+      let availableVoices = [];
+      let selectedVoice = null;
+      let speechSynthesis = window.speechSynthesis;
+      let speechUtterance = null;
+      
+      // Exercicis de dictat (poden ampliar-se)
+      const exercises = [
+        {
+          id: 1,
+          text: "El gat és a la teulada i el gos és al jardí.",
+          difficulty: "Fàcil"
+        },
+        {
+          id: 2,
+          text: "A Barcelona hi ha molts monuments interessants com la Sagrada Família.",
+          difficulty: "Mitjà"
+        },
+        {
+          id: 3,
+          text: "Els núvols són grisos i fa una mica de fred, potser aviat plourà.",
+          difficulty: "Mitjà"
+        },
+        {
+          id: 4,
+          text: "La Mediterrània és un mar que banya les costes catalanes i ofereix un clima temperat.",
+          difficulty: "Difícil"
+        }
+      ];
+      
+      // Inicialitzar veus
+      function initVoices() {
+        // Esperar a que les veus estiguin carregades
+        speechSynthesis.onvoiceschanged = function() {
+          loadVoices();
+        };
+        
+        // Carregar veus immediatament si ja estan disponibles
+        if (speechSynthesis.getVoices().length > 0) {
+          loadVoices();
+        } else {
+          voiceStatus.textContent = "Carregant veus disponibles...";
+        }
+      }
+      
+      // Carregar veus disponibles
+      function loadVoices() {
+        availableVoices = speechSynthesis.getVoices();
+        voiceSelect.innerHTML = '';
+        
+        // Filtrar veus que poden llegir català (o fer-ho millor possible)
+        const suitableVoices = availableVoices.filter(voice => {
+          return voice.lang === 'ca-ES' || voice.lang === 'ca' || 
+                 voice.lang.startsWith('es-') || voice.lang.startsWith('en-') || 
+                 voice.default;
+        });
+        
+        if (suitableVoices.length === 0) {
+          voiceStatus.innerHTML = '<span class="warning">No s\'han trobat veus adequades. Es pot utilitzar la veu per defecte amb resultats limitats.</span>';
+          availableVoices.forEach(voice => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' - Per defecte' : ''}`;
+            option.value = voice.name;
+            voiceSelect.appendChild(option);
+          });
+        } else {
+          suitableVoices.forEach(voice => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' - Per defecte' : ''}`;
+            option.value = voice.name;
+            voiceSelect.appendChild(option);
+          });
+          voiceStatus.textContent = `S'han trobat ${suitableVoices.length} veus disponibles`;
+        }
+        
+        voiceSelect.disabled = false;
+        selectBestVoice();
+      }
+      
+      // Seleccionar la millor veu possible
+      function selectBestVoice() {
+        // 1. Buscar veu en català exacte
+        selectedVoice = availableVoices.find(voice => voice.lang === 'ca-ES' || voice.lang === 'ca');
+        
+        // 2. Buscar veu en castellà
+        if (!selectedVoice) selectedVoice = availableVoices.find(voice => voice.lang.startsWith('es-'));
+        
+        // 3. Buscar veu en anglès
+        if (!selectedVoice) selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en-'));
+        
+        // 4. Veu per defecte
+        if (!selectedVoice) selectedVoice = availableVoices.find(voice => voice.default);
+        
+        // 5. Primera veu disponible
+        if (!selectedVoice && availableVoices.length > 0) selectedVoice = availableVoices[0];
+        
+        if (selectedVoice) {
+          voiceSelect.value = selectedVoice.name;
+          voiceStatus.textContent = `Veu seleccionada: ${selectedVoice.name} (${selectedVoice.lang})`;
+        }
+      }
+      
+      // Configurar esdeveniments
+      voiceSelect.addEventListener('change', function() {
+        selectedVoice = availableVoices.find(voice => voice.name === this.value);
+      });
+      
+      voiceRate.addEventListener('input', function() {
+        rateValue.textContent = this.value;
+      });
+      
+      startBtn.addEventListener('click', startDictation);
+      repeatBtn.addEventListener('click', startDictation);
+      checkBtn.addEventListener('click', checkDictation);
+      
+      // Seleccionar un exercici aleatori
+      function selectRandomExercise() {
+        currentExercise = exercises[Math.floor(Math.random() * exercises.length)];
+        return currentExercise;
+      }
+      
+      // Començar dictat
+      function startDictation() {
+        if (!currentExercise) {
+          currentExercise = selectRandomExercise();
+        }
+        
+        speakText(currentExercise.text);
+        userAnswer.disabled = false;
+        userAnswer.value = '';
+        userAnswer.focus();
+        checkBtn.disabled = false;
+        repeatBtn.disabled = false;
+        feedback.style.display = 'none';
+      }
+      
+      // Parlar text
+      function speakText(text) {
+        if (speechSynthesis.speaking) {
+          speechSynthesis.cancel();
+        }
+        
+        speechUtterance = new SpeechSynthesisUtterance(text);
+        
+        if (selectedVoice) {
+          speechUtterance.voice = selectedVoice;
+          // Forçar intent de llegir en català encara que la veu sigui d'un altre idioma
+          try {
+            speechUtterance.lang = 'ca-ES';
+          } catch(e) {
+            console.log("No s'ha pogut forçar l'idioma a ca-ES");
+          }
+        }
+        
+        speechUtterance.rate = parseFloat(voiceRate.value);
+        speechUtterance.pitch = 1;
+        
+        speechUtterance.onstart = function() {
+          startBtn.disabled = true;
+          repeatBtn.disabled = true;
+        };
+        
+        speechUtterance.onend = function() {
+          startBtn.disabled = false;
+          repeatBtn.disabled = false;
+        };
+        
+        speechSynthesis.speak(speechUtterance);
+      }
+      
+      // Comprovar dictat
+      function checkDictation() {
+        const userText = userAnswer.value.trim();
+        const correctText = currentExercise.text;
+        
+        if (userText === correctText) {
+          feedback.textContent = "Correcte! Has escrit perfectament el dictat.";
+          feedback.className = "feedback correct";
+          feedback.style.display = 'block';
+        } else {
+          // Comparació més tolerant (ignorar majúscules i alguns caràcters)
+          const normalizedUser = userText.toLowerCase().replace(/[.,;!?]/g, '').trim();
+          const normalizedCorrect = correctText.toLowerCase().replace(/[.,;!?]/g, '').trim();
+          
+          if (normalizedUser === normalizedCorrect) {
+            feedback.textContent = "Gairebé correcte! Revisa la puntuació i les majúscules.";
+            feedback.className = "feedback correct";
+            feedback.style.display = 'block';
+          } else {
+            feedback.innerHTML = `Hi ha alguns errors. Així és com hauria de ser:<br><br><strong>${correctText}</strong>`;
+            feedback.className = "feedback incorrect";
+            feedback.style.display = 'block';
+          }
+        }
+      }
+      
+      // Inicialitzar
+      initVoices();
+    });
+  </script>
+</body>
+</html>
