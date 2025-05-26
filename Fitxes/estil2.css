@@ -36,27 +36,5 @@
   margin: 0 auto;
 }
 
-.image-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin: 20px 0;
-}
 
-.image-container img {
-    width: 48%;
-    max-width: 100%; /* Evita desbordaments */
-    height: auto;
-    object-fit: contain; /* Manté la proporció */
-}
-
-/* Opcional: Responsive per mòbils */
-@media (max-width: 600px) {
-    .image-container {
-        flex-direction: column;
-    }
-    .image-container img {
-        width: 100%;
-    }
-}
 
