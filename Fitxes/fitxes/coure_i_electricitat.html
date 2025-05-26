@@ -24,9 +24,25 @@
       
     <p>Aquestes capes es van omplint amb un nombre màxim d’electrons per capa i seguint un ordre específic.</p>
 
-    <img src="../imatges/atom_orbites.PNG" alt="Nombre màxim d'electron per capa">
+    <div class="image-container">
+      <img src="../imatges/atom_orbites.PNG" alt="Nombre màxim d'electrons per capa">
+      <img src="../imatges/Ordre_electrons.png" alt="Ordre electrons per capa">
+    </div>
 
-    <img src="../imatges/Ordre_electrons.png" alt="Ordre electrons per capa">
+<style>
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Espai entre imatges */
+    margin: 20px 0;
+}
+
+.image-container img {
+    width: 48%; /* Ajusta segons necessitis */
+    height: auto;
+    object-fit: contain; /* Manté la proporció */
+}
+</style>
 
     <p>Els electrons s’organitzen segons un patró establert: primer l’orbital 1s, després el 2s, 2p, 3s, 3p, 4s, etc. Els orbitals “s” tenen forma esfèrica (com una bombolla al voltant del nucli), mentre que els “p” tenen tres orientacions possibles en l’espai i poden allotjar fins a 6 electrons, dos per cada orientació (x, y, z).</p>
 
