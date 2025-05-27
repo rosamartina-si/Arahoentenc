@@ -36,5 +36,19 @@
   margin: 0 auto;
 }
 
+.image-2-imatges {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Espai entre imatges */
+    margin: 20px 0;
+}
+
+.image-2-imatges img {
+    width: 48%; /* Ajusta segons necessitis */
+    height: auto;
+    object-fit: contain; /* Manté la proporció */
+}
+
+
 
 
