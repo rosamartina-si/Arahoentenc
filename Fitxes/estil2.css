@@ -49,10 +49,6 @@
     object-fit: contain; /* Manté la proporció */
 }
 
-        .svg-test {
-            width: 300px;
-            height: 300px;
-            border: 1px solid red; /* Per veure l'espai */
-        }
+
 
 
