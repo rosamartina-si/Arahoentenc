@@ -81,6 +81,11 @@ img {
   object-fit: contain;
 }
 
+body img:not(.image-2-imatges img) {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 /* Taules */
 table {
   width: 100%;
