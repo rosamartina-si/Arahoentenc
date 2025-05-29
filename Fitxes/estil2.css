@@ -1,54 +1,146 @@
+/* Estils generals del document */
+body {
+  font-family: 'Georgia', serif;
+  background-color: white;
+  color: #000;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  max-width: 210mm; /* Compatible amb paper A4 */
+  box-sizing: border-box;
+  line-height: 1.6;
+}
 
-    body {
-      font-family: 'Georgia', serif;
-      background-color: white;
-      color: #000;
-      margin: 0 auto;
-      padding: 40px;
-      width: 210mm;
-      max-width: 100%;
-      height: auto;
-      box-sizing: border-box;
-    }
-    h1, h2, h3 {
-      color: #003366;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      margin-bottom: 15px;
-    }
-    .section {
-      margin-bottom: 25px;
-    }
-    .quote {
-      font-style: italic;
-      background-color: #f9f9f9;
-      padding: 10px;
-      border-left: 4px solid #ccc;
-      margin-bottom: 20px;
-    }
-/*per fer que la imatge s’adapti a l’amplada de la pantalla (i evitar que sobrepassi el contenidor.*/
+/* Contenidor principal (equivalent a una fulla A4) */
+.sheet {
+  width: 210mm;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px;
+  box-sizing: border-box;
+  overflow: hidden; /* Evita desbordaments */
+}
+
+/* Capçaleres */
+h1, h2, h3 {
+  color: #003366;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.2em;
+  border-bottom: 2px solid #003366;
+  padding-bottom: 10px;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.4em;
+}
+
+/* Text i paràgrafs */
+p {
+  margin-bottom: 1.2em;
+  text-align: justify;
+}
+
+/* Imatges responsives (genèric) */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid #eee; /* Opcional: per destacar imatges */
+}
+
+/* Contenidor especial per imatges responsives (si cal destacar-ne alguna) */
 .responsive-img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: 20px auto;
+  text-align: center;
 }
 
+/* Grups de 2 imatges (flexbox) */
 .image-2-imatges {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px; /* Espai entre imatges */
-    margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap; /* Permet ajust en pantalles petites */
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px 0;
 }
 
 .image-2-imatges img {
-    width: 48%; /* Ajusta segons necessitis */
-    height: auto;
-    object-fit: contain; /* Manté la proporció */
+  width: calc(50% - 10px); /* 50% menys l'espai del gap */
+  height: auto;
+  object-fit: contain;
 }
 
+/* Taules */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 25px 0;
+}
 
+table, th, td {
+  border: 1px solid #ddd;
+}
 
+th, td {
+  padding: 12px;
+  text-align: left;
+}
 
+th {
+  background-color: #f2f2f2;
+  color: #003366;
+}
+
+/* Llistes */
+ul, ol {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+/* Classes auxiliars */
+.quote {
+  font-style: italic;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-left: 4px solid #ccc;
+  margin: 20px 0;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+/* Adaptació a pantalles petites */
+@media (max-width: 768px) {
+  .sheet {
+    padding: 20px;
+  }
+  
+  .image-2-imatges {
+    flex-direction: column;
+  }
+  
+  .image-2-imatges img {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  h1 {
+    font-size: 1.8em;
+  }
+}
