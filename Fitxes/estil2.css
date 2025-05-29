@@ -66,6 +66,14 @@ img {
   text-align: center;
 }
 
+.responsive-img img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Centrat horitzontalment */
+  padding: 10px 0; /* Espai vertical */
+}
+
 /* Grups de 2 imatges (flexbox) */
 .image-2-imatges {
   display: flex;
