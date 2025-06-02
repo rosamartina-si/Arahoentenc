@@ -3,19 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Resolució d'Equacions - Sessió 1</title>
+  <link rel="stylesheet" href="estils.css">
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-    }
-    h2, h3 {
-      background-color: #e0f0ff;
-      padding: 10px;
-    }
-    .exercici {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 20px;
+    .espai {
+      border-bottom: 1px dotted #999;
+      height: 24px;
+      margin: 8px 0;
     }
     .solucio {
       background-color: #f9f9f9;
@@ -23,44 +16,33 @@
       margin-top: 10px;
       font-family: monospace;
     }
-    .introduccio, .explicacio {
-      background-color: #f0f8ff;
+    .exercici {
+      border: 1px solid #ccc;
       padding: 15px;
-      margin-bottom: 30px;
-      border-left: 5px solid #4a90e2;
-    }
-
+      margin-bottom: 20px;
     }
   </style>
 </head>
-<body>
+<body class="sheet">
 
 <h2>Sessió 1 – Resolució d'equacions</h2>
 
 <div class="introduccio">
   <h3>🔍 Què és una equació?</h3>
- <p>Una <strong>equació</strong> és una afirmació matemàtica que diu que dues expressions tenen el mateix valor, com una <strong>balança equilibrada</strong>.</p>
-
+  <p>Una <strong>equació</strong> és una afirmació matemàtica que diu que dues expressions tenen el mateix valor, com una <strong>balança equilibrada</strong>.</p>
   <p>Per exemple, sabem que:</p>
   <p><code>24 ÷ 2 = 12</code></p>
-
   <p>Ara imagina que no sabem quin número dividit entre 2 dona 12. Ho podríem escriure així:</p>
   <p><code>x ÷ 2 = 12</code></p>
-
   <p>Això ja és una <strong>equació</strong>: conté una <strong>incògnita</strong>, que anomenem <code>x</code>, i volem descobrir quin valor té perquè la igualtat sigui certa.</p>
-
   <p>Per resoldre-la, pensem: quin número dividit entre 2 dona 12?</p>
   <p>✔️ Provem amb <code>x = 24</code>:</p>
   <p><code>24 ÷ 2 = 12</code> ✅</p>
-
   <p>Ara podem escriure la solució:</p>
   <p><strong><code>x = 24</code></strong></p>
-
   <p>🔁 A partir d’aquí podem crear equacions més variades, com:</p>
   <p><code>2x + 3 = 7</code>, <code>5(x − 1) = 20</code>, etc.</p>
-
   <p>En totes, busquem el valor de <code>x</code> que fa certa la igualtat.</p>
-
   <p><strong>Exemple:</strong> <code>2x + 3 = 7</code></p>
   <p>Això vol dir: quin número multiplicat per 2 i sumat a 3 dona 7?</p>
   <p><code>x = 2</code>, perquè <code>2×2 + 3 = 4 + 3 = 7</code> ✅</p>
@@ -68,36 +50,17 @@
 </div>
 
 <div class="explicacio">
-  <h3>🧮 Com es resol una equació pas a pas</h3>
-
-  <p><strong>Equació d’exemple:</strong></p>
-
-<p>La Jordina entra en una botiga on venen caixes amb 4 llaunes i 7 sobres d’espècies. Compra 3 caixes iguals i, en total, paga <strong>45 euros</strong>.</p>
-
-<p>Si sabem que cada sobre costa <strong>1 euro</strong>, pots esbrinar quin és el preu d’una llauna (<code>x</code>)?</p>
-
-<p><strong>L’equació que representa aquesta situació és:</strong> <code>3(4x + 7) = 45</code></p>
-
+  <h3>🧲 Com es resol una equació pas a pas</h3>
+  <p>La Jordina entra en una botiga on venen caixes amb 4 llaunes i 7 sobres d’espècies. Compra 3 caixes iguals i, en total, paga <strong>45 euros</strong>.</p>
+  <p>Si sabem que cada sobre costa <strong>1 euro</strong>, pots esbrinar quin és el preu d’una llauna (<code>x</code>)?</p>
+  <p><strong>L’equació que representa aquesta situació és:</strong> <code>3(4x + 7) = 45</code></p>
   <p><strong>Com es resol:</strong></p>
-
   <ol>
-    <li><strong>Dividim entre 3</strong> a cada costat per eliminar el 3 que multiplica el parèntesi:<br>
-      <code>3(4x + 7) ÷ 3 = 45 ÷ 3</code><br>
-      → <code>4x + 7 = 15</code>
-    </li>
-    <li><strong>Restem 7</strong> a cada costat per aïllar el terme amb la <code>x</code>:<br>
-      <code>4x + 7 - 7 = 15 - 7</code><br>
-      → <code>4x = 8</code>
-    </li>
-    <li><strong>Dividim entre 4</strong> a cada costat per trobar el valor de <code>x</code>:<br>
-      <code>4x ÷ 4 = 8 ÷ 4</code><br>
-      → <code>x = 2</code>
-    </li>
+    <li><code>3(4x + 7) ÷ 3 = 45 ÷ 3</code> → <code>4x + 7 = 15</code></li>
+    <li><code>4x + 7 - 7 = 15 - 7</code> → <code>4x = 8</code></li>
+    <li><code>4x ÷ 4 = 8 ÷ 4</code> → <code>x = 2</code></li>
   </ol>
-
   <p><strong>✅ Conclusió:</strong> <code>x = 2</code></p>
-
-  <p><strong>Visualització estil balança:</strong></p>
   <pre>
 3(4x + 7) = 45
       ÷3    ÷3
@@ -110,43 +73,44 @@
 </div>
 
 <div class="exercici">
-  <strong>En Joan ha començat aquest problema però s’ha quedat encallat. Ajuda’l a acabar-lo:</strong><br>
-  <p><em>Un taller de bricolatge ven paquets que inclouen 3 eines i 9 cargols. Si compres 4 paquets iguals i pagues 12 euros en total, quant costa una eina si cada cargol val 1 €?</em></p>
+  <strong>En Joan ha començat aquest problema però s’ha quedat encallat. Ajuda’l a acabar-lo:</strong>
+  <p><em>Un taller de bricolatge ven paquets que inclouen 3 eines i 9 cargols. Si compres 4 paquets iguals i pagues 156 euros en total, quant costa una eina si cada cargol val 1 €?</em></p>
   <div class="solucio">
     4(3x + 9) = 156<br>
           ÷4    ÷4<br>
       3x + 9 = 39<br>
           −9  −9<br>
           3x = 30<br>
-    <div class="espai"></div>
-    <div class="espai"></div>
+          ÷3  ÷3<br>
+          x = 10
   </div>
 </div>
 
 <div class="exercici">
-  <strong>La Laia també necessita ajuda per acabar:</strong><br>
-  <p><em>Una empresa envia 2 caixes que contenen cadascuna 6 ampolles i 2 catàlegs. Si l'enviament costa 16 €, i cada catàleg val 1 €, quin és el cost de cada ampolla?</em></p>
+  <strong>La Laia també necessita ajuda per acabar:</strong>
+  <p><em>Una empresa envia 2 caixes que contenen cadascuna 6 ampolles i 2 catàlegs. Si l'enviament costa 40 €, i cada catàleg val 1 €, quin és el cost de cada ampolla?</em></p>
   <div class="solucio">
     2(6x + 2) = 40<br>
           ÷2    ÷2<br>
       6x + 2 = 20<br>
-    <div class="espai"></div>
-    <div class="espai"></div>
-    <div class="espai"></div>
+          −2  −2<br>
+          6x = 18<br>
+          ÷6  ÷6<br>
+          x = 3
   </div>
 </div>
 
 <div class="exercici">
-  <strong>Prova-ho tu mateix!</strong><br>
-  <p><em>Prepares motxilles per una excursió: cada motxilla inclou 2 cantimplores i 8 barretes energètiques. Si 3 motxilles costen 9 €, i cada barreta costa 1 €, quant costa una cantimplora?</em></p>
+  <strong>Prova-ho tu mateix!</strong>
+  <p><em>Prepares motxilles per una excursió: cada motxilla inclou 2 cantimplores i 8 barretes energètiques. Si 3 motxilles costen 60 €, i cada barreta costa 1 €, quant costa una cantimplora?</em></p>
   <div class="solucio">
     3(2x + 8) = 60<br>
-    <div class="espai"></div>
-    <div class="espai"></div>
-    <div class="espai"></div>
-    <div class="espai"></div>
-    <div class="espai"></div>
-    <div class="espai"></div>
+    ÷3       ÷3<br>
+    2x + 8 = 20<br>
+       −8   −8<br>
+        2x = 12<br>
+        ÷2  ÷2<br>
+        x = 6
   </div>
 </div>
 
