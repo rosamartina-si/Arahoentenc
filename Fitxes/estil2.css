@@ -158,17 +158,3 @@ li {
   }
 }
 
-    code {
-      background-color: #eaeaea;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
-    pre {
-      background-color: #f6f6f6;
-      padding: 10px;
-      overflow-x: auto;
-    }
-    .espai {
-      border-bottom: 1px dotted #999;
-      height: 24px;
-      margin: 8px 0;
