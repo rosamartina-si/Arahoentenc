@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fitxes pluja amb botons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+
+    canvas {
+      background-color: #ffffff;
+      display: block;
+    }
+
+    #scoreDisplay {
+      position: fixed;
+      font-size: 18px;
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
+      right: 20px;
+      top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      #scoreDisplay {
+        top: auto;
+        bottom: 160px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        font-size: 16px;
+      }
+    }
+
+    #restartButton {
+      bottom: 100px;
+      display: none;
+      font-size: 20px;
+      padding: 12px 30px;
+      background-color: #607d8b;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #restartButton:hover {
+      background-color: #455a64;
+      transform: translateX(-50%) scale(1.05);
+    }
+
+    #feedback {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+    }
+
+    #feedback.correct { color: green; }
+    #feedback.incorrect { color: red; }
+
+    #buttonContainer {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    #buttonContainer button {
+      flex: 1 1 auto;
+      padding: 12px 18px;
+      font-size: 18px;
+      font-weight: bold;
+      min-width: 100px;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #buttonContainer button:hover {
+      background-color: #1976d2;
+      transform: scale(1.05);
+    }
+
+    #modalOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffffee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      padding-top: 40px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+
+    #modalOverlay h2, #modalOverlay h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    #modalOverlay p {
+      font-size: 16px;
+      margin: 8px 0;
+      max-width: 500px;
+    }
+
+    #startButton {
+      margin-top: 30px;
+      margin-bottom: 40px;
+      font-size: 20px;
+      padding: 10px 30px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #startButton:hover {
+      background-color: #388e3c;
+    }
+
+    @media (min-width: 800px) {
+      #modalOverlay {
+        padding-left: 100px;
+        padding-right: 100px;
+      }
+
+      #modalOverlay p, #modalOverlay h2, #modalOverlay h3 {
+        max-width: 800px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Reinicia</button>
+  <div id="feedback"></div>
+
+  <script>
+    // Configuració del joc
+    const config = {
+      "lang": "ca",
+      "audio": false,
+      "title": "Hi ha / N'hi ha",
+      "objective": "Llegeix cada frase i tria la forma correcta: <strong>hi ha</strong> o <strong>n'hi ha</strong>.",
+      "explanation": [
+        "<strong>hi ha</strong> ➔ afirma que existeix alguna cosa. Exemple: <em>Hi ha tres gats al jardí.</em>",
+        "<strong>n'hi ha</strong> ➔ expressa quantitat després d'una negació o d'un quantitatiu. Exemple: <em>No en queda cap, n'hi ha zero.</em>",
+        "Recorda: <em>n'hi ha</em> substitueix un complement introduït per «de» o un numeral pronominal."
+      ],
+      "buttons": ["hi ha", "n'hi ha"],
+      "questions": [
+        { "sentence": "___ moltes estrelles al cel aquesta nit.",      "answer": "hi ha" },
+        { "sentence": "Quants llibres hi ha a la prestatgeria? ___ deu.", "answer": "n'hi ha" },
+        { "sentence": "Al mercat ___ fruita molt fresca.",             "answer": "hi ha" },
+        { "sentence": "A la nevera no queda llet; ja no ___.",         "answer": "n'hi ha" },
+        { "sentence": "___ dues cadires lliures al fons de la sala.",  "answer": "hi ha" },
+        { "sentence": "Després de repartir-ne, només ___ una.",        "answer": "n'hi ha" },
+        { "sentence": "Saps si ___ prou temps per acabar?",            "answer": "hi ha" },
+        { "sentence": "De patates, ___ poques.",                       "answer": "n'hi ha" },
+        { "sentence": "___ una proposta interessant sobre la taula.",  "answer": "hi ha" },
+        { "sentence": "A la classe no ___ cap alumne nou.",            "answer": "hi ha" },
+        { "sentence": "Encara ___ esperança.",                         "answer": "hi ha" },
+        { "sentence": "D'exàmens, aquesta setmana ___ dos.",           "answer": "n'hi ha" },
+        { "sentence": "De menjar, ___ suficient per a tothom.",        "answer": "n'hi ha" },
+        { "sentence": "___ un concert al parc diumenge.",              "answer": "hi ha" },
+        { "sentence": "___ boira espessa aquest matí.",                "answer": "hi ha" },
+        { "sentence": "___ un error al formulari.",                    "answer": "hi ha" },
+        { "sentence": "De pastissets, ja no ___; els hem venut tots.", "answer": "n'hi ha" }
+      ]
+    };
+
+    // Inicialització del joc
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const restartButton = document.getElementById('restartButton');
+    const feedback = document.getElementById('feedback');
+    const buttonContainer = document.getElementById('buttonContainer');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    let currentLang = config.lang;
+    let useAudio = config.audio;
+    let sentences = [], current = null;
+    let y = 0, speed = 0.4, active = false, paused = false, canAdvance = true;
+    let score = 0, total = 0, incorrectSentences = [];
+    let animationFrameId;
+
+    // Funcions del joc
+    function renderModal() {
+      const { title, objective, explanation } = config;
+      modalOverlay.innerHTML = `
+        <h2>🎯 ${title}</h2>
+        <p>${objective}</p>
+        <hr style="margin: 20px 0; width: 80%;" />
+        <h3>📘 Explicació gramatical</h3>
+        ${explanation.map(p => `<p>${p}</p>`).join('')}
+        <hr style="margin: 20px 0; width: 80%;" />
+        <p>🔄 Cada vegada l'exercici és diferent.</p>
+        <button id="startButton">Entesos! Comencem</button>
+      `;
+      document.getElementById('startButton').addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+        createButtons();
+        initGame();
+      });
+    }
+
+    function createButtons() {
+      buttonContainer.innerHTML = '';
+      config.buttons.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        btn.onclick = () => handleClick(option, btn);
+        buttonContainer.appendChild(btn);
+      });
+    }
+
+    function initGame() {
+      cancelAnimationFrame(animationFrameId);
+      sentences = [...config.questions].sort(() => 0.5 - Math.random()).slice(0, 10);
+      current = null;
+      y = 0;
+      active = true;
+      paused = false;
+      canAdvance = true;
+      score = 0;
+      total = 0;
+      incorrectSentences = [];
+      restartButton.style.display = 'none';
+      updateScore();
+      nextSentence();
+      draw();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `Puntuació: ${score} / 10`;
+    }
+
+    function showFeedback(message, className) {
+      feedback.textContent = message;
+      feedback.className = className;
+      feedback.style.display = 'block';
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 2000);
+    }
+
+    function nextSentence() {
+      if (sentences.length === 0) {
+        showFeedback(`Puntuació final: ${score} / 10`, 'correct');
+        active = false;
+        restartButton.style.display = 'block';
+        restartButton.onclick = () => initGame();
+        return;
+      }
+      current = sentences.shift();
+      y = 0;
+      canAdvance = true;
+      setAnswerButtonsEnabled(true);
+    }
+
+    function draw() {
+      if (!active || paused) {
+        animationFrameId = requestAnimationFrame(draw);
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (current) {
+        if (canAdvance) y += speed;
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        wrapText(ctx, current.sentence, y, canvas.width * 0.8, 30);
+
+        if (y > canvas.height && canAdvance) {
+          canAdvance = false;
+          showFeedback(`Resposta: ${current.answer}`, 'incorrect');
+          total++;
+          updateScore();
+          nextSentence();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(draw);
+    }
+
+    function handleClick(userAnswer, button) {
+      setAnswerButtonsEnabled(false);
+      animateButtonClick(button);
+      checkAnswer(userAnswer);
+    }
+
+    function checkAnswer(userAnswer) {
+      const fullSentenceOk = current.sentence.replace('___', userAnswer);
+
+      if (current && userAnswer === current.answer) {
+        showFeedback('✓ Correcte!', 'correct');
+        canAdvance = false;
+        score++;
+        total++;
+        updateScore();
+        setTimeout(nextSentence, 1500);
+      } else {
+        showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
+        canAdvance = false;
+        incorrectSentences.push({ ...current, userAnswer });
+        total++;
+        updateScore();
+        setTimeout(nextSentence, 1500);
+      }
+    }
+
+    function animateButtonClick(button) {
+      button.style.transition = 'transform 0.1s, background-color 0.3s';
+      button.style.transform = 'scale(0.95)';
+      button.style.backgroundColor = '#ffc107';
+      setTimeout(() => {
+        button.style.transform = 'scale(1)';
+        button.style.backgroundColor = '';
+      }, 150);
+    }
+
+    function setAnswerButtonsEnabled(enabled) {
+      const buttons = buttonContainer.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = !enabled);
+    }
+
+    function wrapText(context, text, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const testWidth = context.measureText(testLine).width;
+        if (testWidth > maxWidth && n > 0) {
+          const lineX = (canvas.width - context.measureText(line).width) / 2;
+          context.fillText(line, lineX, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      const lineX = (canvas.width - context.measureText(line).width) / 2;
+      context.fillText(line, lineX, y);
+    }
+
+    // Iniciar el joc
+    renderModal();
+  </script>
+</body>
+</html>
