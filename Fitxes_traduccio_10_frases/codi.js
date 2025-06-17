@@ -40,3 +40,10 @@ function generaExercici(frases) {
     <div id="resultat"></div>
   `;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof frases !== 'undefined') {
+    const inicial = shuffle(frases).slice(0, 10);
+    generaExercici(inicial);
+  }
+});
