@@ -1,22 +1,24 @@
-// codi.js - Versió corregida
-
-// Elements del DOM
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
 const scoreDisplay = document.getElementById('scoreDisplay');
 const restartButton = document.getElementById('restartButton');
 const feedback = document.getElementById('feedback');
 const buttonContainer = document.getElementById('buttonContainer');
 const modalOverlay = document.getElementById('modalOverlay');
 
-// Variables del joc
-let currentLang, useAudio, config;
 let sentences = [], current = null;
 let y = 0, speed = 0.4, active = false, paused = false, canAdvance = true;
 let score = 0, total = 0, incorrectSentences = [];
 let animationFrameId;
 
-// Funció per renderitzar el modal inicial
 function renderModal() {
   const { title, objective, explanation } = config;
   modalOverlay.innerHTML = `
@@ -31,33 +33,14 @@ function renderModal() {
   `;
   document.getElementById('startButton').addEventListener('click', () => {
     modalOverlay.style.display = 'none';
-    startGame();
+    createButtons();
+    initGame();
   });
 }
 
-function startGame() {
-  // Reinicia les variables del joc
-  sentences = [...config.questions].sort(() => 0.5 - Math.random()).slice(0, 10);
-  current = null;
-  y = 0;
-  active = true;
-  score = 0;
-  total = 0;
-  
-  // Configura elements UI
-  restartButton.style.display = 'none';
-  updateScore();
-  createButtons(config.buttons);
-  
-  // Inicia el bucle del joc
-  nextSentence();
-  draw();
-}
-
-// Funció per crear els botons d'opció
-function createButtons(buttons) {
+function createButtons() {
   buttonContainer.innerHTML = '';
-  buttons.forEach(option => {
+  config.buttons.forEach(option => {
     const btn = document.createElement('button');
     btn.textContent = option;
     btn.onclick = () => handleClick(option, btn);
@@ -65,12 +48,27 @@ function createButtons(buttons) {
   });
 }
 
-// Funció per actualitzar la puntuació
+function initGame() {
+  cancelAnimationFrame(animationFrameId);
+  sentences = [...config.questions].sort(() => 0.5 - Math.random()).slice(0, 10);
+  current = null;
+  y = 0;
+  active = true;
+  paused = false;
+  canAdvance = true;
+  score = 0;
+  total = 0;
+  incorrectSentences = [];
+  restartButton.style.display = 'none';
+  updateScore();
+  nextSentence();
+  draw();
+}
+
 function updateScore() {
   scoreDisplay.textContent = `Puntuació: ${score} / 10`;
 }
 
-// Funció per mostrar feedback
 function showFeedback(message, className) {
   feedback.textContent = message;
   feedback.className = className;
@@ -80,10 +78,12 @@ function showFeedback(message, className) {
   }, 2000);
 }
 
-// Funció per passar a la següent frase
 function nextSentence() {
   if (sentences.length === 0) {
-    endGame();
+    showFeedback(`Puntuació final: ${score} / 10`, 'correct');
+    active = false;
+    restartButton.style.display = 'block';
+    restartButton.onclick = () => initGame();
     return;
   }
   current = sentences.shift();
@@ -92,14 +92,6 @@ function nextSentence() {
   setAnswerButtonsEnabled(true);
 }
 
-function endGame() {
-  showFeedback(`Puntuació final: ${score} / 10`, 'correct');
-  active = false;
-  restartButton.style.display = 'block';
-  restartButton.onclick = startGame;
-}
-
-// Funció principal de dibuix
 function draw() {
   if (!active || paused) {
     animationFrameId = requestAnimationFrame(draw);
@@ -107,49 +99,50 @@ function draw() {
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
   if (current) {
     if (canAdvance) y += speed;
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
-    wrapText(current.sentence, y);
+    wrapText(ctx, current.sentence, y, canvas.width * 0.8, 30);
+
+    if (y > canvas.height && canAdvance) {
+      canAdvance = false;
+      showFeedback(`Resposta: ${current.answer}`, 'incorrect');
+      total++;
+      updateScore();
+      nextSentence();
+    }
   }
 
   animationFrameId = requestAnimationFrame(draw);
 }
 
-// Versió simplificada de wrapText
-function wrapText(text, yPos) {
-  const x = canvas.width / 2;
-  ctx.textAlign = 'center';
-  ctx.fillText(text, x, yPos);
-}
-
-// Funció per gestionar clics als botons
 function handleClick(userAnswer, button) {
   setAnswerButtonsEnabled(false);
   animateButtonClick(button);
   checkAnswer(userAnswer);
 }
 
-// Funció per comprovar respostes
 function checkAnswer(userAnswer) {
-  if (userAnswer === current.answer) {
+  if (current && userAnswer === current.answer) {
     showFeedback('✓ Correcte!', 'correct');
+    canAdvance = false;
     score++;
+    total++;
+    updateScore();
+    setTimeout(nextSentence, 1500);
   } else {
     showFeedback(`✗ Incorrecte. Resposta: ${current.answer}`, 'incorrect');
+    canAdvance = false;
     incorrectSentences.push({ ...current, userAnswer });
+    total++;
+    updateScore();
+    setTimeout(nextSentence, 1500);
   }
-  
-  total++;
-  updateScore();
-  canAdvance = false;
-  setTimeout(nextSentence, 1500);
 }
 
-// Funció per animar els botons
 function animateButtonClick(button) {
+  button.style.transition = 'transform 0.1s, background-color 0.3s';
   button.style.transform = 'scale(0.95)';
   button.style.backgroundColor = '#ffc107';
   setTimeout(() => {
@@ -158,31 +151,28 @@ function animateButtonClick(button) {
   }, 150);
 }
 
-// Funció per habilitar/deshabilitar botons
 function setAnswerButtonsEnabled(enabled) {
   const buttons = buttonContainer.querySelectorAll('button');
   buttons.forEach(btn => btn.disabled = !enabled);
 }
 
-// Funció d'inicialització del joc
-function initGame(cfg) {
-  config = cfg;
-  currentLang = config.lang || 'ca';
-  useAudio = config.audio !== false;
-  
-  // Configura el canvas
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  
-  // Inicia el joc
-  renderModal();
+function wrapText(context, text, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const testWidth = context.measureText(testLine).width;
+    if (testWidth > maxWidth && n > 0) {
+      const lineX = (canvas.width - context.measureText(line).width) / 2;
+      context.fillText(line, lineX, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  const lineX = (canvas.width - context.measureText(line).width) / 2;
+  context.fillText(line, lineX, y);
 }
 
-// Exporta la funció initGame
-window.initGame = initGame;
-
-// Gestió de redimensionament
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+renderModal();
