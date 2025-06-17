@@ -29,7 +29,7 @@ function renderModal() {
     ${explanation.map(p => `<p>${p}</p>`).join('')}
     <hr style="margin: 20px 0; width: 80%;" />
     <p>🔄 Each time the exercise is different.</p>
-    <button id="startButton">Got it! Let's start</button>
+    <button id="startButton">Entesos! Comencem</button>
   `;
   document.getElementById('startButton').addEventListener('click', () => {
     modalOverlay.style.display = 'none';
