@@ -1,44 +1,61 @@
-{
-  "lang": "en",
-  "audio": true,
-  
-  "title": "They / Them / Their",
-  "objective": "Llegeix cada frase i tria la paraula correcta: <strong>they</strong>, <strong>them</strong> o <strong>their</strong>.",
-"explanation": [
-  "<strong>they</strong> ➔ subject (e.g. <em>They are happy</em>).",
-  "<strong>them</strong> ➔ object (e.g. <em>I saw them</em>).",
-  "<strong>their</strong> ➔ possessive (e.g. <em>Their dog is cute</em>)."
-],
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>They / Them / Their</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Restart</button>
+  <div id="feedback"></div>
 
-
-  "buttons": ["they", "them", "their"],
-
-  "questions": [
-    { "sentence": "___ are my friends from school.", "answer": "they" },
-    { "sentence": "I saw ___ at the cinema yesterday.", "answer": "them" },
-    { "sentence": "This is ___ house.", "answer": "their" },
-    { "sentence": "___ play football every weekend.", "answer": "they" },
-    { "sentence": "I helped ___ with homework.", "answer": "them" },
-    { "sentence": "We visited ___ grandparents last week.", "answer": "their" },
-    { "sentence": "Can you give this to ___?", "answer": "them" },
-    { "sentence": "Do you know ___ names?", "answer": "their" },
-    { "sentence": "___ are always late!", "answer": "they" },
-    { "sentence": "___ cat is very playful.", "answer": "their" },
-    { "sentence": "___ went to the zoo yesterday.", "answer": "they" },
-    { "sentence": "I want to go with ___.", "answer": "them" },
-    { "sentence": "This is ___ favorite book.", "answer": "their" },
-    { "sentence": "The teacher asked ___ a question.", "answer": "them" },
-    { "sentence": "___ live next to my house.", "answer": "they" },
-    { "sentence": "I gave the present to ___.", "answer": "them" },
-    { "sentence": "The children forgot ___ lunch.", "answer": "their" },
-    { "sentence": "___ don't want to come with us.", "answer": "they" },
-    { "sentence": "We need to call ___ now.", "answer": "them" },
-    { "sentence": "I like ___ new car.", "answer": "their" },
-    { "sentence": "___ love to play games.", "answer": "they" },
-    { "sentence": "Tell ___ to be careful!", "answer": "them" },
-    { "sentence": "Do you think ___ will come to the party?", "answer": "they" },
-    { "sentence": "The teacher told ___ to sit down.", "answer": "them" },
-    { "sentence": "Why did you call ___ so early?", "answer": "them" },
-    { "sentence": "___ don't understand the question.", "answer": "they" }
-  ]
-}
+  <script>
+    const config = {
+      lang: "en",
+      audio: true,
+      title: "They / Them / Their",
+      objective: "Read each sentence and choose the correct word: <strong>they</strong>, <strong>them</strong>, or <strong>their</strong>.",
+      explanation: [
+        "<strong>they</strong> ➔ subject (e.g. <em>They are happy</em>).",
+        "<strong>them</strong> ➔ object (e.g. <em>I saw them</em>).",
+        "<strong>their</strong> ➔ possessive (e.g. <em>Their dog is cute</em>)."
+      ],
+      buttons: ["they", "them", "their"],
+      questions: [
+        { sentence: "___ are my friends from school.", answer: "they" },
+        { sentence: "I saw ___ at the cinema yesterday.", answer: "them" },
+        { sentence: "This is ___ house.", answer: "their" },
+        { sentence: "___ play football every weekend.", answer: "they" },
+        { sentence: "I helped ___ with homework.", answer: "them" },
+        { sentence: "We visited ___ grandparents last week.", answer: "their" },
+        { sentence: "Can you give this to ___?", answer: "them" },
+        { sentence: "Do you know ___ names?", answer: "their" },
+        { sentence: "___ are always late!", answer: "they" },
+        { sentence: "___ cat is very playful.", answer: "their" },
+        { sentence: "___ went to the zoo yesterday.", answer: "they" },
+        { sentence: "I want to go with ___.", answer: "them" },
+        { sentence: "This is ___ favorite book.", answer: "their" },
+        { sentence: "The teacher asked ___ a question.", answer: "them" },
+        { sentence: "___ live next to my house.", answer: "they" },
+        { sentence: "I gave the present to ___.", answer: "them" },
+        { sentence: "The children forgot ___ lunch.", answer: "their" },
+        { sentence: "___ don't want to come with us.", answer: "they" },
+        { sentence: "We need to call ___ now.", answer: "them" },
+        { sentence: "I like ___ new car.", answer: "their" },
+        { sentence: "___ love to play games.", answer: "they" },
+        { sentence: "Tell ___ to be careful!", answer: "them" },
+        { sentence: "Do you think ___ will come to the party?", answer: "they" },
+        { sentence: "The teacher told ___ to sit down.", answer: "them" },
+        { sentence: "Why did you call ___ so early?", answer: "them" },
+        { sentence: "___ don't understand the question.", answer: "they" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
