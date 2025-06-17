@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paraules amb M i N</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Reinicia</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "ca",
+      audio: false,
+      title: "Paraules amb m / n / mm / nn / mp / mn",
+      objective: "Tria la lletra que falta: <strong>m</strong> o <strong>n</strong>. La paraula apareix amb un espai en blanc al lloc de la <em>m</em>, <em>n</em>, <em>mm</em>, <em>nn</em>, <em>mp</em> o <em>mn</em>.",
+      explanation: [
+        "<u><strong>Regles ortogràfiques: M vs N</strong></u>",
+        "En català, l'ús de les consonants <strong>m</strong> i <strong>n</strong> davant altres consonants pot generar dubtes perquè sovint sonen molt semblants.",
+        "",
+        "<u><strong>Quan s'escriu <em>M</em>?</strong></u>",
+        "Davant <strong>b</strong>: <em>bomba, àmbit, ombra, cambra</em>. Excepcions: <em>Canberra, Istanbul</em>.",
+        "Davant <strong>p</strong>: <em>comprar, company, ample, camperol</em>. Excepcions: compostos amb <em>ben-</em> (<em>benplantat, benparlat, benmereixent</em>).",
+        "Davant <strong>m</strong> (doble m): <em>commoure, emmarcar, immens</em>. Excepcions: prefixos <em>ben-, tan-, gran-, en-</em> (<em>benmirat, tanmateix, enmig</em>).",
+        "Davant <strong>f</strong>: <em>amfiteatre, àmfora, nimfa, triomf, èmfasi, simfonia, samfaina</em>. Excepcions: prefixos <em>con-, en-, in-</em> (<em>confessió, enfocar, infant</em>) i paraules especials: <em>fanfarró, fanfara</em>.",
+        "Prefix <strong>circum-</strong>: <em>circumferència, circumscripció</em>.",
+        "Grups especials <strong>mp</strong> (amb <em>p muda</em>): <em>assumpte, compte, temptar, temps, exempció, redempció, símptoma, presumpció, peremptori</em>.",
+        "",
+        "<u><strong>Quan s'escriu <em>N</em>?</strong></u>",
+        "Davant <strong>v</strong>: <em>canvi, convent, envestir, invent</em>. Excepcions: <em>tramvia, triumvir, circumval·lació</em>.",
+        "Davant <strong>f</strong> amb prefixos <em>con-, en-, in-</em>: <em>conferència, enfadar, infermer</em>.",
+        "Grups especials <strong>mn</strong>: <em>alumne, amnistia, columna, solemne, somni</em>.",
+        "Grups especials <strong>nn</strong>: <em>Anna, annex, innocent, perenne, innat, connectar</em>.",
+        "Davant la resta de consonants: <em>enviar, encendre, enriquir, endins, enganxar, enllaç, enrere, entre</em>. Excepcions: <em>comte, empremta, impremta, premsa, somriure, gimcana, zumzeig, femta, Samsó</em>.",
+        "",
+        "<u><strong>Distinció especial:</strong></u>",
+        "conte: narració breu (El conte infantil).",
+        "comte/comtessa: títol nobiliari (El comte Arnau).",
+        "compte: càlcul o atenció (Anar amb compte, Obrir un compte al banc)."
+      ],
+      buttons: ["m", "n", "mm", "nn", "mp", "mn"],
+      questions: [
+        { "sentence": "e___ig", "answer": "nm" },
+        { "sentence": "e___arcat", "answer": "mm" },
+        { "sentence": "i___ens", "answer": "mm" },
+        { "sentence": "e___arcar", "answer": "mm" },
+        { "sentence": "a___istat", "answer": "m" },
+        { "sentence": "co___oció", "answer": "mm" },
+        { "sentence": "i___ediat", "answer": "mm" },
+        { "sentence": "e___urallar", "answer": "mm" },
+        { "sentence": "i___ortal", "answer": "mm" },
+        { "sentence": "a___b", "answer": "m" },
+        { "sentence": "e___plenar", "answer": "m" },
+        { "sentence": "i___utable", "answer": "mm" },
+        { "sentence": "i___ensitat", "answer": "mm" },
+        { "sentence": "e___blema", "answer": "m" },
+        { "sentence": "a___biguetat", "answer": "m" },
+        { "sentence": "Ca___berra", "answer": "n" },
+        { "sentence": "Ista___bul", "answer": "n" },
+        { "sentence": "be___plantat", "answer": "n" },
+        { "sentence": "be___parlat", "answer": "n" },
+        { "sentence": "be___irat", "answer": "nm" },
+        { "sentence": "ta___ateix", "answer": "nm" },
+        { "sentence": "gra___ent", "answer": "nm" },
+        { "sentence": "e___ig", "answer": "nm" },
+        { "sentence": "fa___farró", "answer": "n" },
+        { "sentence": "è___fasi", "answer": "m" },
+        { "sentence": "tra___via", "answer": "m" },
+        { "sentence": "gi___cana", "answer": "m" },
+        { "sentence": "so___riure", "answer": "m" },
+        { "sentence": "hà___ster", "answer": "m" },
+        { "sentence": "pre___sa", "answer": "m" },
+        { "sentence": "e___premta", "answer": "m" },
+        { "sentence": "fe___ta", "answer": "m" },
+        { "sentence": "i___premta", "answer": "m" },
+        { "sentence": "zu___zeig", "answer": "m" },
+        { "sentence": "alu___e", "answer": "mn" },
+        { "sentence": "a___èsia", "answer": "mn" },
+        { "sentence": "a___istia", "answer": "mn" },
+        { "sentence": "calú___ia", "answer": "mn" },
+        { "sentence": "colu___a", "answer": "mn" },
+        { "sentence": "conde___a", "answer": "mn" },
+        { "sentence": "so___i", "answer": "mn" },
+        { "sentence": "so___àmbul", "answer": "mn" },
+        { "sentence": "gi___às", "answer": "mn" },
+        { "sentence": "hi___e", "answer": "mn" },
+        { "sentence": "inde___e", "answer": "mn" },
+        { "sentence": "inde___itzar", "answer": "mn" },
+        { "sentence": "sole___e", "answer": "mn" },
+        { "sentence": "___emotècnic", "answer": "mn" },
+        { "sentence": "o___ipotent", "answer": "mn" },
+        { "sentence": "o___ipresent", "answer": "mn" },
+        { "sentence": "co___oció", "answer": "mm" },
+        { "sentence": "e___arcar", "answer": "mm" },
+        { "sentence": "i___ens", "answer": "mm" },
+        { "sentence": "i___ersió", "answer": "mm" },
+        { "sentence": "co___batre", "answer": "m" },
+        { "sentence": "co___binació", "answer": "m" },
+        { "sentence": "co___partir", "answer": "m" },
+        { "sentence": "a___ple", "answer": "m" },
+        { "sentence": "a___bició", "answer": "m" },
+        { "sentence": "ca___s", "answer": "mp" },
+        { "sentence": "lla___s", "answer": "mp" },
+        { "sentence": "te___s", "answer": "mp" },
+        { "sentence": "su___tuós", "answer": "mp" },
+        { "sentence": "te___tar", "answer": "mp" },
+        { "sentence": "sú___toma", "answer": "mp" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
