@@ -7,14 +7,11 @@
 </head>
 <body>
 
-<h1>Traducció: Abans de sortir...</h1>
+<h1>Practica els verbs irregulars en passat</h1>
 <p>
   Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
 </p>
-<p>
-  Les frases expliquen accions que el nen <strong>havia de fer abans de sortir a jugar</strong>. Utilitza el modal <strong>had to</strong>.
-</p>
-<p><strong>Exemple:</strong> He hagut de fer els deures abans de sortir a jugar. → <em>I had to do my homework before I went out to play.</em></p>
+<p>Tradueix aquestes frases del català a l'anglès (passat simple). Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta i escoltar la frase correcta.</p>
 
 <!-- Pots triar: center (per defecte), left o right -->
 <div class="image left">
@@ -28,21 +25,72 @@
   
 <script>
   // Frases a traduir (actualitza aquest array a cada fitxa)
-  const frases = [
-  ["He hagut de fer el llit abans de sortir.", ["I had to make my bed before I went out."]],
-  ["He hagut de preparar la motxilla abans de jugar.", ["I had to pack my backpack before I played."]],
-  ["He hagut de rentar els plats abans d’anar al parc.", ["I had to wash the dishes before I went to the park."]],
-  ["He hagut de trucar la meva àvia abans de veure els meus amics.", ["I had to call my grandmother before I saw my friends."]],
-  ["He hagut de posar‑me les sabates abans de sortir.", ["I had to put on my shoes before I went out."]],
-  ["He hagut de rentar‑me la cara abans de sortir.", ["I had to wash my face before I went out."]],
-  ["He hagut de recollir els meus joguets abans de jugar.", ["I had to pick up my toys before I played."]],
-  ["He hagut de posar la taula abans d’anar al parc.", ["I had to set the table before I went to the park."]],
-  ["He hagut de fer una trucada abans de veure els meus amics.", ["I had to make a phone call before I saw my friends."]],
-  ["He hagut de canviar‑me de roba abans de sortir.", ["I had to change my clothes before I went out."]]
+const frases = [
+  ["Ell era al parc.", ["He was in the park"], "🏞️"],
+  ["Nosaltres ens vam fer amics.", ["We became friends"], "🤝"],
+  ["Ella va començar la festa.", ["She began the party"], "🎉"],
+  ["Ell va trencar la finestra.", ["He broke the window"], "🪟"],
+  ["La meva germana va portar un pastís.", ["My sister brought a cake"], "🍰"],
+  ["Van construir una casa al camp.", ["They built a house in the countryside"], "🏠"],
+  ["Vas comprar un regal per a mi.", ["You bought a present for me"], "🎁"],
+  ["Ell va atrapar la pilota.", ["He caught the ball"], "⚾"],
+  ["Vam escollir la millor foto.", ["We chose the best picture"], "🖼️"],
+  ["Vaig venir a la teva festa.", ["I came to your party"], "🎊"],
+  ["Allò va costar molts diners.", ["It cost a lot of money"], "💰"],
+  ["Ella va tallar el formatge.", ["She cut the cheese"], "🔪"],
+  ["Nosaltres vam fer la tasca junts.", ["We did the task together"], "✅"],
+  ["Ell va dibuixar un retrat.", ["He drew a portrait"], "🖌️"],
+  ["La meva amiga va beure suc.", ["My friend drank juice"], "🧃"],
+  ["Tu vas conduir fins a Madrid.", ["You drove to madrid"], "🚗"],
+  ["Vam menjar poma al matí.", ["We ate an apple in the morning"], "🍎"],
+  ["Ella va caure a la piscina.", ["She fell into the pool"], "🏊"],
+  ["Ens vam sentir molt contents.", ["We felt very happy"], "😄"],
+  ["Ell va trobar un rellotge vell.", ["He found an old watch"], "⌚"],
+  ["Vam volar a Londres.", ["We flew to london"], "✈️"],
+  ["Ella va oblidar les claus.", ["She forgot the keys"], "🔑"],
+  ["Ell va aconseguir una feina nova.", ["He got a new job"], "💼"],
+  ["Ells van donar un regal a la mestra.", ["They gave a present to the teacher"], "🎁"],
+  ["La meva cosina va anar al cinema.", ["My cousin went to the cinema"], "🎦"],
+  ["Ell va tenir un gosset ahir.", ["He had a puppy yesterday"], "🐶"],
+  ["Nosaltres vam sentir la cançó.", ["We heard the song"], "🎶"],
+  ["Ella va guardar el secret.", ["She kept the secret"], "🤐"],
+  ["Ells van saber la veritat.", ["They knew the truth"], "💡"],
+  ["Vas marxar massa d’hora.", ["You left too early"], "🏃"],
+  ["Jo vaig deixar diners al meu amic.", ["I lent money to my friend"], "💵"],
+  ["La professora em va deixar sortir.", ["The teacher let me go out"], "🚪"],
+  ["Ell va perdre el bitllet de tren.", ["He lost the train ticket"], "🎟️"],
+  ["Vam fer un pastís deliciós.", ["We made a delicious cake"], "🍰"],
+  ["Allò va significar molt per a nosaltres.", ["It meant a lot to us"], "❗"],
+  ["Ell va conèixer el president.", ["He met the president"], "🤝"],
+  ["Vosaltres vau pagar el sopar.", ["You paid for the dinner"], "💳"],
+  ["Ell va posar el llibre a la taula.", ["He put the book on the table"], "📖"],
+  ["Ella va llegir una novel·la curta.", ["She read a short novel"], "📚"],
+  ["Vam córrer 5 quilòmetres al matí.", ["We ran 5 kilometers in the morning"], "🏃"],
+  ["Ell va dir la veritat.", ["He said the truth"], "💬"],
+  ["Vaig veure un estel fugaç.", ["I saw a shooting star"], "🌠"],
+  ["Ell va vendre el cotxe vell.", ["He sold the old car"], "🚗"],
+  ["Nosaltres vam enviar una carta.", ["We sent a letter"], "✉️"],
+  ["Ella va col·locar la taula al pati.", ["She set the table in the yard"], "🍽️"],
+  ["Ell va ensenyar les fotos del viatge.", ["He showed the travel photos"], "🖼️"],
+  ["Vam tancar la finestra.", ["We shut the window"], "🪟"],
+  ["Ell es va asseure a la cadira.", ["He sat on the chair"], "💺"],
+  ["Jo vaig dormir vuit hores ahir.", ["I slept eight hours yesterday"], "😴"],
+  ["Ella va parlar anglès amb el turista.", ["She spoke english with the tourist"], "🇬🇧"],
+  ["Vam gastar tots els estalvis.", ["We spent all our savings"], "💸"],
+  ["Ell va estar dempeus tot el viatge.", ["He stood the entire trip"], "🧍"],
+  ["Ella va agafar un taxi.", ["She took a taxi"], "🚕"],
+  ["El professor ens va ensenyar matemàtiques.", ["The teacher taught us math"], "📐"],
+  ["Ell va explicar la història divertida.", ["He told the funny story"], "🤣"],
+  ["Nosaltres vam pensar en tu ahir.", ["We thought about you yesterday"], "🤔"],
+  ["Ella va entendre el problema ràpidament.", ["She understood the problem quickly"], "💡"],
+  ["Ell es va despertar tard avui.", ["He woke up late today"], "⏰"],
+  ["Jo vaig portar una jaqueta nova.", ["I wore a new jacket"], "🧥"],
+  ["Ells van guanyar el premi final.", ["They won the final prize"], "🏆"],
+  ["Vosaltres vau escriure un poema preciós.", ["You wrote a beautiful poem"], "✒️"]
+];
 
-  ];
 </script>
   
-<script src="../script.js"></script>
+<script src="../codi.js"></script>
 </body>
 </html>
