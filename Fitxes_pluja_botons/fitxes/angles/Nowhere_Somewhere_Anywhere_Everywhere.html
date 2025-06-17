@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nowhere / Somewhere / Anywhere / Everywhere</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Restart</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "en",
+      audio: true,
+      title: "Nowhere / Somewhere / Anywhere / Everywhere",
+      objective: "Choose the correct word: <strong>nowhere</strong>, <strong>somewhere</strong>, <strong>anywhere</strong>, or <strong>everywhere</strong>.",
+      explanation: [
+        "<strong>nowhere</strong> ➔ means ‘not in or at any place’. Used to express total absence (e.g., It's nowhere to be seen, You're going nowhere) and sometimes metaphorically (‘not progressing’).",
+        "<strong>somewhere</strong> ➔ means ‘in some place’ or ‘to some place’. Examples: Somewhere else (in another place), I left it somewhere or other, somewhere near us (not far from us).",
+        "<strong>anywhere</strong> ➔ means ‘in any place’. Often used in negative or interrogative sentences (e.g., We aren't going anywhere). In affirmatives, it can mean ‘wherever’ (e.g., He can go anywhere in the world).",
+        "<strong>everywhere</strong> ➔ means ‘in all places’. Used in positive sentences to express ubiquity (e.g., There was sand everywhere)."
+      ],
+      buttons: ["nowhere", "somewhere", "anywhere", "everywhere"],
+      questions: [
+        { sentence: "I left my keys ___ in the house.", answer: "somewhere" },
+        { sentence: "She looked ___ for her phone.", answer: "everywhere" },
+        { sentence: "There was ___ to sit in the park.", answer: "nowhere" },
+        { sentence: "We can't go ___ this weekend.", answer: "anywhere" },
+        { sentence: "He travels ___ for work.", answer: "everywhere" },
+        { sentence: "The dog must be hiding ___ in the house.", answer: "somewhere" },
+        { sentence: "I couldn't find help ___", answer: "anywhere" },
+        { sentence: "There is ___ to hide from the rain.", answer: "nowhere" },
+        { sentence: "She put her glasses ___ and forgot.", answer: "somewhere" },
+        { sentence: "I've looked ___, but I can't see him.", answer: "everywhere" },
+        { sentence: "We looked ___ for the dog", answer: "everywhere" },
+        { sentence: "There is ___ to run", answer: "nowhere" },
+        { sentence: "I can't see my phone ___", answer: "anywhere" },
+        { sentence: "They searched ___ for their lost cat", answer: "everywhere" },
+        { sentence: "There is ___ to park in this area", answer: "nowhere" },
+        { sentence: "I didn't find the book ___ in the library", answer: "anywhere" },
+        { sentence: "I haven't seen him ___ today", answer: "anywhere" },
+        { sentence: "You can't get good food ___ in this town", answer: "anywhere" },
+        { sentence: "We looked ___ for the missing keys", answer: "everywhere" },
+        { sentence: "There is ___ to hide from the storm", answer: "nowhere" },
+        { sentence: "I can't find my wallet ___", answer: "anywhere" },
+        { sentence: "She looked ___ for her glasses", answer: "everywhere" },
+        { sentence: "There's ___ to sit in this café", answer: "nowhere" },
+        { sentence: "He has traveled ___ in the last year", answer: "everywhere" },
+        { sentence: "I can't go ___ without my phone", answer: "anywhere" },
+        { sentence: "I've looked ___ for my keys", answer: "everywhere" },
+        { sentence: "You can't find peace ___ in the city", answer: "anywhere" },
+        { sentence: "We searched ___ for our missing bag", answer: "everywhere" },
+        { sentence: "There’s ___ to escape from the noise", answer: "nowhere" },
+        { sentence: "Can we go ___ on a weekend trip?", answer: "anywhere" },
+        { sentence: "The kids are hiding ___ in the house", answer: "everywhere" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
