@@ -95,3 +95,8 @@ button:hover {
   border-left: 4px solid #003366;
   font-size: 14px;
 }
+
+.icona {
+  font-size: 1.5em;
+  margin-left: 0.4em;
+}
