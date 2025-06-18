@@ -1,44 +1,26 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-  <meta charset="UTF-8" />
-  <title>Traducció: Expressions de temps</title>
-  <link rel="stylesheet" href="../estils.css" />
-</head>
-<body>
-
-<h1>Traducció: Les expressions de temps</h1>
-<p>
-  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
-</p>
-    <p>Per parlar del temps, fem servir <strong>in</strong> amb períodes llargs (mesos, anys, segles), <strong>on</strong> amb dies concrets i <strong>at</strong> amb hores o moments específics del dia.</p>
-    <p><strong>in + mesos / anys / segles</strong>: <em>in July, in 2023, in the 20th century</em>.</p>
-    <p><strong>on + dies</strong>: s'utilitza per a dies concrets: <em>on Monday, on my birthday</em>.</p>
-    <p><strong>at + hores / moments concrets</strong>: <em>at 5 o'clock, at noon, at night</em>.</p>
-    <p><strong>before / after</strong>: per indicar anterioritat o posterioritat. Ex: <em>before dinner, after school</em>.</p>
-    <p><strong>yesterday / today / tomorrow</strong>: es col·loquen habitualment al final de la frase: <em>I saw her yesterday</em>, <em>We will go tomorrow</em>. També poden anar al començament per donar èmfasi: <em>Yesterday, I saw her</em>. No es posen mai entre el subjecte i el verb.</p>
-    <p><strong>last night</strong>: No s'utilitza *yesterday night* per parlar de la nit anterior. La forma correcta és <em>last night</em>.</p>
-
-<!-- Pots triar: center (per defecte), left o right -->
-<div class="image left">
-  <img src="../Img/time-prepositions.jpg" alt="Preposicions de temps" />
-  <img src="../Img/prepositions-to-form-time-expressions.jpg" alt="Preposicions de temps" />
+<div class="nota">
+  <p><strong>Recorda:</strong> per parlar del temps, fem servir <strong>in</strong> amb períodes llargs (mesos, anys, segles), <strong>on</strong> amb dies concrets i <strong>at</strong> amb hores o moments específics del dia.</p>
+  <strong>Nota lingüística:</strong>
+  <ul>
+    <li><strong>on + dies</strong>: s'utilitza per a dies concrets: <em>on Monday, on my birthday</em>.</li>
+    <li><strong>in + mesos / anys / segles</strong>: <em>in July, in 2023, in the 20th century</em>.</li>
+    <li><strong>at + hores / moments concrets</strong>: <em>at 5 o'clock, at noon, at night</em>.</li>
+    <li><strong>before / after</strong>: per indicar anterioritat o posterioritat. Ex: <em>before dinner, after school</em>.</li>
+    <li><strong>yesterday / today / tomorrow</strong>: es col·loquen habitualment al final de la frase: <em>I saw her yesterday</em>, <em>We will go tomorrow</em>. També poden anar al començament per donar èmfasi: <em>Yesterday, I saw her</em>. No es posen mai entre el subjecte i el verb.</li>
+  <li><strong>last night</strong>: No s'utilitza *yesterday night* per parlar de la nit anterior. La forma correcta és <em>last night</em>.</li>
+  <li><strong>at + expressions especials</strong>: també es fa servir <em>at</em> amb algunes expressions concretes com <em>at night, at the weekend, at Christmas, at Easter, at the beginning of..., at the end of...</em>.</li>
+  </ul>
 </div>
-
-<div id="exercici"></div>
-<div id="controls"></div>
-
-
-    <p><strong>in + mesos / anys / segles</strong>: <em>in July, in 2023, in the 20th century</em>.</p>
-    <p><strong>on + dies</strong>: s'utilitza per a dies concrets: <em>on Monday, on my birthday</em>.</p>
-    <p><strong>at + hores / moments concrets</strong>: <em>at 5 o'clock, at noon, at night</em>.</p>
-    <p><strong>before / after</strong>: per indicar anterioritat o posterioritat. Ex: <em>before dinner, after school</em>.</p>
-    <p><strong>yesterday / today / tomorrow</strong>: es col·loquen habitualment al final de la frase: <em>I saw her yesterday</em>, <em>We will go tomorrow</em>. També poden anar al començament per donar èmfasi: <em>Yesterday, I saw her</em>. No es posen mai entre el subjecte i el verb.</p>
-
 
 <!-- Primer carreguem les frases -->
 <script>
   const frases = [
+    ["Dormim a la nit.", ["We sleep at night."]],
+    ["Ens trobarem el cap de setmana.", ["We will meet at the weekend."]],
+    ["Celebrem el Nadal amb la família.", ["We celebrate at Christmas with the family."]],
+    ["Anem a missa per Pasqua.", ["We go to church at Easter."]],
+    ["Va parlar al començament de la lliçó.", ["He spoke at the beginning of the lesson."]],
+    ["Ens veurem al final del mes.", ["We will see each other at the end of the month."]],
     ["Vaig anar a l'escola dilluns.", ["I went to school on Monday."]],
     ["Ell va néixer el 2009.", ["He was born in 2009."]],
     ["Vam sopar a les 8.", ["We had dinner at 8 o'clock."]],
@@ -66,6 +48,7 @@
     ["La festa va començar a mitjanit.", ["The party started at midnight."]],
     ["Ens vam veure el cap de setmana.", ["We saw each other on the weekend."]],
     ["Ell va estudiar a l'estiu.", ["He studied in the summer."]],
+    ["Va passar el Nadal amb la seva família.", ["He spent Christmas with his family."]],
     ["El concert és el 4 de juliol.", ["The concert is on July 4th."]],
     ["Van marxar després del cap de setmana.", ["They left after the weekend."]]
   ];
