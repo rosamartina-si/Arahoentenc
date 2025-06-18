@@ -57,7 +57,7 @@ function renderModal() {
   `;
   document.getElementById('startButton').addEventListener('click', () => {
     modalOverlay.style.display = 'none';
-    createButtons();
+    createInputUI();
     initGame();
   });
 }
