@@ -205,6 +205,9 @@ function animateButtonClick(button) {
 function setAnswerButtonsEnabled(enabled) {
   const buttons = buttonContainer.querySelectorAll('button');
   buttons.forEach(btn => btn.disabled = !enabled);
+  
+  const input = buttonContainer.querySelector('input');
+  if (input) input.disabled = !enabled;
 }
 
 function wrapText(context, text, y, maxWidth, lineHeight) {
