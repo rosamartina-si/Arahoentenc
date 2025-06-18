@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traducció: Les preposicions de temps</title>
+  <link rel="stylesheet" href="../estils.css" />
+</head>
+<body>
+
+<h1>Traducció: Les preposicions de temps</h1>
+<p>
+  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
+</p>
+
+<!-- Pots triar: center (per defecte), left o right -->
+<div class="image left">
+  <img src="../Img/temps.png" alt="Nen amb rellotge i calendari" />
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<div class="nota">
+  <strong>Nota lingüística:</strong>
+  <ul>
+    <li><strong>in + mesos / anys / segles</strong>: <em>in July, in 2023, in the 20th century</em>.</li>
+    <li><strong>on + dies</strong>: s'utilitza per a dies concrets: <em>on Monday, on my birthday</em>.</li>
+    <li><strong>at + hores / moments concrets</strong>: <em>at 5 o'clock, at noon, at night</em>.</li>
+    <li><strong>before / after</strong>: per indicar anterioritat o posterioritat. Ex: <em>before dinner, after school</em>.</li>
+    <li><strong>yesterday / today / tomorrow</strong>: es col·loquen habitualment al final de la frase: <em>I saw her yesterday</em>, <em>We will go tomorrow</em>. També poden anar al començament per donar èmfasi: <em>Yesterday, I saw her</em>. No es posen mai entre el subjecte i el verb.</li>
+  </ul>
+</div>
+
+<!-- Primer carreguem les frases -->
+<script>
+  const frases = [
+    ["Vaig anar a l'escola dilluns.", ["I went to school on Monday."]],
+    ["Ell va néixer el 2009.", ["He was born in 2009."]],
+    ["Vam sopar a les 8.", ["We had dinner at 8 o'clock."]],
+    ["Ella va estudiar al juliol.", ["She studied in July."]],
+    ["Jo vaig esmorzar abans de l'escola.", ["I had breakfast before school."]],
+    ["Ells van sortir després del dinar.", ["They went out after lunch."]],
+    ["Avui he llegit un llibre.", ["I read a book today."]],
+    ["Ahir vam veure una pel·lícula.", ["We watched a movie yesterday."]],
+    ["Demà anirem al parc.", ["We will go to the park tomorrow."]],
+    ["El meu aniversari és al novembre.", ["My birthday is in November."]],
+    ["Vam veure focs artificials la nit de Cap d'Any.", ["We saw fireworks on New Year's Eve."]],
+    ["Van arribar a la una del migdia.", ["They arrived at one in the afternoon."]],
+    ["Sempre estudio a la nit.", ["I always study at night."]],
+    ["Vam fer l'examen al maig.", ["We took the exam in May."]],
+    ["Ell treballa els dilluns.", ["He works on Mondays."]],
+    ["Vaig dinar abans de marxar.", ["I had lunch before leaving."]],
+    ["Ella va fer els deures després del berenar.", ["She did her homework after the snack."]],
+    ["Aniré de vacances el 2025.", ["I will go on holiday in 2025."]],
+    ["Ens veurem demà al matí.", ["We will see each other tomorrow morning."]],
+    ["Vaig escriure la carta ahir a la nit.", ["I wrote the letter last night."]],
+    ["Vam arribar a l'escola a les vuit.", ["We arrived at school at eight o'clock."]],
+    ["Vaig fer l'exàmen el dilluns passat.", ["I took the exam last Monday."]],
+    ["Ell va marxar abans de l'esmorzar.", ["He left before breakfast."]],
+    ["Treballarem en aquest projecte al setembre.", ["We will work on this project in September."]],
+    ["La festa va començar a mitjanit.", ["The party started at midnight."]],
+    ["Ens vam veure el cap de setmana.", ["We saw each other on the weekend."]],
+    ["Ell va estudiar a l'estiu.", ["He studied in the summer."]],
+    ["Va passar el Nadal amb la seva família.", ["He spent Christmas with his family."]],
+    ["El concert és el 4 de juliol.", ["The concert is on July 4th."]],
+    ["Van marxar després del cap de setmana.", ["They left after the weekend."]]
+  ];
+</script>
+
+<!-- Després carreguem la lògica -->
+<script src="../script.js"></script>
+
+</body>
+</html>
