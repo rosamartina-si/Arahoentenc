@@ -1,1 +1,58 @@
-mode: "buttons", // o bé "text"
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fitxa pluja amb botons - Mal o Malament</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Reinicia</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "ca", // o bé en
+      audio: true, // o bé false
+      mode: "buttons", // o bé "text"
+      title: "Mal o Malament",
+      objective: "Llegeix cada frase i tria la forma correcta: <strong>mal</strong> o <strong>malament</strong>.",
+      explanation: [
+        "<strong>mal</strong> ➔ és un adjectiu o un nom. Exemples: <em>Tinc mal a la cama.</em>,  <em>Això està mal organitzat.</em>",
+        "<strong>malament</strong> ➔ és un adverbvi i acompanya verbs. Exemple: <em>Ho has fet malament.</em>",
+        "Recorda: <em>malament</em> respon a la pregunta 'com?' i modifica l'acció del verb."
+      ],
+      buttons: ["mal", "malament"],
+      questions: [
+        { sentence: "Has escrit ___ el teu nom.", answer: "malament" },
+        { sentence: "Els nens es porten ___ avui.", answer: "malament" },
+        { sentence: "Aquest sofà està ___ dissenyat.", answer: "mal" },
+        { sentence: "Els estudiants han entès ___ l'explicació.", answer: "malament" },
+        { sentence: "No parlis ___ dels teus amics.", answer: "malament" },
+        { sentence: "Hem interpretat ___ les seves paraules.", answer: "malament" },
+        { sentence: "Aquesta porta està ___ pintada.", answer: "mal" },
+        { sentence: "Els jugadors han jugat ___ aquest partit.", answer: "malament" },
+        { sentence: "El pa està ___ fet; és massa dur.", answer: "mal" },
+        { sentence: "He calculat ___ les distàncies.", answer: "malament" },
+        { sentence: "Els resultats estan ___ organitzats.", answer: "mal" },
+        { sentence: "Has pronunciat ___ aquesta paraula.", answer: "malament" },
+        { sentence: "Aquest quadre està ___ penjat.", answer: "mal" },
+        { sentence: "Els alumnes han resolt ___ els problemes.", answer: "malament" },
+        { sentence: "La resposta està ___ formulada.", answer: "mal" },
+        { sentence: "Has conduït ___ per aquest carrer.", answer: "malament" },
+        { sentence: "Aquest text està ___ traduït.", answer: "mal" },
+        { sentence: "Has connectat ___ els cables; no funciona.", answer: "malament" },
+        { sentence: "Aquesta foto està ___ enfocada; es veu borrosa.", answer: "mal" },
+        { sentence: "Els llibres estan ___ col·locats a l'estanteria.", answer: "mal" },
+        { sentence: "Els documents estan ___ numerats; no segueixen l'ordre.", answer: "mal" },
+        { sentence: "Has programat ___ l'alarma; no ha sonat.", answer: "malament" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
