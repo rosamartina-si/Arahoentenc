@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descarregar Vídeos TV3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        #videoUrl {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #CC0000; /* Vermell TV3 */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #AA0000;
+        }
+        #result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f8f8f8;
+        }
+        .instructions {
+            font-size: 14px;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📺 Descarregar Vídeos de TV3</h1>
+    
+    <input type="text" id="videoUrl" 
+           placeholder="Enganxa aquí l'enllaç del vídeo (ex: https://www.ccma.cat/tv3/alacarta/programa/video/123456/)">
+    
+    <button onclick="processVideo()">Descarregar Vídeo</button>
+    
+    <div id="result"></div>
+    
+    <div class="instructions">
+        <p><strong>Com funciona:</strong></p>
+        <ol>
+            <li>Ves a la pàgina del vídeo a <a href="https://www.ccma.cat/tv3/alacarta/" target="_blank">TV3 a la carta</a></li>
+            <li>Copia l'enllaç del vídeo</li>
+            <li>Enganxa'l a la casella superior</li>
+            <li>Fes clic al botó i espera que comenci la descàrrega</li>
+        </ol>
+    </div>
+
+    <script>
+        function processVideo() {
+            const url = document.getElementById('videoUrl').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            
+            if (!url) {
+                showError('Si us plau, enganxa un enllaç de TV3');
+                return;
+            }
+
+            const videoId = extractVideoId(url);
+            
+            if (!videoId) {
+                showError('Enllaç no reconegut. Assegura\'t que és un vídeo de TV3');
+                return;
+            }
+
+            // Utilitza el reproductor de TV3 com a proxy de descàrrega
+            const downloadUrl = `https://player.tv3.cat/vod/ccma/mp4/${videoId}.mp4`;
+            
+            resultDiv.innerHTML = '<p>🔍 Preparant descàrrega...</p>';
+            
+            // Prova a obrir l'enllaç directament
+            setTimeout(() => {
+                window.open(downloadUrl, '_blank');
+                resultDiv.innerHTML += `<p>Si no comença la descàrrega, <a href="${downloadUrl}" target="_blank">fes clic aquí</a></p>`;
+            }, 500);
+        }
+
+        function extractVideoId(url) {
+            const patterns = [
+                /\/video\/(\d+)\//,  // Pattern normal
+                /\/\d+\/(\d+)\//     // Pattern alternatiu
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            
+            return null;
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p style="color:red">❌ ${message}</p>`;
+        }
+    </script>
+</body>
+</html>
