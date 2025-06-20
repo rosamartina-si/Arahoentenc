@@ -73,6 +73,11 @@ function createInputUI() {
       buttonContainer.appendChild(btn);
     });
   } else if (config.mode === 'text') {
+    const form = document.createElement('div');
+    form.style.display = 'flex';
+    form.style.gap = '10px';
+    form.style.alignItems = 'center';
+    
     const input = document.createElement('input');
     input.type = 'text';
     input.placeholder = 'Escriu la resposta...';
@@ -81,32 +86,34 @@ function createInputUI() {
     input.style.borderRadius = '8px';
     input.style.border = '1px solid #ccc';
     input.style.minWidth = '200px';
-
+    input.style.flexGrow = '1';
+    
+    // Autofocus al camp d'entrada
+    input.autofocus = true;
+    
     const submitBtn = document.createElement('button');
     submitBtn.textContent = '✅ Envia';
     submitBtn.onclick = () => {
-      const resposta = input.value.trim();
-      if (resposta !== '') {
-        handleClick(resposta, submitBtn);
-      }
+      handleClick(input.value.trim(), submitBtn);
+      input.value = ''; // Neteja el camp després d'enviar
+      input.focus(); // Manté el focus en el camp
     };
 
-    // 🔑 Detectar Enter/Return per enviar
-    input.addEventListener('keydown', (e) => {
+    // Enviament amb tecla Enter
+    input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        e.preventDefault();
         submitBtn.click();
       }
     });
 
-    buttonContainer.appendChild(input);
-    buttonContainer.appendChild(submitBtn);
-
-    // 🔎 Donar focus automàtic al camp de text
-    setTimeout(() => input.focus(), 0);
+    form.appendChild(input);
+    form.appendChild(submitBtn);
+    buttonContainer.appendChild(form);
+    
+    // Assegura el focus si per alguna raó no funciona autofocus
+    setTimeout(() => input.focus(), 100);
   }
 }
-
 
 
 function initGame() {
