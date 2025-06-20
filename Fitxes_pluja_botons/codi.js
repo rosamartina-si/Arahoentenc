@@ -80,6 +80,7 @@ function createInputUI() {
     
     const input = document.createElement('input');
     input.type = 'text';
+    input.id = 'answerInput'; // Afegim un ID per facilitar l'accés
     input.placeholder = 'Escriu la resposta...';
     input.style.fontSize = '18px';
     input.style.padding = '10px';
@@ -88,15 +89,15 @@ function createInputUI() {
     input.style.minWidth = '200px';
     input.style.flexGrow = '1';
     
-    // Autofocus al camp d'entrada
+    // Autofocus inicial
     input.autofocus = true;
-    
+
     const submitBtn = document.createElement('button');
     submitBtn.textContent = '✅ Envia';
     submitBtn.onclick = () => {
       handleClick(input.value.trim(), submitBtn);
-      input.value = ''; // Neteja el camp després d'enviar
-      input.focus(); // Manté el focus en el camp
+      input.value = '';
+      // No fem focus aquí perquè ho gestionarem a nextSentence()
     };
 
     // Enviament amb tecla Enter
@@ -110,8 +111,30 @@ function createInputUI() {
     form.appendChild(submitBtn);
     buttonContainer.appendChild(form);
     
-    // Assegura el focus si per alguna raó no funciona autofocus
+    // Focus inicial assegurat
     setTimeout(() => input.focus(), 100);
+  }
+}
+
+// Modifiquem nextSentence() per gestionar el focus
+function nextSentence() {
+  if (sentences.length === 0) {
+    showFeedback(`${translations[config.lang].finalScore}: ${score} / 10`, 'correct');
+    active = false;
+    restartButton.style.display = 'block';
+    restartButton.onclick = () => initGame();
+    return;
+  }
+  current = sentences.shift();
+  y = 0;
+  canAdvance = true;
+  setAnswerButtonsEnabled(true);
+  
+  // Tornem a posar el focus al camp d'entrada
+  const input = document.getElementById('answerInput');
+  if (input) {
+    input.value = ''; // Netegem el camp
+    setTimeout(() => input.focus(), 50); // Petita pausa per assegurar que està disponible
   }
 }
 
