@@ -65,7 +65,7 @@ function renderModal() {
 function createInputUI() {
   buttonContainer.innerHTML = '';
 
-  if (config.mode === 'buttons') {
+  if (config.mode === 'botons') {
     config.buttons.forEach(option => {
       const btn = document.createElement('button');
       btn.textContent = option;
