@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Cercador de Frases en PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
+        button { padding: 10px; margin: 10px 0; }
+        .result { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .frase { margin-bottom: 10px; padding: 8px; background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <h1>Cercador de Frases en PDF</h1>
+    <input type="file" id="pdfFile" accept=".pdf">
+    <br>
+    <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar)">
+    <button onclick="searchPDF()">Cercar</button>
+    
+    <div id="results" class="result"></div>
+
+    <script>
+        async function searchPDF() {
+            const file = document.getElementById('pdfFile').files[0];
+            const searchText = document.getElementById('searchText').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            
+            if (!file || !searchText) {
+                alert("Puja un PDF i introdueix un text a cercar.");
+                return;
+            }
+
+            resultsDiv.innerHTML = "<p>Processant PDF...</p>";
+            
+            // Configura pdf.js
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+            const reader = new FileReader();
+            
+            reader.onload = async function(e) {
+                try {
+                    const typedArray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedArray).promise;
+                    let allText = "";
+                    
+                    // Llegeix totes les pàgines
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        allText += pageText + " ";
+                    }
+                    
+                    // Separa frases (simplificat) i cerca
+                    const frases = allText.split(/[.!?]+/).filter(frase => 
+                        frase.toLowerCase().includes(searchText)
+                    );
+                    
+                    // Mostra resultats
+                    if (frases.length === 0) {
+                        resultsDiv.innerHTML = `<p>No s'han trobat frases amb "${searchText}".</p>`;
+                    } else {
+                        resultsDiv.innerHTML = `<h3>${frases.length} frases trobades amb "${searchText}":</h3>`;
+                        frases.forEach((frase, index) => {
+                            resultsDiv.innerHTML += `<div class="frase"><strong>Frase ${index + 1}:</strong> ${frase.trim()}.</div>`;
+                        });
+                    }
+                } catch (error) {
+                    resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>
