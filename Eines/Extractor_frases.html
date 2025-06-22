@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Cercador de Frases en PDF amb Regex</title>
+    <script src="libs/pdf.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .regex-options { margin: 10px 0; }
+        .regex-example { font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Cercador de Frases en PDF amb Regex</h1>
+    <input type="file" id="pdfFile" accept=".pdf">
+    <br>
+    <input type="text" id="searchText" placeholder="Text o regex (ex: alçar|aixecar)">
+    <div class="regex-options">
+        <label><input type="checkbox" id="regexCheckbox"> Utilitza expressió regular</label>
+        <div class="regex-example">Exemples: <code>alçar|aixecar</code>, <code>alç[a-z]*</code>, <code>^Alçar</code></div>
+    </div>
+    <button onclick="searchPDF()">Cercar</button>
+    <div id="results" class="result"></div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'libs/pdf.worker.min.js';
+
+        async function searchPDF() {
+            const file = document.getElementById('pdfFile').files[0];
+            const searchText = document.getElementById('searchText').value.trim();
+            const useRegex = document.getElementById('regexCheckbox').checked;
+            const resultsDiv = document.getElementById('results');
+            
+            if (!file || !searchText) {
+                alert("Puja un PDF i introdueix un patró de cerca.");
+                return;
+            }
+
+            resultsDiv.innerHTML = "<p>Processant PDF...</p>";
+            const reader = new FileReader();
+            
+            reader.onload = async function(e) {
+                try {
+                    const typedArray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedArray).promise;
+                    let allText = "";
+                    
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        allText += pageText + " ";
+                    }
+                    
+                    // Separa frases i aplica la cerca (amb o sense regex)
+                    const frases = allText.split(/[.!?]+/).filter(frase => {
+                        if (useRegex) {
+                            try {
+                                const regex = new RegExp(searchText, 'i'); // 'i' = insensible a majúscules
+                                return regex.test(frase);
+                            } catch (error) {
+                                alert(`Regex invàlida: ${error.message}`);
+                                return false;
+                            }
+                        } else {
+                            return frase.toLowerCase().includes(searchText.toLowerCase());
+                        }
+                    });
+                    
+                    // Mostra resultats
+                    if (frases.length === 0) {
+                        resultsDiv.innerHTML = `<p>No s'han trobat coincidències.</p>`;
+                    } else {
+                        resultsDiv.innerHTML = `
+                            <h3>${frases.length} frases trobades:</h3>
+                            <p><small>Patró: <code>${useRegex ? searchText : searchText.toLowerCase()}</code></small></p>
+                        `;
+                        frases.forEach((frase, index) => {
+                            // Ressalta el text coincident (si és regex)
+                            let fraseDestacada = frase.trim();
+                            if (useRegex) {
+                                const regex = new RegExp(`(${searchText})`, 'gi');
+                                fraseDestacada = fraseDestacada.replace(regex, '<mark>$1</mark>');
+                            }
+                            resultsDiv.innerHTML += `
+                                <div class="frase">
+                                    <strong>Frase ${index + 1}:</strong> ${fraseDestacada}.
+                                </div>
+                            `;
+                        });
+                    }
+                } catch (error) {
+                    resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>
