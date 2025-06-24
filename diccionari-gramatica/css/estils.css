@@ -1,0 +1,59 @@
+:root {
+    --color-primary: #4a6fa5;
+    --color-secondary: #e9f1f7;
+    --color-accent: #ff7e5f;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.search-box {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+}
+
+.dictionary-entry {
+    background: white;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+mark {
+    background-color: #ffeb3b;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* ... (altres estils del teu disseny original) ... */
