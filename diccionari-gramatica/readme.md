@@ -13,10 +13,18 @@ Utilitza asteriscs (`*`) per indicar paraules que han de coincidir exactament:
 
 ## Estructura del projecte
 
-- `index.html`: Pàgina principal
-- `js/cercador.js`: Lògica de cerca
-- `css/estils.css`: Estils CSS
-- `entrades/`: Carpeta amb totes les entrades en fitxers HTML separats
+diccionari-gramatica/
+├── index.html          # Pàgina principal
+├── readme.md          # Documentació (aquest arxiu)
+├── js/
+│   └── cercador.js    # Lògica de cerca
+├── css/
+│   └── estils.css     # Estils CSS
+└── entrades/
+    ├── alçar.html     # Entrada sobre el verb "alçar"
+    ├── gerundi.html   # Entrada sobre gerundis
+    ├── preposicions.html # Entrada sobre preposicions
+    └── ...            # Altres entrades
 
 ## Com afegir noves entrades
 
