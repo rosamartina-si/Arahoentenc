@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diccionari de Gramàtica Catalana</title>
+    <link rel="stylesheet" href="css/estils.css">
+</head>
+<body>
+    <header>
+        <h1>📘 Diccionari de Gramàtica Catalana</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Cerca (paraules exactes entre *)">
+            <small>Exemple: <code>*alçar* *mans*</code> buscarà entrades amb ambdues paraules exactes</small>
+        </div>
+
+        <div id="entries-container">
+            <!-- Les entrades es carregaran aquí dinàmicament -->
+        </div>
+    </div>
+
+    <script src="js/cercador.js"></script>
+</body>
+</html>
