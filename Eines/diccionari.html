@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diccionari de Gramàtica Catalana</title>
+    <style>
+        :root {
+            --color-primary: #4a6fa5;
+            --color-secondary: #e9f1f7;
+            --color-accent: #ff7e5f;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .search-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        .dictionary-entry {
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .entry-header {
+            background-color: var(--color-secondary);
+            padding: 1rem;
+            border-bottom: 2px solid var(--color-primary);
+        }
+        .entry-content {
+            padding: 1.5rem;
+        }
+        .usage-example {
+            background-color: #f5f5f5;
+            border-left: 4px solid var(--color-accent);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            font-style: italic;
+        }
+        .highlight {
+            background-color: #fffde7;
+            padding: 0.2rem;
+            border-radius: 3px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📘 Diccionari de Gramàtica Catalana</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Cerca un terme (ex: gerundi, alçar...)">
+        </div>
+
+        <!-- Entrada per als gerundis -->
+        <div class="dictionary-entry" data-category="morfologia">
+            <div class="entry-header">
+                <h2>📖 Gerundis en Català</h2>
+                <span class="tag">Morfologia</span>
+                <span class="tag">Verb</span>
+            </div>
+            <div class="entry-content">
+                <p><strong>Tots els gerundis tenen una connexió lògica i temporal directa amb el verb principal.</strong></p>
+                <p>La majoria de gerundis aporten informació circumstancial (manera, causa, temps).</p>
+                <p>El gerundi, en aquest corpus, s'utilitza per afegir informació complementària al verb principal, ja sigui per indicar:</p>
+                <ul>
+                    <li><span class="highlight">Com es fa l'acció</span> (manera)</li>
+                    <li><span class="highlight">Mentre es fa</span> (temps)</li>
+                    <li><span class="highlight">Amb quina finalitat</span> (causa)</li>
+                    <li><span class="highlight">Acció que s'hi afegeix lògicament</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Entrada per al verb "alçar" -->
+        <div class="dictionary-entry" data-category="verbs">
+            <div class="entry-header">
+                <h2>📘 Verb "Alçar"</h2>
+                <span class="tag">Verb</span>
+                <span class="tag">Moviment</span>
+            </div>
+            <div class="entry-content">
+                <p><strong>📝 Regla general d'ús:</strong></p>
+                <p>“Alçar” s'utilitza per expressar l'acció d'elevar o aixecar quelcom (una part del cos, un objecte, la veu, la mirada...) o bé de posar-se dret o en moviment vertical.</p>
+                
+                <p><strong>🔧 Principals construccions i usos observats:</strong></p>
+                
+                <h3>1. Alçar + [part del cos]</h3>
+                <p>Expressa el moviment d'elevar una part del cos:</p>
+                <div class="usage-example">Va alçar el cap per mirar.</div>
+                <div class="usage-example">Va alçar una mà per expressar-se.</div>
+                <p><span class="tag">✅</span> Sentit literal o expressiu: mirar, saludar, expressar, sentir...</p>
+                
+                <h3>2. Alçar + [objecte físic]</h3>
+                <p>Fer que un objecte s'elevi o s'aixequi:</p>
+                <div class="usage-example">Va alçar la guitarra.</div>
+                <div class="usage-example">Va alçar el llum.</div>
+                <p><span class="tag">✅</span> Sentit literal: moviment ascendent sobre un objecte.</p>
+                
+                <h3>3. Alçar-se (pronominal)</h3>
+                <p>Adoptar una posició vertical o posar-se dret (persona o cosa):</p>
+                <div class="usage-example">Es va alçar de la cadira.</div>
+                <div class="usage-example">La construcció va alçar-se sota el padrinatge de la ciència.</div>
+                <p><span class="tag">✅</span> Sentit reflexiu: posar-se dret, aixecar-se.</p>
+                
+                <h3>4. Alçar + veu/mirada/vista...</h3>
+                <p>Usos figurats o expressius:</p>
+                <div class="usage-example">Va alçar la veu (parlar més fort).</div>
+                <div class="usage-example">Alçaren el cap (en sentit d'afirmar).</div>
+                <p><span class="tag">✅</span> Sentit figurat: reivindicació, expressivitat, emoció.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funció de cerca simple
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const entries = document.querySelectorAll('.dictionary-entry');
+            
+            entries.forEach(entry => {
+                const text = entry.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    entry.style.display = 'block';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
