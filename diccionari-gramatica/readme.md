@@ -18,15 +18,19 @@
 | **alçar**, **aixecar** | `aixecar` | Exacte | TROBA |
 
 ## Estructura de Fitxers
-```
-diccionari/
-├── index.html
-├── css/
-│   └── estils.css
+
+diccionari-gramatica/
+├── index.html          # Pàgina principal
+├── readme.md          # Documentació (aquest arxiu)
 ├── js/
-│   └── cercador.js
-└── README.md
-```
+│   └── cercador.js    # Lògica de cerca
+├── css/
+│   └── estils.css     # Estils CSS
+└── entrades/
+    ├── alçar.html     # Entrada sobre el verb "alçar"
+    ├── gerundi.html   # Entrada sobre gerundis
+    ├── preposicions.html # Entrada sobre preposicions
+    └── ...            # Altres entrades
 
 ## Com Afegir Entrades
 1. Afegiu un nou `<div class="dictionary-entry">` a `index.html`
