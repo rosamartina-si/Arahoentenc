@@ -13,38 +13,16 @@
 
     <div class="container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Escriu paraules a cercar...">
+            <input type="text" id="searchInput" placeholder="Cerca (ex: alçar, gerundi...)">
             <div class="search-options">
-                <button class="search-option active" data-type="all">Cercar a tot arreu</button>
-                <button class="search-option" data-type="keywords">Només paraules clau</button>
-                <button class="search-option" data-type="exact">Coincidència exacta</button>
+                <button class="search-option active" data-type="all">Tots els textos</button>
+                <button class="search-option" data-type="titles">Només títols</button>
+                <button class="search-option" data-type="examples">Només exemples</button>
             </div>
-            <small>Marqueu les paraules clau amb <strong>**paraula**</strong> al contingut</small>
         </div>
 
         <div id="entries-container">
             <!-- Les entrades es carregaran aquí dinàmicament -->
-            <div class="dictionary-entry">
-                <div class="entry-header">
-                    <h2>El **gerundi**</h2>
-                </div>
-                <div class="entry-content">
-                    <p>El **gerundi** és una forma verbal no personal que acaba en **-ant**.</p>
-                    <p>S'utilitza per expressar acció simultània o **manera**.</p>
-                    <div class="usage-example">Exemple: **Cantant** s'aprèn.</div>
-                </div>
-            </div>
-
-            <div class="dictionary-entry">
-                <div class="entry-header">
-                    <h2>Verb **alçar**</h2>
-                </div>
-                <div class="entry-content">
-                    <p>**Alçar** significa posar quelcom en posició vertical o **elevar**-lo.</p>
-                    <p>El seu **participi** és **alçat**.</p>
-                    <div class="usage-example">**Va alçar** les mans.</div>
-                </div>
-            </div>
         </div>
     </div>
 
