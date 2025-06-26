@@ -40,6 +40,28 @@ header {
     font-size: 1rem;
     border: 2px solid #ddd;
     border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.search-options {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+
+.search-option {
+    padding: 5px 10px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.search-option.active {
+    background: var(--color-primary);
+    color: white;
 }
 
 .dictionary-entry {
@@ -50,10 +72,44 @@ header {
     overflow: hidden;
 }
 
+.entry-header {
+    background-color: var(--color-secondary);
+    padding: 1rem;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.entry-header h2 {
+    margin: 0;
+}
+
+.entry-content {
+    padding: 1.5rem;
+}
+
+.usage-example {
+    background-color: #f5f5f5;
+    border-left: 4px solid var(--color-accent);
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    font-style: italic;
+}
+
 mark {
     background-color: #ffeb3b;
     padding: 0 2px;
     border-radius: 2px;
 }
 
-/* ... (altres estils del teu disseny original) ... */
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .search-options {
+        flex-direction: column;
+    }
+    
+    .search-option {
+        width: 100%;
+    }
+}
