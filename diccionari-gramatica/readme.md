@@ -1,7 +1,5 @@
 # Diccionari de Gramàtica Catalana
 
-# Diccionari de Gramàtica Catalana
-
 ## Instruccions d'Ús
 
 ### Sistema de Cerca
