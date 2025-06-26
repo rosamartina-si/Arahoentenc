@@ -78,10 +78,6 @@ header {
     border-bottom: 2px solid var(--color-primary);
 }
 
-.entry-header h2 {
-    margin: 0;
-}
-
 .entry-content {
     padding: 1.5rem;
 }
@@ -92,6 +88,16 @@ header {
     padding: 0.5rem 1rem;
     margin: 0.5rem 0;
     font-style: italic;
+}
+
+.tag {
+    display: inline-block;
+    background-color: var(--color-accent);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
 }
 
 mark {
