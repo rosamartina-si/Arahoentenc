@@ -1,84 +1,83 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const entries = [
+        'entrades/alçar.html',
+        'entrades/gerundi.html'
+        // Afegeix aquí més entrades
+    ];
+    
+    const container = document.getElementById('entries-container');
     const searchInput = document.getElementById('searchInput');
     const searchOptions = document.querySelectorAll('.search-option');
     let currentSearchType = 'all';
     
-    // Configuració dels botons de cerca
+    // Configura els botons de cerca
     searchOptions.forEach(option => {
         option.addEventListener('click', function() {
             searchOptions.forEach(opt => opt.classList.remove('active'));
             this.classList.add('active');
             currentSearchType = this.dataset.type;
-            performSearch();
+            if (searchInput.value) performSearch();
         });
     });
     
+    // Carrega totes les entrades
+    function loadEntries() {
+        container.innerHTML = '';
+        entries.forEach(entry => {
+            fetch(entry)
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML += html;
+                    if (searchInput.value) performSearch();
+                })
+                .catch(error => {
+                    console.error(`Error carregant ${entry}:`, error);
+                });
+        });
+    }
+    
     // Funció principal de cerca
     function performSearch() {
-        const searchText = searchInput.value.trim().toLowerCase();
+        const searchTerm = searchInput.value.trim().toLowerCase();
         const entries = document.querySelectorAll('.dictionary-entry');
         
         entries.forEach(entry => {
-            // Neteja els ressaltats anteriors
-            entry.innerHTML = entry.innerHTML.replace(/\*\*([^*]+)\*\*/g, '$1')
-                                           .replace(/<mark>/g, '')
-                                           .replace(/<\/mark>/g, '');
-            
-            if (!searchText) {
-                entry.style.display = 'block';
-                return;
-            }
-            
             let searchContent = '';
-            const keywords = [];
             
-            // Extreure paraules clau marcades
-            entry.innerHTML.replace(/\*\*([^*]+)\*\*/g, (match, keyword) => {
-                keywords.push(keyword.toLowerCase());
-                return match;
-            });
-            
-            // Triar contingut a cercar segons opció
+            // Determina què cercar segons el tipus seleccionat
             switch(currentSearchType) {
-                case 'keywords':
-                    searchContent = keywords.join(' ');
+                case 'titles':
+                    searchContent = entry.querySelector('[data-search="title"]').textContent.toLowerCase();
                     break;
-                case 'exact':
-                    searchContent = keywords.join(' ');
+                case 'examples':
+                    const examples = entry.querySelectorAll('[data-search="example"]');
+                    searchContent = Array.from(examples).map(ex => ex.textContent).join(' ').toLowerCase();
                     break;
-                default:
+                default: // 'all'
                     searchContent = entry.textContent.toLowerCase();
             }
             
             // Fer la cerca
-            const searchWords = searchText.split(/\s+/).filter(w => w);
-            let matches = searchWords.every(word => {
-                if (currentSearchType === 'exact') {
-                    return keywords.some(kw => kw === word);
-                }
-                return searchContent.includes(word);
-            });
+            const words = searchTerm.split(/\s+/).filter(w => w);
+            let matches = words.length === 0 || words.every(word => 
+                searchContent.includes(word)
+            );
             
-            // Mostrar/amagar i ressaltar
             entry.style.display = matches ? 'block' : 'none';
             
-            if (matches) {
+            // Ressaltar coincidències
+            if (matches && searchTerm) {
                 let html = entry.innerHTML;
-                searchWords.forEach(word => {
+                words.forEach(word => {
                     const regex = new RegExp(`(${word})`, 'gi');
                     html = html.replace(regex, '<mark>$1</mark>');
-                    
-                    // Si és cerca exacta, ressaltar només paraules clau coincidents
-                    if (currentSearchType === 'exact') {
-                        html = html.replace(/\*\*([^*]+)\*\*/g, (match, kw) => {
-                            return kw.toLowerCase() === word ? `<mark>${kw}</mark>` : kw;
-                        });
-                    }
                 });
-                entry.innerHTML = html.replace(/\*\*([^*]+)\*\*/g, '$1');
+                entry.innerHTML = html;
             }
         });
     }
     
+    // Inicialitza
+    loadEntries();
     searchInput.addEventListener('input', performSearch);
 });
