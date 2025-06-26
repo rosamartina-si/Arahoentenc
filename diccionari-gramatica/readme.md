@@ -1,37 +1,38 @@
 # Diccionari de Gramàtica Catalana
 
-## Com funciona la cerca
+# Diccionari de Gramàtica Catalana
 
-Utilitza asteriscs (`*`) per indicar paraules que han de coincidir exactament:
+## Instruccions d'Ús
 
-| Cerca          | Resultats                                                                 |
-|----------------|---------------------------------------------------------------------------|
-| `*alçar*`      | Només entrades amb "alçar" exacte                                         |
-| `*alçar* *mans*` | Entrades que continguin ambdues paraules exactes                         |
-| `*alçar* veu`  | Entrades amb "alçar" exacte + "veu" en qualsevol part                    |
-| `subjuntiu`    | Cerca normal (sense exigir coincidència exacta)                          |
+### Sistema de Cerca
+1. **Marqueu les paraules clau** en el contingut amb doble asterisc: `**paraula**`
+2. **Seleccioneu el tipus de cerca**:
+   - **Cercar a tot arreu**: Cerca a tot el text
+   - **Només paraules clau**: Cerca només en paraules marcades (accepta parcials)
+   - **Coincidència exacta**: Cerca només paraules marcades que coincideixin exactament
 
-## Estructura del projecte
+### Exemples de Cerca
 
-diccionari-gramatica/
-├── index.html          # Pàgina principal
-├── readme.md          # Documentació (aquest arxiu)
-├── js/
-│   └── cercador.js    # Lògica de cerca
+| Paraules clau marcades | Cerca | Tipus | Resultat |
+|------------------------|-------|-------|----------|
+| **alçar**, **aixecar** | `alç` | Només paraules clau | TROBA (**alçar**) |
+| **alçar**, **aixecar** | `alç` | Exacte | NO troba |
+| **alçar**, **aixecar** | `aixecar` | Exacte | TROBA |
+
+## Estructura de Fitxers
+```
+diccionari/
+├── index.html
 ├── css/
-│   └── estils.css     # Estils CSS
-└── entrades/
-    ├── alçar.html     # Entrada sobre el verb "alçar"
-    ├── gerundi.html   # Entrada sobre gerundis
-    ├── preposicions.html # Entrada sobre preposicions
-    └── ...            # Altres entrades
+│   └── estils.css
+├── js/
+│   └── cercador.js
+└── README.md
+```
 
-## Com afegir noves entrades
+## Com Afegir Entrades
+1. Afegiu un nou `<div class="dictionary-entry">` a `index.html`
+2. Marqueu les paraules clau amb `**paraula**`
+3. Les paraules marcades es podran cercar amb els filtres especials
 
-1. Crea un nou fitxer HTML a la carpeta `entrades/` (ex: `verb-ser.html`)
-2. Utilitza l'estructura d'entrada mostrada a dalt
-3. Afegeix el camí del nou fitxer a l'array `entries` a `cercador.js`
 
-## Requisits
-
-Funciona en qualsevol navegador modern sense necessitat de servidor.
