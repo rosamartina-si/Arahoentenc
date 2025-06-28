@@ -36,7 +36,8 @@
             resultsDiv.innerHTML = "<p>Processant PDF...</p>";
             
             // Configura pdf.js
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+            <!-- pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';-->
+            pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.min.js';
             const reader = new FileReader();
             
             reader.onload = async function(e) {
