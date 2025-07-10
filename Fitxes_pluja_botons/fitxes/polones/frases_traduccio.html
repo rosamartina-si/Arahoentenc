@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Frases bàsiques en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Restart</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl", // "ca" per català o "en" per anglès (amb cometes)
+      audio: true, // true per activar àudio o false per desactivar (sense cometes)
+      mode: "text", // "text" per entrada de "text" o "botons" per mode de botons (amb cometes)
+      title: "Frases bàsiques en polonès",
+      objective: "Traducció de frases bàsiques del polonès al català",
+      explanation: [
+            "<strong>Pronunciació bàsica</strong> ➔ El polonès té sons especials com 'cz' (com 'tx' en català), 'sz' (com 'x' catalana), 'ż' (com 'j' francesa). L'accent tònic cau gairebé sempre en la penúltima síl·laba.",
+            "<strong>Gènere gramatical</strong> ➔ Com en català, té gèneres (masculí, femení, neutre) però amb més variants. Els adjectius s'han d'acordar amb el substantiu.",
+            "<strong>Casos gramaticals</strong> ➔ El polonès usa 7 casos (nominatiu, genitiu, datiu, etc.) que afecten les terminacions de les paraules, cosa que no existeix en català.",
+            "<strong>Formal i informal</strong> ➔ Com en català, hi ha tractaments formals ('Pan/Pani' per senyor/senyora) i informals ('ty' per tu).",
+            "<strong>Pronoms personals</strong> ➔ Sovint s'ometen perquè el verb ja indica la persona (Mówię = 'Jo parlo').",
+            "<strong>Negació</strong> ➔ Es fa amb 'nie' davant del verb (Nie rozumiem = 'No entenc'), similar al català.",
+            "<strong>Articles</strong> ➔ No existeixen articles ('el', 'la', 'un') en polonès. El context indica si és definit o indefinit."
+      ],
+      buttons: [],
+      questions: [
+        { sentence: "Dzień dobry", answer: "Bon dia" },
+        { sentence: "Dobry wieczór", answer: "Bona tarda / Bona nit" },
+        { sentence: "Do widzenia", answer: "Adéu" },
+        { sentence: "Cześć", answer: "Hola / Adéu informal" },
+        { sentence: "Dziękuję", answer: "Gràcies" },
+        { sentence: "Proszę", answer: "Si us plau / De res" },
+        { sentence: "Przepraszam", answer: "Perdó / Disculpa" },
+        { sentence: "Nie mówię po polsku", answer: "No parlo polonès" },
+        { sentence: "Czy mówisz po angielsku?", answer: "Parles anglès?" },
+        { sentence: "Nie rozumiem", answer: "No ho entenc" },
+        { sentence: "Tak", answer: "Sí" },
+        { sentence: "Nie", answer: "No" },
+        { sentence: "Ile to kosztuje?", answer: "Quant costa?" },
+        { sentence: "Gdzie jest toaleta?", answer: "On és el lavabo?" },
+        { sentence: "Pomocy!", answer: "Ajuda!" },
+        { sentence: "Jestem turystą", answer: "Sóc turista" },
+        { sentence: "Zgubiłem się", answer: "M'he perdut" },
+        { sentence: "Potrzebuję lekarza", answer: "Necessito un metge" },
+        { sentence: "Czy to jest daleko?", answer: "És lluny?" },
+        { sentence: "Która godzina?", answer: "Quina hora és?" },
+        { sentence: "Gdzie jest stacja?", answer: "On és l'estació?" },
+        { sentence: "Poproszę bilet", answer: "Un bitllet, si us plau" },
+        { sentence: "Na zdrowie!", answer: "Salut!" },
+        { sentence: "Smacznego!", answer: "Bon profit!" },
+        { sentence: "Gdzie mogę kupić bilet?", answer: "On puc comprar un bitllet?" },
+        { sentence: "Czy to jest dobre?", answer: "És bo?" },
+        { sentence: "Chciałbym to", answer: "M'agradaria això" },
+        { sentence: "Jestem uczulony na...", answer: "Sóc al·lèrgic a..." },
+        { sentence: "Czy mogę zapłacić kartą?", answer: "Puc pagar amb targeta?" },
+        { sentence: "Gotówką czy kartą?", answer: "Efectiu o targeta?" },
+        { sentence: "Potrzebuję pomocy", answer: "Necessito ajuda" },
+        { sentence: "Nie wiem", answer: "No ho sé" },
+        { sentence: "Jestem zmęczony", answer: "Estic cansat" },
+        { sentence: "Chcę odpocząć", answer: "Vull descansar" },
+        { sentence: "Jak się nazywasz?", answer: "Com et dius?" },
+        { sentence: "Nazywam się...", answer: "Em dic..." },
+        { sentence: "Miło mi cię poznać", answer: "Encantat de conèixer-te" },
+        { sentence: "Gdzie jest restauracja?", answer: "On és el restaurant?" },
+        { sentence: "Czy mogę prosić o menu?", answer: "Puc veure el menú?" },
+        { sentence: "Poproszę wodę", answer: "Aigua, si us plau" },
+        { sentence: "Poproszę piwo", answer: "Una cervesa, si us plau" },
+        { sentence: "Poproszę rachunek", answer: "El compte, si us plau" },
+        { sentence: "Mam rezerwację", answer: "Tinc una reserva" },
+        { sentence: "Nie mam rezerwacji", answer: "No tinc cap reserva" },
+        { sentence: "Ile to trwa?", answer: "Quant dura?" },
+        { sentence: "Gdzie mogę wymienić pieniądze?", answer: "On puc canviar diners?" },
+        { sentence: "To jest piękne", answer: "Això és bonic" },
+        { sentence: "To jest pyszne", answer: "Això és deliciós" },
+        { sentence: "To jest drogie", answer: "Això és car" },
+        { sentence: "To jest tanie", answer: "Això és barat" },
+        { sentence: "Zimno mi", answer: "Tinc fred" },
+        { sentence: "Gorąco mi", answer: "Tinc calor" },
+        { sentence: "Gdzie jest przystanek autobusowy?", answer: "On és la parada d'autobús?" },
+        { sentence: "Czy mogę zrobić zdjęcie?", answer: "Puc fer una foto?" },
+        { sentence: "Jak się masz?", answer: "Com estàs?" },
+        { sentence: "Dobrze, dziękuję", answer: "Estic bé, gràcies" },
+        { sentence: "Gdzie jest bankomat?", answer: "On és el caixer automàtic?" },
+        { sentence: "Czy to jest bezpieczne?", answer: "És segur?" },
+        { sentence: "Nie mam gotówki", answer: "No tinc efectiu" },
+        { sentence: "Nie mogę znaleźć...", answer: "No puc trobar..." },
+        { sentence: "Jestem głodny", answer: "Tinc gana" },
+        { sentence: "Jestem spragniony", answer: "Tinc set" },
+        { sentence: "Czy to jest otwarte?", answer: "Està obert?" },
+        { sentence: "Czy to jest zamknięte?", answer: "Està tancat?" },
+        { sentence: "Czy to jest dobre miejsce?", answer: "És un bon lloc?" },
+        { sentence: "Nie ma problemu", answer: "Cap problema" },
+        { sentence: "Spokojnie", answer: "Tranquil·litat" },
+        { sentence: "Na lewo", answer: "A l'esquerra" },
+        { sentence: "Na prawo", answer: "A la dreta" },
+        { sentence: "Prosto", answer: "Tot recte" },
+        { sentence: "Za rogiem", answer: "Al tombar la cantonada" },
+        { sentence: "W lewo", answer: "Gira a l'esquerra" },
+        { sentence: "W prawo", answer: "Gira a la dreta" },
+        { sentence: "Uważaj!", answer: "Compte!" },
+        { sentence: "To jest pilne", answer: "És urgent" },
+        { sentence: "Nie dotykaj", answer: "No toquis" },
+        { sentence: "Nie wolno", answer: "Prohibit" },
+        { sentence: "Gdzie to jest?", answer: "On és això?" },
+        { sentence: "Kiedy?", answer: "Quan?" },
+        { sentence: "Dlaczego?", answer: "Per què?" },
+        { sentence: "Jak?", answer: "Com?" },
+        { sentence: "Z kim?", answer: "Amb qui?" },
+        { sentence: "Dla mnie", answer: "Per a mi" },
+        { sentence: "Dla ciebie", answer: "Per a tu" },
+        { sentence: "Jestem gotowy", answer: "Estic llest" },
+        { sentence: "Nie jestem pewny", answer: "No n'estic segur" },
+        { sentence: "Nie mogę", answer: "No puc" },
+        { sentence: "Nie teraz", answer: "Ara no" },
+        { sentence: "Może później", answer: "Potser més tard" },
+        { sentence: "Czy to jest możliwe?", answer: "És possible?" },
+        { sentence: "Nie wiem, przepraszam", answer: "No ho sé, perdó" },
+        { sentence: "Miłego dnia!", answer: "Que tinguis un bon dia!" },
+        { sentence: "Do zobaczenia!", answer: "Fins aviat!" },
+        { sentence: "Miłej podróży!", answer: "Bon viatge!" },
+        { sentence: "Dobranoc", answer: "Bona nit" },
+        { sentence: "Czy mogę wejść?", answer: "Puc entrar?" },
+        { sentence: "Proszę mówić wolniej", answer: "Si us plau, parla més a poc a poc" },
+        { sentence: "Nie ma za co", answer: "De res" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
