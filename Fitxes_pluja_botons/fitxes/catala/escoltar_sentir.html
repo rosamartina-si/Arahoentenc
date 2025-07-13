@@ -17,8 +17,15 @@
   <script>
     const config = {
       lang: "ca", // "ca" o "en" (amb cometes)
-      audio: true, // true o false (sense cometes)
-      mode: "botons", // "text" o "botons" (amb cometes)
+      uiLang: "ca", // Força la UI en català (ignorant uiLangMap)
+      audio: true,  // true o false
+      mode: "pluja_botons", // "pluja_text" o "pluja_botons"
+      speed: 0.5, // Velocitat de baixada (0.1 = lent, 1 = ràpid)
+      speechRate: 0.7,    // Velocitat de pronunciació (0.5-2)
+      playAudioAtStart: false, // true o false: Pronunciar al començament de cada paraula
+      noteDisplayTime: 3, // Temps en segons que es mostren les notes (per defecte: 3)
+      enableRepeatButton: false, //Si volem que l'usuari pugui tornar a sentir l'àudio
+      
       title: "Mal o Malament",
       objective: "Llegeix cada frase i tria la forma correcta: <strong>mal</strong> o <strong>malament</strong>.",
       explanation: [
