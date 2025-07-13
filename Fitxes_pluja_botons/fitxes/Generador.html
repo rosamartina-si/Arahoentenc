@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Fitxes Polonès-Català</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; }
+    h1 { font-size: 24px; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input, select { width: 100%; margin-top: 5px; padding: 6px; font-size: 16px; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    pre { background: #f7f7f7; padding: 10px; white-space: pre-wrap; word-break: break-word; }
+    .columns-container { display: flex; gap: 10px; margin-top: 10px; }
+    .column { flex: 1; }
+    textarea { width: 100%; height: 300px; font-size: 14px; padding: 8px; }
+    .column-header { font-weight: bold; text-align: center; margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🎯 Generador d'arxiu HTML per a fitxes</h1>
+
+  <label for="lang">Llengua (lang):</label>
+  <input type="text" id="lang" value="pl-PL" />
+
+  <label for="uiLang">Llengua de la interfície (uiLang):</label>
+  <input type="text" id="uiLang" value="ca" />
+
+  <label for="title">Títol de l'activitat:</label>
+  <input type="text" id="title" value="Traducció Polonès-Català" />
+
+  <label for="objective">Objectiu:</label>
+  <input type="text" id="objective" value="Escriu la traducció correcta:" />
+
+  <label for="mode">Mode:</label>
+  <select id="mode">
+    <option value="pluja_text">Pluja de text</option>
+    <option value="pluja_botons">Pluja de botons</option>
+  </select>
+
+  <label for="speed">Velocitat (0.1 - 2):</label>
+  <input type="number" step="0.1" id="speed" value="0.5" />
+
+  <label for="speechRate">Velocitat de veu (0.5 - 2):</label>
+  <input type="number" step="0.1" id="speechRate" value="0.5" />
+
+  <label for="playAudioAtStart">Reproduir àudio a l'inici?</label>
+  <select id="playAudioAtStart">
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+
+  <label for="noteDisplayTime">Durada de les notes (en segons):</label>
+  <input type="number" id="noteDisplayTime" value="4" />
+
+  <label for="enableRepeatButton">Botó per repetir frase?</label>
+  <select id="enableRepeatButton">
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+
+  <label>Fitxes (una per línia, separades per columnes):</label>
+  <div class="columns-container">
+    <div class="column">
+      <div class="column-header">Pregunta (Polonès)</div>
+      <textarea id="questions-col1" placeholder="Dzień dobry\nDobry wieczór\nDo widzenia"></textarea>
+    </div>
+    <div class="column">
+      <div class="column-header">Resposta (Català)</div>
+      <textarea id="questions-col2" placeholder="Bon dia\nBona tarda\nAdéu"></textarea>
+    </div>
+    <div class="column">
+      <div class="column-header">Notes (Opcional)</div>
+      <textarea id="questions-col3" placeholder="📅 Usat fins a les 17h\n📅 Usat a partir de les 17h\nFormal"></textarea>
+    </div>
+  </div>
+
+  <button onclick="generateHTML()">Genera HTML</button>
+
+  <h2>Resultat:</h2>
+  <pre id="output"></pre>
+
+  <script>
+    function generateHTML() {
+      const config = {
+        lang: document.getElementById('lang').value,
+        uiLang: document.getElementById('uiLang').value,
+        title: document.getElementById('title').value,
+        objective: document.getElementById('objective').value,
+        mode: document.getElementById('mode').value,
+        speed: parseFloat(document.getElementById('speed').value),
+        speechRate: parseFloat(document.getElementById('speechRate').value),
+        playAudioAtStart: document.getElementById('playAudioAtStart').value === 'true',
+        noteDisplayTime: parseInt(document.getElementById('noteDisplayTime').value),
+        enableRepeatButton: document.getElementById('enableRepeatButton').value === 'true',
+        explanation: ["Afegiu aquí la vostra explicació gramatical si cal."],
+        questions: []
+      };
+
+      // Processar les columnes
+      const col1 = document.getElementById('questions-col1').value.split('\n');
+      const col2 = document.getElementById('questions-col2').value.split('\n');
+      const col3 = document.getElementById('questions-col3').value.split('\n');
+
+      const maxLines = Math.max(col1.length, col2.length, col3.length);
+      
+      for (let i = 0; i < maxLines; i++) {
+        const sentence = (col1[i] || '').trim();
+        const answer = (col2[i] || '').trim();
+        const notes = (col3[i] || '').trim();
+        
+        if (sentence && answer) {
+          const questionObj = { sentence, answer };
+          if (notes) questionObj.notes = notes;
+          config.questions.push(questionObj);
+        }
+      }
+
+      const htmlContent = `<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${config.title}</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Restart</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = ${JSON.stringify(config, null, 2)};
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>`;
+
+      document.getElementById('output').textContent = htmlContent;
+    }
+  </script>
+</body>
+</html>
