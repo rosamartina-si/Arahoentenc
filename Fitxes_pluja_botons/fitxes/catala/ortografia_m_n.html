@@ -16,9 +16,16 @@
 
   <script>
     const config = {
-      lang: "ca",
-      audio: true,
-      mode: "botons", // "text" o "botons" (amb cometes)
+      lang: "ca", // "ca" o "en" (amb cometes)
+      uiLang: "ca", // Força la UI en català (ignorant uiLangMap)
+      audio: true,  // true o false
+      mode: "pluja_botons", // "pluja_text" o "pluja_botons"
+      speed: 0.5, // Velocitat de baixada (0.1 = lent, 1 = ràpid)
+      speechRate: 0.7,    // Velocitat de pronunciació (0.5-2)
+      playAudioAtStart: false, // true o false: Pronunciar al començament de cada paraula
+      noteDisplayTime: 3, // Temps en segons que es mostren les notes (per defecte: 3)
+      enableRepeatButton: false, //Si volem que l'usuari pugui tornar a sentir l'àudio
+      
       title: "Paraules amb m / n / mm / nn / mp / mn",
       objective: "Tria la lletra que falta: <strong>m</strong> o <strong>n</strong>. La paraula apareix amb un espai en blanc al lloc de la <em>m</em>, <em>n</em>, <em>mm</em>, <em>nn</em>, <em>mp</em> o <em>mn</em>.",
       explanation: [
