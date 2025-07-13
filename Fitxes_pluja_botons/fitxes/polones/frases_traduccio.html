@@ -16,118 +16,518 @@
 
   <script>
     const config = {
-      lang: "en",
-      audio: true,
-      mode: "botons", // o "text" o "botons" (amb cometes)
-      title: "Nowhere / Somewhere / Anywhere / Everywhere 2",
-      objective: "Choose the correct word: <strong>nowhere</strong>, <strong>somewhere</strong>, <strong>anywhere</strong>, or <strong>everywhere</strong>.",
+      lang: "pl-PL",
+      uiLang: "ca", // Força la UI en català (ignorant uiLangMap)
+      audio: true,  // true o false
+      mode: "pluja_text", // "pluja_text" o "pluja_botons"
+      speed: 0.5, // Velocitat de baixada (0.1 = lent, 1 = ràpid)
+      speechRate: 0.5,    // Velocitat de pronunciació (0.5-2)
+      playAudioAtStart: true, // true o false: Pronunciar al començament de cada paraula
+      noteDisplayTime: 15, // Temps en segons que es mostren les notes (per defecte: 3)
+      enableRepeatButton: true, //Si volem que l'usuari pugui tornar a sentir l'àudio
+      title: "Traducció Polonès-Català",
+      objective: "Escriu la traducció correcta:",
       explanation: [
-            "<strong>nowhere</strong> ➔ ‘enlloc’. Expressa absència total (It's nowhere to be seen, You're going nowhere) i també s'usa en sentit figurat (‘no progressar’).",
-            "<strong>somewhere</strong> ➔ ‘en algun lloc, en alguna (part / banda)'. (Somewhere else en algun altre lloc, I left it somewhere or other ho vaig deixar en un lloc o altre, somewhere near us prop de nosaltres, no gaire lluny de casa nostra).",
-            "<strong>anywhere</strong> ➔ ‘a qualsevol lloc’. S'empra sobretot en frases negatives o interrogatives (We aren't going anywhere). En afirmatives pot significar ‘a qualsevol lloc del món’ / ‘pertot arreu’ (He can go anywhere in the world).",
-            "<strong>everywhere</strong> ➔ ‘a tot arreu’ o ‘pertot arreu’. Indica presència universal en frases afirmatives (There was sand everywhere)."
+        "PRONÚNCIA: Sons especials: cz=tx, sz=x, ż=j francesa. Accent a penúltima síl·laba.",
+        "VOCALS: a=mal, e=exèrcit, i=si, o=cosa, u/ó=suc, y=entre i/e",
+        "CONSONANTS: c=ts, ć=tx suau, h=jamón (cast), j=io, ł=w, w=v francesa, ż/rz=j",
+        "DÍGRAFS: ch=jamón, cz=tx, sz=x, dż=j fort",
+        "GRAMÀTICA: 7 casos, 3 gèneres, no articles, pronoms opcionals",
+        "FORMALITAT: Pan/Pani=senyor/senyora, ty=tu (informal)",
+        "NEGACIÓ: 'nie' davant verb (Nie rozumiem=No entenc)"
       ],
-      buttons: ["nowhere", "somewhere", "anywhere", "everywhere"],
-      questions: [
-        { sentence: "Dzień dobry", answer: "Bon dia" },
-        { sentence: "Dobry wieczór", answer: "Bona tarda / Bona nit" },
-        { sentence: "Do widzenia", answer: "Adéu" },
-        { sentence: "Cześć", answer: "Hola / Adéu informal" },
-        { sentence: "Dziękuję", answer: "Gràcies" },
-        { sentence: "Proszę", answer: "Si us plau / De res" },
-        { sentence: "Przepraszam", answer: "Perdó / Disculpa" },
-        { sentence: "Nie mówię po polsku", answer: "No parlo polonès" },
-        { sentence: "Czy mówisz po angielsku?", answer: "Parles anglès?" },
-        { sentence: "Nie rozumiem", answer: "No ho entenc" },
-        { sentence: "Tak", answer: "Sí" },
-        { sentence: "Nie", answer: "No" },
-        { sentence: "Ile to kosztuje?", answer: "Quant costa?" },
-        { sentence: "Gdzie jest toaleta?", answer: "On és el lavabo?" },
-        { sentence: "Pomocy!", answer: "Ajuda!" },
-        { sentence: "Jestem turystą", answer: "Sóc turista" },
-        { sentence: "Zgubiłem się", answer: "M'he perdut" },
-        { sentence: "Potrzebuję lekarza", answer: "Necessito un metge" },
-        { sentence: "Czy to jest daleko?", answer: "És lluny?" },
-        { sentence: "Która godzina?", answer: "Quina hora és?" },
-        { sentence: "Gdzie jest stacja?", answer: "On és l'estació?" },
-        { sentence: "Poproszę bilet", answer: "Un bitllet, si us plau" },
-        { sentence: "Na zdrowie!", answer: "Salut!" },
-        { sentence: "Smacznego!", answer: "Bon profit!" },
-        { sentence: "Gdzie mogę kupić bilet?", answer: "On puc comprar un bitllet?" },
-        { sentence: "Czy to jest dobre?", answer: "És bo?" },
-        { sentence: "Chciałbym to", answer: "M'agradaria això" },
-        { sentence: "Jestem uczulony na...", answer: "Sóc al·lèrgic a..." },
-        { sentence: "Czy mogę zapłacić kartą?", answer: "Puc pagar amb targeta?" },
-        { sentence: "Gotówką czy kartą?", answer: "Efectiu o targeta?" },
-        { sentence: "Potrzebuję pomocy", answer: "Necessito ajuda" },
-        { sentence: "Nie wiem", answer: "No ho sé" },
-        { sentence: "Jestem zmęczony", answer: "Estic cansat" },
-        { sentence: "Chcę odpocząć", answer: "Vull descansar" },
-        { sentence: "Jak się nazywasz?", answer: "Com et dius?" },
-        { sentence: "Nazywam się...", answer: "Em dic..." },
-        { sentence: "Miło mi cię poznać", answer: "Encantat de conèixer-te" },
-        { sentence: "Gdzie jest restauracja?", answer: "On és el restaurant?" },
-        { sentence: "Czy mogę prosić o menu?", answer: "Puc veure el menú?" },
-        { sentence: "Poproszę wodę", answer: "Aigua, si us plau" },
-        { sentence: "Poproszę piwo", answer: "Una cervesa, si us plau" },
-        { sentence: "Poproszę rachunek", answer: "El compte, si us plau" },
-        { sentence: "Mam rezerwację", answer: "Tinc una reserva" },
-        { sentence: "Nie mam rezerwacji", answer: "No tinc cap reserva" },
-        { sentence: "Ile to trwa?", answer: "Quant dura?" },
-        { sentence: "Gdzie mogę wymienić pieniądze?", answer: "On puc canviar diners?" },
-        { sentence: "To jest piękne", answer: "Això és bonic" },
-        { sentence: "To jest pyszne", answer: "Això és deliciós" },
-        { sentence: "To jest drogie", answer: "Això és car" },
-        { sentence: "To jest tanie", answer: "Això és barat" },
-        { sentence: "Zimno mi", answer: "Tinc fred" },
-        { sentence: "Gorąco mi", answer: "Tinc calor" },
-        { sentence: "Gdzie jest przystanek autobusowy?", answer: "On és la parada d'autobús?" },
-        { sentence: "Czy mogę zrobić zdjęcie?", answer: "Puc fer una foto?" },
-        { sentence: "Jak się masz?", answer: "Com estàs?" },
-        { sentence: "Dobrze, dziękuję", answer: "Estic bé, gràcies" },
-        { sentence: "Gdzie jest bankomat?", answer: "On és el caixer automàtic?" },
-        { sentence: "Czy to jest bezpieczne?", answer: "És segur?" },
-        { sentence: "Nie mam gotówki", answer: "No tinc efectiu" },
-        { sentence: "Nie mogę znaleźć...", answer: "No puc trobar..." },
-        { sentence: "Jestem głodny", answer: "Tinc gana" },
-        { sentence: "Jestem spragniony", answer: "Tinc set" },
-        { sentence: "Czy to jest otwarte?", answer: "Està obert?" },
-        { sentence: "Czy to jest zamknięte?", answer: "Està tancat?" },
-        { sentence: "Czy to jest dobre miejsce?", answer: "És un bon lloc?" },
-        { sentence: "Nie ma problemu", answer: "Cap problema" },
-        { sentence: "Spokojnie", answer: "Tranquil·litat" },
-        { sentence: "Na lewo", answer: "A l'esquerra" },
-        { sentence: "Na prawo", answer: "A la dreta" },
-        { sentence: "Prosto", answer: "Tot recte" },
-        { sentence: "Za rogiem", answer: "Al tombar la cantonada" },
-        { sentence: "W lewo", answer: "Gira a l'esquerra" },
-        { sentence: "W prawo", answer: "Gira a la dreta" },
-        { sentence: "Uważaj!", answer: "Compte!" },
-        { sentence: "To jest pilne", answer: "És urgent" },
-        { sentence: "Nie dotykaj", answer: "No toquis" },
-        { sentence: "Nie wolno", answer: "Prohibit" },
-        { sentence: "Gdzie to jest?", answer: "On és això?" },
-        { sentence: "Kiedy?", answer: "Quan?" },
-        { sentence: "Dlaczego?", answer: "Per què?" },
-        { sentence: "Jak?", answer: "Com?" },
-        { sentence: "Z kim?", answer: "Amb qui?" },
-        { sentence: "Dla mnie", answer: "Per a mi" },
-        { sentence: "Dla ciebie", answer: "Per a tu" },
-        { sentence: "Jestem gotowy", answer: "Estic llest" },
-        { sentence: "Nie jestem pewny", answer: "No n'estic segur" },
-        { sentence: "Nie mogę", answer: "No puc" },
-        { sentence: "Nie teraz", answer: "Ara no" },
-        { sentence: "Może później", answer: "Potser més tard" },
-        { sentence: "Czy to jest możliwe?", answer: "És possible?" },
-        { sentence: "Nie wiem, przepraszam", answer: "No ho sé, perdó" },
-        { sentence: "Miłego dnia!", answer: "Que tinguis un bon dia!" },
-        { sentence: "Do zobaczenia!", answer: "Fins aviat!" },
-        { sentence: "Miłej podróży!", answer: "Bon viatge!" },
-        { sentence: "Dobranoc", answer: "Bona nit" },
-        { sentence: "Czy mogę wejść?", answer: "Puc entrar?" },
-        { sentence: "Proszę mówić wolniej", answer: "Si us plau, parla més a poc a poc" },
-        { sentence: "Nie ma za co", answer: "De res" }
-      ]
+      buttons: ["Sí", "No", "Hola"], // Només necessari per a pluja_botons
+questions: [
+  { 
+    sentence: "Dzień dobry", 
+    answer: "Bon dia",
+    notes: "📅 Usat des del matí fins a les 17-18h. Pronunciació: 'Jen dobri' (la 'ń' sona com la 'ny' en 'any')" 
+  },
+  { 
+    sentence: "Dobry wieczór", 
+    answer: "Bona tarda / Bona nit",
+    notes: "📅 Usat des de les 17-18h fins a l'hora de dormir. Atenció: 'cz' sona com 'tx'" 
+  },
+  { 
+    sentence: "Do widzenia", 
+    answer: "Adéu",
+    notes: "Formal. Literalment significa 'fins a la vista'. Els polonesos aprecien si acompanyes amb un petit gest de cap" 
+  },
+  { 
+    sentence: "Cześć", 
+    answer: "Hola / Adéu informal",
+    notes: "🔊 Pronunciat 'txeix'. Informal, ideal per a joves o situacions relaxades" 
+  },
+  { 
+    sentence: "Dziękuję", 
+    answer: "Gràcies",
+    notes: "🌟 Clau de convivència! Pronunciat aproximadament 'jen-kuie'. Mira als ulls quan ho diguis - és un signe de respecte" 
+  },
+  { 
+    sentence: "Proszę", 
+    answer: "Si us plau / De res",
+    notes: "📌 Usat tant per demanar alguna cosa com per respondre a 'gràcies'. Pronunciat 'pro-xe' (la 'sz' sona com 'x')" 
+  },
+  { 
+    sentence: "Przepraszam", 
+    answer: "Perdó / Disculpa",
+    notes: "🚦 Pronunciat 'pxe-prasha-m'. Útil per cridar l'atenció (ex: en un restaurant) o demanar perdó" 
+  },
+  { 
+    sentence: "Nie mówię po polsku", 
+    answer: "No parlo polonès",
+    notes: "💡 Si afegeixes '...ale mówię po angielsku' (...però parlo anglès) augmentaràs les possibilitats que t'ajudin" 
+  },
+  { 
+    sentence: "Czy mówisz po angielsku?", 
+    answer: "Parles anglès?",
+    notes: "👥 En persones joves funciona en un 80% de casos. En majors de 50 anys és millor mostrar-ho escrit" 
+  },
+  { 
+    sentence: "Nie rozumiem", 
+    answer: "No ho entenc",
+    notes: "✋ Acompanya amb gest de negació amb el dit índex. Pronunciat 'nie ro-zumiem'" 
+  },
+  { 
+    sentence: "Tak", 
+    answer: "Sí"
+  },
+  { 
+    sentence: "Nie", 
+    answer: "No"
+  },
+  { 
+    sentence: "Ile to kosztuje?", 
+    answer: "Quant costa?",
+    notes: "🛍️ Útil en mercats. Si et responen, poden començar amb 'to...' (això...) seguit del preu" 
+  },
+  { 
+    sentence: "Gdzie jest toaleta?", 
+    answer: "On és el lavabo?",
+    notes: "🚻 En llocs públics busca el cartell 'WC'. Important: sovint es paga (2-5 zł) i convé dur monedes" 
+  },
+  { 
+    sentence: "Pomocy!", 
+    answer: "Ajuda!",
+    notes: "🚨 Emergències reals. Per dubtes, és millor usar 'Potrzebuję pomocy' (Necessito ajuda) que sona menys alarmant" 
+  },
+  { 
+    sentence: "Jestem turystą", 
+    answer: "Sóc turista",
+    notes: "🧳 Pronunciat 'ies-tem tu-ris-tom'. Útil si et perds o tens problemes - els polonesos solen ajudar turistes" 
+  },
+  { 
+    sentence: "Zgubiłem się", 
+    answer: "M'he perdut",
+    notes: "🗺️ Si ho dius mostrant un mapa o el mòbil, t'ajudaran ràpidament. Versió femenina: 'Zgubiłam się'" 
+  },
+  { 
+    sentence: "Potrzebuję lekarza", 
+    answer: "Necessito un metge",
+    notes: "🏥 En farmàcies (Apteka) poden ajudar amb problemes lleus. Per emergències, marca el 112" 
+  },
+  { 
+    sentence: "Czy to jest daleko?", 
+    answer: "És lluny?",
+    notes: "🚶‍♂️ Respostes típiques: 'Blisko' (a prop), 'Daleko' (lluny) o '15 minut' (a 15 minuts caminant)" 
+  },
+  { 
+    sentence: "Która godzina?", 
+    answer: "Quina hora és?",
+    notes: "⏰ Resposta típica: 'Jest...' (és...) + hora. Ex: 'Jest wpół do czwartej' (és dos quarts de quatre)" 
+  },
+  { 
+    sentence: "Gdzie jest stacja?", 
+    answer: "On és l'estació?",
+    notes: "🚂 'Stacja' és per trens. Per autobusos és 'dworzec autobusowy' (pronunciat 'dvo-xets auto-busovi')" 
+  },
+  { 
+    sentence: "Poproszę bilet", 
+    answer: "Un bitllet, si us plau",
+    notes: "🎫 En transport públic, especifica 'ulgowy' (reduït) si viatgen amb nens. Normalment fins als 4 anys és gratis" 
+  },
+  { 
+    sentence: "Na zdrowie!", 
+    answer: "Salut!",
+    notes: "🥂 Es diu quan algú esternuda O quan s'aixeca una copa. Resposta educada: 'Dziękuję' (gràcies)" 
+  },
+  { 
+    sentence: "Smacznego!", 
+    answer: "Bon profit!",
+    notes: "🍽️ Es diu abans de menjar. Resposta educada: 'Dziękuję'. Pronunciat 'sma-txne-go'" 
+  },
+  { 
+    sentence: "Gdzie mogę kupić bilet?", 
+    answer: "On puc comprar un bitllet?",
+    notes: "💶 En estacions grans, busca màquines automàtiques ('automat biletowy') amb opció en anglès" 
+  },
+  { 
+    sentence: "Czy to jest dobre?", 
+    answer: "És bo?",
+    notes: "🍴 Útil en restaurants per demanar recomanacions. Resposta típica: 'Bardzo dobre!' (Molt bo!)" 
+  },
+  { 
+    sentence: "Chciałbym to", 
+    answer: "M'agradaria això",
+    notes: "🛒 Pronunciat 'htxau-bim to'. Versió femenina: 'Chciałabym'. Assenyala si no et surt la pronunciació" 
+  },
+  { 
+    sentence: "Jestem uczulony na...", 
+    answer: "Sóc al·lèrgic a...",
+    notes: "⚠️ Important en restaurants! Completa amb: 'orzechy' (fruits secs), 'gluten' o 'mleko' (llet)" 
+  },
+  { 
+    sentence: "Czy mogę zapłacić kartą?", 
+    answer: "Puc pagar amb targeta?",
+    notes: "💳 En petits establiments o mercats potser no accepten targetes. Millor preguntar abans de consumir" 
+  },
+  { 
+    sentence: "Gotówką czy kartą?", 
+    answer: "Efectiu o targeta?",
+    notes: "💰 Resposta útil: 'Kartą, proszę' (Amb targeta, si us plau) o 'Gotówką' (En efectiu)" 
+  },
+  { 
+    sentence: "Potrzebuję pomocy", 
+    answer: "Necessito ajuda",
+    notes: "🆘 Menys urgent que 'Pomocy!'. Útil en botigues o per demanar direccions" 
+  },
+  { 
+    sentence: "Nie wiem", 
+    answer: "No ho sé",
+    notes: "🤷‍♂️ Acompanya amb un gest d'espatlles. Alternativa educada: 'Nie jestem pewien' (No n'estic segur)" 
+  },
+  { 
+    sentence: "Jestem zmęczony", 
+    answer: "Estic cansat",
+    notes: "😴 Versió masculina ('zmęczony'). Femení: 'Jestem zmęczona'. Útil per justificar una pausa en excursions" 
+  },
+  { 
+    sentence: "Chcę odpocząć", 
+    answer: "Vull descansar",
+    notes: "🌳 Útil en parcs o museus. Pots afegir 'Gdzie mogę usiąść?' (On puc seure?)" 
+  },
+  { 
+    sentence: "Jak się nazywasz?", 
+    answer: "Com et dius?",
+    notes: "👶 Informal. En contextos formals, millor 'Jak ma pan/pani na imię?' (Com es diu, senyor/senyora?)" 
+  },
+  { 
+    sentence: "Nazywam się...", 
+    answer: "Em dic...",
+    notes: "📛 Pronunciat 'na-zi-vam xie...'. Els polonesos presenten el cognom primer en contextos formals" 
+  },
+  { 
+    sentence: "Miło mi cię poznać", 
+    answer: "Encantat de conèixer-te",
+    notes: "🤝 Informal. Formal: 'Miło mi pana/panią poznać'. Resposta habitual: 'Nawzajem' (Igualment)" 
+  },
+  { 
+    sentence: "Gdzie jest restauracja?", 
+    answer: "On és el restaurant?",
+    notes: "🍽️ En ciutats turístiques com Cracòvia, busca 'Bar mleczny' (menjadors econòmics tradicionals)" 
+  },
+  { 
+    sentence: "Czy mogę prosić o menu?", 
+    answer: "Puc veure el menú?",
+    notes: "📖 En alguns llocs et donaran la carta directament. Alternativa: 'Poproszę menu' (El menú, si us plau)" 
+  },
+  { 
+    sentence: "Poproszę wodę", 
+    answer: "Aigua, si us plau",
+    notes: "💧 Especifica 'niegazowaną' (sense gas) o 'gazowaną' (amb gas). L'aigua del aixeta és potable a tot arreu" 
+  },
+  { 
+    sentence: "Poproszę piwo", 
+    answer: "Una cervesa, si us plau",
+    notes: "🍺 Polònia té excel·lents cerveses locals. Demana 'jasne' (clara) o 'ciemne' (fosca). L'edat legal és 18 anys" 
+  },
+  { 
+    sentence: "Poproszę rachunek", 
+    answer: "El compte, si us plau",
+    notes: "🧾 Pronunciat 'ra-ju-nek'. En restaurants, cal demanar-lo explícitament - no el porten automàticament" 
+  },
+  { 
+    sentence: "Mam rezerwację", 
+    answer: "Tinc una reserva",
+    notes: "🏨 Pronunciat 'mam re-zer-va-tsie'. Útil en hotels o restaurants populars" 
+  },
+  { 
+    sentence: "Nie mam rezerwacji", 
+    answer: "No tinc cap reserva",
+    notes: "🚪 Resposta útil si et pregunten en restaurants. Pregunta: 'Czy jest wolny stolik?' (Hi ha taula lliure?)" 
+  },
+  { 
+    sentence: "Ile to trwa?", 
+    answer: "Quant dura?",
+    notes: "⏳ Útil per excursions o esperes. Resposta típica: 'Godzinę' (Una hora) o '20 minut' (20 minuts)" 
+  },
+  { 
+    sentence: "Gdzie mogę wymienić pieniądze?", 
+    answer: "On puc canviar diners?",
+    notes: "💱 Evita canvis a l'aeroport (comissions altes). Millor en bancs o oficines de canvi ('kantor') amb cartell '0% prowizji' (0% comissió)" 
+  },
+  { 
+    sentence: "To jest piękne", 
+    answer: "Això és bonic",
+    notes: "🏰 Pronunciat 'to ies pien-kne'. Útil en museus o davant monuments. Alternativa: 'To jest wspaniałe!' (És meravellós!)" 
+  },
+  { 
+    sentence: "To jest pyszne", 
+    answer: "Això és deliciós",
+    notes: "🍲 Els cuiners i amfitrions polonesos ho apreciaran molt! Pronunciat 'to ies pish-ne'" 
+  },
+  { 
+    sentence: "To jest drogie", 
+    answer: "Això és car",
+    notes: "💸 Pronunciat 'to ies dro-gie'. En mercats, pot obrir portes a regatejar ('Czy może pan/pani taniej?' - Pot fer-ho més barat?)" 
+  },
+  { 
+    sentence: "To jest tanie", 
+    answer: "Això és barat",
+    notes: "🛒 Útil quan et pregunten per què compres alguna cosa. Resposta educada: 'Dlatego, że jest dobre i tanie' (Perquè és bo i barat)" 
+  },
+  { 
+    sentence: "Zimno mi", 
+    answer: "Tinc fred",
+    notes: "❄️ Versió masculina ('mi'). Femení: 'Zimno mi' (igual). Útil en hivern o llocs amb aire condicionat fort" 
+  },
+  { 
+    sentence: "Gorąco mi", 
+    answer: "Tinc calor",
+    notes: "🌡️ Versió masculina ('mi'). Femení: 'Gorąco mi' (igual). Útil en transports o restaurants sense aire condicionat" 
+  },
+  { 
+    sentence: "Gdzie jest przystanek autobusowy?", 
+    answer: "On és la parada d'autobús?",
+    notes: "🚏 Pronunciat 'pxis-ta-nek au-to-bu-so-vi'. En ciutats grans, busca pantalles digitals amb temps d'espera" 
+  },
+  { 
+    sentence: "Czy mogę zrobić zdjęcie?", 
+    answer: "Puc fer una foto?",
+    notes: "📸 Pronunciat 'txie mo-gue ro-bitx zdjie-txie'. Important en museus o esglésies on pot estar prohibit" 
+  },
+  { 
+    sentence: "Jak się masz?", 
+    answer: "Com estàs?",
+    notes: "👋 Informal. Resposta típica: 'Dziękuję, dobrze' (Gràcies, bé). No s'usa tant com en català" 
+  },
+  { 
+    sentence: "Dobrze, dziękuję", 
+    answer: "Estic bé, gràcies",
+    notes: "😊 Resposta educada. Si vols ser més informal: 'W porządku!' (Tot en ordre!)" 
+  },
+  { 
+    sentence: "Gdzie jest bankomat?", 
+    answer: "On és el caixer automàtic?",
+    notes: "🏦 Pronunciat 'ban-ko-mat'. Els de bancs grans (PKO, ING) no cobren comissió per targetes estrangeres" 
+  },
+  { 
+    sentence: "Czy to jest bezpieczne?", 
+    answer: "És segur?",
+    notes: "🛡️ Útil per preguntar per barris o transport nocturn. Resposta típica: 'Tak, bardzo' (Sí, molt)" 
+  },
+  { 
+    sentence: "Nie mam gotówki", 
+    answer: "No tinc efectiu",
+    notes: "💵 Pronunciat 'nie mam go-tuf-ki'. En mercats petits, millor portar sempre alguns złotys en paper" 
+  },
+  { 
+    sentence: "Nie mogę znaleźć...", 
+    answer: "No puc trobar...",
+    notes: "🔍 Completa amb: 'hotelu' (l'hotel), 'dworca' (l'estació) o 'apteki' (la farmàcia)" 
+  },
+  { 
+    sentence: "Jestem głodny", 
+    answer: "Tinc gana",
+    notes: "🍎 Versió masculina ('głodny'). Femení: 'Jestem głodna'. Útil per justificar una parada per menjar" 
+  },
+  { 
+    sentence: "Jestem spragniony", 
+    answer: "Tinc set",
+    notes: "🥤 Versió masculina ('spragniony'). Femení: 'Jestem spragniona'. Important a l'estiu!" 
+  },
+  { 
+    sentence: "Czy to jest otwarte?", 
+    answer: "Està obert?",
+    notes: "🕒 Resposta típica: 'Tak, do...' (Sí, fins a... + hora). En diumenge molts llocs tanquen aviat" 
+  },
+  { 
+    sentence: "Czy to jest zamknięte?", 
+    answer: "Està tancat?",
+    notes: "🚪 Pronunciat 'zam-knie-te'. Si ho està, pregunta: 'Kiedy otwarcie?' (Quan obren?)" 
+  },
+  { 
+    sentence: "Czy to jest dobre miejsce?", 
+    answer: "És un bon lloc?",
+    notes: "📍 Útil per demanar recomanacions de restaurants o allotjament. Resposta: 'Tak, polecam!' (Sí, el recomano!)" 
+  },
+  { 
+    sentence: "Nie ma problemu", 
+    answer: "Cap problema",
+    notes: "😊 Resposta molt útil quan et disculpes o et donen les gràcies. Mostra actitud positiva" 
+  },
+  { 
+    sentence: "Spokojnie", 
+    answer: "Tranquil·litat",
+    notes: "🧘 Pronunciat 'spo-koi-nie'. Útil per calmar algú (ex: si et preocupes per una confusió)" 
+  },
+  { 
+    sentence: "Na lewo", 
+    answer: "A l'esquerra",
+    notes: "⬅️ Pronunciat 'na le-vo'. En direccions, sovint acompanyat de gestos" 
+  },
+  { 
+    sentence: "Na prawo", 
+    answer: "A la dreta",
+    notes: "➡️ Pronunciat 'na pra-vo'. Atenció: 'w' sona com 'v' en polonès" 
+  },
+  { 
+    sentence: "Prosto", 
+    answer: "Tot recte",
+    notes: "↑ Útil combinat amb 'Na lewo/prawo' (Gira a esquerra/dreta) per indicar direccions" 
+  },
+  { 
+    sentence: "Za rogiem", 
+    answer: "Al tombar la cantonada",
+    notes: "↩️ Pronunciat 'za ro-giem'. Literalment significa 'darrere de la cantonada'" 
+  },
+  { 
+    sentence: "W lewo", 
+    answer: "Gira a l'esquerra",
+    notes: "🔄 Similar a 'Na lewo' però més usat en indicacions de trànsit o mapes" 
+  },
+  { 
+    sentence: "W prawo", 
+    answer: "Gira a la dreta",
+    notes: "🔄 Com 'Na prawo', però més específic per indicar un gir" 
+  },
+  { 
+    sentence: "Uważaj!", 
+    answer: "Compte!",
+    notes: "⚠️ Pronunciat 'u-va-zhai'. Útil en carrers amb cotxes, bicis o esglaons perillosos" 
+  },
+  { 
+    sentence: "To jest pilne", 
+    answer: "És urgent",
+    notes: "🚑 Pronunciat 'to ies pil-ne'. Útil en farmàcies o hospitals. Alternativa forta: 'Natychmiast!' (Immediatament!)" 
+  },
+  { 
+    sentence: "Nie dotykaj", 
+    answer: "No toquis",
+    notes: "✋ Pronunciat 'nie do-ti-kai'. Comú en museus o botigues amb objectes delicats" 
+  },
+  { 
+    sentence: "Nie wolno", 
+    answer: "Prohibit",
+    notes: "🚫 Pronunciat 'nie vol-no'. Veureàs aquest cartell en zones restringides o per fotografia" 
+  },
+  { 
+    sentence: "Gdzie to jest?", 
+    answer: "On és això?",
+    notes: "🗺️ Mostra el mòbil o un mapa quan ho preguntis. Alternativa: 'Jak dojść do...?' (Com arribar a...?)" 
+  },
+  { 
+    sentence: "Kiedy?", 
+    answer: "Quan?",
+    notes: "📅 Resposta típica: 'Dzisiaj' (Avui), 'Jutro' (Demà) o una hora concreta" 
+  },
+  { 
+    sentence: "Dlaczego?", 
+    answer: "Per què?",
+    notes: "🤔 Pronunciat 'dla-txe-go'. Útil per entendre normes locals (ex: per què cal pagar per anar al lavabo)" 
+  },
+  { 
+    sentence: "Jak?", 
+    answer: "Com?",
+    notes: "❓ Resposta típica: 'Tak' (Així) + gest o 'Nie wiem' (No ho sé) si no ho entenen" 
+  },
+  { 
+    sentence: "Z kim?", 
+    answer: "Amb qui?",
+    notes: "👥 Útil per confirmar reserves ('Z rodziną' - Amb la família) o activitats ('Z przewodnikiem' - Amb guia)" 
+  },
+  { 
+    sentence: "Dla mnie", 
+    answer: "Per a mi",
+    notes: "🍽️ Pronunciat 'dla mnie'. Útil en restaurants: 'Poproszę dla mnie...' (Per a mi..., si us plau)" 
+  },
+  { 
+    sentence: "Dla ciebie", 
+    answer: "Per a tu",
+    notes: "🎁 Pronunciat 'dla txie-bie'. Informal. Formal: 'Dla pana/pani' (Per a vostè)" 
+  },
+  { 
+    sentence: "Jestem gotowy", 
+    answer: "Estic llest",
+    notes: "👍 Versió masculina ('gotowy'). Femení: 'Jestem gotowa'. Útil en excursions o quan paguis" 
+  },
+  { 
+    sentence: "Nie jestem pewny", 
+    answer: "No n'estic segur",
+    notes: "🤷 Versió masculina ('pewny'). Femení: 'Nie jestem pewna'. Alternativa: 'Chyba tak' (Suposo que sí)" 
+  },
+  { 
+    sentence: "Nie mogę", 
+    answer: "No puc",
+    notes: "🚷 Pronunciat 'nie mo-gue'. Si vols ser educat/da, afegeix 'Przepraszam' (Ho sento)" 
+  },
+  { 
+    sentence: "Nie teraz", 
+    answer: "Ara no",
+    notes: "⏸️ Pronunciat 'nie te-raz'. Alternativa: 'Później' (Més tard)" 
+  },
+  { 
+    sentence: "Może później", 
+    answer: "Potser més tard",
+    notes: "🕒 Pronunciat 'mo-zhe puz-niej'. Útil per posposar una proposta (ex: un venedor insistent)" 
+  },
+  { 
+    sentence: "Czy to jest możliwe?", 
+    answer: "És possible?",
+    notes: "✨ Pronunciat 'to ies mo-zli-ve'. Útil per demanar excepcions (ex: menjar fora d'horari)" 
+  },
+  { 
+    sentence: "Nie wiem, przepraszam", 
+    answer: "No ho sé, perdó",
+    notes: "🙏 Pronunciat 'nie viem, pxe-prasha-m'. Mostra bona educació encara que no puguis ajudar" 
+  },
+  { 
+    sentence: "Miłego dnia!", 
+    answer: "Que tinguis un bon dia!",
+    notes: "🌞 Formal. Usat en botigues o serveis. Resposta: 'Wzajemnie!' (Igualment!)" 
+  },
+  { 
+    sentence: "Do zobaczenia!", 
+    answer: "Fins aviat!",
+    notes: "👋 Pronunciat 'do zo-ba-txe-nia'. Informal. Formal: 'Do widzenia' (Adéu)" 
+  },
+  { 
+    sentence: "Miłej podróży!", 
+    answer: "Bon viatge!",
+    notes: "✈️ Pronunciat 'mieu-ei po-dru-zhi'. Resposta típica: 'Dziękuję!' (Gràcies!)" 
+  },
+  { 
+    sentence: "Dobranoc", 
+    answer: "Bona nit",
+    notes: "🌙 Usat quan algú se'n va a dormir. No com a comiat general com en català" 
+  },
+  { 
+    sentence: "Czy mogę wejść?", 
+    answer: "Puc entrar?",
+    notes: "🚪 Pronunciat 'txie mo-gue veix-tx'. Útil en llocs amb accés restringit o habitacions privades" 
+  },
+  { 
+    sentence: "Proszę mówić wolniej", 
+    answer: "Si us plau, parla més a poc a poc",
+    notes: "🐢 Útil quan no entens. Alternativa: 'Czy może pan/pani powtórzyć?' (Pot repetir, senyor/senyora?)" 
+  },
+  { 
+    sentence: "Nie ma za co", 
+    answer: "De res",
+    notes: "😊 Resposta informal a 'Dziękuję' (Gràcies). Formal: 'Proszę bardzo' (Si us plau)" 
+  }
+]
+
     };
   </script>
   <script src="../../codi.js"></script>
