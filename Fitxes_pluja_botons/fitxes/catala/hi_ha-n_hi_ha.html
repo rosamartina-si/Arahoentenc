@@ -16,9 +16,16 @@
 
   <script>
     const config = {
-      lang: "ca",
-      audio: true,
-      mode: "text", // o "text" o "botons" (amb cometes)
+      lang: "ca", // "ca" o "en" (amb cometes)
+      uiLang: "ca", // Força la UI en català (ignorant uiLangMap)
+      audio: true,  // true o false
+      mode: "pluja_text", // "pluja_text" o "pluja_botons"
+      speed: 0.5, // Velocitat de baixada (0.1 = lent, 1 = ràpid)
+      speechRate: 0.7,    // Velocitat de pronunciació (0.5-2)
+      playAudioAtStart: false, // true o false: Pronunciar al començament de cada paraula
+      noteDisplayTime: 3, // Temps en segons que es mostren les notes (per defecte: 3)
+      enableRepeatButton: false, //Si volem que l'usuari pugui tornar a sentir l'àudio
+      
       title: "Hi ha / N'hi ha 2",
       objective: "Llegeix cada frase i tria la forma correcta: <strong>hi ha</strong> o <strong>n'hi ha</strong>.",
       explanation: [
