@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monosíl·labs polonesos</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Restart</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_text",
+      speed: 0.5,
+      speechRate: 0.5,
+      playAudioAtStart: true,
+      noteDisplayTime: 15,
+      enableRepeatButton: true,
+      title: "Monosíl·labs polonesos",
+      objective: "Escriu la traducció al català del monosíl·lab:",
+      explanation: [
+        "PRONÚNCIA: cz=tx, sz=x, ż=j francesa. Accent a penúltima síl·laba.",
+        "VOCALS: a=mal, e=exèrcit, i=si, o=cosa, u/ó=suc, y=entre i/e",
+        "CONSONANTS: c=ts, ć=tx suau, ł=w, w=v francesa, ż/rz=j"
+      ],
+      questions: [
+        { 
+          sentence: "Tak (Tak, to jest mój dom - Sí, aquesta és la meva casa)", 
+          answer: "Sí"
+        },
+        { 
+          sentence: "Nie (Nie, to nie mój pies - No, aquest no és el meu gos)", 
+          answer: "No"
+        },
+        { 
+          sentence: "Ja (Ja tu mieszkam - Jo visc aquí)", 
+          answer: "Jo"
+        },
+        { 
+          sentence: "Ty (Ty jesteś miły - Tu ets simpàtic)", 
+          answer: "Tu",
+          notes: "Forma informal (per amics/familia)"
+        },
+        { 
+          sentence: "On (On pracuje - Ell treballa)", 
+          answer: "Ell"
+        },
+        { 
+          sentence: "Ona (Ona śpiewa - Ella canta)", 
+          answer: "Ella"
+        },
+        { 
+          sentence: "My (My jemy obiad - Nosaltres dinem)", 
+          answer: "Nosaltres"
+        },
+        { 
+          sentence: "Wy (Wy macie psa? - Vosaltres teniu un gos?)", 
+          answer: "Vosaltres"
+        },
+        { 
+          sentence: "Oni (Oni są z Polski - Ells són de Polònia)", 
+          answer: "Ells"
+        },
+        { 
+          sentence: "To (To jest książka - Això és un llibre)", 
+          answer: "Això/Aquest"
+        },
+        { 
+          sentence: "Ten (Ten dom jest duży - Aquesta casa és gran)", 
+          answer: "Aquest (masculí)"
+        },
+        { 
+          sentence: "Tam (Tam jest sklep - Allà hi ha una botiga)", 
+          answer: "Allà"
+        },
+        { 
+          sentence: "Kto (Kto to jest? - Qui és aquest?)", 
+          answer: "Qui"
+        },
+        { 
+          sentence: "Co (Co to jest? - Què és això?)", 
+          answer: "Què"
+        },
+        { 
+          sentence: "Gdzie (Gdzie mieszkasz? - On vius?)", 
+          answer: "On"
+        },
+        { 
+          sentence: "Kiedy (Kiedy przychodzisz? - Quan vens?)", 
+          answer: "Quan"
+        },
+        { 
+          sentence: "Jak (Jak się masz? - Com estàs?)", 
+          answer: "Com"
+        },
+        { 
+          sentence: "Dlaczego (Dlaczego płaczesz? - Per què plores?)", 
+          answer: "Per què"
+        },
+        { 
+          sentence: "Ile (Ile to kosztuje? - Quant costa?)", 
+          answer: "Quant"
+        },
+        { 
+          sentence: "Która (Która jest godzina? - Quina hora és?)", 
+          answer: "Quina",
+          notes: "Usat per preguntar l'hora"
+        },
+        { 
+          sentence: "Czy (Czy masz psa? - Tens un gos?)", 
+          answer: "(Partícula interrogativa)",
+          notes: "No té traducció directa, indica pregunta"
+        },
+        { 
+          sentence: "Mam (Mam kota - Tinc un gat)", 
+          answer: "Tinc"
+        },
+        { 
+          sentence: "Masz (Masz czas? - Tens temps?)", 
+          answer: "Tens"
+        },
+        { 
+          sentence: "Chcę (Chcę jeść - Vull menjar)", 
+          answer: "Vull"
+        },
+        { 
+          sentence: "Muszę (Muszę iść - He d'anar)", 
+          answer: "He de"
+        },
+        { 
+          sentence: "Mogę (Mogę pomóc? - Puc ajudar?)", 
+          answer: "Puc"
+        },
+        { 
+          sentence: "Widzę (Widzę cię - Et veig)", 
+          answer: "Veig"
+        },
+        { 
+          sentence: "Słyszę (Słyszę muzykę - Escolto música)", 
+          answer: "Escolto"
+        },
+        { 
+          sentence: "Mówię (Mówię po polsku - Parlo polonès)", 
+          answer: "Parlo"
+        },
+        { 
+          sentence: "Piszę (Piszę list - Escric una carta)", 
+          answer: "Escric"
+        },
+        { 
+          sentence: "Czytam (Czytam książkę - Llegeixo un llibre)", 
+          answer: "Llegeixo"
+        },
+        { 
+          sentence: "Lubię (Lubię kawę - M'agrada el cafè)", 
+          answer: "M'agrada"
+        },
+        { 
+          sentence: "Wolę (Wolę herbatę - Prefereixo el te)", 
+          answer: "Prefereixo"
+        },
+        { 
+          sentence: "Znam (Znam go - El conec)", 
+          answer: "Conec"
+        },
+        { 
+          sentence: "Wiem (Wiem odpowiedź - Sé la resposta)", 
+          answer: "Sé"
+        },
+        { 
+          sentence: "Rozumiem (Rozumiem pytanie - Entenc la pregunta)", 
+          answer: "Entenc"
+        },
+        { 
+          sentence: "Myślę (Myślę o tobie - Penso en tu)", 
+          answer: "Penso"
+        },
+        { 
+          sentence: "Pracuję (Pracuję w biurze - Treballo a una oficina)", 
+          answer: "Treballo"
+        },
+        { 
+          sentence: "Uczę (Uczę się polskiego - Estudio polonès)", 
+          answer: "Estudio",
+          notes: "Literal: 'Aprenc polonès'"
+        },
+        { 
+          sentence: "Daj (Daj mi książkę - Dóna'm un llibre)", 
+          answer: "Dóna"
+        },
+        { 
+          sentence: "Weź (Weź to - Agafa això)", 
+          answer: "Agafa"
+        },
+        { 
+          sentence: "Idź (Idź prosto - Ves tot recte)", 
+          answer: "Vés"
+        },
+        { 
+          sentence: "Stój (Stój tam! - Aturat allà!)", 
+          answer: "Aturat"
+        },
+        { 
+          sentence: "Patrz (Patrz na mnie - Mira'm)", 
+          answer: "Mira"
+        },
+        { 
+          sentence: "Czekaj (Czekaj chwilę - Espera un moment)", 
+          answer: "Espera"
+        },
+        { 
+          sentence: "Pomóż (Pomóż mi - Ajuda'm)", 
+          answer: "Ajuda"
+        },
+        { 
+          sentence: "Kocham (Kocham cię - T'estimo)", 
+          answer: "Estimo"
+        },
+        { 
+          sentence: "Śpij (Śpij dobrze - Dorm bé)", 
+          answer: "Dorm"
+        },
+        { 
+          sentence: "Jedz (Jedz powoli - Menja a poc a poc)", 
+          answer: "Menja"
+        },
+        { 
+          sentence: "Pij (Pij wodę - Beu aigua)", 
+          answer: "Beu"
+        },
+        { 
+          sentence: "Żyj (Żyj szczęśliwie - Viu feliç)", 
+          answer: "Viu"
+        },
+        { 
+          sentence: "Bądź (Bądź cicho - Està callat)", 
+          answer: "Sigues"
+        },
+        { 
+          sentence: "Zrób (Zrób to - Fes-ho)", 
+          answer: "Fes"
+        },
+        { 
+          sentence: "Kup (Kup chleb - Compra pa)", 
+          answer: "Compra"
+        },
+        { 
+          sentence: "Sprzedaj (Sprzedaj dom - Vén la casa)", 
+          answer: "Vén"
+        },
+        { 
+          sentence: "Otwórz (Otwórz drzwi - Obre la porta)", 
+          answer: "Obre"
+        },
+        { 
+          sentence: "Zamknij (Zamknij okno - Tanca la finestra)", 
+          answer: "Tanca"
+        },
+        { 
+          sentence: "Ciepło (Ciepło dziś - Avui fa calor)", 
+          answer: "Calor"
+        },
+        { 
+          sentence: "Zimno (Zimno mi - Tinc fred)", 
+          answer: "Fred"
+        },
+        { 
+          sentence: "Duży (Duży pies - Gos gran)", 
+          answer: "Gran"
+        },
+        { 
+          sentence: "Mały (Mały kot - Gat petit)", 
+          answer: "Petit"
+        },
+        { 
+          sentence: "Dobry (Dobry człowiek - Bona persona)", 
+          answer: "Bo"
+        },
+        { 
+          sentence: "Zły (Zły pomysł - Mala idea)", 
+          answer: "Dolent"
+        },
+        { 
+          sentence: "Stary (Stary dom - Casa vella)", 
+          answer: "Vell"
+        },
+        { 
+          sentence: "Nowy (Nowy samochód - Cotxe nou)", 
+          answer: "Nou"
+        },
+        { 
+          sentence: "Czarny (Czarny kot - Gat negre)", 
+          answer: "Negre"
+        },
+        { 
+          sentence: "Biały (Biały śnieg - Neu blanca)", 
+          answer: "Blanc"
+        },
+        { 
+          sentence: "Czerwony (Czerwone wino - Vi negre)", 
+          answer: "Vermell"
+        },
+        { 
+          sentence: "Zielony (Zielone drzewo - Arbre verd)", 
+          answer: "Verd"
+        },
+        { 
+          sentence: "Niebieski (Niebieskie niebo - Cel blau)", 
+          answer: "Blau"
+        },
+        { 
+          sentence: "Żółty (Żółty banan - Plàtan groc)", 
+          answer: "Groc"
+        },
+        { 
+          sentence: "Szybki (Szybki bieg - Córrer ràpid)", 
+          answer: "Ràpid"
+        },
+        { 
+          sentence: "Wolny (Wolny pociąg - Tren lent)", 
+          answer: "Lent"
+        },
+        { 
+          sentence: "Wysoki (Wysoka góra - Muntanya alta)", 
+          answer: "Alt"
+        },
+        { 
+          sentence: "Niski (Niski stół - Taula baixa)", 
+          answer: "Baix"
+        },
+        { 
+          sentence: "Długi (Długi film - Pel·lícula llarga)", 
+          answer: "Llarg"
+        },
+        { 
+          sentence: "Krótki (Krótka sukienka - Vestit curt)", 
+          answer: "Curt"
+        },
+        { 
+          sentence: "Gruby (Gruba książka - Llibre gruixut)", 
+          answer: "Gruixut"
+        },
+        { 
+          sentence: "Cienki (Cienki lód - Gel fi)", 
+          answer: "Prim/Fi"
+        },
+        { 
+          sentence: "Mocny (Mocna kawa - Cafè fort)", 
+          answer: "Fort"
+        },
+        { 
+          sentence: "Słaby (Słaba herbata - Te fluix)", 
+          answer: "Fluix"
+        },
+        { 
+          sentence: "Ciężki (Ciężki plecak - Motxilla pesada)", 
+          answer: "Pesat"
+        },
+        { 
+          sentence: "Lekki (Lekki bagaż - Equipatge lleuger)", 
+          answer: "Lleuger"
+        },
+        { 
+          sentence: "Twardy (Twardy chleb - Pa dur)", 
+          answer: "Dur"
+        },
+        { 
+          sentence: "Miękki (Miękkie łóżko - Llit tou)", 
+          answer: "To"
+        },
+        { 
+          sentence: "Głośny (Głośna muzyka - Música alta)", 
+          answer: "Alt"
+        },
+        { 
+          sentence: "Cichy (Cicha noc - Nit silenciosa)", 
+          answer: "Silenciós"
+        },
+        { 
+          sentence: "Czysty (Czysta woda - Aigua neta)", 
+          answer: "Nete"
+        },
+        { 
+          sentence: "Brudny (Brudne ręce - Mans brutes)", 
+          answer: "Brut"
+        },
+        { 
+          sentence: "Drogi (Drogi hotel - Hotel car)", 
+          answer: "Car"
+        },
+        { 
+          sentence: "Tani (Tani bilet - Bitllet barat)", 
+          answer: "Barat"
+        },
+        { 
+          sentence: "Łatwy (Łatwy test - Examen fàcil)", 
+          answer: "Fàcil"
+        },
+        { 
+          sentence: "Trudny (Trudne zadanie - Tasca difícil)", 
+          answer: "Difícil"
+        },
+        { 
+          sentence: "Piękny (Piękny widok - Vista bonica)", 
+          answer: "Bonic"
+        },
+        { 
+          sentence: "Brzydki (Brzydki zapach - Olor lletja)", 
+          answer: "Lletj"
+        },
+        { 
+          sentence: "Młody (Młody mężczyzna - Home jove)", 
+          answer: "Jove"
+        },
+        { 
+          sentence: "Stary (Stara kobieta - Dona vella)", 
+          answer: "Vell"
+        },
+        { 
+          sentence: "Bogaty (Bogaty człowiek - Persona rica)", 
+          answer: "Ric"
+        },
+        { 
+          sentence: "Biedny (Biedne dziecko - Nen pobre)", 
+          answer: "Pobre"
+        },
+        { 
+          sentence: "Zdrowy (Zdrowy styl życia - Estil de vida saludable)", 
+          answer: "Saludable"
+        },
+        { 
+          sentence: "Chory (Chory kot - Gat malalt)", 
+          answer: "Malalt"
+        },
+        { 
+          sentence: "Wesoły (Wesoły dzień - Dia alegre)", 
+          answer: "Alegre"
+        },
+        { 
+          sentence: "Smutny (Smutna historia - Història trista)", 
+          answer: "Trist"
+        },
+        { 
+          sentence: "Zajęty (Zajęty telefon - Telèfon ocupat)", 
+          answer: "Ocupat"
+        },
+        { 
+          sentence: "Wolny (Wolny stolik - Taula lliure)", 
+          answer: "Lliure"
+        },
+        { 
+          sentence: "Prawda (To prawda - És veritat)", 
+          answer: "Veritat"
+        },
+        { 
+          sentence: "Fałsz (To fałsz - És fals)", 
+          answer: "Fals"
+        },
+        { 
+          sentence: "Pół (Pół do szóstej - Dos quarts de sis)", 
+          answer: "Mitja",
+          notes: "En hores: 'dos quarts'"
+        },
+        { 
+          sentence: "Raz (Raz dwa trzy - Un dos tres)", 
+          answer: "Un",
+          notes: "En comptar: 'un, dos, tres'"
+        }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
