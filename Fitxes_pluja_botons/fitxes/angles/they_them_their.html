@@ -16,9 +16,16 @@
 
   <script>
     const config = {
-      lang: "en",
-      audio: true,
-      mode: "botons", // "text" o "botons" (amb cometes)
+      lang: "en", // "ca" o "en" (amb cometes)
+      uiLang: "en", // Força la UI en català (ignorant uiLangMap)
+      audio: true,  // true o false
+      mode: "pluja_botons", // "pluja_text" o "pluja_botons"
+      speed: 0.5, // Velocitat de baixada (0.1 = lent, 1 = ràpid)
+      speechRate: 0.7,    // Velocitat de pronunciació (0.5-2)
+      playAudioAtStart: false, // true o false: Pronunciar al començament de cada paraula
+      noteDisplayTime: 3, // Temps en segons que es mostren les notes (per defecte: 3)
+      enableRepeatButton: false, //Si volem que l'usuari pugui tornar a sentir l'àudio
+      
       title: "They / Them / Their",
       objective: "Read each sentence and choose the correct word: <strong>they</strong>, <strong>them</strong>, or <strong>their</strong>.",
       explanation: [
