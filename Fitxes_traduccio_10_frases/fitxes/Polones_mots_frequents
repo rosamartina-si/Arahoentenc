@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aprèn les 100 paraules més útils en polonès</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    .image {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .image img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    #exercici {
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .paraula-container {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      flex-grow: 1;
+    }
+    button {
+      padding: 8px 15px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+    button:hover {
+      background-color: #219653;
+    }
+    .feedback {
+      margin-top: 5px;
+      padding: 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    .correct {
+      background-color: #d5f5e3;
+      color: #27ae60;
+      display: block;
+    }
+    .incorrect {
+      background-color: #fadbd8;
+      color: #e74c3c;
+      display: block;
+    }
+    .audio-icon {
+      cursor: pointer;
+      margin-left: 10px;
+      color: #3498db;
+      font-size: 18px;
+    }
+    .progress-container {
+      margin-top: 20px;
+      background-color: #ecf0f1;
+      border-radius: 4px;
+      height: 20px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #3498db;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .emoji {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Les 100 paraules més útils en polonès per viatjar</h1>
+<p>Tradueix aquestes paraules del català al polonès. Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta i escoltar la pronunciació.</p>
+
+<div class="image">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Warsaw_Old_Town_Market_Square_20070804.jpg/800px-Warsaw_Old_Town_Market_Square_20070804.jpg" alt="Ciutat de Polònia">
+</div>  
+
+<div id="exercici"></div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="controls" id="controls">
+  <button id="prevBtn">Anterior</button>
+  <span id="counter">1/100</span>
+  <button id="nextBtn">Següent</button>
+</div>
+
+<script>
+// Les 100 paraules més útils en polonès per a viatjar
+const paraules = [
+  ["Hola (formal)", "Dzień dobry", "🌞", "Djen dobri"],
+  ["Hola (informal)", "Cześć", "👋", "txeshtch"],
+  ["Adéu", "Do widzenia", "👋", "do vidzènia"],
+  ["Si us plau", "Proszę", "🙏", "próshe"],
+  ["Gràcies", "Dziękuję", "🙏", "djienkuiè"],
+  ["De res", "Nie ma za co", "😊", "nie ma za tso"],
+  ["Sí", "Tak", "👍", "tak"],
+  ["No", "Nie", "👎", "nie"],
+  ["Bon profit", "Smacznego", "🍽️", "smatchnego"],
+  ["Bona nit", "Dobranoc", "🌙", "dobranots"],
+  ["Com estàs?", "Jak się masz?", "🤔", "iak sie mash"],
+  ["Bé, gràcies", "Dobrze, dziękuję", "😊", "dobje djienkuiè"],
+  ["No entenc", "Nie rozumiem", "🤷", "nie rozumiem"],
+  ["Parles català/anglès?", "Czy mówisz po angielsku?", "🗣️", "txi muixh po anguielsku"],
+  ["No sé parlar polonès", "Nie mówię po polsku", "🙊", "nie muvie po polsku"],
+  ["Em dic...", "Nazywam się...", "👤", "nazivam sie"],
+  ["Sóc de...", "Jestem z...", "🌍", "iestem z"],
+  ["On és...?", "Gdzie jest...?", "📍", "gdje iest"],
+  ["Quant costa?", "Ile to kosztuje?", "💰", "ile to koshtuie"],
+  ["Vull...", "Chcę...", "👉", "htse"],
+  ["No vull", "Nie chcę", "👎", "nie htse"],
+  ["Ajuda!", "Pomocy!", "🆘", "pomotsi"],
+  ["Hospital", "Szpital", "🏥", "shpital"],
+  ["Policia", "Policja", "👮", "politsia"],
+  ["Emergència", "Nagły wypadek", "🚨", "nagui vipadek"],
+  ["Dret", "Prawo", "➡️", "pravo"],
+  ["Esquerra", "Lewo", "⬅️", "levo"],
+  ["Recte", "Prosto", "⬆️", "prosto"],
+  ["A prop", "Blisko", "📍", "blisko"],
+  ["Lluny", "Daleko", "📍", "daleko"],
+  ["Mapa", "Mapa", "🗺️", "mapa"],
+  ["Hotel", "Hotel", "🏨", "hotel"],
+  ["Restaurant", "Restauracja", "🍽️", "restauratsia"],
+  ["Menú", "Menu", "📋", "menu"],
+  ["Aigua", "Woda", "💧", "voda"],
+  ["Cafè", "Kawa", "☕", "kava"],
+  ["Te", "Herbata", "🍵", "herbata"],
+  ["Cervesa", "Piwo", "🍺", "pivo"],
+  ["Vi", "Wino", "🍷", "vino"],
+  ["Pa", "Chleb", "🍞", "hleb"],
+  ["Formatge", "Ser", "🧀", "ser"],
+  ["Ous", "Jajka", "🥚", "iaika"],
+  ["Carn", "Mięso", "🍖", "mienso"],
+  ["Peix", "Ryba", "🐟", "riba"],
+  ["Verdures", "Warzywa", "🥦", "vajiva"],
+  ["Fruita", "Owoce", "🍎", "ovotse"],
+  ["Postres", "Deser", "🍰", "deser"],
+  ["Compte", "Rachunek", "💳", "rahunek"],
+  ["Diners", "Pieniądze", "💰", "pieniondze"],
+  ["Car", "Drogo", "💸", "drogo"],
+  ["Barat", "Tanie", "💸", "tanie"],
+  ["Obert", "Otwarte", "🟢", "otfarte"],
+  ["Tancat", "Zamknięte", "🔴", "zamkniente"],
+  ["Avui", "Dzisiaj", "📅", "djishiai"],
+  ["Demà", "Jutro", "📅", "iutro"],
+  ["Ahir", "Wczoraj", "📅", "ftxorai"],
+  ["Ara", "Teraz", "⏱️", "teras"],
+  ["Més tard", "Później", "⏳", "pozdniej"],
+  ["Dilluns", "Poniedziałek", "📅", "poniedjauek"],
+  ["Dimarts", "Wtorek", "📅", "ftorek"],
+  ["Dimecres", "Środa", "📅", "shroda"],
+  ["Dijous", "Czwartek", "📅", "txfartek"],
+  ["Divendres", "Piątek", "📅", "piontek"],
+  ["Dissabte", "Sobota", "📅", "sobota"],
+  ["Diumenge", "Niedziela", "📅", "niedjela"],
+  ["Gener", "Styczeń", "❄️", "stitsen"],
+  ["Febrer", "Luty", "❄️", "luti"],
+  ["Març", "Marzec", "🌸", "majets"],
+  ["Abril", "Kwiecień", "🌷", "kfietxen"],
+  ["Maig", "Maj", "🌼", "mai"],
+  ["Juny", "Czerwiec", "☀️", "txerviets"],
+  ["Juliol", "Lipiec", "☀️", "lipiets"],
+  ["Agost", "Sierpień", "☀️", "xerpien"],
+  ["Setembre", "Wrzesień", "🍂", "vjeshen"],
+  ["Octubre", "Październik", "🍁", "pashdjernik"],
+  ["Novembre", "Listopad", "🍂", "listopat"],
+  ["Desembre", "Grudzień", "❄️", "grudjen"],
+  ["Un", "Jeden", "1️⃣", "ieden"],
+  ["Dos", "Dwa", "2️⃣", "dva"],
+  ["Tres", "Trzy", "3️⃣", "tshi"],
+  ["Quatre", "Cztery", "4️⃣", "txteri"],
+  ["Cinc", "Pięć", "5️⃣", "pientx"],
+  ["Sis", "Sześć", "6️⃣", "sheshtx"],
+  ["Set", "Siedem", "7️⃣", "xedem"],
+  ["Vuit", "Osiem", "8️⃣", "oxem"],
+  ["Nou", "Dziewięć", "9️⃣", "djievientx"],
+  ["Deu", "Dziesięć", "🔟", "djeshientx"],
+  ["Onze", "Jedenaście", "1️⃣1️⃣", "iedenashtxe"],
+  ["Dotze", "Dwanaście", "1️⃣2️⃣", "dvanashtxe"],
+  ["Tretze", "Trzynaście", "1️⃣3️⃣", "tshinashtxe"],
+  ["Catorze", "Czternaście", "1️⃣4️⃣", "txternashtxe"],
+  ["Quinze", "Piętnaście", "1️⃣5️⃣", "pientnashtxe"],
+  ["Cent", "Sto", "💯", "sto"],
+  ["Mil", "Tysiąc", "1000", "tishionts"],
+  ["Diners", "Pieniądze", "💰", "pieniondze"],
+  ["Car", "Drogi", "💸", "drogi"],
+  ["Barat", "Tani", "💸", "tani"],
+  ["Bon", "Dobry", "👍", "dobri"],
+  ["Dolent", "Zły", "👎", "zuí"],
+  ["Gran", "Duży", "🔼", "duji"],
+  ["Petit", "Mały", "🔽", "mauí"],
+  ["Calent", "Gorący", "🔥", "gorontsi"],
+  ["Fred", "Zimny", "❄️", "ximni"],
+  ["Ràpid", "Szybki", "⚡", "shibki"],
+  ["Lent", "Wolny", "🐢", "volni"],
+  ["Fàcil", "Łatwy", "😊", "uatfi"],
+  ["Difícil", "Trudny", "😓", "trudni"],
+  ["Bonic", "Piękny", "🌹", "pienkni"],
+  ["Lleig", "Brzydki", "👹", "bjidki"],
+  ["Jo", "Ja", "👤", "ia"],
+  ["Tu", "Ty", "👤", "ti"],
+  ["Ell", "On", "👨", "on"],
+  ["Ella", "Ona", "👩", "ona"],
+  ["Nosaltres", "My", "👥", "mi"],
+  ["Vosaltres", "Wy", "👥", "vi"],
+  ["Ells", "Oni", "👥", "oni"]
+];
+
+let currentIndex = 0;
+let correctAnswers = 0;
+
+// Mostrar la paraula actual
+function showCurrentWord() {
+  const word = paraules[currentIndex];
+  const progress = ((currentIndex + 1) / paraules.length) * 100;
+  
+  document.getElementById('exercici').innerHTML = `
+    <div class="paraula-container">
+      <div>
+        <span class="emoji">${word[2]}</span>
+        <strong>${word[0]}</strong>
+      </div>
+      <div class="input-container">
+        <input type="text" id="userAnswer" placeholder="Escriu en polonès..." autocomplete="off">
+        <button onclick="checkAnswer()">Comprova</button>
+        <span class="audio-icon" onclick="playPronunciation('${word[3]}')">🔊</span>
+      </div>
+      <div id="feedback"></div>
+    </div>
+  `;
+  
+  document.getElementById('progressBar').style.width = `${progress}%`;
+  document.getElementById('counter').textContent = `${currentIndex + 1}/${paraules.length}`;
+  
+  // Permetre prémer Enter per comprovar
+  document.getElementById('userAnswer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      checkAnswer();
+    }
+  });
+  
+  // Enfocar l'input automàticament
+  document.getElementById('userAnswer').focus();
+}
+
+// Comprovar la resposta
+function checkAnswer() {
+  const userAnswer = document.getElementById('userAnswer').value.trim();
+  const correctAnswer = paraules[currentIndex][1];
+  const feedback = document.getElementById('feedback');
+  
+  if (!userAnswer) {
+    feedback.innerHTML = `<div class="feedback incorrect">Si us plau, escriu una resposta</div>`;
+    return;
+  }
+  
+  if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+    feedback.innerHTML = `<div class="feedback correct">Correcte! ${getRandomCongrats()}</div>`;
+    correctAnswers++;
+    setTimeout(() => {
+      nextWord();
+    }, 1000);
+  } else {
+    feedback.innerHTML = `
+      <div class="feedback incorrect">
+        Incorrecte. La resposta correcta és: <strong>${correctAnswer}</strong><br>
+        Pronúncia: <em>${paraules[currentIndex][3]}</em>
+      </div>
+    `;
+  }
+}
+
+// Següent paraula
+function nextWord() {
+  if (currentIndex < paraules.length - 1) {
+    currentIndex++;
+    showCurrentWord();
+  } else {
+    // Fi de l'exercici
+    document.getElementById('exercici').innerHTML = `
+      <div style="text-align: center; padding: 30px;">
+        <h2>Exercici completat! 🎉</h2>
+        <p>Has encertat <strong>${correctAnswers}</strong> de <strong>${paraules.length}</strong> paraules.</p>
+        <button onclick="resetExercise()">Tornar a començar</button>
+      </div>
+    `;
+  }
+}
+
+// Paraula anterior
+function prevWord() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showCurrentWord();
+  }
+}
+
+// Reproduir pronunciació
+function playPronunciation(pronunciation) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(paraules[currentIndex][1]);
+    utterance.lang = 'pl-PL';
+    speechSynthesis.speak(utterance);
+  } else {
+    alert("El teu navegador no suporta síntesi de veu. Prova amb Chrome o Edge.");
+  }
+}
+
+// Felicitacions aleatòries
+function getRandomCongrats() {
+  const congrats = ["Molt bé! 👍", "Perfecte! 🎯", "Excel·lent! 🌟", "Ho has encertat! 💯"];
+  return congrats[Math.floor(Math.random() * congrats.length)];
+}
+
+// Reiniciar exercici
+function resetExercise() {
+  currentIndex = 0;
+  correctAnswers = 0;
+  showCurrentWord();
+}
+
+// Configurar botons
+document.getElementById('prevBtn').addEventListener('click', prevWord);
+document.getElementById('nextBtn').addEventListener('click', nextWord);
+
+// Iniciar l'exercici
+showCurrentWord();
+</script>
+
+</body>
+</html>
