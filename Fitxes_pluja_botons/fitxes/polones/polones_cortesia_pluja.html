@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cortesia en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Expressions de cortesia",
+      objective: "Escull la traducció al català de l’expressió en polonès:",
+      explanation: [
+        "EXPRESSIONS DE CORTESIA:",
+        "— «Dziękuję» = Gràcies",
+        "— «Dzięki» = Gràcies (informal, com 'merci')",
+        "— «Proszę» = Si us plau (i també 'endavant', o quan ofereixes alguna cosa)",
+        "— «Nie ma za co» = De res (literalment: 'no hi ha per què')",
+        "— «Przepraszam» = Perdó / Disculpi / Em sap greu (segons el context)"
+      ],
+      buttons: ["Gràcies", "Si us plau", "De res", "Perdó", "Merci"],
+      questions: [
+        { sentence: "Dziękuję", answer: "Gràcies" },
+        { sentence: "Dzięki", answer: "Merci" },
+        { sentence: "Proszę", answer: "Si us plau" },
+        { sentence: "Nie ma za co", answer: "De res" },
+        { sentence: "Przepraszam", answer: "Perdó" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
