@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprèn Polonès a Gdańsk</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .story-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .word-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted #666;
+        }
+        .word-tooltip:hover::after {
+            content: attr(data-translation);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 1;
+            margin-bottom: 5px;
+        }
+        .word-tooltip:hover::before {
+            content: "🔊";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .greeting-select {
+            display: inline-block;
+            position: relative;
+        }
+        .greeting-select select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 16px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+        .audio-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            color: #3498db;
+            display: inline-block;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+        }
+        .correct {
+            background-color: #d5f5e3;
+            color: #27ae60;
+            display: block;
+        }
+        .incorrect {
+            background-color: #fadbd8;
+            color: #e74c3c;
+            display: block;
+        }
+        .check-button {
+            padding: 5px 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .check-button:hover {
+            background-color: #219653;
+        }
+        .info-box {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Un Dia a Gdańsk</h1>
+    <h2>Aprèn polonès amb situacions reals</h2>
+    
+    <div class="info-box">
+        <p><strong>Com funciona:</strong> Passa el ratolí per sobre les <span style="border-bottom: 1px dotted #666;">paraules subratllades</span> per veure la traducció al català. Als desplegables, tria la paraula correcta en polonès.</p>
+    </div>
+    
+    <div class="story-container">
+        <p>
+            <span class="greeting-select">
+                <select id="greeting1">
+                    <option value="" selected>Bon dia (formal)</option>
+                    <option value="Dzień dobry">Dzień dobry</option>
+                    <option value="Cześć">Cześć</option>
+                    <option value="Do widzenia">Do widzenia</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('dzien-dobry')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting1', 'Dzień dobry')">✓</button>
+            </span>! 
+            <span class="word-tooltip" data-translation="Em dic" data-audio="nazywam-sie">Nazywam się</span> <span class="word-tooltip" data-translation="Piotr" data-audio="piotr">Piotr</span> i <span class="word-tooltip" data-translation="visc" data-audio="mieszkam">mieszkam</span> w <span class="word-tooltip" data-translation="preciosa" data-audio="pieknym">pięknym</span> <span class="word-tooltip" data-translation="Gdańsk" data-audio="gdansku">Gdańsku</span>. 
+            <span class="word-tooltip" data-translation="Cada matí" data-audio="kazdego-ranka">Każdego ranka</span>, <span class="word-tooltip" data-translation="quan vaig" data-audio="gdy-ide">gdy idę</span> <span class="word-tooltip" data-translation="cap al" data-audio="nad">nad</span> <span class="word-tooltip" data-translation="Motława (riu)" data-audio="motlawe">Motławę</span>, 
+            <span class="word-tooltip" data-translation="saludo" data-audio="witam-sie">witam się</span> z <span class="word-tooltip" data-translation="veïns" data-audio="sasiadami">sąsiadami</span> <span class="word-tooltip" data-translation="dient" data-audio="mowiac">mówiąc</span> 
+            <span class="greeting-select">
+                <select id="greeting2">
+                    <option value="" selected>Hola (informal)</option>
+                    <option value="Dzień dobry">Dzień dobry</option>
+                    <option value="Cześć">Cześć</option>
+                    <option value="Dobry wieczór">Dobry wieczór</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('czescz')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting2', 'Cześć')">✓</button>
+            </span>.
+        </p>
+        
+        <p>
+            <span class="word-tooltip" data-translation="Al migdia" data-audio="w-poludnie">W południe</span> <span class="word-tooltip" data-translation="menjo" data-audio="jem">jem</span> <span class="word-tooltip" data-translation="dinar" data-audio="obiad">obiad</span> w <span class="word-tooltip" data-translation="Długi Targ (plaça)" data-audio="dlugim-targu">Długim Targu</span>. 
+            <span class="word-tooltip" data-translation="cambrers" data-audio="kelnerzy">Kelnerzy</span> w <span class="word-tooltip" data-translation="restaurant" data-audio="restauracji">restauracji</span> <span class="word-tooltip" data-translation="sempre" data-audio="zawsze">zawsze</span> <span class="word-tooltip" data-translation="diuen" data-audio="mowia">mówią</span> 
+            <span class="greeting-select">
+                <select id="greeting3">
+                    <option value="" selected>Bon dia</option>
+                    <option value="Dzień dobry">Dzień dobry</option>
+                    <option value="Smacznego">Smacznego</option>
+                    <option value="Do widzenia">Do widzenia</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('dzien-dobry')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting3', 'Dzień dobry')">✓</button>
+            </span>, 
+            a <span class="word-tooltip" data-translation="quan" data-audio="gdy">gdy</span> <span class="word-tooltip" data-translation="surto" data-audio="wychodze">wychodzę</span>, <span class="word-tooltip" data-translation="desitgen" data-audio="zycza">życzą</span> mi 
+            <span class="greeting-select">
+                <select id="greeting4">
+                    <option value="" selected>Bon profit</option>
+                    <option value="Dzień dobry">Dzień dobry</option>
+                    <option value="Smacznego">Smacznego</option>
+                    <option value="Dobranoc">Dobranoc</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('smacznego')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting4', 'Smacznego')">✓</button>
+            </span>.
+        </p>
+        
+        <p>
+            <span class="word-tooltip" data-translation="Al vespre" data-audio="wieczorem">Wieczorem</span> <span class="word-tooltip" data-translation="passejo" data-audio="spaceruje">spaceruję</span> <span class="word-tooltip" data-translation="pel" data-audio="po">po</span> <span class="word-tooltip" data-translation="moll de Brzeźno" data-audio="molo-w-brzeznie">molo w Brzeźnie</span>. 
+            <span class="word-tooltip" data-translation="Quan trobo" data-audio="gdy-spotykam">Gdy spotykam</span> <span class="word-tooltip" data-translation="amics" data-audio="znajomych">znajomych</span>, <span class="word-tooltip" data-translation="ens diem" data-audio="mowimy-sobie">mówimy sobie</span> 
+            <span class="greeting-select">
+                <select id="greeting5">
+                    <option value="" selected>Bona tarda</option>
+                    <option value="Dzień dobry">Dzień dobry</option>
+                    <option value="Dobry wieczór">Dobry wieczór</option>
+                    <option value="Do widzenia">Do widzenia</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('dobry-wieczor')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting5', 'Dobry wieczór')">✓</button>
+            </span>. 
+            <span class="word-tooltip" data-translation="I quan" data-audio="a-gdy">A gdy</span> <span class="word-tooltip" data-translation="ja" data-audio="juz">już</span> <span class="word-tooltip" data-translation="hora de tornar" data-audio="czas-wracac">czas wracać</span> <span class="word-tooltip" data-translation="a" data-audio="do">do</span> <span class="word-tooltip" data-translation="casa" data-audio="domu">domu</span>, <span class="word-tooltip" data-translation="em despull" data-audio="zegnam-sie">żegnam się</span> <span class="word-tooltip" data-translation="dient" data-audio="mowiac">mówiąc</span> 
+            <span class="greeting-select">
+                <select id="greeting6">
+                    <option value="" selected>Adéu (formal)</option>
+                    <option value="Cześć">Cześć</option>
+                    <option value="Do widzenia">Do widzenia</option>
+                    <option value="Dobranoc">Dobranoc</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('do-widzenia')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting6', 'Do widzenia')">✓</button>
+            </span> 
+            <span class="word-tooltip" data-translation="o" data-audio="lub">lub</span> 
+            <span class="greeting-select">
+                <select id="greeting7">
+                    <option value="" selected>Adeu (informal)</option>
+                    <option value="Cześć">Cześć</option>
+                    <option value="Do widzenia">Do widzenia</option>
+                    <option value="Dobranoc">Dobranoc</option>
+                </select>
+                <span class="audio-icon" onclick="playAudio('czescz')">🔊</span>
+                <button class="check-button" onclick="checkAnswer('greeting7', 'Cześć')">✓</button>
+            </span>.
+        </p>
+    </div>
+
+    <div id="feedback-container" style="margin-top: 20px;"></div>
+
+    <script>
+        // Funció per comprovar respostes
+        function checkAnswer(questionId, correctAnswer) {
+            const selectElement = document.getElementById(questionId);
+            const feedbackContainer = document.getElementById('feedback-container');
+            
+            if (!selectElement.value) {
+                feedbackContainer.innerHTML = `<div class="feedback incorrect">Si us plau, selecciona una resposta</div>`;
+                return;
+            }
+            
+            if (selectElement.value === correctAnswer) {
+                feedbackContainer.innerHTML = `<div class="feedback correct">Correcte! ${getRandomCongrats()}</div>`;
+                selectElement.style.borderColor = "#27ae60";
+            } else {
+                feedbackContainer.innerHTML = `<div class="feedback incorrect">Incorrecte. La resposta correcta és: ${correctAnswer}</div>`;
+                selectElement.style.borderColor = "#e74c3c";
+            }
+            
+            setTimeout(() => {
+                selectElement.style.borderColor = "#ddd";
+            }, 2000);
+        }
+        
+        // Funció per reproduir àudio
+        function playAudio(word) {
+            // Crear objecte d'àudio dinàmicament
+            const audio = new Audio();
+            
+            // Configurar les fonts d'àudio segons la paraula
+            const audioSources = {
+                'dzien-dobry': 'https://www.myinstants.com/media/sounds/dzien-dobry.mp3',
+                'czescz': 'https://www.myinstants.com/media/sounds/czesc.mp3',
+                'dobry-wieczor': 'https://www.myinstants.com/media/sounds/dobry-wieczor.mp3',
+                'do-widzenia': 'https://www.myinstants.com/media/sounds/do-widzenia.mp3',
+                'smacznego': 'https://www.myinstants.com/media/sounds/smacznego.mp3',
+                'nazywam-sie': 'https://www.myinstants.com/media/sounds/nazywam-sie.mp3',
+                'gdansku': 'https://www.myinstants.com/media/sounds/gdansk.mp3',
+                'motlawe': 'https://www.myinstants.com/media/sounds/motlawa.mp3',
+                'dlugim-targu': 'https://www.myinstants.com/media/sounds/dlugi-targ.mp3',
+                'molo-w-brzeznie': 'https://www.myinstants.com/media/sounds/brzezno.mp3'
+            };
+            
+            // Assignar la font d'àudio si existeix
+            if (audioSources[word]) {
+                audio.src = audioSources[word];
+                audio.play().catch(e => console.error("Error en reproduir l'àudio:", e));
+            } else {
+                console.warn("No s'ha trobat l'àudio per a:", word);
+                // Fer un intent amb síntesi de veu com a fallback
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(word);
+                    utterance.lang = 'pl-PL';
+                    speechSynthesis.speak(utterance);
+                }
+            }
+            
+            // Efecte visual
+            const audioIcon = event.currentTarget;
+            audioIcon.style.transform = "scale(1.3)";
+            setTimeout(() => {
+                audioIcon.style.transform = "scale(1)";
+            }, 200);
+        }
+        
+        // Funció per a felicitacions aleatòries
+        function getRandomCongrats() {
+            const congrats = ["Molt bé! 👍", "Perfecte! 🎯", "Excel·lent! 🌟", "Ho has encertat! 💯"];
+            return congrats[Math.floor(Math.random() * congrats.length)];
+        }
+    </script>
+</body>
+</html>
