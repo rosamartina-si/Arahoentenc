@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salutacions en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Salutacions",
+      objective: "Escull la traducció al català de la salutació en polonès:",
+      explanation: [
+        "ÚS DE LES SALUTACIONS:",
+        "— «Dzień dobry» = Bon dia (aprox. de 6:00 a 18:00)",
+        "— «Dobry wieczór» = Bona tarda / vespre (aprox. de 18:00 a 22:00)",
+        "— «Dobranoc» = Bona nit (quan vas a dormir, no com a salutació general)",
+        "— «Cześć» = Hola / Adéu informal (només amb confiança)",
+        "— «Do widzenia» = Adéu (forma estàndard i educada)"
+      ],
+      buttons: ["Bon dia", "Bona tarda", "Bona nit", "Adéu", "Hola"],
+      questions: [
+        { sentence: "Dzień dobry", answer: "Bon dia" },
+        { sentence: "Dobry wieczór", answer: "Bona tarda" },
+        { sentence: "Dobranoc", answer: "Bona nit" },
+        { sentence: "Do widzenia", answer: "Adéu" },
+        { sentence: "Cześć", answer: "Hola" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
