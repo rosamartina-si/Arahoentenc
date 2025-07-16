@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unitats, desenes i centenes en polonès</title>
+  <link rel="stylesheet" href="../../estils.css" />
+</head>
+<body>
+
+<h1>Unitats, desenes i centenes en polonès</h1>
+<p>Escriu la xifra numèrica corresponent al número en polonès. Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta.</p>
+
+<div class="image left">
+  <img src="../Img/numeros.jpg" alt="Nombres en polonès">
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<script>
+  window.habilitaAudio = true;
+  window.textToSpeechTarget = 'entrada';
+  window.textToSpeechLangs = {
+    entrada: 'pl-PL',
+    resposta: 'ca-ES'
+  };
+
+  const frases = [
+    // unitats
+    ["jeden", ["1"]],
+    ["dwa", ["2"]],
+    ["trzy", ["3"]],
+    ["cztery", ["4"]],
+    ["pięć", ["5"]],
+    ["sześć", ["6"]],
+    ["siedem", ["7"]],
+    ["osiem", ["8"]],
+    ["dziewięć", ["9"]],
+
+    // desenes simples
+    ["dziesięć", ["10"]],
+    ["dwadzieścia", ["20"]],
+    ["trzydzieści", ["30"]],
+    ["czterdzieści", ["40"]],
+    ["pięćdziesiąt", ["50"]],
+    ["sześćdziesiąt", ["60"]],
+    ["siedemdziesiąt", ["70"]],
+    ["osiemdziesiąt", ["80"]],
+    ["dziewięćdziesiąt", ["90"]],
+
+    // centenes simples
+    ["sto", ["100"]],
+    ["dwieście", ["200"]],
+    ["trzysta", ["300"]],
+    ["czterysta", ["400"]],
+    ["pięćset", ["500"]],
+    ["sześćset", ["600"]],
+    ["siedemset", ["700"]],
+    ["osiemset", ["800"]],
+    ["dziewięćset", ["900"]]
+  ];
+</script>
+
+<script src="../../script2.js"></script>
+
+</body>
+</html>
