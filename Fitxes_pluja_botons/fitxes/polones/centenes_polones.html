@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Centenes en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Centenes",
+      objective: "Escull la traducció al català de la centena en polonès:",
+      explanation: [
+        "CENTENES I MILER EN POLONÈS:",
+        "— «Sto» = Cent",
+        "— «Dwieście» = Doscents → dwa + -ście",
+        "— «Trzysta» = Tres-cents → trzy + sta",
+        "— «Czterysta» = Quatre-cents → cztery + sta",
+        "— «Pięćset» = Cinc-cents → pięć + set",
+        "— «Sześćset» = Sis-cents → sześć + set",
+        "— «Siedemset» = Set-cents → siedem + set",
+        "— «Osiemset» = Vuit-cents → osiem + set",
+        "— «Dziewięćset» = Nou-cents → dziewięć + set",
+        "— «Tysiąc» = Mil (forma única)",
+        "",
+        "ℹ️ FORMACIÓ:",
+        "— «Sto» és la base per 100",
+        "— «Dwieście» és irregular (no *dwasta*), ve de «dwa + -ście» (forma antiga)",
+        "— «Trzysta» i «Czterysta» fan servir el sufix «-sta»",
+        "— De 500 a 900 el sufix és «-set», afegit al nombre bàsic:",
+        "     pięć + set → pięćset",
+        "     sześć + set → sześćset",
+        "— «Tysiąc» (mil) és una forma única i invariable en singular",
+        "",
+        "✅ Per a nombres com 200, 300, 400, etc., es combinen els numerals 2–9 amb «-sta» o «-set» segons el cas",
+        "— A partir de 1000, els nombres es construeixen afegint desenes/unitats després: ex. «tysiąc sto» = mil cent"
+      ],
+      buttons: [
+        "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"
+      ],
+      questions: [
+        { sentence: "Sto", answer: "100" },
+        { sentence: "Dwieście", answer: "200" },
+        { sentence: "Trzysta", answer: "300" },
+        { sentence: "Czterysta", answer: "400" },
+        { sentence: "Pięćset", answer: "500" },
+        { sentence: "Sześćset", answer: "600" },
+        { sentence: "Siedemset", answer: "700" },
+        { sentence: "Osiemset", answer: "800" },
+        { sentence: "Dziewięćset", answer: "900" },
+        { sentence: "Tysiąc", answer: "1000" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
