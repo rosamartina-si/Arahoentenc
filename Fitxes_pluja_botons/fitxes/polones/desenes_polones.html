@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Desenes en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Desenes",
+      objective: "Escull la traducció al català de la desena en polonès:",
+      explanation: [
+        "DESENES EN POLONÈS:",
+        "— «Dziesięć» = Deu",
+        "— «Dwadzieścia» = Vint",
+        "— «Trzydzieści» = Trenta",
+        "— «Czterdzieści» = Quaranta",
+        "— «Pięćdziesiąt» = Cinquanta",
+        "— «Sześćdziesiąt» = Seixanta",
+        "— «Siedemdziesiąt» = Setanta",
+        "— «Osiemdziesiąt» = Vuitanta",
+        "— «Dziewięćdziesiąt» = Noranta",
+        "— «Sto» = Cent"
+      ],
+      buttons: ["Deu", "Vint", "Trenta", "Quaranta", "Cinquanta", "Seixanta", "Setanta", "Vuitanta", "Noranta", "Cent"],
+      questions: [
+        { sentence: "Dziesięć", answer: "Deu" },
+        { sentence: "Dwadzieścia", answer: "Vint" },
+        { sentence: "Trzydzieści", answer: "Trenta" },
+        { sentence: "Czterdzieści", answer: "Quaranta" },
+        { sentence: "Pięćdziesiąt", answer: "Cinquanta" },
+        { sentence: "Sześćdziesiąt", answer: "Seixanta" },
+        { sentence: "Siedemdziesiąt", answer: "Setanta" },
+        { sentence: "Osiemdziesiąt", answer: "Vuitanta" },
+        { sentence: "Dziewięćdziesiąt", answer: "Noranta" },
+        { sentence: "Sto", answer: "Cent" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
