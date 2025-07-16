@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Al restaurant: el lavabo en polonès</title>
+  <link rel="stylesheet" href="../../estils.css" />
+</head>
+<body>
+
+<h1>Al restaurant: el lavabo en polonès</h1>
+<p>Traduïu les frases següents del polonès al català. Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta i escoltar la pronunciació correcta.</p>
+
+<div class="image left">
+  <img src="../Img/lavabo_restaurant.jpg" alt="Lavabo en un restaurant polonès">
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<script>
+  window.habilitaAudio = true;
+  window.textToSpeechTarget = 'entrada';
+  window.textToSpeechLangs = {
+    entrada: 'pl-PL',
+    resposta: 'ca-ES'
+  };
+
+  const frases = [
+    ["Gdzie jest toaleta?", ["On és el lavabo?"]],
+    ["Czy mogę skorzystać z toalety?", ["Puc fer servir el lavabo?"]],
+    ["Szukam toalety.", ["Estic buscant el lavabo."]],
+    ["Toaleta jest tam.", ["El lavabo és allà."]],
+    ["Na prawo", ["A la dreta"]],
+    ["Na lewo", ["A l'esquerra"]],
+    ["Na końcu korytarza", ["Al fons del passadís"]],
+    ["Za barem", ["Darrere la barra"]],
+    ["Toaleta dla klientów", ["Lavabo per a clients"]],
+    ["Dziękuję, już znalazłem.", ["Gràcies, ja l’he trobat."]]
+  ];
+</script>
+
+<script src="../../script2.js"></script>
+
+</body>
+</html>
