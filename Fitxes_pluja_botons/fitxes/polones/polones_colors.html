@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colors en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Colors",
+      objective: "Escull la traducció al català del color en polonès:",
+      explanation: [
+        "COLORS BÀSICS EN POLONÈS:",
+        "— «Czarny» = Negre",
+        "— «Biały» = Blanc",
+        "— «Czerwony» = Vermell",
+        "— «Zielony» = Verd",
+        "— «Niebieski» = Blau",
+        "— «Żółty» = Groc",
+        "— «Pomarańczowy» = Taronja",
+        "— «Różowy» = Rosa",
+        "— «Szary» = Gris",
+        "— «Brązowy» = Marró"
+      ],
+      buttons: ["Negre", "Blanc", "Vermell", "Verd", "Blau", "Groc", "Taronja", "Rosa", "Gris", "Marró"],
+      questions: [
+        { sentence: "Czarny", answer: "Negre" },
+        { sentence: "Biały", answer: "Blanc" },
+        { sentence: "Czerwony", answer: "Vermell" },
+        { sentence: "Zielony", answer: "Verd" },
+        { sentence: "Niebieski", answer: "Blau" },
+        { sentence: "Żółty", answer: "Groc" },
+        { sentence: "Pomarańczowy", answer: "Taronja" },
+        { sentence: "Różowy", answer: "Rosa" },
+        { sentence: "Szary", answer: "Gris" },
+        { sentence: "Brązowy", answer: "Marró" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
