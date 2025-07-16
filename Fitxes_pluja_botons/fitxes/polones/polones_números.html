@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Números en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Números",
+      objective: "Escull la traducció al català del número en polonès:",
+      explanation: [
+        "NÚMEROS EN POLONÈS (1–10):",
+        "— «Jeden» = U",
+        "— «Dwa» = Dos",
+        "— «Trzy» = Tres",
+        "— «Cztery» = Quatre",
+        "— «Pięć» = Cinc",
+        "— «Sześć» = Sis",
+        "— «Siedem» = Set",
+        "— «Osiem» = Vuit",
+        "— «Dziewięć» = Nou",
+        "— «Dziesięć» = Deu"
+      ],
+      buttons: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      questions: [
+        { sentence: "Jeden", answer: "Un" },
+        { sentence: "Dwa", answer: "Dos" },
+        { sentence: "Trzy", answer: "Tres" },
+        { sentence: "Cztery", answer: "Quatre" },
+        { sentence: "Pięć", answer: "Cinc" },
+        { sentence: "Sześć", answer: "Sis" },
+        { sentence: "Siedem", answer: "Set" },
+        { sentence: "Osiem", answer: "Vuit" },
+        { sentence: "Dziewięć", answer: "Nou" },
+        { sentence: "Dziesięć", answer: "Deu" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
