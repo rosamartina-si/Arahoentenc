@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Números en polonès</title>
+  <link rel="stylesheet" href="../../estils.css" />
+</head>
+<body>
+
+<h1>Els nombres del 1 al 100 en polonès</h1>
+<p>Escolta o llegeix el número en polonès i escriu-ne la forma numèrica. Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta.</p>
+
+<div class="image left">
+  <img src="../Img/numeros.jpg" alt="Números">
+</div>  
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<script>
+  window.habilitaAudio = true;
+  window.textToSpeechTarget = 'entrada';
+  window.textToSpeechLangs = {
+    entrada: 'pl-PL',
+    resposta: 'ca-ES'
+  };
+
+const frases = [
+  ["jeden", ["1"]],
+  ["dwa", ["2"]],
+  ["trzy", ["3"]],
+  ["cztery", ["4"]],
+  ["pięć", ["5"]],
+  ["sześć", ["6"]],
+  ["siedem", ["7"]],
+  ["osiem", ["8"]],
+  ["dziewięć", ["9"]],
+  ["dziesięć", ["10"]],
+  ["jedenaście", ["11"]],
+  ["dwanaście", ["12"]],
+  ["trzynaście", ["13"]],
+  ["czternaście", ["14"]],
+  ["piętnaście", ["15"]],
+  ["szesnaście", ["16"]],
+  ["siedemnaście", ["17"]],
+  ["osiemnaście", ["18"]],
+  ["dziewiętnaście", ["19"]],
+  ["dwadzieścia", ["20"]],
+  ["dwadzieścia jeden", ["21"]],
+  ["dwadzieścia dwa", ["22"]],
+  ["dwadzieścia trzy", ["23"]],
+  ["dwadzieścia cztery", ["24"]],
+  ["dwadzieścia pięć", ["25"]],
+  ["dwadzieścia sześć", ["26"]],
+  ["dwadzieścia siedem", ["27"]],
+  ["dwadzieścia osiem", ["28"]],
+  ["dwadzieścia dziewięć", ["29"]],
+  ["trzydzieści", ["30"]],
+  ["trzydzieści jeden", ["31"]],
+  ["trzydzieści dwa", ["32"]],
+  ["trzydzieści trzy", ["33"]],
+  ["trzydzieści cztery", ["34"]],
+  ["trzydzieści pięć", ["35"]],
+  ["trzydzieści sześć", ["36"]],
+  ["trzydzieści siedem", ["37"]],
+  ["trzydzieści osiem", ["38"]],
+  ["trzydzieści dziewięć", ["39"]],
+  ["czterdzieści", ["40"]],
+  ["czterdzieści jeden", ["41"]],
+  ["czterdzieści dwa", ["42"]],
+  ["czterdzieści trzy", ["43"]],
+  ["czterdzieści cztery", ["44"]],
+  ["czterdzieści pięć", ["45"]],
+  ["czterdzieści sześć", ["46"]],
+  ["czterdzieści siedem", ["47"]],
+  ["czterdzieści osiem", ["48"]],
+  ["czterdzieści dziewięć", ["49"]],
+  ["pięćdziesiąt", ["50"]],
+  ["pięćdziesiąt jeden", ["51"]],
+  ["pięćdziesiąt dwa", ["52"]],
+  ["pięćdziesiąt trzy", ["53"]],
+  ["pięćdziesiąt cztery", ["54"]],
+  ["pięćdziesiąt pięć", ["55"]],
+  ["pięćdziesiąt sześć", ["56"]],
+  ["pięćdziesiąt siedem", ["57"]],
+  ["pięćdziesiąt osiem", ["58"]],
+  ["pięćdziesiąt dziewięć", ["59"]],
+  ["sześćdziesiąt", ["60"]],
+  ["sześćdziesiąt jeden", ["61"]],
+  ["sześćdziesiąt dwa", ["62"]],
+  ["sześćdziesiąt trzy", ["63"]],
+  ["sześćdziesiąt cztery", ["64"]],
+  ["sześćdziesiąt pięć", ["65"]],
+  ["sześćdziesiąt sześć", ["66"]],
+  ["sześćdziesiąt siedem", ["67"]],
+  ["sześćdziesiąt osiem", ["68"]],
+  ["sześćdziesiąt dziewięć", ["69"]],
+  ["siedemdziesiąt", ["70"]],
+  ["siedemdziesiąt jeden", ["71"]],
+  ["siedemdziesiąt dwa", ["72"]],
+  ["siedemdziesiąt trzy", ["73"]],
+  ["siedemdziesiąt cztery", ["74"]],
+  ["siedemdziesiąt pięć", ["75"]],
+  ["siedemdziesiąt sześć", ["76"]],
+  ["siedemdziesiąt siedem", ["77"]],
+  ["siedemdziesiąt osiem", ["78"]],
+  ["siedemdziesiąt dziewięć", ["79"]],
+  ["osiemdziesiąt", ["80"]],
+  ["osiemdziesiąt jeden", ["81"]],
+  ["osiemdziesiąt dwa", ["82"]],
+  ["osiemdziesiąt trzy", ["83"]],
+  ["osiemdziesiąt cztery", ["84"]],
+  ["osiemdziesiąt pięć", ["85"]],
+  ["osiemdziesiąt sześć", ["86"]],
+  ["osiemdziesiąt siedem", ["87"]],
+  ["osiemdziesiąt osiem", ["88"]],
+  ["osiemdziesiąt dziewięć", ["89"]],
+  ["dziewięćdziesiąt", ["90"]],
+  ["dziewięćdziesiąt jeden", ["91"]],
+  ["dziewięćdziesiąt dwa", ["92"]],
+  ["dziewięćdziesiąt trzy", ["93"]],
+  ["dziewięćdziesiąt cztery", ["94"]],
+  ["dziewięćdziesiąt pięć", ["95"]],
+  ["dziewięćdziesiąt sześć", ["96"]],
+  ["dziewięćdziesiąt siedem", ["97"]],
+  ["dziewięćdziesiąt osiem", ["98"]],
+  ["dziewięćdziesiąt dziewięć", ["99"]],
+  ["sto", ["100"]]
+];
+
+</script>
+
+<script src="../../script2.js"></script>
+
+</body>
+</html>
