@@ -64,14 +64,14 @@ function normalitza(text) {
 }
 
 /**
- * Text-to-speech
+ * Text-to-speech amb idioma configurable
  */
-function parla(text) {
+function parla(text, lang = 'en-GB') {
   if (!window.habilitaAudio) return;
   const synth = window.speechSynthesis;
   if (synth) {
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
+    utter.lang = lang;
     synth.speak(utter);
   }
 }
@@ -92,30 +92,37 @@ function comprovaIndividual(button) {
 
   if (isCorrect) {
     if (prevState === 'incorrect' || prevState === 'corrected') {
-      input.classList.remove('incorrect','correct');
+      input.classList.remove('incorrect', 'correct');
       input.classList.add('corrected');
       correccio.innerHTML = '<span style="color:orange;">✓ Ara ja és correcte</span>';
       input.dataset.state = 'corrected';
     } else {
-      input.classList.remove('incorrect','corrected');
+      input.classList.remove('incorrect', 'corrected');
       input.classList.add('correct');
       correccio.innerHTML = '<span style="color:green;">✓ Correcte!</span>';
       input.dataset.state = 'correct';
     }
 
-    const textParlat = (window.textToSpeechTarget === 'entrada')
-      ? bloc.querySelector('p').textContent.replace(/^\d+\.\s*/, '')
-      : correctes[0];
-
-    parla(textParlat);
-
   } else {
-    input.classList.remove('correct','corrected');
+    input.classList.remove('correct', 'corrected');
     input.classList.add('incorrect');
     correccio.innerHTML = `<span style="color:red;">❌ Resposta correcta: ${correctes[0]}</span>`;
     input.dataset.state = 'incorrect';
-    parla(correctes[0]);
   }
+
+  // Parla el text indicat segons la configuració
+  const target = window.textToSpeechTarget || 'resposta';
+  let textParlat, lang;
+
+  if (target === 'entrada') {
+    textParlat = bloc.querySelector('p').textContent.replace(/^\d+\.\s*/, '');
+    lang = window.textToSpeechLangs?.entrada || 'en-GB';
+  } else {
+    textParlat = correctes[0];
+    lang = window.textToSpeechLangs?.resposta || 'en-GB';
+  }
+
+  parla(textParlat, lang);
 }
 
 /**
@@ -139,7 +146,7 @@ function reinicia() {
   document.querySelectorAll('.phrase-block').forEach(bloc => {
     const inp = bloc.querySelector('input');
     inp.value = '';
-    inp.classList.remove('correct','incorrect','corrected');
+    inp.classList.remove('correct', 'incorrect', 'corrected');
     inp.dataset.state = 'unchecked';
     bloc.querySelector('.correction').textContent = '';
   });
