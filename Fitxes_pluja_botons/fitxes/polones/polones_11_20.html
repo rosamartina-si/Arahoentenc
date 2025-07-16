@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nombres de l’11 al 20 en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Nombres de l’11 al 20",
+      objective: "Escull la xifra correcta del nombre en polonès:",
+      explanation: [
+        "NOMBRES DE L’11 AL 20 EN POLONÈS:",
+        "",
+        "Aquests nombres tenen formes especials no 100% regulars, cal memoritzar-les:",
+        "— «jedenaście» = 11 → literalment: *un sobre deu*",
+        "— «dwanaście» = 12 → *dos sobre deu*",
+        "— «trzynaście» = 13",
+        "— «czternaście» = 14",
+        "— «piętnaście» = 15",
+        "— «szesnaście» = 16",
+        "— «siedemnaście» = 17",
+        "— «osiemnaście» = 18",
+        "— «dziewiętnaście» = 19",
+        "— «dwadzieścia» = 20 (forma composta: dwa + dzieścia)",
+        "",
+        "ℹ️ Observació:",
+        "— De l’11 al 19 acaben en «naście»",
+        "— A partir del 20 comencen les desenes regulars amb sufixos «-dzieścia» o «-dziesiąt»"
+      ],
+      buttons: ["11", "12", "13", "14", "15", "16", "17", "18", "19", "20"],
+      questions: [
+        { sentence: "Jedenaście", answer: "11" },
+        { sentence: "Dwanaście", answer: "12" },
+        { sentence: "Trzynaście", answer: "13" },
+        { sentence: "Czternaście", answer: "14" },
+        { sentence: "Piętnaście", answer: "15" },
+        { sentence: "Szesnaście", answer: "16" },
+        { sentence: "Siedemnaście", answer: "17" },
+        { sentence: "Osiemnaście", answer: "18" },
+        { sentence: "Dziewiętnaście", answer: "19" },
+        { sentence: "Dwadzieścia", answer: "20" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
