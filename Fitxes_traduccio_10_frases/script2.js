@@ -15,7 +15,7 @@ function shuffle(array) {
  */
 function generaExercici(frases) {
   const contenidor = document.getElementById('exercici');
-  contenidor.innerHTML = '';  // Neteja contingut anterior
+  contenidor.innerHTML = '';
 
   frases.forEach((f, i) => {
     const bloc = document.createElement('div');
@@ -25,30 +25,25 @@ function generaExercici(frases) {
       <input type="text"
              data-index="${i}"
              data-state="unchecked"
-             data-correct="${JSON.stringify(f[1])
-               .replace(/"/g, '&quot;')
-               .replace(/'/g, '&#39;')}"
-      >
+             data-correct="${JSON.stringify(f[1]).replace(/"/g, '&quot;').replace(/'/g, '&#39;')}">
       <button>Comprova</button>
       <div class="correction"></div>
     `;
     contenidor.appendChild(bloc);
 
     const btn = bloc.querySelector('button');
-    btn.addEventListener('click', () => comprovaIndividual(btn));
+    btn.addEventListener('click', () => comprovaIndividual(bloc));
 
     const input = bloc.querySelector('input');
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        comprovaIndividual(btn);
+        comprovaIndividual(bloc);
       }
     });
   });
 
-  // Controls generals
-  const controls = document.getElementById('controls');
-  controls.innerHTML = `
+  document.getElementById('controls').innerHTML = `
     <button onclick="comprovaTotes()">Comprova-ho tot</button>
     <button onclick="reinicia()">Esborra-ho tot</button>
     <button onclick="reiniciaAleatori()">🔁 Frases noves</button>
@@ -64,26 +59,39 @@ function normalitza(text) {
 }
 
 /**
- * Text-to-speech amb idioma configurable
+ * Pronunciar text en l'idioma especificat
  */
-function parla(text, lang) {
-  if (!window.habilitaAudio) return;
+function pronunciarText(text, lang) {
+  if (!window.habilitaAudio || !window.speechSynthesis) return;
   
-  // Aturar qualsevol pronunciació anterior
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
+  // Aturar pronunciacions previess
+  window.speechSynthesis.cancel();
+  
+  // Esperar un moment per evitar solapaments
+  setTimeout(() => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
     
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = lang;
-    window.speechSynthesis.speak(utter);
-  }
+    // Verificar que l'idioma estigui disponible
+    const veus = window.speechSynthesis.getVoices();
+    const veuDisponible = veus.some(veu => veu.lang === lang);
+    
+    if (veuDisponible) {
+      utterance.voice = veus.find(veu => veu.lang === lang);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.warn(`No s'ha trobat una veu per l'idioma ${lang}`);
+      // Intentar-ho igualment
+      utterance.lang = lang;
+      window.speechSynthesis.speak(utterance);
+    }
+  }, 100);
 }
 
 /**
  * Comprova una frase individual
  */
-function comprovaIndividual(button) {
-  const bloc = button.closest('.phrase-block');
+function comprovaIndividual(bloc) {
   const input = bloc.querySelector('input');
   const correctes = JSON.parse(input.dataset.correct);
   const resposta = normalitza(input.value);
@@ -125,53 +133,73 @@ function comprovaIndividual(button) {
     lang = window.textToSpeechLangs?.resposta || 'ca-ES';
   }
 
-  parla(textParlat, lang);
+  // Esperar a que estigui disponible l'API de veu
+  if (!window.speechSynthesis) {
+    console.warn("L'API de síntesi de veu no està disponible");
+    return;
+  }
+
+  // Esperar a que es carreguin les veus si cal
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      pronunciarText(textParlat, lang);
+    };
+  } else {
+    pronunciarText(textParlat, lang);
+  }
 }
 
 /**
- * Comprova totes les frases i mostra el total d'encerts
+ * Comprova totes les frases
  */
 function comprovaTotes() {
   let encerts = 0;
-  const totalFrases = document.querySelectorAll('.phrase-block').length;
+  const blocs = document.querySelectorAll('.phrase-block');
   
-  document.querySelectorAll('.phrase-block').forEach(bloc => {
-    const inp = bloc.querySelector('input');
-    const btn = bloc.querySelector('button');
-    comprovaIndividual(btn);
-    if (inp.classList.contains('correct')) encerts++;
+  blocs.forEach(bloc => {
+    const input = bloc.querySelector('input');
+    comprovaIndividual(bloc);
+    if (input.classList.contains('correct')) encerts++;
   });
   
-  document.getElementById('resultat').textContent = `Has encertat ${encerts} de ${totalFrases}.`;
+  document.getElementById('resultat').textContent = `Has encertat ${encerts} de ${blocs.length}.`;
 }
 
 /**
- * Neteja tots els camps i missatges
+ * Reinicia l'exercici
  */
 function reinicia() {
   document.querySelectorAll('.phrase-block').forEach(bloc => {
-    const inp = bloc.querySelector('input');
-    inp.value = '';
-    inp.classList.remove('correct', 'incorrect', 'corrected');
-    inp.dataset.state = 'unchecked';
+    const input = bloc.querySelector('input');
+    input.value = '';
+    input.classList.remove('correct', 'incorrect', 'corrected');
+    input.dataset.state = 'unchecked';
     bloc.querySelector('.correction').textContent = '';
   });
   document.getElementById('resultat').textContent = '';
 }
 
 /**
- * Reinicia l'exercici amb frases noves aleatòriament
+ * Genera un nou exercici aleatori
  */
 function reiniciaAleatori() {
   reinicia();
-  const noves = shuffle(frases).slice(0, 10);
-  generaExercici(noves);
+  const novesFrases = shuffle(frases).slice(0, 10);
+  generaExercici(novesFrases);
 }
 
-// Al carregar la pàgina, barregem i mostrem 10 frases
+// Inicialització
 document.addEventListener('DOMContentLoaded', () => {
+  // Esperar a que estigui disponible l'API de veu
+  if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.onvoiceschanged = () => {
+      console.log("Veus disponibles:", speechSynthesis.getVoices());
+    };
+  }
+
+  // Generar l'exercici inicial
   if (typeof frases !== 'undefined') {
-    const inicial = shuffle(frases).slice(0, 10);
-    generaExercici(inicial);
+    const frasesInicials = shuffle(frases).slice(0, 10);
+    generaExercici(frasesInicials);
   }
 });
