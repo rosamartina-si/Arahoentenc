@@ -66,7 +66,7 @@ function normalitza(text) {
 /**
  * Text-to-speech amb idioma configurable
  */
-function parla(text, lang = 'en-GB') {
+function parla(text, lang) {
   if (!window.habilitaAudio) return;
   const synth = window.speechSynthesis;
   if (synth) {
@@ -80,10 +80,10 @@ function parla(text, lang = 'en-GB') {
  * Comprova una frase individual
  */
 function comprovaIndividual(button) {
-  const bloc      = button.closest('.phrase-block');
-  const input     = bloc.querySelector('input');
+  const bloc = button.closest('.phrase-block');
+  const input = bloc.querySelector('input');
   const correctes = JSON.parse(input.dataset.correct);
-  const resposta  = normalitza(input.value);
+  const resposta = normalitza(input.value);
   const prevState = input.dataset.state;
   const correccio = bloc.querySelector('.correction');
 
@@ -102,7 +102,6 @@ function comprovaIndividual(button) {
       correccio.innerHTML = '<span style="color:green;">✓ Correcte!</span>';
       input.dataset.state = 'correct';
     }
-
   } else {
     input.classList.remove('correct', 'corrected');
     input.classList.add('incorrect');
@@ -116,10 +115,10 @@ function comprovaIndividual(button) {
 
   if (target === 'entrada') {
     textParlat = bloc.querySelector('p').textContent.replace(/^\d+\.\s*/, '');
-    lang = window.textToSpeechLangs?.entrada || 'en-GB';
+    lang = window.textToSpeechLangs?.entrada || 'pl-PL';
   } else {
     textParlat = correctes[0];
-    lang = window.textToSpeechLangs?.resposta || 'en-GB';
+    lang = window.textToSpeechLangs?.resposta || 'ca-ES';
   }
 
   parla(textParlat, lang);
@@ -136,7 +135,7 @@ function comprovaTotes() {
     comprovaIndividual(btn);
     if (inp.classList.contains('correct')) encerts++;
   });
-  document.getElementById('resultat').textContent = `Has encertat ${encerts} de 10.`;
+  document.getElementById('resultat').textContent = `Has encertat ${encerts} de ${document.querySelectorAll('.phrase-block').length}.`;
 }
 
 /**
@@ -154,7 +153,7 @@ function reinicia() {
 }
 
 /**
- * Reinicia l’exercici amb 10 frases noves aleatòriament
+ * Reinicia l’exercici amb frases noves aleatòriament
  */
 function reiniciaAleatori() {
   reinicia();
