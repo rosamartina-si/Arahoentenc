@@ -1,5 +1,5 @@
 /**
- * Barreja un array amb l’algorisme Fisher–Yates
+ * Barreja un array amb l'algorisme Fisher–Yates
  */
 function shuffle(array) {
   const a = array.slice();
@@ -11,7 +11,7 @@ function shuffle(array) {
 }
 
 /**
- * Genera l’exercici a partir de l’array de frases
+ * Genera l'exercici a partir de l'array de frases
  */
 function generaExercici(frases) {
   const contenidor = document.getElementById('exercici');
@@ -68,11 +68,14 @@ function normalitza(text) {
  */
 function parla(text, lang) {
   if (!window.habilitaAudio) return;
-  const synth = window.speechSynthesis;
-  if (synth) {
+  
+  // Aturar qualsevol pronunciació anterior
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+    
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
-    synth.speak(utter);
+    window.speechSynthesis.speak(utter);
   }
 }
 
@@ -90,6 +93,7 @@ function comprovaIndividual(button) {
   const correctNormalized = correctes.map(c => normalitza(c));
   const isCorrect = correctNormalized.includes(resposta);
 
+  // Actualitzar estat visual
   if (isCorrect) {
     if (prevState === 'incorrect' || prevState === 'corrected') {
       input.classList.remove('incorrect', 'correct');
@@ -109,7 +113,7 @@ function comprovaIndividual(button) {
     input.dataset.state = 'incorrect';
   }
 
-  // Parla el text indicat segons la configuració
+  // Pronunciar el text segons configuració
   const target = window.textToSpeechTarget || 'resposta';
   let textParlat, lang;
 
@@ -125,17 +129,20 @@ function comprovaIndividual(button) {
 }
 
 /**
- * Comprova totes les frases i mostra el total d’encerts
+ * Comprova totes les frases i mostra el total d'encerts
  */
 function comprovaTotes() {
   let encerts = 0;
+  const totalFrases = document.querySelectorAll('.phrase-block').length;
+  
   document.querySelectorAll('.phrase-block').forEach(bloc => {
     const inp = bloc.querySelector('input');
     const btn = bloc.querySelector('button');
     comprovaIndividual(btn);
     if (inp.classList.contains('correct')) encerts++;
   });
-  document.getElementById('resultat').textContent = `Has encertat ${encerts} de ${document.querySelectorAll('.phrase-block').length}.`;
+  
+  document.getElementById('resultat').textContent = `Has encertat ${encerts} de ${totalFrases}.`;
 }
 
 /**
@@ -153,7 +160,7 @@ function reinicia() {
 }
 
 /**
- * Reinicia l’exercici amb frases noves aleatòriament
+ * Reinicia l'exercici amb frases noves aleatòriament
  */
 function reiniciaAleatori() {
   reinicia();
