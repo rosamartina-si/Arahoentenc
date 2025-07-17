@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: el lavabo en polonès</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+    }
+    h1 {
+      color: #003366;
+    }
+    .match-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2em;
+    }
+    .col {
+      width: 45%;
+    }
+    .item {
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+    .selected {
+      background-color: #d0ebff;
+    }
+    .matched {
+      border: 2px solid green;
+      background-color: #e8fbe8;
+      pointer-events: none;
+    }
+    .incorrect-pol {
+      border: 2px solid red;
+      background-color: #ffeaea !important;
+    }
+    .incorrect-cat {
+      border: 2px solid red;
+      background-color: #ffeaea !important;
+    }
+    .fixed-pol {
+      border: 2px solid orange;
+      background-color: #fffacc !important;
+      pointer-events: none;
+    }
+    .fixed-cat {
+      border: 2px solid orange;
+      background-color: #fffacc !important;
+      pointer-events: none;
+    }
+    .reset-cat {
+      background-color: #ffffff !important;
+      pointer-events: auto;
+      border: 1px solid #ccc !important;
+    }
+    #score {
+      font-weight: bold;
+      margin-top: 1em;
+      color: #003366;
+    }
+    #controls {
+      margin-top: 2em;
+    }
+    #controls button {
+      margin: 5px 5px 15px 0;
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #003366;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    #controls button:hover {
+      background-color: #005599;
+    }
+    .nota {
+      margin-top: 30px;
+      padding: 12px;
+      background: #f4f8ff;
+      border-left: 4px solid #003366;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Relaciona les frases: el lavabo en polonès</h1>
+<p>Fes clic primer a una frase en polonès per escoltar-la, i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Frases noves</button>
+</div>
+
+<div class="nota">
+  Recorda que les frases marcades en vermell o groc no sumen punts al comptador.
+  Només les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script>
+  const totesLesFrases = [
+    { id: 1, pol: "Gdzie jest toaleta?", cat: "On és el lavabo?" },
+    { id: 2, pol: "Na lewo", cat: "A l'esquerra" },
+    { id: 3, pol: "Za barem", cat: "Darrere la barra" },
+    { id: 4, pol: "Dziękuję, już znalazłem.", cat: "Gràcies, ja l'he trobat." },
+    { id: 5, pol: "Toaleta dla klientów", cat: "Lavabo per a clients" },
+    { id: 6, pol: "Czy mogę skorzystać z toalety?", cat: "Puc fer servir el lavabo?" },
+    { id: 7, pol: "Szukam toalety.", cat: "Estic buscant el lavabo." },
+    { id: 8, pol: "Na prawo", cat: "A la dreta" },
+    { id: 9, pol: "Toaleta jest tam.", cat: "El lavabo és allà." },
+    { id:10, pol: "Toaleta jest na końcu korytarza.", cat: "El lavabo és al fons del passadís." },
+    { id:11, pol: "Czy toaleta jest zajęta?", cat: "El lavabo està ocupat?" },
+    { id:12, pol: "Toaleta jest wolna.", cat: "El lavabo està lliure." },
+    { id:13, pol: "Toaleta znajduje się obok baru.", cat: "El lavabo és al costat de la barra." },
+    { id:14, pol: "Potrzebuję iść do toalety.", cat: "Necessito anar al lavabo." },
+    { id:15, pol: "Toaleta jest niedostępna.", cat: "El lavabo no està disponible." },
+    { id:16, pol: "Czy mają państwo toaletę?", cat: "Tenen lavabo?" },
+    { id:17, pol: "Jest tylko jedna toaleta.", cat: "Hi ha només un lavabo." },
+    { id:18, pol: "Toaleta jest zepsuta.", cat: "El lavabo està espatllat." },
+    { id:19, pol: "Toaleta jest po lewej stronie.", cat: "El lavabo és a l'esquerra." },
+    { id:20, pol: "Toaleta jest po prawej stronie.", cat: "El lavabo és a la dreta." }
+  ];
+
+  let encerts = 0;
+  let total = 10;
+  let selectedPol = null;
+  let frasesUsades = [];
+  let incorrectPairs = {};
+
+  function barreja(array) {
+    return array.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function speakPolish(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "pl-PL";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+  }
+
+  function actualitzaPuntuacio() {
+    document.getElementById("score").textContent = `Encerts: ${encerts} / ${total}`;
+    if (encerts === total) {
+      setTimeout(() => alert("🎉 Has completat totes les parelles!"), 100);
+    }
+  }
+
+  function novaRonda() {
+    const restants = totesLesFrases.filter(f => !frasesUsades.includes(f.id));
+    let ronda = restants.length >= total ? barreja(restants).slice(0, total) : barreja(totesLesFrases).slice(0, total);
+    frasesUsades.push(...ronda.map(f => f.id));
+    incorrectPairs = {};
+    generaExercici(ronda);
+  }
+
+  function generaExercici(frases) {
+    const polContainer = document.getElementById("polones");
+    const catContainer = document.getElementById("catala");
+    polContainer.innerHTML = "";
+    catContainer.innerHTML = "";
+    encerts = 0;
+    selectedPol = null;
+    actualitzaPuntuacio();
+
+    const polFrases = barreja(frases);
+    const catFrases = barreja(frases);
+
+    polFrases.forEach(f => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.dataset.id = f.id;
+      div.textContent = f.pol;
+      div.addEventListener("click", () => {
+        if (div.classList.contains("matched") || div.classList.contains("fixed-pol")) return;
+        document.querySelectorAll("#polones .item").forEach(el => el.classList.remove("selected"));
+        div.classList.add("selected");
+        selectedPol = div;
+        speakPolish(f.pol);
+      });
+      polContainer.appendChild(div);
+    });
+
+    catFrases.forEach(f => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.dataset.id = f.id;
+      div.textContent = f.cat;
+      div.addEventListener("click", () => {
+        if (!selectedPol) return;
+
+        // 🧽 Elimina reset-cat per fer-la reutilitzable
+        div.classList.remove("reset-cat");
+
+        const polId = selectedPol.dataset.id;
+        const catId = div.dataset.id;
+
+        if (polId === catId) {
+          if (selectedPol.classList.contains("incorrect-pol")) {
+            // CORRECCIÓ
+            selectedPol.classList.remove("incorrect-pol");
+            selectedPol.classList.add("fixed-pol");
+
+            if (incorrectPairs[polId]) {
+              const prevIncorrectCat = document.querySelector(`#catala .item[data-id="${incorrectPairs[polId]}"]`);
+              if (prevIncorrectCat) {
+                prevIncorrectCat.classList.remove("incorrect-cat");
+                prevIncorrectCat.classList.add("reset-cat");
+              }
+            }
+
+            div.classList.remove("incorrect-cat");
+            div.classList.add("fixed-cat");
+
+          } else if (!div.classList.contains("fixed-cat")) {
+            selectedPol.classList.add("matched");
+            div.classList.add("matched");
+            encerts++;
+            actualitzaPuntuacio();
+          }
+        } else {
+          selectedPol.classList.add("incorrect-pol");
+          div.classList.add("incorrect-cat");
+          incorrectPairs[polId] = catId;
+        }
+
+        selectedPol.classList.remove("selected");
+        selectedPol = null;
+      });
+      catContainer.appendChild(div);
+    });
+  }
+
+  window.onload = novaRonda;
+</script>
+
+</body>
+</html>
