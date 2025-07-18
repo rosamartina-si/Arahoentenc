@@ -1,0 +1,86 @@
+body {
+  font-family: 'Georgia', serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+}
+.match-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2em;
+}
+.col {
+  width: 45%;
+}
+.item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+.selected {
+  background-color: #d0ebff;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+  pointer-events: none;
+}
+.incorrect-pol {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+.incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+.fixed-pol {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.reset-cat {
+  background-color: #ffffff !important;
+  pointer-events: auto;
+  border: 1px solid #ccc !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+}
+#controls {
+  margin-top: 2em;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 12px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+}
