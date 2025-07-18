@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: el lavabo en polonès</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>Relaciona les frases: el lavabo en polonès</h1>
+<p>Fes clic primer a una frase en polonès per escoltar-la, i després a la traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Frases noves</button>
+</div>
+
+<div class="nota">
+  Recorda que les frases marcades en vermell o groc no sumen punts al comptador.
+  Només les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+  [
+    {"id": 1, "pol": "Gdzie jest toaleta?", "cat": "On és el lavabo?"},
+    {"id": 2, "pol": "Na lewo", "cat": "A l'esquerra"},
+    {"id": 3, "pol": "Za barem", "cat": "Darrere la barra"},
+    {"id": 4, "pol": "Dziękuję, już znalazłem.", "cat": "Gràcies, ja l'he trobat."},
+    {"id": 5, "pol": "Toaleta dla klientów", "cat": "Lavabo per a clients"},
+    {"id": 6, "pol": "Czy mogę skorzystać z toalety?", "cat": "Puc fer servir el lavabo?"},
+    {"id": 7, "pol": "Szukam toalety.", "cat": "Estic buscant el lavabo."},
+    {"id": 8, "pol": "Na prawo", "cat": "A la dreta"},
+    {"id": 9, "pol": "Toaleta jest tam.", "cat": "El lavabo és allà."},
+    {"id": 10, "pol": "Toaleta jest na końcu korytarza.", "cat": "El lavabo és al fons del passadís."},
+    {"id": 11, "pol": "Czy toaleta jest zajęta?", "cat": "El lavabo està ocupat?"},
+    {"id": 12, "pol": "Toaleta jest wolna.", "cat": "El lavabo està lliure."},
+    {"id": 13, "pol": "Toaleta znajduje się obok baru.", "cat": "El lavabo és al costat de la barra."},
+    {"id": 14, "pol": "Potrzebuję iść do toalety.", "cat": "Necessito anar al lavabo."},
+    {"id": 15, "pol": "Toaleta jest niedostępna.", "cat": "El lavabo no està disponible."},
+    {"id": 16, "pol": "Czy mają państwo toaletę?", "cat": "Tenen lavabo?"},
+    {"id": 17, "pol": "Jest tylko jedna toaleta.", "cat": "Hi ha només un lavabo."},
+    {"id": 18, "pol": "Toaleta jest zepsuta.", "cat": "El lavabo està espatllat."},
+    {"id": 19, "pol": "Toaleta jest po lewej stronie.", "cat": "El lavabo és a l'esquerra."},
+    {"id": 20, "pol": "Toaleta jest po prawej stronie.", "cat": "El lavabo és a la dreta."}
+  ]
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
