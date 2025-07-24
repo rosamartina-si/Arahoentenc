@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Indicacions a la carretera en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona les frases: indicacions per carretera en polonès</h1>
+<p>Fes clic primer a una frase en polonès per escoltar-la, i després a la traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 12</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Frases noves</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "Wyjazd", "cat": "Sortida"},
+  {"id": 2, "pol": "Wjazd", "cat": "Entrada"},
+  {"id": 3, "pol": "Zjazd z autostrady", "cat": "Sortida de l'autopista"},
+  {"id": 4, "pol": "Autostrada", "cat": "Autopista"},
+  {"id": 5, "pol": "Stacja benzynowa", "cat": "Gasolinera"},
+  {"id": 6, "pol": "Parking", "cat": "Aparcament"},
+  {"id": 7, "pol": "Droga zamknięta", "cat": "Carretera tallada"},
+  {"id": 8, "pol": "Objazd", "cat": "Desviació"},
+  {"id": 9, "pol": "Centrum", "cat": "Centre"},
+  {"id": 10, "pol": "Granica państwa", "cat": "Frontera"},
+  {"id": 11, "pol": "Uwaga!", "cat": "Atenció!"},
+  {"id": 12, "pol": "Roboty drogowe", "cat": "Obres a la carretera"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
