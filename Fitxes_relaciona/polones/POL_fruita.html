@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Fruites en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona les paraules: fruites en polonès</h1>
+<p>Fes clic primer a la paraula en polonès i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 20</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Fruites noves</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "jabłko", "cat": "poma"},
+  {"id": 2, "pol": "gruszka", "cat": "pera"},
+  {"id": 3, "pol": "banan", "cat": "plàtan"},
+  {"id": 4, "pol": "pomarańcza", "cat": "taronja"},
+  {"id": 5, "pol": "cytryna", "cat": "llimona"},
+  {"id": 6, "pol": "winogrono", "cat": "raïm"},
+  {"id": 7, "pol": "truskawka", "cat": "maduixa"},
+  {"id": 8, "pol": "wiśnia", "cat": "cirera"},
+  {"id": 9, "pol": "malina", "cat": "gerd"},
+  {"id": 10, "pol": "arbuz", "cat": "síndria"},
+  {"id": 11, "pol": "ananas", "cat": "pinya"},
+  {"id": 12, "pol": "brzoskwinia", "cat": "préssec"},
+  {"id": 13, "pol": "śliwka", "cat": "pruna"},
+  {"id": 14, "pol": "borówka", "cat": "nabius"},
+  {"id": 15, "pol": "czarna porzeczka", "cat": "grosella negra"},
+  {"id": 16, "pol": "porzeczka", "cat": "grosella"},
+  {"id": 17, "pol": "jeżyna", "cat": "móra"},
+  {"id": 18, "pol": "żurawina", "cat": "nabiu vermell"},
+  {"id": 19, "pol": "morela", "cat": "albercoc"},
+  {"id": 20, "pol": "agrest", "cat": "grosella espinosa"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
