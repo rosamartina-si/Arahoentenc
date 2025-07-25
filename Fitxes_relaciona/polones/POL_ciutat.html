@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Rètols a la ciutat en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona les frases: rètols a la ciutat en polonès</h1>
+<p>Fes clic primer a una paraula en polonès i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 20</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Rètols nous</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "Wejście", "cat": "Entrada"},
+  {"id": 2, "pol": "Wyjście", "cat": "Sortida"},
+  {"id": 3, "pol": "Wyjście ewakuacyjne", "cat": "Sortida d’emergència"},
+  {"id": 4, "pol": "Zakaz wstępu", "cat": "Prohibit entrar"},
+  {"id": 5, "pol": "Zakaz palenia", "cat": "Prohibit fumar"},
+  {"id": 6, "pol": "Winda", "cat": "Ascensor"},
+  {"id": 7, "pol": "Schody", "cat": "Escales"},
+  {"id": 8, "pol": "Otwarte", "cat": "Obert"},
+  {"id": 9, "pol": "Zamknięte", "cat": "Tancat"},
+  {"id": 10, "pol": "Kasa", "cat": "Caixa"},
+  {"id": 11, "pol": "Informacja", "cat": "Informació"},
+  {"id": 12, "pol": "Toaleta", "cat": "Lavabo"},
+  {"id": 13, "pol": "Wyjście na taras", "cat": "Sortida a la terrassa"},
+  {"id": 14, "pol": "Restauracja", "cat": "Restaurant"},
+  {"id": 15, "pol": "Apteka", "cat": "Farmàcia"},
+  {"id": 16, "pol": "Policja", "cat": "Policia"},
+  {"id": 17, "pol": "Szpital", "cat": "Hospital"},
+  {"id": 18, "pol": "Przystanek", "cat": "Parada"},
+  {"id": 19, "pol": "Dworzec", "cat": "Estació"},
+  {"id": 20, "pol": "Centrum handlowe", "cat": "Centre comercial"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
