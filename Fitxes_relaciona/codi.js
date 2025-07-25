@@ -6,7 +6,7 @@ let encerts = 0;
 let total = 10;
 let selectedPol = null;
 let frasesUsades = [];
-let incorrectPairs = {};
+let incorrectPairs = {}; // { polId: [catId1, catId2, ...] }
 
 function barreja(array) {
   return array.slice().sort(() => Math.random() - 0.5);
@@ -32,6 +32,10 @@ function novaRonda() {
   frasesUsades.push(...ronda.map(f => f.id));
   incorrectPairs = {};
   generaExercici(ronda);
+}
+
+function resetClasses(el) {
+  el.classList.remove("selected", "incorrect-pol", "incorrect-cat");
 }
 
 function generaExercici(frases) {
@@ -68,40 +72,44 @@ function generaExercici(frases) {
     div.textContent = f.cat;
     div.addEventListener("click", () => {
       if (!selectedPol) return;
-
-      // 🧽 Elimina reset-cat per fer-la reutilitzable
-      div.classList.remove("reset-cat");
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
 
       const polId = selectedPol.dataset.id;
       const catId = div.dataset.id;
 
       if (polId === catId) {
+        // ✅ Encert
         if (selectedPol.classList.contains("incorrect-pol")) {
-          // CORRECCIÓ
-          selectedPol.classList.remove("incorrect-pol");
+          // Encerta després d'errors → GROC
+          resetClasses(selectedPol);
           selectedPol.classList.add("fixed-pol");
-
-          if (incorrectPairs[polId]) {
-            const prevIncorrectCat = document.querySelector(`#catala .item[data-id="${incorrectPairs[polId]}"]`);
-            if (prevIncorrectCat) {
-              prevIncorrectCat.classList.remove("incorrect-cat");
-              prevIncorrectCat.classList.add("reset-cat");
-            }
-          }
-
-          div.classList.remove("incorrect-cat");
           div.classList.add("fixed-cat");
 
-        } else if (!div.classList.contains("fixed-cat")) {
+          // ✅ Neteja tots els errors previs associats a aquest polId
+          if (incorrectPairs[polId]) {
+            incorrectPairs[polId].forEach(prevCatId => {
+              const prevIncorrectCat = document.querySelector(`#catala .item[data-id="${prevCatId}"]`);
+              if (prevIncorrectCat) resetClasses(prevIncorrectCat);
+            });
+          }
+
+        } else {
+          // ✅ Encert a la primera → VERD
           selectedPol.classList.add("matched");
           div.classList.add("matched");
           encerts++;
           actualitzaPuntuacio();
         }
       } else {
+        // ❌ Error → VERMELL
         selectedPol.classList.add("incorrect-pol");
         div.classList.add("incorrect-cat");
-        incorrectPairs[polId] = catId;
+
+        // Desa totes les opcions errònies
+        if (!incorrectPairs[polId]) incorrectPairs[polId] = [];
+        if (!incorrectPairs[polId].includes(catId)) {
+          incorrectPairs[polId].push(catId);
+        }
       }
 
       selectedPol.classList.remove("selected");
