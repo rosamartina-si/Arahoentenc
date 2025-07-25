@@ -39,10 +39,17 @@ function resetClasses(el) {
 }
 
 function generaExercici(frases) {
+  const matchContainer = document.querySelector(".match-container");
+  matchContainer.innerHTML = `
+    <svg class="connect-lines" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+    <div class="col" id="polones"></div>
+    <div class="col" id="catala"></div>
+  `;
+
   const polContainer = document.getElementById("polones");
   const catContainer = document.getElementById("catala");
-  polContainer.innerHTML = "";
-  catContainer.innerHTML = "";
+  const svg = document.querySelector(".connect-lines");
+
   encerts = 0;
   selectedPol = null;
   actualitzaPuntuacio();
@@ -93,12 +100,14 @@ function generaExercici(frases) {
             });
           }
 
+          dibuixaLinia(selectedPol, div, svg, "#f1c40f"); // Groc per encerts tardans
         } else {
           // ✅ Encert a la primera → VERD
           selectedPol.classList.add("matched");
           div.classList.add("matched");
           encerts++;
           actualitzaPuntuacio();
+          dibuixaLinia(selectedPol, div, svg, "#2ecc71"); // Verd per encerts directes
         }
       } else {
         // ❌ Error → VERMELL
@@ -117,6 +126,31 @@ function generaExercici(frases) {
     });
     catContainer.appendChild(div);
   });
+}
+
+function dibuixaLinia(el1, el2, svg, color) {
+  const rect1 = el1.getBoundingClientRect();
+  const rect2 = el2.getBoundingClientRect();
+  const containerRect = document.querySelector(".match-container").getBoundingClientRect();
+
+  // Punt inicial: costat dret del polonès
+  const x1 = rect1.right - containerRect.left;
+  const y1 = rect1.top + rect1.height / 2 - containerRect.top;
+
+  // Punt final: costat esquerre del català
+  const x2 = rect2.left - containerRect.left;
+  const y2 = rect2.top + rect2.height / 2 - containerRect.top;
+
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("x1", x1);
+  line.setAttribute("y1", y1);
+  line.setAttribute("x2", x2);
+  line.setAttribute("y2", y2);
+  line.setAttribute("stroke", color);
+  line.setAttribute("stroke-width", "3");
+  line.setAttribute("stroke-linecap", "round");
+
+  svg.appendChild(line);
 }
 
 window.onload = novaRonda;
