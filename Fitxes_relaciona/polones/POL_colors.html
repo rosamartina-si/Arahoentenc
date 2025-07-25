@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Colors en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona les paraules: colors en polonès</h1>
+<p>Fes clic primer a la paraula en polonès i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 12</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Colors nous</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "biały", "cat": "blanc"},
+  {"id": 2, "pol": "czarny", "cat": "negre"},
+  {"id": 3, "pol": "czerwony", "cat": "vermell"},
+  {"id": 4, "pol": "niebieski", "cat": "blau"},
+  {"id": 5, "pol": "zielony", "cat": "verd"},
+  {"id": 6, "pol": "żółty", "cat": "groc"},
+  {"id": 7, "pol": "pomarańczowy", "cat": "taronja"},
+  {"id": 8, "pol": "różowy", "cat": "rosa"},
+  {"id": 9, "pol": "fioletowy", "cat": "lila / violeta"},
+  {"id": 10, "pol": "brązowy", "cat": "marró"},
+  {"id": 11, "pol": "szary", "cat": "gris"},
+  {"id": 12, "pol": "beżowy", "cat": "beix"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
