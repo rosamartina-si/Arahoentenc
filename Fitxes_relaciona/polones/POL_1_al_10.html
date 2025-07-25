@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Números en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona els números: de l’1 al 10 en polonès</h1>
+<p>Fes clic primer a un número en polonès i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Números nous</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "jeden", "cat": "u"},
+  {"id": 2, "pol": "dwa", "cat": "dos"},
+  {"id": 3, "pol": "trzy", "cat": "tres"},
+  {"id": 4, "pol": "cztery", "cat": "quatre"},
+  {"id": 5, "pol": "pięć", "cat": "cinc"},
+  {"id": 6, "pol": "sześć", "cat": "sis"},
+  {"id": 7, "pol": "siedem", "cat": "set"},
+  {"id": 8, "pol": "osiem", "cat": "vuit"},
+  {"id": 9, "pol": "dziewięć", "cat": "nou"},
+  {"id": 10, "pol": "dziesięć", "cat": "deu"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
