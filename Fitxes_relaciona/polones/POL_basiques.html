@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciona: Paraules bàsiques en polonès</title>
+  <link rel="stylesheet" href="../estil.css">
+</head>
+<body>
+
+<h1>Relaciona les paraules: bàsiques en polonès</h1>
+<p>Fes clic primer a la paraula en polonès i després a la seva traducció en català.</p>
+
+<div class="match-container">
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 14</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Paraules noves</button>
+</div>
+
+<div class="nota">
+  Recorda: les parelles encertades directament (en verd) sumen punts.
+</div>
+
+<script type="application/json" id="frases-data">
+[
+  {"id": 1, "pol": "tak", "cat": "sí"},
+  {"id": 2, "pol": "nie", "cat": "no"},
+  {"id": 3, "pol": "dziękuję", "cat": "gràcies"},
+  {"id": 4, "pol": "proszę", "cat": "si us plau"},
+  {"id": 5, "pol": "przepraszam", "cat": "perdó"},
+  {"id": 6, "pol": "gdzie", "cat": "on"},
+  {"id": 7, "pol": "kiedy", "cat": "quan"},
+  {"id": 8, "pol": "teraz", "cat": "ara"},
+  {"id": 9, "pol": "dzisiaj", "cat": "avui"},
+  {"id": 10, "pol": "jutro", "cat": "demà"},
+  {"id": 11, "pol": "wczoraj", "cat": "ahir"},
+  {"id": 12, "pol": "dobrze", "cat": "bé"},
+  {"id": 13, "pol": "źle", "cat": "malament"},
+  {"id": 14, "pol": "nie wiem", "cat": "no ho sé"}
+]
+</script>
+
+<script src="../codi.js"></script>
+</body>
+</html>
