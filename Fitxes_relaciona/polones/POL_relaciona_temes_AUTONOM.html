@@ -110,6 +110,10 @@ h1 {
     <option value="fruites">Fruites</option>
     <option value="numeros">Números (1-10)</option>
     <option value="basiques">Paraules bàsiques</option>
+    <option value="transport">Transport</option>
+    <option value="barca">Barca</option>
+    <option value="menjar">Menjar</option>
+    <option value="dies">Dies</option>
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
 </div>
@@ -180,11 +184,62 @@ const TEMES = {
     {"id":4,"pol":"proszę","cat":"si us plau"},
     {"id":5,"pol":"przepraszam","cat":"perdó"},
     {"id":6,"pol":"gdzie","cat":"on"},
-    {"id":7,"pol":"kiedy","cat":"quan"},
-    {"id":8,"pol":"dzisiaj","cat":"avui"},
-    {"id":9,"pol":"jutro","cat":"demà"},
-    {"id":10,"pol":"wczoraj","cat":"ahir"}
-  ]
+    {"id":7,"pol":"kiedy","cat":"quan"}
+  ],
+  transport: [
+  {"id":1,"pol":"Lotnisko","cat":"Aeroport"},
+  {"id":2,"pol":"Samolot","cat":"Avió"},
+  {"id":3,"pol":"Walizka","cat":"Maleta"},
+  {"id":4,"pol":"Autostrada","cat":"Autopista"},
+  {"id":5,"pol":"Stacja benzynowa","cat":"Gasolinera"},
+  {"id":6,"pol":"Parking","cat":"Aparcament"},
+  {"id":7,"pol":"Płatna droga","cat":"Peatge"},
+  {"id":8,"pol":"Wypadek","cat":"Accident"},
+  {"id":9,"pol":"Pas bezpieczeństwa","cat":"Cinturó de seguretat"},
+  {"id":10,"pol":"Samochód","cat":"Cotxe"}
+  ],
+  barca: [
+  {"id":1,"pol":"Łódź","cat":"Barca"},
+  {"id":2,"pol":"Rzeka","cat":"Riu"},
+  {"id":3,"pol":"Jezioro","cat":"Lac"},
+  {"id":4,"pol":"Kotwica","cat":"Àncora"},
+  {"id":5,"pol":"Kamizelka ratunkowa","cat":"Armilla salvavides"},
+  {"id":6,"pol":"Mapa","cat":"Mapa"},
+  {"id":7,"pol":"Przystań","cat":"Port"},
+  {"id":8,"pol":"Silnik","cat":"Motor"},
+  {"id":9,"pol":"Benzyna","cat":"Gasolina"},
+  {"id":10,"pol":"Płynąć","cat":"Navegar"}
+  ],
+  menjar: [
+  {"id":1,"pol":"Woda","cat":"Aigua"},
+  {"id":2,"pol":"Chleb","cat":"Pa"},
+  {"id":3,"pol":"Piwo","cat":"Cervesa"},
+  {"id":4,"pol":"Wino","cat":"Vi"},
+  {"id":5,"pol":"Śniadanie","cat":"Esmorzar"},
+  {"id":6,"pol":"Obiad","cat":"Dinar"},
+  {"id":7,"pol":"Kolacja","cat":"Sopar"},
+  {"id":8,"pol":"Ryba","cat":"Peix"},
+  {"id":9,"pol":"Mięso","cat":"Carn"},
+  {"id":10,"pol":"Sałatka","cat":"Amanida"},
+  {"id":11,"pol":"Deser","cat":"Postres"},
+  {"id":12,"pol":"Kawa","cat":"Cafè"},
+  {"id":13,"pol":"Herbata","cat":"Tè"}
+],
+dies: [
+  {"id":1,"pol":"Poniedziałek","cat":"Dilluns"},
+  {"id":2,"pol":"Wtorek","cat":"Dimarts"},
+  {"id":3,"pol":"Środa","cat":"Dimecres"},
+  {"id":4,"pol":"Czwartek","cat":"Dijous"},
+  {"id":5,"pol":"Piątek","cat":"Divendres"},
+  {"id":6,"pol":"Sobota","cat":"Dissabte"},
+  {"id":7,"pol":"Niedziela","cat":"Diumenge"},
+  {"id":8,"pol":"Dziś","cat":"Avui"},
+  {"id":9,"pol":"Jutro","cat":"Demà"},
+  {"id":10,"pol":"Wczoraj","cat":"Ahir"},
+  {"id":11,"pol":"Rano","cat":"Matí"},
+  {"id":12,"pol":"Wieczór","cat":"Vespre"},
+  {"id":13,"pol":"Noc","cat":"Nit"}
+]
 };
 
 let frasesActuals = TEMES.colors;
