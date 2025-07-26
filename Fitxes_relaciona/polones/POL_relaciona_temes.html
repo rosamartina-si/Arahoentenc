@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<title>Relaciona: Jocs en polonès</title>
+<style>
+body {
+  font-family: 'Georgia', serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+}
+#tema-selector {
+  margin-bottom: 20px;
+}
+#tema-selector select {
+  padding: 6px;
+  font-size: 14px;
+}
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  padding: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease;
+  background-color: #fff;
+}
+.selected {
+  background-color: #d0ebff;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+}
+.fixed-pol {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none; /* Traduccions no clicables un cop resoltes */
+}
+.incorrect-pol, .incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+}
+#controls {
+  margin-top: 2em;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 12px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<h1>Relaciona en polonès</h1>
+<div id="tema-selector">
+  <label for="tema">Tria un tema: </label>
+  <select id="tema">
+    <option value="colors">Colors</option>
+    <option value="fruites">Fruites</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="basiques">Paraules bàsiques</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+<div class="match-container">
+  <svg class="match-lines"></svg>
+  <div class="col" id="polones"></div>
+  <div class="col" id="catala"></div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+</div>
+
+<div class="nota">
+  Verd = encert a la primera | Groc = encert després d'errors (es repetirà a la següent ronda) | Vermell = error.
+</div>
+
+<script>
+const TOTAL_PER_RONDA = 10;
+
+const TEMES = {
+  colors: [
+    {"id":1,"pol":"biały","cat":"blanc"},
+    {"id":2,"pol":"czarny","cat":"negre"},
+    {"id":3,"pol":"czerwony","cat":"vermell"},
+    {"id":4,"pol":"niebieski","cat":"blau"},
+    {"id":5,"pol":"zielony","cat":"verd"},
+    {"id":6,"pol":"żółty","cat":"groc"},
+    {"id":7,"pol":"pomarańczowy","cat":"taronja"},
+    {"id":8,"pol":"różowy","cat":"rosa"},
+    {"id":9,"pol":"fioletowy","cat":"lila"},
+    {"id":10,"pol":"brązowy","cat":"marró"},
+    {"id":11,"pol":"szary","cat":"gris"},
+    {"id":12,"pol":"beżowy","cat":"beix"}
+  ],
+  fruites: [
+    {"id":1,"pol":"jabłko","cat":"poma"},
+    {"id":2,"pol":"gruszka","cat":"pera"},
+    {"id":3,"pol":"banan","cat":"plàtan"},
+    {"id":4,"pol":"pomarańcza","cat":"taronja"},
+    {"id":5,"pol":"cytryna","cat":"llimona"},
+    {"id":6,"pol":"winogrono","cat":"raïm"},
+    {"id":7,"pol":"truskawka","cat":"maduixa"},
+    {"id":8,"pol":"wiśnia","cat":"cirera"},
+    {"id":9,"pol":"malina","cat":"gerd"},
+    {"id":10,"pol":"arbuz","cat":"síndria"},
+    {"id":11,"pol":"ananas","cat":"pinya"},
+    {"id":12,"pol":"brzoskwinia","cat":"préssec"}
+  ],
+  numeros: [
+    {"id":1,"pol":"jeden","cat":"1"},
+    {"id":2,"pol":"dwa","cat":"2"},
+    {"id":3,"pol":"trzy","cat":"3"},
+    {"id":4,"pol":"cztery","cat":"4"},
+    {"id":5,"pol":"pięć","cat":"5"},
+    {"id":6,"pol":"sześć","cat":"6"},
+    {"id":7,"pol":"siedem","cat":"7"},
+    {"id":8,"pol":"osiem","cat":"8"},
+    {"id":9,"pol":"dziewięć","cat":"9"},
+    {"id":10,"pol":"dziesięć","cat":"10"}
+  ],
+  basiques: [
+    {"id":1,"pol":"tak","cat":"sí"},
+    {"id":2,"pol":"nie","cat":"no"},
+    {"id":3,"pol":"dziękuję","cat":"gràcies"},
+    {"id":4,"pol":"proszę","cat":"si us plau"},
+    {"id":5,"pol":"przepraszam","cat":"perdó"},
+    {"id":6,"pol":"gdzie","cat":"on"},
+    {"id":7,"pol":"kiedy","cat":"quan"},
+    {"id":8,"pol":"dzisiaj","cat":"avui"},
+    {"id":9,"pol":"jutro","cat":"demà"},
+    {"id":10,"pol":"wczoraj","cat":"ahir"}
+  ]
+};
+
+let frasesActuals = TEMES.colors;
+let encerts = 0;
+let selectedPol = null;
+let currentAttempts = {};
+
+function canviaTema() {
+  frasesActuals = TEMES[document.getElementById("tema").value];
+  novaRonda();
+}
+
+function barreja(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function speakPolish(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "pl-PL";
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `Encerts: ${encerts} / ${TOTAL_PER_RONDA}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-pol").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = frasesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = frasesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-pol, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-pol", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const polContainer = document.getElementById("polones");
+  const catContainer = document.getElementById("catala");
+
+  const matchedPol = polContainer.querySelectorAll(".matched, .fixed-pol");
+  matchedPol.forEach(pol => {
+    const polId = pol.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${polId}"], .fixed-cat[data-id="${polId}"]`);
+    if (cat) {
+      const polRect = pol.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = polRect.right - containerRect.left;
+      const y1 = polRect.top + polRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#666");
+      line.setAttribute("stroke-width", "2");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const polContainer = document.getElementById("polones");
+  const catContainer = document.getElementById("catala");
+  polContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedPol = null;
+  actualitzaPuntuacio();
+
+  const polFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  polFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.pol;
+
+    div.addEventListener("click", () => {
+      speakPolish(f.pol); // ✅ Sempre pronuncia
+      if (div.classList.contains("matched") || div.classList.contains("fixed-pol")) return;
+      netejaErrors();
+      document.querySelectorAll("#polones .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedPol = div;
+    });
+
+    polContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.cat;
+
+    div.addEventListener("click", () => {
+      if (!selectedPol) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const polId = selectedPol.dataset.id;
+      const catId = div.dataset.id;
+
+      if (polId === catId) {
+        if (currentAttempts[polId] && currentAttempts[polId].attempts > 0) {
+          selectedPol.classList.add("fixed-pol");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedPol.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedPol);
+        mouAlTop(div);
+        dibuixaLinies();
+      } else {
+        selectedPol.classList.add("incorrect-pol");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[polId]) currentAttempts[polId] = { attempts: 0 };
+        currentAttempts[polId].attempts++;
+      }
+
+      selectedPol.classList.remove("selected");
+      selectedPol = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+</body>
+</html>
