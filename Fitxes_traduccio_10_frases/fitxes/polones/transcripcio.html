@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Polonès: Transcripció i Traducció</title>
+  <link rel="stylesheet" href="../../estils.css" />
+</head>
+<body>
+
+<h1>Transcriu i tradueix paraules poloneses</h1>
+<p>Escolta o llegeix la paraula en polonès i fes dues coses:</p>
+<ol>
+  <li>Escriu com sonaria amb grafia catalana aproximada.</li>
+  <li>Escriu la traducció al català.</li>
+</ol>
+<p>Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta.</p>
+
+<div class="instructions">
+  <h2>Com fer la transcripció?</h2>
+  <ul>
+    <li><strong>Escriu com si fos català:</strong> no usis símbols fonètics.</li>
+    <li><strong>Regles bàsiques:</strong>
+      <ul>
+        <li><code>cz</code> → <strong>tx</strong> (czwartek → txvartek)</li>
+        <li><code>sz</code> → <strong>x</strong> (szkoła → xcola)</li>
+        <li><code>ż</code>, <code>rz</code> → <strong>j</strong> (żaba → jaba)</li>
+        <li><code>dż</code> → <strong>dj</strong> (dżem → djèm)</li>
+        <li><code>ś</code> → <strong>x</strong> suau (środa → xroda)</li>
+        <li><code>ł</code> → <strong>u</strong> curta (łąka → uonka)</li>
+        <li><code>j</code> → <strong>i</strong> (język → iènzik)</li>
+        <li><code>ą</code> → <strong>on</strong>, <code>ę</code> → <strong>en</strong></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<script>
+  window.habilitaAudio = true;
+  window.textToSpeechTarget = 'entrada';
+  window.textToSpeechLangs = {
+    entrada: 'pl-PL',
+    resposta: 'ca-ES'
+  };
+
+  // Format: [Paraula polonesa, [pronunciació catalana], [traducció catalana]]
+  const frases = [
+    ["tak", ["tac"], ["sí"]],
+    ["nie", ["nie"], ["no"]],
+    ["proszę", ["pròxe"], ["si us plau"]],
+    ["dziękuję", ["djenkuie"], ["gràcies"]],
+    ["cześć", ["txextx"], ["hola"]],
+    ["szkoła", ["xcola"], ["escola"]],
+    ["dom", ["dom"], ["casa"]],
+    ["pies", ["pies"], ["gos"]],
+    ["kot", ["kot"], ["gat"]],
+    ["dziecko", ["djetxko"], ["nen/nena"]],
+    ["woda", ["voda"], ["aigua"]],
+    ["chleb", ["jleb"], ["pa"]],
+    ["jabłko", ["iabuko"], ["poma"]],
+    ["ryba", ["riba"], ["peix"]],
+    ["łóżko", ["uixko"], ["llit"]],
+    ["miasto", ["miasto"], ["ciutat"]],
+    ["ulica", ["ulitza"], ["carrer"]],
+    ["ręka", ["renka"], ["mà"]],
+    ["oko", ["oko"], ["ull"]],
+    ["noga", ["noga"], ["cama"]]
+  ];
+</script>
+
+<script src="../../script2.js"></script>
+
+</body>
+</html>
