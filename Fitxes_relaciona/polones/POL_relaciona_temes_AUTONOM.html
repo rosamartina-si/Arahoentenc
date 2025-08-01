@@ -110,14 +110,14 @@ h1 {
     <option value="fruites">Fruites</option>
     <option value="fruites_poloneses">Fruites</option>
     <option value="numeros">Números (1-10)</option>
-    <option value="basiques">Paraules bàsiques</option>
+    <option value="cortesia">Frases de cortesia</option>
     <option value="transport">Transport</option>
     <option value="barca">Barca</option>
     <option value="menjar">Menjar</option>
     <option value="dies">Dies</option>
     <option value="possessius">Possessius</option> <!-- Afegit -->
     <option value="apats">Àpats i serveis</option>
-
+    <option value="bistro">Esmorzar Gdansk</option>
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
 </div>
@@ -175,14 +175,12 @@ fruites_poloneses: [
     {"id":3,"pol":"śliwka","cat":"pruna"},
     {"id":4,"pol":"czarna porzeczka","cat":"grosella negra"},
     {"id":5,"pol":"czerwona porzeczka","cat":"grosella vermella"},
-    {"id":6,"pol":"borówka","cat":"nabiu (mirtillo)"},
+    {"id":6,"pol":"borówka","cat":"nabiu"},
     {"id":7,"pol":"truskawka","cat":"maduixa"},
     {"id":8,"pol":"poziomka","cat":"maduixa de bosc"},
     {"id":9,"pol":"malina","cat":"gerd"},
     {"id":10,"pol":"jeżyna","cat":"móra"}
 ],
-
-
   numeros: [
     {"id":1,"pol":"jeden","cat":"1"},
     {"id":2,"pol":"dwa","cat":"2"},
@@ -195,15 +193,20 @@ fruites_poloneses: [
     {"id":9,"pol":"dziewięć","cat":"9"},
     {"id":10,"pol":"dziesięć","cat":"10"}
   ],
-  basiques: [
+cortesia: [
     {"id":1,"pol":"tak","cat":"sí"},
     {"id":2,"pol":"nie","cat":"no"},
     {"id":3,"pol":"dziękuję","cat":"gràcies"},
     {"id":4,"pol":"proszę","cat":"si us plau"},
     {"id":5,"pol":"przepraszam","cat":"perdó"},
-    {"id":6,"pol":"gdzie","cat":"on"},
-    {"id":7,"pol":"kiedy","cat":"quan"}
-  ],
+    {"id":6,"pol":"dzień dobry","cat":"bon dia (fins a migdia)"},
+    {"id":7,"pol":"dobry wieczór","cat":"bona tarda / bon vespre (a partir de les 16-17 h)"},
+    {"id":8,"pol":"dobranoc","cat":"bona nit (quan ens acomiadem per anar a dormir)"},
+    {"id":9,"pol":"cześć","cat":"hola (informal)"},
+    {"id":10,"pol":"do widzenia","cat":"adéu (formal)"},
+    {"id":11,"pol":"pa","cat":"adéu (informal, com ‘adeu-siau’)"}
+],
+
   transport: [
   {"id":1,"pol":"Lotnisko","cat":"Aeroport"},
   {"id":2,"pol":"Samolot","cat":"Avió"},
@@ -241,7 +244,7 @@ fruites_poloneses: [
   {"id":10,"pol":"Sałatka","cat":"Amanida"},
   {"id":11,"pol":"Deser","cat":"Postres"},
   {"id":12,"pol":"Kawa","cat":"Cafè"},
-  {"id":13,"pol":"Herbata","cat":"Tè"}
+  {"id":13,"pol":"Herbata","cat":"Te"}
 ],
 dies: [
   {"id":1,"pol":"Poniedziałek","cat":"Dilluns"},
@@ -296,7 +299,82 @@ apats: [
     {"id":20,"pol":"przystawka","cat":"entrant"},
     {"id":21,"pol":"drugie danie","cat":"segon plat"},
     {"id":22,"pol":"deser","cat":"postres"},
+    {"id":22,"pol":"owoc","cat":"fruita"},
+    {"id":23,"pol":"sezonowe","cat":"de temporada"},
+    {"id":24,"pol":"wiejska","cat":"de pagès"},
+    {"id":25,"pol":"wędzonej","cat":"fumat"},
+    {"id":26,"pol":"sos","cat":"salsa"},
+    {"id":27,"pol":"domowa","cat":"casolana"},
+    {"id":28,"pol":"bezglutenowe","cat":"sense gluten"},
+    {"id":29,"pol":"piklowana","cat":"adobat"},
+    {"id":30,"pol":"olej","cat":"oli"},
+    {"id":31,"pol":"ocet","cat":"vinagre"},
+    {"id":32,"pol":"sól","cat":"sal"},
+    {"id":33,"pol":"wieprzowina","cat":"porc"},
+    {"id":34,"pol":"wołowego","cat":"vedella"},
+    {"id":35,"pol":"kurczak","cat":"pollastre"}
+  
 ],
+  bistro: [
+    {"id":1,"pol":"croissant","cat":"croissant"},
+    {"id":2,"pol":"brioszka","cat":"brioix"},
+    {"id":3,"pol":"konfitura","cat":"confitura"},
+    {"id":4,"pol":"miód","cat":"mel"},
+    {"id":5,"pol":"masło","cat":"mantega"},
+    {"id":7,"pol":"pomarańcza brulée","cat":"taronja cremada"},
+    {"id":8,"pol":"jajecznica","cat":"ous remenats"},
+    {"id":9,"pol":"frankfurterki","cat":"salsitxes tipus Frankfurt"},
+    {"id":10,"pol":"twaróg","cat":"mató / formatge fresc"},
+    {"id":11,"pol":"warzywa","cat":"verdures"},
+    {"id":12,"pol":"pieczywo","cat":"pa (assortit)"},
+    {"id":13,"pol":"jaja sadzone","cat":"ous ferrats"},
+    {"id":14,"pol":"szynka","cat":"pernil"},
+    {"id":15,"pol":"ser","cat":"formatge"},
+    {"id":16,"pol":"czosnkiem","cat":"all"},
+    {"id":16,"pol":"skórką cytrynową","cat":"pell de llimona"},
+    {"id":17,"pol":"sałatka","cat":"amanida"},
+    {"id":17,"pol":"ogórków","cat":"cogombre"},
+    {"id":17,"pol":"koperkiem","cat":"anet"},
+    {"id":18,"pol":"oliwa","cat":"oli"},
+    {"id":18,"pol":"papryki","cat":"pebrot"},
+    {"id":19,"pol":"płatki","cat":"cereals d'esmorzar"},
+    {"id":20,"pol":"focaccia","cat":"coca de pa"},
+    {"id":21,"pol":"kaszanka","cat":"botifarra negra"},
+    {"id":22,"pol":"fasola","cat":"mongetes"},
+    {"id":23,"pol":"boczek wędzony","cat":"cansalada"},
+    {"id":24,"pol":"hash browns","cat":"una mena de truita de patata en forma d'hamburguesa"},
+    {"id":25,"pol":"pomidor","cat":"tomàquet"},
+    {"id":26,"pol":"pastrami","cat":"llom (embotit)"},
+    {"id":27,"pol":"przepiórcze jaja","cat":"ous de guatlla"},
+    {"id":28,"pol":"awokado","cat":"alvocat"},
+    {"id":29,"pol":"cebula","cat":"ceba"},
+    {"id":30,"pol":"pikantny majonez","cat":"maionesa picant"},
+    {"id":31,"pol":"oliwki","cat":"olives"},
+    {"id":32,"pol":"suszone pomidory","cat":"tomàquets secs"},
+    {"id":33,"pol":"zioła","cat":"herbes"},
+    {"id":35,"pol":"szpinak","cat":"espinacs"},
+    {"id":35,"pol":"pieczarkami","cat":"xampinyons"},
+    {"id":36,"pol":"dżem","cat":"melmelada"},
+    {"id":36,"pol":"cebuli","cat":"ceba"},
+    {"id":37,"pol":"rukola","cat":"rúcula"},
+    {"id":38,"pol":"orzechy włoskie","cat":"nous"},
+    {"id":40,"pol":"sos","cat":"salsa"},
+    {"id":41,"pol":"sałata","cat":"enciam"},
+    {"id":42,"pol":"syrop klonowy","cat":"xarop d’auró"},
+    {"id":43,"pol":"kremowy serek","cat":"formatge cremós"},
+    {"id":44,"pol":"orzechy arachidowe","cat":"cacauets"},
+    {"id":45,"pol":"jogurt","cat":"iogurt"},
+    {"id":46,"pol":"bakalie","cat":"fruita seca i deshidratada"},
+    {"id":47,"pol":"słony karmel","cat":"caramel salat"},
+    {"id":48,"pol":"cukier","cat":"sucre"},
+    {"id":49,"pol":"owsiane","cat":"civada"},
+    {"id":50,"pol":"mleko","cat":"llet"},
+    {"id":51,"pol":"szczypiorek","cat":"cibulet"},
+    {"id":52,"pol":"prażona cebula","cat":"ceba fregida cruixent"}
+
+
+],
+
 
 };
 
