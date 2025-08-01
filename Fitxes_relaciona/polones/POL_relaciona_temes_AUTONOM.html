@@ -108,12 +108,16 @@ h1 {
   <select id="tema">
     <option value="colors">Colors</option>
     <option value="fruites">Fruites</option>
+    <option value="fruites_poloneses">Fruites</option>
     <option value="numeros">Números (1-10)</option>
     <option value="basiques">Paraules bàsiques</option>
     <option value="transport">Transport</option>
     <option value="barca">Barca</option>
     <option value="menjar">Menjar</option>
     <option value="dies">Dies</option>
+    <option value="possessius">Possessius</option> <!-- Afegit -->
+    <option value="apats">Àpats i serveis</option>
+
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
 </div>
@@ -165,6 +169,20 @@ const TEMES = {
     {"id":11,"pol":"ananas","cat":"pinya"},
     {"id":12,"pol":"brzoskwinia","cat":"préssec"}
   ],
+fruites_poloneses: [
+    {"id":1,"pol":"jabłko","cat":"poma"},
+    {"id":2,"pol":"gruszka","cat":"pera"},
+    {"id":3,"pol":"śliwka","cat":"pruna"},
+    {"id":4,"pol":"czarna porzeczka","cat":"grosella negra"},
+    {"id":5,"pol":"czerwona porzeczka","cat":"grosella vermella"},
+    {"id":6,"pol":"borówka","cat":"nabiu (mirtillo)"},
+    {"id":7,"pol":"truskawka","cat":"maduixa"},
+    {"id":8,"pol":"poziomka","cat":"maduixa de bosc"},
+    {"id":9,"pol":"malina","cat":"gerd"},
+    {"id":10,"pol":"jeżyna","cat":"móra"}
+],
+
+
   numeros: [
     {"id":1,"pol":"jeden","cat":"1"},
     {"id":2,"pol":"dwa","cat":"2"},
@@ -239,7 +257,47 @@ dies: [
   {"id":11,"pol":"Rano","cat":"Matí"},
   {"id":12,"pol":"Wieczór","cat":"Vespre"},
   {"id":13,"pol":"Noc","cat":"Nit"}
-]
+],
+  possessius: [
+    {"id":1,"pol":"mój","cat":"el meu"},
+    {"id":2,"pol":"moja","cat":"la meva"},
+    {"id":3,"pol":"moje","cat":"el meu (neutre)"},
+    {"id":4,"pol":"twój","cat":"el teu"},
+    {"id":5,"pol":"twoja","cat":"la teva"},
+    {"id":6,"pol":"twoje","cat":"el teu (neutre)"},
+    {"id":7,"pol":"jego","cat":"el seu (d’ell)"},
+    {"id":8,"pol":"jej","cat":"el seu (d’ella)"},
+    {"id":9,"pol":"nasz","cat":"el nostre"},
+    {"id":10,"pol":"nasza","cat":"la nostra"},
+    {"id":11,"pol":"wasz","cat":"el vostre"},
+    {"id":12,"pol":"wasza","cat":"la vostra"},
+    {"id":13,"pol":"ich","cat":"el seu (d’ells/d’elles)"}
+],
+apats: [
+    {"id":1,"pol":"śniadanie","cat":"esmorzar"},
+    {"id":2,"pol":"obiad","cat":"dinar"},
+    {"id":3,"pol":"kolacja","cat":"sopar"},
+    {"id":4,"pol":"bufet","cat":"bufet lliure"},
+    {"id":5,"pol":"rezerwacja wymagana","cat":"cal reserva"},
+    {"id":6,"pol":"otwarte","cat":"obert"},
+    {"id":7,"pol":"zamknięte","cat":"tancat"},
+    {"id":8,"pol":"toaleta","cat":"lavabo"},
+    {"id":9,"pol":"mężczyźni","cat":"homes"},
+    {"id":10,"pol":"kobiety","cat":"dones"},
+    {"id":11,"pol":"restauracja","cat":"restaurant"},
+    {"id":12,"pol":"samoobsługa","cat":"self-service"},
+    {"id":13,"pol":"rezerwowany stolik","cat":"taula reservada"},
+    {"id":14,"pol":"wejście","cat":"entrada"},
+    {"id":15,"pol":"wyjście","cat":"sortida"},
+    {"id":16,"pol":"menu","cat":"menú"},
+    {"id":17,"pol":"rachunek","cat":"compte (factura)"},
+    {"id":18,"pol":"kelner","cat":"cambrer"},
+    {"id":19,"pol":"napoje","cat":"begudes"},
+    {"id":20,"pol":"przystawka","cat":"entrant"},
+    {"id":21,"pol":"drugie danie","cat":"segon plat"},
+    {"id":22,"pol":"deser","cat":"postres"},
+],
+
 };
 
 let frasesActuals = TEMES.colors;
