@@ -117,7 +117,8 @@ h1 {
     <option value="dies">Dies</option>
     <option value="possessius">Possessius</option> <!-- Afegit -->
     <option value="apats">Àpats i serveis</option>
-    <option value="bistro">Esmorzar Gdansk</option>
+    <option value="bistro_dolc">Esmorzar dolç - Gdansk</option>
+    <option value="bistro_salat">Esmorzar salat - Gdansk</option>
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
 </div>
@@ -315,65 +316,67 @@ apats: [
     {"id":35,"pol":"kurczak","cat":"pollastre"}
   
 ],
-  bistro: [
+bistro_dolc: [
     {"id":1,"pol":"croissant","cat":"croissant"},
     {"id":2,"pol":"brioszka","cat":"brioix"},
     {"id":3,"pol":"konfitura","cat":"confitura"},
     {"id":4,"pol":"miód","cat":"mel"},
     {"id":5,"pol":"masło","cat":"mantega"},
-    {"id":7,"pol":"pomarańcza brulée","cat":"taronja cremada"},
-    {"id":8,"pol":"jajecznica","cat":"ous remenats"},
-    {"id":9,"pol":"frankfurterki","cat":"salsitxes tipus Frankfurt"},
-    {"id":10,"pol":"twaróg","cat":"mató / formatge fresc"},
-    {"id":11,"pol":"warzywa","cat":"verdures"},
-    {"id":12,"pol":"pieczywo","cat":"pa (assortit)"},
-    {"id":13,"pol":"jaja sadzone","cat":"ous ferrats"},
-    {"id":14,"pol":"szynka","cat":"pernil"},
-    {"id":15,"pol":"ser","cat":"formatge"},
-    {"id":16,"pol":"czosnkiem","cat":"all"},
-    {"id":16,"pol":"skórką cytrynową","cat":"pell de llimona"},
-    {"id":17,"pol":"sałatka","cat":"amanida"},
-    {"id":17,"pol":"ogórków","cat":"cogombre"},
-    {"id":17,"pol":"koperkiem","cat":"anet"},
-    {"id":18,"pol":"oliwa","cat":"oli"},
-    {"id":18,"pol":"papryki","cat":"pebrot"},
-    {"id":19,"pol":"płatki","cat":"cereals d'esmorzar"},
-    {"id":20,"pol":"focaccia","cat":"coca de pa"},
-    {"id":21,"pol":"kaszanka","cat":"botifarra negra"},
-    {"id":22,"pol":"fasola","cat":"mongetes"},
-    {"id":23,"pol":"boczek wędzony","cat":"cansalada"},
-    {"id":24,"pol":"hash browns","cat":"una mena de truita de patata en forma d'hamburguesa"},
-    {"id":25,"pol":"pomidor","cat":"tomàquet"},
-    {"id":26,"pol":"pastrami","cat":"llom (embotit)"},
-    {"id":27,"pol":"przepiórcze jaja","cat":"ous de guatlla"},
-    {"id":28,"pol":"awokado","cat":"alvocat"},
-    {"id":29,"pol":"cebula","cat":"ceba"},
-    {"id":30,"pol":"pikantny majonez","cat":"maionesa picant"},
-    {"id":31,"pol":"oliwki","cat":"olives"},
-    {"id":32,"pol":"suszone pomidory","cat":"tomàquets secs"},
-    {"id":33,"pol":"zioła","cat":"herbes"},
-    {"id":35,"pol":"szpinak","cat":"espinacs"},
-    {"id":35,"pol":"pieczarkami","cat":"xampinyons"},
-    {"id":36,"pol":"dżem","cat":"melmelada"},
-    {"id":36,"pol":"cebuli","cat":"ceba"},
-    {"id":37,"pol":"rukola","cat":"rúcula"},
-    {"id":38,"pol":"orzechy włoskie","cat":"nous"},
-    {"id":40,"pol":"sos","cat":"salsa"},
-    {"id":41,"pol":"sałata","cat":"enciam"},
-    {"id":42,"pol":"syrop klonowy","cat":"xarop d’auró"},
-    {"id":43,"pol":"kremowy serek","cat":"formatge cremós"},
-    {"id":44,"pol":"orzechy arachidowe","cat":"cacauets"},
-    {"id":45,"pol":"jogurt","cat":"iogurt"},
-    {"id":46,"pol":"bakalie","cat":"fruita seca i deshidratada"},
-    {"id":47,"pol":"słony karmel","cat":"caramel salat"},
-    {"id":48,"pol":"cukier","cat":"sucre"},
-    {"id":49,"pol":"owsiane","cat":"civada"},
-    {"id":50,"pol":"mleko","cat":"llet"},
-    {"id":51,"pol":"szczypiorek","cat":"cibulet"},
-    {"id":52,"pol":"prażona cebula","cat":"ceba fregida cruixent"}
-
-
+    {"id":6,"pol":"pomarańcza brulée","cat":"taronja cremada"},
+    {"id":7,"pol":"dżem","cat":"melmelada"},
+    {"id":8,"pol":"owoce","cat":"fruites"},
+    {"id":9,"pol":"orzechy włoskie","cat":"nous"},
+    {"id":10,"pol":"orzechy arachidowe","cat":"cacauets"},
+    {"id":11,"pol":"syrop klonowy","cat":"xarop d’auró"},
+    {"id":12,"pol":"słony karmel","cat":"caramel salat"},
+    {"id":13,"pol":"cukier","cat":"sucre"},
+    {"id":14,"pol":"płatki","cat":"cereals d'esmorzar"},
+    {"id":15,"pol":"owsiane","cat":"civada"},
+    {"id":16,"pol":"jogurt","cat":"iogurt"},
+    {"id":17,"pol":"bakalie","cat":"fruita seca i deshidratada"},
+    {"id":18,"pol":"kremowy serek","cat":"formatge cremós (dolç o amb vainilla)"},
+    {"id":19,"pol":"mleko","cat":"llet"}
 ],
+
+bistro_salat: [
+    {"id":1,"pol":"jajecznica","cat":"ous remenats"},
+    {"id":2,"pol":"jaja sadzone","cat":"ous ferrats"},
+    {"id":3,"pol":"frankfurterki","cat":"salsitxes tipus Frankfurt"},
+    {"id":4,"pol":"szynka","cat":"pernil"},
+    {"id":5,"pol":"twaróg","cat":"mató / formatge fresc"},
+    {"id":6,"pol":"ser","cat":"formatge"},
+    {"id":7,"pol":"czosnkiem","cat":"all"},
+    {"id":8,"pol":"skórką cytrynową","cat":"pell de llimona"},
+    {"id":9,"pol":"sałatka","cat":"amanida"},
+    {"id":10,"pol":"ogórków","cat":"cogombre"},
+    {"id":11,"pol":"koperkiem","cat":"anet"},
+    {"id":12,"pol":"warzywa","cat":"verdures"},
+    {"id":13,"pol":"oliwa","cat":"oli"},
+    {"id":14,"pol":"papryki","cat":"pebrot"},
+    {"id":15,"pol":"focaccia","cat":"coca de pa"},
+    {"id":16,"pol":"pieczywo","cat":"pa (assortit)"},
+    {"id":17,"pol":"kaszanka","cat":"botifarra negra"},
+    {"id":18,"pol":"fasola","cat":"mongetes"},
+    {"id":19,"pol":"boczek wędzony","cat":"cansalada"},
+    {"id":20,"pol":"hash browns","cat":"truita de patata (hamburguesa)"},
+    {"id":21,"pol":"pomidor","cat":"tomàquet"},
+    {"id":22,"pol":"pastrami","cat":"llom (embotit)"},
+    {"id":23,"pol":"przepiórcze jaja","cat":"ous de guatlla"},
+    {"id":24,"pol":"awokado","cat":"alvocat"},
+    {"id":25,"pol":"cebula","cat":"ceba"},
+    {"id":26,"pol":"pikantny majonez","cat":"maionesa picant"},
+    {"id":27,"pol":"oliwki","cat":"olives"},
+    {"id":28,"pol":"suszone pomidory","cat":"tomàquets secs"},
+    {"id":29,"pol":"zioła","cat":"herbes"},
+    {"id":30,"pol":"szpinak","cat":"espinacs"},
+    {"id":31,"pol":"pieczarkami","cat":"xampinyons"},
+    {"id":32,"pol":"rukola","cat":"rúcula"},
+    {"id":33,"pol":"sos","cat":"salsa"},
+    {"id":34,"pol":"sałata","cat":"enciam"},
+    {"id":35,"pol":"szczypiorek","cat":"cibulet"},
+    {"id":36,"pol":"prażona cebula","cat":"ceba fregida cruixent"}
+]
+
 
 
 };
