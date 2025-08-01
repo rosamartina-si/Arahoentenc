@@ -106,19 +106,26 @@ h1 {
 <div id="tema-selector">
   <label for="tema">Tria un tema: </label>
   <select id="tema">
+    <option value="cortesia">Frases de cortesia</option>
     <option value="colors">Colors</option>
     <option value="fruites">Fruites</option>
     <option value="fruites_poloneses">Fruites</option>
-    <option value="numeros">Números (1-10)</option>
-    <option value="cortesia">Frases de cortesia</option>
-    <option value="transport">Transport</option>
-    <option value="barca">Barca</option>
-    <option value="menjar">Menjar</option>
-    <option value="dies">Dies</option>
-    <option value="possessius">Possessius</option> <!-- Afegit -->
-    <option value="apats">Àpats i serveis</option>
+    <option value="gelats">Gustos de gelat</option>
     <option value="bistro_dolc">Esmorzar dolç - Gdansk</option>
     <option value="bistro_salat">Esmorzar salat - Gdansk</option>
+    <option value="apats">Àpats i serveis</option>
+    <option value="menjar">Menjar</option>
+    <option value="transport">Transport</option>
+    <option value="barca">Barca</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="dies">Dies</option>
+    <option value="possessius">Possessius</option> 
+    <option value="preposicions">Preposicions</option>
+    
+
+
+    
+
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
 </div>
@@ -174,14 +181,37 @@ fruites_poloneses: [
     {"id":1,"pol":"jabłko","cat":"poma"},
     {"id":2,"pol":"gruszka","cat":"pera"},
     {"id":3,"pol":"śliwka","cat":"pruna"},
-    {"id":4,"pol":"czarna porzeczka","cat":"grosella negra"},
-    {"id":5,"pol":"czerwona porzeczka","cat":"grosella vermella"},
+    {"id":4,"pol":"czarna porzeczka","cat":"grosella negra - forma entre nabiu i raïm, com mini raïms"},
+    {"id":5,"pol":"czerwona porzeczka","cat":"grosella vermella - forma entre nabiu i raïm, com mini raïms"},
     {"id":6,"pol":"borówka","cat":"nabiu"},
     {"id":7,"pol":"truskawka","cat":"maduixa"},
     {"id":8,"pol":"poziomka","cat":"maduixa de bosc"},
     {"id":9,"pol":"malina","cat":"gerd"},
     {"id":10,"pol":"jeżyna","cat":"móra"}
 ],
+  gelats: [
+    {"id":1,"pol":"waniliowy","cat":"vainilla"},
+    {"id":2,"pol":"czekoladowy","cat":"xocolata"},
+    {"id":3,"pol":"truskawkowy","cat":"maduixa"},
+    {"id":4,"pol":"śmietankowy","cat":"nata"},
+    {"id":5,"pol":"malinowy","cat":"gerd"},
+    {"id":6,"pol":"cytrynowy","cat":"llimona"},
+    {"id":7,"pol":"mango","cat":"mango"},
+    {"id":8,"pol":"kawowy","cat":"cafè"},
+    {"id":9,"pol":"orzech włoski","cat":"nou"},
+    {"id":10,"pol":"orzech laskowy","cat":"avellana"},
+    {"id":11,"pol":"solony karmel","cat":"caramel salat"},
+    {"id":12,"pol":"jagodowy","cat":"fruites del bosc"},
+    {"id":13,"pol":"borówkowy","cat":"nabiu"},
+    {"id":14,"pol":"porzeczkowy","cat":"grosella - forma entre nabiu i raïm, com mini raïms"},
+    {"id":15,"pol":"pistacjowy","cat":"festuc"},
+    {"id":16,"pol":"kokosowy","cat":"coco"},
+    {"id":17,"pol":"miętowy","cat":"menta"},
+    {"id":18,"pol":"tiramisu","cat":"tiramisu"},
+    {"id":19,"pol":"jogurtowy","cat":"iogurt"},
+    {"id":20,"pol":"śliwkowy","cat":"pruna"}
+],
+
   numeros: [
     {"id":1,"pol":"jeden","cat":"1"},
     {"id":2,"pol":"dwa","cat":"2"},
@@ -277,6 +307,21 @@ dies: [
     {"id":12,"pol":"wasza","cat":"la vostra"},
     {"id":13,"pol":"ich","cat":"el seu (d’ells/d’elles)"}
 ],
+  preposicions: [
+    {"id":1,"pol":"z","cat":"amb"},
+    {"id":2,"pol":"bez","cat":"sense"},
+    {"id":3,"pol":"dla","cat":"per a"},
+    {"id":4,"pol":"i","cat":"i"},
+    {"id":5,"pol":"lub","cat":"o"},
+    {"id":6,"pol":"do","cat":"fins a / per a"},
+    {"id":7,"pol":"od","cat":"des de"},
+    {"id":8,"pol":"w","cat":"a / dins"},
+    {"id":9,"pol":"na","cat":"a / sobre"},
+    {"id":10,"pol":"po","cat":"després de"},
+    {"id":11,"pol":"przed","cat":"abans"},
+    {"id":12,"pol":"przy","cat":"a prop de"}
+],
+
 apats: [
     {"id":1,"pol":"śniadanie","cat":"esmorzar"},
     {"id":2,"pol":"obiad","cat":"dinar"},
