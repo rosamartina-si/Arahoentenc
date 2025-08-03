@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coberts en polonès</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+  <div id="modalOverlay"></div>
+  <div id="scoreDisplay"></div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="buttonContainer"></div>
+  <button id="restartButton">🔁 Torna a començar</button>
+  <div id="feedback"></div>
+
+  <script>
+    const config = {
+      lang: "pl-PL",
+      uiLang: "ca",
+      audio: true,
+      mode: "pluja_botons",
+      speed: 0.5,
+      speechRate: 1,
+      playAudioAtStart: true,
+      noteDisplayTime: 0,
+      enableRepeatButton: false,
+      title: "Coberts",
+      objective: "Escull la traducció al català del mot en polonès:",
+      explanation: [
+        "COBERTS EN POLONÈS:",
+        "— «Nóż» = Ganivet",
+        "— «Widelec» = Forquilla",
+        "— «Łyżka» = Cullera"
+      ],
+      buttons: ["Ganivet", "Forquilla", "Cullera"],
+      questions: [
+        { sentence: "Nóż", answer: "Ganivet" },
+        { sentence: "Widelec", answer: "Forquilla" },
+        { sentence: "Łyżka", answer: "Cullera" }
+      ]
+    };
+  </script>
+  <script src="../../codi.js"></script>
+</body>
+</html>
