@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anàlisi de "Singin' in the Rain"</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: #5a67d8;
+            border-bottom: 2px solid #c3dafe;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        .container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .lyrics-analysis {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .video-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .phrase {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 4px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .phrase:hover {
+            background-color: #f8fafc;
+            border-left-color: #5a67d8;
+        }
+        
+        .original {
+            font-style: italic;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .habitual {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .poc-habitual {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .comprensible {
+            background-color: #feebcb;
+            color: #744210;
+        }
+        
+        .alternative {
+            margin-top: 8px;
+            padding: 10px;
+            background-color: #ebf8ff;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .summary {
+            margin-top: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background-color: #f7fafc;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        /* Estils per a la nova secció de versió oral */
+        .oral-version {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            padding: 40px;
+            border-radius: 10px;
+            margin-top: 40px;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .oral-version h2 {
+            color: #744210;
+            border-bottom: 2px solid rgba(116, 66, 16, 0.3);
+            text-align: center;
+        }
+        
+        .oral-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .oral-section {
+            margin-bottom: 30px;
+        }
+        
+        .oral-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .oral-note {
+            background-color: #e6f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .oral-version {
+                padding: 20px;
+            }
+            
+            .oral-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Anàlisi de "Singin' in the Rain"</h1>
+        <p>Fem una revisió frase per frase de la lletra original</p>
+    </header>
+    
+    <div class="container">
+        <div class="lyrics-analysis">
+            <h2>🎵 Frase per frase – Ús en llengua oral</h2>
+            
+            <div class="phrase">
+                <div class="original">"I'm singin' in the rain, just singin' in the rain"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — És clarament poètic.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "I'm singing, even though it's raining!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"What a glorious feeling, I'm happy again!"</div>
+                <div><span class="status comprensible">⚠️ Comprensible</span> — "Glorious feeling" és força literari.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "I feel amazing, I'm happy again!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"I'm laughing at clouds so dark up above"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Poètic/metafòric, no és natural en conversa.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Even the dark clouds can't bring me down!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"The sun's in my heart and I'm ready for love!"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Poètic. És una metàfora emocional.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "I feel great inside and I'm open to love!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Let the stormy clouds chase everyone from the place"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Literari/metafòric.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Let the storm scare everyone off — I don't care!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Come on with your rain, I've got a smile on my face!"</div>
+                <div><span class="status comprensible">⚠️ Comprensible</span> — Mig poètic, però força comprensible.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Let it rain — I'm still smiling!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"I'll walk down the lane with a happy refrain"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Poètic ("refrain" és molt poc comú oralment).</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "I'll walk around singing happily!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Just singin', singin' in the rain!"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Poètic, però repetitiu per efecte musical.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "I'm just singing, rain or not!"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Why am I smiling and why do I sing?"</div>
+                <div><span class="status habitual">✅ Habitual</span> — Aquesta estructura sí és oralment natural.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> (Sense canvis — és clara i habitual.)</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Why does December seem sunny as Spring?"</div>
+                <div><span class="status comprensible">⚠️ Comprensible</span> — Mig poètic, però fàcil d'entendre.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Why does winter feel like spring?"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Why do I get up each morning to start happy and head-up with joy in my heart?"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Llarg i formal, no gaire oral.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Why do I wake up happy every day?"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Why is each new task a trifle to do?"</div>
+                <div><span class="status poc-habitual">❌ Poc habitual</span> — Formal/literari ("a trifle" no s'usa gaire oralment).</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Why does everything feel so easy?"</div>
+            </div>
+            
+            <div class="phrase">
+                <div class="original">"Because I am living a life full of you!"</div>
+                <div><span class="status comprensible">⚠️ Comprensible</span> — Romàntic i poètic, però comprensible.</div>
+                <div class="alternative"><strong>Alternativa col·loquial:</strong> "Because my life is full of you!"</div>
+            </div>
+        </div>
+        
+        <div class="video-section">
+            <h2>🎬 Vídeo de la cançó</h2>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/WttNlbaECDY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            
+            <div style="margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <h3>Diverses versions</h3>
+                <p>Aquesta icònica cançó ha estat versionada per molts artistes al llarg dels anys:</p>
+                <ul>
+                    <li>Gene Kelly (versió original de la pel·lícula de 1952)</li>
+                    <li>Frank Sinatra</li>
+                    <li>Diana Ross & The Supremes</li>
+                    <li>Mint Royale</li>
+                    <li>i molts altres...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <!-- Nova secció: Versió oral i natural -->
+    <div class="oral-version">
+        <h2>💬 Versió oral i natural de "Singin' in the Rain"</h2>
+        
+        <div class="oral-content">
+            <div class="oral-section">
+                <p>You know what?<br>
+                It's raining like crazy out there...<br>
+                and I'm still in such a good mood — I can't stop smiling!</p>
+                
+                <p>I feel amazing. Honestly, I haven't felt this happy in a while.<br>
+                Even those big dark clouds? I just laugh at them.<br>
+                They're not gonna ruin my vibe.</p>
+            </div>
+            
+            <div class="oral-section">
+                <p>I feel like there's sunshine inside me — seriously —<br>
+                like my heart's full of light, and I'm totally open to love.</p>
+                
+                <p>Everyone else is running for cover,<br>
+                but I'm just here, walking around, soaking wet and loving it.<br>
+                The rain can keep coming — I'm good. I'm actually smiling!</p>
+                
+                <p>I'm walking down the street, humming to myself,<br>
+                like I've got my own soundtrack playing in my head.</p>
+            </div>
+            
+            <div class="oral-section">
+                <p>And yeah, you're probably wondering:<br>
+                why am I smiling like an idiot?<br>
+                Why am I even singing when it's pouring outside?</p>
+                
+                <p>I don't know… it's like, even though it's winter,<br>
+                it feels like spring to me.</p>
+                
+                <p>Every morning I wake up excited —<br>
+                happy, energized, just ready to go.</p>
+                
+                <p>Even the boring stuff? It all feels easy now.</p>
+                
+                <p>And you know why?</p>
+                
+                <p>Because my life is full of <em>you</em>.</p>
+            </div>
+            
+            <div class="oral-note">
+                <strong>Notes:</strong> Aquesta versió no rima, però sonaria natural en una conversa real. Està pensada per ser parlada com un monòleg emotiu, alegre, informal. Ideal per llegir en veu alta o fins i tot interpretar en un petit espectacle.
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Anàlisi realitzat amb ❤️ per a estudiants d'anglès</p>
+        <p>© 2025 - Tots els drets reservats</p>
+    </footer>
+</body>
+</html>
