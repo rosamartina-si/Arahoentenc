@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traducció: keep / save / put away</title>
+  <link rel="stylesheet" href="../../estils.css" />
+</head>
+<body>
+
+<h1>Traducció: <em>keep</em>, <em>save</em> o <em>put away</em></h1>
+<p>
+  Tradueix aquestes frases del català a l'anglès. Escriu la teva resposta, clica <strong>Comprova</strong> o prem la tecla <strong>Retorn</strong> i escolta la frase correcta.
+</p>
+
+<div class="image center">
+  <img src="../../Img/organize.png" alt="Nena endreçant i treballant a l'ordinador" />
+</div>
+
+<div id="exercici"></div>
+<div id="controls"></div>
+
+<div class="nota">
+  <strong>Nota lingüística:</strong>
+  <ul>
+    <li><strong>keep</strong>: mantenir, conservar o no revelar.</li>
+    <li><strong>save</strong>: estalviar o desar fitxers/progrés.</li>
+    <li><strong>put away</strong>: guardar a lloc, endreçar després d’usar.</li>
+  </ul>
+</div>
+
+<script>
+const frases = [
+  // KEEP
+  ["Guarda el secret; no ho expliquis a ningú.", ["Keep the secret; don't tell anyone."]],
+  ["Conserva el tiquet per si ho has de tornar.", ["Keep the receipt in case you need to return it."]],
+  ["Mantén la calma durant l'examen.", ["Keep calm during the exam."]],
+  ["El medicament s'ha de conservar a la nevera.", ["The medicine must be kept in the fridge."]],
+  ["No revelis el seu nom; mantén-lo en secret.", ["Don't reveal his name; keep it secret."]],
+  ["Guarda el teu passaport amb tu en tot moment.", ["Keep your passport with you at all times."]],
+  ["Mantingues les mans netes abans de menjar.", ["Keep your hands clean before eating."]],
+  ["Mantén la porta tancada, si us plau.", ["Keep the door closed, please."]],
+  ["Conserva les cartes velles a la capsa de records.", ["Keep the old letters in the memory box."]],
+  ["Mantingues el gos lligat al parc.", ["Keep the dog on a leash in the park."]],
+
+  // SAVE
+  ["He d'estalviar diners per al viatge.", ["I need to save money for the trip."]],
+  ["Desa el fitxer abans de tancar la finestra.", ["Save the file before closing the window."]],
+  ["Desa els canvis i tanca el document.", ["Save the changes and close the document."]],
+  ["Al joc, desa el teu progrés sovint.", ["In the game, save your progress often."]],
+  ["Estic estalviant per comprar una casa.", ["I am saving to buy a house."]],
+  ["Desa la teva feina cada cinc minuts.", ["Save your work every five minutes."]],
+  ["Hem d'estalviar energia apagant les llums.", ["We must save energy by turning off the lights."]],
+  ["Guarda aquesta pàgina web als favorits.", ["Save this webpage in your favorites.", "Save this webpage to your bookmarks."]],
+  ["El bombers van salvar el nen de l'incendi.", ["The firefighters saved the child from the fire."]],
+  ["Vaig estalviar prou diners per comprar un ordinador nou.", ["I saved enough money to buy a new computer."]],
+
+  // PUT AWAY
+  ["Després de jugar, endreça els joguets a la capsa.", ["After playing, put the toys away in the box."]],
+  ["La professora diu: «Guardeu els mòbils ara».", ["The teacher says, \"Put your phones away now.\""]],
+  ["Acabes de plegar la roba d'hivern; ara guarda-la a l'altell.", ["You have just folded the winter clothes; now put them away in the top cupboard."]],
+  ["Quan acabis de cuinar, guarda els ganivets al calaix.", ["When you finish cooking, put the knives away in the drawer."]],
+  ["El metge li va dir que guardés les medicines fora de l'abast dels nens.", ["The doctor told him to put the medicines away from the children's reach."]],
+  ["Guarda les teves sabates a l’armari.", ["Put your shoes away in the closet."]],
+  ["Acaba els deures i guarda els llibres a la motxilla.", ["Finish your homework and put the books away in the backpack."]],
+  ["Després de sopar, endreça els plats al rentaplats.", ["After dinner, put the dishes away in the dishwasher."]],
+  ["Guarda la guitarra a la seva funda.", ["Put the guitar away in its case."]],
+  ["Endreça la compra al rebost, si us plau.", ["Please put the groceries away in the pantry."]]
+];
+</script>
+
+<script src="../../script.js"></script>
+
+</body>
+</html>
