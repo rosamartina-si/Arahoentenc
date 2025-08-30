@@ -1,14 +1,20 @@
-Aquí tens el teu text maquetat amb el mateix format HTML de l’exemple:
-
-```html
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Llocs bonics de Mallorca</title>
   <!-- Enllacem el full d'estils que has desat a ../estil2.css -->
-  <link rel="stylesheet" href="../../estil2.css">
+  <link rel="stylesheet" href="../estil2.css">
+  <style>
+    /* Estils mínims per icones i mapes (es poden moure a l’arxiu CSS) */
+    .track { margin: 0.75rem 0 1.25rem; }
+    .badges { display:flex; flex-wrap:wrap; gap:.5rem; margin:.5rem 0 .75rem; }
+    .badge { display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .55rem; border-radius:999px; border:1px solid #ddd; font-size:.95rem; }
+    .badge svg { width:16px; height:16px; }
+    .map-embed { width:100%; height:220px; border:0; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+    .map-fallback { margin:.4rem 0 0; font-size:.9rem; }
+  </style>
 </head>
 
 <body>
@@ -16,28 +22,130 @@ Aquí tens el teu text maquetat amb el mateix format HTML de l’exemple:
 
     <h1>Llocs bonics de veure a Mallorca</h1>
 
-    <h2>De Tolleric a far de Cap Blanc</h2>
-    <p>Camí que va per dalt de les penyes al llarg de 9 quilòmetres. Paisatge conservat: garriga de la Marina de Llucmajor. No ens trobem construccions noves.</p>
+    <!-- ICONES SVG (reutilitzades) -->
+    <svg aria-hidden="true" style="display:none">
+      <symbol id="ic-distance" viewBox="0 0 24 24">
+        <path d="M7 20a3 3 0 1 1 0-6h7.17l-2.58-2.59L13 9l5 5-5 5-1.41-1.41L14.17 16H7a2 2 0 1 0 0 4Z"/>
+      </symbol>
+      <symbol id="ic-time" viewBox="0 0 24 24">
+        <path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5Zm.75 5.75h-1.5v6l5 3 .75-1.26-4.25-2.49V7.5Z"/>
+      </symbol>
+      <symbol id="ic-diff" viewBox="0 0 24 24">
+        <path d="M12 2 1 22h22L12 2Zm0 4.8 7.5 13.2H4.5L12 6.8Z"/>
+      </symbol>
+    </svg>
+
+    <h2>De Tolleric al far de Cap Blanc</h2>
+    <p>Itinerari que recorre la part alta dels penyals durant 9 quilòmetres. El paisatge, ben conservat, és la garriga de la Marina de Llucmajor. No s’hi troben construccions noves.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>9,1 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>2 h 33 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Moderada</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Tolleric - Far de Cap Blanc"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=9493305&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://www.wikiloc.com/hiking-trails/tolleric-far-de-cap-blanc-9493305" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
     <h2>Del far de Cap Blanc a cala Pi</h2>
-    <p>Primers set quilòmetres de costa sense traces humanes, que se sumen als vuit darrers d'ahir, i trobem la primera platja verge, cala Bertran, una entrada profunda i estreta del mar fins a la una petita platja envoltada de pins. Som a la Marina de Llucmajor, una zona costanera amb un ecosistema característic: sobretot ullastrars (a la Mallorca tradicional s'empeltava d'olivera als conreus), també hi abunda la mata, el pi bord o pi blanc, i en zones més obertes, el romaní i diversos tipus d'estepes (l'estepa blanca, negra, llimonenca). Arribem a cala Pi: platja d'arena blanca entre alts penya-segats, una torre per prevenir els atacs de pirates i corsaris otomas (acabada el 1663). Molta zona construïda.</p>
+    <p>Els primers set quilòmetres de costa són sense empremta humana fins a arribar a la primera platja verge, cala Bertran. A la Marina de Llucmajor hi dominen els ullastrars, la mata i els pins; a cala Pi, platja d’arena blanca entre penyals, s’alça una torre (1663) contra pirates otomans.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>14,7 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>3 h 26 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Moderada</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Cala Pi - Cap Blanc"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=61652862&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://www.wikiloc.com/hiking-trails/cala-pi-cap-blanc-61652862" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
-    <h2>Vallgornera a s'Estadella</h2>
-    <p>Costa verge durant cinc quilòmetres, passant algunes cales, pins dramàticament inclinats pel vent i una altra antiga torre de vigilància, fins a arribar a unes velles cases de pescadors de s'Estadella reconvertides en allotjaments turístics.</p>
+    <h2>De Vallgornera a s’Estadella</h2>
+    <p>Costa verge durant cinc quilòmetres amb petites cales, pins inclinats pel vent i una torre de vigilància; s’arriba a les antigues cases de pescadors de s’Estadella.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>8,3 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>2 h 21 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Fàcil</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Vallgornera - s’Estalella"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://ca.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=64839187&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://ca.wikiloc.com/rutes-senderisme/vallgornera-a-sestalella-64839187" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
-    <h2>De sa Ràpita a cap de ses Salines</h2>
-    <p>Les platges del sud de Mallorca són les més verges, les més grans i belles de l'illa, moltes amb l'article salat: sa Ràpita, ses Covetes, es Trenc (la platja verge més gran de Mallorca, pels ecologistes és un símbol de resistència), ses Roquetes, es Carbó, es Caragol (platja paradisíaca)... Les he conegudes plenes a vessar de gent, al sol de l'estiu, però al maig amb prou feines hi ha alguns banyistes. Hi ha llargs trams en què s'acumula la posidònia, senyal inequívoc d'aigües netes amb ecosistemes rics. Treure-les o no de les platges (molesten als banyistes, sobretot quan es podreixen) és un debat constant a tota la costa: s'ha de prioritzar el medi ambient o el benestar dels turistes? Cada vegada es treuen menys, afortunadament. La posidònia no és una alga, tot i que col·loquialment se l'anomena així, és una planta superior amb arrels, flors i fruits. Fa la fotosíntesi i absorbeix CO<sub>2</sub> a un ritme vint vegades més gran que el d'un bosc terrestre. Aquestes platges tenen una flora molt rica: hi ha moltíssimes plantes pròpies d'ambients litorals, com el lliri de mar, el morró, una gramínia que ajuda a fixar les dunes, les savines i fins i tot hi ha alguna planta endèmica amenaçada per la freqüèntació i el trepig, com la <em>Silene migjornensis</em>. Darrere es Trenc, molt a prop del litoral, hi ha el salobrar de Campos, que és una molt bona representació de vegetació de plantes adaptades a sòls salns, com les salicòrnies. A les voreres de les salines hi ha plantes endèmiques bastant rares, principalment saladines, que són objecte de conservació per part de les administracions. En aquestes platges hi ha vells búnquers, són de la postguerra, el règim franquista tenia por d'una invasió anglesa. La Colònia de Sant Jordi és el port més important de la costa sud mallorquina i l'única població (amb el petit nucli de ses Covetes) que hi ha en gairebé trenta quilòmetres. Està situada entre sa Ràpita (municipi de Campos) i s'Almunia (Santanyí), que ja es troba a la costa de llevant: quilòmetres de platges i penyes verges. La Colònia de Sant Jordi compensa tanta virginitat mediambiental: té hotels escandalosament alts. L'illot de na Guardis, a tres-cents metres de la platja de Can Curt, a la badia de la Colònia de Sant Jordi, va ser l'assentament fenici més important de Mallorca (finals dels segle V aC i, sobretot, des del IV aC). El far de ses Salines és el punt més septentrional de la costa mallorquina.</p>
+    <h2>De sa Ràpita al cap de ses Salines</h2>
+    <p>Platges àmplies i en gran part verges (sa Ràpita, ses Covetes, es Trenc, es Carbó, es Caragol...). La posidònia —planta marina clau— s’hi acumula en trams i és senyal d’aigües netes; cada cop se’n retira menys. Darrere es Trenc hi ha el salobrar de Campos. La Colònia de Sant Jordi, amb hotels alts, és el principal nucli de la costa sud. L’illot de na Guardis fou un assentament fenici. El far de ses Salines marca el punt més meridional de Mallorca.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>11,2 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>3 h 19 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Fàcil</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Sa Ràpita – Es Trenc – Colònia de Sant Jordi"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://es.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=198726652&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://es.wikiloc.com/rutas-senderismo/sa-rapita-parc-natural-es-trenc-colonia-de-sant-jordi-coastal-walk-198726652" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
-    <h2>Cap de ses Salines a cala Figuera</h2>
-    <p>Excursió al caló de Màrmols des del far de ses Salines. Són tres hores de camí d'anada i tornada (una platja verge a Mallorca s'ha de guanyar, no és de franc). Cala s'Almúnia: bonica com poques. A prop, el caló des Moro, amagat darrere els pins. Hi ha pàrquing gratuït per aquestes dues cales (els turistes fan fins a quatre hores de cua per banyar-s'hi). Sí és bonic però tampoc n'hi ha per tant. Hi ha dotzenes de cales igual de belles i verges. La platja de Santanyí és un reducte de relax, un món feliç. Cala Figuera: un antic llogaret de pescadors (encara en queden alguns en actiu) de no més de tres-cents habitants. Hi ha l'hostal La Marina per allotjar-s'hi. Els negocis són encara majoritàriament de famílies mallorquines de tota la vida. Abans d'arribar a Cala Figuera hi ha le mirador d'es Pontàs (abans d'arribar a cala Santanyí): una roca espectacular en forma de pont d'una sola arcada que s'alça a pocs metres de la costa. Sembla un arc de triomf gegantí esculpit en una roca blanquinosa i rogenca.</p>
+    <h2>Del cap de ses Salines a cala Figuera</h2>
+    <p>Excursió al caló des Màrmols des del far de ses Salines (ruta d’anada i tornada). Cala s’Almunia i el caló des Moro són molt concorreguts a l’estiu; la platja de Santanyí i cala Figuera mantenen l’encant mariner. Mirador d’es Pontàs, arc natural espectacular.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>10,9 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>3 h 06 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Moderada</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Far de ses Salines – Caló des Màrmols"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=45292698&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://www.wikiloc.com/hiking-trails/ses-salines-far-cap-de-ses-salines-cala-marmols-45292698" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
-    <h2>Cala Figuera a Portocolom</h2>
-    <p>Prop de cala Figuera comença el parc natural de Mondragó: poques batalles guanyades han salvat tanta bellesa com les cales verges de Mondragó: la platja ampla i blanca de s'Amarador, on segueix igual que fa quaranta anys, o el caló des Borgit, petit, arrecerat, d'arena encara més blanca. En canvi el caló d'en Garrot, dins el parc, i cala sa Barca Trencada, establiments construïts a peu de platja. Ara ve zona molt urbanitzada. Quan s'acaba, una altra seqüència espectacular de cales sense construccions, o gairebé: cala Mitjana, cala sa Nau (amb una penya amb un forat, es Puntàs, tan guapo com sa Foradada de la costa de Deià, però sense carretera devora ni gent a la vista), cala Estreta, cala Bràfia... Portocolom: vell port mariner que mereix passejades, un poble vorera de mar amb un vell port, cases antigues i passejos de pins i tamarells. Dormir pot ser barat.</p>
+    <h2>De cala Figuera a Portocolom</h2>
+    <p>Parc Natural de Mondragó amb cales verges (s’Amarador, des Borgit). Després d’un tram urbanitzat, tornen les cales sense construccions: Mitjana, sa Nau (amb es Puntàs), Estreta, Bràfia... Portocolom, vell port mariner deliciós per passejar.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>25,1 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>9 h 07 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Moderada</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Cala Figuera – Mondragó – Portopetro – Portocolom"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://ca.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=72362565&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://ca.wikiloc.com/rutes-senderisme/volta-a-mallorca-a-peu-vorera-de-mar-etapa-5-cala-figuera-cala-mondrago-porto-petro-portocolom-72362565" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
-    <h2>De Portocolom a s'Illot</h2>
-    <p>Cala Magraner, una altra platja verge, amb una impressionant paret amb grans coves a l'altra banda, on uns joves fan escalada. Per baixar a la platja hi ha una corda.</p>
+    <h2>De Portocolom a s’Illot</h2>
+    <p>Cala Magraner és una platja verge amb parets i coves on sovint hi ha escaladors; l’accés final té un tram amb corda. Tram llarg i costaner fins a Porto Cristo, i complement circular a s’Illot per la Punta de n’Amer.</p>
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>33,0 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>8 h 04 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Moderada</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: Portocolom – Porto Cristo (passant per Cala Magraner)"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=164829327&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://www.wikiloc.com/hiking-trails/porto-cristo-portocolom-coastal-walk-164829327" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
+
+    <div class="track">
+      <div class="badges">
+        <span class="badge"><svg><use href="#ic-distance"/></svg>8,1 km</span>
+        <span class="badge"><svg><use href="#ic-time"/></svg>1 h 38 min</span>
+        <span class="badge"><svg><use href="#ic-diff"/></svg>Fàcil</span>
+      </div>
+      <iframe class="map-embed" title="Mapa Wikiloc: s’Illot – Punta de n’Amer (circular)"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=49725891&measures=off&title=off&near=off&images=off&maptype=H"></iframe>
+      <p class="map-fallback"><a href="https://www.wikiloc.com/hiking-trails/sillot-sa-punta-de-namer-49725891" target="_blank" rel="noopener">Obre el mapa a Wikiloc</a></p>
+    </div>
 
   </div><!-- /sheet -->
 </body>
 </html>
-```
+
