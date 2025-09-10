@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Omple els buits: also / too / so do I</title>
+  <link rel="stylesheet" href="../estil.css" />
+</head>
+<body>
+
+<h1>Omple els buits: <em>also</em>, <em>too</em>, <em>so do I</em></h1>
+
+<p>
+  Introdueix la paraula correcta a l’espai en blanc, fes clic a <strong>Comprova</strong> —o prem la tecla <strong>Retorn</strong>— i escolta la frase completa.
+</p>
+
+<!-- Pots triar: center (per defecte), left o right -->
+<div class="image left">
+  <img src="../Img/also_too_sodoi.jpg" alt="also too so do I" />
+</div>
+
+<p>
+  <strong>Also</strong> s'utilitza normalment abans del verb principal o després del verb <em>to be</em>. És més comú en llenguatge formal.
+</p>
+<p>
+  <strong>Too</strong> s'utilitza al final de la frase. És més comú en llenguatge informal.
+</p>
+<p>
+  <strong>So do I</strong> (o les seves variants) s'utilitza per expressar acord amb una afirmació anterior. Cal adaptar l'auxiliar segons el verb i temps de la frase original.
+</p>
+
+<div id="exercici"></div>
+
+<div id="controls"></div>
+
+<script>
+  const frases = [
+    ["— M'agrada la pizza. — A mi també.", "— I like pizza. — ____ ____ ____.", "So do I", "I like pizza. — So do I."],
+    ["— Vaig anar a Londres. — Jo també.", "— I went to London. — ____ ____ ____.", "So did I", "I went to London. — So did I."],
+    ["— Ella parla francès. — Jo també.", "— She speaks French. — ____ ____ ____.", "So do I", "She speaks French. — So do I."],
+    ["— Estic cansat. — Jo també estic cansat.", "— I'm tired. — I am tired ____.", "too", "I'm tired. — I am tired too."],
+    ["— A ell li agrada la música. — A ella també li agrada la música.", "— He likes music. — She ____ likes music.", "also", "He likes music. — She also likes music."],
+    ["— Vam veure la pel·li. — Nosaltres també la vam veure.", "— They saw the film. — We saw it ____.", "too", "They saw the film. — We saw it too."],
+    ["— Estic aprenent italià. — Jo també estic aprenent italià.", "— I'm learning Italian. — ____ ____ ____.", "So am I", "I'm learning Italian. — So am I."],
+    ["— Puc ajudar. — Jo també puc ajudar.", "— I can help. — ____ ____ ____.", "So can I", "I can help. — So can I."],
+    ["— A ella li agrada llegir. — A mi també m’agrada llegir.", "— She likes reading. — I like it ____.", "too", "She likes reading. — I like it too."],
+    ["— Ell està content. — Ella també està contenta.", "— He is happy. — She is happy ____.", "too", "He is happy. — She is happy too."],
+    ["— Ell ha acabat l'exercici. — Jo també he acabat l'exercici.", "— He has finished the exercise. — ____ ____ ____.", "So have I", "He has finished the exercise. — So have I."],
+    ["— Vindran demà. — Nosaltres també vindrem demà.", "— They will come tomorrow. — We ____ will come.", "also", "They will come tomorrow. — We also will come."],
+    ["— Vaig estudiar matemàtiques. — Jo també vaig estudiar matemàtiques.", "— I studied maths. — ____ ____ ____.", "So did I", "I studied maths. — So did I."],
+    ["— Ella treballa a Oxford. — Ella també treballa a Londres.", "— She works in Oxford. — She ____ works in London.", "also", "She works in Oxford. — She also works in London."],
+    ["— M’agrada el cafè. — A mi també m’agrada el cafè.", "— I like coffee. — I like coffee ____.", "too", "I like coffee. — I like coffee too."],
+    ["— Ell viu a Girona. — Jo també visc a Girona.", "— He lives in Girona. — ____ ____ ____.", "So do I", "He lives in Girona. — So do I."],
+    ["— Ella vol venir. — Jo també vull venir.", "— She wants to come. — ____ ____ ____.", "So do I", "She wants to come. — So do I."],
+    ["— Ell pot conduir. — Jo també puc conduir.", "— He can drive. — ____ ____ ____.", "So can I", "He can drive. — So can I."],
+    ["— Estic nerviós. — Jo també estic nerviós.", "— I'm nervous. — I am nervous ____.", "too", "I'm nervous. — I am nervous too."],
+    ["— Jo vinc. — Ell també ve.", "— I'm coming. — He ____ is coming.", "also", "I'm coming. — He also is coming."]
+  ];
+</script>
+
+
+<script src="../script2.js"></script>
+</body>
+</html>
