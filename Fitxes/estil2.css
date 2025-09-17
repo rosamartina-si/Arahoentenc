@@ -105,6 +105,12 @@ img {
   object-fit: contain;
 }
 
+.image-2-imatges-petites img {
+  width: 20%; /* Ajusta a mida petita */
+  height: auto;
+  object-fit: contain;
+}
+
 body img:not(.image-2-imatges img) {
   max-width: 100% !important;
   height: auto !important;
