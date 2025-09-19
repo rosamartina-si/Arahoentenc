@@ -106,6 +106,7 @@ h1 {
 <div id="tema-selector">
   <label for="tema">Tria un tema: </label>
   <select id="tema">
+    <option value="transcripció">Transcripció</option>
     <option value="colors">Colors</option>
     <option value="fruites">Fruites</option>
     <option value="numeros">Números (1-10)</option>
@@ -133,6 +134,30 @@ h1 {
 const TOTAL_PER_RONDA = 10;
 
 const TEMES = {
+  transcripcio: [
+  {"id":1,"pol":"cz","cat":"tx"},
+  {"id":2,"pol":"sz","cat":"x"},
+  {"id":3,"pol":"ż","cat":"j"},
+  {"id":4,"pol":"rz","cat":"j"},
+  {"id":5,"pol":"dż","cat":"dj"},
+  {"id":6,"pol":"c","cat":"ts"},
+  {"id":7,"pol":"ć","cat":"tx"},
+  {"id":8,"pol":"ś","cat":"x"},
+  {"id":9,"pol":"ź","cat":"j"},
+  {"id":10,"pol":"ń","cat":"n"},
+  {"id":11,"pol":"ł","cat":"u"},
+  {"id":12,"pol":"ą","cat":"on"},
+  {"id":13,"pol":"ę","cat":"en"},
+  {"id":14,"pol":"ó","cat":"u"},
+  {"id":15,"pol":"y","cat":"e"},
+  {"id":16,"pol":"j","cat":"i"},
+  {"id":17,"pol":"w","cat":"v"},
+  {"id":18,"pol":"ch","cat":"j castellana"},
+  {"id":19,"pol":"si(+vocal)","cat":"x"},
+  {"id":20,"pol":"zi(+vocal)","cat":"j"},
+  {"id":21,"pol":"ci(+vocal)","cat":"tx"},
+  {"id":22,"pol":"ni(+vocal)","cat":"ny"}
+],
   colors: [
     {"id":1,"pol":"biały","cat":"blanc"},
     {"id":2,"pol":"czarny","cat":"negre"},
