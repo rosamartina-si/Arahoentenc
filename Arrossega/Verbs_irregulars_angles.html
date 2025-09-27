@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrossega i ordena els verbs irregulars</title>
+<style>
+:root {
+  --color-primary: #003366;
+  --color-secondary: #4a86e8;
+  --color-correct: #4CAF50;
+  --color-partial: #FFC107;
+  --color-incorrect: #F44336;
+  --color-border: #ccc;
+  --color-bg: #f9f9f9;
+  --shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1 { 
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+#game-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+#level-indicator {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: var(--color-primary);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9em;
+}
+
+#page-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#page-info {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.nav-button {
+  padding: 8px 16px;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #3a76d8;
+}
+
+.nav-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+#page-list {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.page-btn {
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.page-btn:hover {
+  background: #e0e0e0;
+}
+
+.page-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.page-btn.completed {
+  background: var(--color-correct);
+  color: white;
+  border-color: var(--color-correct);
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.col {
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  min-height: 300px;
+  padding: 0;
+  background: white;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.col.highlight {
+  border-color: var(--color-primary);
+  background-color: rgba(0, 51, 102, 0.05);
+}
+
+.col h3 { 
+  text-align: center; 
+  margin: 0;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  background: #f5f5f5;
+}
+
+.col-content {
+  flex: 1;
+  padding: 10px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.verb-row {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.verb-row:last-child {
+  border-bottom: none;
+}
+
+.verb-row.empty {
+  min-height: 40px;
+  opacity: 0.3;
+  background: #f9f9f9;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+}
+
+#items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  min-height: 100px;
+  padding: 15px;
+  border: 2px dashed var(--color-border);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.item {
+  padding: 10px 15px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff;
+  cursor: grab;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+  user-select: none;
+  position: relative;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.item.dragging {
+  opacity: 0.7;
+  transform: rotate(5deg);
+}
+
+.item.correct { 
+  background: #e8f5e9; 
+  border-color: var(--color-correct); 
+  color: #2e7d32;
+}
+
+.item.partial { 
+  background: #fffde7; 
+  border-color: var(--color-partial); 
+  color: #f57f17;
+}
+
+.item.incorrect { 
+  background: #ffebee; 
+  border-color: var(--color-incorrect); 
+  color: #c62828;
+  animation: shake 0.5s;
+}
+
+.item.placed {
+  cursor: default;
+}
+
+.item.used {
+  opacity: 0.7;
+  background: #f0f0f0;
+  border-style: dashed;
+}
+
+.item.used::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--color-correct);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+#controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#score-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#score { 
+  font-weight: bold; 
+  font-size: 1.2em;
+  color: var(--color-primary);
+}
+
+#progress {
+  flex-grow: 1;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  max-width: 200px;
+}
+
+#progress-bar {
+  height: 100%;
+  background: var(--color-primary);
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+button {
+  padding: 10px 20px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #002244;
+}
+
+#message {
+  text-align: center;
+  margin-top: 15px;
+  min-height: 24px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+#message.success {
+  color: var(--color-correct);
+}
+
+#message.error {
+  color: var(--color-incorrect);
+}
+
+@media (max-width: 768px) {
+  #board {
+    grid-template-columns: 1fr;
+  }
+  
+  #page-navigation {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  #score-container {
+    justify-content: space-between;
+  }
+  
+  #level-indicator {
+    position: static;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Arrossega els verbs irregulars</h1>
+<p class="subtitle">Col·loca cada forma verbal a la columna correcta (Infinitiu, Passat, Participi).</p>
+
+<div id="game-container">
+  <div id="level-indicator">Nivell B1</div>
+  
+  <div id="page-navigation">
+    <button id="prev-page" class="nav-button" disabled>← Anterior</button>
+    
+    <div id="page-info">Pàgina <span id="current-page">1</span> de <span id="total-pages">5</span></div>
+    
+    <div id="page-list">
+      <!-- Els botons de pàgina es generaran aquí -->
+    </div>
+    
+    <button id="next-page" class="nav-button">Següent →</button>
+  </div>
+  
+  <div id="board" aria-label="Àrea per col·locar les formes verbals">
+    <div class="col" id="inf" aria-label="Columna per a infinitius">
+      <h3>Infinitiu</h3>
+      <div class="col-content" id="inf-content">
+        <!-- Els infinitius arrossegats aniran aquí -->
+      </div>
+    </div>
+    <div class="col" id="past" aria-label="Columna per a passats">
+      <h3>Passat</h3>
+      <div class="col-content" id="past-content">
+        <!-- Els passats arrossegats aniran aquí -->
+      </div>
+    </div>
+    <div class="col" id="part" aria-label="Columna per a participis">
+      <h3>Participi</h3>
+      <div class="col-content" id="part-content">
+        <!-- Els participis arrossegats aniran aquí -->
+      </div>
+    </div>
+  </div>
+  
+  <div id="items-container" aria-label="Formes verbals per arrossegar">
+    <!-- Els ítems es generaran aquí -->
+  </div>
+  
+  <div id="message" aria-live="polite"></div>
+  
+  <div id="controls">
+    <div id="score-container">
+      <div id="score">Puntuació: <span id="correct-count">0</span>/15</div>
+      <div id="progress" aria-label="Progrés del joc">
+        <div id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="15"></div>
+      </div>
+    </div>
+    <button id="reset-btn">Reiniciar pàgina</button>
+  </div>
+</div>
+
+<script>
+// Verbs de nivell B1 organitzats per pàgines
+const VERB_PAGES = [
+  // Pàgina 1 - Verbs bàsics
+  [
+    {id:1, inf:"go", past:"went", part:"gone"},
+    {id:2, inf:"see", past:"saw", part:"seen"},
+    {id:3, inf:"eat", past:"ate", part:"eaten"},
+    {id:4, inf:"take", past:"took", part:"taken"},
+    {id:5, inf:"write", past:"wrote", part:"written"}
+  ],
+  // Pàgina 2 - Verbs comuns
+  [
+    {id:6, inf:"begin", past:"began", part:"begun"},
+    {id:7, inf:"break", past:"broke", part:"broken"},
+    {id:8, inf:"choose", past:"chose", part:"chosen"},
+    {id:9, inf:"drive", past:"drove", part:"driven"},
+    {id:10, inf:"fall", past:"fell", part:"fallen"}
+  ],
+  // Pàgina 3 - Verbs importants
+  [
+    {id:11, inf:"forget", past:"forgot", part:"forgotten"},
+    {id:12, inf:"get", past:"got", part:"gotten"},
+    {id:13, inf:"give", past:"gave", part:"given"},
+    {id:14, inf:"know", past:"knew", part:"known"},
+    {id:15, inf:"speak", past:"spoke", part:"spoken"}
+  ],
+  // Pàgina 4 - Verbs amb formes iguals
+  [
+    {id:16, inf:"swim", past:"swam", part:"swum"},
+    {id:17, inf:"think", past:"thought", part:"thought"},
+    {id:18, inf:"understand", past:"understood", part:"understood"},
+    {id:19, inf:"wear", past:"wore", part:"worn"},
+    {id:20, inf:"win", past:"won", part:"won"}
+  ],
+  // Pàgina 5 - Verbs amb totes les formes iguals
+  [
+    {id:21, inf:"bring", past:"brought", part:"brought"},
+    {id:22, inf:"buy", past:"bought", part:"bought"},
+    {id:23, inf:"catch", past:"caught", part:"caught"},
+    {id:24, inf:"teach", past:"taught", part:"taught"},
+    {id:25, inf:"cut", past:"cut", part:"cut"} // Verb amb totes les formes iguals
+  ]
+];
+
+class VerbGame {
+  constructor() {
+    this.currentPage = 0;
+    this.totalPages = VERB_PAGES.length;
+    this.gameState = this.loadGameState();
+    
+    this.init();
+  }
+  
+  // Carregar l'estat del joc des de localStorage
+  loadGameState() {
+    const savedState = localStorage.getItem('verbGameState');
+    if (savedState) {
+      return JSON.parse(savedState);
+    }
+    
+    // Estat per defecte: cap pàgina completada
+    const initialState = {
+      currentPage: 0,
+      completedPages: [],
+      pageStats: {}
+    };
+    
+    // Inicialitzar les estadístiques de cada pàgina
+    for (let i = 0; i < VERB_PAGES.length; i++) {
+      initialState.pageStats[i] = {
+        punts: 0,
+        correctCount: 0,
+        totalAttempts: 0,
+        placedItems: 0,
+        completedVerbs: [],
+        placedForms: {}, // Per controlar quines formes s'han colocat
+        failedAttempts: {} // Per controlar quines formes s'han fallat abans
+      };
+    }
+    
+    return initialState;
+  }
+  
+  // Guardar l'estat del joc a localStorage
+  saveGameState() {
+    this.gameState.currentPage = this.currentPage;
+    localStorage.setItem('verbGameState', JSON.stringify(this.gameState));
+  }
+  
+  // Carregar les dades de la pàgina actual
+  loadPageData() {
+    const pageData = this.gameState.pageStats[this.currentPage];
+    
+    this.punts = pageData.punts || 0;
+    this.correctCount = pageData.correctCount || 0;
+    this.totalAttempts = pageData.totalAttempts || 0;
+    this.intents = {}; // Reiniciar per cada pàgina
+    this.placedItems = pageData.placedItems || 0;
+    
+    // Total d'ítems: 15 (3 formes × 5 verbs)
+    this.totalItems = 15;
+    
+    this.completedVerbs = pageData.completedVerbs || [];
+    this.placedForms = pageData.placedForms || {}; // Formes ja colocades
+    this.failedAttempts = pageData.failedAttempts || {}; // Formes que s'han fallat
+    
+    // Actualitzar la interfície
+    this.updatePageInfo();
+    this.updateScore();
+    this.updateProgress();
+    this.updateNavigation();
+  }
+  
+  // Guardar les dades de la pàgina actual
+  savePageData() {
+    this.gameState.pageStats[this.currentPage] = {
+      punts: this.punts,
+      correctCount: this.correctCount,
+      totalAttempts: this.totalAttempts,
+      placedItems: this.placedItems,
+      completedVerbs: this.completedVerbs,
+      placedForms: this.placedForms,
+      failedAttempts: this.failedAttempts
+    };
+    
+    // Marcar la pàgina com a completada si s'han colocat tots els ítems
+    if (this.placedItems === this.totalItems && !this.gameState.completedPages.includes(this.currentPage)) {
+      this.gameState.completedPages.push(this.currentPage);
+    }
+    
+    this.saveGameState();
+  }
+  
+  // 🔊 funció per llegir una paraula en anglès
+  speakEnglish(text) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-GB";
+      utterance.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    }
+  }
+  
+  shuffle(arr) {
+    // Algoritme de Fisher-Yates per barrejar l'array
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  
+  showMessage(text, type = '') {
+    const messageEl = document.getElementById('message');
+    messageEl.textContent = text;
+    messageEl.className = type ? type : '';
+    
+    // Netejar el missatge després de 3 segons (excepte si és un missatge permanent)
+    if (type !== 'success') {
+      setTimeout(() => {
+        if (messageEl.textContent === text) {
+          messageEl.textContent = '';
+          messageEl.className = '';
+        }
+      }, 3000);
+    }
+  }
+  
+  updatePageInfo() {
+    document.getElementById('current-page').textContent = this.currentPage + 1;
+    document.getElementById('total-pages').textContent = this.totalPages;
+    
+    // Actualitzar la llista de pàgines
+    const pageList = document.getElementById('page-list');
+    pageList.innerHTML = '';
+    
+    for (let i = 0; i < this.totalPages; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = 'page-btn';
+      pageBtn.textContent = i + 1;
+      
+      if (i === this.currentPage) {
+        pageBtn.classList.add('active');
+      } else if (this.gameState.completedPages.includes(i)) {
+        pageBtn.classList.add('completed');
+      }
+      
+      pageBtn.addEventListener('click', () => {
+        this.changePage(i);
+      });
+      
+      pageList.appendChild(pageBtn);
+    }
+  }
+  
+  updateScore() {
+    // Mostrar la puntuació sobre 15 (només les encertades a la primera)
+    document.getElementById("score").innerHTML = `Puntuació: <span id="correct-count">${this.punts}</span>/15`;
+  }
+  
+  updateProgress() {
+    const progressBar = document.getElementById('progress-bar');
+    const progress = (this.placedItems / this.totalItems) * 100;
+    progressBar.style.width = `${progress}%`;
+    progressBar.setAttribute('aria-valuenow', this.placedItems);
+    progressBar.setAttribute('aria-valuemax', this.totalItems);
+  }
+  
+  updateNavigation() {
+    document.getElementById('prev-page').disabled = this.currentPage === 0;
+    document.getElementById('next-page').disabled = this.currentPage === this.totalPages - 1;
+  }
+  
+  createItemElement(item) {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.textContent = item.text;
+    div.draggable = true;
+    div.dataset.id = item.id;
+    div.dataset.form = item.form;
+    div.dataset.text = item.text; // Guardar el text per a clonar
+    
+    div.setAttribute('aria-label', `Forma verbal: ${item.text}. Arrossega per col·locar a la columna correcta.`);
+    
+    // Gestió d'esdeveniments de drag
+    div.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", JSON.stringify(item));
+      e.dataTransfer.effectAllowed = "copy"; // Permetre còpia
+      div.classList.add("dragging");
+      
+      // Destacar totes les columnes
+      document.querySelectorAll('.col').forEach(col => {
+        col.classList.add('highlight');
+      });
+    });
+    
+    div.addEventListener("dragend", () => {
+      div.classList.remove("dragging");
+      document.querySelectorAll('.col').forEach(col => {
+        col.classList.remove('highlight');
+      });
+    });
+    
+    return div;
+  }
+  
+  // Determinar si una forma és vàlida per a una columna
+  isValidPlacement(verbId, formType, targetColumn) {
+    const verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    if (!verb) return false;
+    
+    // Cas 1: Totes les formes són iguals (ex: cut-cut-cut)
+    if (verb.inf === verb.past && verb.inf === verb.part) {
+      return true; // Pot anar a qualsevol columna
+    }
+    
+    // Cas 2: Infinitiu i passat són iguals, però participi és diferent
+    if (verb.inf === verb.past && verb.inf !== verb.part) {
+      if (targetColumn === 'inf' || targetColumn === 'past') return formType === 'inf' || formType === 'past';
+      if (targetColumn === 'part') return formType === 'part';
+    }
+    
+    // Cas 3: Infinitiu i participi són iguals, però passat és diferent
+    if (verb.inf === verb.part && verb.inf !== verb.past) {
+      if (targetColumn === 'inf' || targetColumn === 'part') return formType === 'inf' || formType === 'part';
+      if (targetColumn === 'past') return formType === 'past';
+    }
+    
+    // Cas 4: Passat i participi són iguals, però infinitiu és diferent
+    if (verb.past === verb.part && verb.past !== verb.inf) {
+      if (targetColumn === 'past' || targetColumn === 'part') return formType === 'past' || formType === 'part';
+      if (targetColumn === 'inf') return formType === 'inf';
+    }
+    
+    // Cas 5: Totes les formes són diferents
+    if (targetColumn === 'inf') return formType === 'inf';
+    if (targetColumn === 'past') return formType === 'past';
+    if (targetColumn === 'part') return formType === 'part';
+    
+    return false;
+  }
+  
+  // Verificar si una forma ja ha estat colocada a una columna
+  isFormAlreadyPlaced(verbId, formType, targetColumn) {
+    const key = `${verbId}-${targetColumn}`;
+    return this.placedForms[key] === formType;
+  }
+  
+  // Verificar si s'ha fallat aquesta forma abans
+  hasFailedBefore(verbId, formType) {
+    const key = `${verbId}-${formType}`;
+    return this.failedAttempts[key] === true;
+  }
+  
+  init() {
+    // Configurar navegació
+    document.getElementById('prev-page').addEventListener('click', () => {
+      if (this.currentPage > 0) {
+        this.changePage(this.currentPage - 1);
+      }
+    });
+    
+    document.getElementById('next-page').addEventListener('click', () => {
+      if (this.currentPage < this.totalPages - 1) {
+        this.changePage(this.currentPage + 1);
+      }
+    });
+    
+    // Configurar el botó de reinici
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      this.resetPage();
+    });
+    
+    // Carregar la pàgina actual
+    this.changePage(this.gameState.currentPage || 0);
+  }
+  
+  changePage(pageIndex) {
+    // Guardar l'estat actual abans de canviar
+    this.savePageData();
+    
+    // Canviar a la nova pàgina
+    this.currentPage = pageIndex;
+    this.loadPageData();
+    
+    // Reiniciar la visualització
+    this.resetDisplay();
+    
+    // Carregar els verbs de la pàgina actual
+    this.loadVerbs();
+    
+    this.showMessage(`Pàgina ${pageIndex + 1} carregada. Bona sort!`);
+  }
+  
+  resetDisplay() {
+    const itemsContainer = document.getElementById('items-container');
+    itemsContainer.innerHTML = '';
+    
+    // Netejar les columnes
+    document.querySelectorAll('.col-content').forEach(content => {
+      content.innerHTML = '';
+    });
+  }
+  
+  loadVerbs() {
+    const itemsContainer = document.getElementById('items-container');
+    const currentVerbs = VERB_PAGES[this.currentPage];
+    
+    // Crear un conjunt de formes úniques (sense duplicats)
+    const uniqueForms = new Set();
+    const formsMap = new Map(); // Mapejar text de forma a la seva informació
+    
+    currentVerbs.forEach(v => {
+      // Afegir les tres formes al conjunt (Set elimina duplicats automàticament)
+      uniqueForms.add(v.inf);
+      uniqueForms.add(v.past);
+      uniqueForms.add(v.part);
+      
+      // Guardar la informació de cada forma
+      formsMap.set(v.inf, {id: v.id, form: 'inf'});
+      formsMap.set(v.past, {id: v.id, form: 'past'});
+      formsMap.set(v.part, {id: v.id, form: 'part'});
+    });
+    
+    // Convertir el Set a array i barrejar
+    const uniqueFormsArray = Array.from(uniqueForms);
+    this.shuffle(uniqueFormsArray).forEach(formText => {
+      const formInfo = formsMap.get(formText);
+      if (formInfo) {
+        const itemElement = this.createItemElement({
+          id: formInfo.id,
+          form: formInfo.form,
+          text: formText
+        });
+        
+        // Marcar com a utilitzada si ja s'ha colocat per a aquest verb
+        const verbId = formInfo.id;
+        const formType = formInfo.form;
+        
+        // Comprovar si aquesta forma ja s'ha utilitzat per a alguna columna
+        const isUsed = Object.keys(this.placedForms).some(key => {
+          const [placedVerbId, column] = key.split('-');
+          const placedFormType = this.placedForms[key];
+          return parseInt(placedVerbId) === verbId && placedFormType === formType;
+        });
+        
+        if (isUsed) {
+          itemElement.classList.add('used');
+        }
+        
+        itemsContainer.appendChild(itemElement);
+      }
+    });
+    
+    // Restaurar les formes ja colocades
+    this.restorePlacedForms();
+    
+    // Configurar les columnes com a zones de destí
+    this.setupDropZones();
+  }
+  
+  // Crear les files per als verbs a les columnes
+  createVerbRows() {
+    const currentVerbs = VERB_PAGES[this.currentPage];
+    
+    // Crear files per a cada verb a cada columna
+    currentVerbs.forEach(verb => {
+      this.createVerbRow('inf', verb.id);
+      this.createVerbRow('past', verb.id);
+      this.createVerbRow('part', verb.id);
+    });
+  }
+  
+  // Crear una fila per a un verb específic a una columna
+  createVerbRow(column, verbId) {
+    const colContent = document.getElementById(`${column}-content`);
+    if (!colContent) return;
+    
+    const row = document.createElement("div");
+    row.className = "verb-row empty";
+    row.dataset.verbId = verbId;
+    row.dataset.column = column;
+    
+    colContent.appendChild(row);
+  }
+  
+  restorePlacedForms() {
+    // Primer, crear totes les files necessàries
+    this.createVerbRows();
+    
+    // Després, restaurar les formes que ja estaven colocades
+    Object.keys(this.placedForms).forEach(key => {
+      const [verbId, column] = key.split('-');
+      const formType = this.placedForms[key];
+      
+      const verb = VERB_PAGES[this.currentPage].find(v => v.id === parseInt(verbId));
+      if (!verb) return;
+      
+      // Obtenir el text de la forma
+      let formText = '';
+      if (formType === 'inf') formText = verb.inf;
+      if (formType === 'past') formText = verb.past;
+      if (formType === 'part') formText = verb.part;
+      
+      // Crear una còpia de la forma per a la columna
+      this.createFormCopy(formText, verb.id, formType, column);
+    });
+  }
+  
+  createFormCopy(text, verbId, formType, column) {
+    const colContent = document.getElementById(`${column}-content`);
+    if (!colContent) return;
+    
+    // Trobar la fila corresponent al verb
+    const row = colContent.querySelector(`.verb-row[data-verb-id="${verbId}"]`);
+    if (!row) return;
+    
+    // Eliminar la classe "empty" i netejar el contingut
+    row.classList.remove('empty');
+    row.innerHTML = '';
+    
+    const copy = document.createElement("div");
+    copy.className = "item placed correct";
+    copy.textContent = text;
+    copy.dataset.id = verbId;
+    copy.dataset.form = formType;
+    copy.draggable = false;
+    
+    row.appendChild(copy);
+  }
+  
+  setupDropZones() {
+    document.querySelectorAll(".col").forEach(col => {
+      // Eliminar esdeveniments anteriors
+      col.replaceWith(col.cloneNode(true));
+    });
+    
+    // Re-configurar els esdeveniments
+    document.querySelectorAll(".col").forEach(col => {
+      col.addEventListener("dragover", e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "copy";
+      });
+      
+      col.addEventListener("dragenter", e => {
+        e.preventDefault();
+        col.classList.add('highlight');
+      });
+      
+      col.addEventListener("dragleave", e => {
+        if (!col.contains(e.relatedTarget)) {
+          col.classList.remove('highlight');
+        }
+      });
+      
+      col.addEventListener("drop", e => {
+        e.preventDefault();
+        col.classList.remove('highlight');
+        
+        try {
+          const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+          const dragged = document.querySelector('.item.dragging');
+          
+          if (!dragged) return;
+          
+          this.totalAttempts++;
+          
+          // Comprovar si la col·locació és correcta
+          const isCorrect = this.isValidPlacement(data.id, data.form, col.id);
+          const isAlreadyPlaced = this.isFormAlreadyPlaced(data.id, data.form, col.id);
+          const hasFailed = this.hasFailedBefore(data.id, data.form);
+          
+          if (isCorrect && !isAlreadyPlaced) {
+            // Col·locació correcta
+            this.correctCount++;
+            
+            // Crear una còpia per a la columna (la original es queda)
+            this.createFormCopy(data.text, data.id, data.form, col.id);
+            
+            // Marcar l'original com a utilitzada (però no amagar-la)
+            dragged.classList.add('used');
+            
+            // Registrar que aquesta forma ha estat colocada
+            this.placedForms[`${data.id}-${col.id}`] = data.form;
+            this.placedItems++;
+            
+            // Només sumar puntuació si NO s'ha fallat abans
+            if (!hasFailed) {
+              this.punts++;
+              this.showMessage("Correcte! +1 punt", 'success');
+            } else {
+              this.showMessage("Correcte, però ja ho havies intentat abans", '');
+            }
+            
+            this.updateProgress();
+            this.updateScore();
+            
+            // 🔊 Pronunciar la paraula
+            this.speakEnglish(data.text);
+            
+            // Comprovar si s'ha completat el verb
+            this.checkVerbCompletion(data.id);
+            
+          } else if (isAlreadyPlaced) {
+            // Ja hi ha una forma igual en aquesta columna
+            this.showMessage("Aquesta forma ja està colocada aquí!", 'error');
+            this.updateScore();
+          } else {
+            // Col·locació incorrecta - Registrar el fallo
+            this.showMessage("Intenta-ho de nou!", 'error');
+            this.updateScore();
+            
+            // Registrar que s'ha fallat aquesta forma
+            const failKey = `${data.id}-${data.form}`;
+            this.failedAttempts[failKey] = true;
+          }
+          
+          // Guardar l'estat després de cada acció
+          this.savePageData();
+        } catch (error) {
+          console.error("Error en processar l'arrossegament:", error);
+        }
+      });
+    });
+  }
+  
+  checkVerbCompletion(verbId) {
+    const currentVerbs = VERB_PAGES[this.currentPage];
+    const verb = currentVerbs.find(v => v.id === verbId);
+    
+    // Comprovar que totes les columnes tenen una forma vàlida d'aquest verb
+    const infPlaced = this.placedForms[`${verbId}-inf`] !== undefined;
+    const pastPlaced = this.placedForms[`${verbId}-past`] !== undefined;
+    const partPlaced = this.placedForms[`${verbId}-part`] !== undefined;
+    
+    const isComplete = infPlaced && pastPlaced && partPlaced;
+    
+    if (isComplete) {
+      // Afegir a la llista de verbs completats si encara no hi és
+      if (!this.completedVerbs.includes(verbId)) {
+        this.completedVerbs.push(verbId);
+      }
+      
+      this.showMessage(`Has completat el verb ${verb.inf}!`, 'success');
+    }
+  }
+  
+  resetPage() {
+    // Reiniciar les dades de la pàgina actual
+    this.gameState.pageStats[this.currentPage] = {
+      punts: 0,
+      correctCount: 0,
+      totalAttempts: 0,
+      placedItems: 0,
+      completedVerbs: [],
+      placedForms: {},
+      failedAttempts: {}
+    };
+    
+    // Eliminar del llistat de pàgines completades si hi era
+    const index = this.gameState.completedPages.indexOf(this.currentPage);
+    if (index > -1) {
+      this.gameState.completedPages.splice(index, 1);
+    }
+    
+    this.saveGameState();
+    this.loadPageData();
+    this.resetDisplay();
+    this.loadVerbs();
+    
+    this.showMessage("Pàgina reiniciada. Bona sort!");
+  }
+}
+
+// Inicialitzar el joc quan la pàgina estigui carregada
+document.addEventListener('DOMContentLoaded', () => {
+  new VerbGame();
+});
+</script>
+</body>
+</html>
