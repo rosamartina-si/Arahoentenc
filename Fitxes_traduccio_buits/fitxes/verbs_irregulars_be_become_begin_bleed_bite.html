@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Omple els buits: Verbs irregulars</title>
+  <link rel="stylesheet" href="../estil.css" />
+</head>
+<body>
+
+<h1>Omple els buits: Verbs irregulars</h1>
+<p>
+  Introdueix la paraula correcta a l’espai en blanc, fes clic a <strong>Comprova</strong> —o prem la tecla <strong>Retorn</strong>— i escolta la frase completa.
+</p>
+
+<div class="image left">
+  <img src="../Img/verbs.webp" alt="Imatge de verbs irregulars">
+</div>  
+
+<div id="exercici"></div>
+
+<div id="controls"></div>
+
+ <script>
+  // Frases a traduir
+const frases = [
+  // Verb: BE
+  ["Vull ____ un bon estudiant.", "I want to ____ a good student", "be", "I want to be a good student"],
+  ["Quan era petit, jo ____ molt tímid.", "When I was a child, I ____ very shy", "was", "When I was a child, I was very shy"],
+  ["Ells han ____ molt amables amb nosaltres.", "They have ____ very kind to us", "been", "They have been very kind to us"],
+
+  // Verb: BECOME
+  ["Vull ____ famós algun dia.", "I want to ____ famous one day", "become", "I want to become famous one day"],
+  ["Ella ____ professora l’any passat.", "She ____ a teacher last year", "became", "She became a teacher last year"],
+  ["Ell ha ____ un bon amic.", "He has ____ a good friend", "become", "He has become a good friend"],
+
+  // Verb: BITE
+  ["Els gossos poden ____.", "Dogs can ____", "bite", "Dogs can bite"],
+  ["El meu gos em va ____ ahir.", "My dog ____ me yesterday", "bit", "My dog bit me yesterday"],
+  ["L’insecte l’ha ____ a la cama.", "The insect has ____ her leg", "bitten", "The insect has bitten her leg"],
+
+  // Verb: BLEED
+  ["Si et talles, pots ____.", "If you cut yourself, you may ____", "bleed", "If you cut yourself, you may bleed"],
+  ["El meu dit va ____ molt.", "My finger ____ a lot", "bled", "My finger bled a lot"],
+  ["Ells han ____ pel nas moltes vegades.", "They have ____ from the nose many times", "bled", "They have bled from the nose many times"],
+
+  // Verb: BEGIN
+  ["Quan vols ____ la reunió?", "When do you want to ____ the meeting?", "begin", "When do you want to begin the meeting?"],
+  ["La classe va ____ a les nou.", "The class ____ at nine", "began", "The class began at nine"],
+  ["El concert ja ha ____.", "The concert has already ____", "begun", "The concert has already begun"]
+];
+</script>
+  
+<script src="../script2.js"></script>
+</body>
+</html>
