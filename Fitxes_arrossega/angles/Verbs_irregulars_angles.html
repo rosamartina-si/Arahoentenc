@@ -22,7 +22,7 @@
 
 body {
   font-family: 'Georgia', serif;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   background-color: var(--color-bg);
@@ -47,17 +47,6 @@ h1 {
   padding: 20px;
   box-shadow: var(--shadow);
   position: relative;
-}
-
-#level-indicator {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  background: var(--color-primary);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 0.9em;
 }
 
 #page-navigation {
@@ -128,9 +117,39 @@ h1 {
 
 #board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: auto repeat(3, 1fr);
   gap: 15px;
   margin-bottom: 20px;
+}
+
+#catalan-column {
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  min-height: 300px;
+  padding: 0;
+  background: white;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+#catalan-column h3 {
+  text-align: center; 
+  margin: 0;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  background: #f5f5f5;
+}
+
+#catalan-content {
+  flex: 1;
+  padding: 10px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .col {
@@ -185,6 +204,22 @@ h1 {
   background: #f9f9f9;
   border: 1px dashed #ddd;
   border-radius: 4px;
+}
+
+.catalan-label {
+  font-weight: bold;
+  color: #2c5545;
+  padding: 8px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.catalan-label:last-child {
+  border-bottom: none;
 }
 
 #items-container {
@@ -266,83 +301,231 @@ h1 {
   justify-content: center;
 }
 
+#controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
+}
+
+#score-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#score {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+#progress {
+  width: 200px;
+  height: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  background-color: var(--color-secondary);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  padding: 10px 16px;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.control-button:hover {
+  background: #3a76d8;
+}
+
+#custom-exercise-btn {
+  background: var(--color-correct);
+}
+
+#custom-exercise-btn:hover {
+  background: #45a049;
+}
+
+/* Modal per crear exercici personalitzat */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.close-modal {
+  float: right;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #777;
+}
+
+.custom-verb-form {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.custom-verb-form h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.verb-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.verb-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.verb-item:hover {
+  background-color: #f0f0f0;
+}
+
+.verb-item.selected {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+.verb-item .catalan {
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
+.selected-verbs {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.selected-verb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.selected-verb .catalan {
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
+.remove-verb {
+  background: none;
+  border: none;
+  color: var(--color-incorrect);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.search-container {
+  margin-bottom: 15px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-5px); }
   40%, 80% { transform: translateX(5px); }
 }
 
-#controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-#score-container {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-#score { 
-  font-weight: bold; 
-  font-size: 1.2em;
-  color: var(--color-primary);
-}
-
-#progress {
-  flex-grow: 1;
-  height: 10px;
-  background: #e0e0e0;
-  border-radius: 5px;
-  overflow: hidden;
-  max-width: 200px;
-}
-
-#progress-bar {
-  height: 100%;
-  background: var(--color-primary);
-  width: 0%;
-  transition: width 0.5s ease;
-}
-
-button {
-  padding: 10px 20px;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: #002244;
-}
-
-#message {
-  text-align: center;
-  margin-top: 15px;
-  min-height: 24px;
-  font-weight: bold;
-  transition: all 0.3s;
-}
-
-#message.success {
-  color: var(--color-correct);
-}
-
-#message.error {
-  color: var(--color-incorrect);
-}
-
 @media (max-width: 768px) {
   #board {
     grid-template-columns: 1fr;
+  }
+  
+  #catalan-column {
+    width: 100%;
+    order: -1;
   }
   
   #page-navigation {
@@ -353,16 +536,30 @@ button:hover {
   #controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px;
   }
   
   #score-container {
-    justify-content: space-between;
+    align-items: center;
   }
   
-  #level-indicator {
-    position: static;
-    display: inline-block;
-    margin-bottom: 10px;
+  #progress {
+    width: 100%;
+  }
+  
+  .control-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    padding: 15px;
+  }
+  
+  .verb-item .catalan {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
   }
 }
 </style>
@@ -373,8 +570,6 @@ button:hover {
 <p class="subtitle">Col·loca cada forma verbal a la columna correcta (Infinitiu, Passat, Participi).</p>
 
 <div id="game-container">
-  <div id="level-indicator">Nivell B1</div>
-  
   <div id="page-navigation">
     <button id="prev-page" class="nav-button" disabled>← Anterior</button>
     
@@ -388,6 +583,13 @@ button:hover {
   </div>
   
   <div id="board" aria-label="Àrea per col·locar les formes verbals">
+    <div id="catalan-column" aria-label="Traducció al català">
+      <h3>Català</h3>
+      <div id="catalan-content">
+        <!-- Les traduccions al català es mostraran aquí -->
+      </div>
+    </div>
+    
     <div class="col" id="inf" aria-label="Columna per a infinitius">
       <h3>Infinitiu</h3>
       <div class="col-content" id="inf-content">
@@ -421,7 +623,63 @@ button:hover {
         <div id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="15"></div>
       </div>
     </div>
-    <button id="reset-btn">Reiniciar pàgina</button>
+    <div class="control-buttons">
+      <button id="reset-btn" class="control-button">Reiniciar</button>
+      <button id="custom-exercise-btn" class="control-button">Personalitzat</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal per crear exercici personalitzat -->
+<div id="custom-exercise-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Crea el teu exercici personalitzat</h2>
+    
+    <div class="custom-verb-form">
+      <h3>Afegir verb nou</h3>
+      <div class="form-group">
+        <label for="custom-inf">Infinitiu (anglès):</label>
+        <input type="text" id="custom-inf" placeholder="Ex: go">
+      </div>
+      <div class="form-group">
+        <label for="custom-inf-ca">Infinitiu (català):</label>
+        <input type="text" id="custom-inf-ca" placeholder="Ex: anar">
+      </div>
+      <div class="form-group">
+        <label for="custom-past">Passat (anglès):</label>
+        <input type="text" id="custom-past" placeholder="Ex: went">
+      </div>
+      <div class="form-group">
+        <label for="custom-part">Participi (anglès):</label>
+        <input type="text" id="custom-part" placeholder="Ex: gone">
+      </div>
+      <button id="add-custom-verb" class="control-button">Afegir verb</button>
+    </div>
+    
+    <div class="verb-list">
+      <h3>Selecciona verbs de la llista (<span id="verb-count">0</span> disponibles)</h3>
+      
+      <div class="search-container">
+        <input type="text" id="verb-search" placeholder="Cerca verbs...">
+      </div>
+      
+      <div id="verb-list-container">
+        <!-- La llista de verbs es generarà aquí -->
+      </div>
+    </div>
+    
+    <div class="selected-verbs">
+      <h3>Verbs seleccionats (<span id="selected-count">0</span>/5)</h3>
+      <div id="selected-verbs-list">
+        <!-- Els verbs seleccionats es mostraran aquí -->
+      </div>
+    </div>
+    
+    <div class="modal-buttons">
+      <button id="cancel-custom" class="control-button">Cancel·lar</button>
+      <button id="create-custom-exercise" class="control-button" disabled>Crear exercici</button>
+    </div>
   </div>
 </div>
 
@@ -430,44 +688,200 @@ button:hover {
 const VERB_PAGES = [
   // Pàgina 1 - Verbs bàsics
   [
-    {id:1, inf:"go", past:"went", part:"gone"},
-    {id:2, inf:"see", past:"saw", part:"seen"},
-    {id:3, inf:"eat", past:"ate", part:"eaten"},
-    {id:4, inf:"take", past:"took", part:"taken"},
-    {id:5, inf:"write", past:"wrote", part:"written"}
+    {id:1, inf:"go", past:"went", part:"gone", inf_ca:"anar"},
+    {id:2, inf:"see", past:"saw", part:"seen", inf_ca:"veure"},
+    {id:3, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar"},
+    {id:4, inf:"take", past:"took", part:"taken", inf_ca:"agafar"},
+    {id:5, inf:"write", past:"wrote", part:"written", inf_ca:"escriure"}
   ],
   // Pàgina 2 - Verbs comuns
   [
-    {id:6, inf:"begin", past:"began", part:"begun"},
-    {id:7, inf:"break", past:"broke", part:"broken"},
-    {id:8, inf:"choose", past:"chose", part:"chosen"},
-    {id:9, inf:"drive", past:"drove", part:"driven"},
-    {id:10, inf:"fall", past:"fell", part:"fallen"}
+    {id:6, inf:"begin", past:"began", part:"begun", inf_ca:"començar"},
+    {id:7, inf:"break", past:"broke", part:"broken", inf_ca:"trencar"},
+    {id:8, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar"},
+    {id:9, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir"},
+    {id:10, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure"}
   ],
   // Pàgina 3 - Verbs importants
   [
-    {id:11, inf:"forget", past:"forgot", part:"forgotten"},
-    {id:12, inf:"get", past:"got", part:"gotten"},
-    {id:13, inf:"give", past:"gave", part:"given"},
-    {id:14, inf:"know", past:"knew", part:"known"},
-    {id:15, inf:"speak", past:"spoke", part:"spoken"}
+    {id:11, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar"},
+    {id:12, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir"},
+    {id:13, inf:"give", past:"gave", part:"given", inf_ca:"donar"},
+    {id:14, inf:"know", past:"knew", part:"known", inf_ca:"saber"},
+    {id:15, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar"}
   ],
   // Pàgina 4 - Verbs amb formes iguals
   [
-    {id:16, inf:"swim", past:"swam", part:"swum"},
-    {id:17, inf:"think", past:"thought", part:"thought"},
-    {id:18, inf:"understand", past:"understood", part:"understood"},
-    {id:19, inf:"wear", past:"wore", part:"worn"},
-    {id:20, inf:"win", past:"won", part:"won"}
+    {id:16, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar"},
+    {id:17, inf:"think", past:"thought", part:"thought", inf_ca:"pensar"},
+    {id:18, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre"},
+    {id:19, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)"},
+    {id:20, inf:"win", past:"won", part:"won", inf_ca:"guanyar"}
   ],
   // Pàgina 5 - Verbs amb totes les formes iguals
   [
-    {id:21, inf:"bring", past:"brought", part:"brought"},
-    {id:22, inf:"buy", past:"bought", part:"bought"},
-    {id:23, inf:"catch", past:"caught", part:"caught"},
-    {id:24, inf:"teach", past:"taught", part:"taught"},
-    {id:25, inf:"cut", past:"cut", part:"cut"} // Verb amb totes les formes iguals
+    {id:21, inf:"bring", past:"brought", part:"brought", inf_ca:"portar"},
+    {id:22, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar"},
+    {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar"},
+    {id:24, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar"},
+    {id:25, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar"}
   ]
+];
+
+// Llista completa de verbs irregulars amb traducció al català
+const ALL_VERBS = [
+  // Verbs més comuns (A-C)
+  {id:1, inf:"arise", past:"arose", part:"arisen", inf_ca:"sorgir"},
+  {id:2, inf:"awake", past:"awoke", part:"awoken", inf_ca:"despertar-se"},
+  {id:3, inf:"be", past:"was/were", part:"been", inf_ca:"ser/estar"},
+  {id:4, inf:"bear", past:"bore", part:"borne", inf_ca:"suportar"},
+  {id:5, inf:"beat", past:"beat", part:"beaten", inf_ca:"batre"},
+  {id:6, inf:"become", past:"became", part:"become", inf_ca:"convertir-se"},
+  {id:7, inf:"begin", past:"began", part:"begun", inf_ca:"començar"},
+  {id:8, inf:"bend", past:"bent", part:"bent", inf_ca:"doblegar"},
+  {id:9, inf:"bet", past:"bet", part:"bet", inf_ca:"apostar"},
+  {id:10, inf:"bid", past:"bid", part:"bid", inf_ca:"oferir"},
+  {id:11, inf:"bind", past:"bound", part:"bound", inf_ca:"lligar"},
+  {id:12, inf:"bite", past:"bit", part:"bitten", inf_ca:"mossegar"},
+  {id:13, inf:"bleed", past:"bled", part:"bled", inf_ca:"sagnar"},
+  {id:14, inf:"blow", past:"blew", part:"blown", inf_ca:"bufar"},
+  {id:15, inf:"break", past:"broke", part:"broken", inf_ca:"trencar"},
+  {id:16, inf:"breed", past:"bred", part:"bred", inf_ca:"criar"},
+  {id:17, inf:"bring", past:"brought", part:"brought", inf_ca:"portar"},
+  {id:18, inf:"build", past:"built", part:"built", inf_ca:"construir"},
+  {id:19, inf:"burn", past:"burnt", part:"burnt", inf_ca:"cremar"},
+  {id:20, inf:"burst", past:"burst", part:"burst", inf_ca:"rebentar"},
+  {id:21, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar"},
+  {id:22, inf:"cast", past:"cast", part:"cast", inf_ca:"llençar"},
+  {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar"},
+  {id:24, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar"},
+  {id:25, inf:"cling", past:"clung", part:"clung", inf_ca:"aferrar-se"},
+  {id:26, inf:"come", past:"came", part:"come", inf_ca:"venir"},
+  {id:27, inf:"cost", past:"cost", part:"cost", inf_ca:"costar"},
+  {id:28, inf:"creep", past:"crept", part:"crept", inf_ca:"arrossegar-se"},
+  {id:29, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar"},
+  
+  // Verbs D-F
+  {id:30, inf:"deal", past:"dealt", part:"dealt", inf_ca:"tractar"},
+  {id:31, inf:"dig", past:"dug", part:"dug", inf_ca:"cavar"},
+  {id:32, inf:"do", past:"did", part:"done", inf_ca:"fer"},
+  {id:33, inf:"draw", past:"drew", part:"drawn", inf_ca:"dibuixar"},
+  {id:34, inf:"dream", past:"dreamt", part:"dreamt", inf_ca:"somiar"},
+  {id:35, inf:"drink", past:"drank", part:"drunk", inf_ca:"beure"},
+  {id:36, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir"},
+  {id:37, inf:"dwell", past:"dwelt", part:"dwelt", inf_ca:"habitar"},
+  {id:38, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar"},
+  {id:39, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure"},
+  {id:40, inf:"feed", past:"fed", part:"fed", inf_ca:"alimentar"},
+  {id:41, inf:"feel", past:"felt", part:"felt", inf_ca:"sentir"},
+  {id:42, inf:"fight", past:"fought", part:"fought", inf_ca:"lluitar"},
+  {id:43, inf:"find", past:"found", part:"found", inf_ca:"trobar"},
+  {id:44, inf:"flee", past:"fled", part:"fled", inf_ca:"fugir"},
+  {id:45, inf:"fling", past:"flung", part:"flung", inf_ca:"llançar"},
+  {id:46, inf:"fly", past:"flew", part:"flown", inf_ca:"volar"},
+  {id:47, inf:"forbid", past:"forbade", part:"forbidden", inf_ca:"prohibir"},
+  {id:48, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar"},
+  {id:49, inf:"forgive", past:"forgave", part:"forgiven", inf_ca:"perdonar"},
+  {id:50, inf:"freeze", past:"froze", part:"frozen", inf_ca:"congelar"},
+  
+  // Verbs G-K
+  {id:51, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir"},
+  {id:52, inf:"give", past:"gave", part:"given", inf_ca:"donar"},
+  {id:53, inf:"go", past:"went", part:"gone", inf_ca:"anar"},
+  {id:54, inf:"grind", past:"ground", part:"ground", inf_ca:"moldre"},
+  {id:55, inf:"grow", past:"grew", part:"grown", inf_ca:"creixer"},
+  {id:56, inf:"hang", past:"hung", part:"hung", inf_ca:"penjar"},
+  {id:57, inf:"have", past:"had", part:"had", inf_ca:"tenir"},
+  {id:58, inf:"hear", past:"heard", part:"heard", inf_ca:"sentir"},
+  {id:59, inf:"hide", past:"hid", part:"hidden", inf_ca:"amagar"},
+  {id:60, inf:"hit", past:"hit", part:"hit", inf_ca:"colpejar"},
+  {id:61, inf:"hold", past:"held", part:"held", inf_ca:"aguantar"},
+  {id:62, inf:"hurt", past:"hurt", part:"hurt", inf_ca:"ferir"},
+  {id:63, inf:"keep", past:"kept", part:"kept", inf_ca:"guardar"},
+  {id:64, inf:"kneel", past:"knelt", part:"knelt", inf_ca:"agenollar-se"},
+  {id:65, inf:"knit", past:"knit", part:"knit", inf_ca:"fer punt"},
+  {id:66, inf:"know", past:"knew", part:"known", inf_ca:"saber"},
+  
+  // Verbs L-R
+  {id:67, inf:"lay", past:"laid", part:"laid", inf_ca:"posar"},
+  {id:68, inf:"lead", past:"led", part:"led", inf_ca:"conduir"},
+  {id:69, inf:"lean", past:"leant", part:"leant", inf_ca:"recolzar"},
+  {id:70, inf:"leap", past:"leapt", part:"leapt", inf_ca:"saltar"},
+  {id:71, inf:"learn", past:"learnt", part:"learnt", inf_ca:"aprendre"},
+  {id:72, inf:"leave", past:"left", part:"left", inf_ca:"deixar"},
+  {id:73, inf:"lend", past:"lent", part:"lent", inf_ca:"prestar"},
+  {id:74, inf:"let", past:"let", part:"let", inf_ca:"permetre"},
+  {id:75, inf:"lie", past:"lay", part:"lain", inf_ca:"jeure"},
+  {id:76, inf:"light", past:"lit", part:"lit", inf_ca:"encendre"},
+  {id:77, inf:"lose", past:"lost", part:"lost", inf_ca:"perdre"},
+  {id:78, inf:"make", past:"made", part:"made", inf_ca:"fer"},
+  {id:79, inf:"mean", past:"meant", part:"meant", inf_ca:"significar"},
+  {id:80, inf:"meet", past:"met", part:"met", inf_ca:"conèixer"},
+  {id:81, inf:"pay", past:"paid", part:"paid", inf_ca:"pagar"},
+  {id:82, inf:"put", past:"put", part:"put", inf_ca:"posar"},
+  {id:83, inf:"quit", past:"quit", part:"quit", inf_ca:"deixar"},
+  {id:84, inf:"read", past:"read", part:"read", inf_ca:"llegir"},
+  {id:85, inf:"ride", past:"rode", part:"ridden", inf_ca:"muntar"},
+  {id:86, inf:"ring", past:"rang", part:"rung", inf_ca:"tocar (timbre)"},
+  {id:87, inf:"rise", past:"rose", part:"risen", inf_ca:"aixecar-se"},
+  {id:88, inf:"run", past:"ran", part:"run", inf_ca:"córrer"},
+  
+  // Verbs S-W
+  {id:89, inf:"say", past:"said", part:"said", inf_ca:"dir"},
+  {id:90, inf:"see", past:"saw", part:"seen", inf_ca:"veure"},
+  {id:91, inf:"seek", past:"sought", part:"sought", inf_ca:"buscar"},
+  {id:92, inf:"sell", past:"sold", part:"sold", inf_ca:"vendre"},
+  {id:93, inf:"send", past:"sent", part:"sent", inf_ca:"enviar"},
+  {id:94, inf:"set", past:"set", part:"set", inf_ca:"establir"},
+  {id:95, inf:"sew", past:"sewed", part:"sewn", inf_ca:"cosir"},
+  {id:96, inf:"shake", past:"shook", part:"shaken", inf_ca:"sacsejar"},
+  {id:97, inf:"shine", past:"shone", part:"shone", inf_ca:"brillar"},
+  {id:98, inf:"shoot", past:"shot", part:"shot", inf_ca:"disparar"},
+  {id:99, inf:"show", past:"showed", part:"shown", inf_ca:"mostrar"},
+  {id:100, inf:"shrink", past:"shrank", part:"shrunk", inf_ca:"encongir"},
+  {id:101, inf:"shut", past:"shut", part:"shut", inf_ca:"tancar"},
+  {id:102, inf:"sing", past:"sang", part:"sung", inf_ca:"cantar"},
+  {id:103, inf:"sink", past:"sank", part:"sunk", inf_ca:"enfonsar"},
+  {id:104, inf:"sit", past:"sat", part:"sat", inf_ca:"seure"},
+  {id:105, inf:"sleep", past:"slept", part:"slept", inf_ca:"dormir"},
+  {id:106, inf:"slide", past:"slid", part:"slid", inf_ca:"lliscar"},
+  {id:107, inf:"sow", past:"sowed", part:"sown", inf_ca:"sembrar"},
+  {id:108, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar"},
+  {id:109, inf:"spell", past:"spelt", part:"spelt", inf_ca:"lletrejar"},
+  {id:110, inf:"spend", past:"spent", part:"spent", inf_ca:"gastar"},
+  {id:111, inf:"spill", past:"spilt", part:"spilt", inf_ca:"abocar"},
+  {id:112, inf:"spin", past:"spun", part:"spun", inf_ca:"girar"},
+  {id:113, inf:"spit", past:"spat", part:"spat", inf_ca:"escopir"},
+  {id:114, inf:"split", past:"split", part:"split", inf_ca:"dividir"},
+  {id:115, inf:"spoil", past:"spoilt", part:"spoilt", inf_ca:"fer malbé"},
+  {id:116, inf:"spread", past:"spread", part:"spread", inf_ca:"estendre"},
+  {id:117, inf:"spring", past:"sprang", part:"sprung", inf_ca:"saltar"},
+  {id:118, inf:"stand", past:"stood", part:"stood", inf_ca:"estar dret"},
+  {id:119, inf:"steal", past:"stole", part:"stolen", inf_ca:"robar"},
+  {id:120, inf:"stick", past:"stuck", part:"stuck", inf_ca:"enganxar"},
+  {id:121, inf:"sting", past:"stung", part:"stung", inf_ca:"picar"},
+  {id:122, inf:"stink", past:"stank", part:"stunk", inf_ca:"pudor"},
+  {id:123, inf:"strike", past:"struck", part:"struck", inf_ca:"colpejar"},
+  {id:124, inf:"swear", past:"swore", part:"sworn", inf_ca:"jurar"},
+  {id:125, inf:"sweep", past:"swept", part:"swept", inf_ca:"escombrar"},
+  {id:126, inf:"swell", past:"swelled", part:"swollen", inf_ca:"inflat"},
+  {id:127, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar"},
+  {id:128, inf:"swing", past:"swung", part:"swung", inf_ca:"balancejar"},
+  {id:129, inf:"take", past:"took", part:"taken", inf_ca:"agafar"},
+  {id:130, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar"},
+  {id:131, inf:"tear", past:"tore", part:"torn", inf_ca:"estripar"},
+  {id:132, inf:"tell", past:"told", part:"told", inf_ca:"explicar"},
+  {id:133, inf:"think", past:"thought", part:"thought", inf_ca:"pensar"},
+  {id:134, inf:"throw", past:"threw", part:"thrown", inf_ca:"llençar"},
+  {id:135, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre"},
+  {id:136, inf:"wake", past:"woke", part:"woken", inf_ca:"despertar"},
+  {id:137, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)"},
+  {id:138, inf:"weep", past:"wept", part:"wept", inf_ca:"plorar"},
+  {id:139, inf:"win", past:"won", part:"won", inf_ca:"guanyar"},
+  {id:140, inf:"wind", past:"wound", part:"wound", inf_ca:"enrotllar"},
+  {id:141, inf:"withdraw", past:"withdrew", part:"withdrawn", inf_ca:"retirar"},
+  {id:142, inf:"wring", past:"wrung", part:"wrung", inf_ca:"escórrer"},
+  {id:143, inf:"write", past:"wrote", part:"written", inf_ca:"escriure"}
 ];
 
 class VerbGame {
@@ -475,6 +889,8 @@ class VerbGame {
     this.currentPage = 0;
     this.totalPages = VERB_PAGES.length;
     this.gameState = this.loadGameState();
+    this.customVerbs = []; // Per emmagatzemar verbs personalitzats
+    this.customVerbsList = []; // Llista de verbs personalitzats per al modal
     
     this.init();
   }
@@ -648,6 +1064,7 @@ class VerbGame {
     div.dataset.id = item.id;
     div.dataset.form = item.form;
     div.dataset.text = item.text; // Guardar el text per a clonar
+    div.dataset.inf_ca = item.inf_ca || ''; // Guardar la traducció
     
     div.setAttribute('aria-label', `Forma verbal: ${item.text}. Arrossega per col·locar a la columna correcta.`);
     
@@ -675,7 +1092,15 @@ class VerbGame {
   
   // Determinar si una forma és vàlida per a una columna
   isValidPlacement(verbId, formType, targetColumn) {
-    const verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    // Obtenir el verb de la pàgina actual o dels verbs personalitzats
+    let verb;
+    if (this.currentPage < VERB_PAGES.length) {
+      verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    } else {
+      // Pàgina personalitzada
+      verb = this.customVerbs.find(v => v.id === verbId);
+    }
+    
     if (!verb) return false;
     
     // Cas 1: Totes les formes són iguals (ex: cut-cut-cut)
@@ -740,8 +1165,344 @@ class VerbGame {
       this.resetPage();
     });
     
+    // Configurar el botó d'exercici personalitzat
+    document.getElementById('custom-exercise-btn').addEventListener('click', () => {
+      this.openCustomExerciseModal();
+    });
+    
+    // Configurar el modal d'exercici personalitzat
+    this.setupCustomExerciseModal();
+    
     // Carregar la pàgina actual
     this.changePage(this.gameState.currentPage || 0);
+  }
+  
+  setupCustomExerciseModal() {
+    const modal = document.getElementById('custom-exercise-modal');
+    const closeBtn = document.querySelector('.close-modal');
+    const cancelBtn = document.getElementById('cancel-custom');
+    const createBtn = document.getElementById('create-custom-exercise');
+    const addVerbBtn = document.getElementById('add-custom-verb');
+    const searchInput = document.getElementById('verb-search');
+    
+    // Tancar el modal
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    
+    // Crear l'exercici personalitzat
+    createBtn.addEventListener('click', () => {
+      this.createCustomExercise();
+      modal.style.display = 'none';
+    });
+    
+    // Afegir verb personalitzat
+    addVerbBtn.addEventListener('click', () => {
+      this.addCustomVerb();
+    });
+    
+    // Cerca de verbs
+    searchInput.addEventListener('input', (e) => {
+      this.filterVerbs(e.target.value);
+    });
+    
+    // Tancar el modal fent clic fora
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+    
+    // Carregar la llista de verbs
+    this.loadVerbList();
+  }
+  
+  filterVerbs(searchTerm) {
+    const verbItems = document.querySelectorAll('.verb-item');
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    
+    verbItems.forEach(item => {
+      const verbText = item.textContent.toLowerCase();
+      if (verbText.includes(lowerSearchTerm)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+  
+  loadVerbList() {
+    const verbListContainer = document.getElementById('verb-list-container');
+    const verbCount = document.getElementById('verb-count');
+    verbListContainer.innerHTML = '';
+    
+    // Actualitzar el comptador de verbs disponibles
+    verbCount.textContent = ALL_VERBS.length + this.customVerbsList.length;
+    
+    // Carregar verbs predefinits
+    ALL_VERBS.forEach(verb => {
+      const verbItem = document.createElement('div');
+      verbItem.className = 'verb-item';
+      verbItem.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca})</span>`;
+      verbItem.dataset.id = verb.id;
+      verbItem.dataset.type = 'predefined';
+      
+      verbItem.addEventListener('click', () => {
+        this.toggleVerbSelection(verb.id, 'predefined');
+      });
+      
+      verbListContainer.appendChild(verbItem);
+    });
+    
+    // Carregar verbs personalitzats
+    this.customVerbsList.forEach(verb => {
+      const verbItem = document.createElement('div');
+      verbItem.className = 'verb-item';
+      verbItem.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca || 'sense traducció'})</span>`;
+      verbItem.dataset.id = verb.id;
+      verbItem.dataset.type = 'custom';
+      
+      verbItem.addEventListener('click', () => {
+        this.toggleVerbSelection(verb.id, 'custom');
+      });
+      
+      verbListContainer.appendChild(verbItem);
+    });
+  }
+  
+  toggleVerbSelection(verbId, verbType) {
+    const verbItem = document.querySelector(`.verb-item[data-id="${verbId}"][data-type="${verbType}"]`);
+    const selectedVerbsList = document.getElementById('selected-verbs-list');
+    const selectedCount = document.getElementById('selected-count');
+    
+    // Comprovar si el verb ja està seleccionat
+    const existingItem = selectedVerbsList.querySelector(`[data-id="${verbId}"][data-type="${verbType}"]`);
+    
+    if (existingItem) {
+      // Eliminar el verb de la llista de seleccionats
+      existingItem.remove();
+      verbItem.classList.remove('selected');
+    } else {
+      // Comprovar que no s'hagin seleccionat més de 5 verbs
+      if (selectedVerbsList.children.length >= 5) {
+        this.showMessage("Has arribat al límit de 5 verbs per exercici", 'error');
+        return;
+      }
+      
+      // Trobar el verb a la llista corresponent
+      let verb;
+      if (verbType === 'predefined') {
+        verb = ALL_VERBS.find(v => v.id === verbId);
+      } else {
+        verb = this.customVerbsList.find(v => v.id === verbId);
+      }
+      
+      if (!verb) return;
+      
+      // Afegir el verb a la llista de seleccionats
+      const selectedVerb = document.createElement('div');
+      selectedVerb.className = 'selected-verb';
+      selectedVerb.dataset.id = verbId;
+      selectedVerb.dataset.type = verbType;
+      
+      selectedVerb.innerHTML = `
+        <span>${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca})</span></span>
+        <button class="remove-verb">×</button>
+      `;
+      
+      selectedVerb.querySelector('.remove-verb').addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleVerbSelection(verbId, verbType);
+      });
+      
+      selectedVerbsList.appendChild(selectedVerb);
+      verbItem.classList.add('selected');
+    }
+    
+    // Actualitzar el comptador
+    selectedCount.textContent = selectedVerbsList.children.length;
+    
+    // Activar o desactivar el botó de crear exercici
+    const createBtn = document.getElementById('create-custom-exercise');
+    createBtn.disabled = selectedVerbsList.children.length === 0;
+  }
+  
+  addCustomVerb() {
+    const infInput = document.getElementById('custom-inf');
+    const infCaInput = document.getElementById('custom-inf-ca');
+    const pastInput = document.getElementById('custom-past');
+    const partInput = document.getElementById('custom-part');
+    
+    const inf = infInput.value.trim();
+    const inf_ca = infCaInput.value.trim();
+    const past = pastInput.value.trim();
+    const part = partInput.value.trim();
+    
+    if (!inf || !past || !part) {
+      this.showMessage("Si us plau, omple totes les formes del verb en anglès", 'error');
+      return;
+    }
+    
+    // Crear un nou ID per al verb personalitzat (números negatius per diferenciar)
+    const newId = -Math.floor(Math.random() * 1000);
+    
+    // Afegir el verb a la llista de verbs personalitzats
+    const newVerb = {id: newId, inf, past, part, inf_ca};
+    this.customVerbsList.push(newVerb);
+    
+    // Actualitzar la llista de verbs
+    this.loadVerbList();
+    
+    // Netejar els camps d'entrada
+    infInput.value = '';
+    infCaInput.value = '';
+    pastInput.value = '';
+    partInput.value = '';
+    
+    this.showMessage("Verb afegit correctament. Ara pots seleccionar-lo per a l'exercici.");
+  }
+  
+  openCustomExerciseModal() {
+    const modal = document.getElementById('custom-exercise-modal');
+    
+    // Netejar les seleccions anteriors
+    document.getElementById('selected-verbs-list').innerHTML = '';
+    document.getElementById('selected-count').textContent = '0';
+    document.querySelectorAll('.verb-item.selected').forEach(item => {
+      item.classList.remove('selected');
+    });
+    
+    // Netejar la cerca
+    document.getElementById('verb-search').value = '';
+    
+    // Mostrar tots els verbs
+    document.querySelectorAll('.verb-item').forEach(item => {
+      item.style.display = 'block';
+    });
+    
+    // Desactivar el botó de crear exercici
+    document.getElementById('create-custom-exercise').disabled = true;
+    
+    // Mostrar el modal
+    modal.style.display = 'flex';
+  }
+  
+  createCustomExercise() {
+    const selectedVerbsList = document.getElementById('selected-verbs-list');
+    const selectedVerbs = [];
+    
+    // Recollir els verbs seleccionats
+    for (let i = 0; i < selectedVerbsList.children.length; i++) {
+      const verbElement = selectedVerbsList.children[i];
+      const verbId = parseInt(verbElement.dataset.id);
+      const verbType = verbElement.dataset.type;
+      
+      let verb;
+      if (verbType === 'predefined') {
+        verb = ALL_VERBS.find(v => v.id === verbId);
+      } else {
+        verb = this.customVerbsList.find(v => v.id === verbId);
+      }
+      
+      if (verb) {
+        selectedVerbs.push(verb);
+      }
+    }
+    
+    if (selectedVerbs.length === 0) {
+      this.showMessage("No s'han seleccionat verbs per a l'exercici", 'error');
+      return;
+    }
+    
+    // Crear una nova pàgina amb els verbs seleccionats
+    this.customVerbs = selectedVerbs;
+    
+    // Canviar a la pàgina personalitzada (serà la darrera pàgina)
+    this.currentPage = VERB_PAGES.length; // La pàgina després de les predefinides
+    
+    // Inicialitzar les dades de la pàgina personalitzada
+    if (!this.gameState.pageStats[this.currentPage]) {
+      this.gameState.pageStats[this.currentPage] = {
+        punts: 0,
+        correctCount: 0,
+        totalAttempts: 0,
+        placedItems: 0,
+        completedVerbs: [],
+        placedForms: {},
+        failedAttempts: {}
+      };
+    }
+    
+    this.totalPages = VERB_PAGES.length + 1; // Incloure la pàgina personalitzada
+    
+    // Carregar la pàgina personalitzada
+    this.loadPageData();
+    this.resetDisplay();
+    this.loadCustomVerbs();
+    
+    this.showMessage(`Exercici personalitzat creat amb ${selectedVerbs.length} verbs. Bona sort!`);
+  }
+  
+  loadCustomVerbs() {
+    const itemsContainer = document.getElementById('items-container');
+    itemsContainer.innerHTML = '';
+    
+    // Crear un conjunt de formes úniques (sense duplicats)
+    const uniqueForms = new Set();
+    const formsMap = new Map(); // Mapejar text de forma a la seva informació
+    
+    this.customVerbs.forEach(v => {
+      // Afegir les tres formes al conjunt (Set elimina duplicats automàticamente)
+      uniqueForms.add(v.inf);
+      uniqueForms.add(v.past);
+      uniqueForms.add(v.part);
+      
+      // Guardar la informació de cada forma
+      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca});
+      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca});
+      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca});
+    });
+    
+    // Convertir el Set a array i barrejar
+    const uniqueFormsArray = Array.from(uniqueForms);
+    this.shuffle(uniqueFormsArray).forEach(formText => {
+      const formInfo = formsMap.get(formText);
+      if (formInfo) {
+        const itemElement = this.createItemElement({
+          id: formInfo.id,
+          form: formInfo.form,
+          text: formText,
+          inf_ca: formInfo.inf_ca
+        });
+        
+        // Marcar com a utilitzada si ja s'ha colocat per a aquest verb
+        const verbId = formInfo.id;
+        const formType = formInfo.form;
+        
+        // Comprovar si aquesta forma ja s'ha utilitzat per a alguna columna
+        const isUsed = Object.keys(this.placedForms).some(key => {
+          const [placedVerbId, column] = key.split('-');
+          const placedFormType = this.placedForms[key];
+          return parseInt(placedVerbId) === verbId && placedFormType === formType;
+        });
+        
+        if (isUsed) {
+          itemElement.classList.add('used');
+        }
+        
+        itemsContainer.appendChild(itemElement);
+      }
+    });
+    
+    // Restaurar les formes ja colocades
+    this.restorePlacedForms();
+    
+    // Configurar les columnes com a zones de destí
+    this.setupDropZones();
   }
   
   changePage(pageIndex) {
@@ -756,7 +1517,11 @@ class VerbGame {
     this.resetDisplay();
     
     // Carregar els verbs de la pàgina actual
-    this.loadVerbs();
+    if (pageIndex < VERB_PAGES.length) {
+      this.loadVerbs();
+    } else {
+      this.loadCustomVerbs();
+    }
     
     this.showMessage(`Pàgina ${pageIndex + 1} carregada. Bona sort!`);
   }
@@ -769,6 +1534,9 @@ class VerbGame {
     document.querySelectorAll('.col-content').forEach(content => {
       content.innerHTML = '';
     });
+    
+    // Netejar la columna de català
+    document.getElementById('catalan-content').innerHTML = '';
   }
   
   loadVerbs() {
@@ -786,9 +1554,9 @@ class VerbGame {
       uniqueForms.add(v.part);
       
       // Guardar la informació de cada forma
-      formsMap.set(v.inf, {id: v.id, form: 'inf'});
-      formsMap.set(v.past, {id: v.id, form: 'past'});
-      formsMap.set(v.part, {id: v.id, form: 'part'});
+      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca});
+      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca});
+      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca});
     });
     
     // Convertir el Set a array i barrejar
@@ -799,7 +1567,8 @@ class VerbGame {
         const itemElement = this.createItemElement({
           id: formInfo.id,
           form: formInfo.form,
-          text: formText
+          text: formText,
+          inf_ca: formInfo.inf_ca
         });
         
         // Marcar com a utilitzada si ja s'ha colocat per a aquest verb
@@ -830,18 +1599,24 @@ class VerbGame {
   
   // Crear les files per als verbs a les columnes
   createVerbRows() {
-    const currentVerbs = VERB_PAGES[this.currentPage];
+    let currentVerbs;
+    
+    if (this.currentPage < VERB_PAGES.length) {
+      currentVerbs = VERB_PAGES[this.currentPage];
+    } else {
+      currentVerbs = this.customVerbs;
+    }
     
     // Crear files per a cada verb a cada columna
     currentVerbs.forEach(verb => {
-      this.createVerbRow('inf', verb.id);
+      this.createVerbRow('inf', verb.id, verb.inf_ca);
       this.createVerbRow('past', verb.id);
       this.createVerbRow('part', verb.id);
     });
   }
   
   // Crear una fila per a un verb específic a una columna
-  createVerbRow(column, verbId) {
+  createVerbRow(column, verbId, inf_ca = '') {
     const colContent = document.getElementById(`${column}-content`);
     if (!colContent) return;
     
@@ -851,6 +1626,17 @@ class VerbGame {
     row.dataset.column = column;
     
     colContent.appendChild(row);
+    
+    // Si és la columna d'infinitius, crear també l'etiqueta en català
+    if (column === 'inf' && inf_ca) {
+      const catalanContent = document.getElementById('catalan-content');
+      const catalanLabel = document.createElement("div");
+      catalanLabel.className = "catalan-label";
+      catalanLabel.textContent = inf_ca;
+      catalanLabel.dataset.verbId = verbId;
+      
+      catalanContent.appendChild(catalanLabel);
+    }
   }
   
   restorePlacedForms() {
@@ -862,7 +1648,13 @@ class VerbGame {
       const [verbId, column] = key.split('-');
       const formType = this.placedForms[key];
       
-      const verb = VERB_PAGES[this.currentPage].find(v => v.id === parseInt(verbId));
+      let verb;
+      if (this.currentPage < VERB_PAGES.length) {
+        verb = VERB_PAGES[this.currentPage].find(v => v.id === parseInt(verbId));
+      } else {
+        verb = this.customVerbs.find(v => v.id === parseInt(verbId));
+      }
+      
       if (!verb) return;
       
       // Obtenir el text de la forma
@@ -872,11 +1664,11 @@ class VerbGame {
       if (formType === 'part') formText = verb.part;
       
       // Crear una còpia de la forma per a la columna
-      this.createFormCopy(formText, verb.id, formType, column);
+      this.createFormCopy(formText, verb.id, formType, column, verb.inf_ca);
     });
   }
   
-  createFormCopy(text, verbId, formType, column) {
+  createFormCopy(text, verbId, formType, column, inf_ca) {
     const colContent = document.getElementById(`${column}-content`);
     if (!colContent) return;
     
@@ -944,7 +1736,7 @@ class VerbGame {
             this.correctCount++;
             
             // Crear una còpia per a la columna (la original es queda)
-            this.createFormCopy(data.text, data.id, data.form, col.id);
+            this.createFormCopy(data.text, data.id, data.form, col.id, data.inf_ca);
             
             // Marcar l'original com a utilitzada (però no amagar-la)
             dragged.classList.add('used');
@@ -994,8 +1786,12 @@ class VerbGame {
   }
   
   checkVerbCompletion(verbId) {
-    const currentVerbs = VERB_PAGES[this.currentPage];
-    const verb = currentVerbs.find(v => v.id === verbId);
+    let verb;
+    if (this.currentPage < VERB_PAGES.length) {
+      verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    } else {
+      verb = this.customVerbs.find(v => v.id === verbId);
+    }
     
     // Comprovar que totes les columnes tenen una forma vàlida d'aquest verb
     const infPlaced = this.placedForms[`${verbId}-inf`] !== undefined;
@@ -1035,7 +1831,12 @@ class VerbGame {
     this.saveGameState();
     this.loadPageData();
     this.resetDisplay();
-    this.loadVerbs();
+    
+    if (this.currentPage < VERB_PAGES.length) {
+      this.loadVerbs();
+    } else {
+      this.loadCustomVerbs();
+    }
     
     this.showMessage("Pàgina reiniciada. Bona sort!");
   }
