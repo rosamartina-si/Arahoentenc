@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arrossega i ordena els verbs irregulars</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
   --color-primary: #003366;
@@ -100,7 +101,7 @@ h1 {
 }
 
 .page-btn:hover {
-  background: #e0e0e0;
+  background: #e0e0f0;
 }
 
 .page-btn.active {
@@ -120,6 +121,7 @@ h1 {
   grid-template-columns: auto repeat(3, 1fr);
   gap: 15px;
   margin-bottom: 20px;
+  align-items: start;
 }
 
 #catalan-column {
@@ -131,7 +133,7 @@ h1 {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  width: 180px;
+  width: 200px; /* Ampliat per a les icones */
 }
 
 #catalan-column h3 {
@@ -149,7 +151,7 @@ h1 {
   min-height: 200px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0;
 }
 
 .col {
@@ -183,23 +185,28 @@ h1 {
   min-height: 200px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0;
 }
 
-.verb-row {
+/* CANVIS CLAU: Alçada fixa per a totes les files */
+.verb-row, .catalan-label {
   display: flex;
   align-items: center;
-  min-height: 40px;
-  padding: 5px;
+  height: 50px; /* Alçada fixa per a totes les files */
+  min-height: 50px; /* Assegurar l'alçada mínima */
+  padding: 8px 5px;
   border-bottom: 1px solid #f0f0f0;
+  margin: 0;
+  line-height: 1.4;
 }
 
-.verb-row:last-child {
+.verb-row:last-child, .catalan-label:last-child {
   border-bottom: none;
 }
 
 .verb-row.empty {
-  min-height: 40px;
+  height: 50px; /* Mateixa alçada que les altres files */
+  min-height: 50px;
   opacity: 0.3;
   background: #f9f9f9;
   border: 1px dashed #ddd;
@@ -209,17 +216,30 @@ h1 {
 .catalan-label {
   font-weight: bold;
   color: #2c5545;
-  padding: 8px;
-  min-height: 40px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 0;
-  line-height: 1.4;
+  gap: 10px;
 }
 
-.catalan-label:last-child {
-  border-bottom: none;
+/* Estils per a les icones (NOMÉS a la columna de català) */
+.verb-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  font-size: 1.1em;
+  flex-shrink: 0;
+}
+
+/* Assegurar que els items dins de les files ocupin tota l'alçada */
+.verb-row .item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 #items-container {
@@ -244,6 +264,8 @@ h1 {
   box-shadow: var(--shadow);
   user-select: none;
   position: relative;
+  height: auto; /* Permetre que l'altura s'ajusti al contingut */
+  /* Sense icona als items arrossegables */
 }
 
 .item:hover {
@@ -443,6 +465,7 @@ h1 {
   border-bottom: 1px solid #eee;
   cursor: pointer;
   transition: background 0.2s;
+  /* Sense icones als items de la llista */
 }
 
 .verb-item:hover {
@@ -477,6 +500,7 @@ h1 {
   background-color: white;
   border-radius: 4px;
   border: 1px solid var(--color-border);
+  /* Sense icones als verbs seleccionats */
 }
 
 .selected-verb .catalan {
@@ -528,6 +552,10 @@ h1 {
     order: -1;
   }
   
+  .col, #catalan-column {
+    width: 100%;
+  }
+  
   #page-navigation {
     flex-direction: column;
     gap: 10px;
@@ -560,6 +588,18 @@ h1 {
     display: block;
     margin-left: 0;
     margin-top: 2px;
+  }
+  
+  /* Ajustos per a mòbils */
+  .verb-row, .catalan-label {
+    height: 45px; /* Alçada lleugerament menor per a mòbils */
+    min-height: 45px;
+  }
+  
+  .verb-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 1em;
   }
 }
 </style>
@@ -684,204 +724,267 @@ h1 {
 </div>
 
 <script>
+// Diccionari d'icones per als verbs
+const VERB_ICONS = {
+  // Verbs de moviment
+  'go': 'fas fa-walking',
+  'come': 'fas fa-arrow-right-to-bracket',
+  'run': 'fas fa-running',
+  'walk': 'fas fa-walking',
+  'swim': 'fas fa-person-swimming',
+  'fly': 'fas fa-dove',
+  'drive': 'fas fa-car',
+  'ride': 'fas fa-bicycle',
+  
+  // Verbs d'acció
+  'take': 'fas fa-hand-back-fist',
+  'bring': 'fas fa-hands-holding',
+  'give': 'fas fa-hand-holding-heart',
+  'get': 'fas fa-hand-point-up',
+  'make': 'fas fa-hammer',
+  'do': 'fas fa-screwdriver-wrench',
+  'break': 'fas fa-ban',
+  'cut': 'fas fa-scissors',
+  
+  // Verbs sensorials
+  'see': 'fas fa-eye',
+  'hear': 'fas fa-ear-listen',
+  'feel': 'fas fa-hand',
+  'know': 'fas fa-brain',
+  'think': 'fas fa-lightbulb',
+  'understand': 'fas fa-head-side-brain',
+  'forget': 'fas fa-brain',
+  
+  // Verbs d'estat
+  'be': 'fas fa-circle',
+  'have': 'fas fa-star',
+  'become': 'fas fa-arrows-turn-to-dots',
+  
+  // Verbs d'expressió
+  'say': 'fas fa-comment',
+  'speak': 'fas fa-microphone',
+  'tell': 'fas fa-comment-dots',
+  'write': 'fas fa-pen',
+  'read': 'fas fa-book-open',
+  
+  // Altres verbs comuns
+  'eat': 'fas fa-utensils',
+  'drink': 'fas fa-mug-hot',
+  'sleep': 'fas fa-bed',
+  'wear': 'fas fa-shirt',
+  'buy': 'fas fa-cart-shopping',
+  'sell': 'fas fa-money-bill-wave',
+  'teach': 'fas fa-chalkboard-user',
+  'learn': 'fas fa-graduation-cap',
+  'begin': 'fas fa-flag-checkered',
+  'end': 'fas fa-flag',
+  'win': 'fas fa-trophy',
+  'lose': 'fas fa-face-sad-tear',
+  'find': 'fas fa-magnifying-glass',
+  'seek': 'fas fa-binoculars',
+  
+  // Icones per defecte
+  'default': 'fas fa-language'
+};
+
 // Verbs de nivell B1 organitzats per pàgines
 const VERB_PAGES = [
   // Pàgina 1 - Verbs bàsics
   [
-    {id:1, inf:"go", past:"went", part:"gone", inf_ca:"anar"},
-    {id:2, inf:"see", past:"saw", part:"seen", inf_ca:"veure"},
-    {id:3, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar"},
-    {id:4, inf:"take", past:"took", part:"taken", inf_ca:"agafar"},
-    {id:5, inf:"write", past:"wrote", part:"written", inf_ca:"escriure"}
+    {id:1, inf:"go", past:"went", part:"gone", inf_ca:"anar", icon: "fas fa-walking"},
+    {id:2, inf:"see", past:"saw", part:"seen", inf_ca:"veure", icon: "fas fa-eye"},
+    {id:3, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar", icon: "fas fa-utensils"},
+    {id:4, inf:"take", past:"took", part:"taken", inf_ca:"agafar", icon: "fas fa-hand-back-fist"},
+    {id:5, inf:"write", past:"wrote", part:"written", inf_ca:"escriure", icon: "fas fa-pen"}
   ],
   // Pàgina 2 - Verbs comuns
   [
-    {id:6, inf:"begin", past:"began", part:"begun", inf_ca:"començar"},
-    {id:7, inf:"break", past:"broke", part:"broken", inf_ca:"trencar"},
-    {id:8, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar"},
-    {id:9, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir"},
-    {id:10, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure"}
+    {id:6, inf:"begin", past:"began", part:"begun", inf_ca:"començar", icon: "fas fa-flag-checkered"},
+    {id:7, inf:"break", past:"broke", part:"broken", inf_ca:"trencar", icon: "fas fa-ban"},
+    {id:8, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar", icon: "fas fa-hand-pointer"},
+    {id:9, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir", icon: "fas fa-car"},
+    {id:10, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure", icon: "fas fa-arrow-down"}
   ],
   // Pàgina 3 - Verbs importants
   [
-    {id:11, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar"},
-    {id:12, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir"},
-    {id:13, inf:"give", past:"gave", part:"given", inf_ca:"donar"},
-    {id:14, inf:"know", past:"knew", part:"known", inf_ca:"saber"},
-    {id:15, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar"}
+    {id:11, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar", icon: "fas fa-brain"},
+    {id:12, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir", icon: "fas fa-hand-point-up"},
+    {id:13, inf:"give", past:"gave", part:"given", inf_ca:"donar", icon: "fas fa-hand-holding-heart"},
+    {id:14, inf:"know", past:"knew", part:"known", inf_ca:"saber", icon: "fas fa-brain"},
+    {id:15, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar", icon: "fas fa-microphone"}
   ],
   // Pàgina 4 - Verbs amb formes iguals
   [
-    {id:16, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar"},
-    {id:17, inf:"think", past:"thought", part:"thought", inf_ca:"pensar"},
-    {id:18, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre"},
-    {id:19, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)"},
-    {id:20, inf:"win", past:"won", part:"won", inf_ca:"guanyar"}
+    {id:16, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar", icon: "fas fa-person-swimming"},
+    {id:17, inf:"think", past:"thought", part:"thought", inf_ca:"pensar", icon: "fas fa-lightbulb"},
+    {id:18, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre", icon: "fas fa-head-side-brain"},
+    {id:19, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)", icon: "fas fa-shirt"},
+    {id:20, inf:"win", past:"won", part:"won", inf_ca:"guanyar", icon: "fas fa-trophy"}
   ],
   // Pàgina 5 - Verbs amb totes les formes iguals
   [
-    {id:21, inf:"bring", past:"brought", part:"brought", inf_ca:"portar"},
-    {id:22, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar"},
-    {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar"},
-    {id:24, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar"},
-    {id:25, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar"}
+    {id:21, inf:"bring", past:"brought", part:"brought", inf_ca:"portar", icon: "fas fa-hands-holding"},
+    {id:22, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar", icon: "fas fa-cart-shopping"},
+    {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar", icon: "fas fa-baseball"},
+    {id:24, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar", icon: "fas fa-chalkboard-user"},
+    {id:25, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar", icon: "fas fa-scissors"}
   ]
 ];
 
 // Llista completa de verbs irregulars amb traducció al català
 const ALL_VERBS = [
   // Verbs més comuns (A-C)
-  {id:1, inf:"arise", past:"arose", part:"arisen", inf_ca:"sorgir"},
-  {id:2, inf:"awake", past:"awoke", part:"awoken", inf_ca:"despertar-se"},
-  {id:3, inf:"be", past:"was/were", part:"been", inf_ca:"ser/estar"},
-  {id:4, inf:"bear", past:"bore", part:"borne", inf_ca:"suportar"},
-  {id:5, inf:"beat", past:"beat", part:"beaten", inf_ca:"batre"},
-  {id:6, inf:"become", past:"became", part:"become", inf_ca:"convertir-se"},
-  {id:7, inf:"begin", past:"began", part:"begun", inf_ca:"començar"},
-  {id:8, inf:"bend", past:"bent", part:"bent", inf_ca:"doblegar"},
-  {id:9, inf:"bet", past:"bet", part:"bet", inf_ca:"apostar"},
-  {id:10, inf:"bid", past:"bid", part:"bid", inf_ca:"oferir"},
-  {id:11, inf:"bind", past:"bound", part:"bound", inf_ca:"lligar"},
-  {id:12, inf:"bite", past:"bit", part:"bitten", inf_ca:"mossegar"},
-  {id:13, inf:"bleed", past:"bled", part:"bled", inf_ca:"sagnar"},
-  {id:14, inf:"blow", past:"blew", part:"blown", inf_ca:"bufar"},
-  {id:15, inf:"break", past:"broke", part:"broken", inf_ca:"trencar"},
-  {id:16, inf:"breed", past:"bred", part:"bred", inf_ca:"criar"},
-  {id:17, inf:"bring", past:"brought", part:"brought", inf_ca:"portar"},
-  {id:18, inf:"build", past:"built", part:"built", inf_ca:"construir"},
-  {id:19, inf:"burn", past:"burnt", part:"burnt", inf_ca:"cremar"},
-  {id:20, inf:"burst", past:"burst", part:"burst", inf_ca:"rebentar"},
-  {id:21, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar"},
-  {id:22, inf:"cast", past:"cast", part:"cast", inf_ca:"llençar"},
-  {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar"},
-  {id:24, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar"},
-  {id:25, inf:"cling", past:"clung", part:"clung", inf_ca:"aferrar-se"},
-  {id:26, inf:"come", past:"came", part:"come", inf_ca:"venir"},
-  {id:27, inf:"cost", past:"cost", part:"cost", inf_ca:"costar"},
-  {id:28, inf:"creep", past:"crept", part:"crept", inf_ca:"arrossegar-se"},
-  {id:29, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar"},
+  {id:1, inf:"arise", past:"arose", part:"arisen", inf_ca:"sorgir", icon: "fas fa-sun"},
+  {id:2, inf:"awake", past:"awoke", part:"awoken", inf_ca:"despertar-se", icon: "fas fa-bed"},
+  {id:3, inf:"be", past:"was/were", part:"been", inf_ca:"ser/estar", icon: "fas fa-circle"},
+  {id:4, inf:"bear", past:"bore", part:"borne", inf_ca:"suportar", icon: "fas fa-weight-hanging"},
+  {id:5, inf:"beat", past:"beat", part:"beaten", inf_ca:"batre", icon: "fas fa-drum"},
+  {id:6, inf:"become", past:"became", part:"become", inf_ca:"convertir-se", icon: "fas fa-arrows-turn-to-dots"},
+  {id:7, inf:"begin", past:"began", part:"begun", inf_ca:"començar", icon: "fas fa-flag-checkered"},
+  {id:8, inf:"bend", past:"bent", part:"bent", inf_ca:"doblegar", icon: "fas fa-bending"},
+  {id:9, inf:"bet", past:"bet", part:"bet", inf_ca:"apostar", icon: "fas fa-dice"},
+  {id:10, inf:"bid", past:"bid", part:"bid", inf_ca:"oferir", icon: "fas fa-gavel"},
+  {id:11, inf:"bind", past:"bound", part:"bound", inf_ca:"lligar", icon: "fas fa-link"},
+  {id:12, inf:"bite", past:"bit", part:"bitten", inf_ca:"mossegar", icon: "fas fa-teeth"},
+  {id:13, inf:"bleed", past:"bled", part:"bled", inf_ca:"sagnar", icon: "fas fa-tint"},
+  {id:14, inf:"blow", past:"blew", part:"blown", inf_ca:"bufar", icon: "fas fa-wind"},
+  {id:15, inf:"break", past:"broke", part:"broken", inf_ca:"trencar", icon: "fas fa-ban"},
+  {id:16, inf:"breed", past:"bred", part:"bred", inf_ca:"criar", icon: "fas fa-paw"},
+  {id:17, inf:"bring", past:"brought", part:"brought", inf_ca:"portar", icon: "fas fa-hands-holding"},
+  {id:18, inf:"build", past:"built", part:"built", inf_ca:"construir", icon: "fas fa-hammer"},
+  {id:19, inf:"burn", past:"burnt", part:"burnt", inf_ca:"cremar", icon: "fas fa-fire"},
+  {id:20, inf:"burst", past:"burst", part:"burst", inf_ca:"rebentar", icon: "fas fa-burst"},
+  {id:21, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar", icon: "fas fa-cart-shopping"},
+  {id:22, inf:"cast", past:"cast", part:"cast", inf_ca:"llençar", icon: "fas fa-baseball"},
+  {id:23, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar", icon: "fas fa-baseball"},
+  {id:24, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar", icon: "fas fa-hand-pointer"},
+  {id:25, inf:"cling", past:"clung", part:"clung", inf_ca:"aferrar-se", icon: "fas fa-handshake"},
+  {id:26, inf:"come", past:"came", part:"come", inf_ca:"venir", icon: "fas fa-arrow-right-to-bracket"},
+  {id:27, inf:"cost", past:"cost", part:"cost", inf_ca:"costar", icon: "fas fa-tag"},
+  {id:28, inf:"creep", past:"crept", part:"crept", inf_ca:"arrossegar-se", icon: "fas fa-person-walking"},
+  {id:29, inf:"cut", past:"cut", part:"cut", inf_ca:"tallar", icon: "fas fa-scissors"},
   
   // Verbs D-F
-  {id:30, inf:"deal", past:"dealt", part:"dealt", inf_ca:"tractar"},
-  {id:31, inf:"dig", past:"dug", part:"dug", inf_ca:"cavar"},
-  {id:32, inf:"do", past:"did", part:"done", inf_ca:"fer"},
-  {id:33, inf:"draw", past:"drew", part:"drawn", inf_ca:"dibuixar"},
-  {id:34, inf:"dream", past:"dreamt", part:"dreamt", inf_ca:"somiar"},
-  {id:35, inf:"drink", past:"drank", part:"drunk", inf_ca:"beure"},
-  {id:36, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir"},
-  {id:37, inf:"dwell", past:"dwelt", part:"dwelt", inf_ca:"habitar"},
-  {id:38, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar"},
-  {id:39, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure"},
-  {id:40, inf:"feed", past:"fed", part:"fed", inf_ca:"alimentar"},
-  {id:41, inf:"feel", past:"felt", part:"felt", inf_ca:"sentir"},
-  {id:42, inf:"fight", past:"fought", part:"fought", inf_ca:"lluitar"},
-  {id:43, inf:"find", past:"found", part:"found", inf_ca:"trobar"},
-  {id:44, inf:"flee", past:"fled", part:"fled", inf_ca:"fugir"},
-  {id:45, inf:"fling", past:"flung", part:"flung", inf_ca:"llançar"},
-  {id:46, inf:"fly", past:"flew", part:"flown", inf_ca:"volar"},
-  {id:47, inf:"forbid", past:"forbade", part:"forbidden", inf_ca:"prohibir"},
-  {id:48, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar"},
-  {id:49, inf:"forgive", past:"forgave", part:"forgiven", inf_ca:"perdonar"},
-  {id:50, inf:"freeze", past:"froze", part:"frozen", inf_ca:"congelar"},
+  {id:30, inf:"deal", past:"dealt", part:"dealt", inf_ca:"tractar", icon: "fas fa-handshake"},
+  {id:31, inf:"dig", past:"dug", part:"dug", inf_ca:"cavar", icon: "fas fa-shovel"},
+  {id:32, inf:"do", past:"did", part:"done", inf_ca:"fer", icon: "fas fa-screwdriver-wrench"},
+  {id:33, inf:"draw", past:"drew", part:"drawn", inf_ca:"dibuixar", icon: "fas fa-pencil"},
+  {id:34, inf:"dream", past:"dreamt", part:"dreamt", inf_ca:"somiar", icon: "fas fa-cloud"},
+  {id:35, inf:"drink", past:"drank", part:"drunk", inf_ca:"beure", icon: "fas fa-mug-hot"},
+  {id:36, inf:"drive", past:"drove", part:"driven", inf_ca:"conduir", icon: "fas fa-car"},
+  {id:37, inf:"dwell", past:"dwelt", part:"dwelt", inf_ca:"habitar", icon: "fas fa-house"},
+  {id:38, inf:"eat", past:"ate", part:"eaten", inf_ca:"menjar", icon: "fas fa-utensils"},
+  {id:39, inf:"fall", past:"fell", part:"fallen", inf_ca:"caure", icon: "fas fa-arrow-down"},
+  {id:40, inf:"feed", past:"fed", part:"fed", inf_ca:"alimentar", icon: "fas fa-apple-whole"},
+  {id:41, inf:"feel", past:"felt", part:"felt", inf_ca:"sentir", icon: "fas fa-hand"},
+  {id:42, inf:"fight", past:"fought", part:"fought", inf_ca:"lluitar", icon: "fas fa-fist-raised"},
+  {id:43, inf:"find", past:"found", part:"found", inf_ca:"trobar", icon: "fas fa-magnifying-glass"},
+  {id:44, inf:"flee", past:"fled", part:"fled", inf_ca:"fugir", icon: "fas fa-running"},
+  {id:45, inf:"fling", past:"flung", part:"flung", inf_ca:"llançar", icon: "fas fa-baseball"},
+  {id:46, inf:"fly", past:"flew", part:"flown", inf_ca:"volar", icon: "fas fa-dove"},
+  {id:47, inf:"forbid", past:"forbade", part:"forbidden", inf_ca:"prohibir", icon: "fas fa-ban"},
+  {id:48, inf:"forget", past:"forgot", part:"forgotten", inf_ca:"oblidar", icon: "fas fa-brain"},
+  {id:49, inf:"forgive", past:"forgave", part:"forgiven", inf_ca:"perdonar", icon: "fas fa-heart"},
+  {id:50, inf:"freeze", past:"froze", part:"frozen", inf_ca:"congelar", icon: "fas fa-snowflake"},
   
   // Verbs G-K
-  {id:51, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir"},
-  {id:52, inf:"give", past:"gave", part:"given", inf_ca:"donar"},
-  {id:53, inf:"go", past:"went", part:"gone", inf_ca:"anar"},
-  {id:54, inf:"grind", past:"ground", part:"ground", inf_ca:"moldre"},
-  {id:55, inf:"grow", past:"grew", part:"grown", inf_ca:"creixer"},
-  {id:56, inf:"hang", past:"hung", part:"hung", inf_ca:"penjar"},
-  {id:57, inf:"have", past:"had", part:"had", inf_ca:"tenir"},
-  {id:58, inf:"hear", past:"heard", part:"heard", inf_ca:"sentir"},
-  {id:59, inf:"hide", past:"hid", part:"hidden", inf_ca:"amagar"},
-  {id:60, inf:"hit", past:"hit", part:"hit", inf_ca:"colpejar"},
-  {id:61, inf:"hold", past:"held", part:"held", inf_ca:"aguantar"},
-  {id:62, inf:"hurt", past:"hurt", part:"hurt", inf_ca:"ferir"},
-  {id:63, inf:"keep", past:"kept", part:"kept", inf_ca:"guardar"},
-  {id:64, inf:"kneel", past:"knelt", part:"knelt", inf_ca:"agenollar-se"},
-  {id:65, inf:"knit", past:"knit", part:"knit", inf_ca:"fer punt"},
-  {id:66, inf:"know", past:"knew", part:"known", inf_ca:"saber"},
+  {id:51, inf:"get", past:"got", part:"gotten", inf_ca:"aconseguir", icon: "fas fa-hand-point-up"},
+  {id:52, inf:"give", past:"gave", part:"given", inf_ca:"donar", icon: "fas fa-hand-holding-heart"},
+  {id:53, inf:"go", past:"went", part:"gone", inf_ca:"anar", icon: "fas fa-walking"},
+  {id:54, inf:"grind", past:"ground", part:"ground", inf_ca:"moldre", icon: "fas fa-gears"},
+  {id:55, inf:"grow", past:"grew", part:"grown", inf_ca:"créixer", icon: "fas fa-seedling"},
+  {id:56, inf:"hang", past:"hung", part:"hung", inf_ca:"penjar", icon: "fas fa-image"},
+  {id:57, inf:"have", past:"had", part:"had", inf_ca:"tenir", icon: "fas fa-star"},
+  {id:58, inf:"hear", past:"heard", part:"heard", inf_ca:"sentir", icon: "fas fa-ear-listen"},
+  {id:59, inf:"hide", past:"hid", part:"hidden", inf_ca:"amagar", icon: "fas fa-eye-slash"},
+  {id:60, inf:"hit", past:"hit", part:"hit", inf_ca:"colpejar", icon: "fas fa-hand-back-fist"},
+  {id:61, inf:"hold", past:"held", part:"held", inf_ca:"aguantar", icon: "fas fa-hand-holding"},
+  {id:62, inf:"hurt", past:"hurt", part:"hurt", inf_ca:"ferir", icon: "fas fa-bandage"},
+  {id:63, inf:"keep", past:"kept", part:"kept", inf_ca:"guardar", icon: "fas fa-box-archive"},
+  {id:64, inf:"kneel", past:"knelt", part:"knelt", inf_ca:"agenollar-se", icon: "fas fa-person-praying"},
+  {id:65, inf:"knit", past:"knit", part:"knit", inf_ca:"fer punt", icon: "fas fa-scarf"},
+  {id:66, inf:"know", past:"knew", part:"known", inf_ca:"saber", icon: "fas fa-brain"},
   
   // Verbs L-R
-  {id:67, inf:"lay", past:"laid", part:"laid", inf_ca:"posar"},
-  {id:68, inf:"lead", past:"led", part:"led", inf_ca:"conduir"},
-  {id:69, inf:"lean", past:"leant", part:"leant", inf_ca:"recolzar"},
-  {id:70, inf:"leap", past:"leapt", part:"leapt", inf_ca:"saltar"},
-  {id:71, inf:"learn", past:"learnt", part:"learnt", inf_ca:"aprendre"},
-  {id:72, inf:"leave", past:"left", part:"left", inf_ca:"deixar"},
-  {id:73, inf:"lend", past:"lent", part:"lent", inf_ca:"prestar"},
-  {id:74, inf:"let", past:"let", part:"let", inf_ca:"permetre"},
-  {id:75, inf:"lie", past:"lay", part:"lain", inf_ca:"jeure"},
-  {id:76, inf:"light", past:"lit", part:"lit", inf_ca:"encendre"},
-  {id:77, inf:"lose", past:"lost", part:"lost", inf_ca:"perdre"},
-  {id:78, inf:"make", past:"made", part:"made", inf_ca:"fer"},
-  {id:79, inf:"mean", past:"meant", part:"meant", inf_ca:"significar"},
-  {id:80, inf:"meet", past:"met", part:"met", inf_ca:"conèixer"},
-  {id:81, inf:"pay", past:"paid", part:"paid", inf_ca:"pagar"},
-  {id:82, inf:"put", past:"put", part:"put", inf_ca:"posar"},
-  {id:83, inf:"quit", past:"quit", part:"quit", inf_ca:"deixar"},
-  {id:84, inf:"read", past:"read", part:"read", inf_ca:"llegir"},
-  {id:85, inf:"ride", past:"rode", part:"ridden", inf_ca:"muntar"},
-  {id:86, inf:"ring", past:"rang", part:"rung", inf_ca:"tocar (timbre)"},
-  {id:87, inf:"rise", past:"rose", part:"risen", inf_ca:"aixecar-se"},
-  {id:88, inf:"run", past:"ran", part:"run", inf_ca:"córrer"},
+  {id:67, inf:"lay", past:"laid", part:"laid", inf_ca:"posar", icon: "fas fa-layer-group"},
+  {id:68, inf:"lead", past:"led", part:"led", inf_ca:"conduir", icon: "fas fa-flag"},
+  {id:69, inf:"lean", past:"leant", part:"leant", inf_ca:"recolzar", icon: "fas fa-person-leaning"},
+  {id:70, inf:"leap", past:"leapt", part:"leapt", inf_ca:"saltar", icon: "fas fa-person-running"},
+  {id:71, inf:"learn", past:"learnt", part:"learnt", inf_ca:"aprendre", icon: "fas fa-graduation-cap"},
+  {id:72, inf:"leave", past:"left", part:"left", inf_ca:"deixar", icon: "fas fa-door-open"},
+  {id:73, inf:"lend", past:"lent", part:"lent", inf_ca:"prestar", icon: "fas fa-hand-holding-dollar"},
+  {id:74, inf:"let", past:"let", part:"let", inf_ca:"permetre", icon: "fas fa-check"},
+  {id:75, inf:"lie", past:"lay", part:"lain", inf_ca:"jeure", icon: "fas fa-bed"},
+  {id:76, inf:"light", past:"lit", part:"lit", inf_ca:"encendre", icon: "fas fa-lightbulb"},
+  {id:77, inf:"lose", past:"lost", part:"lost", inf_ca:"perdre", icon: "fas fa-face-sad-tear"},
+  {id:78, inf:"make", past:"made", part:"made", inf_ca:"fer", icon: "fas fa-hammer"},
+  {id:79, inf:"mean", past:"meant", part:"meant", inf_ca:"significar", icon: "fas fa-comment"},
+  {id:80, inf:"meet", past:"met", part:"met", inf_ca:"conèixer", icon: "fas fa-handshake"},
+  {id:81, inf:"pay", past:"paid", part:"paid", inf_ca:"pagar", icon: "fas fa-money-bill-wave"},
+  {id:82, inf:"put", past:"put", part:"put", inf_ca:"posar", icon: "fas fa-box"},
+  {id:83, inf:"quit", past:"quit", part:"quit", inf_ca:"deixar", icon: "fas fa-door-open"},
+  {id:84, inf:"read", past:"read", part:"read", inf_ca:"llegir", icon: "fas fa-book-open"},
+  {id:85, inf:"ride", past:"rode", part:"ridden", inf_ca:"muntar", icon: "fas fa-bicycle"},
+  {id:86, inf:"ring", past:"rang", part:"rung", inf_ca:"tocar (timbre)", icon: "fas fa-bell"},
+  {id:87, inf:"rise", past:"rose", part:"risen", inf_ca:"aixecar-se", icon: "fas fa-sun"},
+  {id:88, inf:"run", past:"ran", part:"run", inf_ca:"córrer", icon: "fas fa-running"},
   
   // Verbs S-W
-  {id:89, inf:"say", past:"said", part:"said", inf_ca:"dir"},
-  {id:90, inf:"see", past:"saw", part:"seen", inf_ca:"veure"},
-  {id:91, inf:"seek", past:"sought", part:"sought", inf_ca:"buscar"},
-  {id:92, inf:"sell", past:"sold", part:"sold", inf_ca:"vendre"},
-  {id:93, inf:"send", past:"sent", part:"sent", inf_ca:"enviar"},
-  {id:94, inf:"set", past:"set", part:"set", inf_ca:"establir"},
-  {id:95, inf:"sew", past:"sewed", part:"sewn", inf_ca:"cosir"},
-  {id:96, inf:"shake", past:"shook", part:"shaken", inf_ca:"sacsejar"},
-  {id:97, inf:"shine", past:"shone", part:"shone", inf_ca:"brillar"},
-  {id:98, inf:"shoot", past:"shot", part:"shot", inf_ca:"disparar"},
-  {id:99, inf:"show", past:"showed", part:"shown", inf_ca:"mostrar"},
-  {id:100, inf:"shrink", past:"shrank", part:"shrunk", inf_ca:"encongir"},
-  {id:101, inf:"shut", past:"shut", part:"shut", inf_ca:"tancar"},
-  {id:102, inf:"sing", past:"sang", part:"sung", inf_ca:"cantar"},
-  {id:103, inf:"sink", past:"sank", part:"sunk", inf_ca:"enfonsar"},
-  {id:104, inf:"sit", past:"sat", part:"sat", inf_ca:"seure"},
-  {id:105, inf:"sleep", past:"slept", part:"slept", inf_ca:"dormir"},
-  {id:106, inf:"slide", past:"slid", part:"slid", inf_ca:"lliscar"},
-  {id:107, inf:"sow", past:"sowed", part:"sown", inf_ca:"sembrar"},
-  {id:108, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar"},
-  {id:109, inf:"spell", past:"spelt", part:"spelt", inf_ca:"lletrejar"},
-  {id:110, inf:"spend", past:"spent", part:"spent", inf_ca:"gastar"},
-  {id:111, inf:"spill", past:"spilt", part:"spilt", inf_ca:"abocar"},
-  {id:112, inf:"spin", past:"spun", part:"spun", inf_ca:"girar"},
-  {id:113, inf:"spit", past:"spat", part:"spat", inf_ca:"escopir"},
-  {id:114, inf:"split", past:"split", part:"split", inf_ca:"dividir"},
-  {id:115, inf:"spoil", past:"spoilt", part:"spoilt", inf_ca:"fer malbé"},
-  {id:116, inf:"spread", past:"spread", part:"spread", inf_ca:"estendre"},
-  {id:117, inf:"spring", past:"sprang", part:"sprung", inf_ca:"saltar"},
-  {id:118, inf:"stand", past:"stood", part:"stood", inf_ca:"estar dret"},
-  {id:119, inf:"steal", past:"stole", part:"stolen", inf_ca:"robar"},
-  {id:120, inf:"stick", past:"stuck", part:"stuck", inf_ca:"enganxar"},
-  {id:121, inf:"sting", past:"stung", part:"stung", inf_ca:"picar"},
-  {id:122, inf:"stink", past:"stank", part:"stunk", inf_ca:"pudor"},
-  {id:123, inf:"strike", past:"struck", part:"struck", inf_ca:"colpejar"},
-  {id:124, inf:"swear", past:"swore", part:"sworn", inf_ca:"jurar"},
-  {id:125, inf:"sweep", past:"swept", part:"swept", inf_ca:"escombrar"},
-  {id:126, inf:"swell", past:"swelled", part:"swollen", inf_ca:"inflat"},
-  {id:127, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar"},
-  {id:128, inf:"swing", past:"swung", part:"swung", inf_ca:"balancejar"},
-  {id:129, inf:"take", past:"took", part:"taken", inf_ca:"agafar"},
-  {id:130, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar"},
-  {id:131, inf:"tear", past:"tore", part:"torn", inf_ca:"estripar"},
-  {id:132, inf:"tell", past:"told", part:"told", inf_ca:"explicar"},
-  {id:133, inf:"think", past:"thought", part:"thought", inf_ca:"pensar"},
-  {id:134, inf:"throw", past:"threw", part:"thrown", inf_ca:"llençar"},
-  {id:135, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre"},
-  {id:136, inf:"wake", past:"woke", part:"woken", inf_ca:"despertar"},
-  {id:137, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)"},
-  {id:138, inf:"weep", past:"wept", part:"wept", inf_ca:"plorar"},
-  {id:139, inf:"win", past:"won", part:"won", inf_ca:"guanyar"},
-  {id:140, inf:"wind", past:"wound", part:"wound", inf_ca:"enrotllar"},
-  {id:141, inf:"withdraw", past:"withdrew", part:"withdrawn", inf_ca:"retirar"},
-  {id:142, inf:"wring", past:"wrung", part:"wrung", inf_ca:"escórrer"},
-  {id:143, inf:"write", past:"wrote", part:"written", inf_ca:"escriure"}
+  {id:89, inf:"say", past:"said", part:"said", inf_ca:"dir", icon: "fas fa-comment"},
+  {id:90, inf:"see", past:"saw", part:"seen", inf_ca:"veure", icon: "fas fa-eye"},
+  {id:91, inf:"seek", past:"sought", part:"sought", inf_ca:"buscar", icon: "fas fa-binoculars"},
+  {id:92, inf:"sell", past:"sold", part:"sold", inf_ca:"vendre", icon: "fas fa-money-bill-wave"},
+  {id:93, inf:"send", past:"sent", part:"sent", inf_ca:"enviar", icon: "fas fa-paper-plane"},
+  {id:94, inf:"set", past:"set", part:"set", inf_ca:"establir", icon: "fas fa-cogs"},
+  {id:95, inf:"sew", past:"sewed", part:"sewn", inf_ca:"cosir", icon: "fas fa-needle"},
+  {id:96, inf:"shake", past:"shook", part:"shaken", inf_ca:"sacsejar", icon: "fas fa-hand-rock"},
+  {id:97, inf:"shine", past:"shone", part:"shone", inf_ca:"brillar", icon: "fas fa-sun"},
+  {id:98, inf:"shoot", past:"shot", part:"shot", inf_ca:"disparar", icon: "fas fa-bullseye"},
+  {id:99, inf:"show", past:"showed", part:"shown", inf_ca:"mostrar", icon: "fas fa-eye"},
+  {id:100, inf:"shrink", past:"shrank", part:"shrunk", inf_ca:"encongir", icon: "fas fa-compress"},
+  {id:101, inf:"shut", past:"shut", part:"shut", inf_ca:"tancar", icon: "fas fa-door-closed"},
+  {id:102, inf:"sing", past:"sang", part:"sung", inf_ca:"cantar", icon: "fas fa-music"},
+  {id:103, inf:"sink", past:"sank", part:"sunk", inf_ca:"enfonsar", icon: "fas fa-water"},
+  {id:104, inf:"sit", past:"sat", part:"sat", inf_ca:"seure", icon: "fas fa-chair"},
+  {id:105, inf:"sleep", past:"slept", part:"slept", inf_ca:"dormir", icon: "fas fa-bed"},
+  {id:106, inf:"slide", past:"slid", part:"slid", inf_ca:"lliscar", icon: "fas fa-person-skating"},
+  {id:107, inf:"sow", past:"sowed", part:"sown", inf_ca:"sembrar", icon: "fas fa-seedling"},
+  {id:108, inf:"speak", past:"spoke", part:"spoken", inf_ca:"parlar", icon: "fas fa-microphone"},
+  {id:109, inf:"spell", past:"spelt", part:"spelt", inf_ca:"lletrejar", icon: "fas fa-font"},
+  {id:110, inf:"spend", past:"spent", part:"spent", inf_ca:"gastar", icon: "fas fa-money-bill-wave"},
+  {id:111, inf:"spill", past:"spilt", part:"spilt", inf_ca:"abocar", icon: "fas fa-glass-water"},
+  {id:112, inf:"spin", past:"spun", part:"spun", inf_ca:"girar", icon: "fas fa-sync"},
+  {id:113, inf:"spit", past:"spat", part:"spat", inf_ca:"escopir", icon: "fas fa-droplet"},
+  {id:114, inf:"split", past:"split", part:"split", inf_ca:"dividir", icon: "fas fa-code-branch"},
+  {id:115, inf:"spoil", past:"spoilt", part:"spoilt", inf_ca:"fer malbé", icon: "fas fa-trash"},
+  {id:116, inf:"spread", past:"spread", part:"spread", inf_ca:"estendre", icon: "fas fa-expand"},
+  {id:117, inf:"spring", past:"sprang", part:"sprung", inf_ca:"saltar", icon: "fas fa-frog"},
+  {id:118, inf:"stand", past:"stood", part:"stood", inf_ca:"estar dret", icon: "fas fa-person-standing"},
+  {id:119, inf:"steal", past:"stole", part:"stolen", inf_ca:"robar", icon: "fas fa-mask"},
+  {id:120, inf:"stick", past:"stuck", part:"stuck", inf_ca:"enganxar", icon: "fas fa-paste"},
+  {id:121, inf:"sting", past:"stung", part:"stung", inf_ca:"picar", icon: "fas fa-bug"},
+  {id:122, inf:"stink", past:"stank", part:"stunk", inf_ca:"fer pudor", icon: "fas fa-poo"},
+  {id:123, inf:"strike", past:"struck", part:"struck", inf_ca:"colpejar", icon: "fas fa-bolt"},
+  {id:124, inf:"swear", past:"swore", part:"sworn", inf_ca:"jurar", icon: "fas fa-hand"},
+  {id:125, inf:"sweep", past:"swept", part:"swept", inf_ca:"escombrar", icon: "fas fa-broom"},
+  {id:126, inf:"swell", past:"swelled", part:"swollen", inf_ca:"inflar", icon: "fas fa-expand"},
+  {id:127, inf:"swim", past:"swam", part:"swum", inf_ca:"nedar", icon: "fas fa-person-swimming"},
+  {id:128, inf:"swing", past:"swung", part:"swung", inf_ca:"balancejar", icon: "fas fa-person-hiking"},
+  {id:129, inf:"take", past:"took", part:"taken", inf_ca:"agafar", icon: "fas fa-hand-back-fist"},
+  {id:130, inf:"teach", past:"taught", part:"taught", inf_ca:"ensenyar", icon: "fas fa-chalkboard-user"},
+  {id:131, inf:"tear", past:"tore", part:"torn", inf_ca:"estripar", icon: "fas fa-scissors"},
+  {id:132, inf:"tell", past:"told", part:"told", inf_ca:"explicar", icon: "fas fa-comment-dots"},
+  {id:133, inf:"think", past:"thought", part:"thought", inf_ca:"pensar", icon: "fas fa-lightbulb"},
+  {id:134, inf:"throw", past:"threw", part:"thrown", inf_ca:"llençar", icon: "fas fa-baseball"},
+  {id:135, inf:"understand", past:"understood", part:"understood", inf_ca:"entendre", icon: "fas fa-head-side-brain"},
+  {id:136, inf:"wake", past:"woke", part:"woken", inf_ca:"despertar", icon: "fas fa-bed"},
+  {id:137, inf:"wear", past:"wore", part:"worn", inf_ca:"portar (roba)", icon: "fas fa-shirt"},
+  {id:138, inf:"weep", past:"wept", part:"wept", inf_ca:"plorar", icon: "fas fa-face-sad-cry"},
+  {id:139, inf:"win", past:"won", part:"won", inf_ca:"guanyar", icon: "fas fa-trophy"},
+  {id:140, inf:"wind", past:"wound", part:"wound", inf_ca:"enrotllar", icon: "fas fa-redo"},
+  {id:141, inf:"withdraw", past:"withdrew", part:"withdrawn", inf_ca:"retirar", icon: "fas fa-arrow-left"},
+  {id:142, inf:"wring", past:"wrung", part:"wrung", inf_ca:"escórrer", icon: "fas fa-hand-fist"},
+  {id:143, inf:"write", past:"wrote", part:"written", inf_ca:"escriure", icon: "fas fa-pen"}
 ];
 
 class VerbGame {
@@ -1059,12 +1162,18 @@ class VerbGame {
   createItemElement(item) {
     const div = document.createElement("div");
     div.className = "item";
-    div.textContent = item.text;
+    
+    // Sense icona als items arrossegables (per no donar pistes)
+    const textSpan = document.createElement("span");
+    textSpan.textContent = item.text;
+    div.appendChild(textSpan);
+    
     div.draggable = true;
     div.dataset.id = item.id;
     div.dataset.form = item.form;
     div.dataset.text = item.text; // Guardar el text per a clonar
     div.dataset.inf_ca = item.inf_ca || ''; // Guardar la traducció
+    div.dataset.icon = item.icon || ''; // Guardar la icona (per a les files de català)
     
     div.setAttribute('aria-label', `Forma verbal: ${item.text}. Arrossega per col·locar a la columna correcta.`);
     
@@ -1247,7 +1356,12 @@ class VerbGame {
     ALL_VERBS.forEach(verb => {
       const verbItem = document.createElement('div');
       verbItem.className = 'verb-item';
-      verbItem.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca})</span>`;
+      
+      // Sense icones als items de la llista
+      const textSpan = document.createElement('span');
+      textSpan.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca})</span>`;
+      verbItem.appendChild(textSpan);
+      
       verbItem.dataset.id = verb.id;
       verbItem.dataset.type = 'predefined';
       
@@ -1262,7 +1376,12 @@ class VerbGame {
     this.customVerbsList.forEach(verb => {
       const verbItem = document.createElement('div');
       verbItem.className = 'verb-item';
-      verbItem.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca || 'sense traducció'})</span>`;
+      
+      // Sense icones als items de la llista
+      const textSpan = document.createElement('span');
+      textSpan.innerHTML = `${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca || 'sense traducció'})</span>`;
+      verbItem.appendChild(textSpan);
+      
       verbItem.dataset.id = verb.id;
       verbItem.dataset.type = 'custom';
       
@@ -1309,6 +1428,7 @@ class VerbGame {
       selectedVerb.dataset.id = verbId;
       selectedVerb.dataset.type = verbType;
       
+      // Sense icones als verbs seleccionats
       selectedVerb.innerHTML = `
         <span>${verb.inf} - ${verb.past} - ${verb.part} <span class="catalan">(${verb.inf_ca})</span></span>
         <button class="remove-verb">×</button>
@@ -1462,9 +1582,9 @@ class VerbGame {
       uniqueForms.add(v.part);
       
       // Guardar la informació de cada forma
-      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca});
-      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca});
-      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca});
+      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca, icon: v.icon});
+      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca, icon: v.icon});
+      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca, icon: v.icon});
     });
     
     // Convertir el Set a array i barrejar
@@ -1476,7 +1596,8 @@ class VerbGame {
           id: formInfo.id,
           form: formInfo.form,
           text: formText,
-          inf_ca: formInfo.inf_ca
+          inf_ca: formInfo.inf_ca,
+          icon: formInfo.icon
         });
         
         // Marcar com a utilitzada si ja s'ha colocat per a aquest verb
@@ -1554,9 +1675,9 @@ class VerbGame {
       uniqueForms.add(v.part);
       
       // Guardar la informació de cada forma
-      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca});
-      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca});
-      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca});
+      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca, icon: v.icon});
+      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca, icon: v.icon});
+      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca, icon: v.icon});
     });
     
     // Convertir el Set a array i barrejar
@@ -1568,7 +1689,8 @@ class VerbGame {
           id: formInfo.id,
           form: formInfo.form,
           text: formText,
-          inf_ca: formInfo.inf_ca
+          inf_ca: formInfo.inf_ca,
+          icon: formInfo.icon
         });
         
         // Marcar com a utilitzada si ja s'ha colocat per a aquest verb
@@ -1607,16 +1729,21 @@ class VerbGame {
       currentVerbs = this.customVerbs;
     }
     
+    // Netejar les columnes abans de crear les files
+    document.querySelectorAll('.col-content, #catalan-content').forEach(content => {
+      content.innerHTML = '';
+    });
+    
     // Crear files per a cada verb a cada columna
     currentVerbs.forEach(verb => {
-      this.createVerbRow('inf', verb.id, verb.inf_ca);
+      this.createVerbRow('inf', verb.id, verb.inf_ca, verb.icon);
       this.createVerbRow('past', verb.id);
       this.createVerbRow('part', verb.id);
     });
   }
   
   // Crear una fila per a un verb específic a una columna
-  createVerbRow(column, verbId, inf_ca = '') {
+  createVerbRow(column, verbId, inf_ca = '', icon = '') {
     const colContent = document.getElementById(`${column}-content`);
     if (!colContent) return;
     
@@ -1632,7 +1759,19 @@ class VerbGame {
       const catalanContent = document.getElementById('catalan-content');
       const catalanLabel = document.createElement("div");
       catalanLabel.className = "catalan-label";
-      catalanLabel.textContent = inf_ca;
+      
+      // Afegir icona a l'etiqueta en català (NOMÉS aquí)
+      if (icon) {
+        const iconElement = document.createElement("i");
+        iconElement.className = icon;
+        iconElement.classList.add("verb-icon");
+        catalanLabel.appendChild(iconElement);
+      }
+      
+      const textSpan = document.createElement("span");
+      textSpan.textContent = inf_ca;
+      catalanLabel.appendChild(textSpan);
+      
       catalanLabel.dataset.verbId = verbId;
       
       catalanContent.appendChild(catalanLabel);
@@ -1664,11 +1803,11 @@ class VerbGame {
       if (formType === 'part') formText = verb.part;
       
       // Crear una còpia de la forma per a la columna
-      this.createFormCopy(formText, verb.id, formType, column, verb.inf_ca);
+      this.createFormCopy(formText, verb.id, formType, column, verb.inf_ca, verb.icon);
     });
   }
   
-  createFormCopy(text, verbId, formType, column, inf_ca) {
+  createFormCopy(text, verbId, formType, column, inf_ca, icon) {
     const colContent = document.getElementById(`${column}-content`);
     if (!colContent) return;
     
@@ -1682,10 +1821,21 @@ class VerbGame {
     
     const copy = document.createElement("div");
     copy.className = "item placed correct";
-    copy.textContent = text;
+    
+    // Sense icona als items colocats (per no donar pistes)
+    const textSpan = document.createElement("span");
+    textSpan.textContent = text;
+    copy.appendChild(textSpan);
+    
     copy.dataset.id = verbId;
     copy.dataset.form = formType;
     copy.draggable = false;
+    
+    // Assegurar que l'item ocupi tota l'alçada de la fila
+    copy.style.height = "100%";
+    copy.style.display = "flex";
+    copy.style.alignItems = "center";
+    copy.style.justifyContent = "center";
     
     row.appendChild(copy);
   }
@@ -1736,7 +1886,7 @@ class VerbGame {
             this.correctCount++;
             
             // Crear una còpia per a la columna (la original es queda)
-            this.createFormCopy(data.text, data.id, data.form, col.id, data.inf_ca);
+            this.createFormCopy(data.text, data.id, data.form, col.id, data.inf_ca, data.icon);
             
             // Marcar l'original com a utilitzada (però no amagar-la)
             dragged.classList.add('used');
