@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercicis de Verbs Irregulars</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --color-primary: #003366;
+  --color-secondary: #4a86e8;
+  --color-correct: #4CAF50;
+  --color-partial: #FFC107;
+  --color-incorrect: #F44336;
+  --color-border: #ccc;
+  --color-bg: #f9f9f9;
+  --shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1 { 
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Pestanyes */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  padding: 12px 24px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 1em;
+  margin-right: 5px;
+  transition: all 0.3s;
+}
+
+.tab.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.tab:hover:not(.active) {
+  background: #e0e0f0;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+#game-container, #fill-blanks-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* Estils per l'exercici d'omplir buits */
+.image {
+  float: left;
+  margin: 0 20px 20px 0;
+  max-width: 200px;
+}
+
+.image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.phrase-block {
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.phrase-block p {
+  margin: 8px 0;
+}
+
+.phrase-block input {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  width: 200px;
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+.phrase-block input.correct {
+  border-color: var(--color-correct);
+  background-color: #e8f5e9;
+}
+
+.phrase-block input.incorrect {
+  border-color: var(--color-incorrect);
+  background-color: #ffebee;
+}
+
+.phrase-block input.corrected {
+  border-color: var(--color-partial);
+  background-color: #fffde7;
+}
+
+.phrase-block button {
+  padding: 8px 16px;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.phrase-block button:hover {
+  background: #3a76d8;
+}
+
+.correction {
+  margin-top: 8px;
+  font-size: 0.9em;
+}
+
+#fill-blanks-controls {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#fill-blanks-result {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* Estils per l'exercici d'arrossegar */
+#page-navigation, #fill-blanks-page-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#page-info, #fill-blanks-page-info {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.nav-button {
+  padding: 8px 16px;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #3a76d8;
+}
+
+.nav-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+#page-list, #fill-blanks-page-list {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.page-btn {
+  padding: 5px 10px;
+  background: #f0f0f0;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.page-btn:hover {
+  background: #e0e0f0;
+}
+
+.page-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.page-btn.completed {
+  background: var(--color-correct);
+  color: white;
+  border-color: var(--color-correct);
+}
+
+#board {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: start;
+}
+
+#catalan-column {
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  min-height: 300px;
+  padding: 0;
+  background: white;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+#catalan-column h3 {
+  text-align: center; 
+  margin: 0;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  background: #f5f5f5;
+}
+
+#catalan-content {
+  flex: 1;
+  padding: 10px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.col {
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  min-height: 300px;
+  padding: 0;
+  background: white;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.col.highlight {
+  border-color: var(--color-primary);
+  background-color: rgba(0, 51, 102, 0.05);
+}
+
+.col h3 { 
+  text-align: center; 
+  margin: 0;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  background: #f5f5f5;
+}
+
+.col-content {
+  flex: 1;
+  padding: 10px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.verb-row, .catalan-label {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  min-height: 50px;
+  padding: 8px 5px;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.verb-row:last-child, .catalan-label:last-child {
+  border-bottom: none;
+}
+
+.verb-row.empty {
+  height: 50px;
+  min-height: 50px;
+  opacity: 0.3;
+  background: #f9f9f9;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+}
+
+.catalan-label {
+  font-weight: bold;
+  color: #2c5545;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verb-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  font-size: 1.1em;
+  flex-shrink: 0;
+}
+
+.verb-row .item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  min-height: 100px;
+  padding: 15px;
+  border: 2px dashed var(--color-border);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.item {
+  padding: 10px 15px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff;
+  cursor: grab;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+  user-select: none;
+  position: relative;
+  height: auto;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.item.dragging {
+  opacity: 0.7;
+  transform: rotate(5deg);
+}
+
+.item.correct { 
+  background: #e8f5e9; 
+  border-color: var(--color-correct); 
+  color: #2e7d32;
+}
+
+.item.partial { 
+  background: #fffde7; 
+  border-color: var(--color-partial); 
+  color: #f57f17;
+}
+
+.item.incorrect { 
+  background: #ffebee; 
+  border-color: var(--color-incorrect); 
+  color: #c62828;
+  animation: shake 0.5s;
+}
+
+.item.placed {
+  cursor: default;
+}
+
+.item.used {
+  opacity: 0.7;
+  background: #f0f0f0;
+  border-style: dashed;
+}
+
+.item.used::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--color-correct);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
+}
+
+#score-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#score {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+#progress {
+  width: 200px;
+  height: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  background-color: var(--color-secondary);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  padding: 10px 16px;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.control-button:hover {
+  background: #3a76d8;
+}
+
+#custom-exercise-btn {
+  background: var(--color-correct);
+}
+
+#custom-exercise-btn:hover {
+  background: #45a049;
+}
+
+/* Modal per crear exercici personalitzat */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.close-modal {
+  float: right;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #777;
+}
+
+.custom-verb-form {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.custom-verb-form h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.verb-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.verb-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.verb-item:hover {
+  background-color: #f0f0f0;
+}
+
+.verb-item.selected {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+.verb-item .catalan {
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
+.selected-verbs {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.selected-verb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.selected-verb .catalan {
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
+.remove-verb {
+  background: none;
+  border: none;
+  color: var(--color-incorrect);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.search-container {
+  margin-bottom: 15px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+@media (max-width: 768px) {
+  #board {
+    grid-template-columns: 1fr;
+  }
+  
+  #catalan-column {
+    width: 100%;
+    order: -1;
+  }
+  
+  .col, #catalan-column {
+    width: 100%;
+  }
+  
+  #page-navigation, #fill-blanks-page-navigation {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  #score-container {
+    align-items: center;
+  }
+  
+  #progress {
+    width: 100%;
+  }
+  
+  .control-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    padding: 15px;
+  }
+  
+  .verb-item .catalan {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+  
+  .verb-row, .catalan-label {
+    height: 45px;
+    min-height: 45px;
+  }
+  
+  .verb-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 1em;
+  }
+  
+  .tabs {
+    flex-direction: column;
+  }
+  
+  .tab {
+    border-radius: 8px;
+    margin-bottom: 5px;
+  }
+  
+  .image {
+    float: none;
+    margin: 0 auto 20px;
+    text-align: center;
+  }
+  
+  .phrase-block input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Exercicis de Verbs Irregulars</h1>
+
+<div class="tabs">
+  <button class="tab active" data-tab="drag">Arrossega els verbs</button>
+  <button class="tab" data-tab="fill">Omple els buits</button>
+</div>
+
+<!-- CONTINGUT PESTANYA 1: ARROSSEGA ELS VERBS -->
+<div id="drag-tab" class="tab-content active">
+  <p class="subtitle">Col·loca cada forma verbal a la columna correcta (Infinitiu, Passat, Participi).</p>
+
+  <div id="game-container">
+    <div id="page-navigation">
+      <button id="prev-page" class="nav-button" disabled>← Anterior</button>
+      
+      <div id="page-info">Pàgina <span id="current-page">1</span> de <span id="total-pages">2</span></div>
+      
+      <div id="page-list">
+        <!-- Els botons de pàgina es generaran aquí -->
+      </div>
+      
+      <button id="next-page" class="nav-button">Següent →</button>
+    </div>
+    
+    <div id="board" aria-label="Àrea per col·locar les formes verbals">
+      <div id="catalan-column" aria-label="Traducció al català">
+        <h3>Català</h3>
+        <div id="catalan-content">
+          <!-- Les traduccions al català es mostraran aquí -->
+        </div>
+      </div>
+      
+      <div class="col" id="inf" aria-label="Columna per a infinitius">
+        <h3>Infinitiu</h3>
+        <div class="col-content" id="inf-content">
+          <!-- Els infinitius arrossegats aniran aquí -->
+        </div>
+      </div>
+      <div class="col" id="past" aria-label="Columna per a passats">
+        <h3>Passat</h3>
+        <div class="col-content" id="past-content">
+          <!-- Els passats arrossegats aniran aquí -->
+        </div>
+      </div>
+      <div class="col" id="part" aria-label="Columna per a participis">
+        <h3>Participi</h3>
+        <div class="col-content" id="part-content">
+          <!-- Els participis arrossegats aniran aquí -->
+        </div>
+      </div>
+    </div>
+    
+    <div id="items-container" aria-label="Formes verbals per arrossegar">
+      <!-- Els ítems es generaran aquí -->
+    </div>
+    
+    <div id="message" aria-live="polite"></div>
+    
+    <div id="controls">
+      <div id="score-container">
+        <div id="score">Puntuació: <span id="correct-count">0</span>/15</div>
+        <div id="progress" aria-label="Progrés del joc">
+          <div id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="15"></div>
+        </div>
+      </div>
+      <div class="control-buttons">
+        <button id="reset-btn" class="control-button">Reiniciar</button>
+        <button id="custom-exercise-btn" class="control-button">Personalitzat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTINGUT PESTANYA 2: OMPLE ELS BUITS -->
+<div id="fill-tab" class="tab-content">
+  <p class="subtitle">Introdueix la paraula correcta a l'espai en blanc, fes clic a <strong>Comprova</strong> —o prem la tecla <strong>Retorn</strong>— i escolta la frase completa.</p>
+
+  <div id="fill-blanks-container">
+    <div id="fill-blanks-page-navigation">
+      <button id="fill-blanks-prev-page" class="nav-button" disabled>← Anterior</button>
+      
+      <div id="fill-blanks-page-info">Pàgina <span id="fill-blanks-current-page">1</span> de <span id="fill-blanks-total-pages">2</span></div>
+      
+      <div id="fill-blanks-page-list">
+        <!-- Els botons de pàgina es generaran aquí -->
+      </div>
+      
+      <button id="fill-blanks-next-page" class="nav-button">Següent →</button>
+    </div>
+    
+
+    <div id="fill-blanks-exercici"></div>
+
+    <div id="fill-blanks-controls"></div>
+    <div id="fill-blanks-result"></div>
+  </div>
+</div>
+
+<script>
+// Frases predefinides per a cada forma verbal dels verbs de VERB_PAGES
+const FRASES_PER_VERBS = {
+  // Pàgina 1
+  1: [ // be
+    ["M'agrada ser professor.", "I like to ____ a teacher", "be", "I like to be a teacher"],
+    ["Ell vol ser metge quan sigui gran.", "He wants to ____ a doctor when he grows up", "be", "He wants to be a doctor when he grows up"],
+    ["Ahir vaig ser molt feliç.", "Yesterday I ____ very happy", "was", "Yesterday I was very happy"],
+    ["Ella va ser la primera a arribar.", "She ____ the first to arrive", "was", "She was the first to arrive"],
+    ["He estat a Londres moltes vegades.", "I have ____ to London many times", "been", "I have been to London many times"],
+    ["Han estat amics des de la infantesa.", "They have ____ friends since childhood", "been", "They have been friends since childhood"]
+  ],
+  2: [ // become
+    ["Ell espera esdevenir president.", "He hopes to ____ president", "become", "He hopes to become president"],
+    ["Volen esdevenir ciutadans.", "They want to ____ citizens", "become", "They want to become citizens"],
+    ["L'aigua va esdevenir gel durant la nit.", "The water ____ ice during the night", "became", "The water became ice during the night"],
+    ["El somni va esdevenir realitat.", "The dream ____ reality", "became", "The dream became reality"],
+    ["Ha esdevingut un home ric.", "He has ____ a rich man", "become", "He has become a rich man"],
+    ["La situació ha esdevingut perillosa.", "The situation has ____ dangerous", "become", "The situation has become dangerous"]
+  ],
+  3: [ // bite
+    ["Els gossos solen mossegar quan tenen por.", "Dogs tend to ____ when they are scared", "bite", "Dogs tend to bite when they are scared"],
+    ["No mosseguis el teu llavi.", "Don't ____ your lip", "bite", "Don't bite your lip"],
+    ["El peix va mossegar l'ham ràpidament.", "The fish ____ the bait quickly", "bit", "The fish bit the bait quickly"],
+    ["El nen va mossegar la poma.", "The child ____ the apple", "bit", "The child bit the apple"],
+    ["He estat mossegat per un insecte.", "I have been ____ by an insect", "bitten", "I have been bitten by an insect"],
+    ["La poma ha estat mossegada.", "The apple has been ____", "bitten", "The apple has been bitten"]
+  ],
+  4: [ // bleed
+    ["Les ferides profundes solen sagnar molt.", "Deep wounds tend to ____ a lot", "bleed", "Deep wounds tend to bleed a lot"],
+    ["Si et talles, podries sagnar.", "If you cut yourself, you might ____", "bleed", "If you cut yourself, you might bleed"],
+    ["El nas li va sagnar després del cop.", "His nose ____ after the hit", "bled", "His nose bled after the hit"],
+    ["La ferida va sagnar durant deu minuts.", "The wound ____ for ten minutes", "bled", "The wound bled for ten minutes"],
+    ["Ha sagnat massa i necessita ajuda.", "He has ____ too much and needs help", "bled", "He has bled too much and needs help"],
+    ["Ha sagnat per la ferida al braç.", "He has ____ from the wound on his arm", "bled", "He has bled from the wound on his arm"]
+  ],
+  5: [ // begin
+    ["Hauríem de començar la reunió aviat.", "We should ____ the meeting soon", "begin", "We should begin the meeting soon"],
+    ["Volen començar el viatge demà.", "They want to ____ the journey tomorrow", "begin", "They want to begin the journey tomorrow"],
+    ["El partit va començar a les tres.", "The game ____ at three o'clock", "began", "The game began at three o'clock"],
+    ["Tot va començar amb una simple idea.", "Everything ____ with a simple idea", "began", "Everything began with a simple idea"],
+    ["Ha començat a ploure fortament.", "It has ____ to rain heavily", "begun", "It has begun to rain heavily"],
+    ["El projecte ha començat amb èxit.", "The project has ____ successfully", "begun", "The project has begun successfully"]
+  ],
+  // Pàgina 2
+  6: [ // wake
+    ["Normalment em despert a les set.", "I usually ____ up at seven", "wake", "I usually wake up at seven"],
+    ["Ell no vol despertar-se d'hora.", "He doesn't want to ____ up early", "wake", "He doesn't want to wake up early"],
+    ["Ahir em vaig despertar molt tard.", "Yesterday I ____ up very late", "woke", "Yesterday I woke up very late"],
+    ["Ell es va despertar amb el soroll del trànsit.", "He ____ up because of the traffic noise", "woke", "He woke up because of the traffic noise"],
+    ["M'he despertat diverses vegades aquesta nit.", "I have ____ up several times tonight", "woken", "I have woken up several times tonight"],
+    ["Ha estat despertat pel telèfon.", "He has been ____ up by the phone", "woken", "He has been woken up by the phone"]
+  ],
+  7: [ // blow
+    ["El vent sol bufar fort a la costa.", "The wind tends to ____ hard on the coast", "blow", "The wind tends to blow hard on the coast"],
+    ["Vull bufar les espelmes del pastís.", "I want to ____ out the candles on the cake", "blow", "I want to blow out the candles on the cake"],
+    ["Ahir va bufar un vent molt fort.", "Yesterday it ____ very hard", "blew", "Yesterday it blew very hard"],
+    ["Ell va bufar les fulles del carrer.", "He ____ the leaves off the street", "blew", "He blew the leaves off the street"],
+    ["He bufat globus per a la festa.", "I have ____ up balloons for the party", "blown", "I have blown up balloons for the party"],
+    ["Els arbres han estat enderrocats pel vent.", "The trees have been ____ down by the wind", "blown", "The trees have been blown down by the wind"]
+  ],
+  8: [ // break
+    ["No vull trencar aquesta finestra.", "I don't want to ____ this window", "break", "I don't want to break this window"],
+    ["Tens por de trencar les regles?", "Are you afraid to ____ the rules?", "break", "Are you afraid to break the rules?"],
+    ["El nen va trencar el joc ahir.", "The boy ____ the toy yesterday", "broke", "The boy broke the toy yesterday"],
+    ["Ella va trencar el rècord mundial.", "She ____ the world record", "broke", "She broke the world record"],
+    ["He trencat la meva promesa.", "I have ____ my promise", "broken", "I have broken my promise"],
+    ["El vidre està trencat.", "The glass is ____", "broken", "The glass is broken"]
+  ],
+  9: [ // bring
+    ["Has de portar els documents demà.", "You have to ____ the documents tomorrow", "bring", "You have to bring the documents tomorrow"],
+    ["Pots portar el teu ordinador?", "Can you ____ your computer?", "bring", "Can you bring your computer?"],
+    ["Ahir vaig portar el pastís a la festa.", "Yesterday I ____ the cake to the party", "brought", "Yesterday I brought the cake to the party"],
+    ["Ella va portar les seves amigues.", "She ____ her friends", "brought", "She brought her friends"],
+    ["He portat tot el que necessites.", "I have ____ everything you need", "brought", "I have brought everything you need"],
+    ["Els llibres han estat portats per l'assistent.", "The books have been ____ by the assistant", "brought", "The books have been brought by the assistant"]
+  ],
+  10: [ // buy
+    ["Vull comprar una casa nova.", "I want to ____ a new house", "buy", "I want to buy a new house"],
+    ["Poden comprar els bitllets en línia?", "Can they ____ the tickets online?", "buy", "Can they buy the tickets online?"],
+    ["Ahir vaig comprar aquest cotxe.", "Yesterday I ____ this car", "bought", "Yesterday I bought this car"],
+    ["Ell va comprar tot el que necessitàvem.", "He ____ everything we needed", "bought", "He bought everything we needed"],
+    ["He comprat regals per a tothom.", "I have ____ gifts for everyone", "bought", "I have bought gifts for everyone"],
+    ["La propietat ha estat comprada per inversors.", "The property has been ____ by investors", "bought", "The property has been bought by investors"]
+  ]
+};
+
+// Verbs de nivell B1 organitzats per pàgines
+const VERB_PAGES = [
+  // Pàgina 1 - Verbs bàsics
+  [
+    {id:1, inf:"be", past:"was/were", part:"been", inf_ca:"ser/estar", icon: "fas fa-user"},
+    {id:2, inf:"become", past:"became", part:"become", inf_ca:"esdevenir", icon: "fas fa-arrow-right-arrow-left"},
+    {id:3, inf:"bite", past:"bit", part:"bitten", inf_ca:"mossegar", icon: "fas fa-teeth"},
+    {id:4, inf:"bleed", past:"bled", part:"bled", inf_ca:"sagnar", icon: "fas fa-tint"},
+    {id:5, inf:"begin", past:"began", part:"begun", inf_ca:"començar", icon: "fas fa-flag-checkered"}
+  ],
+  // Pàgina 2 - Verbs comuns
+  [
+    {id:6, inf:"wake", past:"woke", part:"woken", inf_ca:"despertar", icon: "fas fa-bed"},
+    {id:7, inf:"blow", past:"blew", part:"blown", inf_ca:"bufar", icon: "fas fa-wind"},
+    {id:8, inf:"break", past:"broke", part:"broken", inf_ca:"trencar", icon: "fas fa-ban"},
+    {id:9, inf:"bring", past:"brought", part:"brought", inf_ca:"portar", icon: "fas fa-hands-holding"},
+    {id:10, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar", icon: "fas fa-cart-shopping"}
+  ]
+];
+
+// Funcions per a l'exercici d'omplir buits
+function shuffle(array) {
+  const a = array.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function normalitza(text) {
+  return text.trim().toLowerCase().replace(/[.,!?']/g, '');
+}
+
+function parla(text) {
+  const synth = window.speechSynthesis;
+  if (synth) {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-GB';
+    synth.speak(utter);
+  }
+}
+
+function comprovaIndividual(button) {
+  const bloc = button.closest('.phrase-block');
+  const input = bloc.querySelector('input');
+  const respostaCorrecta = normalitza(input.dataset.correct);
+  const resposta = normalitza(input.value);
+  const prevState = input.dataset.state;
+  const correccio = bloc.querySelector('.correction');
+
+  const fraseCompleta = input.dataset.complet;
+  const isCorrect = resposta === respostaCorrecta;
+
+  if (isCorrect) {
+    if (prevState === 'incorrect' || prevState === 'corrected') {
+      input.classList.remove('incorrect','correct');
+      input.classList.add('corrected');
+      correccio.innerHTML = '<span style="color:orange;">✓ Ara ja és correcte</span>';
+      input.dataset.state = 'corrected';
+    } else {
+      input.classList.remove('incorrect','corrected');
+      input.classList.add('correct');
+      correccio.innerHTML = '<span style="color:green;">✓ Correcte!</span>';
+      input.dataset.state = 'correct';
+    }
+    parla(fraseCompleta);
+  } else {
+    input.classList.remove('correct','corrected');
+    input.classList.add('incorrect');
+    correccio.innerHTML = `<span style="color:red;">❌ Resposta correcta: ${respostaCorrecta}</span>`;
+    input.dataset.state = 'incorrect';
+    parla(fraseCompleta);
+  }
+}
+
+function comprovaTotes() {
+  let encerts = 0;
+  document.querySelectorAll('.phrase-block').forEach(bloc => {
+    const inp = bloc.querySelector('input');
+    const btn = bloc.querySelector('button');
+    comprovaIndividual(btn);
+    if (inp.classList.contains('correct')) encerts++;
+  });
+  const result = document.getElementById('fill-blanks-result');
+  if (result) {
+    result.textContent = `Has encertat ${encerts} de ${document.querySelectorAll('.phrase-block').length}.`;
+  }
+}
+
+function reinicia() {
+  document.querySelectorAll('.phrase-block').forEach(bloc => {
+    const inp = bloc.querySelector('input');
+    inp.value = '';
+    inp.classList.remove('correct','incorrect','corrected');
+    inp.dataset.state = 'unchecked';
+    bloc.querySelector('.correction').textContent = '';
+  });
+  const result = document.getElementById('fill-blanks-result');
+  if (result) {
+    result.textContent = '';
+  }
+}
+
+// Classe per gestionar l'exercici d'omplir buits amb pàgines
+class FillBlanksGame {
+  constructor() {
+    this.currentPage = 0;
+    this.totalPages = 2;
+    this.gameState = this.loadGameState();
+    
+    this.init();
+  }
+  
+  loadGameState() {
+    const savedState = localStorage.getItem('fillBlanksGameState');
+    if (savedState) {
+      return JSON.parse(savedState);
+    }
+    
+    const initialState = {
+      currentPage: 0,
+      completedPages: []
+    };
+    
+    return initialState;
+  }
+  
+  saveGameState() {
+    this.gameState.currentPage = this.currentPage;
+    localStorage.setItem('fillBlanksGameState', JSON.stringify(this.gameState));
+  }
+  
+  updatePageInfo() {
+    const currentPageEl = document.getElementById('fill-blanks-current-page');
+    const totalPagesEl = document.getElementById('fill-blanks-total-pages');
+    const pageListEl = document.getElementById('fill-blanks-page-list');
+    
+    if (currentPageEl) currentPageEl.textContent = this.currentPage + 1;
+    if (totalPagesEl) totalPagesEl.textContent = this.totalPages;
+    
+    if (pageListEl) {
+      pageListEl.innerHTML = '';
+      
+      for (let i = 0; i < this.totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'page-btn';
+        pageBtn.textContent = i + 1;
+        
+        if (i === this.currentPage) {
+          pageBtn.classList.add('active');
+        } else if (this.gameState.completedPages.includes(i)) {
+          pageBtn.classList.add('completed');
+        }
+        
+        pageBtn.addEventListener('click', () => {
+          this.changePage(i);
+        });
+        
+        pageListEl.appendChild(pageBtn);
+      }
+    }
+  }
+  
+  updateNavigation() {
+    const prevBtn = document.getElementById('fill-blanks-prev-page');
+    const nextBtn = document.getElementById('fill-blanks-next-page');
+    
+    if (prevBtn) prevBtn.disabled = this.currentPage === 0;
+    if (nextBtn) nextBtn.disabled = this.currentPage === this.totalPages - 1;
+  }
+  
+  generaExercici(pagina) {
+    const contenidor = document.getElementById('fill-blanks-exercici');
+    if (!contenidor) return;
+    
+    contenidor.innerHTML = '';
+    
+    // Obtenir les frases per a la pàgina actual
+    const frasesPagina = [];
+    const verbsPagina = VERB_PAGES[pagina];
+    
+    verbsPagina.forEach(verb => {
+      if (FRASES_PER_VERBS[verb.id]) {
+        frasesPagina.push(...FRASES_PER_VERBS[verb.id]);
+      }
+    });
+    
+    // Barrejar les frases i agafar un màxim de 10
+    const frases = shuffle(frasesPagina).slice(0, 10);
+    
+    frases.forEach((f, i) => {
+      const bloc = document.createElement('div');
+      bloc.className = 'phrase-block';
+
+      const [catala, anglesIncomplet, respostaCorrecta, fraseCompleta] = f;
+
+      bloc.innerHTML = `
+        <p><strong>${i + 1}. ${catala}</strong></p>
+        <p>${anglesIncomplet}</p>
+        <input type="text"
+               data-index="${i}"
+               data-state="unchecked"
+               data-correct="${respostaCorrecta}"
+               data-complet="${fraseCompleta}">
+        <button>Comprova</button>
+        <div class="correction"></div>
+      `;
+
+      contenidor.appendChild(bloc);
+
+      const btn = bloc.querySelector('button');
+      btn.addEventListener('click', () => comprovaIndividual(btn));
+
+      const input = bloc.querySelector('input');
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          comprovaIndividual(btn);
+        }
+      });
+    });
+
+    const controls = document.getElementById('fill-blanks-controls');
+    if (controls) {
+      controls.innerHTML = `
+        <button onclick="comprovaTotes()">Comprova-ho tot</button>
+        <button onclick="reinicia()">Esborra-ho tot</button>
+        <button onclick="fillBlanksGame.reiniciaAleatori()">🔁 Frases noves</button>
+      `;
+    }
+  }
+  
+  reiniciaAleatori() {
+    reinicia();
+    this.generaExercici(this.currentPage);
+  }
+  
+  changePage(pageIndex) {
+    this.currentPage = pageIndex;
+    this.saveGameState();
+    
+    this.updatePageInfo();
+    this.updateNavigation();
+    this.generaExercici(pageIndex);
+    
+    // Reiniciar resultats
+    const result = document.getElementById('fill-blanks-result');
+    if (result) {
+      result.textContent = '';
+    }
+  }
+  
+  init() {
+    const prevBtn = document.getElementById('fill-blanks-prev-page');
+    const nextBtn = document.getElementById('fill-blanks-next-page');
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (this.currentPage > 0) {
+          this.changePage(this.currentPage - 1);
+        }
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (this.currentPage < this.totalPages - 1) {
+          this.changePage(this.currentPage + 1);
+        }
+      });
+    }
+    
+    this.changePage(this.gameState.currentPage || 0);
+  }
+}
+
+// Classe principal del joc d'arrossegar verbs
+class VerbGame {
+  constructor() {
+    this.currentPage = 0;
+    this.totalPages = VERB_PAGES.length;
+    this.gameState = this.loadGameState();
+    
+    this.init();
+  }
+  
+  loadGameState() {
+    const savedState = localStorage.getItem('verbGameState');
+    if (savedState) {
+      return JSON.parse(savedState);
+    }
+    
+    const initialState = {
+      currentPage: 0,
+      completedPages: [],
+      pageStats: {}
+    };
+    
+    for (let i = 0; i < VERB_PAGES.length; i++) {
+      initialState.pageStats[i] = {
+        punts: 0,
+        correctCount: 0,
+        totalAttempts: 0,
+        placedItems: 0,
+        completedVerbs: [],
+        placedForms: {},
+        failedAttempts: {}
+      };
+    }
+    
+    return initialState;
+  }
+  
+  saveGameState() {
+    this.gameState.currentPage = this.currentPage;
+    localStorage.setItem('verbGameState', JSON.stringify(this.gameState));
+  }
+  
+  loadPageData() {
+    const pageData = this.gameState.pageStats[this.currentPage];
+    
+    this.punts = pageData.punts || 0;
+    this.correctCount = pageData.correctCount || 0;
+    this.totalAttempts = pageData.totalAttempts || 0;
+    this.placedItems = pageData.placedItems || 0;
+    
+    this.totalItems = 15;
+    
+    this.completedVerbs = pageData.completedVerbs || [];
+    this.placedForms = pageData.placedForms || {};
+    this.failedAttempts = pageData.failedAttempts || {};
+    
+    this.updatePageInfo();
+    this.updateScore();
+    this.updateProgress();
+    this.updateNavigation();
+  }
+  
+  savePageData() {
+    this.gameState.pageStats[this.currentPage] = {
+      punts: this.punts,
+      correctCount: this.correctCount,
+      totalAttempts: this.totalAttempts,
+      placedItems: this.placedItems,
+      completedVerbs: this.completedVerbs,
+      placedForms: this.placedForms,
+      failedAttempts: this.failedAttempts
+    };
+    
+    if (this.placedItems === this.totalItems && !this.gameState.completedPages.includes(this.currentPage)) {
+      this.gameState.completedPages.push(this.currentPage);
+    }
+    
+    this.saveGameState();
+  }
+  
+  speakEnglish(text) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-GB";
+      utterance.rate = 0.9;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    }
+  }
+  
+  shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  
+  showMessage(text, type = '') {
+    const messageEl = document.getElementById('message');
+    if (!messageEl) return;
+    
+    messageEl.textContent = text;
+    messageEl.className = type ? type : '';
+    
+    if (type !== 'success') {
+      setTimeout(() => {
+        if (messageEl.textContent === text) {
+          messageEl.textContent = '';
+          messageEl.className = '';
+        }
+      }, 3000);
+    }
+  }
+  
+  updatePageInfo() {
+    const currentPageEl = document.getElementById('current-page');
+    const totalPagesEl = document.getElementById('total-pages');
+    const pageListEl = document.getElementById('page-list');
+    
+    if (currentPageEl) currentPageEl.textContent = this.currentPage + 1;
+    if (totalPagesEl) totalPagesEl.textContent = this.totalPages;
+    
+    if (pageListEl) {
+      pageListEl.innerHTML = '';
+      
+      for (let i = 0; i < this.totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'page-btn';
+        pageBtn.textContent = i + 1;
+        
+        if (i === this.currentPage) {
+          pageBtn.classList.add('active');
+        } else if (this.gameState.completedPages.includes(i)) {
+          pageBtn.classList.add('completed');
+        }
+        
+        pageBtn.addEventListener('click', () => {
+          this.changePage(i);
+        });
+        
+        pageListEl.appendChild(pageBtn);
+      }
+    }
+  }
+  
+  updateScore() {
+    const scoreEl = document.getElementById("score");
+    if (scoreEl) {
+      scoreEl.innerHTML = `Puntuació: <span id="correct-count">${this.punts}</span>/15`;
+    }
+  }
+  
+  updateProgress() {
+    const progressBar = document.getElementById('progress-bar');
+    if (progressBar) {
+      const progress = (this.placedItems / this.totalItems) * 100;
+      progressBar.style.width = `${progress}%`;
+      progressBar.setAttribute('aria-valuenow', this.placedItems);
+      progressBar.setAttribute('aria-valuemax', this.totalItems);
+    }
+  }
+  
+  updateNavigation() {
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    
+    if (prevBtn) prevBtn.disabled = this.currentPage === 0;
+    if (nextBtn) nextBtn.disabled = this.currentPage === this.totalPages - 1;
+  }
+  
+  createItemElement(item) {
+    const div = document.createElement("div");
+    div.className = "item";
+    
+    const textSpan = document.createElement("span");
+    textSpan.textContent = item.text;
+    div.appendChild(textSpan);
+    
+    div.draggable = true;
+    div.dataset.id = item.id;
+    div.dataset.form = item.form;
+    div.dataset.text = item.text;
+    div.dataset.inf_ca = item.inf_ca || '';
+    
+    div.setAttribute('aria-label', `Forma verbal: ${item.text}. Arrossega per col·locar a la columna correcta.`);
+    
+    div.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", JSON.stringify(item));
+      e.dataTransfer.effectAllowed = "copy";
+      div.classList.add("dragging");
+      
+      document.querySelectorAll('.col').forEach(col => {
+        col.classList.add('highlight');
+      });
+    });
+    
+    div.addEventListener("dragend", () => {
+      div.classList.remove("dragging");
+      document.querySelectorAll('.col').forEach(col => {
+        col.classList.remove('highlight');
+      });
+    });
+    
+    return div;
+  }
+  
+  isValidPlacement(verbId, formType, targetColumn) {
+    const verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    if (!verb) return false;
+    
+    if (verb.inf === verb.past && verb.inf === verb.part) {
+      return true;
+    }
+    
+    if (verb.inf === verb.past && verb.inf !== verb.part) {
+      if (targetColumn === 'inf' || targetColumn === 'past') return formType === 'inf' || formType === 'past';
+      if (targetColumn === 'part') return formType === 'part';
+    }
+    
+    if (verb.inf === verb.part && verb.inf !== verb.past) {
+      if (targetColumn === 'inf' || targetColumn === 'part') return formType === 'inf' || formType === 'part';
+      if (targetColumn === 'past') return formType === 'past';
+    }
+    
+    if (verb.past === verb.part && verb.past !== verb.inf) {
+      if (targetColumn === 'past' || targetColumn === 'part') return formType === 'past' || formType === 'part';
+      if (targetColumn === 'inf') return formType === 'inf';
+    }
+    
+    if (targetColumn === 'inf') return formType === 'inf';
+    if (targetColumn === 'past') return formType === 'past';
+    if (targetColumn === 'part') return formType === 'part';
+    
+    return false;
+  }
+  
+  isFormAlreadyPlaced(verbId, formType, targetColumn) {
+    const key = `${verbId}-${targetColumn}`;
+    return this.placedForms[key] === formType;
+  }
+  
+  hasFailedBefore(verbId, formType) {
+    const key = `${verbId}-${formType}`;
+    return this.failedAttempts[key] === true;
+  }
+  
+  init() {
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const resetBtn = document.getElementById('reset-btn');
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (this.currentPage > 0) {
+          this.changePage(this.currentPage - 1);
+        }
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (this.currentPage < this.totalPages - 1) {
+          this.changePage(this.currentPage + 1);
+        }
+      });
+    }
+    
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        this.resetPage();
+      });
+    }
+    
+    this.changePage(this.gameState.currentPage || 0);
+  }
+  
+  createVerbRows() {
+    const currentVerbs = VERB_PAGES[this.currentPage];
+    
+    document.querySelectorAll('.col-content, #catalan-content').forEach(content => {
+      if (content) content.innerHTML = '';
+    });
+    
+    currentVerbs.forEach(verb => {
+      this.createVerbRow('inf', verb.id, verb.inf_ca, verb.icon);
+      this.createVerbRow('past', verb.id);
+      this.createVerbRow('part', verb.id);
+    });
+  }
+  
+  createVerbRow(column, verbId, inf_ca = '', icon = '') {
+    const colContent = document.getElementById(`${column}-content`);
+    if (!colContent) return;
+    
+    const row = document.createElement("div");
+    row.className = "verb-row empty";
+    row.dataset.verbId = verbId;
+    row.dataset.column = column;
+    
+    colContent.appendChild(row);
+    
+    if (column === 'inf' && inf_ca) {
+      const catalanContent = document.getElementById('catalan-content');
+      if (catalanContent) {
+        const catalanLabel = document.createElement("div");
+        catalanLabel.className = "catalan-label";
+        
+        if (icon) {
+          const iconElement = document.createElement("i");
+          iconElement.className = icon;
+          iconElement.classList.add("verb-icon");
+          catalanLabel.appendChild(iconElement);
+        }
+        
+        const textSpan = document.createElement("span");
+        textSpan.textContent = inf_ca;
+        catalanLabel.appendChild(textSpan);
+        
+        catalanLabel.dataset.verbId = verbId;
+        
+        catalanContent.appendChild(catalanLabel);
+      }
+    }
+  }
+  
+  restorePlacedForms() {
+    this.createVerbRows();
+    
+    Object.keys(this.placedForms).forEach(key => {
+      const [verbId, column] = key.split('-');
+      const formType = this.placedForms[key];
+      
+      const verb = VERB_PAGES[this.currentPage].find(v => v.id === parseInt(verbId));
+      if (!verb) return;
+      
+      let formText = '';
+      if (formType === 'inf') formText = verb.inf;
+      if (formType === 'past') formText = verb.past;
+      if (formType === 'part') formText = verb.part;
+      
+      this.createFormCopy(formText, verb.id, formType, column, verb.inf_ca, verb.icon);
+    });
+  }
+  
+  createFormCopy(text, verbId, formType, column, inf_ca, icon) {
+    const colContent = document.getElementById(`${column}-content`);
+    if (!colContent) return;
+    
+    const row = colContent.querySelector(`.verb-row[data-verb-id="${verbId}"]`);
+    if (!row) return;
+    
+    row.classList.remove('empty');
+    row.innerHTML = '';
+    
+    const copy = document.createElement("div");
+    copy.className = "item placed correct";
+    
+    const textSpan = document.createElement("span");
+    textSpan.textContent = text;
+    copy.appendChild(textSpan);
+    
+    copy.dataset.id = verbId;
+    copy.dataset.form = formType;
+    copy.draggable = false;
+    
+    copy.style.height = "100%";
+    copy.style.display = "flex";
+    copy.style.alignItems = "center";
+    copy.style.justifyContent = "center";
+    
+    row.appendChild(copy);
+  }
+  
+  setupDropZones() {
+    document.querySelectorAll(".col").forEach(col => {
+      col.replaceWith(col.cloneNode(true));
+    });
+    
+    document.querySelectorAll(".col").forEach(col => {
+      col.addEventListener("dragover", e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "copy";
+      });
+      
+      col.addEventListener("dragenter", e => {
+        e.preventDefault();
+        col.classList.add('highlight');
+      });
+      
+      col.addEventListener("dragleave", e => {
+        if (!col.contains(e.relatedTarget)) {
+          col.classList.remove('highlight');
+        }
+      });
+      
+      col.addEventListener("drop", e => {
+        e.preventDefault();
+        col.classList.remove('highlight');
+        
+        try {
+          const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+          const dragged = document.querySelector('.item.dragging');
+          
+          if (!dragged) return;
+          
+          this.totalAttempts++;
+          
+          const isCorrect = this.isValidPlacement(data.id, data.form, col.id);
+          const isAlreadyPlaced = this.isFormAlreadyPlaced(data.id, data.form, col.id);
+          const hasFailed = this.hasFailedBefore(data.id, data.form);
+          
+          if (isCorrect && !isAlreadyPlaced) {
+            this.correctCount++;
+            
+            this.createFormCopy(data.text, data.id, data.form, col.id, data.inf_ca);
+            
+            dragged.classList.add('used');
+            
+            this.placedForms[`${data.id}-${col.id}`] = data.form;
+            this.placedItems++;
+            
+            if (!hasFailed) {
+              this.punts++;
+              this.showMessage("Correcte! +1 punt", 'success');
+            } else {
+              this.showMessage("Correcte, però ja ho havies intentat abans", '');
+            }
+            
+            this.updateProgress();
+            this.updateScore();
+            
+            this.speakEnglish(data.text);
+            
+            this.checkVerbCompletion(data.id);
+            
+          } else if (isAlreadyPlaced) {
+            this.showMessage("Aquesta forma ja està colocada aquí!", 'error');
+            this.updateScore();
+          } else {
+            this.showMessage("Intenta-ho de nou!", 'error');
+            this.updateScore();
+            
+            const failKey = `${data.id}-${data.form}`;
+            this.failedAttempts[failKey] = true;
+          }
+          
+          this.savePageData();
+        } catch (error) {
+          console.error("Error en processar l'arrossegament:", error);
+        }
+      });
+    });
+  }
+  
+  checkVerbCompletion(verbId) {
+    const verb = VERB_PAGES[this.currentPage].find(v => v.id === verbId);
+    
+    const infPlaced = this.placedForms[`${verbId}-inf`] !== undefined;
+    const pastPlaced = this.placedForms[`${verbId}-past`] !== undefined;
+    const partPlaced = this.placedForms[`${verbId}-part`] !== undefined;
+    
+    const isComplete = infPlaced && pastPlaced && partPlaced;
+    
+    if (isComplete) {
+      if (!this.completedVerbs.includes(verbId)) {
+        this.completedVerbs.push(verbId);
+      }
+      
+      this.showMessage(`Has completat el verb ${verb.inf}!`, 'success');
+    }
+  }
+  
+  resetPage() {
+    this.gameState.pageStats[this.currentPage] = {
+      punts: 0,
+      correctCount: 0,
+      totalAttempts: 0,
+      placedItems: 0,
+      completedVerbs: [],
+      placedForms: {},
+      failedAttempts: {}
+    };
+    
+    const index = this.gameState.completedPages.indexOf(this.currentPage);
+    if (index > -1) {
+      this.gameState.completedPages.splice(index, 1);
+    }
+    
+    this.saveGameState();
+    this.loadPageData();
+    this.resetDisplay();
+    this.loadVerbs();
+    
+    this.showMessage("Pàgina reiniciada. Bona sort!");
+  }
+  
+  changePage(pageIndex) {
+    this.savePageData();
+    
+    this.currentPage = pageIndex;
+    this.loadPageData();
+    
+    this.resetDisplay();
+    this.loadVerbs();
+    
+    this.showMessage(`Pàgina ${pageIndex + 1} carregada. Bona sort!`);
+  }
+  
+  resetDisplay() {
+    const itemsContainer = document.getElementById('items-container');
+    if (itemsContainer) itemsContainer.innerHTML = '';
+    
+    document.querySelectorAll('.col-content').forEach(content => {
+      if (content) content.innerHTML = '';
+    });
+    
+    const catalanContent = document.getElementById('catalan-content');
+    if (catalanContent) catalanContent.innerHTML = '';
+  }
+  
+  loadVerbs() {
+    const itemsContainer = document.getElementById('items-container');
+    if (!itemsContainer) return;
+    
+    const currentVerbs = VERB_PAGES[this.currentPage];
+    
+    const uniqueForms = new Set();
+    const formsMap = new Map();
+    
+    currentVerbs.forEach(v => {
+      uniqueForms.add(v.inf);
+      uniqueForms.add(v.past);
+      uniqueForms.add(v.part);
+      
+      formsMap.set(v.inf, {id: v.id, form: 'inf', inf_ca: v.inf_ca});
+      formsMap.set(v.past, {id: v.id, form: 'past', inf_ca: v.inf_ca});
+      formsMap.set(v.part, {id: v.id, form: 'part', inf_ca: v.inf_ca});
+    });
+    
+    const uniqueFormsArray = Array.from(uniqueForms);
+    this.shuffle(uniqueFormsArray).forEach(formText => {
+      const formInfo = formsMap.get(formText);
+      if (formInfo) {
+        const itemElement = this.createItemElement({
+          id: formInfo.id,
+          form: formInfo.form,
+          text: formText,
+          inf_ca: formInfo.inf_ca
+        });
+        
+        const verbId = formInfo.id;
+        const formType = formInfo.form;
+        
+        const isUsed = Object.keys(this.placedForms).some(key => {
+          const [placedVerbId, column] = key.split('-');
+          const placedFormType = this.placedForms[key];
+          return parseInt(placedVerbId) === verbId && placedFormType === formType;
+        });
+        
+        if (isUsed) {
+          itemElement.classList.add('used');
+        }
+        
+        itemsContainer.appendChild(itemElement);
+      }
+    });
+    
+    this.restorePlacedForms();
+    
+    this.setupDropZones();
+  }
+}
+
+// Inicialització de tota l'aplicació
+let fillBlanksGame;
+let verbGame;
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicialitzar el joc d'arrossegar verbs
+  verbGame = new VerbGame();
+  
+  // Inicialitzar l'exercici d'omplir buits amb pàgines
+  fillBlanksGame = new FillBlanksGame();
+  
+  // Configurar les pestanyes
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.getAttribute('data-tab');
+      
+      // Actualitzar pestanyes actives
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      
+      tab.classList.add('active');
+      document.getElementById(`${tabId}-tab`).classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>
