@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Omple els buits: Verb irregular (to be)</title>
+  <link rel="stylesheet" href="../../estil.css" />
+</head>
+<body>
+
+<h1>Omple els buits: Verb irregular (to be)</h1>
+<p>
+  Introdueix la paraula correcta a l’espai en blanc, fes clic a <strong>Comprova</strong> —o prem la tecla <strong>Retorn</strong>— i escolta la frase completa.
+</p>
+
+<div class="image left">
+  <img src="../Img/verb-be.webp" alt="Imatge del verb to be">
+</div>  
+
+<div id="exercici"></div>
+
+<div id="controls"></div>
+
+<script>
+// Frases per practicar el verb TO BE
+const frases = [
+  // Present
+  ["Jo sóc estudiant.", "I ____ a student", "am", "I am a student"],
+  ["Ell és professor.", "He ____ a teacher", "is", "He is a teacher"],
+  ["Nosaltres som amics.", "We ____ friends", "are", "We are friends"],
+  ["Tu ets molt alt.", "You ____ very tall", "are", "You are very tall"],
+  ["Ella no és aquí.", "She ____ here", "isn't", "She isn't here"],
+  ["Ells són d’Anglaterra.", "They ____ from England", "are", "They are from England"],
+
+  // Past
+  ["Ahir estava cansat.", "I ____ tired yesterday", "was", "I was tired yesterday"],
+  ["Ell era metge.", "He ____ a doctor", "was", "He was a doctor"],
+  ["Nosaltres érem al cinema.", "We ____ at the cinema", "were", "We were at the cinema"],
+  ["Elles no eren a casa.", "They ____ at home", "weren't", "They weren't at home"],
+  ["Tu vas ser molt valent.", "You ____ very brave", "were", "You were very brave"],
+  ["Feia fred, però jo estava content.", "It was cold, but I ____ happy", "was", "It was cold, but I was happy"],
+
+  // Present perfect (estat o situació)
+  ["Sempre he estat molt pacient.", "I have ____ very patient", "been", "I have been very patient"],
+  ["Ella ha estat molt amable amb tu.", "She has ____ very kind to you", "been", "She has been very kind to you"],
+  ["Nosaltres hem estat aquí moltes vegades.", "We have ____ here many times", "been", "We have been here many times"],
+  ["Has estat ocupat últimament?", "Have you ____ busy lately?", "been", "Have you been busy lately?"],
+  ["Ells han estat al Canadà dues vegades.", "They have ____ to Canada twice", "been", "They have been to Canada twice"],
+  ["Aquest ha estat un bon dia.", "This has ____ a good day", "been", "This has been a good day"]
+];
+</script>
+
+<script src="../../script2.js"></script>
+</body>
+</html>
