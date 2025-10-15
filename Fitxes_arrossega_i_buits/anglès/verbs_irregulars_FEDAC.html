@@ -751,7 +751,7 @@ h1 {
     <div id="page-navigation">
       <button id="prev-page" class="nav-button" disabled>← Anterior</button>
       
-      <div id="page-info">Pàgina <span id="current-page">1</span> de <span id="total-pages">2</span></div>
+      <div id="page-info">Pàgina <span id="current-page">1</span> de <span id="total-pages">3</span></div>
       
       <div id="page-list">
         <!-- Els botons de pàgina es generaran aquí -->
@@ -817,7 +817,7 @@ h1 {
     <div id="fill-blanks-page-navigation">
       <button id="fill-blanks-prev-page" class="nav-button" disabled>← Anterior</button>
       
-      <div id="fill-blanks-page-info">Pàgina <span id="fill-blanks-current-page">1</span> de <span id="fill-blanks-total-pages">2</span></div>
+      <div id="fill-blanks-page-info">Pàgina <span id="fill-blanks-current-page">1</span> de <span id="fill-blanks-total-pages">3</span></div>
       
       <div id="fill-blanks-page-list">
         <!-- Els botons de pàgina es generaran aquí -->
@@ -898,9 +898,9 @@ const FRASES_PER_VERBS = {
   8: [ // break
     ["Volen trencar el pacte.", "They want to ____ the agreement", "break", "They want to break the agreement"],
     ["No em vull trencar el braç", "I don't want to ____ my arm", "break", "I don't want to break my arm"],
-    ["Em va caure el gerro i es fa miques.", "I dropped the vase and it ____ into pieces", "broke", "I dropped the vase and it broke into pieces"],
+    ["Em va caure el gerro i es va trencar en bocins.", "I dropped the vase and it ____ into pieces", "broke", "I dropped the vase and it broke into pieces"],
     ["Van trencar el vidre amb la pilota .", "They ____ the window with the ball", "broke", "They broke the window with the ball"],
-    ["M'he trencat la cama.", "I've ____ my leg", "broken", "I've brokem my leg"],
+    ["M'he trencat la cama.", "I've ____ my leg", "broken", "I've broken my leg"],
     ["Ha trencat el gerro sense voler.", "He has ____ the vase by accident", "broken", "He has broken the vase by accident"]
   ],
   9: [ // bring
@@ -918,6 +918,47 @@ const FRASES_PER_VERBS = {
     ["Va comprar tot el que necessitàvem.", "He ____ everything we needed", "bought", "He bought everything we needed"],
     ["He comprat regals per a tothom.", "I have ____ gifts for everyone", "bought", "I have bought gifts for everyone"],
     ["He comprat uns llapis i unes llibretes.", "I have ____ some pencils and notebooks", "bought", "I have bought some pencils and notebooks"]
+  ],
+  // Pàgina 3 - Verbs nous
+  11: [ // build
+    ["Volem construir una casa nova.", "We want to ____ a new house", "build", "We want to build a new house"],
+    ["Volen construir un pont.", "They want to ____ a bridge", "build", "They want to build a bridge"],
+    ["L'any passat van construir un hospital.", "Last year they ____ a hospital", "built", "Last year they built a hospital"],
+    ["Els meus avis van construir aquesta casa.", "My grandparents ____ this house", "built", "My grandparents built this house"],
+    ["Han construït un parc nou al barri.", "They have ____ a new park in the neighborhood", "built", "They have built a new park in the neighborhood"],
+    ["S'ha construït un nou centre comercial.", "A new shopping center has been ____", "built", "A new shopping center has been built"]
+  ],
+  12: [ // burn
+    ["No cremis aquests papers.", "Don't ____ these papers", "burn", "Don't burn these papers"],
+    ["Vull cremar les fulles seques.", "I want to ____ the dry leaves", "burn", "I want to burn the dry leaves"],
+    ["Ahir va cremar el pastís.", "Yesterday she ____ the cake", "burned", "Yesterday she burned the cake"],
+    ["El foc va cremar tot el bosc.", "The fire ____ the entire forest", "burned", "The fire burned the entire forest"],
+    ["M'he cremat la mà amb l'aigua calenta.", "I have ____ my hand with hot water", "burned", "I have burned my hand with hot water"],
+    ["El sol li ha cremat pell.", "The sun has ____ her skin", "burned", "The sun has burned her skin"]
+  ],
+  13: [ // catch
+    ["Els gossos poden atrapar la pilota.", "Dogs can ____ the ball", "catch", "Dogs can catch the ball"],
+    ["Vull agafar el tren de les vuit.", "I want to ____ the eight o'clock train", "catch", "I want to catch the eight o'clock train"],
+    ["Ahir vaig agafar un refredat.", "Yesterday I ____ a cold", "caught", "Yesterday I caught a cold"],
+    ["El policia va atrapar el lladre.", "The police officer ____ the thief", "caught", "The police officer caught the thief"],
+    ["He agafat la pilota abans que toqués a terra.", "I have ____ the ball before it hit the ground", "caught", "I have caught the ball before it hit the ground"],
+    ["Han agafat el peix més gran del dia.", "They have ____ the biggest fish of the day", "caught", "They have caught the biggest fish of the day"]
+  ],
+  14: [ // choose
+    ["Has de triar entre aquestes dues opcions.", "You have to ____ between these two options", "choose", "You have to choose between these two options"],
+    ["Vull triar el color de la meva habitació.", "I want to ____ the color of my room", "choose", "I want to choose the color of my room"],
+    ["Ahir va triar el vestit blau.", "Yesterday she ____ the blue dress", "chose", "Yesterday she chose the blue dress"],
+    ["Va triar estudiar medicina.", "He ____ to study medicine", "chose", "He chose to study medicine"],
+    ["He triat el regal perfecte per a ella.", "I have ____ the perfect gift for her", "chosen", "I have chosen the perfect gift for her"],
+    ["Han triat un nou president.", "They have ____ a new president", "chosen", "They have chosen a new president"]
+  ],
+  15: [ // cost
+    ["Quant costa aquest llibre?", "How much does this book ____?", "cost", "How much does this book cost?"],
+    ["Aquest cotxe costa molts de diners.", "This car ____ a lot of money", "cost", "This car costs a lot of money"],
+    ["Ahir aquesta jaqueta em va costar 50 euros.", "Yesterday this jacket ____ me 50 euros", "cost", "Yesterday this jacket cost me 50 euros"],
+    ["El viatge ens va costar més del que pensàvem.", "The trip ____ us more than we expected", "cost", "The trip cost us more than we expected"],
+    ["Aquest error m'ha costat la feina.", "This mistake has ____ me my job", "cost", "This mistake has cost me my job"],
+    ["La guerra ha costat moltes vides.", "The war has ____ many lives", "cost", "The war has cost many lives"]
   ]
 };
 
@@ -938,6 +979,14 @@ const VERB_PAGES = [
     {id:8, inf:"break", past:"broke", part:"broken", inf_ca:"trencar", icon: "fas fa-ban"},
     {id:9, inf:"bring", past:"brought", part:"brought", inf_ca:"portar", icon: "fas fa-hands-holding"},
     {id:10, inf:"buy", past:"bought", part:"bought", inf_ca:"comprar", icon: "fas fa-cart-shopping"}
+  ],
+  // Pàgina 3 - Verbs nous (build + 4 verbs més que comencen amb b o c)
+  [
+    {id:11, inf:"build", past:"built", part:"built", inf_ca:"construir", icon: "fas fa-hammer"},
+    {id:12, inf:"burn", past:"burned", part:"burned", inf_ca:"cremar", icon: "fas fa-fire"},
+    {id:13, inf:"catch", past:"caught", part:"caught", inf_ca:"agafar/atrapar", icon: "fas fa-baseball"},
+    {id:14, inf:"choose", past:"chose", part:"chosen", inf_ca:"triar", icon: "fas fa-check-circle"},
+    {id:15, inf:"cost", past:"cost", part:"cost", inf_ca:"costar", icon: "fas fa-money-bill"}
   ]
 ];
 
@@ -1029,7 +1078,7 @@ function reinicia() {
 class FillBlanksGame {
   constructor() {
     this.currentPage = 0;
-    this.totalPages = 2;
+    this.totalPages = 3; // Actualitzat a 3 pàgines
     this.gameState = this.loadGameState();
     
     this.init();
@@ -1202,7 +1251,7 @@ class FillBlanksGame {
 class VerbGame {
   constructor() {
     this.currentPage = 0;
-    this.totalPages = VERB_PAGES.length;
+    this.totalPages = VERB_PAGES.length; // Ara serà 3
     this.gameState = this.loadGameState();
     
     this.init();
