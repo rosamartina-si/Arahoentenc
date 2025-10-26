@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navegant - Poema de Pilar Planas Pascual</title>
+    <meta name="description" content="Poema 'Desig i Esperança' de Pilar Planas Pascual, publicat a  la revista Paraules al Vent - Juliol-Agost 1980">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset i estils base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Dancing Script', cursive;
+            line-height: 1.8;
+            color: #4a3c5f;
+            background: linear-gradient(135deg, #f5f0ff 0%, #e6dcf5 100%);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Contenidor principal */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 253, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(106, 76, 147, 0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #d8cae8;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #8a6bc9, #b19cd9, #8a6bc9);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        /* Capçalera */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            color: #6b4b8a;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #8a6bc9;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .author-name {
+            font-size: 1.4rem;
+            color: #8a6bc9;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .superscript {
+            vertical-align: super;
+            font-size: 0.8em;
+        }
+        
+        /* Secció del poema */
+        .poem-section {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .poem-title {
+            font-size: 2.2rem;
+            color: #8a6bc9;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .poem-content {
+            font-size: 1.5rem;
+            line-height: 2;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 10px;
+            font-weight: 500;
+            color: #5a4a6f;
+        }
+        
+        .poem-content p {
+            margin-bottom: 25px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .poem-content p:hover {
+            background-color: #f5f0ff;
+            transform: translateY(-2px);
+        }
+        
+        /* Decoracions */
+        .decoration {
+            position: absolute;
+            font-size: 2.2rem;
+            color: #b19cd9;
+            opacity: 0.7;
+        }
+        
+        .decoration-1 {
+            top: 20px;
+            left: 20px;
+        }
+        
+        .decoration-2 {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(180deg);
+        }
+        
+        /* Efectes addicionals */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Responsivitat */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .poem-title {
+                font-size: 1.8rem;
+            }
+            
+            .poem-content {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="decoration decoration-1 floating" aria-hidden="true">✽</div>
+        <div class="decoration decoration-2 floating" aria-hidden="true">✽</div>
+        
+        <header>
+            <h1>Desig i Esperança</h1>
+            <div class="subtitle">Publicat a la revista Paraules al Vent - Juliol-Agost 1980</div>
+            <div class="author-name">Pilar Planas Pascual (P<span class="superscript">3</span>)</div>
+        </header>
+        
+        <main>
+            <section class="poem-section" aria-labelledby="poem-title">
+                <h2 class="poem-title" id="poem-title">DESIG I ESPERANÇA</h2>
+                
+                <div class="poem-content">
+                    Navegant pel mig del mar<br>
+                    sense veure terra ferma,<br>
+                    amb aquella plana immensa<br>
+                    et sents petit i desvalgut.<br>
+                    No seria pas ja hora<br>
+                    que cada un passés la prova?<br>
+                    I en sentir aquesta sensació,<br>
+                    deixar anar al fons del mar<br>
+                    l'odi, rancor i cobdícia<br>
+                    que tots portem dins,<br>
+                    de voler, poder i diners,<br>
+                    a costa del que sigui,<br>
+                    fins i tot de la salut,<br>
+                    però sempre dels altres?<br>
+                    Llavors, fet tot això<br>
+                    la mar fora tan blava<br>
+                    que ni quan fora brava<br>
+                    no faria mal a ningú.<br>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
