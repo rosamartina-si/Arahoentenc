@@ -1,0 +1,11 @@
+// Exemples d'ús
+console.log(analitzarAccentuacio("català"));
+console.log(analitzarAccentuacio("barbàrie")); 
+console.log(analitzarAccentuacio("còmodament"));
+console.log(analitzarAccentuacio("agúo"));
+console.log(analitzarAccentuacio("sud-americà"));
+
+// Sortida esperada:
+// { paraula: "català", silabes: ["ca","ta","là"], tipusAccentuacio: "agut", esSimple: true }
+// { paraula: "barbàrie", silabes: ["bar","bà","ri","e"], tipusAccentuacio: "esdruixol", esSimple: true }
+// { paraula: "còmodament", silabes: ["cò","mo","da","ment"], tipusAccentuacio: "esdruixol", esAdverbiMent: true, base: "còmoda", basePortaAccent: true, observacions: "Adverbi en -ment manté l'accent del component de l'esquerra" }
