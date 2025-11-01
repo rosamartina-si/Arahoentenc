@@ -10,10 +10,14 @@
                                si ar-güi separció entre la ü i la i
                                si ar-güí separció entre la ü i la í
 9è vocal + ü: separació a l'esquerra
+10è ï + vocal: separació a la dreta
 
 
 TEST 
-(font: https://oiec.iec.cat/textortografia)
+(fonts: 
+https://oiec.iec.cat/textortografia/codi/3.2.2.1
+https://oiec.iec.cat/textortografia/codi/3.1.1.1b?page=2&criterio=En%20qualsevol%20posici%C3%B3
+https://oiec.iec.cat/textortografia/codi/3.2.1
 (Si dubtes amb la separació: https://www.softcatala.org/sillabes/)
 tela, govern, neboda, capacitat, rigorosament, costat, herba, acte, adjunt, infernal, activitat, problema, cabra, nucli, secretari, pedra, reflex, sofrir, segle, llàgrima, replicar, suprem, altre, monstre, instrument, substantiu, adstrat, comptable, gàngster, queixa, terra, tassa, piscina, jutge, llotja, Novetlè, setmana, cotna, despatxar, potser, ràtzia, espatlla, novel·la, col·legi, orgue, Puigcerdà, palla, renyar, quinqué, sikhisme, alcohol, tothom, boxa, texans, extern, leishmaniosi, neula, noia, creuar, claudàtor, lingüística, delinqüent, guaita, fèieu, creueu, obliqüeu.
 
@@ -22,6 +26,7 @@ aigua, exigua, aiguós, obliqua, pasqua, quota
 aïllar, raïm, traïció, Efraïm, Aïda, atapeït, creïble, creïlla, reïficar, veïna, miïtis, xiïta, amoïnar, heroïna, oïda, Coïmbra, cruïlla, gratuït, ruïnós, Lluïsa, Montuïri, Tuïr; aüc, aüixar, saüc, taüt, Raül, Bissaürri, Estaüja, Sanaüja, Taüll, Cafarnaüm, peüc, peülla, transeünt, Areüsa, Reür (riu de la Cerdanya), Talteüll, Seül, diürn, oriünd, rabiüt, Friül, noümen.
 creï, creïs, creïn (de crear); estudiï, estudiïs, estudiïn (de estudiar); lloï, lloïs, lloïn (de lloar); suï, suïs, suïn (de suar); aguï, aguïs, aguïn
 Aüira (pron. [ə.új.ɾə], Sant Pere d’Aüira, topònim del Ripollès; cf. Alfauir, pron. [al.fa.wíɾ]), aüixar, maüix.
+estoic, fluid, heroic, laic; estoïcisme, fluïdesa, heroïcitat, laïcitzar. arcaïtzant (cf. arcaic), druïdessa, druïdisme (cf. druida), hebraïtzar, hebraïtzant (cf. hebraic), judaïtzar, judaïtzant (cf. judaic), mosaïcista (cf. mosaic), estoïcisme (estoic), fluïdesa, fluïdificar, fluïditat, fluïditzar (cf. fluid), laïcat, laïcisme, laïcitzar (cf. laic), atiroïdisme (cf. tiroide). Notem que no han de dur dièresi els derivats amb el sufix ‑al si els primitius respectius tampoc no la porten: coital, col·loidal, esferoidal, fluidal, helicoidal, laical, romboidal, trapezoidal (derivats respectivament de coit, col·loide, esferoide, fluid, helicoide, laic, romboide, trapezoide). Però: noümenal (de noümen), proïsmal (de proïsme), veïnal (de veí).
 
 argüeixo, argüeixes, argüeix, arguïm, arguïu, argüeixen, arguït, arguïa, arguïes, argüíem, argüíeu, arguïen, argüí, arguïres, argüírem, argüíreu, arguïren, argüir, argüiré, argüiràs, argüirem, argüireu, argüiran, argüiria, argüiries, argüiríem, argüiríeu, argüirien, argüeixi, argüeixis, argüeixin, argüís, arguïssis, argüíssim, argüíssiu, argüíssiu, argüint.
 arguïble, arguïció, arguïdor, argüir
