@@ -13,8 +13,16 @@
 10è ï + vocal: separació a la dreta
 11è gui + aeoàèéòó: separació després de la i
 12è aeiouàèéíòóú + i|u + aeiouàèéíòóú: separació abans de la i|u
-13è consonant + i|u + aeoàèéòó: separació després de la i|u
+13è consonant + i + aeoàèéòó: separació després de la i
+14è consonant (excepte q i g) + u + aeoàèéòó: separació després de la u
 
+15è falta suís conduí : consonant + aeiou + í|ú: separació abans de í|ú
+
+falta : gúa
+
+
+Falta:
+Se separen els prefixos o els radicals que componen un mot quan resulten evidents, encara que la lletra següent sigui una vocal: an-|ovulatori, ben-|estant, bes-|avi, cis-|alpí, co-|ordinador, des-|organitzar, ex-|alumne, hiper-|estàtic, hiper-|realisme, in-|oblidable, inter-|regne, inter-|urbà, mal-|acostumat, pan-|eslavisme, post-|operatori, sots-|oficial, sots-|síndic, sub-|altern, sub-|ratllar, super-|realista, trans-|atlàntic, trans-|sexual. També se separa el primer component d’un compost: cel-|obert, gentil-|home, Dues-|aigües, Mas-|oliver. Semblantment: nos-|altres, vos-|altres.
 
 TEST 
 (fonts: 
