@@ -1,6 +1,6 @@
 1r l·l: posem separació entre les dues eles -> l-l
 2n Una consonant entre vocals: separació a l'esquerra de la consonant, abans de la consonant: nova -> no-va
-3r ll, ny, kh entre vocals: separació a l'esquerra del grups de consonants
+3r ll, ny, kh seguida de vocal: separació a l'esquerra del grups de consonants
 4t bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr: separació a l'esquerra
 5è rr, ss, sc, tg, tj, tl, tm, tn, tx, ts , tz entre vocals: separació entre les consonants
 6è Dues dues o més consonants entre vocals: separació a l'esquerra de l’última consonant
@@ -9,11 +9,19 @@
                                [si ar-guï separció entre la u i la ï: NO cal perquè ja inclòs a la 7a regla]
                                si ar-güi separció entre la ü i la i
                                si ar-güí separció entre la ü i la í
+9è vocal + ü: separació a l'esquerra
 
 
-TEST
+TEST 
+(font: https://oiec.iec.cat/textortografia)
+(Si dubtes amb la separació: https://www.softcatala.org/sillabes/)
 tela, govern, neboda, capacitat, rigorosament, costat, herba, acte, adjunt, infernal, activitat, problema, cabra, nucli, secretari, pedra, reflex, sofrir, segle, llàgrima, replicar, suprem, altre, monstre, instrument, substantiu, adstrat, comptable, gàngster, queixa, terra, tassa, piscina, jutge, llotja, Novetlè, setmana, cotna, despatxar, potser, ràtzia, espatlla, novel·la, col·legi, orgue, Puigcerdà, palla, renyar, quinqué, sikhisme, alcohol, tothom, boxa, texans, extern, leishmaniosi, neula, noia, creuar, claudàtor, lingüística, delinqüent, guaita, fèieu, creueu, obliqüeu.
 
+aigües, llengües, següent, Güell, lingüista, pingüí, Güives, Aigüissi, delinqüent, obliqües, pasqües, aqüífer, terraqüi, ubiqüitat.
+aigua, exigua, aiguós, obliqua, pasqua, quota
+aïllar, raïm, traïció, Efraïm, Aïda, atapeït, creïble, creïlla, reïficar, veïna, miïtis, xiïta, amoïnar, heroïna, oïda, Coïmbra, cruïlla, gratuït, ruïnós, Lluïsa, Montuïri, Tuïr; aüc, aüixar, saüc, taüt, Raül, Bissaürri, Estaüja, Sanaüja, Taüll, Cafarnaüm, peüc, peülla, transeünt, Areüsa, Reür (riu de la Cerdanya), Talteüll, Seül, diürn, oriünd, rabiüt, Friül, noümen.
+creï, creïs, creïn (de crear); estudiï, estudiïs, estudiïn (de estudiar); lloï, lloïs, lloïn (de lloar); suï, suïs, suïn (de suar); aguï, aguïs, aguïn
+Aüira (pron. [ə.új.ɾə], Sant Pere d’Aüira, topònim del Ripollès; cf. Alfauir, pron. [al.fa.wíɾ]), aüixar, maüix.
 
 argüeixo, argüeixes, argüeix, arguïm, arguïu, argüeixen, arguït, arguïa, arguïes, argüíem, argüíeu, arguïen, argüí, arguïres, argüírem, argüíreu, arguïren, argüir, argüiré, argüiràs, argüirem, argüireu, argüiran, argüiria, argüiries, argüiríem, argüiríeu, argüirien, argüeixi, argüeixis, argüeixin, argüís, arguïssis, argüíssim, argüíssiu, argüíssiu, argüint.
 arguïble, arguïció, arguïdor, argüir
