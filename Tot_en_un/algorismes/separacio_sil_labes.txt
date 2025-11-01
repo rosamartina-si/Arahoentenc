@@ -11,6 +11,9 @@
                                si ar-güí separció entre la ü i la í
 9è vocal + ü: separació a l'esquerra
 10è ï + vocal: separació a la dreta
+11è gui + aeoàèéòó: separació després de la i
+12è aeiouàèéíòóú + i|u + aeiouàèéíòóú: separació abans de la i|u
+13è consonant + i|u + aeoàèéòó: separació després de la i|u
 
 
 TEST 
