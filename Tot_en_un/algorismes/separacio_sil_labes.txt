@@ -1,14 +1,39 @@
 1r l·l: posem separació entre les dues eles -> l-l
+
 2n Una consonant entre vocals: separació a l'esquerra de la consonant, abans de la consonant: nova -> no-va
-3r ll, ny, kh seguida de vocal: separació a l'esquerra del grups de consonants
-4t bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr: separació a l'esquerra
-5è rr, ss, sc, tg, tj, tl, tm, tn, tx, ts , tz entre vocals: separació entre les consonants
-6è Dues dues o més consonants entre vocals: separació a l'esquerra de l’última consonant
-7è ï: separació a l'esquerra
-8è El verb argüir és especial: si ar-güeix separació entre ü i la e  
+
+3r ll, ny, kh enmig de paraula seguit de vocal: separació a l'esquerra del grups de consonants
+   bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr enmig de paraula seguit de vocal: separació a l'esquerra
+
+4t Dues o més consonants entre vocals: separació a l'esquerra de l’última consonant
+  inclou: rr, ss, sc, tg, tj, tl, tm, tn, tx, ts , tz entre vocals: separació entre les consonants
+        proposta: Dues o més consonants entre vocals: separació a l'esquerra de l’última consonant
+
+5è El verb argüir és especial: si ar-güeix separació entre ü i la e  
                                [si ar-guï separció entre la u i la ï: NO cal perquè ja inclòs a la 7a regla]
                                si ar-güi separció entre la ü i la i
                                si ar-güí separció entre la ü i la í
+        proposta: argü([eií]): separació després de la u
+        (la combinació ar-gu-ï ja està resolta per la regla posterior sobre ï)
+
+6è ï: separació a l'esquerra
+
+7è g i q + u + vocal: inseparables. Posem un asterix a cada cantó de la u i al final ho restablim: q*u*vocal
+
+8è vocal àtona o amb dièresi + vocal accentuada: separació a l'esquerra de la vocal accentuada
+
+9è vocal accentuada  o amb dièresi + vocal àtona: separació a la dreta de la vocal accentuada
+
+
+
+
+falta excepcions dièresi a per ex. agrair
+el tractament de uu i ii: duu però du-umvir, però antiincendis
+
+7è qu + vocal + iu + vocal + iu
+quèieu
+
+
 9è vocal + ü: separació a l'esquerra
 10è ï + vocal: separació a la dreta
 
