@@ -16,13 +16,11 @@
         proposta: argü([eií]): separació després de la u
         (la combinació ar-gu-ï ja està resolta per la regla posterior sobre ï)
 
-6è ï: separació a l'esquerra
+6è g i q + u + vocal: inseparables. Posem un asterix a cada cantó de la u i al final ho restablim: q*u*vocal
 
-7è g i q + u + vocal: inseparables. Posem un asterix a cada cantó de la u i al final ho restablim: q*u*vocal
+7è vocal àtona  + vocal accentuada o amb dièresi: separació a l'esquerra de la vocal accentuada
 
-8è vocal àtona o amb dièresi + vocal accentuada: separació a l'esquerra de la vocal accentuada
-
-9è vocal accentuada  o amb dièresi + vocal àtona: separació a la dreta de la vocal accentuada
+8è vocal accentuada  o amb dièresi + vocal àtona: separació a la dreta de la vocal accentuada
 
 
 
