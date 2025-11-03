@@ -2,6 +2,7 @@
 https://oiec.iec.cat/textortografia/codi/3.2.2.1
 https://oiec.iec.cat/textortografia/codi/3.1.1.1b?page=2&criterio=En%20qualsevol%20posici%C3%B3
 https://oiec.iec.cat/textortografia/codi/3.2.1
+https://oiec.iec.cat/textortografia/codi/3.2.2.2
 (Si dubtes amb la separació: https://www.softcatala.org/sillabes/)
 
 1r l·l: posem separació entre les dues eles -> l-l
