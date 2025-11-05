@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Omple els buits: Text literari</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6; color: #333; max-width: 800px;
+      margin: 0 auto; padding: 20px; background: #f9f9f9;
+    }
+    h1 { color: #2c3e50; text-align: center; margin-bottom: 10px; }
+    .subtitol { text-align: center; color: #7f8c8d; font-style: italic; margin-bottom: 30px; }
+    .instruccions {
+      background: #e8f4f8; padding: 15px; border-radius: 5px;
+      margin-bottom: 25px; border-left: 4px solid #3498db;
+    }
+    .text-exercici {
+      background: #fff; padding: 25px; border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px; font-size: 18px; line-height: 1.8;
+    }
+
+    .buit { display: inline-block; vertical-align: baseline; }
+    .buit-paraula-sencera { width: 120px; }
+    .buit-dins-paraula   { width: 40px; }
+
+    input[type="text"] {
+      width: 100%; padding: 4px 2px; border: 1px solid #ddd;
+      border-radius: 4px; font-size: 14px; text-align: center;
+      transition: all .3s; vertical-align: middle; font-weight: bold;
+    }
+    input[type="text"]:focus {
+      border-color: #3498db; outline: none;
+      box-shadow: 0 0 0 2px rgba(52,152,219,.2);
+    }
+
+    .incorrecte {
+      background: #f8d7da; color: #721c24;
+      border-color: #f5c6cb; font-weight: bold;
+    }
+
+    .text-correcte {
+      display: inline; padding: 0 1px; border-radius: 3px;
+      vertical-align: baseline; font-weight: bold;
+    }
+    .correcte-primer { background-color: #d4edda !important; color: #155724; } /* verd */
+    .correcte-segon  { background-color: #fff3cd !important; color: #856404; } /* groc */
+    .text-auto       { background-color: #e6f0fa !important; color: #003366; font-style: italic; font-weight: bold; } /* blau suau */
+
+    .controls {
+      display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 20px; background: #3498db; color: #fff;
+      border: none; border-radius: 4px; cursor: pointer;
+      font-size: 16px; transition: background-color .3s;
+      min-width: 120px;
+    }
+    button:hover { background: #2980b9; }
+    #botoComprova { background: #2ecc71; } #botoComprova:hover { background: #27ae60; }
+    #botoNeteja   { background: #e74c3c; } #botoNeteja:hover   { background: #c0392b; }
+
+    .puntuacio {
+      text-align: center; margin-top: 15px; font-size: 18px;
+      font-weight: bold; color: #2c3e50;
+    }
+
+    @media (max-width: 600px) {
+      .buit-dins-paraula { width: 35px; }
+      .buit-paraula-sencera { width: 100px; }
+      input[type="text"] { font-size: 13px; padding: 3px 1px; }
+      button { padding: 8px 16px; font-size: 14px; min-width: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Omple els buits: Text literari</h1>
+<p class="subtitol">Fragment de "L'ombra del rellotge"</p>
+
+<div class="instruccions">
+  <p>Només sumen punts els buits encertats <strong>a la primera</strong> (verd). Els encerts posteriors (groc) no compten. Els que omple el programa surten en <strong>blau i cursiva</strong>.</p>
+</div>
+
+<div class="text-exercici" id="exercici"></div>
+
+<div class="controls">
+  <button id="botoComprova">Comprova tot</button>
+  <button id="botoNeteja">Neteja tot</button>
+</div>
+
+<div class="puntuacio" id="puntuacio"></div>
+
+<script>
+// ---------- Dades ----------
+const textAmbBuits = {
+  text: "____endemà vaig desco____rir que ____ombra del rellotge del menjador s'havia fet independent i que caminava, amb una puntualitat pr____pia, pels racons de la casa. No era pas la més discreta de les ombres: s'entossudia a posar-se allà on jo no volia ombres, i s'escapolia amb una eleg____ncia que només poden tenir els objectes ofesos. ____avi, que era home de seny i superstició, digué que ____ombra s'havia emancipat ____una hora massa carregada de records; jo, que no n'he sabut mai gaire de metaf____siques, vaig creure que simplement s'havia cansat ____obeir. Des ____aleshores, quan el rellotge marca les dotze, jo m'assec a esperar que ____ombra torni, encara que sigui per fer-me un retret.",
+  respostes: [
+    { id: 0,  resposta: "L'", tipus: "paraula-sencera" },
+    { id: 1,  resposta: "b",  tipus: "dins-paraula"     },
+    { id: 2,  resposta: "l'", tipus: "paraula-sencera" },
+    { id: 3,  resposta: "ò",  tipus: "dins-paraula"     },
+    { id: 4,  resposta: "à",  tipus: "dins-paraula"     },
+    { id: 5,  resposta: "L'", tipus: "paraula-sencera" },
+    { id: 6,  resposta: "l'", tipus: "paraula-sencera" },
+    { id: 7,  resposta: "d'", tipus: "paraula-sencera" },
+    { id: 8,  resposta: "í",  tipus: "dins-paraula"     },
+    { id: 9,  resposta: "d'", tipus: "paraula-sencera" },
+    { id: 10, resposta: "d'", tipus: "paraula-sencera" },
+    { id: 11, resposta: "l'", tipus: "paraula-sencera" }
+  ]
+};
+
+const intentsPerBuit = Object.create(null);
+const finalitzat     = Object.create(null);
+const encertAPrimerIntent = Object.create(null);
+
+// ---------- Construcció ----------
+function processarText() {
+  const contenidor = document.getElementById('exercici');
+  const parts = textAmbBuits.text.split('____');
+  let html = '';
+
+  for (let i = 0; i < parts.length; i++) {
+    html += parts[i];
+    if (i < textAmbBuits.respostes.length) {
+      const r = textAmbBuits.respostes[i];
+      const classe = r.tipus === 'dins-paraula' ? 'buit-dins-paraula' : 'buit-paraula-sencera';
+      html += `<span class="buit ${classe}">
+                 <input type="text" id="buit-${i}" data-index="${i}" maxlength="10" />
+               </span>`;
+      intentsPerBuit[i] = 0;
+      finalitzat[i] = false;
+      encertAPrimerIntent[i] = false;
+    }
+  }
+  contenidor.innerHTML = html;
+}
+
+// ---------- Substitució ----------
+function substituirInputPerText(input, text, classeColor) {
+  const net = text.trim();
+  const span = document.createElement('span');
+  span.className = `text-correcte ${classeColor}`;
+  span.textContent = net;
+  input.parentElement.replaceWith(span);
+}
+
+// ---------- Validació individual ----------
+function comprovaRespostaIndividual(input) {
+  const index = parseInt(input.dataset.index, 10);
+  if (finalitzat[index]) return;
+
+  const respostaUsuari = input.value.replace(/\s+/g, ' ').trim();
+  const { resposta: solucio } = textAmbBuits.respostes[index];
+  if (!respostaUsuari) return;
+
+  intentsPerBuit[index]++;
+
+  if (respostaUsuari.toLowerCase() === solucio.toLowerCase()) {
+    const classeColor = intentsPerBuit[index] === 1 ? 'correcte-primer' : 'correcte-segon';
+    substituirInputPerText(input, solucio, classeColor);
+    finalitzat[index] = true;
+    encertAPrimerIntent[index] = intentsPerBuit[index] === 1;
+  } else {
+    input.classList.add('incorrecte');
+    input.value = '';
+    setTimeout(() => input.focus(), 50);
+    if (intentsPerBuit[index] >= 3) {
+      substituirInputPerText(input, solucio, 'correcte-segon');
+      finalitzat[index] = true;
+      encertAPrimerIntent[index] = false;
+    }
+  }
+  actualitzaPuntuacio();
+}
+
+// ---------- Comprovar totes ----------
+function comprovaTotesRespostes() {
+  document.querySelectorAll('#exercici input[type="text"]').forEach(input => {
+    const idx = parseInt(input.dataset.index, 10);
+    if (finalitzat[idx]) return;
+
+    const { resposta: solucio } = textAmbBuits.respostes[idx];
+    const usuari = input.value.replace(/\s+/g, ' ').trim();
+
+    if (usuari.toLowerCase() === solucio.toLowerCase()) {
+      const classeColor = intentsPerBuit[idx] === 0 ? 'correcte-primer' : 'correcte-segon';
+      substituirInputPerText(input, solucio, classeColor);
+      finalitzat[idx] = true;
+      encertAPrimerIntent[idx] = intentsPerBuit[idx] === 0;
+    } else {
+      substituirInputPerText(input, solucio, 'text-auto');
+      finalitzat[idx] = true;
+      encertAPrimerIntent[idx] = false;
+    }
+  });
+  actualitzaPuntuacio();
+}
+
+// ---------- Puntuació ----------
+function actualitzaPuntuacio() {
+  const total = textAmbBuits.respostes.length;
+  const encerts = Object.values(encertAPrimerIntent).filter(Boolean).length;
+  document.getElementById('puntuacio').textContent = `Puntuació: ${encerts} / ${total}`;
+}
+
+// ---------- Netejar ----------
+function netejaTotesRespostes() {
+  processarText();
+  inicialitza();
+  document.getElementById('puntuacio').textContent = '';
+}
+
+// ---------- Inicialitza ----------
+function inicialitza() {
+  const inputs = document.querySelectorAll('#exercici input[type="text"]');
+  inputs.forEach(input => {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === 'Tab' || e.key === ' ') {
+        e.preventDefault();
+        comprovaRespostaIndividual(input);
+        if (e.key === 'Tab') {
+          const idx = parseInt(input.dataset.index, 10);
+          const seg = [...document.querySelectorAll('#exercici input[type="text"]')]
+            .find(inp => parseInt(inp.dataset.index, 10) > idx && !finalitzat[parseInt(inp.dataset.index, 10)]);
+          if (seg) seg.focus();
+        }
+      }
+    });
+  });
+  document.getElementById('botoComprova').addEventListener('click', comprovaTotesRespostes);
+  document.getElementById('botoNeteja').addEventListener('click', netejaTotesRespostes);
+}
+
+// ---------- Inici ----------
+document.addEventListener('DOMContentLoaded', () => {
+  processarText();
+  inicialitza();
+});
+</script>
+
+</body>
+</html>
