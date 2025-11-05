@@ -1,0 +1,85 @@
+function car‡ctersCount(form) {
+
+
+//passem la sortida de la funciÛ que ordena alfabËticament (la variable global 'text') a la variable newstr  
+   var newstr = text;
+
+   //substituÔm l'etiqueta <br> per \n (al final restaurarem els <br>)
+   newstr = newstr.replace(/<br>/gi,"\n");
+
+   //guardem el text d'entrada original a la variable 'original'
+   var original = form.entrada.value;
+
+   var wordArray = new Array();
+
+  // format string for easier manipulation
+  newstr = newstr.toLowerCase();
+  newstr = newstr.replace(/[^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ÁÒ∑-]/g, " ");
+  newstr = newstr.replace(/\s+/g, " ");
+
+//substituÔm 'ny' per '‚'
+  newstr = newstr.replace(/ny/g, "‚");
+
+
+  //amb la funciÛ split creem un array
+  var tempArray = newstr.split("").sort();
+  var count = 1;
+
+
+
+  // Iterate through all the words
+  for (var i = 0; i < tempArray.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[tempArray[i]]) {
+      wordArray[tempArray[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else { wordArray[tempArray[i]] = 1; }
+    }
+
+
+	//aquÌ anotem el nombre d'espais en blanc. Els restarem del cÚmput total de car‡cters.
+	var nreEspaisBlancs = wordArray[tempArray[0]];
+
+//P E  N D E N T ************aquÌ restaurem 'ny'
+	//wordArray[tempArray["‚"]] = "ny";
+//var i = items.indexOf(3452);
+//items[i] = 1010;
+//var i = wordArray.indexOf("‚");
+//wordArray[i] = "ny";
+//wordArray[tempArray.indexOf["‚"]] = "ny";
+
+
+    var arrStr = '';
+
+
+
+    // Create table rows that display the word and the frequency
+    for (word in wordArray) {
+      if (word != " ") {
+        arrStr += '<TR><TD>' + word + '</TD><TD>' + wordArray[word] + '</TD></TR>';
+        count++;
+	}
+	      }
+
+
+var nreMots = parseFloat(tempArray.length) - nreEspaisBlancs;
+
+
+
+document.getElementById("demo").innerHTML='<B>Total</B>: ' + nreMots + ' car‡cters'+ '<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+      count + '><BR><I>' +  
+      '</I><TD><B>Lletra</B><TD><B>OcurrËncies</B></TR>' + arrStr + '</TABLE>';
+
+
+
+  }
+
+
+
+
+
