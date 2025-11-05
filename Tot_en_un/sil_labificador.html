@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separador de Síl·labes - Català</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .resultat {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        
+        .resultat h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        #text-silabes {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔠 Separador de Síl·labes - Català</h1>
+        
+        <div class="input-group">
+            <label for="text">Introdueix el text:</label>
+            <textarea id="text" placeholder="Exemple: La casa nova, el llibre interessant..." autofocus>casa nova paraula llibre butlla blau brau clau carro passat exemple neboda infernal raïm taüll argüir argüeix argüí guant quota guaita poèma veí país aïllar coïncidir paella Màrius Sírius</textarea>
+        </div>
+        
+        <button onclick="separarSilabes()">Separar Síl·labes</button>
+        
+        <div id="resultat" class="resultat" style="display: none;">
+            <h3>Resultat:</h3>
+            <div id="text-silabes"></div>
+        </div>
+        
+        <div class="info">
+            <strong>📝 Regles de separació:</strong>
+            <ul>
+                <li><strong>l·l</strong>: separació entre les dues eles → l-l</li>
+                <li><strong>Consonant entre vocals</strong>: separació abans de la consonant → no-va</li>
+                <li><strong>ll, ny, kh, bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr</strong>: separació a l'esquerra enmig de paraula</li>
+                <li><strong>Dues o més consonants entre vocals</strong>: separació a l'esquerra de l'última consonant</li>
+                <li><strong>g,q + u + vocal</strong>: inseparables</li>
+                <li><strong>vocal àtona + vocal accentuada</strong>: separació a l'esquerra de la vocal accentuada</li>
+                <li><strong>vocal accentuada + vocal àtona</strong>: separació a la dreta de la vocal accentuada</li>
+                <li><strong>argüir i derivats</strong>: separacions específiques per a üe, üi, üí</li>
+                <li><strong>consonant + i/u + a/e/o + (final/consonant)</strong>: separació entre i/u i la vocal</li>
+                <li><strong>a/e/o + a/e/o</strong>: separació entre les vocals</li>
+                <li><strong>vocal + i/u + vocal</strong>: separació abans de i/u</li>
+                <li><strong>vocal + um + (final/s)</strong>: separació entre vocal i um</li>
+                <li><strong>Màrius/Sírius</strong>: separació específica → Màri-us/Síri-us</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function separarSilabes() {
+            const text = document.getElementById('text').value;
+            const resultatDiv = document.getElementById('resultat');
+            const container = document.getElementById('text-silabes');
+            
+            if (!text.trim()) {
+                container.textContent = 'Si us plau, introdueix un text';
+                resultatDiv.style.display = 'block';
+                return;
+            }
+
+            // Processar cada paraula per separat
+            const paraules = text.split(/(\s+)/);
+            let resultatFinal = '';
+            
+            for (let paraula of paraules) {
+                // Si són espais, mantenir només un espai simple
+                if (paraula.match(/^\s+$/)) {
+                    if (resultatFinal.length > 0 && !resultatFinal.endsWith(' ')) {
+                        resultatFinal += ' ';
+                    }
+                    continue;
+                }
+                
+                let paraulaProcessada = paraula;
+                let canvi;
+                
+                // REGLA ESPECIAL: argüir i derivats - APLICAR PRIMER!
+                paraulaProcessada = paraulaProcessada.replace(/argü(eix|i|í)/gi, 'argü-$1');
+                //paraulaProcessada = paraulaProcessada.replace(/argu(ï)/gi, 'argu-$1');
+
+                // REGLA excepció: Màrius → Màri-us. Sírius → Síri-us (APLICAR ABANS)
+                paraulaProcessada = paraulaProcessada.replace(/(Màri|Síri)us($)/gi, '$1-us$2');
+                
+                // REGLA 1: l·l → l-l (separació entre les dues eles)
+                paraulaProcessada = paraulaProcessada.replace(/l·l/gi, 'l-l');
+                
+                // REGLA 2: Una consonant entre vocals → separació abans de la consonant
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç])([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return vocal1 + '-' + consonant + vocal2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 3: Dígrafs i grups consonàntics
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([a-zçàèéíïòóúü])(ll|ny|kh|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr)([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return vocal1 + '-' + consonant + vocal2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 4: Dues o més consonants entre vocals
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç]{2,})([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonants, vocal2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            const consonantsSenseUltima = consonants.substring(0, consonants.length - 1);
+                            const ultimaConsonant = consonants.substring(consonants.length - 1);
+                            return vocal1 + consonantsSenseUltima + '-' + ultimaConsonant + vocal2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                
+                // REGLA 5: g,q + u + vocal excepte ï → inseparables (marcar amb asteriscs)
+                paraulaProcessada = paraulaProcessada.replace(/([gq])u([aeiouàèéíòóúü])/gi, '$1*u*$2');
+
+
+                // REGLA 6: dèieu - vocal + iu + vocal + iu
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aàeéèiíoòóuú])([iu])([aeiou])([iu])/gi, function(match, v1, iu1, v2, iu2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v1 + '-' + iu1 + '*' + v2 + iu2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+
+
+                // REGLA 7: cauen - vocal + i/u + vocal
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeiouàèéíòóú])([iu])([aeiouàèéíïòóúü])/gi, function(match, v1, iu, v2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v1 + '-' + iu + '*' + v2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+
+                // REGLA 8: país - vocal àtona + vocal accentuada
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeiou])([àèéíòóúïü])/gi, function(match, v1, v2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v1 + '-' + v2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 9: Maria - consonant + iu + aeo
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([bcdfgjklmnpqrstvwxyzç])([iu])([aeo])/gi, function(match, c, iu, v) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return c + iu + '-' + v;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 10: teatre - a/e/o + a/e/o
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeoàèéòó])([aeoàèéòó])/gi, function(match, v1, v2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v1 + '-' + v2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 11: vocal accentuada + vocal àtona
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([àèéíòóú])([aeiou])/gi, function(match, v1, v2) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v1 + '-' + v2;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+
+                // REGLA 12: aquàrium - vocal + um final
+                do {
+                    canvi = false;
+                    const novaParaula = paraulaProcessada.replace(/([aeiou])um($|s$)/gi, function(match, v, final) {
+                        if (!match.includes('-')) {
+                            canvi = true;
+                            return v + '-um' + final;
+                        }
+                        return match;
+                    });
+                    if (canvi) {
+                        paraulaProcessada = novaParaula;
+                    }
+                } while (canvi);
+                
+                // Suprimir els asteriscs
+                paraulaProcessada = paraulaProcessada.replace(/\*/gi, '');
+                
+                // Netejar guions duplicats o al principi
+                paraulaProcessada = paraulaProcessada.replace(/--+/g, '-');
+                paraulaProcessada = paraulaProcessada.replace(/^-/, '');
+                
+                if (resultatFinal.length > 0 && !resultatFinal.endsWith(' ')) {
+                    resultatFinal += ' ';
+                }
+                resultatFinal += paraulaProcessada;
+            }
+            
+            // Netejar espais en blanc addicionals
+            resultatFinal = resultatFinal.replace(/\s+/g, ' ').trim();
+            
+            container.textContent = resultatFinal;
+            resultatDiv.style.display = 'block';
+        }
+
+        // Assegurar que el botó funcioni
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('button');
+            button.addEventListener('click', separarSilabes);
+        });
+
+        // Permetre usar la tecla Enter (amb Ctrl)
+        document.getElementById('text').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                separarSilabes();
+            }
+        });
+
+        // Executar automàticament al carregar
+        window.addEventListener('load', function() {
+            setTimeout(separarSilabes, 100);
+        });
+    </script>
+</body>
+</html>
