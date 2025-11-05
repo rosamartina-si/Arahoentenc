@@ -1,0 +1,100 @@
+function arrelCount(form) {
+
+  //cridem funciÛ que etiqueta mots amb l'arrel corresponent. Ex. <INFORMAR>informaciÛ</INFORMAR>
+  arrela(form)
+
+  //var newstr = "\n" + form.entrada.value + "\n";
+
+  //cridem la variable 'text' que contÈ el text etiquetat amb l'arrel
+  var newstr = " " + text + " ";
+
+
+  // Traiem etiquetes internes de prefixos
+
+  //   De: <MAGN»TIC><-ANTI->anti</-ANTI-><-FERRO->ferro</-FERRO-><MAGN»TIC>magnetisme</MAGN»TIC></MAGN»TIC>
+  //   a:  <MAGN»TIC>antiferromagnetisme</MAGN»TIC>
+//  newstr = newstr.replace(/<([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\2><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\4><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\6><\/\1>/gi,"<$1>$3$5$7<\/$1>");
+
+
+  //   De: <MAGN»TIC><-FERRO->ferri</-FERRO-><MAGN»TIC>magnËtic</MAGN»TIC></MAGN»TIC>
+  //   a: <MAGN»TIC>ferrimagnËtic</MAGN»TIC>
+//  newstr = newstr.replace(/<([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\2><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\4><\/\1>/gi,"<$1>$3$5<\/$1>");
+
+  //   De: <¿REA><-DI-><-DIA->di</-DI-></-DIA-><¿REA>‡rea</¿REA></¿REA>
+  //   a:  <¿REA>di‡rea</¿REA>
+
+  //   De: <FOTOGRAFIA><-FOTOllum->foto</-FOTOllum->grafia</FOTOGRAFIA>
+  //   a:  <FOTOGRAFIA>fotografia</FOTOGRAFIA>
+//  newstr = newstr.replace(/<([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)><([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\2>([a-z‡ËÈÌÔÚÛ˙¸Á∑-]+)<\/\1>/gi,"<$1>$3$4<\/$1>");
+
+
+  // Traiem etiquetes dels prefixos
+     newstr = newstr.replace(/<-[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+->/gi,"");
+     newstr = newstr.replace(/<\/-[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+-><[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+>/gi,"");
+     newstr = newstr.replace(/<\/-[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+->/gi,"");
+  // Traiem etiquetes duplicades
+//     newstr = newstr.replace(/(<[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+>)\1/gi,"$1");
+//     newstr = newstr.replace(/(<\/[a-z‡ËÈÌÔÚÛ˙¸Á∑-]+>)\1/gi,"$1");
+
+
+  //substituÔm parËntesis angulars per '@@@': si no dÛna problemes --> @@@I@@@i@@@/I@@@
+  newstr = newstr.replace(/([<>])/g, "@@@");
+
+  //un cop s'executa 'match' newstr es converteix en un array of the substrings that matched: nomÈs contÈ les cadenes amb el    //format xxxIxxxixxx/Ixxx
+  newstr = newstr.match(/@@@[a-z‡ËÈÌÔÚÛ˙¸Á∑Ò]+@@@[a-z‡ËÈÌÔÚÛ˙¸Á∑Ò]+@@@\/[a-z‡ËÈÌÔÚÛ˙¸Á∑Ò]+@@@/gi);
+
+  //ho ordenem alfabËticament:
+  newstr = newstr.sort();
+
+
+
+  //Creem un array que contindr‡ d'una banda un lema i una forma, i de l'altra el nre d'aparicions de cada forma
+  var wordArray = new Array();
+
+  // Iterate through all the words
+  for (var i = 0; i < newstr.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[newstr[i]]) {
+      wordArray[newstr[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else {wordArray[newstr[i]] = 1; }
+    }
+
+
+    // Create table rows that display the word and the frequency
+    var arrStr = '';
+    var count = 1;    //serveix per fer la taula: nomÈs per saber quantes files s'han de crear
+
+    for (word in wordArray) {
+      if (word != "") {
+        arrStr += '<TR><TD>' + word + '</TD><TD>' + wordArray[word] + '</TD></TR>';
+        count++;  //serveix per fer la taula: nomÈs per saber quantes files s'han de crear
+        }
+      }
+
+//netegem el resultat: 
+//traiem els @
+arrStr = arrStr.replace(/@/g, " ");
+//traiem l'etiqueta final /COMUNICAR
+arrStr = arrStr.replace(/ \/[A-Z¿»…Õœ“”⁄‹«∑—]+/g, "");
+
+
+document.getElementById("demo").innerHTML='<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+      count + '><TD><B>LEMA forma</B><TD><B>Nombre</B></TR>' + arrStr + '</TABLE>';
+
+//per si volem controlar que contenen els arrays
+//document.getElementById("demo").innerHTML='<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+//      count + '><B>Text Formatejat Original</B><BR><I>' + newstr + ' ' + LemesSenseRepeticions + ' ' + nreOcurrËncies +  ' //' //+ formes + 
+//      '</I><TD><B>Lema</B><TD><B>Formes</B><TD><B>OcurrËncies</B></TR>' + arrStr + '</TABLE>';
+
+
+  }
+
+
+
+
