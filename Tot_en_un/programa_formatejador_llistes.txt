@@ -1,0 +1,1632 @@
+function fontFormReserva(form){
+
+   text = form.reserva.value;
+   text = text.replace(/\n/gi,"\n<br>");
+   document.getElementById("demo").innerHTML = text;
+}
+
+
+
+
+//cada una d'aquestes funcions de frequència estan programades a un fitxer diferent amb el nom "programa freqüència [...].txt"
+
+function opcions_freqüència(form){
+
+   var newstr = text;
+
+//		<OPTION VALUE="1">freqüència caràcters
+//		<OPTION VALUE="2">Freqüencia síl·labes
+//		<OPTION VALUE="3">Freqüencia síl·labes primàries
+//		<OPTION VALUE="4">Freqüencia arrels
+//		<OPTION VALUE="5">Freqüencia mots
+//		<OPTION VALUE="6">Freqüencia trigrams
+
+if(form.comptem.value == 1) {   	 //freqüència caràcters
+	  caràctersCount(form);	}
+
+else if(form.comptem.value == 2) {   	 //Freqüencia síl·labes
+	  Síl·labaCount(form);	}
+
+else if(form.comptem.value == 3) {   	 //Freqüencia síl·labes primàries
+	  Síl·labaMínimaCount(form);	}
+
+else if(form.comptem.value == 4) {   	 //Freqüencia arrels
+	  arrelCount(form);	}
+
+else if(form.comptem.value == 5) {   	 //Freqüencia mots
+	  wordCount(form);	}
+
+else if(form.comptem.value == 6) {   	 //Freqüencia trigrams
+	  trigramCount(form);	}
+
+}
+
+
+
+
+function opcions_línia(form){
+
+   var newstr = text;
+
+
+//		<OPTION VALUE="0">escull
+//		<OPTION VALUE="1">separa en línies...
+//		<OPTION VALUE="2">nunera línies
+//		<OPTION VALUE="3">ajunta les línies
+//		<OPTION VALUE="4">línies en ordre alfabètic
+//		<OPTION VALUE="5">afegeix text al principi de cada línia...
+//		<OPTION VALUE="6">afegeix text al final de cada línia...
+//		<OPTION VALUE="7">afegeix nombre de paraules al principi de la línia
+//		<OPTION VALUE="8">afegeix nombre de caràcters al principi de la línia
+//		<OPTION VALUE="9">desplaça 1r mot al final de cada línia
+//		<OPTION VALUE="10">desplaça 1r caràcter al final de la línia
+//		<OPTION VALUE="11">desdobla enumeració a l'esquerra
+//		<OPTION VALUE="12">elimina línies en blanc
+//		<OPTION VALUE="13">elimina línies duplicades
+//		<OPTION VALUE="27">elimina línia si al principi conté...
+//		<OPTION VALUE="16">elimina línies que continguin...
+//		<OPTION VALUE="14">elimina 1r mot de cada línia
+//		<OPTION VALUE="15">elimina 1r caràcter de cada línia
+//		<OPTION VALUE="17">extreu les línies que continguin...
+//		<OPTION VALUE="35">extreu les línies que comencin per...
+//		<OPTION VALUE="18">tot en majúscules
+//		<OPTION VALUE="19">tot en minúscules
+//		<OPTION VALUE="20">format replace()...
+//		<OPTION VALUE="21">mostra mots de tantes lletres o més...
+//		<OPTION VALUE="22">mostra mots de tantes lletres o menys...
+//		<OPTION VALUE="23">substitueix mots ressaltats per...
+//		<OPTION VALUE="24">afegeix nombre de caràcters del 1r mot de cada línia
+//		<OPTION VALUE="25">format replace() arrelador
+//		<OPTION VALUE="26">elimina línia si el 1r mot conté...
+//		<OPTION VALUE="27">elimina línia si comença per...
+//		<OPTION VALUE="28">format replace() arrelador íber...
+//		<OPTION VALUE="29">inverteix línies
+//		<OPTION VALUE="30">palíndroms- ressalta línies que ho só
+//		<OPTION VALUE="31">extreu línies ressaltades
+//		<OPTION VALUE="32">format array associatiu
+//		<OPTION VALUE="33">converteix columnes de mots en files
+//		<OPTION VALUE="34">ressalta les línies que comencin per...
+//		<OPTION VALUE="36">format if regex (separador ':')
+
+
+
+if(form.línies.value == 1) {   	 	 //separa en línies..
+	  aLlista(form);	}
+
+else if(form.línies.value == 2) {   	 //numera línies
+	  numera_línies(form);	}
+
+else if(form.línies.value == 3) {   	 //ajunta les línies
+	  senseLlista(form);	}
+
+else if(form.línies.value == 4) {   	 //línies en ordre alfabètic
+	  ordena_línies_a_z(form);	}
+
+else if(form.línies.value == 5) {   	 //afegeix text al principi de cada línia...
+	  afegeix_principi_línia(form);	}
+
+else if(form.línies.value == 6) {   	 //afegeix text al final de cada línia...
+	  afegeix_final_línia(form);	}
+
+else if(form.línies.value == 7) {   	 //afegeix nombre de paraules al principi de la línia
+	  nre_mots_línia(form);	}
+
+else if(form.línies.value == 8) {   	 //afegeix nombre de caràcters al principi de la línia
+	  nre_caràcters_línia(form);	}
+
+else if(form.línies.value == 9) {   	 //desplaça 1r mot al final de cada línia
+	  transposaMot(form);	}
+
+else if(form.línies.value == 10) {   	 //desplaça 1r caràcter al final de la línia
+	  transposaCaràcter(form);	}
+
+else if(form.línies.value == 11) {   	 //desdobla enumeració a l'esquerra
+	  desdoblaEnumeracióEsquerra(form);	}
+
+else if(form.línies.value == 12) {   	 //elimina línies en blanc
+	  treu_línies_en_blanc(form);	}
+
+else if(form.línies.value == 13) {   	 //elimina línies duplicades
+	  treu_línies_duplicades(form);	}
+
+else if(form.línies.value == 14) {   	 //elimina 1r mot de cada línia
+	  eliminaMot(form);	}
+
+else if(form.línies.value == 15) {   	 //elimina 1r caràcter de cada línia
+	  eliminaCaràcter(form);	}
+
+else if(form.línies.value == 16) {   	 //elimina línies que continguin...
+	  eliminaLínies(form);	}
+
+else if(form.línies.value == 17) {   	 //extreu les línies que continguin...
+	  extreuLínies(form);	}
+
+else if(form.línies.value == 35) {   	 //extreu les línies que comencin per...
+	  extreuLíniesComencin(form);	}
+
+else if(form.línies.value == 18) {   	 //tot en majúscules
+	  majúscules(form);	}
+
+else if(form.línies.value == 19) {   	 //tot en minúscules
+	  minúscules(form);	}
+
+else if(form.línies.value == 20) {   	 //format replace()...
+	  format_replace(form);	}
+
+else if(form.línies.value == 36) {   	 //format if regex (separador ':')
+	  format_if_regex(form);	}
+
+//else if(form.línies.value == 21) {   	 //mostra mots de tantes lletres o més...
+//	  tantes_lletres_o_més(form);	}
+
+//else if(form.línies.value == 22) {   	 //mostra mots de tantes lletres o menys...
+//	  tantes_lletres_o_menys(form);	}
+
+//else if(form.línies.value == 23) {   	 //substitueix mots ressaltats per...
+//	  substitueix_ressaltats(form);	}
+
+else if(form.línies.value == 24) {   	 //afegeix nombre de caràcters del 1r mot de cada línia
+	  nre_caràcters_1r_mot(form);	}
+
+else if(form.línies.value == 25) {   	 //format replace() arrelador
+	  format_replace_arrelador(form);	}
+
+else if(form.línies.value == 26) {   	 //elimina línia si 1r mot conté...
+	  eliminaMotSiConté(form);	}
+
+else if(form.línies.value == 27) {   	 //elimina línia si comença per...
+	  eliminaLíniaSiComença(form);	}
+
+else if(form.línies.value == 28) {   	 //format replace() arrelador íber
+	  format_replace_arrelador_íber(form);	}
+
+else if(form.línies.value == 29) {   	 //inverteix línies
+	  inverteix_línies(form);	}
+
+else if(form.línies.value == 30) {   	 //palíndroms- ressalta línies que ho són
+	  línies_palíndroms(form);	}
+
+else if(form.línies.value == 31) {   	 //extreu línies ressaltades
+	  extreu_línies_ressaltades(form);	}
+
+else if(form.línies.value == 32) {   	 //format array associatiu
+	  format_array_associatiu(form);	}
+
+else if(form.línies.value == 33) {   	 //converteix columnes de mots en files
+	  columnes_de_mots_a_files(form);	}
+
+else if(form.línies.value == 34) {   	 //ressalta les línies que comencin per..
+	  ressalta_línies_que_comencin_per(form);	}
+
+
+}
+
+
+
+
+function opcions_ressalta(form){
+
+   var newstr = text;
+
+//		<OPTION VALUE="1">bloqueja els mots...
+//		<OPTION VALUE="2">bloqueja els mots ressaltats...
+//		<OPTION VALUE="3">bloqueja preposicions
+//		<OPTION VALUE="4">bloqueja mots gramaticals
+//		<OPTION VALUE="5">ressalta mots que continguin...
+//		<OPTION VALUE="6">ressalta xifres
+//		<OPTION VALUE="7">ressalta vocal tònica
+//		<OPTION VALUE="8">ressalta mots de tantes síl•labes...
+//		<OPTION VALUE="9">ressalta mots amb primera lletra en Majúscula
+//		<OPTION VALUE="10">ressalta mots amb primera lletra en Majúscula no principi de frase
+//		<OPTION VALUE="11">ressalta mots de tantes lletres o més...
+//		<OPTION VALUE="12">ressalta mots de tantes lletres o menys...
+//		<OPTION VALUE="13">substitueix mots ressaltats per...
+//		<OPTION VALUE="14">extreu línies amb mots ressaltats
+//		<OPTION VALUE="15">extreu mots ressaltats
+//		<OPTION VALUE="16">extreu mots ressaltats i tantes paraules de davant i darrere...
+//		<OPTION VALUE="17">esborra fons groc
+
+
+if(form.línies.value == 1) {   	 	 //bloqueja els mots...
+	  bloquejat_mots(form);	}
+
+else if(form.línies.value == 2) {   	 //bloqueja els mots ressaltats...
+	  bloqueja_mots_ressaltats(form);	}
+
+else if(form.línies.value == 3) {   	 //bloqueja mots gramaticals
+	  bloqueja_mots_gramaticals(form);	}
+
+else if(form.línies.value == 4) {   	 //bloqueja preposicions
+	  bloqueja_preposicions(form);	}
+
+else if(form.línies.value == 5) {   	 //ressalta mots que continguin...
+	  ressalta_mots_que_continguin(form);	}
+
+else if(form.línies.value == 6) {   	 //ressalta xifres
+	  ressalta_xifres(form);	}
+
+else if(form.línies.value == 7) {   	 //ressalta vocal tònica
+	  ressalta_vocal_tònica(form);	}
+
+else if(form.línies.value == 8) {   	 //ressalta mots de tantes síl·labes...
+	  ressalta_mots_de_tantes_síl·labes(form);	}
+
+else if(form.línies.value == 9) {   	 //ressalta mots amb primera lletra en Majúscula
+	  ressalta_mots_primera_MAJ(form);	}
+
+else if(form.línies.value == 10) {   	 //ressalta mots amb primera lletra en Majúscula no principi de frase
+	  ressalta_mots_primera_MAJ_no_inici_frase(form);	}
+
+else if(form.línies.value == 11) {   	 //ressalta mots de tantes lletres o més...
+	  tantes_lletres_o_més(form);	}
+
+else if(form.línies.value == 12) {   	 //ressalta mots de tantes lletres o menys...
+	  tantes_lletres_o_menys(form);	}
+
+else if(form.línies.value == 13) {   	 //substitueix mots ressaltats per...
+	  substitueix_ressaltats(form);	}
+
+else if(form.línies.value == 14) {   	 //extreu línies amb mots ressaltats
+	  extreu_línies_ressaltades(form);	}
+
+else if(form.línies.value == 15) {   	 //extreu mots ressaltats
+	  extreu_mots_ressaltats(form);	}
+
+else if(form.línies.value == 16) {   	 //extreu mots ressaltats i tantes paraules de davant i darrere...
+	  extreu_mots_amb_context(form);	}
+
+else if(form.línies.value == 17) {   	 //esborra fons groc
+	  esborra_fons_groc(form);	}
+
+}
+
+
+function opcions_context(form){
+
+   // I N F O
+   //no s'han de posar parèntesis: el programa en posa a cada casella ex. cada hola dia --> (cada)(hola)(dia)
+
+   var newstr = text;
+
+   //ajuntem les tres entrades en una sola línia
+   var match = "(" + form.context_anterior.value + ")" + "(" + form.objectiu.value + ")" + "(" + form.context_posterior.value + ")";
+   //ho convertim en regex
+   regex = new RegExp(match,"g");
+
+   //ajuntem només el context anterior i el posterior
+   var match2 = "(" + form.context_anterior.value + ")" + "(" + form.context_posterior.value + ")";
+   //ho convertim en regex
+   regex2 = new RegExp(match2,"g");
+
+
+   //desplegable que segons l'opció que triem fa una cosa o una altra
+   //1a afegir
+   //2a marca
+   //3a duplica duplica
+   //4a eliminar
+   //5a extreu
+   //6a converteix a MAJÚSCULES
+   //7a converteix a minúscules
+   //8a desplaça a la dreta
+   //9a desplaça a l'esquerra
+   //10a intercala entre caràcters
+   //11a intercala entre caràcters i extrems
+
+   var objectiu = form.objectiu.value;
+
+   var newstr2 ="";
+
+if(form.funció.value == 1) {   	    //afegir
+          newstr= newstr.replace(regex2,function($1,$2,$3){
+          return $2 + "<span style=\"background-color: #ffff00;\">" + objectiu + "</span>" + $3;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+	}
+else if(form.funció.value == 2) {   //cercar
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + "<span style=\"background-color: #ffff00;\">" + $3 + "</span>" + $4;	});	
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+        }
+else if(form.funció.value == 3) {   //duplica duplica
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + $3 + " " + "<span style=\"background-color: #ffff00;\">" + $3 + "</span>" + $4;	});	
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+else if(form.funció.value == 4) {   //eliminar
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + $4;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+	}
+
+else if(form.funció.value == 5) {   //extreure
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return newstr2 = newstr2 + $2 + $3 + $4 + "\n";	});
+          newstr2 = newstr2.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr2;
+          newstr = newstr2.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+	}
+
+else if(form.funció.value == 6) {   //MAJÚSCULES
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + "<span style=\"background-color: #ffff00;\">" + $3.toUpperCase() + "</span>" + $4;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+	}
+
+else if(form.funció.value == 7) {   //minúscules
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + "<span style=\"background-color: #ffff00;\">" + $3.toLowerCase() + "</span>" + $4;	});	
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+else if(form.funció.value == 8) {   //desplaça a la dreta
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return $2 + "<span style=\"background-color: #ffff00;\">" + $4 + "</span>" + $3;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+else if(form.funció.value == 9) {   //desplaça a l'esquerra
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return  $3 + $2 + "<span style=\"background-color: #ffff00;\">" + $4 + "</span>";	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+
+else if(form.funció.value == 10) {   //intercala entre caràcters
+	   //s'obre finestreta
+	   var textIntercalar = prompt('Què intercalem entre caràcters?', '');
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return  $2 + $3.split('').join("<span style=\"background-color: #ffff00;\">" + textIntercalar + "</span>") + $4;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+
+else if(form.funció.value == 11) {   //intercala entre caràcters i extrems
+	   //s'obre finestreta
+	   var textIntercalar = prompt('Què intercalem entre caràcters?', '');
+          newstr= newstr.replace(regex,function($1,$2,$3,$4){
+          return  $2 + "<span style=\"background-color: #ffff00;\">" + textIntercalar + "</span>" + $3.split('').join("<span style=\"background-color: #ffff00;\">" + textIntercalar + "</span>") + "<span style=\"background-color: #ffff00;\">" + textIntercalar + "</span>" + $4;	});
+          newstr = newstr.split('\n').join("<br>");  //pq a finestra nova es vegin salts de línia
+	  document.getElementById("demo").innerHTML = newstr;
+          newstr = newstr.replace(/<br>/gi,"\n");  
+          newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+        }
+
+   text = newstr;
+}
+
+
+
+function columnes_de_mots_a_files(form){
+
+   var separador = prompt('Quin separador hi ha entre els mots?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   treu_línies_en_blanc(form);
+
+   //partim el text en línies i el guardem en forma d'array
+   newstr = newstr.split(/\n<br>/gi);
+
+   //guardem el nombre d'elements de l'array a newstrLenght
+   var newstrLength = newstr.length;
+
+   var i = 0;
+   var arrStr = "";
+
+   //separem cada línia en paraules == partim línia pel separador
+   for (línia in newstr) { 
+	newstr[i] = newstr[i].split(separador);
+	i++;
+   }
+
+   i = 0;
+
+   for (element in newstr[0]){						//nombre de mots
+		for (var j=0;j < newstrLength; j++){			//nombre de línies
+			arrStr = arrStr + newstr[j][i] + separador;	//aquí s'incrementa el nombre de línies i es manté la posició del mot
+		}
+		arrStr = arrStr + "\n<br>" ;				//quan ja tenim tots els mots d'una determinada posició de les línies --> fem un salt de línia
+		i++;							//aquí passem a la següent posició de mot
+   }
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+
+
+function format_array_associatiu(form){
+
+// PENDENT FER LINK 'AJUDA' QUE INDIQUI:
+//   alert("Els elements han d'estar separats per COMA + ESPAI EN BLANC");
+   
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //per evitar problemes amb últim element --> afegim un de fals al final
+   newstr = newstr.replace(/[^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś]+<br>/gi, ", yyyy\n<br>");
+
+   //partim el text en línies i el guardem en forma d'array
+   newstr = newstr.split(/<br>/gi);
+
+   //guardem el nombre d'elements de l'array a newstrLenght
+   var newstrLength = newstr.length;
+
+   var i = 0;
+   var arrStr = "";
+
+   //separem cada línia en paraules == partim línia pel separador
+   for (línia in newstr) { 
+	newstr[i] = newstr[i].split(", ");
+	i++;
+   }
+
+   newstr[0] = newstr[0].join("\":\" ");
+   newstr[0] = newstr[0].replace(/(\":\" )/gi, "$1\"");
+   newstr[0] = newstr[0].split(" ");
+
+   i = 0;
+
+   for (element in newstr[0]){						//nombre de mots
+		for (var j=0;j < newstrLength; j++){			//nombre de línies
+			arrStr = arrStr + newstr[j][i] + ", ";	//aquí s'incrementa el nombre de línies i es manté la posició del mot
+		}
+		arrStr = arrStr + "zzz";
+		i++;							//aquí passem a la següent posició de mot
+   }
+
+   arrStr = "\"" + arrStr;
+   arrStr = arrStr.replace(/(\":\"),\s+/gi, "$1");
+   arrStr = arrStr.replace(/, zzz\"/gi, "\", \"");
+   arrStr = arrStr.replace(/, zzz$/gi, "\", ");	//últim caràcter del text
+   //traiem última línia falsa
+   arrStr = arrStr.replace(/, yyyy/gi, "");
+   arrStr = arrStr.replace(/\"yyyy/gi, "");
+   arrStr = arrStr.replace(/\", *$/gi, "");
+   arrStr = arrStr.replace(/, undefined/gi, "");
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+}
+
+
+
+
+
+function línies_palíndroms(form){
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr = newstr.split(/\n<br>/gi);
+
+   var i = 0;
+   var arrStr = '';
+
+   for (linia in newstr){
+      var línia = newstr[i];
+
+	//eliminem tot allò que no siguin caràcters: per tal que reconegui "Anita lava la tina" com a palíndrom
+	newstr[i] = newstr[i].replace(/[^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś]/gi, "");
+	newstr[i] = newstr[i].toLowerCase();
+
+
+      if (newstr[i] == newstr[i].split('').reverse().join('')){
+      	arrStr = arrStr + '<span style=\"background-color: #ffff00;\">' + línia + '<\/span>' + '\n<br>';
+	}
+      else { arrStr = arrStr + línia + '\n<br>'; 	}
+      i++;
+   }	
+
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+}
+
+
+
+
+
+function inverteix_línies(form){
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr = newstr.split(/\n<br>/gi);
+
+   var i = 0;
+   var arrStr = '';
+
+   for (linia in newstr){
+      arrStr = arrStr + newstr[i].split('').reverse().join('') + '\n<br>';
+      i++
+   }	
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+
+}
+
+
+
+function extreu_línies_ressaltades(form){
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   newstr = newstr.split(/\n<br>/gi);
+
+   var i = 0;
+   var arrStr = "";
+
+   for (línia in newstr) {
+	if (newstr[i].indexOf("<\/span>") > -1){
+		arrStr = arrStr + newstr[i] + '\n<br>';
+        }
+	i++;
+   }
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+}
+
+
+
+
+
+
+
+function nre_caràcters_1r_mot(form){
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr= newstr.replace(/(<br>)([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)([^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-])/gi,function($1,$2,$3,$4){
+        	  return $2 + $3.split('').length + " " + $3 + $4;	});
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+   treu_línies_en_blanc(form);
+}
+
+
+
+
+function nre_caràcters_línia(form){
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr = newstr.split(/\n<br>/gi);
+ 
+   var i = 0;
+   var arrStr = "";
+
+
+   // Create table rows that display the word and the frequency
+   for (línia in newstr) {
+        arrStr = arrStr + newstr[i].split('').length + " " + newstr[i] + '\n<br>';
+	i++;
+        }
+
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+
+function nre_mots_línia(form){
+
+   treu_línies_en_blanc(form);
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+   
+   //afegim un espai després dels apòstrofs, a més tripliquem l'apòstrof per després    eliminar fàcilment l'espai
+   newstr = newstr.replace(/(\’)/gi,"$1$1$1 ");
+
+   newstr = newstr.split(/\n<br>/gi);
+
+ 
+   var i = 0;
+   var arrStr = "";
+
+
+   // Create table rows that display the word and the frequency
+   for (línia in newstr) {
+        arrStr = arrStr + newstr[i].split(/ +/gi).length + " " + newstr[i] + '\n<br>';
+	i++;
+        }
+  //eliminem els apòstrofs duplicats i l'espai que havíem posat 
+  arrStr = arrStr.replace(/(\’)(\’\’ )/gi,"$1");
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+
+
+function tantes_lletres_o_menys(form){
+
+   //s'obre finestreta
+   var nreLletres = prompt('Vols veure mots que tinguin com a màxim quantes lletres?', '');
+
+   var newstr = text;
+   
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //etiquetem mot amb nombre caràcters ex.: casa<nreChar 4>
+   newstr= newstr.replace(/([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)([^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]|$)/gi,function($1,$2,$3){
+          return $2 + "<nreChar " + $2.length + ">" + $3;	});
+
+   //restablim l'etiqueta <br>
+   newstr = newstr.replace(/<br<nreChar [0-9]+>>/gi, "<br>");
+
+   newstr= newstr.replace(/([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)<nreChar ([0-9]+)>/gi,function($1,$2,$3){
+	  if ($3 <= nreLletres){
+	         return "<span style=\"background-color: #ffff00;\">" + $2 + "</span>";	} 
+          else { return $2}	  });
+	
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+//   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+
+function tantes_lletres_o_més(form){
+
+   //s'obre finestreta
+   var nreLletres = prompt('Vols veure mots a partir de quantes lletres?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr= newstr.replace(/([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)([^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]|$)/gi,function($1,$2,$3){
+          return $2 + "<nreChar " + $2.length + ">" + $3;	});
+
+   newstr = newstr.replace(/<br<nreChar [0-9]+>>/gi, "<br>");
+
+   newstr= newstr.replace(/([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)<nreChar ([0-9]+)>/gi,function($1,$2,$3){
+	  if ($3 >= nreLletres){
+	         return "<span style=\"background-color: #ffff00;\">" + $2 + "</span>";	} 
+          else { return $2}	  });
+	
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+//   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+
+
+
+
+
+function substitueix_ressaltats(form){
+
+   //s'obre finestreta
+   var substitució = prompt('Que hi vols posar en el seu lloc?', '');
+
+   var newstr = text;
+
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">)(.*)(<\/span>)/gi, substitució);
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+//   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+
+
+function desdoblaEnumeracióEsquerra(form) {   
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //etiquetem prinicipi i final d'enumeració (al final de l'enumeració i afegim coma i espai pq regla següent tbé s'apliqui a l'últim element)
+   newstr = newstr.replace(/(<br>)(([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+ *, *)+)([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)([^,a-zàèìòùáéíóúäëïöüâêîôûßçñ])/gi, "$1<ENUM>$2$4, <\/ENUM>$+");
+   newstr = newstr.replace(/(^)(([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+ *, *)+)([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)([^,a-zàèìòùáéíóúäëïöüâêîôûßçñ])/gi, "$1<ENUM>$2$4, <\/ENUM>$+");    // regla especial per la primera línia
+
+   //etiquetem cada element de l'enumeració (hi afegim l'etiqueta <E> al primer element)
+   newstr = newstr.replace(/(<ENUM>)(([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+ *, *)+)(<\/ENUM>)/gi, function($1,$2,$3,$4,$5){
+		  return $2 + "<E>" + $3.split(', ').join("<\/E><E>") + $5;				});
+
+   //per desdoblar elements de l'enumeració
+   newstr = newstr.replace(/<ENUM>(.*)<\/ENUM>(.*\s\s<br>)/gi, function($1,$2,$3){
+	      return $2.split('<\/E>').join("<span style=\"background-color: #ffff00;\">" + $3 + "</span>");  });
+   //regla especial per l'última línia
+   newstr = newstr.replace(/<ENUM>(.*)<\/ENUM>(.*$)/gi, function($1,$2,$3){
+	      return $2.split('<\/E>').join("<span style=\"background-color: #ffff00;\">" + $3 + "</span><br>");  });
+
+   //eliminem etiquetes <L>, marca @ i <FI>
+   newstr = newstr.replace(/(<E>|<\/E>)/gi,""); 
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+ 
+//   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+function eliminaLínies(form) {
+
+   //s'obre finestreta
+   var textEliminar = prompt('Què contenen les línies que vols eliminar?', '');
+
+   //ampliem el text eliminar a tota la línia
+   var textEliminar1 = "<br>.*" + textEliminar + ".*"
+
+   //convertim text a eliminar en regex
+   regex = new RegExp(textEliminar1, "ig");
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //eliminem les línies que contenen el text que hem indicat
+   newstr = newstr.replace(regex,"");
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+function extreuLínies(form) {
+
+   //s'obre finestreta
+   var textVeure = prompt('Què contenen les línies que vols veure?', '');
+
+   //ampliem el text a veure a tota la línia
+   var textVeure1 = "<br>(.*" + textVeure + ")"
+
+   //convertim la línia que volem mostrar en regex
+   regex = new RegExp(textVeure1, "ig");
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //afegim el text @@@ a les línies que ens interessa veure
+   newstr = newstr.replace(regex,"<br>@@@$1");
+
+   //eliminem les línies que no contenen el text '@@@' a principi de línia
+   newstr = newstr.replace(/<br>[^@].*\s+/gi,"");
+   newstr = newstr.replace(/<br>[^@].*$/gi,"");   
+
+   //eliminem text @@@
+   newstr = newstr.replace(/@@@/gi,"");   
+
+   //eliminem l'etiqueta <br>
+      //regla especial per quan fem cerca que inclogui algun caràcter de '<br>': per ex extreure mots que continguin 'br'
+         //si no ho fem ens coloreja l'etiqueta i es fa visible per pantalla
+             //més endavant la restaurarem
+   newstr = newstr.replace(/<br>/gi,"");   
+
+   //posem en fons groc el la cadena de caràcter que hem dit que havien de contenir les línies
+   var textVeure0 = "(" + textVeure + ")"
+   regex0 = new RegExp(textVeure0, "ig"); 
+   newstr = newstr.replace(regex0,"<span style=\"background-color: #ffff00;\">$1<\/span>");   
+
+   //restaurarem l'etiqueta <br>
+   newstr = newstr.replace(/\n/gi,"\n<br>");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+   treu_línies_en_blanc(form);
+
+}
+
+
+
+function extreuLíniesComencin(form) {    //****
+
+   //s'obre finestreta
+   var textVeure = prompt('Com comencen les línies que vols veure?', '');
+
+   //ampliem el text a veure a tota la línia
+   var textVeure1 = "<br>(" + textVeure + ")"
+
+   //convertim la línia que volem mostrar en regex
+   regex = new RegExp(textVeure1, "ig");
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //afegim el text @@@ a les línies que ens interessa veure
+   newstr = newstr.replace(regex,"<br>@@@$1");
+
+   //eliminem les línies que no contenen el text '@@@' a principi de línia
+   newstr = newstr.replace(/<br>[^@].*\s+/gi,"");
+   newstr = newstr.replace(/<br>[^@].*$/gi,"");   
+
+   //eliminem text @@@
+   newstr = newstr.replace(/@@@/gi,"");   
+
+   //eliminem l'etiqueta <br>
+      //regla especial per quan fem cerca que inclogui algun caràcter de '<br>': per ex extreure mots que continguin 'br'
+         //si no ho fem ens coloreja l'etiqueta i es fa visible per pantalla
+             //més endavant la restaurarem
+   newstr = newstr.replace(/<br>/gi,"");   
+
+   //posem en fons groc el la cadena de caràcter que hem dit que havien de contenir les línies
+   var textVeure0 = "(" + textVeure + ")"
+   regex0 = new RegExp(textVeure0, "ig"); 
+   newstr = newstr.replace(regex0,"<span style=\"background-color: #ffff00;\">$1<\/span>");   
+
+   //restaurarem l'etiqueta <br>
+   newstr = newstr.replace(/\n/gi,"\n<br>");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+   treu_línies_en_blanc(form);
+
+}
+
+
+
+
+function afegeix_principi_línia(form) {
+
+   //s'obre finestreta
+   var textIniciLínia = prompt('Què vols afegir a principi de cada línia?', '');
+   //convertim el text entrat en regex
+   regex = new RegExp(textIniciLínia, "ig");
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //afegim text indicat al principi de cada línia
+   newstr = newstr.replace(/<br>/gi,"<br><span style=\"background-color: #ffff00;\">" + textIniciLínia + "</span>"); 
+   newstr = newstr.replace(/^/gi,"<span style=\"background-color: #ffff00;\">" + textIniciLínia + "</span>");   //cas especial primera  línia
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+
+}
+
+
+
+
+
+function ressalta_línies_que_comencin_per(form){
+
+
+
+   //s'obre finestreta
+   var textIniciLínia = prompt('Què vols afegir a principi de cada línia?', '');
+   //convertim el text entrat en regex
+   regex = new RegExp("<br>" + textIniciLínia, "ig");
+   regex2 = new RegExp("^" + textIniciLínia, "ig");
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,""); 
+
+   //ressaltem al principi de cada línia el text indicat
+   newstr = newstr.replace(regex,"<br><span style=\"background-color: #ffff00;\">" + textIniciLínia + "</span>"); 
+   newstr = newstr.replace(regex2,"<span style=\"background-color: #ffff00;\">" + textIniciLínia + "</span>");   //cas especial primera  línia 
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+
+}
+
+
+
+
+function afegeix_final_línia(form) {
+
+   //s'obre finestreta
+   var textFinalLínia = prompt('Què vols afegir al final de cada línia?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr= newstr.replace(/(\n<br>)/gi,function($1,$2){
+        	  return "<span style=\"background-color: #ffff00;\">" + textFinalLínia + "</span>"+ $2;	});
+   //cas especial de l'última línia
+   newstr = newstr.replace(/$/gi,"<span style=\"background-color: #ffff00;\">" + textFinalLínia + "</span>");   //cas especial primera  línia
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+
+
+function transposaMot(form) {
+
+   var newstr = text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //posem en un array les línies i les ajuntem amb el separador '@@@'
+   newstr = newstr.split(/\s+<br>/g).join("@@@");
+   newstr = newstr.replace(/^/gi,"@@@"); //ho afegim al principi de la primera línia
+   newstr = newstr.replace(/$/gi,"@@@"); //ho afegim aal final de l'última línia
+
+   newstr = newstr.split(/@@@/g);
+   arrStr = '';
+
+
+  // Iterate through all the words
+  for (var i = 0; i < newstr.length; i++) {
+      newstr[i] = newstr[i].replace(/([0-9a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+)[^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-](.*)/gi,"$2 <span style=\"background-color: #ffff00;\">$1</span>"); 	
+      arrStr = arrStr + newstr[i] + "\n<br>";
+  }
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+
+
+function transposaCaràcter(form) {
+
+   var newstr = text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //posem en un array les línies i les ajuntem amb el separador '@@@'
+   newstr = newstr.split(/<br>/g).join("@@@");
+   newstr = newstr.replace(/^/gi,"@@@"); //ho afegim al principi de la primera línia
+   newstr = newstr.replace(/$/gi,"@@@"); //ho afegim aal final de l'última línia
+
+   newstr = newstr.split(/@@@/g);
+   arrStr = '';
+
+  // Iterate through all the words
+  for (var i = 0; i < newstr.length; i++) {
+      newstr[i] = newstr[i].replace(/(.)(.*)/gi,"$2<span style=\"background-color: #ffff00;\">$1</span>"); 	
+      arrStr = arrStr + newstr[i] + "\n<br>";
+  }
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+}
+
+
+
+function eliminaCaràcter(form) {
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //eliminem 1r caràcter al principi de cada línia
+   newstr = newstr.replace(/^./gi,""); //regla especial per 1a línia que no està encapçala per un <br>
+   newstr = newstr.replace(/<br>./gi,"<br>"); 
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+function eliminaMot(form) {
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //eliminem 1r mot al principi de cada línia
+   newstr = newstr.replace(/^([a-zàèìòùáéíóúäëïöüâêîôûßçñ0-9·-]+)[^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-](.*)/gi,"$2"); //regla especial per 1a línia que no està encapçala per un <br>
+   newstr = newstr.replace(/<br>([a-zàèìòùáéíóúäëïöüâêîôûßçñ0-9·-]+)$/gi,"<br>"); //regla especial per l'última línia per si només és un mot i per tant no va seguit de cap caràcter de puntuació
+   newstr = newstr.replace(/<br>([a-zàèìòùáéíóúäëïöüâêîôûßçñ0-9·-]+)[^a-zàèìòùáéíóúäëïöüâêîôûßçñ·-](.*)/gi,"<br>$2");
+
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+function eliminaLíniaSiComença(form){
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   var caràcters = prompt('Les línies que vols eliminar, què contenen al principi?', '');
+
+   //ampliem el text a eliminar a tota la línia
+   caràcters = "\n<br>" + caràcters + ".*"
+
+   //convertim text a eliminar en regex
+   var regex = new RegExp(caràcters, "ig");
+
+   //eliminem les línies que contenen el text que hem indicat
+   newstr = newstr.replace(regex,"");
+
+   treu_línies_en_blanc(form);
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+function eliminaMotSiConté(form) {
+
+   treu_línies_en_blanc(form);
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   var caràcters = prompt('Què conté el primer mot de la línia que vols eliminar?', '');
+
+   //ampliem el text a eliminar a tota la línia
+   var caràcters1 = "\n<br>([a-zàèìòùáéíóúäëïöüâêîôûßçñ0-9·-]+|)" + caràcters + ".*"
+
+   //convertim text a eliminar en regex
+   var regex = new RegExp(caràcters1, "ig");
+
+   //eliminem les línies que contenen el text que hem indicat
+   newstr = newstr.replace(regex,"");
+
+   treu_línies_en_blanc(form);
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+
+function aLlista(form) {
+
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   var separador = prompt('Com tens separats els elements?', '');
+   regex = new RegExp(separador, "ig");
+
+   newstr = newstr.split(regex).join('\n<br>');
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+function senseLlista(form) {
+
+   var separador = prompt('Quina separació vols entre les línies que ara ajuntem?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+  
+   //posem en un array les línies i les ajuntem amb el separador que hem indicat
+   newstr = newstr.split(/\s+<br>/g).join(separador);
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+
+function ordena_línies_a_z(form){
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr = newstr.split(/\n<br>/gi).sort().join('\n<br>');
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+function majúscules(form){
+
+   var newstr = text.toUpperCase();
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+function minúscules(form){
+
+   var newstr = text.toLowerCase();
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+
+function treu_línies_en_blanc(form) {
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //el format de la línia en blanc és un sol <br> a la línia
+	   //eliminem espais en blanc que pugui haver en una línia en blanc
+   newstr = newstr.replace(/\s<br> *\s/gi,"");  
+   newstr = newstr.replace(/^\s+<br> */gi,"");  //regla especial per la primera línia en blanc de la llista
+   newstr = newstr.replace(/\s+<br> *$/gi,"");  //regla especial per l'última línia en blanc de la llista
+
+   //traiem espais en blanc al final i principi de cada línia
+   newstr = newstr.replace(/^ +/gi,"");  	//prinicpi primera línia
+   newstr = newstr.replace(/ +$/gi,"");   	//final última línia
+   newstr = newstr.replace(/(\s+<br>) +/gi,"$1");	//principi de línia
+   newstr = newstr.replace(/ +(\s+<br>)/gi,"$1");	//final de línia
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+}
+
+
+
+
+
+function treu_línies_duplicades(form) {
+
+   var newstr = "\n<br>" + text + "\n<br>"; //afegim una línia en blanc a sota pq parteix: (mot + <br>) (mot + <br>) i l'últim queda només (mot) i per tant el considera diferent de qualsevol altre
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //eliminem espais en blanc al final de les línies
+   newstr = newstr.replace(/ +$/gi,"");   //regla especial per l'última línia
+   newstr = newstr.replace(/ +(\s+<br>)/gi,"$1"); 
+
+   //posem en un array les línies i les ajuntem amb el separador 'ñ@ñ'
+   newstr = newstr.split(/\s+<br>/g).join("ñ@ñ");
+
+   var wordArray = new Array();
+   var tempArray = newstr.split(/ñ@ñ/gi);
+
+  // Iterate through all the words
+  for (var i = 0; i < tempArray.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[tempArray[i]]) {
+      wordArray[tempArray[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else { wordArray[tempArray[i]] = 1; }
+    }
+
+var arrStr = '';
+
+    // Create table rows that display the word and the frequency
+    for (word in wordArray) {
+      if (word != "") {
+        arrStr += word + '\n<br>';
+        }
+      }
+
+   treu_línies_en_blanc(form);
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+function format_replace_arrelador_íber(form){
+
+//   sil·labifica(form);
+
+   treu_línies_en_blanc(form);
+
+   var newstr = "\n<br>" + text + "\n<br>";
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //partim línia
+   var primerMot = newstr;
+   primerMot = primerMot.replace(/<br>([a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś·-]+)[^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś·-](.*)/gi,"<br>$1");
+   primerMot = primerMot.split(/\n<br>/gi);  //ja tenim el 1r array
+ 
+   var restaLínia = newstr;
+   restaLínia = restaLínia.replace(/<br>([a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś·-]+)([^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś·-].*)/gi,"<br>$2");
+   restaLínia = restaLínia.split(/\n<br>/gi);  //ja tenim el 2n array
+
+   var i = 0;
+   var arrStr = "";
+
+					//newstr = newstr.replace(/([^a-zàèéíïòóúüç·@-])(all)(s)?([^a-zàèéíïòóúüç·@-])/gi,"$1@<@ALL@>@$2@<\/@ALL@>@$3@$+");
+   // Create table rows that display the word and the frequency
+   for (línia in primerMot) {
+	        arrStr = arrStr + "newstr = newstr.replace\(\/\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś\]\|\[a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś\]\+\)(" + primerMot[i] + "\)\(\[a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś\]\+\|\[^a-zàèìòùáéíóúäëïöüâêîôûßçḿñŕś\]\)\/gi, function\($1,$2,$3,$4\)\{\n<br>     return $1 \+ \" \" \+ $2\.split\(\'\'\)\.join\(\'@\'\) \+ " + "\"@<" + restaLínia[i].split('').join('@') + "@>@\" \+ $3\.split\(\'\'\)\.join\(\'@\'\) \+ " + "\"@<\\/" + restaLínia[i].split('').join('@') + "@>@\" \+ $4\.split\(\'\'\)\.join\(\'@\'\);     \}\);\n<br>";
+		i++;
+        }
+
+
+//   newstr= newstr.replace(/(\n<br>)/gi,function($1,$2){
+//        	  return "<span style=\"background-color: #ffff00;\">" + textFinalLínia + "</span>"+ $2;	});
+
+
+   arrStr = arrStr.replace(/@< @/gi, "@<@");
+   arrStr = arrStr.replace(/@<(..) @/gi, "@<$1@");
+   arrStr = arrStr.replace(/@ *\s+>@/gi, "@>@");
+
+   treu_línies_en_blanc(form);
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+}
+
+
+
+
+function format_replace_arrelador(form) {
+
+//   sil·labifica(form);
+
+   treu_línies_en_blanc(form);
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+
+   newstr = newstr.replace(/([a-zàèéíïòóúüç@·-]+)/gi, function($1){
+//	PATRÓ: newstr = newstr.replace(/([^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-])(zoom)(s)?([^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-])/gi, "$1@<@ Z@O@O@M@>@$2@<\/@Z@O@O@M@>@$3@$+");
+//	return  "newstr = newstr.replace\(\/\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-\]\)\(" + $1 + "\)\(s\)\?\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-\]\)\/gi\, " + "\"$1@\<@ " + $1.toUpperCase().split('').join('@') + "@\>@$2@\<\\\/@" + $1.toUpperCase().split('').join('@') + "@\>@$3@$+\"\)\;";		});
+//	PATRÓ: newstr = newstr.replace(/([^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-])(zoom)([^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-])/gi, "$1<@ Z@O@O@M@>@z@o@o@m@$+");
+//	return  "newstr = newstr.replace\(\/\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-\]\)\(" + $1 + "\)\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-\]\)\/gi\, " + "\"$1\<@ " + $1.toUpperCase().split('').join('@') + "@\>@" + $1.split('').join('@') + "@$+\"\)\;";		});
+//	PATRÓ: newstr = newstr.replace(/([^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-])([a-zàèéíïòóúüç@·-]*)zoom/gi, "$1<@ Z@O@O@M@>$2@z@o@o@m@");
+	return  "newstr = newstr.replace\(\/\(\[^a-zàèìòùáéíóúäëïöüâêîôûßçñ@·-\]\)\(\[a-zàèéíïòóúüç@·-\]\*\)" + $1 + "\/gi\, " + "\"$1\<@" + $1.toUpperCase().split('').join('@') + "@\>$2@" + $1.split('').join('@') + "@\"\)\;";		});
+
+
+   newstr = newstr.replace(/\n/gi, "\n<br>");
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+
+}
+
+
+function format_if_regex(form) {
+
+//la regla és:
+/*
+regex = /([^a-zàèéíïòóúüç·])(segur|dubte)([^a-zàèéíïòóúüç·])/i;
+if (regex.test(newstr) == true) 
+{
+infostr = infostr + regex + ": de segur, sens dubte [cast. a buen seguro]\. (Fitxes de normalització lingüística. UPC)\n\n"
+}
+*/
+
+   //var separador = prompt('Quin separador hi ha entre les dues parts del replace()?', '');
+   //regex = new RegExp(separador, "g");
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //substituïm el contingut del separador per etiquetes les </1><2>: car = cotxe --> car</1><2>cotxe
+   newstr = newstr.replace(/\:/,"<\/1><2>");  
+
+   //afegim línia en blanc <br> al principi del text per poder aplicar la següent regla
+   newstr = newstr.replace(/^/gi,"<br>");   
+
+   //afegim text inicial de la funció 'replace()' al principi de cada línia
+   newstr = newstr.replace(/<br>(.+)<\/1>/gi,"<br>regex \= \/\(\[^a-zàèéíïòóúüç·\]\)\($1\)\(\[^a-zàèéíïòóúüç·\]\)\/i\;<br>if \(regex\.test\(newstr\) \=\= true\)<br>\{<br>infostr \= infostr \+ regex \+ \"\: ");
+
+   //substituïm els espais en blanc per @ pq la regla següent s'apliqui correctament
+   newstr = newstr.replace(/ /g,"@");  
+
+   //afegim text final de la funció 'replace()' al final de cada línia
+   //newstr = newstr.replace(/<2>([^\s]*)/gi,"$1\"\);");
+   newstr = newstr.replace(/<2>([^\s]*)/gi,"$1\\n\\n\"<br>\}");
+//)\n\n"
+//}
+
+
+   //restaurem els espais en blanc
+   newstr = newstr.replace(/@/g," ");  
+
+   //eliminem línies en blanc al principi del text (que hem afegit a regla de més amunt)
+   newstr = newstr.replace(/^(<br>\s*)+/g,"");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+function format_replace(form) {
+
+   var separador = prompt('Quin separador hi ha entre les dues parts del replace()?', '');
+   regex = new RegExp(separador, "g");
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //substituïm el contingut del separador per etiquetes les </1><2>: car = cotxe --> car</1><2>cotxe
+   newstr = newstr.replace(regex,"<\/1><2>");  
+
+   //afegim línia en blanc <br> al principi del text per poder aplicar la següent regla
+   newstr = newstr.replace(/^/gi,"<br>");   
+
+   //afegim text inicial de la funció 'replace()' al principi de cada línia
+   newstr = newstr.replace(/<br>(.+)<\/1>/gi,"<br>newstr = newstr.replace\(\/$1\/gi, \"");
+
+   //substituïm els espais en blanc per @ pq la regla següent s'apliqui correctament
+   newstr = newstr.replace(/ /g,"@");  
+
+   //afegim text final de la funció 'replace()' al final de cada línia
+   newstr = newstr.replace(/<2>([^\s]*)/gi,"$1\"\);");
+
+   //restaurem els espais en blanc
+   newstr = newstr.replace(/@/g," ");  
+
+   //eliminem línies en blanc al principi del text (que hem afegit a regla de més amunt)
+   newstr = newstr.replace(/^(<br>\s*)+/g,"");  
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+
+
+
+function substitueix(form) {
+
+   //distingeix entre majúscules i minúscules
+   //RECORDATORI: hi ha etiqueta de línia al principi i final de cada línia:    '<L>xxxx x x xxx xxx xx</L>'
+
+   //s'obre finestreta
+   var textInicial = prompt('Què eliminem?', '([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+) ([A-ZÀÈÌÒÙÁÉÍÓÚÄËÏÖÜÂÊÎÔÛßÇÑ·-]+)');
+   //convertim el text entrat en regex
+   regex1 = new RegExp(textInicial, "g");
+
+   //s'obre finestreta
+   var textFinal = prompt('Què hi posem en el seu lloc?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //fem la substitució
+   newstr = newstr.replace(regex1, textFinal);
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+//***
+/*
+function cercaAmple(form) {
+
+   //distingeix entre majúscules i minúscules
+   //RECORDATORI: hi ha etiqueta de línia al principi i final de cada línia:    '<L>xxxx x x xxx xxx xx</L>'
+
+   //s'obre finestreta
+   var textInicial = prompt('Quina paraula cerques?', '([a-zàèìòùáéíóúäëïöüâêîôûßçñ·-]+) ([A-ZÀÈÌÒÙÁÉÍÓÚÄËÏÖÜÂÊÎÔÛßÇÑ·-]+)');
+   //convertim el text entrat en regex
+   regex1 = new RegExp(textInicial, "g");
+
+   //s'obre finestreta
+   //var textFinal = prompt('Què hi posem en el seu lloc?', '');
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   //fem la substitució
+   newstr = newstr.replace(regex1, "adéu");
+
+   document.getElementById("demo").innerHTML = newstr;
+   text = newstr;
+
+}
+
+*/
+
+
+
+
+
+function numera_línies(form) {
+
+   var newstr = text;
+
+   //traiem ombrejat groc
+   newstr = newstr.replace(/(<span style=\"background-color: #ffff00;\">|<\/span>)/gi,"");  
+
+   newstr = newstr.split(/\n<br>/gi);
+ 
+   var i = 0;
+   var j = 1
+   var arrStr = "";
+
+   // Create table rows that display the word and the frequency
+   for (word in newstr) {
+        arrStr = arrStr + j + " " + newstr[i] + '\n<br>';
+	i++;
+	j++;
+        }
+
+
+   document.getElementById("demo").innerHTML = arrStr;
+   text = arrStr;
+
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////
+///  A Q U E S T E S    F U N C I O N S    N O   E S T A N   A C T I V E S
+////////////////////////////////////////////////////////////////////////////
+
+
+
+
+function cercaRegex(form) {
+
+
+   var original = form.entrada.value; //guardem el text d'entrada original
+   var newstr = form.entrada.value;
+
+   var cerca = form.abans.value;
+
+   cerca = cerca.replace(/^/gi, "()(");   //al principi de la línia
+   cerca = cerca.replace(/$/gi, ")()");   //al final de la línia
+ 
+   regex = new RegExp(cerca, "g");
+
+   //fem la substitució al requadre form.entrada.value (guardat a la variable 'newstr')
+   newstr = newstr.replace(regex, "$1[<]$2[>]$+");
+   newstr = newstr.replace(regex, "$1[<]$2[>]$+");  //repetim regla pq s'apliqui a tots els casos
+
+   newstr = newstr.replace(/\[<\]/g, "<span style=\"background-color: #ffff00;\">");
+   newstr = newstr.replace(/\[>\]/g, "</span>");
+//   newstr = newstr.replace(/\n/g, "<br>");
+
+
+ 
+   document.write(newstr);
+//   form.sortida.value = cerca;
+}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+///  A Q U E S T E S    F U N C I O N S    N O   E S T A N   A C T I V E S   D ' A Q U Í   S O B R E
+//////////////////////////////////////////////////////////////////////////////////////////////////////
