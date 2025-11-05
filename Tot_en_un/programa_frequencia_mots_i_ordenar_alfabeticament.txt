@@ -1,0 +1,61 @@
+function wordCount(form) {
+
+  //cridem la funciÛ que ordena alfabËticament
+  ordenaAlfabËticament(form)
+
+   //passem la sortida de la funciÛ que ordena alfabËticament (la variable global 'text') a la variable newstr  
+   var newstr = text;
+
+   //substituÔm l'etiqueta <br> per \n (al final restaurarem els <br>)
+   newstr = newstr.replace(/<br>/gi,"\n");
+
+   //guardem el text d'entrada original a la variable 'original'
+   var original = form.entrada.value;
+
+   var wordArray = new Array();
+
+  // format string for easier manipulation
+  newstr = newstr.toLowerCase();
+  newstr = newstr.replace(/[^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ÁÒ∑-]/g, " ");
+  newstr = newstr.replace(/\s+/g, " ");
+
+  //amb la funciÛ split creem un array
+  var tempArray = newstr.split(' ')
+  var count = 1;
+
+  // Iterate through all the words
+  for (var i = 0; i < tempArray.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[tempArray[i]]) {
+      wordArray[tempArray[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else { wordArray[tempArray[i]] = 1; }
+    }
+
+    var arrStr = '';
+
+    // Create table rows that display the word and the frequency
+    for (word in wordArray) {
+      if (word != "") {
+        arrStr += '<TR><TD>' + word + '</TD><TD>' + wordArray[word] + '</TD></TR>';
+        count++;
+        }
+      }
+
+var nreMots = parseFloat(tempArray.length) - 1;
+
+document.getElementById("demo").innerHTML='<B>Total</B>: ' + nreMots + ' mots'+ '<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+      count + '><B>Text Formatejat Original</B><BR><I>' + original + 
+      '</I><TD><B>Paraula</B><TD><B>Freq¸Ëncia</B></TR>' + arrStr + '</TABLE>';
+
+
+  }
+
+
+
+
