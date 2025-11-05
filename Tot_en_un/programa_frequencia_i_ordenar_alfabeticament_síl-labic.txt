@@ -1,0 +1,75 @@
+function SÌl∑labaCount(form) {
+
+  //cridem la funciÛ que separa els mots en sÌl∑labes
+  sil∑labifica(form)
+
+  //guardem el text original separat en sil∑labes a variable
+  var text_en_sÌl∑labes = text;
+ 
+  var newstr = text;
+
+   //format string for easier manipulation
+  // ho convertim tot a  min˙scules
+  newstr = newstr.toLowerCase();
+
+ //substituÔm l'etiqueta <br> per \n (al final restaurarem els <br>)
+ newstr = newstr.replace(/\n<br>/gi,"\n");
+
+  // eliminem tot allÚ que no sigui sÌl∑laba: ho substituÔm per un espai en blanc
+  newstr = newstr.replace(/[^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑<>-]/g, " ");
+
+  //separem les sÌl∑labes amb un espai en blanc per poder-les comptar i ordenar alfabËticament
+  newstr = newstr.replace(/([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑])-([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑])/g, "$1- -$2");
+  newstr = newstr.replace(/([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑])-([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑])/g, "$1- -$2");  //repetim regla
+
+  text = newstr;
+  
+  //cridem la funciÛ que ordena alfabËticament
+  ordenaAlfabËticament(form)
+
+  // cridem la variable global 'text' i la guardem a la variable newstr
+  newstr = text;  //variable global inicialitzada a 'Tot en un.html'
+
+  //creem un array amb cada sÌl∑laba
+  var tempArray = newstr.split(/ +/g);
+
+  var wordArray = new Array();
+  var count = 1;
+
+  // Iterate through all the words
+  for (var i = 0; i < tempArray.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[tempArray[i]]) {
+      wordArray[tempArray[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else { wordArray[tempArray[i]] = 1; }
+    }
+
+    var arrStr = '';
+
+    // Create table rows that display the word and the frequency
+    for (word in wordArray) {
+      if (word != "") {
+        arrStr += '<TR><TD>' + word + '</TD><TD>' + wordArray[word] + '</TD></TR>';
+        count++;
+        }
+      }
+
+var nre_sÌl∑labes = tempArray.length;
+
+document.getElementById("demo").innerHTML= '<B>Total</B>: ' + nre_sÌl∑labes + ' sÌl∑labes'+ '<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+      count + '><B>Text dividit en sÌl∑labes</B><BR><I>' + text_en_sÌl∑labes + 
+      '</I><TD><B>SÌl∑laba</B><TD><B>Freq¸Ëncia</B></TR>' + arrStr + '</TABLE>';
+
+
+  }
+
+
+
+
+
