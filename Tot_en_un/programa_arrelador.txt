@@ -1,0 +1,2791 @@
+
+function arrela(form) {
+
+
+var newstr = " " + text + " ";
+
+newstr = newstr.replace(/\n<br>/gi,"\n");
+
+//anem per ordre alfabËtic per facilitar les correccions
+	//si un mot pot correspondre a dos o mÈs arrels diferents (ex. abat 	// --> abat i abatre: posem separats amb "@" ex. ]000690@000770
+
+	//marquem amb un asterix al davant l'arrel principal
+	//newstr = newstr.replace(/(a)(baix)/gi,  function($1,$2,$3)	{
+	//	return "@\[@" + $2.split('').join("@") + "@\]@000021" + "@\[@" + 	// $3.split('').join("@") + "@\]@*072910";	} );
+
+	//marquem ∑ els afixos
+	//marquem amb un * els que sÛn mateix arrel
+	//marquem amb un # els que sÛn sinÚnims
+	// abecÈ i alfabet amb el codi de abecÈ #000910 
+
+
+//000010 a "lletra  
+//000015 a "preposiciÛ
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000010@*000015@" + $4;	} );
+//al
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(l)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000015@" + "@\[@" + $4.split('').join("@") + "@\]@*225750" + $5 + $6;	} );
+
+//000021 a- "Prefix que serveix per a formar verbs. Ex.: apamar, aplanar, allunyar. VEURE AL FINAL DE TOT
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(|des)(a)(bacall[a‡]|badan[^t]|badern|baix|balanÁ|balanc[eÈiÌ]|balduf|barranc|barranqu|berrugu|berrug|bony|favor|frances|ssalari|ssal[^t])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@∑000021@" + $5;	} );
+
+//000040 ‡bac 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(‡ba[cq])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000040@";	} );
+
+//000050 abac‡ 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abac‡|abacan)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000050@";	} );
+
+newstr = newstr.replace(/(abaci)(al|ologi)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000690@" + "@\[@" + $3.split('').join("@") + "@\]@";	} );
+
+newstr = newstr.replace(/(abad)(al|en[cq]|ess|ia|ies)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000690@" + $3;	} );
+
+newstr = newstr.replace(/(abade[jg])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000110@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abali[td])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000260@";	} );
+
+newstr = newstr.replace(/(a)(ballest)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*074520@";	} );
+
+newstr = newstr.replace(/(abalt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000290@";	} );
+
+newstr = newstr.replace(/(a)(banc)(al)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*075160@" + "@\[@" + $4.split('').join("@") + "@\]@021412@" ;	} );
+
+newstr = newstr.replace(/(a)(bander)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*075400@";	} ); 
+
+newstr = newstr.replace(/(abandÛ|abandon)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000370@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abans)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000410@";	} );
+
+newstr = newstr.replace(/(a)(barat)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*076250@";	} ); 
+
+newstr = newstr.replace(/(a)(barb)(et)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*076350@" + "@\[@" + $4.split('').join("@") + "@\]@286441@" ;	} );
+
+newstr = newstr.replace(/(a)(bariton)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*077400@";	} ); 
+
+newstr = newstr.replace(/(abarlo)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000470@";	} );
+
+newstr = newstr.replace(/(a)(bargany|barneg)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*077261@";	} ); 
+
+newstr = newstr.replace(/(a)(baron)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*077501@";	} ); 
+
+newstr = newstr.replace(/(a)(barroc|barroqu)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*078640@";	} ); 
+
+newstr = newstr.replace(/(a)(barr)(ot)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*077730@" + "@\[@" + $4.split('').join("@") + "@\]@475105@" ;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abarset)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000540@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abart)([^r])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*258680@" + $4;	} );
+
+newstr = newstr.replace(/(abartrell)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*659090@";	} );
+
+newstr = newstr.replace(/(a)(b‡si)/gi,  function($1,$2,$3)	{
+	return  "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@000020@"+ $3.split('').join("@") + "@\]@*000570@";	} ); 
+
+newstr = newstr.replace(/(abassegu|abasseg)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000600@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abast)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000610@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(bat)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@"  + "@\[@" + $3.split('').join("@") + "@\]@000021@" + "@\[@" + $4.split('').join("@") + "@\]@*080760@\]*000690@" + $5;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(bat)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@"  + "@\[@" + $3.split('').join("@") + "@\]@000021" + "@\[@" + $4.split('').join("@") + "@\]@*080760@\]*000690@" + $5 + $6;	} );
+
+newstr = newstr.replace(/(a)(bat)(edor|ible|iment)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*080760@" + $4;	} );
+
+newstr = newstr.replace(/(a)(bat)(oll)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*080760@" + "@\[@" + $4.split('').join("@") + "@\]@467591@" ;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(bat)(o|em|eu|en|ia|ies|Ìem|Ìeu|ien|Ì|eres|È|Èrem|Èreu|eren|rÈ|r‡s|r‡|rem|reu|ran|ria|ries|rÌem|rÌeu|rien|i|is|in|Ès|essis|Èssim|Èssiu|essin|re|ent|ut|uda|uts|udes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@000021@" + "@\[@" + $4.split('').join("@") + "@\]@*080760@" + $5 + $6;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abat)(Û|on)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000690@" + $4;	} );
+
+newstr = newstr.replace(/(a)(bat)(uss)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*080760@" + "@\[@" + $4.split('').join("@") + "@\]@651521@" ;	} );
+
+newstr = newstr.replace(/(abb[‡a]ss[iÌ]d)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000790@";	} );
+
+newstr = newstr.replace(/(abdic|abdiqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000820@";	} );
+
+newstr = newstr.replace(/(abd[oÚ]m[ei]n)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000840@";	} );
+
+newstr = newstr.replace(/(abdu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000905@";	} );
+
+newstr = newstr.replace(/(abebai)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000906@";	} );
+
+newstr = newstr.replace(/(a)(be)(cÈ)(d)/gi,  function($1,$2,$3,$4,$5)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@000010@" + "@\[@" + $3.split('').join("@") + "@\]@081201@" + "@\[@" + $4.split('').join("@") + "@\]@127700@\]*000910" + "@\[@" + $5.split('').join("@") + "@\]@179750@" ;	} );
+
+newstr = newstr.replace(/(a)(be)(c[Èe])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@000010@" + "@\[@" + $3.split('').join("@") + "@\]@081201@" + "@\[@" + $4.split('').join("@") + "@\]@127700@\]*000910@" ;	} );
+
+//000930 abegot --> 000960 abella
+newstr = newstr.replace(/(abe)(g)(ot)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000960@" + $3 + $4;	} );
+
+newstr = newstr.replace(/(abel)(i[‡a])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000941@" + $3;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(bell)(eixo|eixes|eix|im|iu|eixen|ia|ies|Ìem|Ìeu|ien|Ì|ires|Ìrem|Ìreu|iren|irÈ|ir‡s|ir‡|irem|ireu|iran|iria|iries|irÌem|irÌeu|irien|eixi|eixis|eixin|Ìs|issis|Ìssim|Ìssiu|issin|ir|int|it|ida|its|ides)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@000021@" + "@\[@" + $4.split('').join("@") + "@\]@*082010@" + $5 + $6;	} );
+
+newstr = newstr.replace(/(a)(bell)(i)(dor|ment)/gi,  function($1,$2,$3,$4,$5)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*082010@" + $4 + $5;	} );
+
+//000960 abella
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abell)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*000960@";	} );
+
+//001100 aberrant --> [000030 ab- + 257960 errar]001100 aberrant 
+//no ABERRUGAT
+newstr = newstr.replace(/(ab)(err)([^u])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@000030@" + "@\[@" + $3.split('').join("@") + "@\]@257960@\]*001100@" + $4;	} );
+
+newstr = newstr.replace(/(a)(besson)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*084580@*084585@";	} ); 
+
+//084640 bËstia 
+newstr = newstr.replace(/(a)(besti)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*084640@";	} ); 
+
+//001140 abeurada --> 085010 beure 
+newstr = newstr.replace(/(a)(beur)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@000021@" + "@\[@" + $3.split('').join("@") + "@\]@*085010@";	} ); 
+
+//001205 abiet- #069750 avet
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abi[eË]t)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*001205@";	} );
+
+//001260 abillar 
+newstr = newstr.replace(/([^r])(abill)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*001205@";	} );
+
+
+
+//-----
+
+//ABIS-
+//001420 abissini 
+newstr = newstr.replace(/(abiss[iÌ]n)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*001420@";	} );
+
+//001330 abÌs - derivats: abisme, abissal,...
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ab[Ìi]s)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*001330@";	} );
+
+//002330 abraxas i abrasax
+newstr = newstr.replace(/(abraxas|abrasax)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*002330@";	} );
+
+//002500 abril 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(abril)([^l])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*002500@" + $4;	} );
+
+//003130 absorbir 
+newstr = newstr.replace(/(absor[bt])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*003130@";	} );
+newstr = newstr.replace(/(absor)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*003130@";	} );
+
+//003840 acabar 
+//bloquegem ACABALAT i ACABDILLAMENT
+newstr = newstr.replace(/(aca)(bal[^l]|bdill)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(acab)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*003840@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(in)(acab)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*003840@";	} );
+//desbloquegem
+newstr = newstr.replace(/(aca)@(bal[^l]|bdill)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//004260 acant "espina"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(acant)([^o])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*004260@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(acant)(o)([^n])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*004260@" +$4 + $5;	} );
+
+//005665 acet- #661870 vinagre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ac[eË]t)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*005665@";	} );
+
+//005690 acetal --> 005665 acet- #661870 vinagre FET + 023620 alcohol 
+newstr = newstr.replace(/(@*005665@)(al)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*023620@";	} );
+
+//006050 ‡cid 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])([a‡]c[iÌ]d)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*006050@";	} );
+newstr = newstr.replace(/(amino|anti|ceto|des|di|hidr|mono|orto|oxi|oxo|per|pesa|poli|sulf|tetr|tio|tri)([a‡]cid)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*006050@";	} );
+
+//008150 acre "Mesura anglosaxona de superfÌcie"
+//008155 acre "Díun sabor fort i irritant"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(acr)(e|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*008150*008155 @" + $4 + $5;	} );
+
+
+//008280 acridina --> 008155 acre "Díun sabor fort i irritant" FET+ 006050 ‡cid + ina
+newstr = newstr.replace(/(acr)(id)([iÌ]n)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*008155@" + "@\[@" + $3.split('').join("@") + "@\]@*006050@" + $4;	} );
+
+//008570 acroleÔna --> 008155 acre "Díun sabor fort i irritant" FET + 467700 olor + Ôna
+newstr = newstr.replace(/(acr)(ole)([iÌÔ]n)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*008155@" + "@\[@" + $3.split('').join("@") + "@\]@*467700@" + $4;	} );
+
+//010230 adeno- #334590 gl‡ndula 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(aden)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*010230#334590@";	} );
+
+//012760 adverbi 
+newstr = newstr.replace(/(adverbi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*012760@";	} );
+
+//020990 aixÚ 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(aixÚ)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*020990@";	} );
+//178480 daixonses #020990 aixÚ 
+newstr = newstr.replace(/(daixonses)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*178480#020990@";	} );
+
+//023620 alcohol 
+newstr = newstr.replace(/(alcoh[oÚ]l)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*023620@";	} );
+
+//018030 agost 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(agost)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*018030@";	} );
+
+//022520 alberge 
+newstr = newstr.replace(/(alberge)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*022520@";	} );
+
+//022540 albergÌnia 
+newstr = newstr.replace(/(alberg[Ìi]ni)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*022540@";	} );
+
+//022470 alberg 
+newstr = newstr.replace(/(alberg|albergu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*022470@";	} );
+
+//023000 alcabala 
+newstr = newstr.replace(/(alcabal)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*023000@";	} );
+
+//023390 alÁar 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(alÁ)([^u])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*023390@" + $4;	} );
+//per descartar els mots que sÛn un car‡cter seguit de 'alÁ' ex. 'calÁ'
+//la lletra anterior no pot ser B, C ni X (per 'balÁ', 'calÁ' i 'exalÁar')
+newstr = newstr.replace(/([a-z‡ËÚÈÌÛ˙Ô¸Á]+)([adefghijklmnopqrstuvyz‡ËÚÈÌÛ˙Ô¸Á])(alÁ)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*023390@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(alc)([eÈiÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*023390@" + $4;	} );
+
+//026720 al∑li- --> 026080 all 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(al∑l[iÌ])([a‡]ci|[a‡]ri|l)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*026720#026080@" + $4;	} );
+
+//027070 allÚ 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(allÚ)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*027070@";	} );
+//178630 dallonses #027070 allÚ 
+newstr = newstr.replace(/(dallonses)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*178630#027070@";	} );
+
+//028400 alpax --> 029490 alumini + nom del seu inventor Aladar Pacz
+newstr = newstr.replace(/(al)(pax)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@*029490@" + $3.split('').join("@") + "@\]@*028400@";	} );
+
+//029290 altre
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(altr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*029290@";	} );
+
+//030900 ambaixada 
+newstr = newstr.replace(/(ambaixad)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*030900@";	} );
+
+//031340 ambrosia 
+newstr = newstr.replace(/(ambr[oÚ]s[iÌ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*031340@";	} );
+
+//031310 ambre 
+//bloquegem GAMBAR, ARRAMBAR i EMBAMBAR
+newstr = newstr.replace(/(gam|arram|embam)(bar)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([‡a]mbar)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*031310@";	} );
+//desbloquegem
+newstr = newstr.replace(/(gam|arram|embam)@(bar)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+newstr = newstr.replace(/([^clsx])(ambr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*031310@";	} );
+
+//031630 ament
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ament)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*031630@";	} );
+
+//032610 amil #434980 midÛ 
+//cas especial AMIL que  Ès AM(IL) + IL
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(am)(il|ils)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*032610#434980@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(am[iÌ]l)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*032610#434980@";	} );
+
+//034380 ampul∑la  #034330 ampolla  
+newstr = newstr.replace(/(ampul∑l)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*034380#034330@";	} );
+
+//034750 anacard 
+newstr = newstr.replace(/(anac[a‡]rd)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*034750@";	} );
+
+//037850 anglËs 
+newstr = newstr.replace(/([^g])(angl)([iÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*037850@" + $4;	} );
+newstr = newstr.replace(/([^s])(angl)([oÚ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*037850@" + $4;	} );
+//037860 anglesina --> de l'illa d'Anglesey, a Gal∑les + -ina
+//037860 anglesita --> de l'illa d'Anglesey, a Gal∑les + -ita
+newstr = newstr.replace(/(angles)(in|it)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*037860@" + $3;	} );
+newstr = newstr.replace(/(anglËs)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*037850";	} );
+newstr = newstr.replace(/(angles)([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*037850" + $3;	} );
+
+//037840 angle i //037850 anglËs (del poble angle)
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(angl)(e|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*037840@*037850@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(angl)(a)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*37850@" + $4 + $5;	} );
+newstr = newstr.replace(/([^m])(angl)(e)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*037840@" + $4;	} );
+
+//038190 anguila 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(anguil|angu[iÌ]l∑l)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*038190@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(angul)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*038190@" + $4 + $5;	} );
+
+//038260 angular --> 037840 angle 
+//Bloquegem ESTRANGULAR i FR¿NGULA
+newstr = newstr.replace(/(estran|fr‡n)(gul)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(angul)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*037840@";	} );
+//desbloquegem
+newstr = newstr.replace(/(estran|fr‡n)Ä(gul)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//038310 ang˙nia 
+newstr = newstr.replace(/(ang[˙u]ni)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*037840@";	} );
+
+//038360 anhel 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(anhel)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*038360@";	} );
+
+//043860 ¿NTRAX i derivats ANTRAC», etc, i prefixos ANTRA- I ANTRAC-
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(‡ntrax|antr[a‡]c|antra)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*043860@";	} );
+
+//043875 antrop- #356260 home 
+newstr = newstr.replace(/(antr[oÚ]p)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*043875@#356260@";	} );
+
+//044370 anul∑lar 
+newstr = newstr.replace(/(anul[∑.]l)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*044370@";	} );
+
+//044540 any ::: …S UNA MICA M…S AVALL, sota ANYOL
+
+//044590 anyell 
+newstr = newstr.replace(/([^c])(anyell)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044590@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(anyÌ)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044590@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(anyin)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044590@";	} );
+
+//044660 anyil 
+newstr = newstr.replace(/(any[iÌ]l)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*044660@";	} );
+
+//044690 anyoc 
+newstr = newstr.replace(/(anyoc|anyoqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*044690@";	} );
+
+//044710 anyol "probable encreuament de allol, der. de all, i bonyol 'bony'
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(anyol)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044710@";	} );
+
+//044540 any 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(any)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044540@";	} );
+newstr = newstr.replace(/([^m])(anu)(al)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*044540@" + $4;	} );
+
+//050200 arameu 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(arame)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*050200@";	} );
+
+//051610 arena --> #603410 sorra
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ar)(eny)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*051610#603410@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(aren)([^g])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*051610#603410@" + $4;	} );
+
+//059840 aspre 
+//bloquegem DIASPRE
+newstr = newstr.replace(/(diasp)(r)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(naspr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*059840@";	}); newstr = newstr.replace(/(aspr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*059840@";	} );
+//desbloquegem
+newstr = newstr.replace(/(diasp)@(r)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//063470 atendre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(aten)(c|s|em|en|ia|ies|Ìem|Ìeu|ien|ent)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*063470@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(atÈn)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*063470@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(atengu)(Ì|eres|È|Èrem|Èreu|eren|i|is|em|eu|in|Ès|essis|Èssim|Èssiu|essin)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*063470@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(atend)(rÈ|r‡s|r‡|rem|reu|ran|ria|ries|rÌem|rÌeu|rien|re)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*063470@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(at)(Ës|esa|esos|eses)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*063470@" + $4 + $5;	} );
+
+//063470 atendre 063510 ateneu 
+newstr = newstr.replace(/(aten)(eu)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@*063470@" + $3.split('').join("@") + "@\]@*063510@"  ;	} );
+
+//063510 ateneu 
+newstr = newstr.replace(/(atene)(ista)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*063510@" + $3;	} );
+
+//063495 Atenes
+newstr = newstr.replace(/(aten)([Ë]s|en[cq])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*063495@" + $3;	} );
+
+//064930 atrevit 
+newstr = newstr.replace(/(atrev)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*064930";	} );
+
+
+//069490 avena #136390 civada
+//Bloquegem les seg¸ents formes verbals de AVENIR: avens, avenim, avenen, avenia, avenies, avenÌem, avenÌeu, avenir, avenint
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(av)(en)(s|im|en|ia|ies|iu|Ìem|ien|Ìeu|ir|int)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + $3 + "Ä" + $4 + $5 + $6;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(av[eË]n)([^cÁtÄ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*069490#136390@" + $4;	} );
+//desbloquegem
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(av)Ä(en)(s|im|en|ia|ies|iu|Ìem|ien|Ìeu|ir|int)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + $3 + $4 + $5 + $6;	} );
+
+//069750 avet
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(avet)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*069750@";	} );
+
+//069990 ‡vid 
+newstr = newstr.replace(/(‡vid)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*069990";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(avid)(esa|eses|itat)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*069990@" + $4;	} );
+
+//070950 azimut 
+newstr = newstr.replace(/(azimut)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*070950";	} );
+
+//071000 azobÈ
+newstr = newstr.replace(/(azob[Èe])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071000";	} );
+
+//071020 azoic --> 000020 a- + 673640 zoo #038620 animal + -ic
+//  		    --> 071060 azot #458100 nitrogen + -ic
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(zo)(i[cq])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + "@\[@" + $3.split('').join("@") + "@\]@*000020@" + "@\[@" + $4.split('').join("@") + "@\]@*673640#038620@" + "@\]@*071060#458100@" + $5;	} );
+//071050 azoospËrmia --> 000020 a- + 673640 zoo #038620 animal + -spËrmia
+newstr = newstr.replace(/(a)(zoo)(sp[Ëe]rmi)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*000020@" + "@\[@" + $3.split('').join("@") + "@\]@*673640#038620@" + $4;	} );
+//071170 azoxi- --> -az 071060 azot #458100 nitrogen FET + -oxi 476000 oxigen  
+newstr = newstr.replace(/(az)(oxi)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071060@#458100" + "@\[@" + $3.split('').join("@") + "@\]@*476000";	} );
+//071060 azot #458100 nitrogen 
+newstr = newstr.replace(/(az[oÚ]t)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071060@#458100";	} );
+//070970 azina --> 071060 azot #458100 nitrogen FET + -ina
+newstr = newstr.replace(/(az)(in)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071060@#458100" + $3;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(azo)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*071060@#458100@";	} );
+newstr = newstr.replace(/(di)(az)([oÚ]ni)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*071060@#458100@" + $4;	} );
+
+//071370 babovisme #071265 Babeuf
+newstr = newstr.replace(/(babov)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071265@";	} );
+
+//071430 bacall‡ 
+newstr = newstr.replace(/(bacall‡|bacallan)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*071430@";	} );
+
+//072210 badana 
+newstr = newstr.replace(/(badan)([^t])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*072210@" + $3;	} );
+
+//072230 baderna 
+newstr = newstr.replace(/(badern)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*072230@";	} );
+
+//072930 baix‡ #477320 paix‡ - 072910 baix 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(baix‡|baix‡s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*072910@*072930@#477320@" + $4;	} );
+
+//072910 baix 
+newstr = newstr.replace(/(baix)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*072910@";	} );
+
+//073340 balanÁa 
+newstr = newstr.replace(/(balanÁ)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*073340@";	} );
+newstr = newstr.replace(/(balanc)([eÈiÌ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*073340@";	} );
+
+//074070 baldufa 
+newstr = newstr.replace(/(balduf)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*074070@";	} );
+
+//074330 balisa 
+newstr = newstr.replace(/(balis)([^mt])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*074330@" + $3;	} );
+
+//074340 balista #074520 ballesta 
+//bloquegem CABALISTA, CANIBALISME i VERBALISME
+newstr = newstr.replace(/(caba|caniba|verba)(l[iÌ]s)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(bal[iÌ]st)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*074340@#074520@";	} );
+//desbloquegem
+newstr = newstr.replace(/(caba|caniba|verba)Ä(l[iÌ]s)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//093090 bony 
+//bloquegem BONYIGA
+newstr = newstr.replace(/(bon)(yig)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+//regla 
+newstr = newstr.replace(/(bony)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*093090@";	} );
+//desbloquegem
+newstr = newstr.replace(/(bon)Ä(yig)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+
+newstr = newstr.replace(/(bargany)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*077261@";	} );
+
+//077970 barranc 
+newstr = newstr.replace(/(barranc|barranqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*077970@";	} );
+
+newstr = newstr.replace(/(bat)(oll)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*080760@" + "@\[@" + $3.split('').join("@") + "@\]@∑467591" ;	} );
+
+//080740 batraci --> 080750 batraco- #340030 granota + -aci
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(batr)([a‡]ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*080750#340030@" + $4;	} );
+
+//080750 batraco- --> batrac- #340030 granota 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(batrac)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*080750#340030@";	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bat)(o|em|eu|en|ia|ies|Ìem|Ìeu|ien|Ì|eres|È|Èrem|Èreu|eren|rÈ|r‡s|r‡|rem|reu|ran|ria|ries|rÌem|rÌeu|rien|i|is|in|Ès|essis|Èssim|Èssiu|essin|re|ent|ut|uda|uts|udes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*080760@" + $4 + $5;	} );
+
+newstr = newstr.replace(/(bat)(uss)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*080760" + "@\[@" + $3.split('').join("@") + "@\]@651521@" ;	} );
+
+//081360 bec i 085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bec)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*081360*085010@" + $4;	} );
+
+newstr = newstr.replace(/(be)(ce)(r)(ol)/gi,  function($1,$2,$3,$4,$5)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@081201" + "@\[@" + $3.split('').join("@") + "@\]@127700@\]*000910@" + $4 + "@\[@" + $5.split('').join("@") + "@\]@466565	@";} );
+
+//083950 berruga
+newstr = newstr.replace(/(berrugu|berrug)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*083950@";	} ); 
+
+//229080 embessonar-se --> 084585 bessÛ "part doble o  m˙ltiple
+newstr = newstr.replace(/(em)(besson)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*084585@";	} ); 
+
+//084640 bËstia 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bËsti)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*084640@";	} );
+
+//084640 bËstia 
+newstr = newstr.replace(/(besti)(al|am|ar|e[jg]|es|ol)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*084640@" + $3;	} );
+
+//084080 bes- + 626310 tia
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bes)(ti)([^n])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@084080@" + "@\[@" + $4.split('').join("@") + "@\]@*626310@" + $5;	} );
+
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bessÛ|besson)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*084580@*084585@";	} ); 
+
+//085010 beure (veure 'bec' mÈs amunt)
+newstr = newstr.replace(/(beur)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*085010@";	} ); 
+
+//085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(beu)(s|en)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*085010@" + $4 + $5;	} );
+//085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(beu)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*085010@" + $4;	} );
+//085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bev)(em|eu|ia|ies|Ìem|Ìeu|ien|ent)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*085010@" + $4 + $5;	} );
+//085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(begu)(Ì|eres|È|Èrem|Èreu|eren|i|is|em|eu|in|Ès|essis|Ès|Èssim|Èssiu|essin)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*085010@" + $4 + $5;	} );
+//085010 beure
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(beg)(ut|uda|uts|udes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*085010@" + $4 + $5;	} );
+
+// 229100 embeure --> 085010 beure i 547330 rebeure --> 085010 beure 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(em|re)(bec|beus|beu|bevem|beveu|beuen|bevia|bevies|bevÌem|bevÌeu|bevien|beguÌ|begueres|beguÈ|beguÈrem|beguÈreu|begueren|begui|beguis|beguem|begueu|beguin|beguÈs|beguessis|beguÈs|beguÈssim|beguÈssiu|beguessin|bevent|begut|beguda|beguts|begudes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + $3+ "@\[@" + $4.split('').join("@") + "@\]@*085010@" + $5;	} );
+
+//093220 bor 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bor)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*093220@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(b[oÚ]r)([a‡])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*093220@" + $4;	} );
+
+//093220 bor 093265 borar
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bor)(at|ats)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*093265*093220@" + $4 + $5;	} );
+
+//093250 boragin‡cies 
+newstr = newstr.replace(/(b@o@r@)(\]@\*093220)(agin)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $4.split('').join("@") + "@\]@*093250@";	} );
+
+//093265 borar
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bor)(o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|ada|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*093265@" + $4 + $5;	} );
+
+//094810 borseguÌ 
+newstr = newstr.replace(/(borseguÌ|borseguin)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*094810@";	} );
+
+//102360 buguenvÌl∑lea 
+newstr = newstr.replace(/(buguenvÌl∑l[ei]a)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*102360@";	} );
+
+//104220 butiro- #419340 mantega
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(but[iÌ]r)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*104220#419340@";	} );
+
+//096215 boulangerita #096213 Boulanger
+newstr = newstr.replace(/(boulanger)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*096213@";	} );
+
+//096225 bournonita #096223 Bournon
+newstr = newstr.replace(/(bournon)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*096223@";	} );
+
+//096228 boutique #095720 botiga
+newstr = newstr.replace(/(boutique)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*096228#095720@";	} );
+
+//096230 bova "planta" #091230 boga 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bov)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*096230#091230@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(em)(bov)(o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|ada|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*096230#091230@" + $5 + $6;	} );
+
+//096140 bou O 096230 bova "planta" #091230 boga 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bov)(al|als|er|ers)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*096140*096230#091230@" + $4 + $5;	} );
+
+//096330 bovor #072400 baf 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bov)(or)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*096140*096330#072400@" + $4;	} );
+
+//096140 bou 
+//bloquegem 393225 laboulbenials 
+newstr = newstr.replace(/(labo)(ulb)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(b[oÚ]v)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*096140@";	} );
+newstr = newstr.replace(/(bou)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*096140@";	} );
+//desbloquegem
+newstr = newstr.replace(/(labo)@(ulb)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//104430 cabal
+//bloquegem ALCABALA i CABALISTA
+newstr = newstr.replace(/(alca)(bal)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(ca)(bal[iÌ]st)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(cabal)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*104430@";	} );
+//desbloquegem
+newstr = newstr.replace(/(alca)Ä(bal)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+newstr = newstr.replace(/(ca)Ä(bal[iÌ]st)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//104440 c‡bala 
+newstr = newstr.replace(/(c[‡a]bal)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*104440@";	} );
+
+//105800 cacic 
+newstr = newstr.replace(/(cacic|caciqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*105800@";	} );
+
+//106000 cada 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cada)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*106000@" + $4;	} );
+
+//111450 c‡mfora 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(c[‡a]mfor)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*111450@";	} );
+
+//113240 canÌbal 
+newstr = newstr.replace(/(can[Ìi]bal)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*113240@";	} );
+
+//113710 cansalada --> 121070 carn + 577860 sal 
+newstr = newstr.replace(/(can)(sal)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121070@" + "@\[@" + $3.split('').join("@") + "@\]@*577860@";	} );
+
+//117205 capri- #105200 cabra 
+//bloquegem REUNIFICAR
+newstr = newstr.replace(/(cap)(rici|ritx)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(c[a‡]pri)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*117205#105200@";	} );
+//desbloquegem
+newstr = newstr.replace(/(cap)@(rici|ritx)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//117320 capritx 
+//117210 caprici 
+newstr = newstr.replace(/(caprici)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*117210#117320@";	} );
+
+//117320 capritx 
+newstr = newstr.replace(/(capritx)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*117320@";	} );
+
+//120170 cardio- #163760 cor
+//Bloquegem PICARDIA, SECARDÕ, SECARDINENC
+newstr = newstr.replace(/(pi|se)(card[iÌ])/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3 + "Ä";	} );
+newstr = newstr.replace(/(c[a‡]rd[iÌ])([^ngÄ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*120170#163760@" + $3;	} );
+//desbloquegem
+newstr = newstr.replace(/(pi|se)Ä(card[iÌ])/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//CARN-
+//121140 carnal∑lita "German Carnallit, from Rudolf von Carnall Ü1874 German mining engineer"
+newstr = newstr.replace(/(carnal∑l[iÌ]t)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121140@";	} );
+//121200 carnauba
+newstr = newstr.replace(/(carnaub)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121200@";	} );
+//121210 carnaval 
+newstr = newstr.replace(/(carnaval)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121210@";	} );
+//121280 carnestoltes #121210 carnaval 
+newstr = newstr.replace(/(carnestolt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121280#121210@";	} );
+//121290 carnet 
+newstr = newstr.replace(/(carnet)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121290@";	} );
+//121430 carnotita "French, from M. A. Carnot Ü1920 French inspector general of mines"
+newstr = newstr.replace(/(carnotit)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*121430@";	} );
+//121070 carn
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(c[a‡]rn)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*121070@";	} );
+
+//122860 carta
+//Bloquegem les formes verbals de CARTENIR
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ca)(rt)(inc|ens|È|enim|eniu|enen|enia|enies|enÌem|enÌeu|enien|inguÌ|ingueres|inguÈ|inguÈrem|inguÈreu|ingueren|indrÈ|indr‡s|indr‡|indrem|indreu|indran|indria|indries|indrÌem|indrÌeu|indrien|ingui|inguis|inguem|ingueu|inguin|inguÈs|inguessis|inguÈssim|inguÈssiu|inguessin|Èn|enir|enint|ingut|inguda|inguts|ingudes|ingues|ingueu|indre)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + $3 + "Ä" + $4 + $5 + $6;	} );
+//Bloquegem els mots: CARTAB”, CARTAGIN»S, CARTELLATGE, CARTESI¿, CARTÕLAG, CARTOIXA, CARTRA, CARTRE
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ca)(rt)(ab[Ûo]|agin[Ëe]s|ellatge|esi[‡a]|[Ìi]lag|oix|r)/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + $3 + "Ä" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cart)([^Ä])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*122860@" + $4;	} );
+//desbloquegem
+newstr = newstr.replace(/(ca)Ä(rt)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//CARTR” Ès forma ambigua tan pot venir de CARTA com de CARTRE/CARTRA
+//122860 carta 123290 cartre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cart)(r[Ûo])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*122860@*123290@";	} );
+
+//125550 catameus 513700 poliol 
+newstr = newstr.replace(/(catameus)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*125550#513700@";	} );
+
+//127710 ceba 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ceb)([^u])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*127710@" + $4;	} );
+
+//131730 cÈrvol 
+//bloquegem CERVELL, CERVESA, CERVICAL, C»RVIX
+newstr = newstr.replace(/(c[eË])(rvell|rves|rvi[cx])/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(c[eËÈ]rv)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*131730@";	} );
+//desbloquegem
+newstr = newstr.replace(/(c[eË])@(rvell|rves|rvi[cx])/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//132035 ceto- "cetaci" #074200 balena 
+newstr = newstr.replace(/(cet)(o)(rÌnids|rrÌnids)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*132035#074200@" + $3 + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cet)([iÌ]l|[a‡]ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*132035#074200@" + $4;	} );
+
+
+//132030 ceto- --> 005665 acet- #661870 vinagre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cet)([oÚ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*005665#661870@" + $4;	} );
+
+//133480 cimaci 
+newstr = newstr.replace(/(cim[a‡]ci)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*133480@";	} );
+
+//134800 circuit 
+newstr = newstr.replace(/(circuit)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*134800@";	} );
+
+//138600 client 
+newstr = newstr.replace(/(client)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*138600@";	} );
+
+//138630 clima 
+newstr = newstr.replace(/(clim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*138630@";	} );
+
+//138720 clÌmax
+newstr = newstr.replace(/(clÌmax)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*138720@";	} );
+//mots etiquetats com a clima que els correspon l'arrel CLÕMAX
+newstr = newstr.replace(/(c@l@i@m@)(\]@\*138630)([‡a]c)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $4.split('').join("@") + "@\]@*138720@";	} );
+newstr = newstr.replace(/(c@l@i@m@)(\]@\*138630)(at)([eË]ri)/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + $4.split('').join("@") + "@\]@*138720@" + $5;	} );
+
+//142730 cohortatiu International Scientific Vocabulary cohortat- (from Latin cohortatus) + -ive; probably originally formed as German kohortativ
+newstr = newstr.replace(/(cohortat)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*142730@";	} );
+
+//142720 cohort 
+newstr = newstr.replace(/(cohort)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*142720@";	} );
+
+//143660 col∑lagen 
+newstr = newstr.replace(/(col∑lag[eË]n)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*143660@";	} );
+
+//147760 comparar 
+newstr = newstr.replace(/(compar)(abl|aci[ÛÛ]|ador|an[Ác]|at)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147760@" + $3;	} );
+
+newstr = newstr.replace(/(compar)(o|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147760@" + $3 + $4;	} );
+//compares: ambigua: de 147840 compare #484250 pare i de 147760 comparar 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(compar)(es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*147760*147840#484250@" + $4 + $5;	} );
+
+
+//147840 compare #484250 pare 
+newstr = newstr.replace(/(compar)(e|et|ets)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147840#484250@" + $3 + $4;	} );
+
+//147870 comparËixer 
+newstr = newstr.replace(/(compar)(ec|[Ëe]ix|egu[eÈiÌtd])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147870@" + $3;	} );
+
+//147890 comparsa 
+newstr = newstr.replace(/(compars)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147890@";	} );
+
+//147960 compartir #485670 part 
+newstr = newstr.replace(/(compart)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147960#485670@";	} );
+
+//147970 comp‡s #486290 pas "fer un pas"
+newstr = newstr.replace(/(compass)(a)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147970#486290@" + $3;	} );
+newstr = newstr.replace(/(comp‡s)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*147970#486290@";	} );
+
+//148000 compassiÛ 
+newstr = newstr.replace(/(compass)(i[Ûouv])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*148000@" + $3;	} );
+
+//149320 comprimir 
+newstr = newstr.replace(/(comprim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*149320@";	} );
+
+//149570 comptar 
+newstr = newstr.replace(/(compt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*149570@";	} );
+
+//149750 cÚmput #149620 compte 
+newstr = newstr.replace(/(c[Úo]mput)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*149750#149620@";	} );
+
+//149980 comunicar (ABANS DE "COM⁄")
+newstr = newstr.replace(/([^x])(comunic|comuniqu)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*149980@";	} );
+
+//150050 comunir (ABANS DE "COM⁄")
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(comun)(eixo|eixes|eix|im|iu|eixen|ia|ies|Ìem|Ìeu|ien|Ì|ires|Ìrem|Ìreu|iren|irÈ|ir‡s|ir‡|irem|ireu|iran|iria|iries|irÌem|irÌeu|irien|eixi|eixis|im|iu|eixin|Ìs|issis|Ìssim|Ìssiu|issin|ir|int|it|ida|its|ides)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*150050@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(comun)(idor)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*150050@" + $4;	} );
+
+//149870 com˙ 
+//Bloquegem el mot: descomunal 
+newstr = newstr.replace(/(desco)(munal)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+newstr = newstr.replace(/(com˙|comun)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*149870@";	} );
+//desbloquegem
+newstr = newstr.replace(/(desco)Ä(munal)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+
+//151270 concreciÛ --> 151320 concret
+newstr = newstr.replace(/(concre)(ci[Ûo])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*151320@" + $3;	} );
+
+//151320 concret 
+newstr = newstr.replace(/(concret)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*151320@";	} );
+
+//153990 congestiÛ 
+newstr = newstr.replace(/(congest)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*153990@";	} );
+
+//154430 conhort 
+newstr = newstr.replace(/(conhort)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*154430@";	} );
+
+//154590 conill: HEM DE BLOQUEJAR: 168120 cosconilla 
+//Bloquegem el mot: cosconilla 
+newstr = newstr.replace(/(cosco)(nill)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+newstr = newstr.replace(/(conill)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*154590@";	} );
+//desbloquegem
+newstr = newstr.replace(/(cosco)Ä(nill)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//157340 construir 
+newstr = newstr.replace(/(constru)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*157340@";	} );
+
+//163210 copinya 
+newstr = newstr.replace(/(copiny)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*163210@";	} );
+
+//165070 cori "membrana"
+//Bloquegem el mot: CORI-MORI
+newstr = newstr.replace(/(co)(ri-mori)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cori|cÚrion)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*165070@" + $4 + $5;	} );
+//desbloquegem
+newstr = newstr.replace(/(co)Ä(ri-mori)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//165080 cori- "separat"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cori)(c‡rpic|sËpal)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@∑165080@" + $4;	} );
+
+//165090 coriaci --> *165070 cori #175560 cuir + -aci
+//165130 coriari‡cies --> 165070 cori #175560 cuir  + -ari + -‡cies
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cori)(aci|ari‡ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*165070#175560@" + $4;	} );
+
+//165120 coriandre 
+newstr = newstr.replace(/(coriandr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165120@";	} );
+
+//165140 coribant --> cori- "Cibele (divinitat)" + -bant "sacerdot"
+newstr = newstr.replace(/(coribant)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165140@";	} );
+
+//165160 corifËnids CORIFEN "dofÌ"
+newstr = newstr.replace(/(corif[Ëe]n)(id)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165160@" + $3;	} );
+
+//165100 coriambe --> 163765 cor "conjunt" + iambe
+//165300 corista --> 163765 cor "conjunt" FET + -ista
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cor)(i[a‡]mb|ist)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*163765@" + $4;	} );
+
+//165170 corifeu 
+newstr = newstr.replace(/(corifeu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165170@";	} );
+
+//165180 corimbe 
+newstr = newstr.replace(/(corimb)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165180@";	} );
+
+//165220 cori-mori --> 163760 cor "Úrgan" + 445320 morir  
+newstr = newstr.replace(/(cor)(i)(|\-)(mor)(i)/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*163760@" + $3 + $4 + "@\[@" + $5.split('').join("@") + "@\]@*445320@" + $6;	} );
+
+//165230 corindÛ 
+newstr = newstr.replace(/(corind[Ûo])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165230@";	} );
+
+//165235 Corint
+newstr = newstr.replace(/(cor[iÌ]nt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165235@";	} );
+
+//165280 corÌsia -->  165275 Choris 
+newstr = newstr.replace(/(cor[Ìi]s)(ia)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165275@" + $3;	} );
+
+//165290 corissÛ --> 163760 cor "Úrgan" FET + -issÛ
+newstr = newstr.replace(/(cor)(iss[Ûo])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*163760@" + $3;	} );
+
+//165310 corivell 
+newstr = newstr.replace(/(corivell)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165310@";	} );
+
+//165330 coriza 
+newstr = newstr.replace(/(coriz)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*165330@";	} );
+
+//168040 cosa 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cos)(a|es|eta|etes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*168040@" + $4 + $5;	} );
+
+//169790 coverbo 
+newstr = newstr.replace(/(coverbo)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169790@";	} );
+
+//169855 -cr‡cia 
+newstr = newstr.replace(/([a‡])(cr‡cia|cr‡cies|crata|crates|cr‡tic|cr‡tica|cr‡tics|cr‡tiques)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑000020@" + $3 + $4;	} );
+newstr = newstr.replace(/(cr‡c)(ia|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169855@" + $3 + $4;	} );
+
+//-cr‡tic
+//bloquegem HIPOCR¿TIC, IDIOSINCR¿TIC, SOCR¿TIC, EUCR¿TIC
+newstr = newstr.replace(/(eucr‡|hipocr‡|idiosincr‡)(ti)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+//regla especial pels derivat de SÚcrates, interfereix amb MESOCR¿TIC i PANTISOCR¿TIC
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(socr[‡a]|presocr[‡a])(ti)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "Ä" + $4;	} );
+//regla
+newstr = newstr.replace(/(cr‡t)(ic)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169855@" + $3;	} );
+//170105 -crata --> 169855 -cr‡cia 
+newstr = newstr.replace(/(crat)(a|es|ism|itz)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169855@" + $3;	} );
+//desbloquegem
+newstr = newstr.replace(/(eucr[‡a]|hipocr[‡a]|idiosincr[‡a]|socr[‡a])Ä(ti)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} );
+
+//170110 crater 
+newstr = newstr.replace(/(cr[a‡]ter)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*170110@";	} );
+
+//cresol --> 341820 gresol *170850 creosota 
+newstr = newstr.replace(/(cres)(ol)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@*170850@" + $3.split('').join("@") + "@\]@*341820@";	} );
+
+//171240 cretenc --> 171215 Creta 
+newstr = newstr.replace(/(cret)(enc|enq)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*171215@" + $3;	} );
+
+//171280 cretona --> 171275 Creton
+newstr = newstr.replace(/(cret)(on)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*171275@" + $3;	} );
+
+//171230 cret‡cic --> 171210 creta FET + -aci + 358977 -ic "relatiu o pertanyent a"
+newstr = newstr.replace(/(cret)(‡c)(ic)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*171210@" + "@\[@" + $3.split('').join("@") + "@\]@∑005985@" + "@\[@" + $4.split('').join("@") + "@\]@∑358977@";	} );
+
+//171210 creta  
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cret)([^Ìi])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*171210@" + $4;	} );
+
+//cuit
+//169570 coure "cuinar"
+//175720 cuitar 
+//bloquegem "descuit"
+newstr = newstr.replace(/(desc)(uit)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a|cor|corre)(cuit)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*175720@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bes|re)(cuit)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*169570@";	} );
+newstr = newstr.replace(/(cuit)(acorrent)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*175720@" + $3;	} );
+newstr = newstr.replace(/(cuit)(or)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169570@" + $3;	} );
+newstr = newstr.replace(/(cuit)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*169570@" + $3 + $4;	} );
+//desbloquegem
+newstr = newstr.replace(/(desc)@(uit)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cuit)(a|es|Ûs|osa|osos|oses)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*169570*175720@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cuit)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*175720@";	} );
+
+
+//176613 cuni- #154590 conill
+//176616 cuniculi- #154590 conill
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(cuniculi|cuni)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*176616#154590@";	} );
+
+//179750 de "lletra
+//179755 de "preposiciÛ
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(de)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*179755*179750@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(d)(['í])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*179755@" + $4;	} );
+//del + 225750 el ARTICLE
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(de)(l)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*179755@" + "@\[@" + $4.split('').join("@") + "@\]@*225750" + $5 + $6;	} );
+
+//187260 des "des de" 179750 de "lletra 179755 de "preposiciÛ" + 258195 es ARTICLE SALAT 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(d)(e)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@"   + "@\[@"  + "@\[@" + $3.split('').join("@") + "@\]@*179755@" + "@\[@" + $4.split('').join("@") + "@\]@*179750@" + $5  + "@\]@*258195@" + "@\]@*187260@" + $6;	} );
+
+//187270 des- = de-
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(des)(sal)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@187270@" + $4;	} );
+
+//182220 definir 
+newstr = newstr.replace(/(defin)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*182220@";	} );
+
+//182620 degenerar 
+newstr = newstr.replace(/(degener)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*182620@";	} );
+
+//182690 deglutir 
+newstr = newstr.replace(/(deglut|deglu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*182690@";	} );
+
+//183670 delegar 
+newstr = newstr.replace(/(delegu|deleg)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*183670@";	} );
+
+//185070 demono- #212000 dimoni 
+newstr = newstr.replace(/(demono)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*185070#212000@";	} );
+
+//186630 deprimir 
+newstr = newstr.replace(/(deprim|depress)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*186630@";	} );
+
+//194430 desembre 
+newstr = newstr.replace(/(desembr)(e|al)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*194430@" + $3;	} );
+
+//207910 dia  
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(di)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*207910@" + $4 + $5;	} );
+
+//209170 diaspre #389710 jaspi 
+newstr = newstr.replace(/(diaspr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*209170#389710@";	} );
+
+//209610 dic 
+//ambigu DIC: 213200 dir 209610 dic 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(dic)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200*209610@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(dic)(s)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(dic|diqu)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200@";	} );
+
+//210950 digerir 
+newstr = newstr.replace(/(diger|digest)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*210950@";	} );
+
+//211040 dÌgit #216470 dit 
+//bloquegem PRESTIDIGITADOR
+newstr = newstr.replace(/(prestidi)(gita)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+//regla
+newstr = newstr.replace(/(d[Ìi]git)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*211040#216470@";	} );
+//desbloquegem
+newstr = newstr.replace(/(prestidi)Ä(gita)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} );
+
+//211350 dijous 
+newstr = newstr.replace(/(dijous)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*211350@";	} 	);
+
+//211640 dilluns 
+newstr = newstr.replace(/(dilluns)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*211640@";	} 	);
+
+//211770 dimarts 
+newstr = newstr.replace(/(dimarts)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*211770@";	} 	);
+
+//211780 dimecres 
+newstr = newstr.replace(/(dimecres)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*211780@";	} 	);
+
+//213200 dir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(di)(em|eu|uen|guÌ|gueres|guÈ|guÈrem|guÈreu|gueren|rÈ|r‡s|r‡|rem|reu|ran|ria|ries|rÌem|rÌeu|rien|gui|guis|guem|gueu|guin|guÈs|guessis|guÈssim|guÈssiu|guessin|gues|r|ent|ta|tes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(d[eË])(ies|ia|iem|ieu|ien)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200@" + $4 + $5;	} );
+
+//215260 dissabte 
+newstr = newstr.replace(/(dissabte)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*215260@";	} 	);
+
+//216470 dit AMBIGU 213200 dir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(dit)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200*216470@" + $4 + $5;	} );
+
+//216695 diu	[acrÚnim de Dispositiu IntraUterÌ] AMBIGU amb 213200 dir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(diu)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*213200*216695@" + $4 + $5;	} );
+
+//216700 diumenge 
+newstr = newstr.replace(/(diumen[gj])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*216700@";	} 	);
+
+//216880 divendres 
+newstr = newstr.replace(/(divendres)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*216880@";	} 	);
+
+//217100 divinaciÛ 240410 endevinar 
+newstr = newstr.replace(/(div)(inaci[oÛ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*240410@" + $3;	} );
+
+//217070 divÌ #207450 dÈu 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(divÌ)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*217070#207450@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(divin)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*217070#207450@";	} );
+
+//217090 dividir + AMBIGU 'individu'
+newstr = newstr.replace(/(divÌs)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*217090@";	} );
+newstr = newstr.replace(/(divis)([io])([a-z‡ËÚÈÌÛ˙Ô¸Á]{1,})/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*217090@" + $3 + $4;	} );
+newstr = newstr.replace(/(divid)([eÈiÌ]|uÔ)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*217090@" + $3;	} );
+
+//217180 divisa 
+newstr = newstr.replace(/(divis)([aeÈiÌ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*217180@" + $3;	} );
+
+//217410 do 'nota' 217415 do 'donar' (plural 'dons')
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(do)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*217410*217415@" + $4;	} );
+
+//219690 dos 217410 do 'nota'
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(do)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + "@\[@" + $3.split('').join("@") + "@\]@*217410@" + $4 + "@\]@*219690@" + $5;	} );
+
+//219690 dos 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(dues)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*219690@" + $4;	} );
+
+//220950 drÚpax 
+newstr = newstr.replace(/(drÚpax)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*220950@";	} );
+
+//244110 engendrar #330490 generar
+newstr = newstr.replace(/(en)(gendr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*244110#330490@";	} );
+
+//224340 ego #390080 jo
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(eg[Úo])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*224340#390080@";	} );
+
+//225750 el ARTICLE
+//225755 el PRONOM
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(el)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*225750*225755@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(l)(['í])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*225750*225755*392890*392893@" + $4;	} );
+
+//227020 elegia 
+//227070 elegir
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(eleg)(ia|ies)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*227020*227070@" + $4 + $5;	} );
+//repetim regle perquË si 2 ocurrËncies seguides, una no s'etiquetaria
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(eleg)(ia|ies)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*227020*227070@" + $4 + $5;	} );
+
+//227020 elegia 
+newstr = newstr.replace(/(eleg)(Ìa[cq])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*227020@" + $3;	} );
+
+//226090 electre (derivats ELECTRICITAT, ETC.)
+//Bloquegem ELECTRIU (d'ELECTOR)
+newstr = newstr.replace(/(elec)(triu)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(el[eË]ctr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*226090@";	} );
+//desbloquegem
+newstr = newstr.replace(/(elec)Ä(triu)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//227000 elegant 
+newstr = newstr.replace(/(eleg[a‡]n[ct])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*227000@";	} );
+
+//227070 elegir 
+//[^bcpr] perquË no etiqueti ES-B-ELEGAR, VI-C-ELEGAT, ES-P-ELEGAT, -P-ELEGRÕ, -R-ELEGAR
+//([^r]) perquË no etiqueti ex. FOTOTELEG-R-AFIA
+newstr = newstr.replace(/([^bcpr])(eleg)([^r])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*227070@" + $4;	} );
+
+//226930 electuari 
+newstr = newstr.replace(/(electuari)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*226930@";	} );
+
+//ara fem ELECCI” i derivats
+//bloquegem R-ELECTURA, S-ELECCI”, T-ELECADIRA ***
+newstr = newstr.replace(/([dprst]e)(lec)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(elec)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*227070@";	} );
+//desbloquegem
+newstr = newstr.replace(/([dprst]e)Ä(lec)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//227440 ell 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ell)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*227440@";	} );
+
+//235400 en 'pronom' 235403 en 'article' 235406 en 'preposiciÛ'
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(en)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*235400*235403*235406@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(n)(')/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*235400*235403@" + $4;	} );
+
+//240620 endÌvia 
+newstr = newstr.replace(/(endÌvi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*240620@";	} );
+
+//248210 ensajornar 
+newstr = newstr.replace(/(ensajorn)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*248210@";	} );
+
+//-ENTER-
+newstr = newstr.replace(/(ent[Ëe]r)(ic|itis)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*249820#383180@" + $3;	} );
+newstr = newstr.replace(/(dis)(ent[Ëe]r)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*249820#383180@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(enter[Úo])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*249820#383180@";	} );
+newstr = newstr.replace(/(mes)(ent[Ëe]r)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@@*249820#383180@";	} );
+
+//250650 entortolligar 
+newstr = newstr.replace(/(entortollig)([ao])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*250650@" + $3;	} );
+newstr = newstr.replace(/(entortolligu)([ei])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*250650@" + $3;	} );
+
+//250900 entre 
+//251410 entregar 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(entreg)(o|a|ava|aves|‡vem|‡veu|aven|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*251410@" + $4 + $5	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(entregu)(es|em|eu|en|Ì|i|is|in|Ès|essis|Èssim|Èssiu|essin)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*251410@" + $4 + $5;	} );
+//251490 entrellat 
+newstr = newstr.replace(/(entrellat)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*251490@";	} );
+//250860 entrar 
+newstr = newstr.replace(/(entr)(o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*250860@" + $3 + $4;	} );
+//251750 entrenar
+newstr = newstr.replace(/(entren)(o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*251750@" + $3 + $4;	} );
+//bloquegem ENTRENYELLAR, ENTRESCAR, ENTRESPOLAR, ENTRETZENAR-SE
+newstr = newstr.replace(/(ent)(renyell|resc|resqu|respol|retzen)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+//250900 entre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(entre)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*250900@";	} );
+//desbloquegem
+newstr = newstr.replace(/(ent)@(renyell|resc|resqu|respol|retzen)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//255390 episcopat #088280 bisbe 
+newstr = newstr.replace(/(episcop)([^i])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*255390#088280@" + 	$3;	} );
+
+//255860 Ëpoca  
+newstr = newstr.replace(/(Ëpoc|Ëpoqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*255860@";	} );
+
+
+//265250 escopeta 
+newstr = newstr.replace(/(escopet)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*265250@";	} );
+
+//265370 escopir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(escup)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*265370@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(escop)([iÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*265370@" + $4;	} );
+
+//265390 escopolamina "Named after Giovanni Scopoli (1723ñ1788), a Tyrolean naturalist"
+newstr = newstr.replace(/(escopol)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*265390@";	} );
+
+//265375 escopo- #077261 -scop
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(escop)(o)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*265375#583696@" + $4;	} );
+
+//267730 esfagne 
+newstr = newstr.replace(/(esf[a‡]gn)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*267730@";	} );
+
+//278520 Èsser 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(Ès|sÛn)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*278520@" + $4;	} 	);
+
+//282650 estÌrax
+newstr = newstr.replace(/(estÌrax|estorac|estoraqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*282650@";	} );
+newstr = newstr.replace(/(estir)(Ë|ens)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*282650@" + $3;	} );
+//regla especial pq interfereix amb Estiracabells, etc.
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(estirac)([‡a]ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*282650@" + $4;	} );
+
+//282750 estiu 
+//bloquegem FESTIU, PESTIU i SUGGESTIU
+newstr = newstr.replace(/(fest|pest|suggest)(iu|[iÌ]v)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+//regla
+newstr = newstr.replace(/(esti[uv])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*282750@";	} );
+//desbloquegem
+newstr = newstr.replace(/(fest|pest|suggest)Ä(iu|[iÌ]v)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} );
+
+//283990 estrangular 
+newstr = newstr.replace(/(estrangul)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*283990@";	} );
+
+//288650 evident 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(evident|evid[Ëe]nc)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*288650@";	} );
+
+//290940 exhort 
+newstr = newstr.replace(/(exhort)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*290940@";	} );
+
+//291910 expectorar 
+newstr = newstr.replace(/(expector)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*291910@";	} );
+
+//292680 exposar 
+newstr = newstr.replace(/(exp[oÚ]s)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*291910@";	} );
+
+//292740 exprÈs 
+newstr = newstr.replace(/(exprÈs|express)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*292740@";	} );
+
+//292850 exprimir #292740 exprÈs  
+newstr = newstr.replace(/(exprim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*292850#292740@";	} );
+
+//295290 fagedena #295265 -fag-
+newstr = newstr.replace(/(fag)(ed[eË]n)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@#295265@" +$3.split('').join("@") + "@\]@*295290@" ;	} );
+
+//295320 fagell 
+newstr = newstr.replace(/(fagell)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295320@";	} );
+
+//295330 fagina 
+newstr = newstr.replace(/(fagin)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295330@";	} );
+
+//295380 fagony --> 311305 foehn
+newstr = newstr.replace(/(fagony)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295380#311305@";	} );
+
+//295390 fagot 
+newstr = newstr.replace(/(fagot)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295390@";	} );
+
+//295450 faig 
+//la forma FAIG Ès homÚnima amb forma verbal de 301790 fer 
+newstr = newstr.replace(/(faig)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*301790@295450@";	} );
+newstr = newstr.replace(/(faj)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295450@";	} );
+newstr = newstr.replace(/(fag)(‡ci|ed)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295450@" + $3;	} );
+
+//295265 -fag-
+//bloquegem ESFAGNALS(mÈs amunt), FAG¿CIES(mÈs amunt), FAGEDENA(mÈs amunt), FAGINA(fet mÈs amunt), FAGONY(fet mÈs amunt), FAGOT(fet mÈs amunt, RUFAGA
+newstr = newstr.replace(/(ruf)(ag)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} );
+//regla
+newstr = newstr.replace(/(f[a‡]g)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*295265@";	} );
+//desbloquegem
+newstr = newstr.replace(/(ruf)Ä(ag)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} );
+
+//299600 favoni 
+newstr = newstr.replace(/(fav[oÚ]ni)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*299600@";	} );
+
+//299610 favor 
+newstr = newstr.replace(/(favor)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*299610@";	} );
+
+//299510 fava
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑]|en|mata|passa)(fav)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*299510@";	} );
+
+//299680 fax 
+newstr = newstr.replace(/(fax)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*299680@";	} );
+
+//299760 febrer 299740 febre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(febrer)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*299760@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(febr)(e)(j)/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + "@\[@" + $3.split('').join("@") + "@\]@*299740@" + $4.split('').join("@") + "@\]@*299760@" + $5;	} );
+newstr = newstr.replace(/([^r])(febr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*299740@";	} );
+
+//309450 flegma 
+newstr = newstr.replace(/(flegm)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*309450@";	} );
+
+//312100 folliga #315710 fotja 
+newstr = newstr.replace(/(follig)([ao])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*312100#315710@";	} );
+newstr = newstr.replace(/(folligu)([ei])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*312100#315710@";	} );
+
+//317190 francËs 
+newstr = newstr.replace(/(franc[Ëe]s)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*317190@";	} );
+
+//317320 franco- 317190 francËs 
+//Bloquegem FRANCOLÕ
+newstr = newstr.replace(/(fran)(col)/gi,  function($1,$2,$3)	{
+	return $2 + "Ä" + $3;	} ); 
+newstr = newstr.replace(/(franc[oÚ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*317190@";	} );
+//desbloquegem
+newstr = newstr.replace(/(fran)Ä(col)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+
+//323780 gal‡xia "llet"
+newstr = newstr.replace(/(gal[‡a]x|gal[a‡]ct)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*323780@";	} );
+
+//325810 gangli 
+newstr = newstr.replace(/(gangli)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*325810@";	} );
+
+//327290 garrameu #437380 miolar
+newstr = newstr.replace(/(garrameu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*327290#327290@";	} );
+
+//328595 a gatameus 328560 gat 433620 meu 'miolar' #437380 miolar 
+newstr = newstr.replace(/(gat)(a)(meu)(s)/gi,  function($1,$2,$3,$4,$5)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*328560@" + $3 + "@\[@" + $4.split('').join("@") + "@\]@*433620#437380@" + $5;	} );
+
+//GEN
+//GEN«ANA, GENCIANA 330230 genciana 
+newstr = newstr.replace(/(genÁan|gencian)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330230";	} );
+//330260 gendarme 
+newstr = newstr.replace(/(gendarm)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330260@";	} );
+//330280 gendre 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(gendr)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330280@";	} );
+//330330 gener 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(gener)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330330@" + $4 + $5;	} );
+//330395 general "militar 330390 general "com˙"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(general)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330395*330390@" + $4 + $5;	} );
+//330395 general "militar
+newstr = newstr.replace(/(general)(a|es|at|ats|Ìssim|Ìssims)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330395@" + $3 + $4;	} );
+//330390 general "com˙"
+newstr = newstr.replace(/(general)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330390@";	} );
+//330540 gËnere 
+newstr = newstr.replace(/(gËner[ea])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330540@";	} );
+//330550 genËric --> 330540 gËnere 
+newstr = newstr.replace(/(genËr)(ic)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330540@" + $3;	} );
+newstr = newstr.replace(/(sui )(generis)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330540@";	} );
+//330580 generÛs 
+newstr = newstr.replace(/(gener[Ûo]s)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330580@";	} );
+//330490 generar 
+newstr = newstr.replace(/([^r])(gener)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330490@";	} );
+//330610 gËnesi #330490 generar 
+newstr = newstr.replace(/(g[eË]n[eË]s[iÌ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330610#330490@";	} );
+//330660 genËtic --> 330200 gen 330490 generar
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(genËt)(ic||ica|ics|iques)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330200*330490@" + $4 + $5;	} );
+//-genËtic --> 330610 gËnesi #330490 generar 
+newstr = newstr.replace(/(genËt)(ic||ica|ics|iques)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330610#330490@" + $3;	} );
+//genetista --> 330200 gen 
+newstr = newstr.replace(/(genet)(ista|istes)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330200@" + $3;	} );
+//330670 genetlÌac
+newstr = newstr.replace(/(genetlÌac)(|a|s)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330670@" + $3;	} );
+newstr = newstr.replace(/(genetlÌaqu)(es)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330670@" + $3;	} );
+//a la geneta --> 330640 genet
+//@\[@a@\]@\*000010@\*000015
+newstr = newstr.replace(/(@\[@a@\]@\*000010@\*000015 la )(geneta)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330640@";	} );
+//330640 genet 330650 geneta 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(genet)(a|es)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330640*330650@" + $4;	} );
+//330640 genet 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(genet)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330640@";	} );
+//330680 geni 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(geni)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330680@" + $4 + $5;	} );
+//330690 genial --> 330680 geni
+newstr = newstr.replace(/(geni)(al|¸)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330680@" + $3;	} );
+//330720 gËnic --> 330200 gen FET 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(gËn)(ic|ica|ics|iques)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@\[@" + $3.split('').join("@") + "@\]@*330200@" + $4 + $5;	} );
+//-gËnic, -genicitat, 
+//330730 genicular #330910 genoll 
+newstr = newstr.replace(/(genicul)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330730#330910@";	} );
+//330750 genio- 429240 mentÛ 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(genio)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330910#429240@";	} );
+//330760 genÌsser 
+newstr = newstr.replace(/(genÌsser)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330760@";	} );
+
+//330770 genital 
+newstr = newstr.replace(/(genital)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330770@";	} );
+//330780 genitiu 
+newstr = newstr.replace(/(geniti[uv])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*3330780@";	} );
+//330800 genitor --> 330765 -genit- "nascut" #330490 generar
+newstr = newstr.replace(/(genit)(or)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330765#330490@" + $3;	} );
+//330790 genito- #330770 genital 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(genito)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*330790#330770@";	} );
+//-genitzar --> 330610 gËnesi #330490 generar + -itzar
+newstr = newstr.replace(/(gen)(itz)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330610#330490@" + $3;	} );
+//bloquegem INDIGENITURA --> INDÕGENA
+newstr = newstr.replace(/(indigen)/gi,  function($1,$2)	{
+	return $2 + "@";	} );
+//330765 *gËnit "nascut" #330490 generar
+newstr = newstr.replace(/(g[eË]nit)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330765#330490@";	} );
+//restaurem INDIGENITURA --> INDÕGENA
+newstr = newstr.replace(/(indigen)(@)/gi,  function($1,$2,$3)	{
+	return $2;	} );
+//330880 genivell 
+newstr = newstr.replace(/(genivell)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330880@";	} );
+//330860 geniva 
+newstr = newstr.replace(/(geniv)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330860@";	} );
+//330910 genoll 
+newstr = newstr.replace(/(genoll)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*330910@";	} );
+
+//331230 geo- #623780 terra 
+//331690 georgi‡ --> GeÚrgia
+newstr = newstr.replace(/(ge[oÚ]rgi[a‡])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*331690@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ge)(oid)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*331230#330770@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ge)(oda|odes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*331230#330770@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ge[oÚ])/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*331230#330770@";	} );
+
+//335000 glia (inclou GLIADINA, NEUROGLIA)
+newstr = newstr.replace(/(gli[ae])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*335000@";	} );
+
+//335305 glif- "gravar"
+newstr = newstr.replace(/(gl[iÌ]f|gl[iÌ]pt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*335305@";	} );
+
+//335370 glÌrids 
+newstr = newstr.replace(/(gl[iÌ]r)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*335370@";	} );
+
+//336170 gluco- 
+newstr = newstr.replace(/(gl[u˙iÌ]c)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*336170@";	} );
+//335320 glioxal --> 336170 gluco- + 476000 oxigen + -al
+newstr = newstr.replace(/(gli)(ox)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*336170@" + "@\[@" + $3.split('').join("@") + "@\]@*476000@";	} );
+
+//338470 gra 339390 gran 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(gra)(n)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@\[@" + $3.split('').join("@") + "@\]@*338470@" + $4.split('').join("@") + "@\]@*339390@" + $5 + $6;	} );
+
+//340770 gratis 
+newstr = newstr.replace(/(gratis)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*340770@";	} );
+
+//340790 gratuÔt #340770 gratis 
+newstr = newstr.replace(/(gratuÔt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*340790@#340770";	} );
+
+//341820 gresol 
+newstr = newstr.replace(/(gresol)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*341820";	} );
+
+//346960 haver 345725 ha 'interjecciÛ' 345720 ha 'lletra' 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ha)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*346960*345725*345720@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ha)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*346960*345725@" + $4 + $5;	} );
+
+//346630 h‡pax 
+newstr = newstr.replace(/(h‡pax)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*346630@";	} );
+
+//347670 hel∑lË #341250 grec 
+newstr = newstr.replace(/(hel∑l[Ëe]n|hel∑lË)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*347670@#341250@";	} );
+
+//349180 herba 
+newstr = newstr.replace(/(herb)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*346630@";	} );
+
+//351180 hi 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(hi)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*351180@" + $4;	} );
+
+//352870 hiero- 
+newstr = newstr.replace(/(hier)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*352870@";	} );
+
+//357330 hora 
+newstr = newstr.replace(/(hor)([ae]|[Úo]sc[oÚ]p)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357330@" + $3;	} );
+
+//357390 hordeaciÛ #470910 ordi 
+newstr = newstr.replace(/(horden|horde[^s])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357390#470910@";	} );
+
+//357380 horda 
+newstr = newstr.replace(/(hord)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357380@";	} );
+
+//357420 horitzÛ 
+newstr = newstr.replace(/(horitzÛ|horitzon)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357420@";	} );
+
+//357640 horror 
+newstr = newstr.replace(/(h[oÚ]rr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357640@";	} );
+
+//357675 horst
+newstr = newstr.replace(/(horst)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357675@";	} );
+
+//357720 hortËnsia 
+//Del lat. cient. Hortensia, y este del fr. Hortense, nombre de la dama a quien dedicÛ esta flor el naturalista francÈs Ph. Commerson, 1727-1773, que la importÛ de China, y el lat. -ia '-ia'.
+newstr = newstr.replace(/(hort[Ëe]ns)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357720@";	} );
+
+//357680 hort 
+newstr = newstr.replace(/(hort)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*357680@";	} );
+
+//365410 imprimir 
+newstr = newstr.replace(/(imprim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*365410@";	} );
+
+//365590 improperar 
+newstr = newstr.replace(/(improper)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*365590@";	} );
+
+//366250 inabastable --> 366240 in- + 000610 abast
+newstr = newstr.replace(/(in)(abast)/gi,  function($1,$2,$3)	{
+	return  "@\[@" + $2.split('').join("@") + "@\]@∑366240@" + "@\[@" +  $3.split('').join("@") + "@\]@*000610@";	} ); 
+
+//AMBIGU individu  217090 dividir 371960 individu 
+//([a-z‡ËÚÈÌÛ˙Ô¸Á]{1,})
+newstr = newstr.replace(/(individu)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*371960*217090@" + $3 + $4;	} );
+newstr = newstr.replace(/(individu)([aeÈiÌ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*371960@" + $3;	} );
+
+//376860 inici 
+newstr = newstr.replace(/(inici)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*376860@";	} );
+
+//389710 jaspi 
+newstr = newstr.replace(/(jaspi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*389710@";	} );
+
+//390000 Jerusalem
+newstr = newstr.replace(/(jerosolim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*390000@";	} );
+
+//389975 jero- 352870 hiero- 
+newstr = newstr.replace(/(jer[oÚ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*352870@";	} );
+
+//390080 jo 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(jo)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*390080@" + $4;	} );
+
+//390085 Joan
+newstr = newstr.replace(/(jo[a‡]n)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*390085@";	} );
+
+//390700 jorn 
+newstr = newstr.replace(/(jorn)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*390085@";	} );
+
+//391550 juliol 
+newstr = newstr.replace(/(juliol)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*391550@" + $3;	} );
+
+//391560 juliola 
+newstr = newstr.replace(/(juliol)(a|es)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*391560@" + $3;	} );
+
+//391700 j˙nior 390860 jove 
+newstr = newstr.replace(/(j˙nior)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*391700@#390860@";	} );
+
+//391710 junt 
+newstr = newstr.replace(/(junt)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*391710@";	} );
+
+//391750 juny 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(juny)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*391750@" + $4;	} );
+
+//391800 junyir 
+newstr = newstr.replace(/(j[u˙]ny)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*391800@";	} );
+
+//392890 la ARTICLE #225750 el ARTICLE
+//392893 la PRONOM #225755 el PRONOM
+//392896 la "nota"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(la)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*392890#225750*392893#225755@*392896@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(l)(es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*392890#225750*392893#225755@" + $4 + $5;	} );
+
+//395100 las "cansat" 392896 la "nota"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(las)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*395100*392896@" + $4;	} );
+
+//393225 laboulbenials #393223 LaboulbËne
+newstr = newstr.replace(/(laboulben)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*393223@";	} );
+
+//399570 lÌquid 
+newstr = newstr.replace(/(l[Ìi]quid)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*399570@";	} );
+
+//406180 lligÛ #403740 llegÛ 
+newstr = newstr.replace(/(llig)(Û|ons|ona|ones)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*406180#403740@" + $3;	} );
+
+//406150 lligar 
+newstr = newstr.replace(/(llig)([ao])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*406150@" + $3;	} );
+newstr = newstr.replace(/(lligu)([ei])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*406150@" + $3;	} );
+
+//410960 m‡ 
+newstr = newstr.replace(/(man)(@\[@c@o@m@˙@|@\[@c@o@m@u@n@)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*410960@" + $3;	} );
+
+//413560 maig 
+newstr = newstr.replace(/(maig)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413560@";	} );
+
+//413720 majestat 
+newstr = newstr.replace(/(majest)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413720@";	} );
+
+//413780 majÚlica  
+newstr = newstr.replace(/(majÚli[cq])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413780@";	} );
+
+//413770 majola #110820 camamilla 
+newstr = newstr.replace(/(majol)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413770#110820@";	} );
+
+//413790 major 
+//413840 majorana #421130 marduix 
+newstr = newstr.replace(/(majoran)([^t])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413840#421130@" + $3;	} );
+newstr = newstr.replace(/(major)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413790@";	} );
+newstr = newstr.replace(/(maj)(˙scul)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*413790@" + $3;	} );
+
+//420770 marÁ 
+newstr = newstr.replace(/(marÁ)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*420770@";	} );
+newstr = newstr.replace(/(marc)(e[^lsi])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*420770@" + $3;	} );
+
+//421040 marci‡ --> 422930 mart 
+newstr = newstr.replace(/(marc)(i‡|ian)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*422930@" + $3;	} );
+
+//421050 marcial 
+newstr = newstr.replace(/(marcial)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*421050@";	} );
+
+//421090 marcir 
+newstr = newstr.replace(/(marc)([eiÌ][^l])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*421090@" + $3;	} );
+
+//422520 marrameu 433620 meu 'miolar' #437380 miolar 
+newstr = newstr.replace(/(marrameu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*422520#433620#437380@";	} );
+
+//431685 met- #660090 vi
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(met)(oxi|oxil|‡|an)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*431685#660090@" + $4 + $5 + $6;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(met)(‡ni[cq]|anol|[iÌ]l)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*431685#660090@" + $4;	} );
+
+//AMBIGU: 433610 meu "possessiu" 433615 meu "planta" 433620 meu "miolar" #437380 miolar
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(meu)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*433610*433615*433620#437380@" + $4 + $5;	} );
+//repetim la regla perquË si surten dos seguits el segon no l'etiqueta
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(meu)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*433610*433615*433620@" + $4 + $5;	} );
+
+//433610 meu "possessiu" 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(mev)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*433610@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(meu)(a|es)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*433610@" + $4;	} );
+
+//433630 meuca 
+newstr = newstr.replace(/(meuc|meuqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*433630#433620#437380@";	} );
+
+//433635 meulo #433620 meu "miolar" #437380 miolar
+newstr = newstr.replace(/(meul)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*433635#433620#437380@";	} );
+
+//437970 mirmeco- #314290 formiga 
+newstr = newstr.replace(/(mirmec)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*437970#314290@";	} );
+
+//440290 modern 
+newstr = newstr.replace(/(modern)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*440290@";	} );
+
+//monot 441940 mona 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(mon)(ot|ota|monots|monotes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*441940@" + $4 + $5;	} );
+
+//442570 mono- 
+//bloquegem AMMONOœDEUS, AMON“LISI (d'amonÌac), QUIMONO
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ammo|quimo)(n[Úo])/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@" + $4;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(amo)(n[Úo]l[iÌ][st])/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@" + $4;	} ); 
+newstr = newstr.replace(/(mon[oÚ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*442570@";	} );
+//desbloquegem
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ammo|quimo)@(n[Úo])/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + $4;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(amo)@(n[Úo]l[iÌ][st])/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + $4;	} ); 
+
+//446120 moscard --> 446080 mosca + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(mosc)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*446080@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325@";	} );
+
+//446400 mossard --> 446540 mosso + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(moss)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*446540@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325@";	} );
+
+//448940 muniÛ 
+newstr = newstr.replace(/(muniÛ|munion)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*448940@";	} );
+
+//454130 negligir 
+newstr = newstr.replace(/(neglig)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*454130@";	} );
+
+//456670 nevus "taca de la pell"
+newstr = newstr.replace(/(nevus)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*456670@";	} );
+
+//458370 no 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(no)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*458370@" + $4;	} );
+
+//460020 nostre 
+//bloquegem ANOSTRACI
+newstr = newstr.replace(/(an)(ostrac)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(nostr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*460020@";	} );
+//desbloquegem
+newstr = newstr.replace(/(an)@(ostrac)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//460660 novembre 
+newstr = newstr.replace(/(novembr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*460660@";	} );
+
+//463140 obovat : 462270 ob- + 475470 ovat #475290 ou 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ob)(ov)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*462270@" + "@\[@" + $4.split('').join("@") + "@\]@*475290@";	} );
+
+//465050 octubre 
+newstr = newstr.replace(/(octubr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*465050@";	} );
+
+//469960 oprimir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(oprim|opress)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*469960@";	} );
+
+//475865 oxi- "punxegut" 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ox[iÌ])(moron|na|nes|rinc|rrinc|tocin|ton)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*475865@" + $4;	} );
+
+//476060 oximel (427160 mel)
+newstr = newstr.replace(/(oxi)(mel)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\[@" + $3.split('').join("@") + "@\]@*427160@"  + "@\]@*476060@" ;	} );
+
+//476000 oxigen 
+newstr = newstr.replace(/([^t])(ox[iÌ]gen)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*476000@";	} );
+//-ox- 
+newstr = newstr.replace(/([^t])([Úo]x)(il)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*476000@" + $4 + $5 + $6;	} );
+//oxi-, OXHÕDRIC
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])([oÚ]x)(azin|azol|h[Ìi]dr|[iÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*476000@" + $4;	} );
+
+//475760 ox‡lic 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ox[a‡]lid|ox[a‡]l)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*475760@";	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ox)(amid)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*475760@" + $4;	} );
+
+//478680 pallard --> 478590 palla + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pall)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*478590@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325@";	} );
+
+//484650 paret 484250 pare 
+newstr = newstr.replace(/(par)(et)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@*484250@"  + $3.split('').join("@") + "@\]@*484650@" ;	} );
+
+//482720 paradoxa 
+newstr = newstr.replace(/(paradox)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*482720@";	} ); 
+
+//491520 pelegrÌ 
+newstr = newstr.replace(/(pelegrÌ|pelegrin)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*491520@";	} ); 
+
+//494130 per 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(per)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*494130@" + $4;	} );
+//pel: 494130 per + 225750 el ARTICLE
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pe)(l)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*494130@" + "@\[@" + $4.split('').join("@") + "@\]@*225750" + $5 + $6;	} );
+
+//502310 pigment 
+newstr = newstr.replace(/(pigment)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*502310@";	} ); 
+
+//502350 pigmeu 
+newstr = newstr.replace(/(pigme)([^n])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*502350@" + $3;	} ); 
+
+//507090 pl‡cid 
+newstr = newstr.replace(/(pl[‡a]cid)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*507090@";	} ); 
+
+//510450 ploure 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(plo)(c|us|u|vem|veu|uen|via|vies|vÌem|vÌeu|vien|guÌ|gueres|guÈ|guÈrem|guÈreu|gueren|urÈ|ur‡s|ur‡|urem|ureu|uran|uria|uries|urÌem|urÌeu|urien|gui|guis|guem|gueu|guin|guÈs|guessis|guÈssim|guÈssiu|guessin|ure|vent|gut|guda|guts|gudes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*510450@" + $4 + $5;	} );
+//derivats amb PLUJAR: SOPLUJAR, SOTAPLUJAR i PLUJ”S PLUJOSA
+newstr = newstr.replace(/(pluj)(o|a|ava|aves|‡vem|‡veu|aven|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|ar|ant|at|ada|ats|ades|[Ûo]s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*510450" + $3 + $4;	} );
+newstr = newstr.replace(/(plug)(es|em|eu|en|Ì|i|is|in|Ès|essis|Èssim|Èssiu|essin|)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*510450@" + $3 + $4;	} );
+//TambÈ els derivats PLOVER, PLOVISQUEJAR, ETC. i 
+// PLUIG i SOPLUIG
+newstr = newstr.replace(/(plov|pluig)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*510450@";	} );
+//TambÈ els derivats PLUGIM, PLUGISSER
+// i EMPLUGENCAT
+newstr = newstr.replace(/(plug)(ie)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*510450@" + $3;	} );
+//AIXOPLUGAR
+newstr = newstr.replace(/(aixo)(plugu|plug|pluc)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*510450@";	} );
+//derivats amb PLUVI
+newstr = newstr.replace(/(pluvi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*510450@";	} );
+
+//512260 pol "cardinal"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pol)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*512260@" + $4;	} );
+
+//515070 pols "partÌcules"
+//515075 pols "batec"
+//512260 pol "cardinal" * 515070 pols "partÌcules" * 515075 pols "batec"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pol)(s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + "@\[@" + $3.split('').join("@") + "@\]@*512260@" + $4.split('').join("@") + "@\]@*515070*515075@" + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pols)(era|eres|o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*515070*515075@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(pols)(ador|ament)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*515075@" + $4 + 	$5;	} );
+//resta POLS correspon a 515070 pols "partÌcules"
+newstr = newstr.replace(/(pols)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*515070@";	} ); 
+
+//PRIMA: 525180 prim 525350 primer 525195 prima #522700 premi 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525180*525350*525195#522700@" + $4 + $5;	} 	);
+//prim‡ria, prim‡riament: 525180 prim i 525350 primer 
+newstr = newstr.replace(/(prim)(‡ria|‡ries|‡riament)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525350*525180@" + $3;	} 	);
+//primaci, primal, primari 525350 primer 
+newstr = newstr.replace(/(prim)(ari|al[^l]|aci)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525350@" + $3;	} 	);
+//525300 primavera 
+newstr = newstr.replace(/(primaver)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525300@";	} ); 
+//525350 primer 
+newstr = newstr.replace(/(prim)(er)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525350@" + $3;	} 	);
+//primor, primoter, primorÛs 525180 prim 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)(or|ors)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525180@" + $4 + $5;	} 	);
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)(oter|oters|otera|oteres)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525180@" + $4 + $5;	} 	);
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)(orÛs|orosa|orosos|oroses)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525180@" + $4 + $5;	} 	);
+//primitxol 525180 prim 
+newstr = newstr.replace(/(prim)(itxol)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525180@" + $3;	} 	);
+//525480 primitiu #525350 primer 
+newstr = newstr.replace(/(prim)(iti[uv])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525480#525350@" + $3;	} 	);
+//525280 primat #525350 primer 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)(at|ats)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525280#525350@" + $4 + $5;	} 	);
+//525540 primnesiÚfits #526200 proa 
+newstr = newstr.replace(/(primnesi[oÚ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525540#526200@";	} ); 
+//525670 prÌmula #525350 primer 
+newstr = newstr.replace(/(pr[iÌ]m)(ul)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525670#525350@" + $3;	} 	);
+//525350 primer 
+//bloquegem PRIMITXOL
+newstr = newstr.replace(/(pri)(mitx)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prim)([oiÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*525350@" + $4;	} 	);
+//desbloquegem
+newstr = newstr.replace(/(pri)@(mitx)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+//525180 prim 
+//bloquegem SUPRIMIR i REPRIMIR
+newstr = newstr.replace(/(rep|sup)(rim)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(prim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*525180@";	} ); 
+//desbloquegem
+newstr = newstr.replace(/(rep|sup)@(rim)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//526350 problema 
+newstr = newstr.replace(/(problem)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*526350@";	} ); 
+
+//529110 prop: FET DESPR…S DE PROPI
+
+//529240 propalar 
+newstr = newstr.replace(/(propal)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529240@";	} ); 
+
+//529380 propi 
+//bloquegem REPROPI x REPROPIESA
+newstr = newstr.replace(/(repr)(op)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(pr[oÚ]pi)([a‡eÈiÌÔ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529380@" + $3;	} 	);
+newstr = newstr.replace(/(propi)(o)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529380@" + $3 + $4;	});  
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(propi)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*529380@" + $4 + $5;	});  
+newstr = newstr.replace(/(desa|ex|im)(propi)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*529380@";	}); 
+//desbloquegem
+newstr = newstr.replace(/(repr)@(op)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//529110 prop: FET DESPR…S DE PROPI
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(a)(prop)(o|es|a|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aria|aries|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades|ament|aments)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@*529110@" + $5 + $6;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(prop)(|er|era|ers|eres|erament)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*529110@" + $4 + $5;	});  
+newstr = newstr.replace(/(prop)(in[cq])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529110@" + $3;	});  
+//529270 propdit FET --> 529110 prop + 213200 dir
+newstr = newstr.replace(/(prop)(dit)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529110@" + "@\[@" + $3.split('').join("@") + "@\]@*213200@";	} );
+//529255 proparent --> 529110 prop + 484530 parent 
+newstr = newstr.replace(/(prop)(parent|passat|vinent)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529110@" + $3;	} );
+
+//529200 propagar 
+newstr = newstr.replace(/(propagu|propag)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529200@";	} ); 
+newstr = newstr.replace(/(prop‡g)(ul)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529200@" + $3;	}); 
+
+//529640 proporciÛ 
+newstr = newstr.replace(/(proporciÛ|proporcion)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529640@";	} ); 
+
+//529750 proposar 
+newstr = newstr.replace(/(prop[oÚ]s)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529750@";	} ); 
+
+//529910 propulsar 
+newstr = newstr.replace(/(propuls)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529910@";	} ); 
+newstr = newstr.replace(/(prop)(ergol)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*529910@" + $3;	});  
+
+//531730 proverbi
+newstr = newstr.replace(/(proverbi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*531730@";	} ); 
+
+//531820 provident 
+newstr = newstr.replace(/(provident|provid[Ëe]nc)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*531820@";	} ); 
+
+//533520 -pterigi "ala, aleta"
+newstr = newstr.replace(/(pter[iÌ]gi)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*533520@";	} );
+
+//538020 que 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(que)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*538020@" + $4;	} );
+
+//540790 quotidi‡ 
+newstr = newstr.replace(/(quotidi‡|quotidian)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*540790@";	} );
+
+//543960 rancor 
+newstr = newstr.replace(/(rancor|ranc[u˙]n)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*543960@";	} );
+
+//548990 recidiva #548540 recaure: 546280 re- ('tornar') cidiva #126830 caure 
+newstr = newstr.replace(/(re)(cidiv)/gi,  function($1,$2,$3)	{
+	return "@\[@" + "@\[@" + $2.split('').join("@") + "@\]@*546280@" + "@\[@" + $3.split('').join("@") + "@\]@*126830@" + "@\]@*548990#548540@";	} ); 
+
+//551600 rediviu #664530 viure 'torna a viure'
+newstr = newstr.replace(/(redi)(vi[uv])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\[@" + $3.split('').join("@") + "@\]@*664530@" + "@\]@*551600@";	} ); 
+
+//554850 regir (fet abans de 554640 regi #555800 rei)
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(reg)(eixo|eixes|eix|im|iu|eixen|ia|ies|Ìem|Ìeu|ien|Ì|ires|Ìrem|Ìreu|iren|irÈ|ir‡s|ir‡|irem|ireu|iran|iria|iries|irÌem|irÌeu|irien|eixi|eixis|eixin|Ìs|issis|Ìssim|Ìssiu|issin|ir|int|it|ida|its|ides)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*554850@" + $4 + $5;	} 	);
+//derivats de REGIR: REGENT, REGIDOR, R»GIM, REGI”
+newstr = newstr.replace(/(reg)(ent|iÛ|ion)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*554850@" + $3;	} );
+newstr = newstr.replace(/([^f])(reg)(idor)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*554850@" + $4;	} );
+newstr = newstr.replace(/(r[eË]g)(im)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*554850@" + $3;	} );
+
+//554640 regi #555800 rei 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(regi)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*554640@#555800" + $4 + $5;	} );
+newstr = newstr.replace(/(rËgi)(a)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*554640@#555800" + $3;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(regi)(na|nes|neta|netes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*554640@#555800" + $4 + $5;	} );
+//regicida
+newstr = newstr.replace(/(regi)(cid)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*554640@#555800" + $3;	} );
+
+//554930 registrar 
+newstr = newstr.replace(/(registr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*554930@";	} );
+
+//561640 reprimir 
+newstr = newstr.replace(/(reprim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*561640@";	} );
+
+//563540 respondre 
+newstr = newstr.replace(/(respond|respons|respon)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*563540@";	} );
+
+//563180 resoldre 
+newstr = newstr.replace(/(resol)([uv])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*563180@" + $3;	} );
+newstr = newstr.replace(/(resol)(c|s||em|eu|en|ia|ies|Ìem|Ìeu|ien|guÌ|gueres|guÈ|guÈrem|guÈreu|gueren|drÈ|dr‡s|dr‡|drem|dreu|dran|dria|dries|drÌem|drÌeu|drien|gui|guis|guem|gueu|guin|guÈs|guessis|guÈssim|guÈssiu|guessin|dre|ent|t|ta|ts|tes)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*563180@" + $3 + $4;	} 	);
+
+//564600 resultar 
+newstr = newstr.replace(/(result)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*564600@";	} );
+
+//571810 romeu "pelegrÌ" #571270 rom‡ #491520 pelegrÌ 
+newstr = newstr.replace(/(rom)(eu|ev|iatg)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*571810#571270#491520@" + $3;	} );
+
+
+//572900 rosegar
+newstr = newstr.replace(/(rosegu|roseg)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*572900@";	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(rosec)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*572900@";	} 	);
+
+//573090 rossegar
+newstr = newstr.replace(/([^bp])(rossegu|rosseg)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*573090@";	} 	); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(r[oÚ]ssec)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*573090@";	} 	);
+
+//573500 rotaci --> 573570 rotar #570290 roda + 005985 -aci 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(rot)([a‡]ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*573570#570290@" + $4;	} );
+
+//577090 saf‡vida
+newstr = newstr.replace(/(saf[a‡]v[iÌ])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*577090@";	} );
+
+//577860 sal 577870 sala 578130 salari 
+//sal
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sal)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*577860@" + $4 + $5;	} );
+//mots ambigus sala i sales
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sal)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*577860*577870@" + $4 + $5;	} );
+//578130 salari 
+newstr = newstr.replace(/(salar)(i)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@578130@" + $3;	} );
+//577870 sala : antesala i avantsala
+newstr = newstr.replace(/(ante|avant)(sal)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@577870@";	} );
+//577860 sal : assalar, dessalar, salar  187270
+newstr = newstr.replace(/(@000021@s|en)(sal)(a[td])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@577860@" + $4;	} );
+newstr = newstr.replace(/(@187270@)(sal)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@577860@";	} );
+newstr = newstr.replace(/(sal)(ador|adur|ament|obre|anc|anqu|aÛ|aons)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@577860@" + $3;	} );
+//577860 sal : salar 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sal)(o|em|eu|en|ava|aves|‡vem|‡veu|aven|Ì|ares|‡|‡rem|‡reu|aren|arÈ|ar‡s|ar‡|arem|areu|aran|aries|aria|arÌem|arÌeu|arien|i|is|in|Ès|essis|Èssim|Èssiu|essin|ar|ant|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*577860@" + $4 + $5;	} );
+//saler
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sal)(er)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*577860@" + $4;	} );
+
+//583610 saxhorn 
+newstr = newstr.replace(/(saxhorn)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@583610@";	} );
+
+//583693 schorl
+newstr = newstr.replace(/(schorl)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@583693@";	} );
+
+//583691 -scop "examinar"
+newstr = newstr.replace(/(sc[Úo]p)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@583696@";	} );
+
+//583700 se 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(se)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@583700@" + $4;	} );
+newstr = newstr.replace(/(s)(['í])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*583700@" + $3;	} ); 
+
+//585380 seguir 
+newstr = newstr.replace(/(seg[u¸])(e[^r])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*585380@" + $3;	} ); 
+newstr = newstr.replace(/(segu)([iÌ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*585380@" + $3;	} ); 
+
+//585400 segur 
+newstr = newstr.replace(/(segur)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*585400@";	} ); 
+
+//591190 setembre 
+newstr = newstr.replace(/(setembr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*591190@";	} ); 
+
+//591310 setmana 
+newstr = newstr.replace(/(setman)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*591310@";	} ); 
+
+//soler***
+//solc
+//600510 solc 600880 soler 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(solc)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*600510*600880@" + $4;	} );
+newstr = newstr.replace(/(solc)([^u])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*600510@" + $3;	} );
+newstr = newstr.replace(/(solqu)([eiÈÌ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*600510@" + $3;	} );
+//sol 
+//600330 sol estel 
+//600335 sol nota musical
+//sol de 601230 solitud 
+//sol de 601670 soluciÛ quÌmica 
+//600880 soler 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@@∑])(sol)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*600510*600880@" + $4;	} );
+//600340 sÚl (entre 250900)
+newstr = newstr.replace(/(250900@|sub)(s[oÚ]l)(|s|at|ada|ats|ades)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*600340@" + $4 + $5 ;	} );
+
+
+//603670 sortija 
+newstr = newstr.replace(/(sorti[jg])/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603670@";	} ); 
+
+//603700 sortilegi 
+newstr = newstr.replace(/(sort[iÌ]leg)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603700@";	} ); 
+
+//603710 sortiller --> 603700 sortilegi 
+newstr = newstr.replace(/(sortill)(er)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603710#603700@" + $3;	} ); 
+
+//603705 sortilla #603670 sortija [entrada principal] 
+//BLOQUEGEM 'sortiller' de 'sortilegi'
+newstr = newstr.replace(/(sor)(tiller)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(sortill)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603705#603670@";	} ); 
+newstr = newstr.replace(/(sor)@(tiller)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//d'aquÌ SORT I SORTIR
+//603575 Sort 'municipi'
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sort)(enc)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*603575@" + $4;	} );
+//564180 ressort #603740 sortir 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(res)(sort)/gi,  function($1,$2,$3,$4)	{
+	return $2 + $3 + "@\[@" + $4.split('').join("@") + "@\]@603740@";	} );
+//603570 sort 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(sort)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*603570@" + $4;	} );
+newstr = newstr.replace(/(sort)(a|e|o|Û|s)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603570@" + $3;	} ); 
+newstr = newstr.replace(/(dis)(sort)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*603570@";	} ); 
+//156850 consort --> 603570 sort FET
+newstr = newstr.replace(/(con)(s[oÚ]r[tc])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2 + "@\[@" + $3.split('').join("@") + "@\]@" + "@\]@*156850#603570@";	} ); 
+//603740 sortir 
+newstr = newstr.replace(/(sort)([iÌ])/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*603740@" + $3;	} ); 
+//611440 surt "sobresalt"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(surt)(|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*603740*611440@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(surt)(o|en|i|is|in)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*603740@" + $4 + $5;	} );
+
+//a aquÌ
+
+
+//611170 suprimir 
+newstr = newstr.replace(/(suprim|supress)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*611170@";	} );
+
+//633660 toxi- 
+newstr = newstr.replace(/(t[oÚ]x)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*633660@";	} );
+
+//638300 treball 
+newstr = newstr.replace(/(treball)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*638300@";	} );
+
+//641740 trÌglids
+newstr = newstr.replace(/(trÌgl)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*641740@";	} );
+
+//624910 test 'terrissa 624914 test 'prova 624918 test 'rÌgid
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624910*624910*624918@" + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)(os)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624910*624910*624918@" + $4 + $5;	} );
+//624914 test 'prova (la forma verbal) 624918 test 'rÌgid 624920 testa 'cap 625000 testar 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)(a|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624914*624918*624920*625000@" + $4 + $5;	} );
+
+
+//624930 testaci --> 624919 test- + 005985 -aci -‡cia -acis -‡cies 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)([a‡]ci)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624919@" + $4;	} );
+
+//625010 testard --> 624920 testa + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624920@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325";	} );
+
+
+//625190 testimoni --> 625000 testar + 362955 -imoni 
+newstr = newstr.replace(/(test)(imoni)/gi,  function($1,$2,$3)	{
+	return  "@\[@" + $2.split('').join("@") + "@\]@*625000@" + "@\[@" + $3.split('').join("@") + "@\]@∑362955";	} ); 
+
+newstr = newstr.replace(/(test)(@\[@i@f@i@[cq]@)/gi,  function($1,$2,$3)	{
+	return  "@\[@" + $2.split('').join("@") + "@\]@*625000@" + $3;	} ); 
+
+//625250 testÛ --> 624920 testa 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(test)(Û|ons)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*624920@" + $4 + $5;	} );
+
+//627320 tinard --> 627290 tina + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(tin)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*627290@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325";	} );
+
+//631270 tÚrax 
+newstr = newstr.replace(/(tÚrax|tor[‡a]c)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*631270@";	} );
+
+
+
+
+//649970 unir - el fem abans de 647415 u "nombre" per no interferir amb uni-
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(un)(eixo|eixes|eix|im|iu|eixen|ia|ies|Ìem|Ìeu|ien|Ì|ires|Ìrem|Ìreu|iren|irÈ|ir‡s|ir‡|irem|ireu|iran|iria|iries|irÌem|irÌeu|irien|eixi|eixis|im|iu|eixin|Ìs|issis|Ìssim|Ìssiu|issin|ir|int|it|ida|its|ides)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*649970@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(un)(ible|ibil|idament|itiu|itiv)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*649970@" + $4;	} );
+//UNI”
+newstr = newstr.replace(/(un)(iÛ|ion)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*649970@" + $3;	} );
+//tots els de REUNIR (UNIR) llevat de REUNIFICAR (UNIR)
+//bloquegem REUNIFICAR
+newstr = newstr.replace(/(reu)(nifi)/gi,  function($1,$2,$3)	{
+	return $2 + "@" + $3;	} ); 
+newstr = newstr.replace(/(re)(un)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*649970@";	} );
+//desbloquegem
+newstr = newstr.replace(/(reu)@(nifi)/gi,  function($1,$2,$3)	{
+	return $2 + $3;	} ); 
+
+//650090 univers (abans de 647415 u "nombre" per no inteferir amb uni-
+newstr = newstr.replace(/(univers)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*650090@";	} ); 
+
+//647410 u "lletra" 647415 u "nombre"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@@∑])(u)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*647410*647415@" + $4;	} );
+
+//647415 u "nombre"
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(un)(|a|s|es|Ë)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑-])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*647415@" + $4 + $5;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(un)([a‡]ri)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*647415@" + $4;	} );
+newstr = newstr.replace(/(un)(d[eË]c)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*647415@" + $3;	} );
+//el prefix uni- i ˙nic
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])([˙u]n)([iÌ])/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*647415@" + $4;	} );
+
+//649050 un‡nime 
+newstr = newstr.replace(/(un[a‡]nim)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*649050@";	} ); 
+
+//649270 ungla 
+newstr = newstr.replace(/(ungl)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*649270@";	} ); 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(ungu)/gi,  function($1,$2,$3)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*649270@";	} ); 
+
+//649340 ung¸ent 
+newstr = newstr.replace(/(ung¸ent)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*649340@";	} ); 
+
+//655630 vellard --> 655620 vell + 051325 -ard 
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(vell)(ard)/gi,  function($1,$2,$3,$4)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@*655620@" + "@\[@" + $4.split('').join("@") + "@\]@∑051325";	} );
+
+//VERB
+//657350 verberar 
+newstr = newstr.replace(/(verber)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*657350@";	} ); 
+//657330 verben‡cies 
+newstr = newstr.replace(/(verben)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*657330@";	} ); 
+//657230 verb 
+newstr = newstr.replace(/(v[eË]rb)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*657230@";	} ); 
+
+//660990 vident #659980 veure 
+newstr = newstr.replace(/(vid)(ent|Ënc)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*660990#659980@" + $3;	} );
+
+//661140 vidre 
+newstr = newstr.replace(/(vidr)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@*661140@";	} ); 
+
+
+// A F I X O S
+// A F I X O S
+// A F I X O S
+// A F I X O S
+
+//358975 -ic "quÌmica"
+//358976 -ic "diminutiu"
+//358977 -ic "relatiu o pertanyent a"
+newstr = newstr.replace(/(043860|138720|631270)(ic)(|a|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@∑358977@" + $4 + $5;	} );
+newstr = newstr.replace(/(043860|631270)(iqu)(es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5)	{
+	return $2 + "@\[@" + $3.split('').join("@") + "@\]@∑358977@" + $4 + $5;	} );
+//358974 -ic genËric
+newstr = newstr.replace(/(ic)(|a|s)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑358974@" + $3 + $4;	} );
+newstr = newstr.replace(/(iqu)(es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑358974@" + $3 + $4;	} );
+
+//005985 -aci -‡cia -acis -‡cies Relatiu a. oliva  olivaci
+//BLOQUEGEM: BONIFACI, DACI, DESFICACI, acabats en -FILACI(GAZOFILACI, HIDROFILACI), LACI, PANCRACI, PREFACI
+newstr = newstr.replace(/(fil[a‡])(ci|cia|cis|cies)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{	return $2 + "Ä" + $3 + $4;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(bonif|d|desfic|l|pancr|pref)(a)(ci|‡cia|acis|‡cies)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4,$5,$6)	{	return $2 + $3 + $4 + "Ä" + $5 + $6 ;	} );
+//etiquetem el sufix -ACI
+newstr = newstr.replace(/([a‡]ci)(|a|s|es)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@Ä∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑005985@" + $3 + $4;	} );
+//DESBLOQUEGEM mots amb -aci que no sÛn el sufix
+newstr = newstr.replace(/(fil[a‡])Ä(ci|cia|cis|cies)/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+newstr = newstr.replace(/(bonif|d|desfic|l|pancr|pref)([a‡])Ä(ci|cia|cis|cies)/gi,  function($1,$2,$3,$4)	{	return $2 + $3 + $4;	} );
+
+//360155 -ific 'Fer o convertir en. Aplicat a substantius o adjectius forma verbs cultes de la primera conjugaciÛ.
+//BLOQUEGEM jeroglÌfic (NO HI HA EL SUFIX -IFICAR)
+newstr = newstr.replace(/(jerogl[Ìi]f)(i[cq])/gi,  function($1,$2,$3)	{	return $2 + "@" + $3;	} );
+//BLOQUEGEM tÌfic (NO HI HA EL SUFIX -IFICAR)
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(t[Ìi]f)(i[cq])/gi,  function($1,$2,$3,$4)
+	{	return $2 + $3 + "@" + $4;	} );
+newstr = newstr.replace(/([ÌÔ]fic|[ÌÔ]fiqu)/gi,  function($1,$2)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑360155@";	} );
+newstr = newstr.replace(/(ific)(a|‡|o)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑360155@" + $3;	} );
+newstr = newstr.replace(/(ifiqu)(e|È|i|Ì)/gi,  function($1,$2,$3)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑360155@" + $3;	} );
+//centificitat
+newstr = newstr.replace(/(ific)(i)(tat|al|er|Ûs|os)/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑360155@" + $3 + $4;	} );
+newstr = newstr.replace(/(ific)(i|is)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])/gi,  function($1,$2,$3,$4)	{
+	return "@\[@" + $2.split('').join("@") + "@\]@∑360155@" + $3 + $4;	} );
+newstr = newstr.replace(/(ific)(ent|Ënci)/gi,  function($1,$2,$3)	{
+	return "\[@" + $2.split('').join("@") + "@\]@∑360155@" + $3;	} );
+//DESBLOQUEGEM jeroglÌfic (NO HI HA EL SUFIC -IFICAR)
+newstr = newstr.replace(/(jerogl[Ìi]f)@(i[cq])/gi,  function($1,$2,$3)	{	return $2 + $3;	} );
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ@∑])(t[Ìi]f)@(i[cq])/gi,  function($1,$2,$3,$4)	{	return $2 + $3 + $4;	} );
+
+
+
+
+
+
+//-------------------------------
+//-------------------------------
+//-------------------------------
+//-------------------------------
+
+//desbloquegem mots ja analitzats o que formen part de l'arrel
+newstr = newstr.replace(/@/gi,"");		
+
+//restaurem l'etiqueta <br>
+newstr = newstr.replace(/\n/gi,"\n<br>");  	
+
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+
+
+}
+
+
+
+
