@@ -1,0 +1,181 @@
+function sil-labifica(form) {
+
+//LÕMITS: separa malament els compostos. Ex.: 'de-so-ri-en-tar', 'coin-ci-dËn-ci-a'
+//        separa malament els mots que haurien de portar diËrisi perÚ sÛn excepcions: 'les terminacions: isme, ista, us, um. Exemple: egoisme, altruista, pius, harmÚnium'
+//                                                                                   FET   'la i dels infinitius, gerundis, futurs i condicionals dels verbs en ir. Exemple: agrair, agraint, agrairÈ, agrairÌa...
+//                                                                                      'darrera els prefixos: co, re, auto, contra. Exemple: coincidir, reiterar (PerÚ cap problema quan posat diËresi: re¸ll, reÔxo, reÔxes...) 
+
+//PER FER:
+//FET: ho fa bÈ 1) Mirar a diccionari en lÌnia del IEC quins mots porten diËresi: fer la comprovaciÛ que aquest sil∑labificador fa bÈ les separacions
+//2) Fer taula de mots amb totes les combinacions de vocals possibles. Per testejar sil∑labificaciÛ.
+
+
+//En el cas de fer servir aquest sil∑labificador per a separar mots a text, cal tenir en compte que la normativa diu que 'no es pot deixar cap lletra tota sola a comenÁament o a final de lÌnia'
+//Ex. incorrecte: d'-aquell, l'-hora, l'-embut, a-questa, a-jut
+//      correcte: d'a-quell, l'ho-ra, l'em-but, aques-ta, ajut
+
+var newstr = "\n<br>" + text + "\n<br>";
+
+//per protegir els guionets del text
+newstr = newstr.replace(/-/g,"{-}");
+
+//grups 'inseparables
+newstr = newstr.replace(/([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ])(br|cr|dr|fr|gr|pr|tr|bl|cl|fl|gl|pl|ny|ll|gu|qu|th|kl)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚])/gi,"$1-$2$3"); //el grup 'kl' Ès nomÈs pel mot 'folklore' i derivats
+newstr = newstr.replace(/([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ])(br|cr|dr|fr|gr|pr|tr|bl|cl|fl|gl|pl|ny|ll|gu|qu|th|kl)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚])/gi,"$1-$2$3");
+
+//grup 'nys' ex. menystÈ --> menys-tÈ
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])(nys)([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2-$3$4");
+
+//bloquegem 'ny' pq no interfereixi amb 'y' dels mots estrangers com whisky (al final del programa ho desbloquegem)
+newstr = newstr.replace(/ny/gi,"{ny}");
+
+//separa 'ei-x'
+newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])(i)(x)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2$3-$4$5");
+//separa 're-du-ei-xen'
+newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])([aeou])(i)(x)([a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2-$3$4-$5$6");
+//separa 're-du-eix'
+newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])([aeou])(i)(x)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2-$3$4$5$6");
+
+
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1-$2$3"); //hi posem la 'y' entre les vocals pels mots estrangers com 'whisky' (prËviament hem protegit 'ny', posant-lo entre parËntesis angulars)
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1-$2$3");
+
+//'washingtÚnia' demana un tractatem personalitzat: el programa separa WAS-HING-TO-NI-¿: no podem fer la regla SH no es separi pq tenim mots com ALESHORES 
+newstr = newstr.replace(/(w)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(sh)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+newstr = newstr.replace(/(w)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(sh)([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+
+//afegim al segon parËntesi la K nomÈs pel mot 'SIKHISME' i derivats
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x|z)([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x|z)([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+
+
+//per separar 'cons-ta' , 'perovskita' (afegit la 'v' a 2n parËntesis exprÈs per aquest sol mot)
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|v)(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x)([bcdfghjklmnpqrstvwxyzÁ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2$3-$4$5");
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|v)(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x)([bcdfghjklmnpqrstvwxyzÁ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2$3-$4$5");
+
+//per separar 'tungs-tË'
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|v)(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x)(s)([bcdfghjklmnpqrtvwxyzÁ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2$3$4-$5$+");
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|v)(b|c|d|f|g|k|l∑|l|m|n|p|r|s|t|x)(s)([bcdfghjklmnpqrtvwxyzÁ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2$3$4-$5$+");
+
+
+//tractem la lletra 'w' dels mots del IEC. SÛn:
+//boswËl∑lia 	browni‡ 	bytownita 	clown 	darwini‡ 	darwinisme 	darwinista 	edelweiss 	hawai‡ 	kilowatt 	kiwi 	kuwaiti‡ 	 lawsona 	lawsonita 	lewisita 	maxwell 	neodarwinisme 	neodarwinista 	newton 	newtoni‡ 	quilowatt 	swing 	taiwanËs 	twist 	 wagneri‡ 	wagnerisme 	washingtÚnia 	waterpolo 	watt 	wattÌmetre 	w‡ttmetre 	web 	weber 	welwÌtsquia 	whisky 	wolfram 	 wolframat 	wolframi 	wolfr‡mic 	wolframita 	wol∑lastonita 	wÚlof 	wulfenita 	wurtzita 	zwitteriÛ 
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(w)([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+newstr = newstr.replace(/([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])(w)([bcdfghjklmnpqrstvwxyzÁﬂÒ])([aeiou‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚y])/gi,"$1$2-$3$4");
+
+//dels mots del IEC que contenen la lletra K:
+//afrikaans 	aga khan 	‡kan 	ankerita 	b‡tik 	berkeli 	bismarck 	brookita 	dakota 	eureka 	folklore 	folklÚric 	folklorista 	frankeni‡cies 	ginkgo 	ginkgo‡cies 	ginkgoates 	ginkgÚfits 	ginkgÚpsids 	greenockita 	haikai 	haiku 	harakiri 	jack 	jansky 	judoka 	kafki‡ 	kag˙ 	k‡iser 	kamikaze 	kanti‡ 	kantisme 	 kaÛ 	kappa 	karaoke 	karate 	karateka 	karitÈ 	karri 	kart 	kartveli‡ 	katxina 	kauri 	kea 	kelvin 	kenaf 	kËntia 	keny‡ 	kepleri‡ 	kerigma 	kernita 	kËrria 	keynesi‡ 	keynesianisme 	khan 	kh‡zar 	khi 	khmer 	khoi 	kif 	kikuiu 	kilo- 	kilocaloria 	kilocicle 	 kilogram 	kilogr‡metre 	kilohertz 	kilÚmetre 	kilooctet 	kilopond 	kilotona 	kilovolt 	kilowatt 	kimberlita 	kimbundu 	kirguÌs 	kirsch 	kitsch 	kiwi 	klebshormidials 	knut 	koinÈ 	kosovar 	kraft 	kremlin 	ksi 	kurd 	kuwaiti‡ 	kyrieleison 	lamarcki‡ 	lamarckisme 	lek 	matsutake 	neokanti‡ 	neokantisme 	neolamarcki‡ 	 neolamarckisme 	okapi 	pakistanËs 	parkinsÚnia 	perovskita 	playback 	plum-cake 	postkanti‡ 	quark 	quilo-1 [o kilo-] 	r‡nker 	rickËttsia 	rickettsiosi 	rock 	sake 	shakespeari‡ 	sikh 	sikhisme 	skarn 	stokes 	tanka 	todorokita 	trotskisme 	trotskista 	uzbek 	vÌking 	vodka 	whisky 	xiitake 	 
+//el mot RICKETTSI¿ provÈ de RICKETTS (The genus Rickettsia is named after Howard Taylor Ricketts (1871ñ1910))
+//    --> ho separem RIC-K»TT-SI-A (l'IULA ho separa RI-CK»T-TSI-A)
+//separem SIK-HIS-ME (IULA SIKH-IS-ME) --> cal mirar el DICCIONARI ORTOGR¿FIC I DE PRON⁄NCIA
+//separem XII-TA-KE  (IULA XI-I-TA-KE)
+
+
+
+
+//----------SEPARACI” DE VOCALS--------
+
+//1r separem totes les vocals amb un guionet
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2");
+//repeticiÛ de la regla anterior per quan tenim mÈs de 2 vocals seguides.
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2");
+
+//2n traiem el guionet del diftong format per 'la u precedida de g o q i seguida de vocal'
+newstr = newstr.replace(/(g|q)(u|¸)(-)(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)/gi,"$1$2$4");
+
+//3r traiem el guionet que precedeix 'la i, u no accentuades entre vocals' ex. de-i-en --> de-ien
+//dupliquem guionet perquË regla seg¸ent no ens modifiqui particiÛ que-ien
+newstr = newstr.replace(/(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)(-)(i|u)(-)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2$2$3$5");
+
+//4t traiem el guionet del diftong format per 'la i, u no accentuades i precedides de vocal'
+newstr = newstr.replace(/(a|‡|e|Ë|È|i|o|Ú|Û|u|˙)(-)(i|u)/gi,"$1$3");
+
+//afegim de nou guionet pels casos amb P R E F I X (prefix) acabat en -vocal seguit de -i o -u: "aeri-", "albumini-", "alterni-", "ambli-", "amfi-", "anti-", "arxi-", "auri-", "axi-", "azoxi-", "bari-", "basi-", "bati-", "bi-", "bradi-", "braqui-", "brevi-", "caduci-", "calci-", "cal∑li-", "carboxi-", "cauli-", "centi-", "cirri-", "cisti-", "cori-", "curvi-", "dactili-", "deci-", "dendri-", "denti-", "di-", "diali-", "digiti-", "dorsi-", "epi-", "equi-", "espadici-", "espermati-", "euri-", "falci-", "ferri-", "fissi-", "flabel∑li-", "hemi-", "hidroxi-", "icosi-", "lacti-", "ligni-", "limni-", "longi-", "maxil∑li-", "meri-", "metoxi-", "mil∑li-", "mini-", "muci-", "multi-", "neuri-", "nicti-", "nocti-", "nudi-", "olei-", "omni-", "opositi-", "ovi-", "oxi-", "paqui-", "pari-", "pedati-", "pedi-", "penni-", "peri-", "plani-", "plati-", "platini-", "pluri-", "poli-", "quadri-", "quasi-", "recti-", "reni-", "semi-", "septi-", "sesqui-", "taqui-", "teli-", "toxi-", "tri-", "uni-", "veni-", "ventri-", "eu-", "abdomino-", "acanto-", "accento-", "acefalo-", "aceto-", "acro-", "acromato-", "acromio-", "actino-", "adelo-", "adeno-", "adipo-", "aero-", "afro-", "agro-", "albumino-", "aldo-", "algo-", "al∑lo-", "alumino-", "alveolo-", "amido-", "amigdalo-", "amilo-", "amino-", "aminoazo-", "amonio-", "ampelo-", "anarco-", "andro-", "anemo-", "angio-", "anglo-", "aniso-", "ano-", "anomo-", "antero-", "anto-", "antropo-", "apo-", "aq¸eo-", "arabo-", "areo-", "argil∑lo-", "aritmo-", "arqueo-", "arterio-", "artro-", "aspido-", "astragalo-", "astro-", "atelo-", "atlanto-", "atlo-", "atmo-", "atto-", "audio-", "auriculo-", "auro-", "austro-", "auto-", "axo-", "azigo-", "azo-", "bacterio-", "balano-", "balneo-", "balto-", "baro-", "basidio-", "bato-", "batraco-", "benzo-", "biblio-", "bio-", "bismuto-", "blasto-", "blefaro-", "blenno-", "boreo-", "boro-", "botano-", "branquio-", "braquio-", "brio-", "bromo-", "bronco-", "bronto-", "buco-", "butiro-", "caco-", "calcaneo-", "calcareo-", "calco-", "cardio-", "cario-", "carpo-", "caudo-", "cefalo-", "celo-", "celto-", "centro-", "cerato-", "cerebro-", "cero-", "cervico-", "ceto-", "ciano-", "ciclo-", "cilindro-", "cimo-", "cino-", "cirro-", "cisto-", "cito-", "clamido-", "claviculo-", "clido-", "clino-", "clisto-", "cloro-", "cnido-", "coccigeo-", "cocco-", "colpo-", "condro-", "conquilio-", "copro-", "corneo-", "cosmo-", "coxo-", "cranio-", "crico-", "crio-", "cripto-", "criso-", "cristal∑lo-", "cromato-", "cromo-", "crono-", "cteno-", "cubito-", "cubo-", "cumulo-", "cupro-", "dacrio-", "dactilo-", "demono-", "dendro-", "dermato-", "dermo-", "deutero-", "dexio-", "dextro-", "diafragmato-", "diazo-", "dimorfo-", "dinamo-", "dino-", "diplo-", "dipso-", "disco-", "dolico-", "dromo-", "duodeno-", "eclesio-", "eco-", "ecto-", "electro-", "eleo-", "elitro-", "enantio-", "encefalo-", "endo-", "eno-", "entero-", "ento-", "entomo-", "eo-", "epiplo-", "equino-", "ergo-", "eritro-", "escapulo-", "escato-", "esclero-", "esfigmo-", "eso-", "esofago-", "espacio-", "espectro-", "espermato-", "espermo-", "esplancno-", "espleno-", "espondilo-", "esporo-", "esquizo-", "estafilo-", "estanno-", "esteato-", "esteno-", "estereo-", "esterno-", "esteto-", "estomato-", "etno-", "euro-", "exo-", "faco-", "fago-", "fanero-", "faringo-", "farmaco-", "femoro-", "femto-", "feo-", "ferro-", "fibro-", "fico-", "fil∑lo-", "filo-", "fino-", "fisio-", "fiso-", "fito-", "flebo-", "fluo-", "fluvio-", "folio-", "fono-", "fosfo-", "foto-", "fragmo-", "franco-", "freno-", "fronto-", "galacto-", "gal∑lo-", "galvano-", "gastero-", "gastro-", "genio-", "genito-", "geo-", "germano-", "geronto-", "giganto-", "gimno-", "gineco-", "gino-", "gipso-", "giro-", "glauco-", "glicero-", "glico-", "glosso-", "gluco-", "gonio-", "gono-", "grafo-", "greco-", "guturo-", "hagio-", "halo-", "haplo-", "hecto-", "helco-", "helico-", "helio-", "helo-", "hemato-", "hemo-", "hepato-", "hetero-", "hialo-", "hidro-", "hiero-", "hieto-", "higro-", "hilo-", "himeno-", "hio-", "hipno-", "hipo-", "hipso-", "hispano-", "histero-", "histo-", "historio-", "holo-", "homeo-", "homo-", "humero-", "iatro-", "icono-", "ictio-", "ideo-", "idio-", "idolo-", "ileo-", "ilio-", "indo-", "infero-", "ino-", "iodo-", "iridio-", "irido-", "isco-", "iso-", "isquio-", "italo-", "judeo-", "kilo-", "labio-", "lacto-", "laparo-", "laringo-", "latero-", "lepido-", "lepto-", "leuco-", "levo-", "lico-", "ligno-", "limfo-", "limno-", "linguo-", "lipo-", "lito-", "logo-", "loxo-", "lumbo-", "macro-", "magneto-", "malaco-", "mano-", "masto-", "maxil∑lo-", "medio-", "megalo-", "melano-", "meno-", "mero-", "meso-", "metal∑lo-", "meteoro-", "metro-", "mico-", "micro-", "mielo-", "mio-", "mirmeco-", "miso-", "mixo-", "mono-", "morfo-", "moto-", "muco-", "nano-", "narco-", "naso-", "necro-", "nefo-", "nefro-", "nemato-", "neo-", "neuro-", "nicto-", "nitro-", "nitroso-", "no-", "nomo-", "noo-", "noso-", "nucleo-", "occipito-", "ocro-", "octo-", "odonto-", "ofio-", "oftalmo-", "oleo-", "oligo-", "omfalo-", "omo-", "onco-", "onico-", "oniro-", "onto-", "oo-", "opisto-", "organo-", "ornito-", "oro-", "orquido-", "orquio-", "orto-", "osfio-", "osteo-", "oto-", "ovario-", "ovo-", "oxo-", "palato-", "paleo-", "panto-", "parieto-", "pato-", "pedo-", "pego-", "perineo-", "periosteo-", "petro-", "pico-", "pielo-", "pigo-", "pio-", "pireto-", "piro-", "plagio-", "plano-", "platino-", "pleo-", "pleuro-", "plio-", "pneumato-", "pneumo-", "podo-", "politico-", "postero-", "potamo-", "praseo-", "pro-", "procto-", "prosopo-", "proteÔno-", "protero-", "proto-", "pseudo-", "psico-", "psicro-", "pterido-", "ptero-", "purpureo-", "quilo-", "quimio-", "quimo-", "quiono-", "quiro-", "rabdo-", "radiculo-", "radio-", "raquio-", "recto-", "reno-", "reo-", "reticulo-", "retino-", "retro-", "reumato-", "rino-", "rizo-", "rodo-", "roseo-", "sacro-", "salpingo-", "sarco-", "seleno-", "semio-", "serbo-", "sero-", "servo-", "sialo-", "sidero-", "sifono-", "silico-", "sincro-", "sincrono-", "sindesmo-", "sino-", "siringo-", "siro-", "sismo-", "socio-", "sodio-", "somato-", "sulfo-", "supero-", "talasso-", "tanato-", "tarso-", "tauto-", "telo-", "temporo-", "teno-", "tenonto-", "teo-", "terato-", "termo-", "tibio-", "tiflo-", "timo-", "tio-", "tiro-", "toco-", "topo-", "toraco-", "toxico-", "toxo-", "traquelo-", "traqueo-", "tribo-", "trico-", "trofo-", "trombo-", "turbo-", "ulo-", "urano-", "uretero-", "uretro-", "urino-", "uro-", "utero-", "vagino-", "vaso-", "veno-", "ventro-", "vesico-", "video-", "vulvo-", "xanto-", "xeno-", "xero-", "xilo-", "zigo-", "zimo-", "zoo-", "ante- ", "cine- ", "cole- ", "e- ", "pre- ", "quinque- ", "re- ", "sobre- ", "tele- ", "vice- " 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(a-e-ri|al-bu-mi-ni|al-ter-ni|am-bli|am-fi|an-ti|ar-xi|au-ri|a-xi|a-zo-xi|ba-ri|ba-si|ba-ti|bi|bra-di|bra-qui|bre-vi|ca-du-ci|cal-ci|cal∑-li|car-bo-xi|cau-li|cen-ti|cir-ri|cis-ti|co-ri|cur-vi|dac-ti-li|de-ci|den-dri|den-ti|di|di-a-li|di-gi-ti|dor-si|e-pi|e-qui|es-pa-di-ci|es-per-ma-ti|eu-ri|fal-ci|fer-ri|fis-si|fla-bel∑-li|he-mi|hi-dro-xi|i-co-si|lac-ti|lig-ni|lim-ni|lon-gi|ma-xil∑-li|me-ri|me-to-xi|mil∑-li|mi-ni|mu-ci|mul-ti|neu-ri|nic-ti|noc-ti|nu-di|o-lei|om-ni|o-po-si-ti|o-vi|o-xi|pa-qui|pa-ri|pe-da-ti|pe-di|pen-ni|pe-ri|pla-ni|pla-ti|pla-ti-ni|plu-ri|po-li|qua-dri|qua-si|rec-ti|re-ni|se-mi|sep-ti|ses-qui|ta-qui|te-li|to-xi|tri|u-ni|ve-ni|ven-tri|eu|ab-do-mi-no|a-can-to|ac-cen-to|a-ce-fa-lo|a-ce-to|a-cro|a-cro-ma-to|a-cro-mi-o|ac-ti-no|a-de-lo|a-de-no|a-di-po|a-e-ro|a-fro|a-gro|al-bu-mi-no|al-do|al-go|al∑-lo|a-lu-mi-no|al-ve-o-lo|a-mi-do|a-mig-da-lo|a-mi-lo|a-mi-no|a-mi-no-a-zo|a-mo-ni-o|am-pe-lo|a-nar-co|an-dro|a-ne-mo|an-gi-o|an-glo|a-ni-so|a-no|a-no-mo|an-te-ro|an-to|an-tro-po|a-po|a-q¸e-o|a-ra-bo|a-re-o|ar-gil∑-lo|a-rit-mo|ar-que-o|ar-te-ri-o|ar-tro|as-pi-do|as-tra-ga-lo|as-tro|a-te-lo|at-lan-to|at-lo|at-mo|at-to|au-di-o|au-ri-cu-lo|au-ro|aus-tro|au-to|a-xo|a-zi-go|a-zo|bac-te-ri-o|ba-la-no|bal-ne-o|bal-to|ba-ro|ba-si-di-o|ba-to|ba-tra-co|ben-zo|bi-bli-o|bi-o|bis-mu-to|blas-to|ble-fa-ro|blen-no|bo-re-o|bo-ro|bo-ta-no|bran-qui-o|bra-qui-o|bri-o|bro-mo|bron-co|bron-to|bu-co|bu-ti-ro|ca-co|cal-ca-ne-o|cal-ca-re-o|cal-co|car-di-o|ca-ri-o|car-po|cau-do|ce-fa-lo|ce-lo|cel-to|cen-tro|ce-ra-to|ce-re-bro|ce-ro|cer-vi-co|ce-to|ci-a-no|ci-clo|ci-lin-dro|ci-mo|ci-no|cir-ro|cis-to|ci-to|cla-mi-do|cla-vi-cu-lo|cli-do|cli-no|clis-to|clo-ro|cni-do|coc-ci-ge-o|coc-co|col-po|con-dro|con-qui-li-o|co-pro|cor-ne-o|cos-mo|co-xo|cra-ni-o|cri-co|cri-o|crip-to|cri-so|cris-tal∑-lo|cro-ma-to|cro-mo|cro-no|cte-no|cu-bi-to|cu-bo|cu-mu-lo|cu-pro|da-cri-o|dac-ti-lo|de-mo-no|den-dro|der-ma-to|der-mo|deu-te-ro|de-xi-o|dex-tro|di-a-frag-ma-to|di-a-zo|di-mor-fo|di-na-mo|di-no|di-plo|dip-so|dis-co|do-li-co|dro-mo|du-o-de-no|e-cle-si-o|e-co|ec-to|e-lec-tro|e-le-o|e-li-tro|e-nan-ti-o|en-ce-fa-lo|en-do|e-no|en-te-ro|en-to|en-to-mo|e-o|e-pi-plo|e-qui-no|er-go|e-ri-tro|es-ca-pu-lo|es-ca-to|es-cle-ro|es-fig-mo|e-so|e-so-fa-go|es-pa-ci-o|es-pec-tro|es-per-ma-to|es-per-mo|es-planc-no|es-ple-no|es-pon-di-lo|es-po-ro|es-qui-zo|es-ta-fi-lo|es-tan-no|es-te-a-to|es-te-no|es-te-re-o|es-ter-no|es-te-to|es-to-ma-to|et-no|eu-ro|e-xo|fa-co|fa-go|fa-ne-ro|fa-rin-go|far-ma-co|fe-mo-ro|fem-to|fe-o|fer-ro|fi-bro|fi-co|fil∑-lo|fi-lo|fi-no|fi-si-o|fi-so|fi-to|fle-bo|flu-o|flu-vi-o|fo-li-o|fo-no|fos-fo|fo-to|frag-mo|fran-co|fre-no|fron-to|ga-lac-to|gal∑-lo|gal-va-no|gas-te-ro|gas-tro|ge-ni-o|ge-ni-to|ge-o|ger-ma-no|ge-ron-to|gi-gan-to|gim-no|gi-ne-co|gi-no|gip-so|gi-ro|glau-co|gli-ce-ro|gli-co|glos-so|glu-co|go-ni-o|go-no|gra-fo|gre-co|gu-tu-ro|ha-gi-o|ha-lo|ha-plo|hec-to|hel-co|he-li-co|he-li-o|he-lo|he-ma-to|he-mo|he-pa-to|he-te-ro|hia-lo|hi-dro|hie-ro|hie-to|hi-gro|hi-lo|hi-me-no|hio|hip-no|hi-po|hip-so|his-pa-no|his-te-ro|his-to|his-to-ri-o|ho-lo|ho-me-o|ho-mo|hu-me-ro|ia-tro|i-co-no|ic-ti-o|i-de-o|i-di-o|i-do-lo|i-le-o|i-li-o|in-do|in-fe-ro|i-no|io-do|i-ri-di-o|i-ri-do|is-co|i-so|is-qui-o|i-ta-lo|ju-de-o|ki-lo|la-bi-o|lac-to|la-pa-ro|la-rin-go|la-te-ro|le-pi-do|lep-to|leu-co|le-vo|li-co|lig-no|lim-fo|lim-no|lin-guo|li-po|li-to|lo-go|lo-xo|lum-bo|ma-cro|mag-ne-to|ma-la-co|ma-no|mas-to|ma-xil∑-lo|me-di-o|me-ga-lo|me-la-no|me-no|me-ro|me-so|me-tal∑-lo|me-te-o-ro|me-tro|mi-co|mi-cro|mi-e-lo|mi-o|mir-me-co|mi-so|mi-xo|mo-no|mor-fo|mo-to|mu-co|na-no|nar-co|na-so|ne-cro|ne-fo|ne-fro|ne-ma-to|ne-o|neu-ro|nic-to|ni-tro|ni-tro-so|no|no-mo|no-o|no-so|nu-cle-o|oc-ci-pi-to|o-cro|oc-to|o-don-to|o-fi-o|of-tal-mo|o-le-o|o-li-go|om-fa-lo|o-mo|on-co|o-ni-co|o-ni-ro|on-to|o-o|o-pis-to|or-ga-no|or-ni-to|o-ro|or-qui-do|or-qui-o|or-to|os-fi-o|os-te-o|o-to|o-va-ri-o|o-vo|o-xo|pa-la-to|pa-le-o|pan-to|pa-ri-e-to|pa-to|pe-do|pe-go|pe-ri-ne-o|pe-ri-os-te-o|pe-tro|pi-co|pi-e-lo|pi-go|pi-o|pi-re-to|pi-ro|pla-gi-o|pla-no|pla-ti-no|ple-o|pleu-ro|pli-o|pneu-ma-to|pneu-mo|po-do|po-li-ti-co|pos-te-ro|po-ta-mo|pra-se-o|pro|proc-to|pro-so-po|pro-te-Ô-no|pro-te-ro|pro-to|pseu-do|psi-co|psi-cro|pte-ri-do|pte-ro|pur-pu-re-o|qui-lo|qui-mi-o|qui-mo|qui-o-no|qui-ro|rab-do|ra-di-cu-lo|ra-di-o|ra-qui-o|rec-to|re-no|re-o|re-ti-cu-lo|re-ti-no|re-tro|reu-ma-to|ri-no|ri-zo|ro-do|ro-se-o|sa-cro|sal-pin-go|sar-co|se-le-no|se-mi-o|ser-bo|se-ro|ser-vo|si-a-lo|si-de-ro|si-fo-no|si-li-co|sin-cro|sin-cro-no|sin-des-mo|si-no|si-rin-go|si-ro|sis-mo|so-ci-o|so-di-o|so-ma-to|sul-fo|su-pe-ro|ta-las-so|ta-na-to|tar-so|tau-to|te-lo|tem-po-ro|te-no|te-non-to|te-o|te-ra-to|ter-mo|ti-bi-o|ti-flo|ti-mo|ti-o|ti-ro|to-co|to-po|to-ra-co|to-xi-co|to-xo|tra-que-lo|tra-que-o|tri-bo|tri-co|tro-fo|trom-bo|tur-bo|u-lo|u-ra-no|u-re-te-ro|u-re-tro|u-ri-no|u-ro|u-te-ro|va-gi-no|va-so|ve-no|ven-tro|ve-si-co|vi-de-o|vul-vo|xan-to|xe-no|xe-ro|xi-lo|zi-go|zi-mo|zo-o|an-te|ci-ne|co-le|e|pre|quin-que|re|so-bre|te-le|vi-ce)(i|u)/gi,"$1$2-$3");
+//restaurem el prefix 'eu-"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(e)(-)(u)/gi,"$1$2$4");
+//traiem el guionet del mot 'arxiu/s"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(ar-xi)(-)(u|us)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet del mot 'diumenge" i derivats
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(di)(-)(u-men-g|u-men-j)/gi,"$1$2$4");
+//traiem el guionet dels mots 'diu", "dius" i "diuen"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(di)(-)(u|us)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet dels mots 'pariu", "poliu", "uniu" i "veniu"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(pa-ri|po-li|u-ni|ve-ni)(-)(u)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet del mot 'autoic" i derivats
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(au-to)(-)(ic)/gi,"$1$2$4");
+//traiem el guionet dels mots formats pel [PREFIX acabat en -o] + "ide", ex. 'actinoide", "adenoide" i derivats
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(ab-do-mi-no|a-can-to|ac-cen-to|a-ce-fa-lo|a-ce-to|a-cro|a-cro-ma-to|a-cro-mi-o|ac-ti-no|a-de-lo|a-de-no|a-di-po|a-e-ro|a-fro|a-gro|al-bu-mi-no|al-do|al-go|al∑-lo|a-lu-mi-no|al-ve-o-lo|a-mi-do|a-mig-da-lo|a-mi-lo|a-mi-no|a-mi-no-a-zo|a-mo-ni-o|am-pe-lo|a-nar-co|an-dro|a-ne-mo|an-gi-o|an-glo|a-ni-so|a-no|a-no-mo|an-te-ro|an-to|an-tro-po|a-po|a-q¸e-o|a-ra-bo|a-re-o|ar-gil∑-lo|a-rit-mo|ar-que-o|ar-te-ri-o|ar-tro|as-pi-do|as-tra-ga-lo|as-tro|a-te-lo|at-lan-to|at-lo|at-mo|at-to|au-di-o|au-ri-cu-lo|au-ro|aus-tro|au-to|a-xo|a-zi-go|a-zo|bac-te-ri-o|ba-la-no|bal-ne-o|bal-to|ba-ro|ba-si-di-o|ba-to|ba-tra-co|ben-zo|bi-bli-o|bi-o|bis-mu-to|blas-to|ble-fa-ro|blen-no|bo-re-o|bo-ro|bo-ta-no|bran-qui-o|bra-qui-o|bri-o|bro-mo|bron-co|bron-to|bu-co|bu-ti-ro|ca-co|cal-ca-ne-o|cal-ca-re-o|cal-co|car-di-o|ca-ri-o|car-po|cau-do|ce-fa-lo|ce-lo|cel-to|cen-tro|ce-ra-to|ce-re-bro|ce-ro|cer-vi-co|ce-to|ci-a-no|ci-clo|ci-lin-dro|ci-mo|ci-no|cir-ro|cis-to|ci-to|cla-mi-do|cla-vi-cu-lo|cli-do|cli-no|clis-to|clo-ro|cni-do|coc-ci-ge-o|coc-co|col-po|con-dro|con-qui-li-o|co-pro|cor-ne-o|cos-mo|co-xo|cra-ni-o|cri-co|cri-o|crip-to|cri-so|cris-tal∑-lo|cro-ma-to|cro-mo|cro-no|cte-no|cu-bi-to|cu-bo|cu-mu-lo|cu-pro|da-cri-o|dac-ti-lo|de-mo-no|den-dro|der-ma-to|der-mo|deu-te-ro|de-xi-o|dex-tro|di-a-frag-ma-to|di-a-zo|di-mor-fo|di-na-mo|di-no|di-plo|dip-so|dis-co|do-li-co|dro-mo|du-o-de-no|e-cle-si-o|e-co|ec-to|e-lec-tro|e-le-o|e-li-tro|e-nan-ti-o|en-ce-fa-lo|en-do|e-no|en-te-ro|en-to|en-to-mo|e-o|e-pi-plo|e-qui-no|er-go|e-ri-tro|es-ca-pu-lo|es-ca-to|es-cle-ro|es-fig-mo|e-so|e-so-fa-go|es-pa-ci-o|es-pec-tro|es-per-ma-to|es-per-mo|es-planc-no|es-ple-no|es-pon-di-lo|es-po-ro|es-qui-zo|es-ta-fi-lo|es-tan-no|es-te-a-to|es-te-no|es-te-re-o|es-ter-no|es-te-to|es-to-ma-to|et-no|eu-ro|e-xo|fa-co|fa-go|fa-ne-ro|fa-rin-go|far-ma-co|fe-mo-ro|fem-to|fe-o|fer-ro|fi-bro|fi-co|fil∑-lo|fi-lo|fi-no|fi-si-o|fi-so|fi-to|fle-bo|flu-o|flu-vi-o|fo-li-o|fo-no|fos-fo|fo-to|frag-mo|fran-co|fre-no|fron-to|ga-lac-to|gal∑-lo|gal-va-no|gas-te-ro|gas-tro|ge-ni-o|ge-ni-to|ge-o|ger-ma-no|ge-ron-to|gi-gan-to|gim-no|gi-ne-co|gi-no|gip-so|gi-ro|glau-co|gli-ce-ro|gli-co|glos-so|glu-co|go-ni-o|go-no|gra-fo|gre-co|gu-tu-ro|ha-gi-o|ha-lo|ha-plo|hec-to|hel-co|he-li-co|he-li-o|he-lo|he-ma-to|he-mo|he-pa-to|he-te-ro|hia-lo|hi-dro|hie-ro|hie-to|hi-gro|hi-lo|hi-me-no|hio|hip-no|hi-po|hip-so|his-pa-no|his-te-ro|his-to|his-to-ri-o|ho-lo|ho-me-o|ho-mo|hu-me-ro|ia-tro|i-co-no|ic-ti-o|i-de-o|i-di-o|i-do-lo|i-le-o|i-li-o|in-do|in-fe-ro|i-no|io-do|i-ri-di-o|i-ri-do|is-co|i-so|is-qui-o|i-ta-lo|ju-de-o|ki-lo|la-bi-o|lac-to|la-pa-ro|la-rin-go|la-te-ro|le-pi-do|lep-to|leu-co|le-vo|li-co|lig-no|lim-fo|lim-no|lin-guo|li-po|li-to|lo-go|lo-xo|lum-bo|ma-cro|mag-ne-to|ma-la-co|ma-no|mas-to|ma-xil∑-lo|me-di-o|me-ga-lo|me-la-no|me-no|me-ro|me-so|me-tal∑-lo|me-te-o-ro|me-tro|mi-co|mi-cro|mi-e-lo|mi-o|mir-me-co|mi-so|mi-xo|mo-no|mor-fo|mo-to|mu-co|na-no|nar-co|na-so|ne-cro|ne-fo|ne-fro|ne-ma-to|ne-o|neu-ro|nic-to|ni-tro|ni-tro-so|no|no-mo|no-o|no-so|nu-cle-o|oc-ci-pi-to|o-cro|oc-to|o-don-to|o-fi-o|of-tal-mo|o-le-o|o-li-go|om-fa-lo|o-mo|on-co|o-ni-co|o-ni-ro|on-to|o-o|o-pis-to|or-ga-no|or-ni-to|o-ro|or-qui-do|or-qui-o|or-to|os-fi-o|os-te-o|o-to|o-va-ri-o|o-vo|o-xo|pa-la-to|pa-le-o|pan-to|pa-ri-e-to|pa-to|pe-do|pe-go|pe-ri-ne-o|pe-ri-os-te-o|pe-tro|pi-co|pi-e-lo|pi-go|pi-o|pi-re-to|pi-ro|pla-gi-o|pla-no|pla-ti-no|ple-o|pleu-ro|pli-o|pneu-ma-to|pneu-mo|po-do|po-li-ti-co|pos-te-ro|po-ta-mo|pra-se-o|pro|proc-to|pro-so-po|pro-te-Ô-no|pro-te-ro|pro-to|pseu-do|psi-co|psi-cro|pte-ri-do|pte-ro|pur-pu-re-o|qui-lo|qui-mi-o|qui-mo|qui-o-no|qui-ro|rab-do|ra-di-cu-lo|ra-di-o|ra-qui-o|rec-to|re-no|re-o|re-ti-cu-lo|re-ti-no|re-tro|reu-ma-to|ri-no|ri-zo|ro-do|ro-se-o|sa-cro|sal-pin-go|sar-co|se-le-no|se-mi-o|ser-bo|se-ro|ser-vo|si-a-lo|si-de-ro|si-fo-no|si-li-co|sin-cro|sin-cro-no|sin-des-mo|si-no|si-rin-go|si-ro|sis-mo|so-ci-o|so-di-o|so-ma-to|sul-fo|su-pe-ro|ta-las-so|ta-na-to|tar-so|tau-to|te-lo|tem-po-ro|te-no|te-non-to|te-o|te-ra-to|ter-mo|ti-bi-o|ti-flo|ti-mo|ti-o|ti-ro|to-co|to-po|to-ra-co|to-xi-co|to-xo|tra-que-lo|tra-que-o|tri-bo|tri-co|tro-fo|trom-bo|tur-bo|u-lo|u-ra-no|u-re-te-ro|u-re-tro|u-ri-no|u-ro|u-te-ro|va-gi-no|va-so|ve-no|ven-tro|ve-si-co|vi-de-o|vul-vo|xan-to|xe-no|xe-ro|xi-lo|zi-go|zi-mo|zo-o)(-)(i-de|ic)/gi,"$1$2$4");
+//traiem el guionet del mot 'brioix" i derivats
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(bri-o)(-)(ix|i-x)/gi,"$1$2$4");
+//traiem el guionet del verb 'entoixar' i resta formes verbals
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(en-to)(-)(i-xo|i-xes|i-xa|i-xem|i-xeu|i-xen|i-xa-va|i-xa-ves|i-xa-va|i-x‡-vem|i-x‡-veu|i-xa-ven|i-xÌ|i-xa-res|i-x‡|i-x‡-rem|i-x‡-reu|i-xa-ren|i-xa-rÈ|i-xa-r‡s|i-xa-r‡|i-xa-rem|i-xa-reu|i-xa-ran|i-xa-ri-a|i-xa-ri-es|i-xa-ri-a|i-xa-rÌ-em|i-xa-rÌ-eu|i-xa-ri-en|i-xi|i-xis|i-xi|i-xem|i-xeu|i-xin|i-xÈs|i-xes-sis|i-xÈs|i-xÈs-sim|i-xÈs-siu|i-xes-sin|i-xa|i-xi|i-xem|i-xeu|i-xin|i-xar|i-xant|i-xat|i-xa-da|i-xats|i-xa-des)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet dels mots 'manoi"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(ma-no|re-no)(-)(i)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet dels mots 'noi", "nou", "noure"  
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(no)(-)(i|is|u|us|u-rÈ|u-r‡s|u-r‡|u-rem|u-reu|u-ran|u-ri-a|u-ri-es|u-ri-a|u-rÌ-em|u-rÌ-eu|u-ri-en|u-re)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet del mot "nou-cents" i derivats
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(no)(-)(u-cents|u-cen-t)/gi,"$1$2$4");
+//traiem el guionet dels mots "dinou", "prou", "renou"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(di-no|pro|re-no)(-)(u|us)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$4$5");
+//traiem el guionet dels mots "noucasat", "nounat", "nouvingut", "nouric"
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(no)(-)(u-)(ca-sat|ca-sa-d|nat|na-d|vin-gut|vin-gu-d|ric|ri-q)/gi,"$1$2$4$5");
+//traiem el guionet del verb 'noure' i resta formes verbals
+
+
+
+
+
+
+//EXCEPCI”: [La i i la u febles] no formen diftong decreixent amb la vocal anterior [...] la u de les terminacions llatines -um i -us (a.qu‡.ri.um, har.mÚ.ni.um, M‡.ri.us, SÌ.ri.us). (Ortografia catalana - Institut d'Estudis Catalans, p‡g 88)
+//tots els del IEC sÛn esdr˙ixols llevat de 'SerapËum' i 'TedËum', aixÌ que busquem que siguin mots esdr˙ixols
+//per casos com 'a-qu¿-ri-um'
+newstr = newstr.replace(/(‡|Ë|Ì|Ú)(-)(b|c|d|f|g|gu|h|j|k|l|m|n|p|qu|r|s|t|v|w|x|y|z)(i|e|u)(um|us)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4-$5$6");
+//per casos com 'c‡M-bi-um 
+newstr = newstr.replace(/(‡|Ë|Ì|Ú)(b|c|d|f|g|l|m|n|p|r|s|t|v|w|x|y|z)(-)(b|c|d|f|g|gu|h|j|k|l|m|n|p|qu|r|s|t|v|w|x|y|z)(i|e|u)(um|us)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4$5-$6$7");
+//per 'SerapËum' i 'TedËum'
+newstr = newstr.replace(/(Ë)(um)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1-$2$3");
+
+//5Ë restaurem un sol guionet de la regla 3a
+newstr = newstr.replace(/(-)(-)/gi,"$1");
+
+//6Ë traiem el guionet del diftong format per la i, u no accentuades a principi de mot
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(h)?(i|u)(-)(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)/gi,"$1$2$3$5");
+
+//7Ë traiem el guionet entre Ô/¸ seguits de 'i/u'  ex. tra-du-Ôu
+newstr = newstr.replace(/(Ô|¸)(-)(i|u)/gi,"$1$3");
+
+//8Ë posem el guionet dels bisÌl∑labs tipus [iu] seguit de vocal accentuada: ex. 'iÛ', 'uÌs'
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(h?[iu])([‡ËÈÌÚÛ˙Ô¸])([bcdfghjklmnpqrstvwxyzÁ]+)?([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2-$3$4$5");
+
+//9Ë posem el guionet dels infinitius, gerundis tipus VOCAL + 'ir': ex. o-ir, pa-ir, flu-ir... (extrets del IEC versiÛ ONLINE)
+//OINT l'IULA no ho separa perÚ tenint en compte que Ès un sinÚnim de OœDOR deu anar separat   COMPROVAR A DICCIONARI ORTOGR¿FIC I DE PRON⁄NCIA
+       //aquestes sÛn arrels ˙niques (cap altra mot acabar com per ex. arg¸ir -llevat que sigui un derivat seu)
+newstr = newstr.replace(/(ab-du|a-cla-me|ad-du|a-gra|ar-g¸|a-ta-pe|a-tri-bu|a-tu|be-ne|cir-cu|con-du|cons-ti-tu|cons-tru|con-tri-bu|cor-ro|de-du|der-ru|de-sa-con-du|des-tru|di-lu|dis-mi-nu|dis-tri-bu|ei-xar-re|e-lu|em-bor-de|em-man-se|em-pe-dre|em-pe-gue|em-pu-de|en-co-be|en-fa-de|en-fe-re|en-lle|en-sut-ze|en-te-be|en-va|en-vi-dre|es-ba-la|es-blan-que|es-bra-ve|es-cal-fe|es-du|es-fe-re|es-gro-gue|es-mor-te|es-pa|es-pes-se|es-ta-tu|es-va|im-bu|in-du|in-flu|ins-ti-tu|ins-tru|in-tro-du|in-tru|in-tu|llu|ma-le|mus-te|o-be|obs-tru|pol∑-lu|pos-se|pro-du|pros-ti-tu|pro-ve|pru|re-bor-de|re-dar-g¸|re-du|res-ti-tu|se-du|re-tri-bu|sub-du|subs-ti-tu|suc-ce|tra|tra-du)(ir|int|i-rÈ|i-r‡s|i-r‡|i-rem|i-reu|i-ran|i-ri-a|i-ri-es|i-rÌ-em|i-rÌ-eu|i-ri-en)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1-$2$3");
+newstr = newstr.replace(/(ab-du|a-cla-me|ad-du|a-gra|ar-g¸|a-ta-pe|a-tri-bu|a-tu|be-ne|cir-cu|con-du|cons-ti-tu|cons-tru|con-tri-bu|cor-ro|de-du|der-ru|de-sa-con-du|des-tru|di-lu|dis-mi-nu|dis-tri-bu|ei-xar-re|e-lu|em-bor-de|em-man-se|em-pe-dre|em-pe-gue|em-pu-de|en-co-be|en-fa-de|en-fe-re|en-lle|en-sut-ze|en-te-be|en-va|en-vi-dre|es-ba-la|es-blan-que|es-bra-ve|es-cal-fe|es-du|es-fe-re|es-gro-gue|es-mor-te|es-pa|es-pes-se|es-ta-tu|es-va|im-bu|in-du|in-flu|ins-ti-tu|ins-tru|in-tro-du|in-tru|in-tu|llu|ma-le|mus-te|o-be|obs-tru|pol∑-lu|pos-se|pro-du|pros-ti-tu|pro-ve|pru|re-bor-de|re-dar-g¸|re-du|res-ti-tu|se-du|re-tri-bu|sub-du|subs-ti-tu|suc-ce|tra|tra-du)(ir|int|i-rÈ|i-r‡s|i-r‡|i-rem|i-reu|i-ran|i-ri-a|i-ri-es|i-rÌ-em|i-rÌ-eu|i-ri-en)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1-$2$3");  //repetim regla
+
+       //aquestes tbÈ sÛn arrels ˙niques llevat de 'pair' que comparteix arrel amb au-pair. PerÚ en ser arrels tan curtes he preferit posar-les mÈs acotades 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(a-?|a-?b-?|a-?d-?|an-te-?|au-to-?|be-?s-?|ca-?p-?|cir-cum-?|co-?|co-?m-?|co-?n-?|con-tra-?|de-?|di-|e-?|e-?m-?|e-?n-?|en-tre-?|e-?s-?|e-?x-?|i-?m-?|i-?n-?|in-ter-?|i-?r-?|ma-?l-?|ma-?m-?|ma-?n-?|menys-?|mul-ti-?|o-?b-?|o-?|pa-ra-?|pe-?r-?|pre-?|pro-?|re-?|re-tro-?|so-bre-?|so-?|so-?m-?|so-?t-?|su-?|su-?b-?|su-per-?|tran-?s-?|tra-?s-?|ul-tra-?|u-ni-?)?([r|s]?-?)?(ble|e-du|flu|fru|o|pa)(ir|int|i-rÈ|i-r‡s|i-r‡|i-rem|i-reu|i-ran|i-ri-a|i-ri-es|i-rÌ-em|i-rÌ-eu|i-ri-en)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-]|<->)/gi,"$1$2$3$4-$5$6");  //'<->' per quan trobem 'destruir-se', 'destruir-te' 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(a-?|a-?b-?|a-?d-?|an-te-?|au-to-?|be-?s-?|ca-?p-?|cir-cum-?|co-?|co-?m-?|co-?n-?|con-tra-?|de-?|di-|e-?|e-?m-?|e-?n-?|en-tre-?|e-?s-?|e-?x-?|i-?m-?|i-?n-?|in-ter-?|i-?r-?|ma-?l-?|ma-?m-?|ma-?n-?|menys-?|mul-ti-?|o-?b-?|o-?|pa-ra-?|pe-?r-?|pre-?|pro-?|re-?|re-tro-?|so-bre-?|so-?|so-?m-?|so-?t-?|su-?|su-?b-?|su-per-?|tran-?s-?|tra-?s-?|ul-tra-?|u-ni-?)?([r|s]?-?)?(ble|e-du|flu|fru|o|pa)(ir|int|i-rÈ|i-r‡s|i-r‡|i-rem|i-reu|i-ran|i-ri-a|i-ri-es|i-rÌ-em|i-rÌ-eu|i-ri-en)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-]|<->)/gi,"$1$2$3$4-$5$6");  //'<->' per quan trobem 'destruir-se', 'destruir-te' //repetim regla
+
+//restaurem 'boom', 'bloom', 'zoom': el programa separa en dues sÌl∑labes
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(b|bl|z)o-om(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2oom$3$4");
+
+
+//traiem el punt volat de l'ela geminada (d'acord amb el que diu la normativa: quan se separa, no es posa el punt.
+//newstr = newstr.replace(/∑/gi,"");
+
+//per treure parËntesis angulars que protegien els guionets del text
+newstr = newstr.replace(/{(-|ny)}/g,"$1");
+
+//traiem primera lÌnia en blanc que hem creat mÈs amunt
+newstr = newstr.replace(/^\n<br>/g,"");
+
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+
+
+}
+
+
+
