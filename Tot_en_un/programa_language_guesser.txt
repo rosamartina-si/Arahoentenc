@@ -1,0 +1,513 @@
+function endevina_llengua(form){
+
+var str = "";
+
+       regles_accents(form)
+
+       regles_4lletres(form)
+
+       regles_3lletres(form)
+
+       regles_2lletres(form)	
+
+       regles_1lletra(form)
+
+
+function regles_accents(form){
+
+      	sil·labifica(form)
+
+//per fer servir el processament del programa sil·labifica, cridem la variable 'text' (en aquest moment conserva marcat els guionets del text: 'do-neu<->me'
+//var str = " " + form.entrada.value + " ";
+
+str = text;
+
+//dupliquem els caràcters que no són lletres ni apòstrof ni guionet per tal que es puguin aplicar les regles (no es solapin entre elles)
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñßăşţ@'·-])/gi, "$1$1");
+
+
+
+// EX. CATALÀ:  str = str.replace(/[^a-zàáäâèéêíïòóöúüçñß@]és[^a-zàáäâèéêíïòóöúüçñß@]/gi, "<ÉS-CATALÀ>");
+
+//................ESDRÚIXOLES...............
+//str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([a-zïüç·]+)(-)([a-zïüç·]+)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@C@A@T@A@L@À@, @C@A@S@T@E@L@L@À@>$2$3$4$5$6$7$8$+");
+
+//................PLANES ACCENTUADES...............
+//EX. Ú-NIC, Ú-NICS, HA-VÍ-EM
+str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aeiou]+)([bcdfghjklmgpqrtvwxyzç]+)([^a-zàèéíïòóúüç-])/gi,"$1<@$3@A@C@C@E@N@T@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@, @A@R@A@N@È@S@>$2$3$4$5$6$7$8$+");
+//EX. DÈ-IEU, CÒN-CAU (però DE-IEN)
+//str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aeiou]U)([a-zç]*)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3$4$5$6$7$8$+");
+//EX. CÀ-NON (CAT.) CA-NON (CAST.)
+//str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aou])(n)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@C@A@T@A@L@À@>$2$3$4$5$6$7$8$+");
+//EX. E-XÀ-MENS
+//str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aeiou]+)(ns)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@C@A@T@A@L@À@>$2$3$4$5$6$7$8$+");
+
+//ARANÈS EX: PROPÈRA
+str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyzç]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aeiou])([^a-zàèéíïòóúüç-])/gi,"$1<@$3@A@C@C@E@N@T@-@A@R@A@N@È@S@>$2$3$4$5$6$7$+");
+//ARANÈS EX: PÒDEN
+str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([àèéíòóú])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyzç]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([aeiou])(n)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@A@R@A@N@È@S@>$2$3$4$5$6$7$8$+");
+//ARANÈS EX: ESFÒRÇ
+str = str.replace(/([^a-zàèéíïòóúüç-])([a-zïüç·-]*)([aeiou])([a-zïüç·]*)(-)([bcdfghjlmnprstvxyzç]|[bcfgp][rl]|[dt]r|ll|ny|qu)?([àèéíòóú])([bcdfghjklmgpqrtvwxyzç]+)([^a-zàèéíïòóúüç-])/gi,"$1<@A@C@C@E@N@T@-@A@R@A@N@È@S@>$2$3$4$5$6$7$8$+");
+
+//CASTELLÀ EX.: TENÍA
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])([a-züñ-]+)(-)([bcdfghjlmnprstvxyzñ]|[bcfgp][rl]|[dt]r|ll|ch|[gq][uü])?(í)(-)(as?)([^a-zàèéíïòóúüç-])/gi,"$1<@$5$7@A@C@C@E@N@T@-@C@A@S@T@E@L@L@À@>$2$3$4$5$6$7$+");
+
+//BASC -----Z-----
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])(z)([aeiou])([nr])?(-)/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(z)([aeiou])([nr])?(-)/gi,"$1<@+@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(z)([aeiou]+)([kn])([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])([aeiou])(z)(-)/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4");
+str = str.replace(/(-)([r])?([aeiou])(z)(-)/gi,"$1<@+@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)([rt])([aeiou])(z)([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4");
+
+
+
+
+
+
+
+//un cop hem acabat de fer servir regles que necessiten tenir el text separat en síl·labes
+//traiem guionets
+str = str.replace(/([^<@])-([^>@])/g,"$1$2");
+str = str.replace(/([^<@])-([^>@])/g,"$1$2");
+
+//traiem parèntesis angulars que protegien els guionets del text
+str = str.replace(/<->/g,"-");
+
+
+}
+
+
+
+
+
+
+function regles_4lletres(form){
+
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(auch)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@U@C@H@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(damb)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@A@M@B@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(dopo)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@O@P@O@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(dera)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@R@A@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(entà)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@N@T@À@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(pour)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@P@O@U@R@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(sich)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@S@I@C@H@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(sche)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@S@C@H@E@-@A@L@E@M@A@N@Y@>$2$3$4$5");
+}
+
+
+
+
+
+
+
+function regles_3lletres(form){
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(amb)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@M@B@-@C@A@T@A@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(and)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@N@D@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(are)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@R@E@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(aux)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@U@X@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(bat)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@B@A@T@-@B@A@S@C@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(che)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@C@H@E@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(con)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@C@O@N@-@C@A@S@T@E@L@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(das)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@A@S@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(del)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@L@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(dem)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@M@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(der)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@R@-@A@L@E@M@A@N@Y@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(des)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@S@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@, @A@L@E@M@A@N@Y@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(die)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@I@E@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ein)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@I@N@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(est)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@S@T@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(eta)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@T@A@-@B@A@S@C@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(eth)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@T@H@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(for)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@F@O@R@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([aeiouàèéíòóú])l·l([aeiouàèéíòóú])/gi, "$1<@L@·@L@-@C@A@T@A@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(les)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@L@E@S@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(mit)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@M@I@T@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(mès)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@M@È@S@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(non)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@N@O@N@-@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(par)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@P@A@R@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(pel)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@P@E@L@-@C@A@T@A@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(per)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@P@E@R@-@C@A@T@A@L@À@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(por)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@P@E@R@-@C@A@S@T@E@L@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(qu')/gi, "$1<@Q@U@'@-@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(que)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@Q@U@E@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(the)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@T@H@E@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(und)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@U@N@D@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(zum)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@Z@U@M@-@A@L@E@M@A@N@Y@>$2$3");
+
+// ACABEN EN AQUESTES LLETRES
+
+str = str.replace(/([aeiou])(lcs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@C@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(lls)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@L@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(lts)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@T@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(mps)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@M@P@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ncs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@C@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ngs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@G@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(nts)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@T@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(nys)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@Y@S@-@C@A@T@A@L@À@,@A@N@G@L@È@S@>");
+str = str.replace(/([aeiou])(rbs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@B@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rcs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@C@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rds)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@D@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rgs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@G@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rns)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@N@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rps)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@P@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rts)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@T@S@-@C@A@T@A@L@À@>");
+
+}
+
+
+
+
+function regles_2lletres(form){
+
+//dupliquem els caràcters que no són lletres ni apòstrof ni guionet per tal que es puguin aplicar les regles (no es solapin entre elles)
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñßăşţ@'·-])/gi, "$1$1");
+
+
+
+// COMENCEN AMB AQUESTES LLETRES
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(c')([aàeèéiíïoòóuúüâêh])([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@C@'@-@I@T@A@L@I@À@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(d')([aàeèéiíïoòóuúüâêh])([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@'@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(l')([aàeèéiíïoòóuúüâêh])/gi, "$1<@L@'@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(th)([a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@T@H@--@A@N@G@L@È@S@,@F@R@A@N@C@È@S@>$2");
+
+
+// CONTENEN AQUESTES LLETRES
+
+//lletres dobles
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([cglmprstz]{2})([a-zàáäâèéêíïòóöúüçñß]+)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@G@G@-@I@T@A@L@I@À@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([clmrs]{2})([a-zàáäâèéêíïòóöúüçñß]+)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@G@G@-@C@A@T@A@L@À@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([clr]{2})([a-zàáäâèéêíïòóöúüçñß]+)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@G@G@-@C@A@S@T@E@L@L@À@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([cmrs]{2})([a-zàáäâèéêíïòóöúüçñß]+)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@G@G@-@A@R@A@N@È@S@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([er]{2})([a-zàáäâèéêíïòóöúüçñß]+)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@G@G@-@B@A@S@C@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(ch)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@C@H@-@C@A@S@T@E@L@L@À@,@A@N@G@L@È@S@,@F@R@A@N@C@È@S@,@A@L@E@M@A@N@Y@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(é)([a-zàèéíïòóúüçâê]*)(é)([a-zàèéíïòóúüçâê]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi,"$1<@É@-@É@-@F@R@A@N@C@È@S@>$2$3$4$5$6$7");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)([gq])(ü)([eièéí])([a-zàèéíïòóúüçâê]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@G@Q@Ü@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3$4$5$6$7");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(lh)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@L@H@-@A@R@A@N@È@S@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)([aeiouàèéíòóú])(nh)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@N@H@-@A@R@A@N@È@S@>$2$3$4$5$6");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(ny)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@N@Y@-@C@A@T@A@L@À@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(sh)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@S@H@-@A@N@G@L@È@S@,@A@R@A@N@È@S@>$2$3$4$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]*)(tx)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@T@X@-@C@A@T@A@L@À@,@B@A@S@C@>$2$3$4$5");
+
+
+
+// MOTS DE DUES LLETRES
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ad)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@D@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ar)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@R@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(as)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@S@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(au)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@A@U@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(be)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@B@E@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(çò)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@Ç@Ò@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(de)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@E@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(da)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@A@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(di)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@I@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(do)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@O@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(du)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@D@U@-@F@R@A@N@C@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ei)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@I@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(el)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@L@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(en)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@N@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(er)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@R@-@A@L@E@M@A@N@Y@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(es)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@S@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@, @A@L@E@M@A@N@Y@,@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(és)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@É@S@-@C@A@T@A@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(et)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@T@-@F@R@A@N@C@È@S@,@C@A@T@A@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ez)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@Z@-@B@A@S@C@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(il)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@I@L@-@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(is)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@I@S@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(in)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@I@N@-@A@N@G@L@È@S@,@A@L@E@M@A@N@Y@,@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(it)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@I@T@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(la)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@L@A@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@,@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(le)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@L@E@-@F@R@A@N@C@È@S@,@C@A@S@T@E@L@L@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(of)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@O@F@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(on)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@O@N@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(or)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@O@R@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(so)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@S@O@-@A@L@E@M@A@N@Y@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(to)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@T@O@-@A@N@G@L@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(ua)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@U@A@-@A@R@A@N@È@S@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(un)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@U@N@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@,@I@T@A@L@I@À@>$2$3");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(va)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@V@A@-@C@A@T@A@L@À@>$2$3");
+
+
+// ACABEN EN AQUESTES LLETRES
+
+str = str.replace(/([a-zàáäâèéêíïòóöúüçñß]+)('c)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1$2$3<@-@'@C@-@A@R@A@N@È@S@>");
+str = str.replace(/([a-z])(ed)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@E@D@-@A@N@G@L@È@S@>");
+str = str.replace(/([a-zàáäâèéêíïòóöúüçñß]+)(ía)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@Í@A@-@C@A@S@T@E@L@L@À@>");
+str = str.replace(/([a-zàáäâèéêíïòóöúüçñß]+)(ón)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@Ó@N@-@C@A@S@T@E@L@L@À@>");
+str = str.replace(/([a-zàáäâèéêíïòóöúüçñß]+)(th)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@H@-@A@N@G@L@È@S@,@A@R@A@N@È@S@>");
+str = str.replace(/([a-zàáäâèéêíïòóöúüçñß]+)(tz)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@Z@-@A@R@A@N@È@S@,@B@A@S@C@>");
+
+
+str = str.replace(/([aeiou])(bs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@B@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(cs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@C@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ds)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@D@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(fs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@F@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(gs)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@G@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(lc)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@C@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ll)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@L@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ls)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(lt)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@T@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(mp)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@M@P@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ms)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@M@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(nc)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@C@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ng)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@G@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(nt)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@T@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ns)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ny)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@Y@-@C@A@T@A@L@À@,@A@N@G@L@È@S@>");
+str = str.replace(/([aeiou])(ps)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@P@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rb)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@B@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rc)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@C@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rç)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@Ç@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rd)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@D@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rg)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@G@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rn)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@N@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rp)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@P@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(rt)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@T@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(sc)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@S@C@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(st)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@S@T@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(ts)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(tx)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@X@-@C@A@T@A@L@À@>");
+
+}
+
+
+
+function regles_1lletra(form){
+
+
+
+// COMENÇA AMB AQUESTA LLETRA
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(x)([aeiou])([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@X@+@-@B@A@S@C@>$2$3$4$5");
+
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])(z)([aeiou])([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@Z@+@-@B@A@S@C@>$2$3$4$5");
+
+
+
+
+
+// TÉ AQUESTA LLETRA
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(à)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@À@-@C@A@T@A@L@À@,@A@R@A@N@È@S@,@I@T@A@L@I@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(á)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Á@-@C@A@S@T@E@L@L@À@>$2$3$4$5");
+
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ä)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ä@-@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(â)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Â@-@F@R@A@N@C@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ă)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@ă@-@R@O@M@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ß)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@ß@-@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(è)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@È@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(é)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@É@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ê)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ê@-@F@R@A@N@C@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ì)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ì@-@I@T@A@L@I@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(í)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Í@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ï)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ï@-@C@A@T@A@L@À@,@A@R@A@N@È@S@>$2$3$4$5");
+
+//
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(î)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Î@-@R@O@M@A@N@È@S@>$2$3$4$5");
+
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ò)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ò@-@C@A@T@A@L@À@,@A@R@A@N@È@S@,@I@T@A@L@I@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ó)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ó@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ö)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ö@-@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ù)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ù@-@I@T@A@L@I@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ú)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ú@-@C@A@T@A@L@À@,@C@A@S@T@E@L@L@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ü)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ü@-@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ç)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ç@-@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-z]*)(k)([aeiou])([a-z]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@K@-@B@A@S@C@>$2$3$4$5$6");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(k)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@K@-@A@N@G@L@È@S@,@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ñ)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Ñ@-@C@A@S@T@E@L@L@À@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ş)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@ş@-@R@O@M@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(ţ)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@ţ@-@R@O@M@A@N@È@S@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(w)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@W@-@A@N@G@L@È@S@,@A@L@E@M@A@N@Y@>$2$3$4$5");
+
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-z]+)(z)([aeiou])([a-z]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Z@-@B@A@S@C@>$2$3$4$5$6");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@]+)([a-zàáäâèéêíïòóöúüçñß]*)(z)([a-zàáäâèéêíïòóöúüçñß]*)([^a-zàáäâèéêíïòóöúüçñß@]+)/gi, "$1<@Z@-@I@T@A@L@I@À@,@C@A@S@T@E@L@L@À@,@C@A@T@A@L@À@>$2$3$4$5");
+
+
+// ACABA EN AQUESTA LLETRA
+
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(a)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@A@-@B@A@S@C@,@C@A@S@T@E@L@L@À@,@C@A@T@A@L@À@,@A@R@A@N@È@S@,@I@T@A@L@I@À@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(e)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@E@-@B@A@S@C@,@C@A@S@T@E@L@L@À@,@A@R@A@N@È@S@,@C@A@T@A@L@À@,@F@R@A@N@C@È@S@,@I@T@A@L@I@À@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(i)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@I@-@B@A@S@C@,@I@T@A@L@I@À@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(o)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@O@-@B@A@S@C@,@C@A@S@T@E@L@L@À@,@I@T@A@L@I@À@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(u)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@U@-@B@A@S@C@>$4");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-z]*)([aeiou])(k)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3$4<@-@K@-@A@N@G@L@È@S@>$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(k)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@K@-@A@N@G@L@È@S@>$4");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(m)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@M@-@A@N@G@L@È@S@,@A@R@A@N@È@S@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([aeiou])(n)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3$4<@-@N@-@B@A@S@C@>$5");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([aeiouáéíóú])(n)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3$4<@-@N@-@B@A@S@C@,@C@A@S@T@E@L@L@À@>$5");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(r)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@-@C@A@S@T@E@L@L@À@,@A@R@A@N@È@S@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([aeiouáéíóú])(s)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3$4<@-@S@-@C@A@S@T@E@L@L@À@>$5");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)(t)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@-@F@R@A@N@C@È@S@,@A@R@A@N@È@S@>$4");
+//str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])([a-zàáäâèéêíïòóöúüçñß]+)([aeiou])(z)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3$4<@-@Z@-@C@A@S@T@E@L@L@À@>$5");
+str = str.replace(/([aeou])(y)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@V@O@C@A@L@+@Y@-@C@A@S@T@E@L@L@À@,@A@N@G@L@È@S@>");
+str = str.replace(/([bcdfgklmnprstvxz])(y)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@Y@-@A@N@G@L@È@S@>");
+
+	//ARANÈS: ACABEN EN: th, nt(s), lh, sh, rç, nh, c, m, n(s), s, r, t(s), mps
+	//conté auut, auie, aue
+	//em sembla que no té 'f' com el basc
+
+	//CATALÀ
+str = str.replace(/([aeiou])(b)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@B@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(c)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@C@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(d)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@D@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(f)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@F@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(g)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@G@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(l)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@L@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(m)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@M@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(n)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@N@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(p)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@P@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(r)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@R@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(s)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@S@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(t)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@T@-@C@A@T@A@L@À@>");
+str = str.replace(/([aeiou])(x)([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1$2$3<@-@X@-@C@A@T@A@L@À@>");
+
+	// B A S C 
+
+//        -----F----- no n'hi ha
+
+//        -----J-----
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])(j)([aeiou])([n])?(-)/gi,"$1<@J@+@-@B@A@S@C@>$2$3$4$5");
+
+//        -----K-----
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])(k)([aeiou])([lrs])?(-)/gi,"$1<@K@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(k)([aeiou])([lrs])?(-)/gi,"$1<@+@K@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(k)([aeiou]+)([kn])?([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1<@K@+@-@B@A@S@C@>$2$3$4$5");
+
+str = str.replace(/(-)([lnrstz])?([aeiou])(k)([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1$2$3$4<@+@K@-@B@A@S@C@>$5");
+
+//        -----V----- no n'hi ha
+
+//        -----X-----
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])(t)?(x)([aeiou])([r])?(-)/gi,"$1<@X@+@-@B@A@S@C@>$2$3$4$5$6");
+str = str.replace(/([aeiout])(-)(x)([aeiou])(-)/gi,"<@+@X@+@-@B@A@S@C@>$1$2$3$4$5");
+str = str.replace(/([aeiout])(-)(x)([aeiou]+)([^a-zàáäâèéêíïòóöúüçñß-])/gi,"<@X@+@-@B@A@S@C@>$1$2$3$4$5");
+
+str = str.replace(/(-)([p])([aeiou])(x)(-)/gi,"$1<@+@X@+@-@B@A@S@C@>$2$3$4$5");
+
+//        -----Y----- no n'hi ha
+
+
+//        -----Z-----
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])(z)([aeiou])([nr])?(-)/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(z)([aeiou])([nr])?(-)/gi,"$1<@+@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)(z)([aeiou]+)([kn])?([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4$5");
+
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß-])([aeiou])(z)(-)/gi,"$1<@Z@+@-@B@A@S@C@>$2$3$4");
+str = str.replace(/(-)([r])?([aeiou])(z)(-)/gi,"$1<@+@Z@+@-@B@A@S@C@>$2$3$4$5");
+str = str.replace(/(-)([rt])([aeiou])(z)([^a-zàáäâèéêíïòóöúüçñß-])/gi,"$1$2$3$4<@+@Z@-@B@A@S@C@>$5");
+
+
+
+//Sembla que tots els mots bascos acaben en aquestes lletres: aeiouknstz
+//Els mots castellans solen acabar en: aeonrs (tbé íéóldyz)
+
+
+//  MOTS D'UNA SOLA LLETRA
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])à([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@À@-@F@R@A@N@C@È@S@>$2");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])e([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@E@-@A@R@A@N@È@S@,@I@T@A@L@I@À@>$2");
+str = str.replace(/([^a-zàáäâèéêíïòóöúüçñß@])y([^a-zàáäâèéêíïòóöúüçñß@])/gi, "$1<@Y@-@C@A@S@T@E@L@L@À@>$2");
+
+}
+
+
+
+
+//esborrem tots els caràcters que no hem substituït
+str = str.replace(/>([^<>])*</g, "><");
+//per treure text abans primera etiqueta
+str = str.replace(/^[^<][^<>]*</g, "<");
+//per treure text després última etiqueta
+str = str.replace(/>[^<>]*[^>]$/g, ">");
+
+//per treure @
+str = str.replace(/@/g, "");
+
+
+//P E R   C O M P T A R   N O M B R E   D E   P A R A U L E S
+
+  var str2 = form.entrada.value;
+  str2 = str2.replace(/[^a-zàáäâèéêíïòóöúüçñß·-]/gi, " ");
+  str2 = str2.replace(/\s+/g, " ");
+  str2 = str2.split(' ');
+  var nre_mots = str2.length;
+
+//P E R   C O M P T A R   N O M B R E   D ' A P A R I C I O N S   P E R  L L E N G U A
+
+
+  var wordArray = new Array();
+
+  // format string for easier manipulation
+  //newstr = newstr.toLowerCase();
+  newstr = str.replace(/<[a-zàáäâèéêíïòóöúüçñß·+-]+'?-/gi, "");
+  newstr = newstr.replace(/['"-]/g, "");
+  newstr = newstr.replace(/[^a-zàäâèéêíïòóúüçñ·]/gi, " ");
+  newstr = newstr.replace(/\s+/g, " ");
+
+  var tempArray = newstr.split(' ').sort();
+  var count = 1;
+  // Iterate through all the words
+  for (var i = 0; i < tempArray.length; i++) {
+
+    // If an array element with the same name as
+    // the current word exists, increment its value by 1
+    if (wordArray[tempArray[i]]) {
+      wordArray[tempArray[i]]++;
+      }
+
+    // Otherwise, assign the array element to the 
+    /// name of the word, and give it a value of 1
+    else { wordArray[tempArray[i]] = 1; }
+    }
+
+    var arrStr = '';
+
+    // Create table rows that display the word and the frequency
+    for (word in wordArray) {
+      if (word != "") {
+        arrStr += '<TR><TD>' + word + '</TD><TD>' + wordArray[word] + '</TD></TR>';
+        count++;
+        }
+      }
+
+
+form.sortida.value = str; 
+
+//document.write(str);
+
+//imprimeix el text genuïtzat a sobre del requadre (al body on surt id="demo")
+document.getElementById("demo").innerHTML= '<B>Total</B>: ' + nre_mots + ' paraules'+ '<TABLE BORDER=0 CELLPADDING=10><TR><TD WIDTH=300 VALIGN=TOP ROWSPAN=' + 
+      count + '>' +     '</I><TD><B>Llengua</B><TD><B>Freqüència</B></TR>' + arrStr + '</TABLE>';
+
+
+}
+
+
