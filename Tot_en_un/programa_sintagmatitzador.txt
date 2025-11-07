@@ -1,0 +1,440 @@
+function sintagmatitza(form) {
+
+var newstr = "\n" + form.entrada.value + " ";
+
+
+//PER FER:
+//1) POSAR MOTS AMB TERMINACIONS VERBALS (ESPECIALMENT DE LA 2A I DE LA 3A) ENTRE <>
+//2) ETIQUETAR DIACRÕTICS
+//3) INTENTAR FER QUE VAGI M…S R¿PID
+
+//PREFIXOS possibles: pot ser des-en-quadrar
+//([r|s]?) per 'a-s-sentir', a-r-replegar
+//(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)([r|s]?)
+
+
+//----NOMS PROPIS------
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])([^a-z‡ËÈÌÔÚÛ˙¸Á<>])([A-Z¿»…Õœ“”⁄‹«])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)([^a-z‡ËÈÌÔÚÛ˙¸Á])/g,"$1$2<noVerb>$3$4<\/noVerb>$5");
+//repetim mateixa regla
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])([^a-z‡ËÈÌÔÚÛ˙¸Á<>])([A-Z¿»…Õœ“”⁄‹«])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)([^a-z‡ËÈÌÔÚÛ˙¸Á])/g,"$1$2<noVerb>$3$4<\/noVerb>$5");
+
+
+// CONTRACCIONS
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(a|de|pe)(l|ls)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1\n<prep>$2<\/prep><article>$3<\/article>$4");
+
+
+//----PREPOSICIONS-----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(a|amb|d'|de|per)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1\n<prep>$2<\/prep>$3");
+//repetim regla
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(a|amb|d'|de|per)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1\n<prep>$2<\/prep>$3");
+
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(entre)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1\n<prep>$2<\/prep>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])(d')([a‡eËÈiÌoÚÛu˙h])/gi,"$1\n<prep>$2<\/prep>$3");
+
+
+// EN + EL LA ELS LES --> PREP + ART DEF
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])(en)( )(el|la|els|les)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1\n<prep>$2<\/prep>$3<article>$4<\/article>$5");
+
+
+
+
+
+//-----XIFRES----------
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á0-9<>])([0-9\.,]*)([0-9])([^a-z‡ËÈÌÔÚÛ˙¸Á0-9<>])/g,"$1<noVerb>$2$3<\/noVerb>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á0-9<>])([0-9\.,]*)([0-9])([^a-z‡ËÈÌÔÚÛ˙¸Á0-9<>])/g,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+//----PUNTUACI”----
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(;|:|\?|!|\"|-|\))([^a-z‡ËÈÌÔÚÛ˙¸Á<]+)/gi,"$1\n$2$3\n");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])(\"|-|\()([a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n$2\n$3");
+
+//---PUNT D'ABREVIATURES ---> les protegim envoltant el punt amb parËntesis angulars: '<>.</>'
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(n˙m|p‡g)(\.)([^a-z‡ËÈÌÔÚÛ˙¸Á0123456789<])/gi,"$1$2<0>$3<\/>$4");
+
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(,|\.)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n$2\n$3");
+
+
+//----PRONOMS RELATIUS-----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(com|on|perquË|qual|quals|quan|quant|quants|que|quË|qui|quin|quins)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n<0>$2<\/>$3\n");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(com|on|perquË|qual|quals|quan|quant|quants|que|quË|qui|quin|quins)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n<0>$2<\/>$3\n");
+
+
+//----I O -----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á-])(i|o)([^a-z‡ËÈÌÔÚÛ˙¸Á-])/gi,"$1\n<0>$2<\/>$3\n");
+
+//----NO -----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á-])(no|ni)([^a-z‡ËÈÌÔÚÛ˙¸Á-])/gi,"$1\n<0>$2<\/>$3\n");
+
+
+
+
+//----SI NOM…S PER“ SOBRETOT-----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(si|nomÈs|perÚ|sobretot)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n<0>$2<\/>$3\n");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(si|nomÈs|perÚ|sobretot)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n<0>$2<\/>$3\n");
+
+
+//----TAMB… TAMPOC -----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(tambÈ|tampoc)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1\n<0>$2<\/>$3\n");
+
+
+
+
+//----S”C …S S”N T…-----
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])(sÛc|Ès|sÛn|tÈ|sÈ)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<verb>$2<\/verb>$3");
+
+//----'-EIXEN'----: segons IEC l'˙nic mot que acaba en -eixen Ès 'creixen' (planta) --> ˙nic mot que no Ès verb que tÈ la terminaciÛ -eixen. --> ETIQUETEM TOTS ELS MOTS ACABATS EN '-EIXEN' COM A VERBS I EL MOT 'CREIXEN' el bloquegem pq no s'etiqueti com a verb (el posem entre parËntesis angulars)
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(creixen)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2<\/>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(eixen)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<verb>$2$3<\/verb>$4");
+
+
+
+//-----------PRONOMS FEBLES---------------------
+//PRONOMS FEBLES: deixat fora: EL ELS LA LES EN:'en' pot ser tbÈ prep o article personal
+//es distingeix entre <pronFebleI> 'I' d'inici (davant verb) i <pronFebreF> 'F' de final (darrere del verb) amb els ˙nics efectes de facilitar l'etiquetaciÛ  ex. facilitar-me la sortida  --> per saber que el pronom feble Ès final i per tant marca que el que el precedeix Ès necess‡riament un verb
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-me)('l|-la|-li|'n|'ls|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFeble>$3<\/pronFeble>$4");
+
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-m)('ho|'hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(me)('l|'n|'ls)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(me)( )(la|li|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(m')(ho|hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(me)( )(l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-te)('m|'l|-la|-li|'n|'ns|'ls|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-t)('ho|'hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(te)('m|'l|'n|'ns|'ls)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(te)( )(la|li|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(t')(ho|hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(te)( )(m'|l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-l)('en|'hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡bcdeËÈfghiÌÔjklmnoÚÛpqrstu˙¸vwxyzÁ>])(-la)(-hi|'n)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(la)('n)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(la)( )(hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(l')(hi|en)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(la|el)( )(n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+//algunes regles coincideixen amb el pronom 'el' (veure aquÌ sobre)
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-li)('l|-la|-ho|-hi|'n|'ls|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(li)('l|'n|'ls)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(li)( )(la|hi|ho|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(li)( )(l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-los)(-el|-la|-ho|-hi|-en|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-ls)(-el|-la|-ho|-hi|-en|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(els)( )(hi|el|la|ho|en|els|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(els)( )(l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-les)(-hi|-en)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(les)( )(hi|en)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(les)( )(n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-se)('m|'t|'l|-la|-li|'n|'ns|-us|'ls|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-s)('ho|'hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(se)('m|'t|'l|'n|'ns|'ls)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(se)( )(la|li|us|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(s')(ho|hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(se)( )(m'|t'|l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-n)('hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = 
+newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(n')(hi)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI><pronFebleI>$3<\/pronFebleI>$4");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-nos)(-el|-la|-ho|-li|-hi|-en|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])('ns)(-el|-la|-li|-ho|-hi|-en|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(ens)( )(el|la|ho|li|hi|en|els|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(ens)( )(l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-vos)(-em|-el|-la|-ho|-li|-hi|-en|-ens|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸>])(-us)(-em|-el|-la|-ho|-li|-hi|-en|-ens|-els|-les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF><pronFebleF>$3<\/pronFebleF>$4");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(us)( )(em|el|la|ho|li|hi|en|ens|els|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(us)( )(m'|l'|n')/gi,"$1<pronFebleI>$2<\/pronFebleI>$3<pronFebleI>$4<\/pronFebleI>");
+
+//------------desprÈs de verb
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á>])(-me|-te|-se|-lo|-la|-los|-les|-ne|-ho|-li|-hi|-nos|-vos|-us)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF>$3");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])('m|'t|'s|'l|'ls|'n|'ns)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<pronFebleF>$2<\/pronFebleF>$3");
+//-----------davant de verb
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(em|et|es|se|ho|li|hi|ens|us)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<pronFebleI>$2<\/pronFebleI>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>-])(m'|t'|s'|n')/gi,"$1<pronFeble>$2<\/pronFeble>");
+
+
+
+//aquÌ fem que 'el la els les' desprÈs de <prep> --> <article>
+newstr = newstr.replace(/(<\/prep>)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(el|la|els|les)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2<article>$3<\/article>$4");
+newstr = newstr.replace(/(<\/prep>)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(l')/gi,"$1$2<article>$3<\/article>");
+
+
+//si hi ha: <prep> + mot --> <noVerb> excepte infinitiu --> posa etiqueta de <noVerb>: prep + 1 lletra o mÈs + lletra llevat 'r' i 'e'
+newstr = newstr.replace(/(<\/prep>)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)([a‡bcdËÈfghiÌÔjklmnoÚÛpqstu˙¸vxyzÁ])([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2<noVerb>$3$4<\/noVerb>$5");
+newstr = newstr.replace(/(<\/prep>)([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)([a‡bcdËÈfghiÌÔjklmnoÚÛpqstu˙¸vxyzÁ])([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+
+
+//TERMINACIONS QUE NO T… CAP VERB  --> per tant etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(ai|ais|alls|‡ncia|‡ncies|b|bs|cs|ells|Ëncia|Ëncies|f|fs|ills|Ôlls|Ôns|Ú|olls|op|ops|Úria|Úries|rn|rns|ssos|¸ent|¸ents|¸lls|un|uns|unt|unts)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+//---‡--- les terminacions verbals '-‡', '-‡rem', '-‡reu', '-r‡s', '-‡vem', '-‡veu', i les formes verbals 'h‡gim', 'h‡giu', 'n‡ixer', 'p‡ixer', 'pert‡nyer', 'pl‡nyer', 'c‡piga', 'c‡pigues', 'c‡piguen', 's‡piga', 's‡pigues', 's‡piguen', 'contraf‡s' i altres compostos de fer, 'rom‡s' i 'est‡s'
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(‡|‡rem|r‡s|‡reu|‡vem|‡veu|f‡s)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)?(h‡gim|h‡giu|n‡ixer|p‡ixer|pert‡nyer|pl‡nyer|c‡piga|c‡pigues|c‡piguen|s‡piga|s‡pigues|s‡piguen|rom‡s|est‡s)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(‡)([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+
+// ----'Ë'---- Els verbs que contenen 'Ë' sÛn: '-Ëiem', '-Ëieu', '-Ës', '(re)aparËixer', 'aprehËn', 'aprËn', 'atËnyer', 'comparËixer', 'comprËn', '(des)(re)conËixer', 'constrËnyer', 'convËncer', 'corprËn', 'defËn', 'depËn', 'desaparËixer', 'desprËn', 'destrËnyer', 'empËnyer', 'emprËn', '(r)estrËnyer', 'expËn', 'fËnyer', 'malvËn', 'ofËn', 'merËixer', 'parËixer', 'reprËn', 'revËn', 'sorprËn', 'suspËn', 'ullprËn', 'vËncer'  --> per tant la resta etiqueta <noVerb>
+//bloquegem els verbs que continguin 'Ë' envoltant-los de parËntesis angulars i desprÈs etiquetem tota la resta com a <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(Ëiem|Ëieu|Ës)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)?(conËixer|merËixer|parËixer|atËnyer|empËnyer|fËnyer|vËncer|aprehËn|corprËn|ullprËn|defËn|depËn|expËn|suspËn|ofËn)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(trËnyer|prËn|vËn)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(Ë)([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+
+
+//---'Ì'--- nomÈs a les terminacions verbals '-Ì', '-Ìem', '-Ìeu', '-Ìrem', '-Ìreu', '-Ìs', '-Ìssim', '-Ìssiu' 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(Ì|Ìem|Ìeu|Ìrem|Ìreu|Ìs|Ìssim|Ìssiu)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(Ì)([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+
+
+//---Ú--- les formes verbals 'conmÚs', 'oclÚs', 'mÚlt/a/s/es' i derivats, 'tÚrcer' i derivats, i derivats amb 'clÚs'
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)?(conmÚs|oclÚs|mÚlt|mÚlta|mÚlts|mÚltes|tÚrcer|clÚs)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(Ú)([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+
+
+// ----'-ulls'---- SÛn verbs nomÈs -culls, -bulls. 
+//bloquegem els mots acabats en -culls i -bulls envoltant-los de parËntesis angulars i desprÈs etiquetem tot com a <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(bulls|culls)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(ulls)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ment' --> sÛn verbs nomÈs 'desment', 'esprement', 'fument', 'ment', 'prement', 'tement' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(ment|fument|prement|tement)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ment)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ans' --> Ès verb nomÈs 'romans' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(romans)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ans)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-nts' --> sÛn verbs nomÈs 'consents', 'desments', 'ments', 'pressents', 'ressents', 'sents' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(ments|sents)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(nts)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-nys' --> sÛn verbs nomÈs 'atenys', 'constrenys', 'destrenys', 'empenys', 'esmunys', 'estrenys', 'fenys', 'grunys', 'munys', 'pertanys', 'planys', 'punys', restrenys', 'retrunys' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(atenys|constrenys|destrenys|empenys|esmunys|estrenys|fenys|grunys|munys|pertanys|planys|punys|restrenys|retrunys)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(nys)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ol' --> de verb nomÈs 'absol', 'col', 'condol', 'dissol', 'dol', 'mol', 'remol', 'resol', 'sol', 'tol', 'vol' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(absol|col|dol|dissol|mol|resol|sol|tol|vol)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ol)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-al/s' --> de verb nomÈs 'cal', 'equival/s', 'preval/s', 'val/s' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(cal|equival|val)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+var re014_36_1 = /([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(equivals|vals)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi; newstr = newstr.replace(re014_36_1,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(als|al)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+//---'-or' --> de verb nomÈs 'mor' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(mor)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(or)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ot' --> de verb nomÈs 'bot', 'fot' i 'pot' i compostos --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(bot|fot|pot)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ot)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-Û' --> de verb nomÈs 'sÛ' del verb 'ser' --> per tant la resta etiqueta <noVerb> 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(sÛ)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2<\/>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(Û)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ou'----> de verb nomÈs 'clou', 'commou', 'cou', 'mou', 'nou' 'ou', 'plou', 'sou', 'fou' i derivats --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(clou|commou|cou|mou|nou|ou|plou|sou|fou)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ou)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-oc'----> de verb nomÈs 'cloc', 'coc', 'moc', 'noc', 'ploc' i derivats --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(cloc|coc|moc|noc|ploc)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(oc)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-Ûs' --> de verb nomÈs 'confÛs', 'difÛs', 'infÛs', 'marfÛs', 'perfÛs', 'refÛs', 'retÛs', 'transfÛs' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(marfÛs)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(fÛs|tÛs)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(Ûs)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-˙' --> de verb nomÈs 'end˙' del verb 'dur'  --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(d˙)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(˙)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-on/s' --> de verb nomÈs 'fon/s', 'pon/s' i 'ton/s' i compostos, i 'morfon/s', 'marfon/s', 'corfon/s' i 'correspon/s' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(fon|pon|ton|marfon|corfon|correspon)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6$7<\/>$8");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ons|on)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-lt/s' --> de verb nomÈs 'absolt/s', 'colt/s', 'dissolt/s', 'mÚlt/s', 'resolt/s', 'tolt/s' i compostos --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(absolt|colt|dissolt|mÚlt|resolt|tolt)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6$7<\/>$8");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(lts|lt)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-e' --> de verb nomÈs els acabats en '-re' i 'he', 'omple', 'corre','vine' (i derivats),  've':no els compostos de 've' pq portarien accÈnt: 'revÈ'   --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(corre|omple|vine)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(he|ve)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2<\/>$3");
+//aquÌ hi ha la llista de tots els infinitius en -re
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(abatre|absoldre|abstreure|admetre|adscriure|ajeure|alabatre|apercebre|aprehendre|aprendre|arremetre|asseure|atendre|atreure|batre|benveure|bestreure|beure|botre|cabre|caldre|caure|circumscriure|cloure|coldre|combatre|cometre|commoure|complaure|compondre|comprendre|comprometre|concebre|concloure|condoldre|confondre|contendre|contreure|conviure|corprendre|correspondre|corrompre|coure|creure|debatre|decaure|decebre|defendre|dependre|desaprendre|desatendre|descloure|descompondre|descreure|descriure|desentendre|despendre|desplaure|desprendre|desviure|detreure|deure|difondre|dissoldre|distendre|distreure|doldre|embeure|emetre|emprendre|encendre|encloure|enfondre|entendre|entremetre|entreveure|esbatre|escaure|escometre|escriure|estendre|excloure|expendre|extreure|fendre|fondre|fotre|haure|heure|incloure|infondre|inscriure|interrompre|irrompre|jeure|lleure|malentendre|malmetre|malvendre|malviure|mamprendre|marfondre|metre|moldre|moure|noure|ocloure|ofendre|oldre|ometre|percebre|perdre|permetre|perviure|plaure|ploure|pondre|prendre|prescriure|pretendre|preveure|prometre|promoure|prorrompre|proscriure|raure|readmetre|rebatre|rebeure|rebotre|rebre|recaure|recloure|recompondre|recoure|reescriure|refondre|remetre|remoldre|remoure|reprendre|resoldre|respondre|retransmetre|retre|retreure|retrotreure|revendre|reveure|reviure|riure|romandre|rompre|seure|sobreentendre|sobreseure|sobreviure|somoure|somriure|sorprendre|sostreure|sotbatre|sotmetre|subscriure|suspendre|toldre|tondre|trametre|transcriure|transfondre|transmetre|treure|ullprendre|vendre|veure|viure)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á><\/])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(e)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á><\/])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(e)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-d' --> de verb nomÈs 'perd' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(perd)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(d)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ig' --> de verb nomÈs 'faig', 'fuig', i 'veig' i compostos, 'haig' i 'vaig' sense compostos --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(faig|fuig|veig)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(haig|vaig)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2<\/>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ig)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-ms' --> de verb nomÈs 'dorms', 'brums', 'consums', 'prems', 'fums', 'presums', 'resums' i 'tems' i compostos --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(dorms|brums|consums|prems|fums|presums|resums|tems)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(ms)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-os' --> de verb nomÈs '-sos', '-tos', 'clos' i 'fos' (no els compostos pq els porten accent -Ûs) --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]*)(sos|tos)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(clos|fos)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2<\/>$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(os)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+//---'-rs' --> de verb nomÈs 'mors' --> per tant la resta etiqueta <noVerb>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|mam|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(mors)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<0>$2$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])([a-z‡ËÈÌÔÚÛ˙¸Á]+)(rs)([^a-z‡ËÈÌÔÚÛ˙¸Á<])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+
+
+
+
+
+
+
+//si hi ha EL LA ELS LES  + <noVerb> --> posa etiqueta de <article>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(el|els|la|les)( )(<noVerb>)/gi,"$1<article>$2<\/article>$3$4");
+//si hi ha L'  + <noVerb> --> posa etiqueta de <article>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á<>])(l')(<noVerb>)/gi,"$1<article>$2<\/article>$3");
+//si hi ha EL LA ELS LES + 'M…S' --> posa etiqueta de <article>
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(el|els|la|les)( )(mÈs)/gi,"$1<article>$2<\/article>$3$4");
+
+
+//si hi ha EL LA ELS LES + mot acabat en '-t' no verb personal --> posa etiqueta <article> 
+// 1r bloquegem els que acaben en -t i no sÛn participis
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(el|la|els|les)( )(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(consent|debat|desment|emet|abat|alabat|bat|combat|bot|acut|admet|arremet|comet|compromet|entremet|esbat|escomet|fot|malmet|ment|met|omet|percut|permet|pot|pressent|promet|put|readmet|rebat|rebot|remet|ressent|ressurt|retransmet|ret|sent|sobresurt|surt|sotbat|sotmet|tramet|transmet)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á>])/gi,"$1$2$3<0>$4$5$6$7<\/>$8");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(el|els|la|les)( )([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(t)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<article>$2<\/article>$3<noVerb>$4$5$6<\/noVerb>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(l')(ets)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2<0>$3<\/>$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(l')(a|ab|ad|ante|bes|cap|circum|co|com|con|contra|de|di|em|en|entre|es|ex|im|in|inter|ir|mal|man|menys|multi|ob|o|para|per|pre|pro|re|retro|sobre|so|som|sot|su|sub|super|trans|tras|ultra|uni)?([r|s]?)(consent|debat|desment|emet|abat|alabat|bat|combat|bot|acut|admet|arremet|comet|compromet|entremet|esbat|escomet|fot|malmet|ment|met|omet|percut|permet|pot|pressent|promet|put|readmet|rebat|rebot|remet|ressent|ressurt|retransmet|ret|sent|sobresurt|surt|sotbat|sotmet|tramet|transmet)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á>])/gi,"$1$2<0>$3$4$5$6<\/>$7");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(l')([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(t)(s?)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<article>$2<\/article><noVerb>$3$4$5<\/noVerb>$6");
+
+
+//si ha "l'altra/e', 'els/les altres' + <article> --> <article> <noVerb> \n <article> 
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(l')(altra|altre)( )(<article>)/gi,"$1<article>$2<\/article><noVerb>$3<\/noVerb>$4\n$5");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>])(els|les)( )(altres)( )(<article>)/gi,"$1<article>$2<\/article>$3<noVerb>$4<\/noVerb>$5\n$6");
+
+
+//si hi ha etiqueta <pronFebleI> + mot --> <pronFebleI> + <verb>
+newstr = newstr.replace(/(<\/pronFebleI>)([^a-z‡ËÈÌÔÚÛ˙¸Á<])(<0>)?([a-z‡ËÈÌÔÚÛ˙¸Á]+)(<\/>)?([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2<verb>$4<\/verb>$6");
+newstr = newstr.replace(/(<\/pronFebleI>)(<0>)?([a‡eËÈhiÌÔoÚÛu˙¸])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(<\/>)?([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<verb>$3$4<\/verb>$6");
+
+//si hi ha etiqueta mot + <pronFebleF> --> <verb> + <pronFeble> (no aplicable si mot Ès possible infinitiu o gerundi --> eliminem terminaciÛ en 'e', 't' o 'r'
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])([a-z‡ËÈÌÔÚÛ˙¸Á]+)([a‡bcdËÈfghiÌÔjklmnoÚÛpqsu˙¸vwxyzÁ])(<pronFebleF>)/gi,"$1<verb>$2$3<\/verb>$4");
+
+
+
+//si hi ha etiqueta '<noVerb>EL, LA, ELS, LES</noVerb>' --> etiqueta <article>
+//newstr = newstr.replace(/(<noVerb>)(el|la|els|les)(<\/noVerb>)/gi,"<article>$2<\/article>");
+
+
+//si hi ha etiqueta <article> + mot --> <article> + <noVerb>
+newstr = newstr.replace(/(<\/article>)([^a-z‡ËÈÌÔÚÛ˙¸Á<>])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2<noVerb>$3<\/noVerb>$4");
+newstr = newstr.replace(/(<\/article>)([a‡eËÈhiÌÔoÚÛu˙¸])([a-z‡ËÈÌÔÚÛ˙¸Á]*)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1<noVerb>$2$3<\/noVerb>$4");
+
+
+
+//MOTS DE 2 O 3 LLETRES --> SI NO …S UN VERB --> POSAR ETIQUETA <NOVERB>
+//aquÌ sota hi ha llista de tots els verbs formats per 2 i 3 lletres
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑>])(adÌ|ala|al‡|ali|alÌ|alo|ama|am‡|ami|amÌ|amo|an‡|anÌ|atÈ|avÈ|bat|bec|beu|bot|cal|cap|cau|cia|ci‡|ciÌ|ciÔ|cio|coc|col|cou|cus|da|dar|dat|dec|dem|des|deu|di|dic|dir|dit|diu|dol|du|duc|dur|dus|dut|duu|era|Ès|ets|fa|fan|fas|fem|fen|fer|fes|fet|feu|fÈu|fia|fi‡|fiÌ|fiÔ|fio|fiu|fon|fos|fot|fou|fui|fum|ha|han|has|he|hec|hem|heu|ir‡|irÈ|ix|ixi|ixo|jac|jau|jec|jeu|llu|mes|met|moc|mol|mor|mou|nat|nia|ni‡|niÌ|niÔ|nio|noc|nou|nua|nu‡|nuÌ|nuÔ|nuo|oÌ|oÔa|oÔm|oir|oÌs|oÔt|oÔu|ora|or‡|ori|orÌ|oro|ou|ous|paÌ|poa|po‡|poÌ|poÔ|pon|poo|pot|puc|put|rac|ras|rau|rep|ret|ric|riu|sap|sÈ|sec|ser|seu|sÛ|sÛc|sol|som|sÛn|sou|sua|su‡|suÌ|suÔ|suo|tÈ|tem|ten|tol|ton|tos|tus|ugi|ugÌ|uja|uj‡|ujo|unÌ|usa|us‡|usi|usÌ|uso|va|val|vam|van|vas|vau|ve|ven|ves|vÈs|veu|vÈu|via|vi‡|viÌ|viÔ|vio|viu|vol|xaÌ|xaÔ)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<])/gi,"$1@$2@$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>∑@])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑]?)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<@])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+//exactament igual q regla anterior: Ès per q etiqueti 2 paraules seguides: si no, etiqueta una sÌ una no.
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>∑@])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑]?)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<@])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+newstr = newstr.replace(/(@)(adÌ|ala|al‡|ali|alÌ|alo|ama|am‡|ami|amÌ|amo|an‡|anÌ|atÈ|avÈ|bat|bec|beu|bot|cal|cap|cau|cia|ci‡|ciÌ|ciÔ|cio|coc|col|cou|cus|da|dar|dat|dec|dem|des|deu|di|dic|dir|dit|diu|dol|du|duc|dur|dus|dut|duu|era|Ès|ets|fa|fan|fas|fem|fen|fer|fes|fet|feu|fÈu|fia|fi‡|fiÌ|fiÔ|fio|fiu|fon|fos|fot|fou|fui|fum|ha|han|has|he|hec|hem|heu|ir‡|irÈ|ix|ixi|ixo|jac|jau|jec|jeu|llu|mes|met|moc|mol|mor|mou|nat|nia|ni‡|niÌ|niÔ|nio|noc|nou|nua|nu‡|nuÌ|nuÔ|nuo|oÌ|oÔa|oÔm|oir|oÌs|oÔt|oÔu|ora|or‡|ori|orÌ|oro|ou|ous|paÌ|poa|po‡|poÌ|poÔ|pon|poo|pot|puc|put|rac|ras|rau|rep|ret|ric|riu|sap|sÈ|sec|ser|seu|sÛ|sÛc|sol|som|sÛn|sou|sua|su‡|suÌ|suÔ|suo|tÈ|tem|ten|tol|ton|tos|tus|ugi|ugÌ|uja|uj‡|ujo|unÌ|usa|us‡|usi|usÌ|uso|va|val|vam|van|vas|vau|ve|ven|ves|vÈs|veu|vÈu|via|vi‡|viÌ|viÔ|vio|viu|vol|xaÌ|xaÔ)(@)/gi,"$2");
+//ho repetim pq si no, no enganxa dos verbs seguits
+//ho repetim pq si no, no enganxa dos verbs seguits
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑>])(adÌ|ala|al‡|ali|alÌ|alo|ama|am‡|ami|amÌ|amo|an‡|anÌ|atÈ|avÈ|bat|bec|beu|bot|cal|cap|cau|cia|ci‡|ciÌ|ciÔ|cio|coc|col|cou|cus|da|dar|dat|dec|dem|des|deu|di|dic|dir|dit|diu|dol|du|duc|dur|dus|dut|duu|era|Ès|ets|fa|fan|fas|fem|fen|fer|fes|fet|feu|fÈu|fia|fi‡|fiÌ|fiÔ|fio|fiu|fon|fos|fot|fou|fui|fum|ha|han|has|he|hec|hem|heu|ir‡|irÈ|ix|ixi|ixo|jac|jau|jec|jeu|llu|mes|met|moc|mol|mor|mou|nat|nia|ni‡|niÌ|niÔ|nio|noc|nou|nua|nu‡|nuÌ|nuÔ|nuo|oÌ|oÔa|oÔm|oir|oÌs|oÔt|oÔu|ora|or‡|ori|orÌ|oro|ou|ous|paÌ|poa|po‡|poÌ|poÔ|pon|poo|pot|puc|put|rac|ras|rau|rep|ret|ric|riu|sap|sÈ|sec|ser|seu|sÛ|sÛc|sol|som|sÛn|sou|sua|su‡|suÌ|suÔ|suo|tÈ|tem|ten|tol|ton|tos|tus|ugi|ugÌ|uja|uj‡|ujo|unÌ|usa|us‡|usi|usÌ|uso|va|val|vam|van|vas|vau|ve|ven|ves|vÈs|veu|vÈu|via|vi‡|viÌ|viÔ|vio|viu|vol|xaÌ|xaÔ)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<])/gi,"$1@$2@$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>∑@])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑]?)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<@])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+//exactament igual q regla anterior: Ès per q etiqueti 2 paraules seguides: si no, etiqueta una sÌ una no.
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á>∑@])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑])([a-z‡ËÈÌÔÚÛ˙¸Á∑]?)([^a-z‡ËÈÌÔÚÛ˙¸Á∑<@])/gi,"$1<noVerb>$2$3$4<\/noVerb>$5");
+newstr = newstr.replace(/(@)(adÌ|ala|al‡|ali|alÌ|alo|ama|am‡|ami|amÌ|amo|an‡|anÌ|atÈ|avÈ|bat|bec|beu|bot|cal|cap|cau|cia|ci‡|ciÌ|ciÔ|cio|coc|col|cou|cus|da|dar|dat|dec|dem|des|deu|di|dic|dir|dit|diu|dol|du|duc|dur|dus|dut|duu|era|Ès|ets|fa|fan|fas|fem|fen|fer|fes|fet|feu|fÈu|fia|fi‡|fiÌ|fiÔ|fio|fiu|fon|fos|fot|fou|fui|fum|ha|han|has|he|hec|hem|heu|ir‡|irÈ|ix|ixi|ixo|jac|jau|jec|jeu|llu|mes|met|moc|mol|mor|mou|nat|nia|ni‡|niÌ|niÔ|nio|noc|nou|nua|nu‡|nuÌ|nuÔ|nuo|oÌ|oÔa|oÔm|oir|oÌs|oÔt|oÔu|ora|or‡|ori|orÌ|oro|ou|ous|paÌ|poa|po‡|poÌ|poÔ|pon|poo|pot|puc|put|rac|ras|rau|rep|ret|ric|riu|sap|sÈ|sec|ser|seu|sÛ|sÛc|sol|som|sÛn|sou|sua|su‡|suÌ|suÔ|suo|tÈ|tem|ten|tol|ton|tos|tus|ugi|ugÌ|uja|uj‡|ujo|unÌ|usa|us‡|usi|usÌ|uso|va|val|vam|van|vas|vau|ve|ven|ves|vÈs|veu|vÈu|via|vi‡|viÌ|viÔ|vio|viu|vol|xaÌ|xaÔ)(@)/gi,"$2");
+
+
+
+//----CADA VEGADA-------
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á])(cada)( )(vegada)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1\n<noVerb>$2<\/noVerb>$3<noVerb>$4<\/noVerb>$5\n");
+
+
+//----EN------
+//'<noVerb>En</noVerb> <noVerb>'  +  mot iniciat en MAJ --> 'En' Ès <article>
+newstr = newstr.replace(/(<noVerb>)(En|en)(<\/noVerb>)( <noVerb>)([A-Z¿»…Õœ“”⁄‹«])([a-z‡ËÈÌÔÚÛ˙¸Á∑]+)(<\/noVerb>)/g,"<article>$2<\/article>$4$5$6$7");
+//'<noVerb>En</noVerb> <noVerb>'  +  mot no iniciat en MAJ --> 'En'  Ès  <Prep>
+newstr = newstr.replace(/(<noVerb>)(en)(<\/noVerb>)( <noVerb>)/gi,"\n<prep>$2<\/prep>$4");
+//'<noVerb>en</noVerb> <verb>' --> 'En'  Ès  <pronFeble>
+newstr = newstr.replace(/(<noVerb>)(en)(<\/noVerb>)( <verb>)/gi,"<pronFeble>$2<\/pronFeble>$4");
+
+//salt SV = pot comenÁar per 'no' + 'pronom Feble' + 'verb'
+newstr = newstr.replace(/(<pronFebleI>[a-z‡ËÈÌÔÚÛ˙¸Á']+<\/pronFebleI>)?( )?(<pronFebleI>[a-z‡ËÈÌÔÚÛ˙¸Á']+<\/pronFebleI>)?( )?(<verb>)/gi,"\n$1$2$3$4$5");
+
+
+//per treure etiquetes repetides
+newstr = newstr.replace(/(<[a-z‡ËÈÌÔÚÛ˙¸Á\/]+>)\1/gi,"$1");
+
+
+
+//per treure espais en blanc a inici de sintagma
+newstr = newstr.replace(/(\n)([ ]+)([a-z‡ËÈÌÔÚÛ˙¸Á0123456789<\[])/gi,"$1$3");
+
+
+//per treure lÌnies en blanc
+newstr = newstr.replace(/(\n)([ ]*)(\n)/gi,"$1");
+newstr = newstr.replace(/(\n)([ ]*)(\n)/gi,"$1");
+
+
+newstr = newstr.replace(/\n/gi,"\n<br>");
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+form.sortida.value = newstr;
+form.entrada.value = newstr;
+
+
+}
+
+
+
+
+
+
+function Sintamatitza_sense_etiquetes(form)  {
+
+	sintagmatitza(form)
+
+	form.sortida.value = form.sortida.value.replace(/(<0>|<\/>)/gi,"");
+	form.sortida.value = form.sortida.value.replace(/<[a-z‡ËÈÌÔÚÛ˙¸Á\/]+>/gi, "");
+
+document.getElementById("demo").innerHTML = form.sortida.value;
+text = form.sortida.value;
+   }
+
+
+
