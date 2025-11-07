@@ -1,0 +1,132 @@
+function tonificador_catal‡(form) {
+
+//sÛn ‡tons: 
+//ï els articles o pronoms el, la, els, les, en, na, un (indeterminat), uns, lo, los;
+//ï els possessius mon, ton, son, ma, ta, sa, mes, tes, ses, mos, tos, sos;
+//ï els pronoms febles em, ens, et, us, el, la, els, les, li, es, ho, en, hi;
+//ï la partÌcula que (pronom relatiu o conjunciÛ);
+//ï les preposicions a, de, per (i les seves contraccions amb l'article), en, amb;
+//ï i les conjuncions i, o, si, ni.   La conjunciÛ o, tot i ser ‡tona, no es pronuncia mai o oberta ni u.
+
+
+//pendent de solucionar: 
+// iais
+//l'accent secundari dels adverbis acabats en '-ment': 'implacAblemEnt' (no hi ha reducciÛ a l'arrel), perÚ 'recollimEnt' sense reducciÛ
+//compostostos sense guionet: 'celobert', 'sobresalta', 'gairebÈ'
+
+//els mots 'i', 'o', 'la' segons el significat poden ser ‡tons o tÚnics
+
+	sil∑labifica(form)
+
+var newstr = " " + text;
+
+//si la vocal porta accent --> posem l'etiqueta <T>
+newstr = newstr.replace(/([‡ËÈÌÚÛ˙])/gi,"<T>$1");
+
+//si no hi ha accent --> posem l'etiqueta <A> a totes les sÌl∑labes (regles2 inclou regles que limiten aquesta regla)
+newstr = newstr.replace(/([aeiouÔ¸])/gi,"<A>$1");
+
+
+//regles que volem que recorrin el text dues vegades (substitutori de duplicar regles)
+
+	regles1(form)
+	regles1(form)
+	regles1(form)
+
+	regles2(form)
+	regles2(form)
+
+
+
+
+
+function regles1(form){
+
+
+//Convertim tots els monosÌl∑labs en tÚnics
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑>-])([a-zÔ¸Á∑]*)<A>([a-zÔ¸Á∑]*)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<T>$3$4");
+
+//treu etiqueta <A> de la 'u' del dÌgraf 'qu' ('que' i 'qui')
+newstr = newstr.replace(/([gq])<[AT]>(u|¸)(<[AT]>[eËÈiÌ])/gi,"$1$2$3");
+
+//traiem etiqueta <A> de semivocals i semiconsonants
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-]|-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸])?<A>([iu])(<A>[aeo])/gi,"$1$2$3$4");
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-]|-)([bcdfghjlmnprstvxyz]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸])?(<A>[aeiou])<A>([iu])/gi,"$1$2$3$4");
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-]|-)([qg])<A>([u¸]<A>[aeiou])/gi,"$1$2$3");
+
+//traiem etiqueta <A> de la 'i' abans de 'x': a 'co-nËi-xer'
+newstr = newstr.replace(/([aeou‡ËÈÚÛ˙])<[AT]>(i-x)/gi,"$1$2");
+
+
+}
+
+
+function regles2(form){
+
+
+// P L A N E S
+
+//cas de 'cAsa', 'matalAssos'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(<A>)([aeiouÔ¸])([a-zÔ¸Á∑]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸]|[iu])?(<A>[aeiou])(s)?(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2<T>$4$5$6$7$8$9$10");
+
+//cas de 'tEnen' i 'vIuen'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(<A>)([aeiouÔ¸])([a-zÔ¸Á∑]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸]|[iu])?(<A>[ei]n)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2<T>$4$5$6$7$8$9");
+
+// A G U D E S
+
+//cas de 'trobat'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸]|[aeiou])?<A>([aeiou][aeiou]?)([bcdfghjlmprtvxyz])([bcdfghjlmnprstvxyzÁ]*)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4<T>$5$6$7$8");
+
+//cas de 'Ramon'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸])?<A>([aou¸])([n])([bcdfghjlmnprstvxyzÁ]*)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4<T>$5$6$7$8");
+
+//cas de 'venint', 'veÔns' i 'aquest'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸])?<A>([eiÔ])([ns])([bcdfghjlmnprstvxyzÁ]+)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4<T>$5$6$7$8");
+
+//cas de 'perdius'
+newstr = newstr.replace(/(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])([a-zÔ¸Á∑-]*)(-)([bcdfghjlmnprstvxyzÁ]|[bcfgp][rl]|[dt]r|ll|ny|[gq][u¸])?<A>([aeiou])([iu])(ns)?(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑-])/gi,"$1$2$3$4<T>$5$6$7$8");
+
+// M O N O S Õ L ∑ L A B S: per defecte, tots porten l'etiqueta <T>
+
+
+//cas dels monosÌl∑labs ‡tons: sustituÔm l'etiqueta <T> per <A>
+
+// cas de donar-los
+newstr = newstr.replace(/(<->l)<T>(a|es|os?)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/(<->h)<T>(o)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/(<->m)<T>(e)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/(<->n)<T>(e|os)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/(<->t)<T>(e)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/(<->v)<T>(os)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+
+
+// resta de casos
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])<T>(amb|els?|em|en|ens|es|et|uns?|us)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1<A>$2$3");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(d)<T>(e|el|els)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(p)<T>(er|el|els)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(h)<T>(o|i)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(l)<T>(es|i)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(m)<T>(a|es?|on|os)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(n)<T>(a|i)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(qu)<T>(e)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(s)<T>(a|es?|i|on|os)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(t)<T>(a|es?|on|os)(<->|[^a-z‡ËÈÌÔÚÛ˙¸Á∑<-])/gi,"$1$2<A>$3$4");
+}
+
+//per visualitzar etiquetes hem de posar-hi un parËntesi diferent: en lloc de '<' ficarem '{'
+newstr = newstr.replace(/<A>/g,"{A}");
+newstr = newstr.replace(/<T>/g,"{T}");
+
+//per treure parËntesis angulars que protegien els guionets del text
+newstr = newstr.replace(/<->/g,"-");
+
+//per treure espai en blanc inicial que hem posat al principi pq no hi haguÈs problemes d'aplicaciÛ de les regles
+newstr = newstr.replace(/^ /g,"");
+
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+
+}
+
+
+
