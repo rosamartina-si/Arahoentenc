@@ -1,0 +1,71 @@
+function oracionitza(form) {
+
+var newstr = "\n" + form.entrada.value + " ";
+
+
+// Posem un salt de lÌnia abans de cada Maj˙scula (de moment hi fiquem '@'): MAJ --> @MAJ
+newstr = newstr.replace(/([A-Z¿»…Õœ“”⁄‹«])/g,"@$1");
+
+
+// Ara traiem salts de lÌnia que no toquen:
+//       Ex. O.N.U.  (repetim la regla dues vegades)
+//newstr = newstr.replace(/@([A-Z¿»…Õœ“”⁄‹«])\.@([A-Z¿»…Õœ“”⁄‹«])/g,"@$1\.$2");
+newstr = newstr.replace(/@([A-Z¿»…Õœ“”⁄‹«]\.)+@([A-Z¿»…Õœ“”⁄‹«])/g,"@$1$2");
+newstr = newstr.replace(/@([A-Z¿»…Õœ“”⁄‹«]\.)+@([A-Z¿»…Õœ“”⁄‹«])/g,"@$1$2");
+
+//	 Ex. AQUÕ o eLearning
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸ÁA-Z¿»…Õœ“”⁄‹«])@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2");
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸ÁA-Z¿»…Õœ“”⁄‹«])@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2");
+
+//       Ex. a Barcelona
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])( +)@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2$3");
+
+//       Ex. l'Oriol
+newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸ÁA-Z¿»…Õœ“”⁄‹«])(')@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2$3");
+
+
+
+
+//P E N D E N T    D E   S O L U C I O N A R
+//       Ex. ' Barcelona, " Barcelona, ) Barcelona, ...
+//newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á'"\)\]>-])( +)@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2$3");
+
+
+//       Ex. un 'DÈu', a (Barcelona), a -Barcelona-
+//newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])( +)(['"\(\[<-])@([A-Z¿»…Õœ“”⁄‹«])/g,"$1$2$3$4");
+
+
+// 		per restaurar: se sent obligat a preguntar: "A quin pis va?" I per un sentiment de
+//newstr = newstr.replace(/@("[A-Z¿»…Õœ“”⁄‹«][^"]*")( +)([A-Z¿»…Õœ“”⁄‹«])/g,"@$1$2@$3");
+//                com que ("[A-Z¿»…Õœ“”⁄‹«][^"]*") dÛna problemes i
+//                en canvi ("^"]*") -sense indicaciÛ de Maj˙scula inicial, no
+//                substituÔm @"MAJ --> @@"MAJ 
+//newstr = newstr.replace(/(["][A])/g,"$1$1AA");
+//newstr = newstr.replace(/@@("[^"]*")( +)([A-Z¿»…Õœ“”⁄‹«])/g,"@$1$2@$3");
+
+
+//  posem a lloc puntuaciÛ: ø@Barcelona --> @øBarcelona
+newstr = newstr.replace(/([ø°"'-])@([A-Z¿»…Õœ“”⁄‹«])/g,"@$1$2");
+
+
+
+// ---> aquÌ podria comptar nre '@' per saber nombre d'oracions
+
+
+// finalment substituÔm '@' per salt de lÌnia
+newstr = newstr.replace(/@/g,"\n");
+
+
+newstr = newstr.replace(/\n/g,"\n<br>");
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+form.sortida.value = newstr;
+form.entrada.value = newstr;
+
+
+}
+
+
+
+
+
