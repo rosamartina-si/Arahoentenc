@@ -1,0 +1,94 @@
+function sil∑labificaciÛ_prim‡ria(form) {
+
+//LÕMITS: separa malament els compostos. Ex.: 'de-so-ri-en-tar', 'coin-ci-dËn-ci-a'
+//        separa malament els mots que haurien de portar diËrisi perÚ sÛn excepcions: 'les terminacions: isme, ista, us, um. Exemple: egoisme, altruista, pius, harmÚnium'
+//                                                                                      'la i dels infinitius, gerundis, futurs i condicionals dels verbs en ir. Exemple: agrair, agraint, agrairÈ, agrairÌa...
+//                                                                                      'darrera els prefixos: co, re, auto, contra. Exemple: coincidir, reiterar (PerÚ cap problema quan posat diËresi: re¸ll, reÔxo, reÔxes...) 
+
+//PER FER:
+//1) Mirar a diccionari en lÌnia del IEC quins mots porten diËresi: fer la comprovaciÛ que aquest sil∑labificador fa bÈ les separacions
+//2) Fer taula de mots amb totes les combinacions de vocals possibles. Per testejar sil∑labificaciÛ.
+
+
+//En el cas de fer servir aquest sil∑labificador per a separar mots a text, cal tenir en compte que la normativa diu que 'no es pot deixar cap lletra tota sola a comenÁament o a final de lÌnia'
+//Ex. incorrecte: d'-aquell, l'-hora, l'-embut, a-questa, a-jut
+//      correcte: d'a-quell, l'ho-ra, l'em-but, aques-ta, ajut
+
+
+var newstr = text;
+
+//substituÔm l'etiqueta <br> per \n (al final restaurarem els <br>)
+newstr = newstr.replace(/<br>/gi,"");
+
+//per protegir els guionets del text
+newstr = newstr.replace(/-/g,"<->");
+
+
+
+//grup 'inseparables
+//newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])(br|cr|dr|fr|gr|pr|tr|bl|cl|fl|gl|pl|ny|ll|gu|qu|th)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2$3");
+//newstr = newstr.replace(/([a-z‡ËÈÌÔÚÛ˙¸Á])(br|cr|dr|fr|gr|pr|tr|bl|cl|fl|gl|pl|ny|ll|gu|qu|th)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2$3");
+
+//separa 'ei-x'
+//newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])(i)(x)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2$3-$4$5");
+//separa 're-du-ei-xen'
+//newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])([aeou])(i)(x)([a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2-$3$4-$5$6");
+//separa 're-du-eix'
+//newstr = newstr.replace(/([bcdfghjklmnpqrstvwxyzÁ])([aeou])([aeou])(i)(x)([^a-z‡ËÈÌÔÚÛ˙¸Á])/gi,"$1$2-$3$4$5$6");
+
+
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2$3");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2$3");
+
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|z)([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2-$3$4");
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x|z)([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2-$3$4");
+
+
+//per separar 'cons-ta'
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x)(b|c|d|f|g|l∑|l|m|n|p|r|s|t|x)([bcdfghjklmnpqrstvwxyzÁ])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2$3-$4$5");
+
+
+//----------SEPARACI” DE VOCALS--------
+
+//1r separem totes les vocals amb un guionet
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2");
+//repeticiÛ de la regla anterior per quan tenim mÈs de 2 vocals seguides.
+newstr = newstr.replace(/([a‡eËÈiÌÔoÚÛu˙¸])([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1-$2");
+
+//2n traiem el guionet del diftong format per 'la u precedida de g o q i seguida de vocal'
+//newstr = newstr.replace(/(g|q)(u|¸)(-)(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)/gi,"$1$2$4");
+
+//3r traiem el guionet que precedeix 'la i, u no accentuades entre vocals' ex. de-i-en --> de-ien
+//dupliquem guionet perquË regla seg¸ent no ens modifiqui particiÛ que-ien
+//newstr = newstr.replace(/(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)(-)(i|u)(-)([a‡eËÈiÌÔoÚÛu˙¸])/gi,"$1$2$2$3$5");
+
+//4t traiem el guionet del diftong format per 'la i, u no accentuades i precedides de vocal'
+//newstr = newstr.replace(/(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)(-)(i|u)/gi,"$1$3");
+
+//5Ë restaurem un sol guionet de la regla 3a
+//newstr = newstr.replace(/(-)(-)/gi,"$1");
+
+//6Ë traiem el guionet del diftong format per la i, u no accentuades a principi de mot
+//newstr = newstr.replace(/([^a-z‡ËÈÌÔÚÛ˙¸Á∑-])(h)?(i|u)(-)(a|‡|e|Ë|È|i|Ì|o|Ú|Û|u|˙)/gi,"$1$2$3$5");
+
+//7Ë traiem el guionet entre Ô/¸ seguits de 'i/u'  ex. tra-du-Ôu
+//newstr = newstr.replace(/(Ô|¸)(-)(i|u)/gi,"$1$3");
+
+
+
+//traiem el punt volat de l'ela geminada (d'acord amb el que diu la normativa: quan se separa, no es posa el punt.
+//newstr = newstr.replace(/∑/gi,"");
+
+//per treure parËntesis angulars que protegien els guionets del text
+newstr = newstr.replace(/<->/g,"-");
+
+//substituÔm l'etiqueta \n per <br> 
+newstr = newstr.replace(/\n/gi,"\n<br>");
+
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;  //per fer servir el processament d'aquest programa, guardarem el resultat a la variable global 'text' 
+
+}
+
+
+
