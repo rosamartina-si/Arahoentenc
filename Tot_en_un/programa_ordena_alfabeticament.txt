@@ -1,0 +1,206 @@
+// P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T         
+// P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T         
+// P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T          P E N D E N T         
+//pt ordenar, quan mateix mot, en l'ordre seg¸ent:  ex. del IEC online: atlo- -atlÛ, perÚ -valent valent
+//                                                  ex. del GREC: Valent -valent, vila Vila
+// crec que l'ordre hauria de ser: ???	OPCI” 1		a A ‡ ¿ -a -A -‡ -¿ a- A- ‡- ¿-
+//						        c C -c -C c- C- Á « -Á -« Á- «-
+//                                 ???  OPCI” 2		a ‡ A ¿ -a -‡ -A -¿ a- ‡- A- ¿-
+// quan sÛn mÈs car‡cters:				a · ‡ ‰ ‚ A ¡ ¿ ƒ ¬ 
+//							-a -· -‡ -‰ -‚ -A -¡ -¿ -ƒ -¬
+//                                                   a- ·- ‡- ‰- ‚- A- ¡- ¿- ƒ- ¬- 
+
+
+// T E O R I A  s/ IEC  'VI. ORDENACI” ALFAB»TICA EN CATAL¿ (acord del 5 de juliol de 1989)
+
+//aco acÚ acÛ aÁo aÁÚ aÁÛ AmfitriÛ amfitriÛ cas‡ casal casatradicional casatradicionalÌssima Cel∑la cella cell‡ cel∑la cel∑l‡ celleta cel∑leta conscienci‡ consciËncia consciÈncia conscÔenci‡ placa plaÁa placates plaÁati SOL Sol SÚl SÛl sol sÚl sÛl
+
+//text prova: FALLA: AmfitriÛ amfitriÛ   per-iÚdic periÚdic   
+//airada aÔrada AmfitriÛ amfitriÛ Cella cella cel∑la cetona charter cianina conscienci‡ consciËncia IEC lÌvid llaÁ lÚgic per-iÚdic periÚdic placa plaÁa segon sol sÚl sÛl suÌ suÔ
+
+// P R I M E R A     R E G L A
+// LL i L∑L, C i « es consideren equivalents a LL i C, respectivament, en el cas que dos mots nomÈs es distingeixin pq un s'escriu amb c i l'altre amb Á, correspon el primer lloc al que s'escriu amb c.
+// S E G O N A     R E G L A
+// GUIONET / SENSE GUIONET es consideren equivalents a SENSE GUIONET, en el cas que dos mots nomÈs es distingeixin pq un porti guionet i l'altra no, correspon el primer lloc al que no porta guionet
+// T E R C E R A     R E G L A
+//ACCENT i DI»RESI es consideren equivalent a VOCAL SENSE ACCENT, en el cas que dos mots nomÈs es distingeixin pq un porta accent/diËresi/sense accent, l'ordre de classificaciÛ Ès el seg¸ent: 
+//1r sense accent   2n accent agut (¥)    3r accent greu (`)   4t diËresi    5Ë accent circumflex 
+// Q U A R T A     R E G L A
+// MAJ i MIN es consideren equivalents a min˙scula, en el cas que dos mots nomÈs es distingeixin pq un Ès en maj˙scula i l'altra en min˙scula, correspon el primer lloc al que Ès en min˙scula
+// S I S E N A     R E G L A
+//En cas de concurrËncia de mÈs d'una d'aquestes diferËncies en un mateix mot, l'ordre de preferËncia Ès aquell en quË han estat esmentades en aquest document. Per tant: cella, cel∑la, ceLLa
+// S E T E N A     R E G L A
+//En cas de dos o mÈs mots que es diferencien nomÈs per la posiciÛ relativa d'una mateixa diferËncia, s'apliquen els criteris establerts tenint en compte nomÈs la primera posiciÛ diferencial a partir del comenÁament del mot. Per tant: conscienci‡, consciËncia
+
+
+//segon IEC:    cella	placa	periÚdic	sol	airada	suÌ	amfitriÛ	conscienci‡
+//		cel∑la	plaÁa	per-iÚdic	sÚl	aÔrada	suÔ	AmfitriÛ	consciËncia
+//		Cella
+
+//		cetona		lÌvid
+//		charter		llaÁ
+//		cianina		lÚgic
+
+
+
+
+function ordenaAlfabËticament(form) {
+
+var newstr = text;	
+
+//newstr = newstr.replace(/$/gi," ");
+//afegim tambÈ un salt al final del text perquË si no, quan fem llista, el darrer mot queda a la mateixa lÌnia
+
+//convertim <br> a \n
+newstr = newstr.replace(/<br>/gi,"");
+
+//envoltem cada mot amb guionets angulars: casa --> <casa>
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]|^)([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]|$)/gi,"$1<$2>$3");
+    //ens queda amb guionets un sÌ i un no: apliquem de nou regla perÚ tenint en compte que hi ha mots amb parËntesis angulars
+    newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-])([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-])(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1$2<$3>$4$5");
+    //tornem a aplicar la regla
+    newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-])([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-])(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1$2<$3>$4$5");
+    //per quan ens queda sense guionets l'˙ltim mot: apliquem de nou regla perÚ tenint en compte que hi ha mots amb parËntesis angulars
+    newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-])([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+)([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]|$)/gi,"$1$2<$3>$4");
+
+
+//tripliquem els mots: <casa> --> <casa><<CASA>><CASA>
+//la primera etiqueta contindr‡ el mot normalitzat, Ès a dir sense accents ni diacrÌtics i en min˙scula
+//la segona etiqueta contindr‡ el mot semimodificat: si l'ordenador per defecte ordena primer MAJ i desprÈs MIN, i segons normativa catalana s'ordena al revÈs, en aquesta etiqueta intermitja invertim MAJ i MIN <bo><bO><Bo> i <bo><BO><bo>
+//la tercera etiqueta contÈ el mot original
+//entre etiquetes hi posem 'aaaaa' pq no interfereixi la segona etiqueta en l'ordenaciÛ alfabËtica
+newstr= newstr.replace(/<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>/gi,function(w){
+          return w.toLowerCase()+"aaaaa<"+w+">aaaaa"+w;
+});
+
+
+regles(form)
+regles(form)
+
+
+function regles(form){
+
+//normalitzem la primera etiqueta: substituÔm els car‡cters 'problem‡tics' [‡ËÈÌÔÚÛ˙¸Ò] pels no problem‡tics [aeioucn]
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)·([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1a$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)È([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1e$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ì([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1i$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Û([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1o$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)˙([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1u$2$3");
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‡([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1a$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ë([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1e$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ï([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1i$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ú([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1o$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)˘([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1u$2$3");
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‰([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1a$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Î([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1e$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ô([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1i$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)ˆ([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1o$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)¸([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1u$2$3");
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‚([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1a$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Í([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1e$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ó([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1i$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ù([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1o$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)˚([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1u$2$3");
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Á([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1c$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)l∑l([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1ll$2$3");
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)Ò([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1n$2$3");
+
+newstr = newstr.replace(/(<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)-([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)(aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>)/gi,"$1$2$3");
+
+// A C C E N T  O B E R T   I  T A N C A T
+//Problema: el programa per defecte posa en primer lloc l'accent obert i en segon lloc el tancat, quan en catal‡ l'ordre Ès 'Û' 'Ú'
+//SoluciÛ:  a la segona etiqueta  intercanviarem les vocals  · --> ‡    ‡ --> ·
+//          primer substituirem · --> xxx     i ‡ --> ttt
+//          segon (i mÈs avall) substituirem    xxx --> ‡   ttt --> · 
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)·([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1xxx$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‡([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1ttt$2");
+
+//C I R C U M F L E X    I   D I » R E S I
+//Problema: el programa per defecte posa en primer lloc l'accent circumflex i en segon lloc la diËresi, quan en catal‡ l'ordre Ès 'Ô' 'Ó'
+//SoluciÛ:  a la segona etiqueta  intercanviarem les vocals  ‚ --> ‰    ‰ --> ‚
+//          primer substituirem ‚ --> zzz     i ‰ --> yyy
+//          segon (i mÈs avall) substituirem    zzz --> ‰   yyy --> ‚ 
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‰([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1yyy$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)‚([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1zzz$2");
+
+
+}
+
+
+// A C C E N T  O B E R T   I  T A N C A T
+//repetim regla
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)xxx([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‡$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)ttt([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1·$2");
+//repetim regla
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)xxx([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‡$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)ttt([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1·$2");
+
+//C I R C U M F L E X    I   D I » R E S I
+//repetim regla
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)zzz([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‰$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)zzz([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‰$2");
+//repetim regla
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)yyy([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‚$2");
+newstr = newstr.replace(/(<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*)yyy([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>)/gi,"$1‚$2");
+
+// M A J ⁄ S C U L E S  I  M I N ⁄ S C U L E S
+//Problema: el programa per defecte posa en primer lloc la MAJ, quan en catal‡ l'ordre Ès 'a' 'A'
+//SoluciÛ:  a la segona etiqueta  intercanviarem maj˙scules i min˙scules
+//ex. <placa>aaaaa<<Placa>>aaaaa<Placa> --> <placa>aaaaa<<pLACA>>aaaaa<Placa>
+newstr = newstr.replace(/<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>>/gi,function my(inString){
+    var outString = "";
+    for( var i=0; i < inString.length; ++i ) 
+    {
+        var ch = inString.charAt(i);
+        outString += ( ch >= 'A' && ch <= 'Z' ) ? ch.toLowerCase() : ch.toUpperCase();
+    }
+    return outString;
+});
+
+
+// G U I O N E T
+//Problema: el programa per defecte posa en primer lloc els mots en guionet, quan en catal‡ l'ordre Ès 'a' '-a'
+//SoluciÛ:  a la segona etiqueta  posarem guionets davant les lletres que no en porten i viceversa
+//ex. <casa>aaaaa<<-c-a-s-a>>aaaaa<casa>
+//ex. <cida><<c-i-d-a>><-cida>
+newstr= newstr.replace(/<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+>/gi,function(w){
+          w = w.split('').join('-');
+          w = w.replace(/<---/gi,"<");
+	  w = w.replace(/--->/gi,">");
+          w = w.replace(/<-</gi,"<<");
+          return w;
+});
+
+
+//substituÔm el primer parËntesi angular per @
+newstr = newstr.replace(/([^a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑@<>-]|^)</gi,"$1@");
+
+//afegim un espai en blanc per l'˙ltim mot de la cadena pq si no, queda enganxat al mot seg¸ent
+newstr = newstr.replace(/$/gi," ");
+
+
+// A Q U Õ   … S   O N   O R D E N E M   A L F A B » T I C A M E N T
+//partim la cadena per @, ordenem i la tornem a unir restaurant el parËntesi angular inicial
+newstr = newstr.split(/@/gi).sort().join('<');
+
+//no sÈ pq perÚ la primera lÌnia no es restaura el <: ho fem expressament
+newstr = newstr.replace(/^/gi,"<");
+
+//aquÌ netegem
+newstr = newstr.replace(/<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>aaaaa<<[a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]*>>aaaaa<([a-z‡ËÏÚ˘·ÈÌÛ˙‰ÎÔˆ¸‚ÍÓÙ˚ﬂÁÒ∑-]+)>/gi,"$1");
+
+newstr = newstr.replace(/\n/gi,"\n<br>"); 
+
+document.getElementById("demo").innerHTML = newstr;
+text = newstr;
+//form.sortida.value = newstr;
+//form.entrada.value = newstr;
+
+}
+
+
