@@ -1,1 +1,891 @@
-fasfafs
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esdrúixoles i Separació de Síl·labes</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* =============================
+       Disseny modern i accessible
+       ============================= */
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --text: #243447;
+      --muted: #5f6b7a;
+      --primary: #2563eb; /* blau indigitible */
+      --primary-600: #1d4ed8;
+      --success: #22c55e;
+      --success-600: #16a34a;
+      --danger: #ef4444;
+      --danger-600: #dc2626;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --ring: 0 0 0 3px rgb(37 99 235 / 22%);
+      --radius: 14px;
+      --shadow-1: 0 10px 30px rgb(2 6 23 / 8%);
+      --shadow-2: 0 4px 12px rgb(2 6 23 / 6%);
+      --grid-gap: 22px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --surface: #0f172a;
+        --text: #e2e8f0;
+        --muted: #9aa7b8;
+        --primary: #60a5fa;
+        --primary-600: #93c5fd;
+        --success: #34d399;
+        --success-600: #10b981;
+        --danger: #f87171;
+        --danger-600: #ef4444;
+        --warning: #fbbf24;
+        --info: #22d3ee;
+        --ring: 0 0 0 3px rgb(96 165 250 / 24%);
+        --shadow-1: 0 10px 30px rgb(0 0 0 / 30%);
+        --shadow-2: 0 4px 12px rgb(0 0 0 / 25%);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgb(37 99 235 / 7%), transparent 60%),
+        radial-gradient(900px 450px at 120% 10%, rgb(34 211 238 / 10%), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 24px;
+      display: grid;
+      place-items: start center;
+    }
+
+    .container {
+      width: min(1100px, 100%);
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-1);
+      padding: clamp(18px, 4vw, 32px);
+      border: 1px solid rgb(2 6 23 / 6%);
+    }
+
+    header.page-header {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    /* ======= Tabs accessibles ======= */
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      margin-top: 14px;
+      border-bottom: 1px solid rgb(2 6 23 / 8%);
+      position: sticky;
+      top: 0;
+      background: linear-gradient( to bottom, color-mix(in oklab, var(--surface), transparent 0%), color-mix(in oklab, var(--surface), transparent 20%) );
+      z-index: 10;
+    }
+
+    .tablist {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tab {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 10px 10px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      position: relative;
+      transition: color .2s ease;
+    }
+
+    .tab[aria-selected="true"] { color: var(--text); }
+
+    .tab[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--info));
+      border-radius: 999px;
+    }
+
+    /* ======= Blocs de contingut ======= */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .section {
+      background: color-mix(in oklab, var(--surface), var(--bg) 12%);
+      border: 1px solid rgb(2 6 23 / 8%);
+      box-shadow: var(--shadow-2);
+      border-radius: var(--radius);
+      padding: clamp(14px, 2.5vw, 20px);
+      margin: 18px 0;
+    }
+
+    .section h2 {
+      margin: 0 0 10px 0;
+      font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+      color: var(--primary-600);
+      letter-spacing: -0.01em;
+    }
+
+    p { line-height: 1.7; margin: 10px 0; }
+
+    ol { margin: 0 0 0 1.15rem; }
+
+    .kbd {
+      font: 600 0.88rem ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      padding: 2px 6px; border-radius: 6px;
+      background: color-mix(in oklab, var(--surface), var(--bg) 22%);
+      border: 1px solid rgb(2 6 23 / 10%);
+    }
+
+    /* ======= Targetes/exercicis ======= */
+    .exercise-container { margin-top: 10px; }
+
+    .instructions {
+      border-left: 4px solid var(--primary);
+      background: color-mix(in oklab, var(--primary), transparent 88%);
+      padding: 14px 16px;
+      border-radius: 10px;
+      color: color-mix(in oklab, var(--text), var(--primary) 20%);
+    }
+
+    .syllable-exercise {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--grid-gap);
+      margin: 18px 0;
+    }
+
+    .word-exercise {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid rgb(2 6 23 / 8%);
+      box-shadow: var(--shadow-2);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .word-exercise:focus-within { box-shadow: 0 0 0 3px rgb(37 99 235 / 16%); }
+    .word-exercise.correct { border-color: color-mix(in oklab, var(--success), black 10%); background: color-mix(in oklab, var(--success), transparent 92%); }
+    .word-exercise.incorrect { border-color: color-mix(in oklab, var(--danger), black 10%); background: color-mix(in oklab, var(--danger), transparent 92%); }
+
+    /* ✅ Estat "correcte" (després d'haver fallat) */
+    .word-exercise.late { 
+      border-color: color-mix(in oklab, var(--warning), black 10%);
+      background: color-mix(in oklab, var(--warning), transparent 92%);
+    }
+
+    .word-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .word-title span:first-child { font-weight: 700; letter-spacing: .01em; }
+
+    .word-status {
+      font-size: 0.8rem; padding: 4px 10px; border-radius: 999px;
+      background: color-mix(in oklab, var(--surface), var(--bg) 18%);
+      color: var(--muted); border: 1px solid rgb(2 6 23 / 10%);
+    }
+    .word-status.correct { background: color-mix(in oklab, var(--success), transparent 86%); color: color-mix(in oklab, var(--success), black 20%); border-color: color-mix(in oklab, var(--success), black 10%); }
+    .word-status.incorrect { background: color-mix(in oklab, var(--danger), transparent 86%); color: color-mix(in oklab, var(--danger), black 20%); border-color: color-mix(in oklab, var(--danger), black 10%); }
+    /* ✅ Xip d’estat groc per als encerts sense punt */
+    .word-status.late {
+      background: color-mix(in oklab, var(--warning), transparent 86%);
+      color: color-mix(in oklab, var(--warning), black 20%);
+      border-color: color-mix(in oklab, var(--warning), black 10%);
+    }
+
+    .word-container {
+      display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+      gap: 3px; margin: 12px 0; padding: 10px; border-radius: 10px;
+      background: color-mix(in oklab, var(--surface), var(--bg) 18%);
+      min-height: 58px;
+    }
+
+    .letter { font-size: 1.45rem; padding: 8px 3px; border-bottom: 2px solid transparent; border-radius: 6px; cursor: pointer; }
+    .letter:hover { background: color-mix(in oklab, var(--surface), var(--bg) 24%); }
+
+    .special-char { font-size: 1.45rem; padding: 8px 2px; color: #8e44ad; font-weight: 800; cursor: pointer; border-radius: 6px; }
+    .special-char:hover { background: color-mix(in oklab, var(--surface), var(--bg) 24%); color: var(--primary); }
+
+    .separator { font-size: 1.45rem; padding: 8px 4px; color: var(--primary); font-weight: 800; cursor: pointer; border-radius: 6px; position: relative; }
+    /* Abans: fons groc i text vermell + ✕. Ara: sense ✕ i amb fons suau blau */
+    .separator:hover { background: color-mix(in oklab, var(--primary), transparent 88%); color: var(--primary); }
+    .separator::after { content: none !important; }           /* ✕ eliminada en qualsevol estat */
+
+    .separator-placeholder { width: 9px; height: 30px; cursor: pointer; border: 2px dashed rgb(2 6 23 / 20%); border-radius: 3px; transition: 120ms ease; }
+    .separator-placeholder:hover { background: color-mix(in oklab, var(--primary), transparent 88%); border-color: var(--primary); }
+
+    .word-controls { display: flex; gap: 10px; }
+
+    .word-check-btn {
+      flex: 1; background: var(--primary); color: white; border: 0; padding: 10px 14px; border-radius: 999px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 2px 8px rgb(37 99 235 / 22%);
+      transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .word-check-btn:hover { background: var(--primary-600); transform: translateY(-1px); }
+    .word-check-btn:active { transform: translateY(0); }
+
+    .word-feedback { margin-top: 10px; font-weight: 700; min-height: 22px; text-align: center; padding: 8px; border-radius: 8px; }
+    .word-feedback.correct { color: var(--success-600); background: color-mix(in oklab, var(--success), transparent 88%); }
+    .word-feedback.incorrect { color: var(--danger-600); background: color-mix(in oklab, var(--danger), transparent 88%); }
+    /* ✅ Missatge groc per a “Correcte (sense punt)” */
+    .word-feedback.late { 
+      color: #b45309; 
+      background: color-mix(in oklab, var(--warning), transparent 88%);
+    }
+
+    /* ======= Controls generals ======= */
+    .controls { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn { background: var(--primary); color: white; border: 0; padding: 12px 22px; border-radius: 12px; cursor: pointer; font-weight: 800; box-shadow: 0 4px 12px rgb(37 99 235 / 22%); transition: .18s ease; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:focus-visible { outline: none; box-shadow: var(--ring); }
+    .btn-check { background: var(--success); }
+    .btn-check:hover { background: var(--success-600); }
+    .btn-reset { background: var(--danger); }
+    .btn-reset:hover { background: var(--danger-600); }
+
+    .score { font-weight: 800; text-align: center; margin: 14px 0; }
+
+    .progress-bar { height: 12px; border-radius: 999px; background: color-mix(in oklab, var(--surface), var(--bg) 24%); overflow: hidden; border: 1px solid rgb(2 6 23 / 10%); }
+    .progress { height: 100%; width: 0%; background: linear-gradient(90deg, var(--success), var(--info)); transition: width .4s ease; }
+
+    /* ======= Llistes d'exemples i caixes temàtiques ======= */
+    .accent-examples { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 12px 0; }
+    .accent-group { background: var(--surface); border-radius: 10px; border: 1px solid rgb(2 6 23 / 10%); padding: 10px; }
+    .accent-list { display: grid; gap: 8px; }
+    .example-word { padding: 6px 10px; border-radius: 8px; background: color-mix(in oklab, var(--surface), var(--bg) 16%); text-align: center; font-weight: 600; }
+
+    .rule-box, .important-box, .accent-box, .exception-box, .mnemonic-box { border-radius: 12px; padding: 16px; margin: 16px 0; }
+    .rule-box { border-left: 6px solid var(--primary); background: color-mix(in oklab, var(--primary), transparent 90%); }
+    .important-box { border-left: 6px solid var(--warning); background: color-mix(in oklab, var(--warning), transparent 90%); }
+    .accent-box { border-left: 6px solid var(--info); background: color-mix(in oklab, var(--info), transparent 92%); }
+    .exception-box { border-left: 6px solid #e67e22; background: color-mix(in oklab, #e67e22, transparent 90%); }
+
+    .special-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .case-group { background: var(--surface); border-radius: 12px; border: 1px solid rgb(2 6 23 / 10%); padding: 12px; }
+    .case-title { font-weight: 800; color: var(--primary-600); margin-bottom: 8px; text-align: center; }
+
+    .open-accent { color: #16a34a; font-weight: 800; }
+    .closed-accent { color: #b45309; font-weight: 800; }
+    .special-case { color: #8e44ad; font-weight: 800; }
+
+    .examples-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+
+    .mnemonic-box .mnemonic-title { color: #8e44ad; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+    .mnemonic-text { font-style: italic; background: var(--surface); border: 1px dashed #8e44ad; padding: 14px; border-radius: 10px; text-align: center; }
+    .highlight-word { background: #e8d4f5; padding: 2px 6px; border-radius: 6px; font-weight: 900; color: #6d28d9; }
+    .mnemonic-image { text-align: center; margin: 12px 0; }
+    .mnemonic-image img { max-width: 100%; border-radius: 10px; border: 3px solid #e8d4f5; box-shadow: var(--shadow-2); }
+    .image-caption { color: var(--muted); font-size: .9rem; text-align: center; }
+
+    /* ======= Mostra grans/petites per a accents ======= */
+    .char-board { display: grid; gap: 6px; margin: 8px 0 4px; }
+    .char-row { display: flex; gap: 14px; align-items: baseline; justify-content: center; flex-wrap: wrap; }
+    .char-large { font-size: clamp(6rem, 22vw, 28rem); line-height: .9; }
+    .char-tiny  { font-size: clamp(0.72rem, 1.6vw, 0.9rem); line-height: 1.1; }
+
+    /* ======= Responsive ======= */
+    @media (max-width: 720px) {
+      body { padding: 16px; }
+      .tablist { overflow-x: auto; }
+      .word-container { min-height: 52px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <span class="eyebrow">Pràctica guiada</span>
+      <h1>Esdrúixoles i separació de síl·labes</h1>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist" aria-label="Seccions">
+      <div class="tablist">
+        <button class="tab" role="tab" id="tab-teoria" aria-controls="teoria" aria-selected="true" data-tab="teoria">Esdrúixoles</button>
+        <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
+      </div>
+    </nav>
+
+    <!-- Contingut: Teoria -->
+    <section id="teoria" class="tab-content active" role="tabpanel" aria-labelledby="tab-teoria">
+      <div class="section">
+        <h2>Què és una paraula esdrúixola?</h2>
+        <p>Una paraula <strong>esdrúixola</strong> té l'accent tònic (la síl·laba que es pronuncia amb més força) a la  síl·laba <strong>antepenúltima</strong> (la tercera començant pel final).</p>
+        <p class="instructions"><strong>Exemples:</strong> <em><strong>mú</strong>-si-ca</em>, <em>es-<strong>drúi</strong>-xo-la</em>, <em><strong>cà</strong>-me-ra</em>.</p>
+      </div>
+
+      <div class="section">
+        <h2>Com identificar una esdrúixola</h2>
+        <ol>
+          <li>Separa la paraula en síl·labes.</li>
+          <li>Compta les síl·labes des del final.</li>
+          <li>Si l'accent tònic és a la tercera síl·laba des del final, és esdrúixola.</li>
+        </ol>
+        <p class="instructions">Exemple: <strong>esdrúixola</strong> → es-<strong>drúi</strong>-xo-la (accent a la síl·laba <strong>antepenúltima</strong>).</p>
+      </div>
+
+      <div class="important-box section">
+        <h2>Recorda quan les vocals se separen:</h2>
+        <div class="special-cases">
+          <div class="case-group">
+            <div class="case-title">I + a/e/o</div>
+            <p>La <span class="special-case">i</span> seguida de <strong>a</strong>, <strong>e</strong> o <strong>o</strong> no forma diftong; són síl·labes diferents:</p>
+            <div class="examples-grid">
+              <div class="example-word">fa-m<span class="special-case">í</span>-li-a</div>
+              <div class="example-word">gr<span class="special-case">à</span>-ci-es</div>
+              <div class="example-word">su-per-f<span class="special-case">í</span>-ci-e</div>
+              <div class="example-word">c<span class="special-case">à</span>-ri-es</div>
+              <div class="example-word">N<span class="special-case">ú</span>-ri-a</div>
+              <div class="example-word">r<span class="special-case">à</span>-di-o</div>
+            </div>
+          </div>
+          <div class="case-group">
+            <div class="case-title">U + a/e/o</div>
+            <p>Quan la <span class="special-case">u</span> va seguida de <strong>a</strong>, <strong>e</strong> o <strong>o</strong>, tampoc forma diftong:</p>
+            <div class="examples-grid">
+              <div class="example-word">con-t<span class="special-case">í</span>-nu-a</div>
+              <div class="example-word">t<span class="special-case">è</span>-nu-e</div>
+            </div>
+          </div>
+        </div>
+        <div class="special-cases">
+          <div class="case-group">
+            <div class="case-title">Atenció!</div>
+            <p>Les vocals de les combinacions <strong>gua / güe / güi / guo</strong> i <strong>qua / qüe / qüi / quo</strong> formen diftong i, per tant, no se separen:</p>
+            <div class="examples-grid">
+              <div class="example-word">am-bi-g<span class="special-case">üi</span>-tat</div>
+              <div class="example-word">pas-q<span class="special-case">ua</span></div>
+              <div class="example-word">ai-g<span class="special-case">üe</span>s</div>
+            </div>
+            <p>Les vocals de <strong>gue, gui, que, qui</strong> (la u és muda) tampoc se separen:</p>
+            <div class="examples-grid">
+              <div class="example-word">al-g<span class="special-case">ue</span>s</div>
+              <div class="example-word">gro-g<span class="special-case">ui</span></div>
+              <div class="example-word">ta-q<span class="special-case">ue</span>s</div>
+              <div class="example-word">brò-q<span class="special-case">ui</span>l</div>
+              <div class="example-word">ob-se-q<span class="special-case">ui</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-box section">
+        <h2>Regla fonamental</h2>
+        <p><strong>TOTS els mots esdrúixols porten accent.</strong></p>
+      </div>
+
+      <div class="accent-box section">
+        <h2>Accents de les esdrúixoles</h2>
+        <p>L'accent de la <strong>e</strong> i <strong>o</strong> "sempre" és <span class="open-accent">obert</span>:</p>
+
+        <!-- 🔵 Mostra de caràcters: grans (è, ò) i petits (é, ó) -->
+        <div class="char-board" aria-label="Mostra d'accents oberts i tancats">
+          <div class="char-row" aria-label="Accents oberts en mida màxima">
+            <span class="char-large open-accent" aria-label="E oberta gran">è</span>
+            <span class="char-large open-accent" aria-label="O oberta gran">ò</span>
+          </div>
+          <div class="char-row" aria-label="Accents tancats en mida mínima llegible">
+            <span class="char-tiny closed-accent" aria-label="E tancada petita">é</span>
+            <span class="char-tiny closed-accent" aria-label="O tancada petita">ó</span>
+          </div>
+        </div>
+        <!-- 🔵 Fi de la mostra -->
+
+        <div class="accent-examples">
+          <div class="accent-group">
+            <h3>E oberta (è)</h3>
+            <div class="accent-list">
+              <div class="example-word"><span class="open-accent">è</span>-po-ca</div>
+              <div class="example-word">in-tel-li-g<span class="open-accent">è</span>n-ci-a</div>
+              <div class="example-word"><span class="open-accent">è</span>t-ni-a</div>
+              <div class="example-word">s<span class="open-accent">è</span>-ri-e</div>
+              <div class="example-word">t<span class="open-accent">è</span>-nu-e</div>
+              <div class="example-word">es-t<span class="open-accent">è</span>-re-o</div>
+            </div>
+          </div>
+          <div class="accent-group">
+            <h3>O oberta (ò)</h3>
+            <div class="accent-list">
+              <div class="example-word">c<span class="open-accent">ò</span>-le-ra</div>
+              <div class="example-word"><span class="open-accent">ò</span>-li-ba</div>
+              <div class="example-word">me-m<span class="open-accent">ò</span>-ri-a</div>
+              <div class="example-word">qui-l<span class="open-accent">ò</span>-me-tre</div>
+              <div class="example-word">hi-p<span class="open-accent">ò</span>-te-si</div>
+              <div class="example-word">s<span class="open-accent">ò</span>-mi-nes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exception-box section">
+        <h2>Excepcions amb accent tancat</h2>
+        <p>Hi ha poques paraules esdrúixoles amb <span class="closed-accent">é</span> o  <span class="closed-accent">ó</span>:</p>
+        <div class="accent-examples">
+          <div class="accent-group">
+            <h3>E tancada (é)</h3>
+            <div class="accent-list">
+              <div class="example-word">fe-r<span class="closed-accent">é</span>s-te-ga</div>
+              <div class="example-word">c<span class="closed-accent">é</span>r-vo-la</div>
+              <div class="example-word">es-gl<span class="closed-accent">é</span>-si-a</div>
+            </div>
+          </div>
+          <div class="accent-group">
+            <h3>O tancada (ó)</h3>
+            <div class="accent-list">
+              <div class="example-word">es-c<span class="closed-accent">ó</span>r-po-ra</div>
+              <div class="example-word">f<span class="closed-accent">ó</span>r-mu-la</div>
+              <div class="example-word">p<span class="closed-accent">ó</span>l-vo-ra</div>
+              <div class="example-word">t<span class="closed-accent">ó</span>m-bo-la</div>
+              <div class="example-word">t<span class="closed-accent">ó</span>r-to-ra</div>
+            </div>
+          </div>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-title">💡 Truc per recordar les excepcions</div>
+          <div class="mnemonic-image">
+            <img src="excepcions_accentuacio_esdruixoles.png" alt="Frase mnemotècnica d'excepcions d'accent tancat en esdrúixoles" />
+            <div class="image-caption">Imatge mnemotècnica </div>
+          </div>
+          <p class="mnemonic-text">"A l'<span class="highlight-word">església</span> una <span class="highlight-word">cérvola</span> <span class="highlight-word">feréstega</span>, una <span class="highlight-word">tórtora</span> i una <span class="highlight-word">escórpora</span> preparaven una <span class="highlight-word">fórmula</span> amb la <span class="highlight-word">pólvora</span> que van guanyar a la <span class="highlight-word">tómbola</span>."</p>
+          <p class="subtle" style="text-align:center">Memoritza la frase (i la imatge) per retenir les excepcions amb accent tancat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contingut: Exercici -->
+    <section id="separacio-sil-labes" class="tab-content" role="tabpanel" aria-labelledby="tab-separacio">
+      <div class="section exercise-container">
+        <h2>Exercici de separació de síl·labes · 10 paraules</h2>
+        <div class="instructions">
+          <p><strong>Com funciona?</strong></p>
+          <p>Fes clic entre les lletres per col·locar un separador. Torna a fer clic per treure'l. Pots comprovar cada paraula amb el botó "Comprova-ho" o prement "Enter".</p>
+        </div>
+
+        <div class="syllable-exercise" id="syllable-exercise"></div>
+
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <p class="score" id="score">Paraules encertades: 0/10 (0 comprovades)</p>
+
+        <div class="controls">
+          <button class="btn btn-check" id="check-all-btn" aria-live="polite">Comprova-ho tot</button>
+          <button class="btn btn-reset" id="reset-all-btn">Reinicia</button>
+          <button class="btn" id="new-exercise-btn">Nou exercici</button>
+        </div>
+
+        <div class="instructions" id="feedback" style="display:none"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== Tabs accessibles =====
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.getAttribute('data-tab');
+        tabs.forEach(t => { t.setAttribute('aria-selected', 'false'); });
+        tab.setAttribute('aria-selected', 'true');
+        tabContents.forEach(c => c.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // ===== Exercici de síl·labes =====
+    const words = [
+      { word: "Amèlia", syllables: ["A", "mè", "li", "a"] },
+      { word: "matemàtiques", syllables: ["ma", "te", "mà", "ti", "ques"] },
+      { word: "música", syllables: ["mú", "si", "ca"] },
+      { word: "esdrúixola", syllables: ["es", "drúi", "xo", "la"] },
+      { word: "càmera", syllables: ["cà", "me", "ra"] },
+      { word: "pàgina", syllables: ["pà", "gi", "na"] },
+      { word: "hipòtesi", syllables: ["hi", "pò", "te", "si"] },
+      { word: "família", syllables: ["fa", "mí", "li", "a"] },
+      { word: "televisió", syllables: ["te", "le", "vi", "si", "ó"] },
+      { word: "electricitat", syllables: ["e", "lec", "tri", "ci", "tat"] },
+      { word: "universitat", syllables: ["u", "ni", "ver", "si", "tat"] },
+      { word: "important", syllables: ["im", "por", "tant"] },
+      { word: "dificultat", syllables: ["di", "fi", "cul", "tat"] },
+      { word: "paraula", syllables: ["pa", "rau", "la"] },
+      { word: "síl·laba", syllables: ["síl", "la", "ba"] },
+      { word: "exemple", syllables: ["e", "xem", "ple"] },
+      { word: "pràctica", syllables: ["pràc", "ti", "ca"] },
+      { word: "ciència", syllables: ["ci","èn", "ci", "a"] },
+      { word: "paciència", syllables: ["pa", "ci","èn", "ci", "a"] },
+      { word: "clínica", syllables: ["clí", "ni", "ca"] },
+      { word: "contínua", syllables: ["con", "tí", "nu", "a"] },
+      { word: "plaques", syllables: ["pla", "ques"] },
+      { word: "paraigües", syllables: ["pa", "rai", "gües"] },
+      { word: "física", syllables: ["fí", "si", "ca"] },
+      { word: "ciberespai", syllables: ["ci", "ber", "es", "pai"] },
+      { word: "consciència", syllables: ["cons", "ci", "èn", "ci", "a"] },
+      { word: "oïda", syllables: ["o", "ï", "da"] },
+      { word: "decisió", syllables: ["de", "ci", "si", "ó"] },
+      { word: "equació", syllables: ["e", "qua", "ci", "ó"] },
+      { word: "solucions", syllables: ["so", "lu", "ci", "ons"] },
+      { word: "elegància", syllables: ["e", "le", "gàn", "ci", "a"] },
+      { word: "coherència", syllables: ["co", "he", "rèn", "ci", "a"] },
+      { word: "ocurrència", syllables: ["o", "cur", "rèn", "ci", "a"] },
+      { word: "Maria", syllables: ["Ma", "ri", "a"] },
+      { word: "abundància", syllables: ["a", "bun", "dàn", "ci", "a"] },
+      { word: "acàcia", syllables: ["a", "cà", "ci", "a"] },
+      { word: "acrobàcia", syllables: ["a", "cro", "bà", "ci", "a"] },
+      { word: "línia", syllables: ["lí", "ni", "a"] },
+      { word: "alçària", syllables: ["al", "çà", "ri", "a"] },
+      { word: "alegria", syllables: ["a", "le", "gri", "a"] },
+      { word: "al·lèrgia", syllables: ["al", "lèr", "gi", "a"] },
+      { word: "ambulància", syllables: ["am", "bu", "làn", "ci", "a"] },
+      { word: "angúnia", syllables: ["an", "gú", "ni", "a"] }
+    ];
+
+    const syllableExercise = document.getElementById('syllable-exercise');
+    const checkAllBtn = document.getElementById('check-all-btn');
+    const resetAllBtn = document.getElementById('reset-all-btn');
+    const newExerciseBtn = document.getElementById('new-exercise-btn');
+    const scoreElement = document.getElementById('score');
+    const progressBar = document.getElementById('progress');
+    const feedback = document.getElementById('feedback');
+
+    let currentExerciseWords = [];
+    let userSeparators = {};
+    // wordStatus[index] = { checked, correct, attempts, scored, late }
+    let wordStatus = {};
+
+    function generateNewExercise() {
+      currentExerciseWords = [...words].sort(() => Math.random() - 0.5).slice(0, 10);
+      userSeparators = {};
+      wordStatus = {};
+      syllableExercise.innerHTML = '';
+      updateScore();
+      feedback.style.display = 'none';
+
+      currentExerciseWords.forEach((wordObj, index) => {
+        userSeparators[index] = [];
+        wordStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+
+        const wordExercise = document.createElement('div');
+        wordExercise.className = 'word-exercise';
+        wordExercise.id = `word-exercise-${index}`;
+        wordExercise.innerHTML = `
+          <div class="word-title">
+            <span>${index + 1}. ${wordObj.word}</span>
+            <span class="word-status" id="word-status-${index}">Pendent</span>
+          </div>
+          <div class="word-container" id="word-container-${index}" tabindex="0" aria-label="Paraula ${wordObj.word}. Fes clic per afegir separadors."></div>
+          <div class="word-controls">
+            <button class="word-check-btn" data-index="${index}" aria-label="Comprova la paraula ${wordObj.word}">Comprova-ho</button>
+          </div>
+          <div class="word-feedback" id="feedback-${index}" aria-live="polite"></div>
+        `;
+        syllableExercise.appendChild(wordExercise);
+
+        renderWord(index);
+
+        const checkBtn = wordExercise.querySelector('.word-check-btn');
+        checkBtn.addEventListener('click', () => checkSingleAnswer(index));
+        const wordContainer = document.getElementById(`word-container-${index}`);
+        wordContainer.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkSingleAnswer(index); });
+      });
+    }
+
+    function renderWord(index) {
+      const wordContainer = document.getElementById(`word-container-${index}`);
+      const wordObj = currentExerciseWords[index];
+      wordContainer.innerHTML = '';
+
+      if (wordObj.word.includes('·')) {
+        renderWordWithSpecialChars(index, wordObj);
+      } else {
+        renderNormalWord(index, wordObj);
+      }
+
+      userSeparators[index].forEach((position) => applySeparator(index, position));
+    }
+
+    function renderNormalWord(index, wordObj) {
+      const wordContainer = document.getElementById(`word-container-${index}`);
+      const letters = wordObj.word.split('');
+      letters.forEach((letter, letterIndex) => {
+        const letterElement = document.createElement('span');
+        letterElement.className = 'letter';
+        letterElement.textContent = letter;
+        letterElement.dataset.index = letterIndex;
+        wordContainer.appendChild(letterElement);
+        if (letterIndex < letters.length - 1) {
+          const separatorPlaceholder = document.createElement('div');
+          separatorPlaceholder.className = 'separator-placeholder';
+          separatorPlaceholder.dataset.position = letterIndex;
+          separatorPlaceholder.dataset.wordIndex = index;
+          separatorPlaceholder.addEventListener('click', addSeparator);
+          wordContainer.appendChild(separatorPlaceholder);
+        }
+      });
+    }
+
+    function renderWordWithSpecialChars(index, wordObj) {
+      const wordContainer = document.getElementById(`word-container-${index}`);
+      const word = wordObj.word;
+      let currentIndex = 0;
+      for (let i = 0; i < word.length; i++) {
+        const char = word[i];
+        if (char === '·') {
+          const specialChar = document.createElement('span');
+          specialChar.className = 'special-char';
+          specialChar.textContent = char;
+          specialChar.dataset.position = currentIndex;
+          specialChar.dataset.wordIndex = index;
+          specialChar.dataset.isDot = 'true';
+          specialChar.addEventListener('click', convertDotToSeparator);
+          wordContainer.appendChild(specialChar);
+          currentIndex++;
+        } else {
+          const letterElement = document.createElement('span');
+          letterElement.className = 'letter';
+          letterElement.textContent = char;
+          letterElement.dataset.index = currentIndex;
+          wordContainer.appendChild(letterElement);
+          const nextChar = word[i + 1];
+          const prevChar = word[i - 1];
+          const isBetweenGeminades = (prevChar === '·' || nextChar === '·');
+          if (i < word.length - 1 && !isBetweenGeminades) {
+            const separatorPlaceholder = document.createElement('div');
+            separatorPlaceholder.className = 'separator-placeholder';
+            separatorPlaceholder.dataset.position = currentIndex;
+            separatorPlaceholder.dataset.wordIndex = index;
+            separatorPlaceholder.addEventListener('click', addSeparator);
+            wordContainer.appendChild(separatorPlaceholder);
+          }
+          currentIndex++;
+        }
+      }
+    }
+
+    function convertDotToSeparator(event) {
+      const position = parseInt(event.target.dataset.position);
+      const wordIndex = parseInt(event.target.dataset.wordIndex);
+      if (!userSeparators[wordIndex].includes(position)) {
+        userSeparators[wordIndex].push(position);
+        userSeparators[wordIndex].sort((a, b) => a - b);
+        applySeparator(wordIndex, position);
+        if (wordStatus[wordIndex].checked) softResetWordDisplay(wordIndex);
+      }
+    }
+
+    function addSeparator(event) {
+      const position = parseInt(event.target.dataset.position);
+      const wordIndex = parseInt(event.target.dataset.wordIndex);
+      if (!userSeparators[wordIndex].includes(position)) {
+        userSeparators[wordIndex].push(position);
+        userSeparators[wordIndex].sort((a, b) => a - b);
+        applySeparator(wordIndex, position);
+        if (wordStatus[wordIndex].checked) softResetWordDisplay(wordIndex);
+      }
+    }
+
+    function removeSeparator(event) {
+      const position = parseInt(event.target.dataset.position);
+      const wordIndex = parseInt(event.target.dataset.wordIndex);
+      userSeparators[wordIndex] = userSeparators[wordIndex].filter((pos) => pos !== position);
+      renderWord(wordIndex);
+      if (wordStatus[wordIndex].checked) softResetWordDisplay(wordIndex);
+    }
+
+    function applySeparator(wordIndex, position) {
+      const wordContainer = document.getElementById(`word-container-${wordIndex}`);
+      const elements = wordContainer.children;
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        const isPlaceholder = element.classList.contains('separator-placeholder');
+        const isDot = element.classList.contains('special-char');
+        if ((isPlaceholder || isDot) && parseInt(element.dataset.position) === position) {
+          element.innerHTML = '-';
+          element.className = 'separator';
+          element.dataset.position = position;
+          element.dataset.wordIndex = wordIndex;
+          element.title = "Torna a fer clic per treure'l";
+          if (isPlaceholder) element.removeEventListener('click', addSeparator);
+          if (isDot) element.removeEventListener('click', convertDotToSeparator);
+          element.addEventListener('click', removeSeparator);
+        }
+      }
+    }
+
+    function buildUserSyllables(wordObj, sepPositions) {
+      const userSyllables = [];
+      let currentSyllable = '';
+      const cleanWord = wordObj.word.replace('·', '');
+      const letters = cleanWord.split('');
+      let adjustedSeparators = [...sepPositions];
+      if (wordObj.word.includes('·')) {
+        const dotPosition = wordObj.word.indexOf('·');
+        adjustedSeparators = sepPositions.map((pos) => (pos >= dotPosition ? pos - 1 : pos));
+      }
+      letters.forEach((letter, letterIndex) => {
+        currentSyllable += letter;
+        if (adjustedSeparators.includes(letterIndex)) {
+          userSyllables.push(currentSyllable);
+          currentSyllable = '';
+        }
+      });
+      if (currentSyllable) userSyllables.push(currentSyllable);
+      return userSyllables;
+    }
+
+    function checkSingleAnswer(index) {
+      const wordObj = currentExerciseWords[index];
+      const userSyllables = buildUserSyllables(wordObj, userSeparators[index]);
+
+      // Comptem intents
+      wordStatus[index].attempts += 1;
+
+      const isCorrect = JSON.stringify(userSyllables) === JSON.stringify(wordObj.syllables);
+
+      // Correcte a la primera -> suma punt
+      if (isCorrect && wordStatus[index].attempts === 1) {
+        wordStatus[index].scored = true;
+        wordStatus[index].late = false;
+      }
+
+      // Correcte però després d'haver fallat -> no suma, marca "late"
+      if (isCorrect && wordStatus[index].attempts > 1) {
+        wordStatus[index].scored = wordStatus[index].scored || false; // manté si ja havia puntuat
+        wordStatus[index].late = !wordStatus[index].scored;           // late només si no havia puntuat
+      }
+
+      wordStatus[index].checked = true;
+      wordStatus[index].correct = isCorrect;
+
+      // Visualització segons estat
+      if (isCorrect && wordStatus[index].late && !wordStatus[index].scored) {
+        updateWordDisplay(index, 'late', wordObj.syllables.join('-'));
+      } else {
+        updateWordDisplay(index, isCorrect ? 'correct' : 'incorrect', wordObj.syllables.join('-'));
+      }
+
+      updateGlobalScore();
+    }
+
+    // Reseteig suau de la vista si es modifica després de comprovar, sense tocar intents ni "scored"
+    function softResetWordDisplay(index) {
+      wordStatus[index].checked = false;
+      wordStatus[index].correct = false;
+      const wordExercise = document.getElementById(`word-exercise-${index}`);
+      const wordStatusElement = document.getElementById(`word-status-${index}`);
+      const wordFeedback = document.getElementById(`feedback-${index}`);
+      wordExercise.className = 'word-exercise';
+      wordStatusElement.textContent = 'Pendent';
+      wordStatusElement.className = 'word-status';
+      wordFeedback.textContent = '';
+      wordFeedback.className = 'word-feedback';
+    }
+
+    function updateWordDisplay(index, state, correctAnswer) {
+      const wordExercise = document.getElementById(`word-exercise-${index}`);
+      const wordStatusElement = document.getElementById(`word-status-${index}`);
+      const wordFeedback = document.getElementById(`feedback-${index}`);
+
+      if (state === 'correct') {
+        wordExercise.className = 'word-exercise correct';
+        wordStatusElement.textContent = 'Correcte';
+        wordStatusElement.className = 'word-status correct';
+        wordFeedback.textContent = '✓ Correcte!';
+        wordFeedback.className = 'word-feedback correct';
+      } else if (state === 'late') {
+        wordExercise.className = 'word-exercise late';
+        wordStatusElement.textContent = 'Correcte';
+        wordStatusElement.className = 'word-status late';
+        wordFeedback.textContent = '✓ Correcte (sense punt)';
+        wordFeedback.className = 'word-feedback late';
+      } else {
+        wordExercise.className = 'word-exercise incorrect';
+        wordStatusElement.textContent = 'Incorrecte';
+        wordStatusElement.className = 'word-status incorrect';
+        wordFeedback.textContent = `✗ Correcte: ${correctAnswer}`;
+        wordFeedback.className = 'word-feedback incorrect';
+      }
+    }
+
+    function checkAllAnswers() {
+      currentExerciseWords.forEach((_, index) => { if (!wordStatus[index].checked) checkSingleAnswer(index); });
+      const scoredCount = Object.values(wordStatus).filter((s) => s.scored).length;
+      if (scoredCount === 10) {
+        feedback.textContent = 'Excel·lent! Has encertat totes les paraules a la primera.';
+        feedback.className = 'instructions';
+      } else {
+        feedback.textContent = `Has encertat ${scoredCount} de 10 paraules a la primera. Continua practicant!`;
+        feedback.className = 'instructions';
+      }
+      feedback.style.display = 'block';
+    }
+
+    function resetAllWords() {
+      currentExerciseWords.forEach((_, index) => {
+        userSeparators[index] = [];
+        renderWord(index);
+        // Reinicia completament l’estat:
+        wordStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+        softResetWordDisplay(index);
+      });
+      updateGlobalScore();
+      feedback.style.display = 'none';
+    }
+
+    function updateGlobalScore() {
+      const scoredCount = Object.values(wordStatus).filter((s) => s.scored).length;
+      const checkedCount = Object.values(wordStatus).filter((s) => s.checked).length;
+      scoreElement.textContent = `Paraules encertades: ${scoredCount}/10 (${checkedCount} comprovades)`;
+      progressBar.style.width = `${(scoredCount / 10) * 100}%`;
+    }
+
+    function updateScore(correctCount = 0) {
+      scoreElement.textContent = `Paraules encertades: ${correctCount}/10 (0 comprovades)`;
+      progressBar.style.width = `${(correctCount / 10) * 100}%`;
+    }
+
+    checkAllBtn.addEventListener('click', checkAllAnswers);
+    resetAllBtn.addEventListener('click', resetAllWords);
+    newExerciseBtn.addEventListener('click', generateNewExercise);
+
+    generateNewExercise();
+  </script>
+</body>
+</html>
+
