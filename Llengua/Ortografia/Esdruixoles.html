@@ -317,8 +317,18 @@
     /* ======= Mostra grans/petites per a accents ======= */
     .char-board { display: grid; gap: 6px; margin: 8px 0 4px; }
     .char-row { display: flex; gap: 14px; align-items: baseline; justify-content: center; flex-wrap: wrap; }
-    .char-large { font-size: clamp(6rem, 22vw, 28rem); line-height: .9; }
-    .char-tiny  { font-size: clamp(0.72rem, 1.6vw, 0.9rem); line-height: 1.1; }
+    /*.char-large { font-size: clamp(6rem, 22vw, 28rem); line-height: .9; }*/
+    /*.char-tiny  { font-size: clamp(0.72rem, 1.6vw, 0.9rem); line-height: 1.1; }*/
+    .char-large { 
+  font-size: clamp(10rem, 35vw, 40rem); 
+  line-height: .85;
+}
+
+.char-tiny { 
+  font-size: clamp(0.35rem, 0.9vw, 0.4rem); 
+  line-height: 1.1;
+}
+
 
     /* ======= Responsive ======= */
     @media (max-width: 720px) {
@@ -413,7 +423,7 @@
 
       <div class="accent-box section">
         <h2>Accents de les esdrúixoles</h2>
-        <p>L'accent de la <strong>e</strong> i <strong>o</strong> "sempre" és <span class="open-accent">obert</span>:</p>
+        <p>L'accent de la <strong>e</strong> i <strong>o</strong> gairebé sempre és <span class="open-accent">obert</span>:</p>
 
         <!-- 🔵 Mostra de caràcters: grans (è, ò) i petits (é, ó) -->
         <div class="char-board" aria-label="Mostra d'accents oberts i tancats">
