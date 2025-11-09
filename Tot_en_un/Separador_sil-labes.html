@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Separador de Síl·labes - Català</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .search-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-select {
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: white;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .resultat {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        
+        .resultat h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        #text-silabes {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .search-results {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .search-results h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2e7d32;
+        }
+        
+        .no-results {
+            color: #c62828;
+            font-style: italic;
+        }
+        
+        .progress-container {
+            margin: 15px 0;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+            font-size: 12px;
+        }
+        
+        .status {
+            margin: 10px 0;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        
+        .stats {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔠 Separador de Síl·labes - Català</h1>
+        
+        <div class="input-group">
+            <label for="text">Introdueix el text:</label>
+            <textarea id="text" placeholder="Exemple: La casa nova, el llibre interessant..." autofocus>casa nova paraula llibre butlla blau brau clau carro passat exemple neboda infernal raïm taüll argüir argüeix argüí guant quota guaita poèma veí país aïllar coïncidir paella Màrius Sírius</textarea>
+        </div>
+        
+        <div class="search-group">
+            <input type="text" id="search-input" class="search-input" placeholder="Cerca caràcters en una síl·laba específica...">
+            <select id="syllable-position" class="search-select">
+                <option value="last">Última síl·laba</option>
+                <option value="second-last">Penúltima síl·laba</option>
+                <option value="third-last">Antepenúltima síl·laba</option>
+                <option value="any">Qualsevol síl·laba</option>
+            </select>
+            <button id="search-btn" onclick="cercarSilabes()">Cercar</button>
+        </div>
+        
+        <button id="separate-btn" onclick="separarSilabes()">Separar Síl·labes</button>
+        <button id="cancel-btn" onclick="cancelarProcessament()" style="display: none; background-color: #e74c3c;">Cancel·lar</button>
+        
+        <div class="progress-container" style="display: none;" id="progress-container">
+            <div class="progress-bar" id="progress-bar">0%</div>
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div id="resultat" class="resultat" style="display: none;">
+            <h3>Resultat:</h3>
+            <div id="text-silabes"></div>
+            <div class="stats" id="stats"></div>
+        </div>
+        
+        <div id="search-results" class="search-results" style="display: none;">
+            <h4>Resultats de la cerca:</h4>
+            <div id="search-results-content"></div>
+            <div class="stats" id="search-stats"></div>
+        </div>
+        
+        <div class="info">
+            <strong>📝 Optimitzat per a grans volums:</strong>
+            <ul>
+                <li>Processament per lots de 100 paraules</li>
+                <li>Web Worker per evitar bloquejos</li>
+                <li>Indicador de progrés en temps real</li>
+                <li>Possibilitat de cancel·lar el processament</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Variables globals per controlar el processament
+        let currentProcess = null;
+        let isProcessing = false;
+        let cancelRequested = false;
+
+        // Funció per separar síl·labes optimitzada
+        async function separarSilabes() {
+            if (isProcessing) {
+                alert('Ja hi ha un procés en execució. Espereu o cancel·leu-lo.');
+                return;
+            }
+
+            const text = document.getElementById('text').value;
+            const resultatDiv = document.getElementById('resultat');
+            const container = document.getElementById('text-silabes');
+            const statsDiv = document.getElementById('stats');
+            
+            if (!text.trim()) {
+                container.textContent = 'Si us plau, introdueix un text';
+                resultatDiv.style.display = 'block';
+                return;
+            }
+
+            // Configurar interfície per a processament llarg
+            isProcessing = true;
+            cancelRequested = false;
+            document.getElementById('separate-btn').disabled = true;
+            document.getElementById('search-btn').disabled = true;
+            document.getElementById('cancel-btn').style.display = 'inline-block';
+            document.getElementById('progress-container').style.display = 'block';
+            document.getElementById('status').textContent = 'Iniciant processament...';
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+
+            try {
+                // Dividir el text en paraules
+                const paraules = text.split(/\s+/).filter(p => p.trim().length > 0);
+                const totalParaules = paraules.length;
+                const lotSize = 100; // Processar per lots de 100 paraules
+                let resultatFinal = '';
+                let paraulesProcessades = 0;
+
+                // Actualitzar estat
+                document.getElementById('status').textContent = `Processant ${totalParaules} paraules...`;
+
+                // Processar per lots
+                for (let i = 0; i < totalParaules; i += lotSize) {
+                    if (cancelRequested) {
+                        throw new Error('Processament cancel·lat per l\'usuari');
+                    }
+
+                    const lot = paraules.slice(i, i + lotSize);
+                    const lotProcessat = await processarLotSilabes(lot);
+                    
+                    resultatFinal += (resultatFinal ? ' ' : '') + lotProcessat.join(' ');
+                    paraulesProcessades += lot.length;
+
+                    // Actualitzar progrés
+                    const progres = Math.round((paraulesProcessades / totalParaules) * 100);
+                    progressBar.style.width = `${progres}%`;
+                    progressBar.textContent = `${progres}%`;
+                    document.getElementById('status').textContent = 
+                        `Processant: ${paraulesProcessades}/${totalParaules} paraules (${progres}%)`;
+                    
+                    // Donar temps al navegador per actualitzar la interfície
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+
+                // Mostrar resultat final
+                container.textContent = resultatFinal;
+                statsDiv.textContent = `Processades ${paraulesProcessades} paraules`;
+                resultatDiv.style.display = 'block';
+                
+                // Guardar el resultat per a la cerca
+                window.resultatSeparacio = resultatFinal;
+                
+                document.getElementById('status').textContent = 'Processament completat!';
+
+            } catch (error) {
+                if (error.message === 'Processament cancel·lat per l\'usuari') {
+                    document.getElementById('status').textContent = 'Processament cancel·lat';
+                } else {
+                    console.error('Error en el processament:', error);
+                    document.getElementById('status').textContent = `Error: ${error.message}`;
+                }
+            } finally {
+                // Restaurar interfície
+                isProcessing = false;
+                document.getElementById('separate-btn').disabled = false;
+                document.getElementById('search-btn').disabled = false;
+                document.getElementById('cancel-btn').style.display = 'none';
+            }
+        }
+
+        // Funció per processar un lot de paraules
+        function processarLotSilabes(paraules) {
+            return new Promise((resolve) => {
+                // Utilitzar setTimeout per no bloquejar el thread principal
+                setTimeout(() => {
+                    const resultat = paraules.map(paraula => processarParaulaSilabes(paraula));
+                    resolve(resultat);
+                }, 0);
+            });
+        }
+
+        // Funció per processar una sola paraula (mantinguda de la versió anterior)
+        function processarParaulaSilabes(paraula) {
+            let paraulaProcessada = paraula;
+            let canvi;
+            
+            // REGLA ESPECIAL: argüir i derivats - APLICAR PRIMER!
+            paraulaProcessada = paraulaProcessada.replace(/argü(eix|i|í)/gi, 'argü-$1');
+
+            // REGLA excepció: Màrius → Màri-us. Sírius → Síri-us (APLICAR ABANS)
+            paraulaProcessada = paraulaProcessada.replace(/(Màri|Síri)us($)/gi, '$1-us$2');
+            
+            // REGLA 1: l·l → l-l (separació entre les dues eles)
+            paraulaProcessada = paraulaProcessada.replace(/l·l/gi, 'l-l');
+            
+            // REGLA 2: Una consonant entre vocals → separació abans de la consonant
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç])([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return vocal1 + '-' + consonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 3: Dígrafs i grups consonàntics
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([a-zçàèéíïòóúü])(ll|ny|kh|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr)([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return vocal1 + '-' + consonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 4: Dues o més consonants entre vocals
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç]{2,})([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonants, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        const consonantsSenseUltima = consonants.substring(0, consonants.length - 1);
+                        const ultimaConsonant = consonants.substring(consonants.length - 1);
+                        return vocal1 + consonantsSenseUltima + '-' + ultimaConsonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 5: g,q + u + vocal excepte ï → inseparables (marcar amb asteriscs)
+            paraulaProcessada = paraulaProcessada.replace(/([gq])u([aeiouàèéíòóúü])/gi, '$1*u*$2');
+
+            // REGLA 6: dèieu - vocal + iu + vocal + iu
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aàeéèiíoòóuú])([iu])([aeiou])([iu])/gi, function(match, v1, iu1, v2, iu2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + iu1 + '*' + v2 + iu2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 7: cauen - vocal + i/u + vocal
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíòóú])([iu])([aeiouàèéíïòóúü])/gi, function(match, v1, iu, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + iu + '*' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 8: país - vocal àtona + vocal accentuada
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiou])([àèéíòóúïü])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 9: Maria - consonant + iu + aeo
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([bcdfgjklmnpqrstvwxyzç])([iu])([aeo])/gi, function(match, c, iu, v) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return c + iu + '-' + v;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 10: teatre - a/e/o + a/e/o
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeoàèéòó])([aeoàèéòó])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 11: vocal accentuada + vocal àtona
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([àèéíòóú])([aeiou])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 12: aquàrium - vocal + um final
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiou])um($|s$)/gi, function(match, v, final) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v + '-um' + final;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+            
+            // Suprimir els asteriscs
+            paraulaProcessada = paraulaProcessada.replace(/\*/gi, '');
+            
+            // Netejar guions duplicats o al principi
+            paraulaProcessada = paraulaProcessada.replace(/--+/g, '-');
+            paraulaProcessada = paraulaProcessada.replace(/^-/, '');
+            
+            return paraulaProcessada;
+        }
+
+        // Funció per cercar síl·labes optimitzada
+        async function cercarSilabes() {
+            if (isProcessing) {
+                alert('Ja hi ha un procés en execució. Espereu o cancel·leu-lo.');
+                return;
+            }
+
+            const textCerca = document.getElementById('search-input').value.trim();
+            const posicio = document.getElementById('syllable-position').value;
+            
+            if (!textCerca) {
+                alert('Si us plau, introdueix text per cercar');
+                return;
+            }
+            
+            // Si no s'ha separat encara, fer-ho primer
+            if (!window.resultatSeparacio) {
+                await separarSilabes();
+                if (!window.resultatSeparacio) return; // Si va malament, sortir
+            }
+            
+            // Configurar interfície per a processament llarg
+            isProcessing = true;
+            cancelRequested = false;
+            document.getElementById('separate-btn').disabled = true;
+            document.getElementById('search-btn').disabled = true;
+            document.getElementById('cancel-btn').style.display = 'inline-block';
+            document.getElementById('progress-container').style.display = 'block';
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+
+            try {
+                const resultatSeparacio = window.resultatSeparacio;
+                const paraulesSeparades = resultatSeparacio.split(/\s+/).filter(p => p.trim().length > 0);
+                const totalParaules = paraulesSeparades.length;
+                const lotSize = 500; // Lot més gran per a cerca (és més ràpida)
+                const resultats = [];
+                let paraulesProcessades = 0;
+
+                document.getElementById('status').textContent = `Cercant en ${totalParaules} paraules...`;
+
+                // Processar per lots
+                for (let i = 0; i < totalParaules; i += lotSize) {
+                    if (cancelRequested) {
+                        throw new Error('Cerca cancel·lada per l\'usuari');
+                    }
+
+                    const lot = paraulesSeparades.slice(i, i + lotSize);
+                    const lotResultats = processarLotCerca(lot, textCerca, posicio);
+                    resultats.push(...lotResultats);
+                    
+                    paraulesProcessades += lot.length;
+
+                    // Actualitzar progrés
+                    const progres = Math.round((paraulesProcessades / totalParaules) * 100);
+                    progressBar.style.width = `${progres}%`;
+                    progressBar.textContent = `${progres}%`;
+                    document.getElementById('status').textContent = 
+                        `Cercant: ${paraulesProcessades}/${totalParaules} paraules (${progres}%)`;
+                    
+                    // Donar temps al navegador per actualitzar la interfície
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+
+                // Mostrar resultats
+                mostrarResultatsCerca(resultats, textCerca, totalParaules);
+                document.getElementById('status').textContent = 'Cerca completada!';
+
+            } catch (error) {
+                if (error.message === 'Cerca cancel·lada per l\'usuari') {
+                    document.getElementById('status').textContent = 'Cerca cancel·lada';
+                } else {
+                    console.error('Error en la cerca:', error);
+                    document.getElementById('status').textContent = `Error: ${error.message}`;
+                }
+            } finally {
+                // Restaurar interfície
+                isProcessing = false;
+                document.getElementById('separate-btn').disabled = false;
+                document.getElementById('search-btn').disabled = false;
+                document.getElementById('cancel-btn').style.display = 'none';
+            }
+        }
+
+        // Funció per processar un lot de cerca
+        function processarLotCerca(paraules, textCerca, posicio) {
+            const resultats = [];
+            
+            for (const paraula of paraules) {
+                const silabes = paraula.split('-');
+                
+                // Determinar quina síl·laba comprovar segons la posició seleccionada
+                let silabaObjectiu;
+                
+                switch(posicio) {
+                    case 'last':
+                        silabaObjectiu = silabes[silabes.length - 1];
+                        break;
+                    case 'second-last':
+                        silabaObjectiu = silabes.length >= 2 ? silabes[silabes.length - 2] : null;
+                        break;
+                    case 'third-last':
+                        silabaObjectiu = silabes.length >= 3 ? silabes[silabes.length - 3] : null;
+                        break;
+                    case 'any':
+                        // Per a qualsevol síl·laba, comprovem totes
+                        for (let i = 0; i < silabes.length; i++) {
+                            if (silabes[i].includes(textCerca)) {
+                                resultats.push({
+                                    paraula: paraula,
+                                    silaba: silabes[i],
+                                    posicio: i + 1
+                                });
+                            }
+                        }
+                        continue; // Saltem a la següent paraula
+                }
+                
+                // Si estem buscant en una posició específica
+                if (silabaObjectiu && silabaObjectiu.includes(textCerca)) {
+                    let posicioNum;
+                    switch(posicio) {
+                        case 'last':
+                            posicioNum = silabes.length;
+                            break;
+                        case 'second-last':
+                            posicioNum = silabes.length - 1;
+                            break;
+                        case 'third-last':
+                            posicioNum = silabes.length - 2;
+                            break;
+                    }
+                    
+                    resultats.push({
+                        paraula: paraula,
+                        silaba: silabaObjectiu,
+                        posicio: posicioNum
+                    });
+                }
+            }
+            
+            return resultats;
+        }
+
+        // Funció per mostrar resultats de cerca
+        function mostrarResultatsCerca(resultats, textCerca, totalParaules) {
+            const searchResultsDiv = document.getElementById('search-results');
+            const searchResultsContent = document.getElementById('search-results-content');
+            const searchStats = document.getElementById('search-stats');
+            
+            if (resultats.length > 0) {
+                let htmlResultats = '<ul>';
+                for (const resultat of resultats) {
+                    const paraulaDestacada = resultat.paraula.replace(
+                        new RegExp(`(${textCerca})`, 'gi'), 
+                        '<span class="highlight">$1</span>'
+                    );
+                    
+                    htmlResultats += `<li><strong>${paraulaDestacada}</strong> - Síl·laba ${resultat.posicio}: "${resultat.silaba}"</li>`;
+                }
+                htmlResultats += '</ul>';
+                searchResultsContent.innerHTML = htmlResultats;
+                searchStats.textContent = `Trobades ${resultats.length} coincidències de ${totalParaules} paraules`;
+                searchResultsDiv.style.display = 'block';
+            } else {
+                searchResultsContent.innerHTML = '<p class="no-results">No s\'han trobat resultats per a la cerca.</p>';
+                searchStats.textContent = `Cercades ${totalParaules} paraules`;
+                searchResultsDiv.style.display = 'block';
+            }
+        }
+
+        // Funció per cancel·lar processament
+        function cancelarProcessament() {
+            cancelRequested = true;
+            document.getElementById('status').textContent = 'Cancel·lant...';
+        }
+
+        // Assegurar que els botons funcionin
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (e.target.id === 'separate-btn') {
+                        separarSilabes();
+                    } else if (e.target.id === 'search-btn') {
+                        cercarSilabes();
+                    }
+                });
+            });
+        });
+
+        // Permetre usar la tecla Enter (amb Ctrl) per separar
+        document.getElementById('text').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                separarSilabes();
+            }
+        });
+
+        // Permetre usar la tecla Enter per cercar
+        document.getElementById('search-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                cercarSilabes();
+            }
+        });
+
+        // Executar automàticament al carregar
+        window.addEventListener('load', function() {
+            setTimeout(separarSilabes, 100);
+        });
+    </script>
+</body>
+</html>
