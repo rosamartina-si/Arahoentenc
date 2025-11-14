@@ -2,299 +2,1232 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Activitats per matèries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recursos Educatius - Activitats per Matèries</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
-    h1 { margin: 0; font-size: 2em; }
-    .link-box {
-      display: block;
-      padding: 8px 12px;
-      background-color: #f0f0f0;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #000;
-      transition: background-color 0.2s;
-      margin-bottom: 6px;
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --dark: #34495e;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --purple: #9b59b6;
     }
-    .link-box:hover {
-      background-color: #e0e0e0;
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .category {
-      margin: 30px 0;
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
     }
-    .category h2 {
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--warning), var(--success));
+    }
+    
+    h1 {
+      font-size: 2.8rem;
       margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
-    .category h3 {
-      margin-top: 1em;
-      color: #005599;
-      font-size: 1.2em;
+    
+    .subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      background: white;
+      border: 2px solid var(--secondary);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .filter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .filter-btn.active {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px;
+      border: 2px solid var(--light);
+      border-radius: 25px;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+    
+    .category {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 5px solid var(--secondary);
+    }
+    
+    .category:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--light);
+    }
+    
+    .category-icon {
+      font-size: 2rem;
+      margin-right: 15px;
+      width: 50px;
+      text-align: center;
+    }
+    
+    .category h2 {
+      color: var(--primary);
+      font-size: 1.6rem;
+      flex: 1;
+    }
+    
+    .subcategory {
+      margin: 20px 0;
+    }
+    
+    .subcategory h3 {
+      font-size: 1.2rem;
+      color: var(--dark);
+      margin-bottom: 12px;
+      padding-left: 12px;
+      border-left: 4px solid var(--secondary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .subcategory h3::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--light);
+      margin-left: 10px;
+    }
+    
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .link-box {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background-color: var(--light);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--dark);
+      transition: all 0.2s;
+      border-left: 4px solid transparent;
+    }
+    
+    .link-box:hover {
+      background-color: #dfe6e9;
+      border-left-color: var(--secondary);
+      transform: translateX(5px);
+    }
+    
+    .link-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+      min-width: 24px;
+      text-align: center;
+    }
+    
+    .external::after {
+      content: "↗";
+      margin-left: auto;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    .level-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--warning);
+      color: white;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    
+    .level-1 { background: var(--success); }
+    .level-2 { background: var(--warning); }
+    .level-3 { background: var(--accent); }
+    
+    .counter {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 0.8rem;
+      margin-left: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .category {
+        padding: 20px;
+      }
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: var(--dark);
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Activitats per matèries 2</h1>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Recursos Educatius</h1>
+      <p class="subtitle">Activitats i materials per a totes les edats i matèries</p>
+    </header>
 
-  <div class="category" id="angles">
-    <h2>🇬🇧 Anglès</h2>
-    <a href="https://app.sesame.com/?_gl=1*1cpbkv4*_ga*NjUzNTE4ODAuMTc2MDQ2NDA2OQ..*_ga_ZZLPJBMBEN*czE3NjA0NjQwNjkkbzEkZzAkdDE3NjA0NjQwNjkkajYwJGwwJGgw" target="_blank">English chat</a></p>
-    <h3>Com funciona</h3>
-    <p><a href="diferencia_conjugacio_angles_catala.html" class="link-box">📘 Diferències verbs anglès vs català</a></p>
-    <h3>Tradueix</h3>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/futbol.html" class="link-box">⚽ Futbol</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/aniversari.html" class="link-box">🎂 Aniversari</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/nado.html" class="link-box">👶 Nadó</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/muntanya.html" class="link-box">🏔️ Excursió</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/abans_jugar.html" class="link-box">🏃 Surto a jugar</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/habitacio.html" class="link-box">🛏️ Habitació</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/zoo.html" class="link-box">🐘 Zoo</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/habits_saludables.html" class="link-box">🥗 Hàbits saludables</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_de_lloc.html" class="link-box">📍 Preposicions de lloc</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/preposicions_de_moviment.html" class="link-box">↔️ Preposicions de moviment</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-in_on.html" class="link-box">🚌 Preposicions de transport: get in - get out</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-out_of_off.html" class="link-box">🚌 Preposicions de transport: get out of - get off</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport_get.html" class="link-box">🚌 Preposicions de transport: get in / get out of - get on / get off</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/behind_in-front-of_before_after.html" class="link-box">🔁 Davant / Darrere, Abans / Després</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/Past_simple_de_10_en_10.html" class="link-box">⏳ Past simple 10×10</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/preposicions_de_temps.html" class="link-box">⏳ Quan? - in / on /at i altres 10×10</a>
-    <a href="Fitxes_traduccio_10_frases/fitxes/angles/Keep_Save_Keep-away.html" class="link-box">Keep / Save /Put away</a
-    <a href="Fitxes_traduccio_buits/fitxes/angles/also_too_so-do-I.html" class="link-box">També: Also / Too / So do I</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/verbs_irregulars_be_become_begin_bleed_bite.html" class="link-box">Buits: verbs irregulars be, become, bite, bleed, begin</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/verbs_irregulars-blow_wake.html" class="link-box">Buits: verbs irregulars blow i wake</a>
-    <a href="Fitxes_traduccio_buits/fitxes/angles/Buits_to-be.html" class="link-box">Buits: verb to be</a>
-    F
-    
-    <h3>Tria</h3>
-    <a href="Fitxes_pluja_botons/fitxes/angles/Nowhere_Somewhere_Anywhere_Everywhere.html" class="link-box">🌍 Anywhere / Nowhere / Everywhere</a>
-    <a href="Fitxes_pluja_botons/fitxes/angles/they_them_their.html" class="link-box">🧑 They / Them / Their</a>
-    <a href="Fitxes_pluja_botons/fitxes/angles/under_below.html" class="link-box">⬇️ Under / Below</a>
-    <a href="Fitxes_arrossega/angles/Verbs_irregulars_angles.html" class="link-box">Arrossega: Verbs irregulars</a>
-    <a href="Fitxes_arrossega_i_buits/anglès/verbs_irregulars_angles.html" class="link-box">Arrossega i buits: Verbs irregulars</a>
-    <a href="Fitxes_arrossega_i_buits/anglès/verbs_irregulars_FEDAC.html" class="link-box">Arrossega i buits: Verbs irregulars FEDAC</a>
-    
-    
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Tots els recursos</button>
+      <button class="filter-btn" data-filter="idiomes">Idiomes</button>
+      <button class="filter-btn" data-filter="ciencies">Ciències</button>
+      <button class="filter-btn" data-filter="llengua">Llengua</button>
+      <button class="filter-btn" data-filter="matematiques">Matemàtiques</button>
+      <button class="filter-btn" data-filter="altres">Altres</button>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Cerca activitats...">
+    </div>
+
+    <div class="grid">
+      <!-- ANGLÈS -->
+      <div class="category" data-category="idiomes">
+        <div class="category-header">
+          <span class="category-icon">🇬🇧</span>
+          <h2>Anglès</h2>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Com funciona</h3>
+          <div class="link-list">
+            <a href="diferencia_conjugacio_angles_catala.html" class="link-box">
+              <span class="link-icon">📘</span>
+              Diferències verbs anglès vs català
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Tradueix</h3>
+          <div class="link-list">
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/futbol.html" class="link-box">
+              <span class="link-icon">⚽</span>
+              Futbol
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/aniversari.html" class="link-box">
+              <span class="link-icon">🎂</span>
+              Aniversari
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/nado.html" class="link-box">
+              <span class="link-icon">👶</span>
+              Nadó
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/muntanya.html" class="link-box">
+              <span class="link-icon">🏔️</span>
+              Excursió
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/abans_jugar.html" class="link-box">
+              <span class="link-icon">🏃</span>
+              Surto a jugar
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/habitacio.html" class="link-box">
+              <span class="link-icon">🛏️</span>
+              Habitació
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/zoo.html" class="link-box">
+              <span class="link-icon">🐘</span>
+              Zoo
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/habits_saludables.html" class="link-box">
+              <span class="link-icon">🥗</span>
+              Hàbits saludables
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_de_lloc.html" class="link-box">
+              <span class="link-icon">📍</span>
+              Preposicions de lloc
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/preposicions_de_moviment.html" class="link-box">
+              <span class="link-icon">↔️</span>
+              Preposicions de moviment
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-in_on.html" class="link-box">
+              <span class="link-icon">🚌</span>
+              Preposicions de transport: get in - get out
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-out_of_off.html" class="link-box">
+              <span class="link-icon">🚌</span>
+              Preposicions de transport: get out of - get off
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport_get.html" class="link-box">
+              <span class="link-icon">🚌</span>
+              Preposicions de transport: get in / get out of - get on / get off
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/behind_in-front-of_before_after.html" class="link-box">
+              <span class="link-icon">🔁</span>
+              Davant / Darrere, Abans / Després
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/Past_simple_de_10_en_10.html" class="link-box">
+              <span class="link-icon">⏳</span>
+              Past simple 10×10
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/preposicions_de_temps.html" class="link-box">
+              <span class="link-icon">⏳</span>
+              Quan? - in / on /at i altres 10×10
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/angles/Keep_Save_Keep-away.html" class="link-box">
+              <span class="link-icon">💾</span>
+              Keep / Save /Put away
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/also_too_so-do-I.html" class="link-box">
+              <span class="link-icon">🔄</span>
+              També: Also / Too / So do I
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/verbs_irregulars_be_become_begin_bleed_bite.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Buits: verbs irregulars be, become, bite, bleed, begin
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/verbs_irregulars-blow_wake.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Buits: verbs irregulars blow i wake
+            </a>
+            <a href="Fitxes_traduccio_buits/fitxes/angles/Buits_to-be.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Buits: verb to be
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Tria</h3>
+          <div class="link-list">
+            <a href="Fitxes_pluja_botons/fitxes/angles/Nowhere_Somewhere_Anywhere_Everywhere.html" class="link-box">
+              <span class="link-icon">🌍</span>
+              Anywhere / Nowhere / Everywhere
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/angles/they_them_their.html" class="link-box">
+              <span class="link-icon">🧑</span>
+              They / Them / Their
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/angles/under_below.html" class="link-box">
+              <span class="link-icon">⬇️</span>
+              Under / Below
+            </a>
+            <a href="Fitxes_arrossega/angles/Verbs_irregulars_angles.html" class="link-box">
+              <span class="link-icon">↔️</span>
+              Arrossega: Verbs irregulars
+            </a>
+            <a href="Fitxes_arrossega_i_buits/anglès/verbs_irregulars_angles.html" class="link-box">
+              <span class="link-icon">↔️</span>
+              Arrossega i buits: Verbs irregulars
+            </a>
+            <a href="Fitxes_arrossega_i_buits/anglès/verbs_irregulars_FEDAC.html" class="link-box">
+              <span class="link-icon">↔️</span>
+              Arrossega i buits: Verbs irregulars FEDAC
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Cançons</h3>
+          <div class="link-list">
+            <a href="Fitxes/fitxes/angles/Singing_in_the_rain.html" class="link-box">
+              <span class="link-icon">🎵</span>
+              Singin' in the Rain
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Altres</h3>
+          <div class="link-list">
+            <a href="next-to_near.html" class="link-box">
+              <span class="link-icon">📍</span>
+              Next to / Near
+            </a>
+            <a href="https://app.sesame.com/?_gl=1*1cpbkv4*_ga*NjUzNTE4ODAuMTc2MDQ2NDA2OQ..*_ga_ZZLPJBMBEN*czE3NjA0NjQwNjkkbzEkZzAkdDE3NjA0NjQwNjkkajYwJGwwJGgw" class="link-box external" target="_blank">
+              <span class="link-icon">💬</span>
+              English chat
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- POLONÈS -->
+      <div class="category" data-category="idiomes">
+        <div class="category-header">
+          <span class="category-icon">🇵🇱</span>
+          <h2>Polonès</h2>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Vocabulari</h3>
+          <div class="link-list">
+            <a href="Fitxes_relaciona/polones/POL_relaciona_temes_AUTONOM.html" class="link-box">
+              <span class="link-icon">🔗</span>
+              Vocabulari - relaciona
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/polones_coberts.html" class="link-box">
+              <span class="link-icon">🍴</span>
+              Els coberts - pluja de mots
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_basiques.html" class="link-box">
+              <span class="link-icon">🔤</span>
+              Paraules bàsiques - relaciona
+            </a>
+            <a href="Fitxes/Polones_salutacions_narracio.html" class="link-box">
+              <span class="link-icon">📖</span>
+              Salutacions en polonès - llegeix
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/salutacions_pluja.html" class="link-box">
+              <span class="link-icon">👋</span>
+              Salutacions en polonès - pluja de mots
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/polones_cortesia_pluja.html" class="link-box">
+              <span class="link-icon">🙏</span>
+              Expressions de cortesia - pluja de mots
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_colors.html" class="link-box">
+              <span class="link-icon">🎨</span>
+              Colors - relaciona
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/polones_colors.html" class="link-box">
+              <span class="link-icon">🎨</span>
+              Els colors - pluja de mots
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_menjar_x10.html" class="link-box">
+              <span class="link-icon">🍎</span>
+              Menjar en polonès - 10 x 10
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_lavabo_bàsic.html" class="link-box">
+              <span class="link-icon">🚻</span>
+              On és el lavabo? - relaciona
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_carretera.html" class="link-box">
+              <span class="link-icon">🛣️</span>
+              A la carretera - relaciona
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_ciutat.html" class="link-box">
+              <span class="link-icon">🏙️</span>
+              A la ciutat - relaciona
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_fruita.html" class="link-box">
+              <span class="link-icon">🍓</span>
+              Quina fruita? - relaciona
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_hores.html" class="link-box">
+              <span class="link-icon">⏰</span>
+              Quina hora és - relaciona
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Números</h3>
+          <div class="link-list">
+            <a href="Fitxes_pluja_botons/fitxes/polones/polones_números.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Números 1-10 - pluja de mots
+            </a>
+            <a href="Fitxes_relaciona/polones/POL_1_al_10.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Números 1-10 - relaciona
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/polones_11_20.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Números 11-20 - pluja de mots
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/desenes_polones.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Les desenes - pluja de mots
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/polones/centenes_polones.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Les centenes - pluja de mots
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_nombres_rodons.html" class="link-box">
+              <span class="link-icon">⭕</span>
+              Els nombres rodons - 10 x 10
+            </a>
+            <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_nombres_1_al_100.html" class="link-box">
+              <span class="link-icon">🔢</span>
+              Nombres 1-100 - 10 x 10
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Transcripció</h3>
+          <div class="link-list">
+            <a href="Fitxes_traduccio_10_frases/fitxes/polones/transcripcio.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Transcripció - 10x10
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CIÈNCIA -->
+      <div class="category" data-category="ciencies">
+        <div class="category-header">
+          <span class="category-icon">🧪</span>
+          <h2>Ciència</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Ciencia/Ciencia_oberta/ambulancies_i_expansio_univers.html" class="link-box">
+            <span class="link-icon">🚑</span>
+            Efecte Doppler
+          </a>
+        </div>
+      </div>
+
+      <!-- CIÈNCIES SOCIALS -->
+      <div class="category" data-category="ciencies">
+        <div class="category-header">
+          <span class="category-icon">🌍👥</span>
+          <h2>Ciències Socials</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Fitxes/fitxes/historia/historia_Catalunya.html" class="link-box">
+            <span class="link-icon">📜</span>
+            Història de Catalunya
+          </a>
+          <a href="Fitxes/fitxes/historia/Joan_I_mort.html" class="link-box">
+            <span class="link-icon">⚰️</span>
+            La creu de Joan I a Foixà
+          </a>
+          <a href="003_Bregman_Rutger_escombriaires_i_banquers.pdf" class="link-box">
+            <span class="link-icon">📄</span>
+            Escombriaires i banquers
+          </a>
+          <a href="Fitxes/fitxes/Aranzels_i_Trump.html" class="link-box">
+            <span class="link-icon">💲</span>
+            Aranzels
+          </a>
+          <a href="Fitxes/fitxes/Canfranc.html" class="link-box">
+            <span class="link-icon">🏔️</span>
+            Allaus
+          </a>
+          <a href="Fitxes/fitxes/apagada_electrica_massiva.html" class="link-box">
+            <span class="link-icon">⚡</span>
+            Apagada elèctrica
+          </a>
+          <a href="Fitxes/fitxes/atoms_i_electricitat.html" class="link-box">
+            <span class="link-icon">⚛️</span>
+            Àtoms i electricitat
+          </a>
+          <a href="Fitxes/fitxes/coure_i_electricitat.html" class="link-box">
+            <span class="link-icon">⚛️</span>
+            Coure i electricitat
+          </a>
+          <a href="Fitxes/fitxes/coure_i_electricitat2.html" class="link-box">
+            <span class="link-icon">⚛️</span>
+            Coure i electricitat 2
+          </a>
+          <a href="Fitxes/fitxes/electrons.html" class="link-box">
+            <span class="link-icon">⚛️</span>
+            Els electrons
+          </a>
+          <a href="Fitxes/fitxes/comarques.html" class="link-box">
+            <span class="link-icon">🗺️</span>
+            Comarques de Catalunya - mapa
+          </a>
+          <a href="https://www.geoguessr.com/vgp/3930" class="link-box external" target="_blank">
+            <span class="link-icon">🌍</span>
+            Comarques de Catalunya - GeoGuessr
+          </a>
+          <a href="https://www.geoguessr.com/vgp/3007?locale=ca" class="link-box external" target="_blank">
+            <span class="link-icon">🌍</span>
+            Països d'Europa - GeoGuessr
+          </a>
+          <a href="Fitxes/fitxes/Llach-l_Estaca.html" class="link-box">
+            <span class="link-icon">🎵</span>
+            L'estaca de Lluís Llach
+          </a>
+          <a href="Fitxes/fitxes/espresso_macchiato.html" class="link-box">
+            <span class="link-icon">🎵</span>
+            Espresso Macchiato de Tommy Cash
+          </a>
+          <a href="Fitxes/fitxes/Vacunes-Jaume_Ferran_Clua.html" class="link-box">
+            <span class="link-icon">💉</span>
+            Vacunes - Jaume Ferran i Clua
+          </a>
+        </div>
+      </div>
+
+      <!-- LLENGUA CATALANA -->
+      <div class="category" data-category="llengua">
+        <div class="category-header">
+          <span class="category-icon">📘</span>
+          <h2>Llengua Catalana</h2>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Dictat</h3>
+          <div class="link-list">
+            <a href="Dictat_catala.html" class="link-box">
+              <span class="link-icon">✏️</span>
+              Dictat
+            </a>
+            <a href="Dictat_2.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Dictat offline
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Ortografia</h3>
+          <div class="link-list">
+            <a href="Llengua/Ortografia/Esdruixoles.html" class="link-box">
+              <span class="link-icon">🔊</span>
+              Esdrúixoles
+            </a>
+            <a href="008_joc-separacio-sil.labes.html" class="link-box">
+              <span class="link-icon">📝</span>
+              Separació síl·labes
+            </a>
+            <a href="006_joc_accentuacio_agudes_per_parelles_nivell_1.html" class="link-box">
+              <span class="link-icon">🅰️</span>
+              Accentuació N1 <span class="level-badge level-1">Bàsic</span>
+            </a>
+            <a href="002_accentuacio_agudes_planes_per_parelles2.html" class="link-box">
+              <span class="link-icon">🅱️</span>
+              Accentuació N2 <span class="level-badge level-2">Intermedi</span>
+            </a>
+            <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=ortografia_m_n" class="link-box">
+              <span class="link-icon">🧠</span>
+              Ortografia M/N
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/catala/ortografia_m_n.html" class="link-box">
+              <span class="link-icon">🙋</span>
+              Ortografia M i N (Botons)
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=separacio_sillabes" class="link-box">
+              <span class="link-icon">🔤</span>
+              Separació de sil·labes
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j1" class="link-box">
+              <span class="link-icon">✍️</span>
+              Ortografia G/J (nivell 1) <span class="level-badge level-1">Bàsic</span>
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j2" class="link-box">
+              <span class="link-icon">✍️</span>
+              Ortografia G/J (nivell 2) <span class="level-badge level-2">Intermedi</span>
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j3" class="link-box">
+              <span class="link-icon">✍️</span>
+              Ortografia G/J (nivell 3) <span class="level-badge level-2">Intermedi</span>
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j4" class="link-box">
+              <span class="link-icon">✍️</span>
+              Ortografia G/J (nivell 4) <span class="level-badge level-3">Avançat</span>
+            </a>
+            <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j5" class="link-box">
+              <span class="link-icon">✍️</span>
+              Ortografia G/J (nivell 5) <span class="level-badge level-3">Avançat</span>
+            </a>
+            <a href="Fitxes_pluja/joc.html?tipus=fitxes/catala&fitxa=accentuacio" class="link-box">
+              <span class="link-icon">✒️</span>
+              Accentuació botons
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Lèxic</h3>
+          <div class="link-list">
+            <a href="Fitxes_pluja_botons/fitxes/catala/mal_malament.html" class="link-box">
+              <span class="link-icon">❌</span>
+              Malament / Mal (Botons)
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/catala/escoltar_sentir.html" class="link-box">
+              <span class="link-icon">👂</span>
+              Escoltar / Sentir
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Gramàtica</h3>
+          <div class="link-list">
+            <a href="004_Distincio_entre_hi_ha_i_n_hi_ha.html" class="link-box">
+              <span class="link-icon">🗣️</span>
+              Distinció hi ha / n'hi ha
+            </a>
+            <a href="Fitxes_pluja_botons/fitxes/catala/hi_ha-n_hi_ha.html" class="link-box">
+              <span class="link-icon">🙋</span>
+              Hi ha / N'hi ha (Botons)
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Redacció</h3>
+          <div class="link-list">
+            <a href="Fitxes/fitxes/hiperbaton.html" class="link-box">
+              <span class="link-icon">🔄</span>
+              Hipèrbaton
+            </a>
+            <a href="Fitxes/fitxes/oximoron.html" class="link-box">
+              <span class="link-icon">💥</span>
+              Oxímoron
+            </a>
+            <a href="011_transformacio_frase_amb_participi_inicial.html" class="link-box">
+              <span class="link-icon">🔄</span>
+              Transformació participi
+            </a>
+            <a href="Fitxes/fitxes/menja_t_una_cama.html" class="link-box">
+              <span class="link-icon">🍗</span>
+              Menja't una cama
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Literatura</h3>
+          <div class="link-list">
+            <a href="Fitxes/fitxes/literatura/la_vaca_cega.html" class="link-box">
+              <span class="link-icon">📖</span>
+              La vaca cega de Joan Maragall
+            </a>
+            <a href="Fitxes/fitxes/literatura/L_auca_del_senyor_Esteve.html" class="link-box">
+              <span class="link-icon">📖</span>
+              L'auca del senyor Esteve de Santiago Rusiñol
+            </a>
+            <a href="Fitxes/fitxes/literatura/Agatha_Christie-Assassinat_en_tres_actes.html" class="link-box">
+              <span class="link-icon">📖</span>
+              Assassinat en tres actes d'Agatha Christie
+            </a>
+            <a href="Llibres/Pere_Calders_contes.pdf" class="link-box">
+              <span class="link-icon">📚</span>
+              Tots els contes de Pere Calders
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Índex</h3>
+          <div class="link-list">
+            <a href="Fitxes/fitxes/index_dificultat_ortografica.html" class="link-box">
+              <span class="link-icon">📊</span>
+              Índex de dificultat ortogràfica
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MATEMÀTIQUES -->
+      <div class="category" data-category="matematiques">
+        <div class="category-header">
+          <span class="category-icon">🧮</span>
+          <h2>Matemàtiques</h2>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Sisè</h3>
+          <div class="link-list">
+            <a href="Sésamath/6/cat_01_6e_N1_S1_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              1. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_02_6e_N1_S2_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              2. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_03_6e_N1_S3_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              3. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_04_6e_N1_S4_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              4. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_05_6e_N2_S1_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              5. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_06_6e_N2_S2_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              6. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_07_6e_N2_S3_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              7. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_08_6e_N2_S4_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              8. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_09_6e_N2_S5_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              9. Nombres enters i decimals
+            </a>
+            <a href="Sésamath/6/cat_10_6e_N2_S6_Nombres_i_calculs.odt" class="link-box">
+              <span class="link-icon">📊</span>
+              10. Nombres enters i decimals
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>1r d'ESO</h3>
+          <div class="link-list">
+            <a href="Sésamath//1r_ESO/1.html" class="link-box">
+              <span class="link-icon">📊</span>
+              1. Fraccions: el sentit
+            </a>
+            <a href="Sésamath//1r_ESO/1_solucions.html" class="link-box">
+              <span class="link-icon">✅</span>
+              1. Fraccions: el sentit - solucions
+            </a>
+            <a href="Fitxes/fitxes/equació_1r_grau.html" class="link-box">
+              <span class="link-icon">⚖️</span>
+              Equacions de primer grau
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCRIPTURA -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">✍️</span>
+          <h2>Grafomotricitat</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="escriptura/gargot_continu.html" class="link-box">
+            <span class="link-icon">🌀</span>
+            Gargot continu
+          </a>
+          <a href="escriptura/S_de_colors.html" class="link-box">
+            <span class="link-icon">🌈</span>
+            S de colors
+          </a>
+          <a href="escriptura/Dibuix_punts.html" class="link-box">
+            <span class="link-icon">🔘</span>
+            Punts
+          </a>
+          <a href="escriptura/Dibuix_espirals.html" class="link-box">
+            <span class="link-icon">🌀</span>
+            Espirals
+          </a>
+          <a href="escriptura/Dibuix_eles.html" class="link-box">
+            <span class="link-icon">♾️</span>
+            Eles
+          </a>
+          <a href="escriptura/a_cegues.html" class="link-box">
+            <span class="link-icon">🙈</span>
+            A cegues
+          </a>
+          <a href="escriptura/rectangles.html" class="link-box">
+            <span class="link-icon">🟥</span>
+            Rectangles
+          </a>
+          <a href="escriptura/rodones.html" class="link-box">
+            <span class="link-icon">🔵</span>
+            Rodones
+          </a>
+          <a href="escriptura/ratlles.html" class="link-box">
+            <span class="link-icon">📏</span>
+            Ratlles
+          </a>
+          <a href="escriptura/dues_mans.html" class="link-box">
+            <span class="link-icon">🤲</span>
+            Dues mans
+          </a>
+        </div>
+      </div>
+
+      <!-- ALTRES -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">📚</span>
+          <h2>Altres</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="PAU/Llengua_cat_i_literatura/index.html" class="link-box">
+            <span class="link-icon">🎓</span>
+            Proves d'Accés a la Universitat
+          </a>
+          <a href="https://transit.gencat.cat/ca/test-de-conduccio/index.html" class="link-box external" target="_blank">
+            <span class="link-icon">🚗</span>
+            Tests del permís B
+          </a>
+          <a href="Fitxes/fitxes/paella_valenciana.html" class="link-box">
+            <span class="link-icon">🍲</span>
+            La paella valenciana
+          </a>
+        </div>
+      </div>
+
+      <!-- VIATGES -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">✈️</span>
+          <h2>Viatges</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Fitxes/fitxes/viatges/Mallorca_a_peu_vora_de_mar.html" class="link-box">
+            <span class="link-icon">🏝️</span>
+            Mallorca - a la vora de mar
+          </a>
+        </div>
+      </div>
+
+      <!-- MEDITACIONS -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">🧘‍♀️</span>
+          <h2>Meditacions</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="meditacions/deures_setmanals.html" class="link-box">
+            <span class="link-icon">📆</span>
+            Deures setmanals
+          </a>
+          <a href="meditacions/Pantalles.html" class="link-box">
+            <span class="link-icon">📱</span>
+            Ús de les pantalles
+          </a>
+          <a href="meditacions/ESO.html" class="link-box">
+            <span class="link-icon">🏫</span>
+            Començo la ESO
+          </a>
+          <a href="meditacions/obstacle.html" class="link-box">
+            <span class="link-icon">🧱</span>
+            Obstacles
+          </a>
+          <a href="meditacions/obstacle2.html" class="link-box">
+            <span class="link-icon">🧱</span>
+            Obstacles (2)
+          </a>
+          <a href="meditacions/Mare_universal.html" class="link-box">
+            <span class="link-icon">🌌</span>
+            Mare universal
+          </a>
+        </div>
+      </div>
+
+      <!-- CRIANÇA POSITIVA -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">👨‍👩‍👧‍👦</span>
+          <h2>Criança Positiva</h2>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Per a adults</h3>
+          <div class="link-list">
+            <a href="crianca/proprioceptiu.html" class="link-box">
+              <span class="link-icon">😴</span>
+              Per què alguns nens s'esveren abans d'anar a dormir?
+            </a>
+            <a href="crianca/petards.html" class="link-box">
+              <span class="link-icon">🎆</span>
+              Per què cal ensenyar als nens a posar límits a la generositat?
+            </a>
+            <a href="crianca/herencia.html" class="link-box">
+              <span class="link-icon">👥</span>
+              Per què sentir-te ignorat pot fer tant de mal?
+            </a>
+            <a href="crianca/terrat.html" class="link-box">
+              <span class="link-icon">🏠</span>
+              Per què alguns missatges amables ens fan sentir culpables?
+            </a>
+            <a href="crianca/llagostera.html" class="link-box">
+              <span class="link-icon">🗣️</span>
+              Per què alguns comentaris aparentment innocents poden fer tant de mal?
+            </a>
+            <a href="crianca/amics.html" class="link-box">
+              <span class="link-icon">😤</span>
+              Per què sobrereacciono?
+            </a>
+            <a href="crianca/Exploracio_simbolica.html" class="link-box">
+              <span class="link-icon">🖼️</span>
+              Per què el nostre món intern parla amb imatges?
+            </a>
+            <a href="crianca/Exploracio_parts.html" class="link-box">
+              <span class="link-icon">🧩</span>
+              Per què el nostre món intern parla amb parts?
+            </a>
+            <a href="crianca/relat_interior.html" class="link-box">
+              <span class="link-icon">📖</span>
+              Per què cal fer un relat interior per transformar el dolor en sentit?
+            </a>
+            <a href="crianca/Espasmes.html" class="link-box">
+              <span class="link-icon">💪</span>
+              Per què és important l'alimentació i l'exercici en l'espasticitat?
+            </a>
+          </div>
+        </div>
+        
+        <div class="subcategory">
+          <h3>Per a nens</h3>
+          <div class="link-list">
+            <a href="crianca/discussio_pares.html" class="link-box">
+              <span class="link-icon">👨‍👩‍👧‍👦</span>
+              Quan passen coses que no entenc...
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EINES -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">🧰</span>
+          <h2>Eines</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Eines/Iban2.html" class="link-box">
+            <span class="link-icon">🔢</span>
+            Verificador IBAN
+          </a>
+          <a href="https://videostv3.vercel.app/" class="link-box external" target="_blank">
+            <span class="link-icon">📺</span>
+            Descarregador vídeos de TV3
+          </a>
+          <a href="Eines/Extractor_frases.html" class="link-box">
+            <span class="link-icon">📄</span>
+            Extractor de frases d'un pdf
+          </a>
+          <a href="Eines/diccionari.html" class="link-box">
+            <span class="link-icon">📚</span>
+            Diccionari i gramàtica
+          </a>
+          <a href="https://tienda.hamelyn.com/?gad_source=1&gad_campaignid=22310764537&gbraid=0AAAAABty6l8EGjj9Sy7VcnE3oMGmQfvFg&gclid=Cj0KCQiAiKzIBhCOARIsAKpKLAMN2Vmd2as5_oZzHaTDdVbgOjOpD3dEixSnMgb9WwD64ygKOz4_YfkaAheeEALw_wcB" class="link-box external" target="_blank">
+            <span class="link-icon">📚</span>
+            Hamelyn - llibres de segona mà
+          </a>
+        </div>
+      </div>
+
+      <!-- TOT EN UN -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">🔍</span>
+          <h2>Tot en un</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Tot_en_un/Tot_en_un.html" class="link-box">
+            <span class="link-icon">🔍</span>
+            Tot en un
+          </a>
+          <a href="Tot_en_un/Entrades_IEC.txt" class="link-box">
+            <span class="link-icon">📝</span>
+            Entrades IEC
+          </a>
+          <a href="Tot_en_un/Tots_els_contes-Pere_Calders.txt" class="link-box">
+            <span class="link-icon">📚</span>
+            Tots els contes - Pere Calders
+          </a>
+          <a href="Tot_en_un/Separador_sil-labes.html" class="link-box">
+            <span class="link-icon">🔤</span>
+            Separador de síl·labes i cercador
+          </a>
+          <a href="Eines/Extractor_frases.html" class="link-box">
+            <span class="link-icon">📄</span>
+            Extractor de frases d'un pdf
+          </a>
+        </div>
+      </div>
+
+      <!-- POEMES P3 -->
+      <div class="category" data-category="altres">
+        <div class="category-header">
+          <span class="category-icon">📝</span>
+          <h2>Poemes P3</h2>
+        </div>
+        
+        <div class="link-list">
+          <a href="Poemes_P3/Desig_i_esperança.html" class="link-box">
+            <span class="link-icon">✨</span>
+            Desig i Esperança
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Recursos educatius per a totes les edats • Dissenyat per a adolescents i adults</p>
+    </footer>
+  </div>
+
+  <script>
+    // Filtres per categories
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const categories = document.querySelectorAll('.category');
+      const searchInput = document.getElementById('searchInput');
       
-    <h3>Cançons</h3>
-    <a href="Fitxes/fitxes/angles/Singing_in_the_rain.html" class="link-box">Singin' in the Rain</a>
-
-    <h3>Altres</h3>
-    <a href="next-to_near.html" class="link-box">Next to / Near</a>
-    
-  </div>
-  
-  <div class="category" id="angles">
-    <h2>Polonès</h2>
-    <a href="Fitxes_relaciona/polones/POL_relaciona_temes_AUTONOM.html" class="link-box">Polonès - vocabulari - relaciona</a> 
-    
-    <a href="Fitxes_traduccio_10_frases/fitxes/polones/transcripcio.html" class="link-box">Polonès - transcripció - 10x10</a> 
-    
-    
-    <a href="Fitxes_pluja_botons/fitxes/polones/polones_coberts.html" class="link-box">Els coberts en polonès - pluja de mots</a> 
-    
-    
-    <a href="Fitxes_relaciona/polones/POL_basiques.html" class="link-box">Paraules bàsiques - relaciona</a> 
-    <a href="Fitxes/Polones_salutacions_narracio.html" class="link-box">Salutacions en polonès - llegeix</a> 
-    <a href="Fitxes_pluja_botons/fitxes/polones/salutacions_pluja.html" class="link-box">Salutacions en polonès - pluja de mots</a> 
-    <a href="Fitxes_pluja_botons/fitxes/polones/polones_cortesia_pluja.html" class="link-box">Expressions de cortesia en polonès - pluja de mots</a> 
-    <a href="Fitxes_relaciona/polones/POL_colors.html" class="link-box">Colors - relaciona</a>
-    <a href="Fitxes_pluja_botons/fitxes/polones/polones_colors.html" class="link-box">Els colors en polonès - pluja de mots</a> 
-    <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_menjar_x10.html" class="link-box">Menjar en polonès - 10 x 10</a> 
-    <a href="Fitxes_relaciona/polones/POL_lavabo_bàsic.html" class="link-box">On és el lavabo? - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_carretera.html" class="link-box">A la carretera - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_ciutat.html" class="link-box">A la ciutat - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_fruita.html" class="link-box">Quina fruita? - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_hores.html" class="link-box">Quina hora és - relaciona</a> 
-    
-    <h3>Números</h3>
-    <a href="Fitxes_pluja_botons/fitxes/polones/polones_números.html" class="link-box">Els números de l'1 al 10 en polonès - pluja de mots</a> 
-    <a href="Fitxes_relaciona/polones/POL_1_al_10.html" class="link-box">Els números de l'1 al 10 en polonès - relaciona</a> 
-    <a href="Fitxes_pluja_botons/fitxes/polones/polones_11_20.html" class="link-box">Els números de l'11 al 20 en polonès - pluja de mots</a>
-    <a href="Fitxes_pluja_botons/fitxes/polones/desenes_polones.html" class="link-box">Les desenes en polonès - pluja de mots</a> 
-    <a href="Fitxes_pluja_botons/fitxes/polones/centenes_polones.html" class="link-box">Les centenes en polonès - pluja de mots</a> 
-    <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_nombres_rodons.html" class="link-box">Els nombres rodons - 10 x 10</a> 
-    <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_nombres_1_al_100.html" class="link-box">Els nombres de l'1 al 100 - 10 x 10</a> 
-    <a href="Fitxes_traduccio_10_frases/fitxes/polones/polones_menjar_x10.html" class="link-box">Menjar en polonès - 10 x 10</a> 
-    <a href="Fitxes_relaciona/polones/POL_lavabo_bàsic.html" class="link-box">On és el lavabo? - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_carretera.html" class="link-box">A la carretera - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_ciutat.html" class="link-box">A la ciutat - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_fruita.html" class="link-box">Fruita - relaciona</a> 
-    <a href="Fitxes_relaciona/polones/POL_colors.html" class="link-box">Colors - relaciona</a>
-  </div>
-
-  <div class="category" id="ciencia">
-    <h2>🧪 Ciència</h2>
-    <a href="Ciencia/Ciencia_oberta/ambulancies_i_expansio_univers.html" class="link-box">🚑 Efecte Doppler</a>
-  </div>
-
-  <div class="category" id="socials">
-    <h2>🌍👥 Ciències socials</h2>
-    <a href="Fitxes/fitxes/historia/historia_Catalunya.html" class="link-box" target="_blank">Història de Catalunya</a>
-    <a href="Fitxes/fitxes/historia/Joan_I_mort.html" class="link-box" target="_blank">La creu de Joan I a Foixà</a>
-    <a href="003_Bregman_Rutger_escombriaires_i_banquers.pdf" class="link-box" target="_blank">📄 Escombriaires i banquers</a>
-    <a href="Fitxes/fitxes/Aranzels_i_Trump.html" class="link-box">💲 Aranzels</a>
-    <a href="Fitxes/fitxes/Canfranc.html" class="link-box">🏔️ Allaus</a>
-    <a href="Fitxes/fitxes/apagada_electrica_massiva.html" class="link-box">⚡ Apagada elèctrica</a>
-    <a href="Fitxes/fitxes/atoms_i_electricitat.html" class="link-box">⚛️ Àtoms i electricitat</a>
-    <a href="Fitxes/fitxes/coure_i_electricitat.html" class="link-box">⚛️ Coure i electricitat</a>
-    <a href="Fitxes/fitxes/coure_i_electricitat2.html" class="link-box">⚛️ Coure i electricitat 2</a>
-    <a href="Fitxes/fitxes/electrons.html" class="link-box">⚛️ Els electrons</a>
-    <a href="Fitxes/fitxes/comarques.html" class="link-box">Les comarques de Catalunya - mapa i mapa mut</a>
-    <a href="https://www.geoguessr.com/vgp/3930" target="_blank">Les comarques de Catalunya -joc educatiu de GeoGuessr</a></p>
-    <a href="https://www.geoguessr.com/vgp/3007?locale=ca" target="_blank">Els països d'Europa -joc educatiu de GeoGuessr</a></p>
-    <a href="Fitxes/fitxes/Llach-l_Estaca.html" class="link-box">L'estaca de Lluís Llach</a>
-    <a href="Fitxes/fitxes/espresso_macchiato.html" class="link-box">Espresso Macchiato de Tommy Cash</a>
-    <a href="Fitxes/fitxes/Vacunes-Jaume_Ferran_Clua.html" class="link-box">Vacunes - Jaume Ferra Clua</a>
-       
-  </div>
-
-  <div class="category" id="llengua">
-    <h2>📘 Llengua</h2>
-    <a href="Fitxes/fitxes/index_dificultat_ortografica.html" class="link-box">Índex de dificultat ortogràfica</a>
-    <h3>✏️ Dictat</h3>
-    <a href="Dictat_catala.html" class="link-box">Dictat</a>
-    <a href="Dictat_2.html" class="link-box">Dictat offline</a>
-    
-    <h3>✏️ Ortografia</h3>
-    <a href="Llengua/Ortografia/Esdruixoles.html" class="link-box">Esdrúixoles</a>
-    <a href="008_joc-separacio-sil.labes.html" class="link-box">📝 Separació síl·labes</a>
-    <a href="006_joc_accentuacio_agudes_per_parelles_nivell_1.html" class="link-box">🅰️ Accentuació N1</a>
-    <a href="002_accentuacio_agudes_planes_per_parelles2.html" class="link-box">🅱️ Accentuació N2</a>
-    <a href="Fitxes_pluja_botons/joc.html?tipus=fitxes/catala&fitxa=ortografia_m_n" class="link-box">🧠 Ortografia M/N</a>
-    <a href="Fitxes_pluja_botons/fitxes/catala/ortografia_m_n.html" class="link-box">🙋 Ortografia M i N (Botons)</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=separacio_sillabes" class="link-box">🔤 Separació de sil·labes</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j1" class="link-box">Ortografia G/J (nivell 1)</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j2" class="link-box">Ortografia G/J (nivell 2)</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j3" class="link-box">Ortografia G/J (nivell 3)</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j4" class="link-box">Ortografia G/J (nivell 4)</a>
-    <a href="Fitxes_pluja_escriure/joc.html?tipus=fitxes/catala&fitxa=g_j5" class="link-box">Ortografia G/J (nivell 5)</a>
-    <a href="Fitxes_pluja/joc.html?tipus=fitxes/catala&fitxa=accentuacio" class="link-box">✒️ Accentuació botons</a>
-    
-    <h3>✏️ Lèxic</h3>
-    <a href="Fitxes_pluja_botons/fitxes/catala/mal_malament.html" class="link-box"> Malament / Mal (Botons)</a>
-    <a href="Fitxes_pluja_botons/fitxes/catala/escoltar_sentir.html" class="link-box">Escoltar / Sentir</a>
-    
-    <h3>📖 Gramàtica</h3>
-    <a href="004_Distincio_entre_hi_ha_i_n_hi_ha.html" class="link-box">🗣️ Distinció hi ha / n'hi ha</a>
-    <a href="Fitxes_pluja_botons/fitxes/catala/hi_ha-n_hi_ha.html" class="link-box">🙋 Hi ha / N'hi ha (Botons)</a>
-
-    
-    <h3>📝 Redacció</h3>
-    <a href="Fitxes/fitxes/hiperbaton.html" class="link-box"> Hipèrbaton</a>
-    <a href="Fitxes/fitxes/oximoron.html" class="link-box">💥 Oxímoron</a>
-    <a href="011_transformacio_frase_amb_participi_inicial.html" class="link-box">🔄 Transformació participi</a>
-    <a href="Fitxes/fitxes/menja_t_una_cama.html" class="link-box">Menja't una cama</a>
-
-    <h3>📝 Literatura</h3>
-    <a href="Fitxes/fitxes/literatura/la_vaca_cega.html" class="link-box">La vaca cega de Joan Maragall</a>
-    <a href="Fitxes/fitxes/literatura/L_auca_del_senyor_Esteve.html" class="link-box">L'auca del senyor Esteve de Santiago Rusiñol</a>
-    <a href="Fitxes/fitxes/literatura/Agatha_Christie-Assassinat_en_tres_actes.html" class="link-box">Assassinat en tres actes d'Agatha Christie</a>
-    <a href="Llibres/Pere_Calders_contes.pdf" class="link-box">Tots els contes de Pere Calder</a>
-    
-  </div>
-
-  
-
-  <div class="category" id="matematiques">
-    <h2>🧮 Matemàtiques</h2>
-    <h3>Sisè</h3>
-    <a href="Sésamath/6/cat_01_6e_N1_S1_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  1. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_02_6e_N1_S2_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  2. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_03_6e_N1_S3_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  3. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_04_6e_N1_S4_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  4. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_05_6e_N2_S1_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  5. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_06_6e_N2_S2_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  6. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_07_6e_N2_S3_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  7. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_08_6e_N2_S4_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  8. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_09_6e_N2_S5_Nombres_i_calculs.odt" class="link-box" target="_blank">📊  9. Nombres enters i decimals (.odt)</a>
-    <a href="Sésamath/6/cat_10_6e_N2_S6_Nombres_i_calculs.odt" class="link-box" target="_blank">📊 10. Nombres enters i decimals (.odt)</a>  
-
-    <h3>1r d'ESO</h3>
-    <a href="Sésamath//1r_ESO/1.html" class="link-box">📊  1. Fraccions: el sentit</a>
-    <a href="Sésamath//1r_ESO/1_solucions.html" class="link-box">📊  1. Fraccions: el sentit - solucions</a>
-
-    <a href="Fitxes/fitxes/equació_1r_grau.html" class="link-box">Equacions de primer grau</a>
-  </div>
-
-  <div class="category" id="escriptura">
-    <h2>✍️ Grafomotricitat</h2>
-    <a href="escriptura/gargot_continu.html" class="link-box">🌀 Gargot continu</a>
-    <a href="escriptura/S_de_colors.html" class="link-box">🌈 S de colors</a>
-    <a href="escriptura/Dibuix_punts.html" class="link-box">🔘 Punts</a>
-    <a href="escriptura/Dibuix_espirals.html" class="link-box">🌀 Espirals</a>
-    <a href="escriptura/Dibuix_eles.html" class="link-box">♾️ Eles</a>
-    <a href="escriptura/a_cegues.html" class="link-box">🙈 A cegues</a>
-    <a href="escriptura/rectangles.html" class="link-box">🟥 Rectangles</a>
-    <a href="escriptura/rodones.html" class="link-box">🔵 Rodones</a>
-    <a href="escriptura/ratlles.html" class="link-box">📏 Ratlles</a>
-    <a href="escriptura/dues_mans.html" class="link-box">🤲 Dues mans</a>
-  </div>
-
-  <div class="category" id="escriptura">
-    <h2>Altres</h2>
-    <a href="PAU/Llengua_cat_i_literatura/index.html" class="link-box">Proves d'Accés a la Universitat</a>
-    <a href="https://transit.gencat.cat/ca/test-de-conduccio/index.html" class="link-box">Tests del permís B</a>
-    <a href="Fitxes/fitxes/paella_valenciana.html" class="link-box">La paella valenciana</a>
-  </div>
-
-  <div class="category" id="viatges">
-    <h2>Viatges</h2>
-    <a href="Fitxes/fitxes/viatges/Mallorca_a_peu_vora_de_mar.html" class="link-box">Mallorca - a la vora de mar</a>
-  </div>
-
-  <div class="category" id="meditacions">
-    <h2>🧘‍♀️ Meditacions</h2>
-    <a href="meditacions/deures_setmanals.html" class="link-box">📆 Deures setmanals</a>
-    <a href="meditacions/Pantalles.html" class="link-box">📱 Ús de les pantalles</a>
-    <a href="meditacions/ESO.html" class="link-box">🏫 Començo la ESO</a>
-    <a href="meditacions/obstacle.html" class="link-box">🧱 Obstacles</a>
-    <a href="meditacions/obstacle2.html" class="link-box">🧱 Obstacles (2)</a>
-    <a href="meditacions/Mare_universal.html" class="link-box">🌌 Mare universal</a>
-  </div>
-
-  <div class="category" id="criança">
-    <h2>Criança positiva</h2>
-    <h3>Per a adults</h3>
-    <a href="crianca/proprioceptiu.html" class="link-box">Per què alguns nens s’esveren abans d’anar a dormir?</a>
-    <a href="crianca/petards.html" class="link-box">Per què cal ensenyar als nens a posar límits a la generositat?</a>
-    <a href="crianca/herencia.html" class="link-box">Per què sentir-te ignorat pot fer tant de mal?</a>
-    <a href="crianca/terrat.html" class="link-box">Per què alguns missatges amables ens fan sentir culpables?</a>
-    <a href="crianca/llagostera.html" class="link-box">Per què alguns comentaris aparentment innocents poden fer tant de mal?</a>
-    <a href="crianca/amics.html" class="link-box">Per què sobrereacciono?</a>
-    <a href="crianca/Exploracio_simbolica.html" class="link-box">Per què el nostre món intern parla amb imatges?</a>
-    <a href="crianca/Exploracio_parts.html" class="link-box">Per què el nostre món intern parla amb parts?</a>
-    <a href="crianca/relat_interior.html" class="link-box">Per què cal fer un relat interior per transformar el dolor en sentit?</a>
-    <a href="crianca/Espasmes.html" class="link-box">Per què és important l’alimentació i l’exercici en l’espasticitat?</a>
-    
-    
-    <h3>Per a nens</h3>
-    <a href="crianca/discussio_pares.html" class="link-box">Quan passen coses que no entenc…</a>
-  </div>
-
-  <div class="category" id="eines">
-    <h2>Tot en un</h2>
-    <a href="Tot_en_un/Tot_en_un.html" class="link-box">Tot en un</a>
-    <a href="Tot_en_un/Entrades_IEC.txt" class="link-box">Entrades IEC</a>
-    <a href="Tot_en_un/Tots_els_contes-Pere_Calders.txt" class="link-box">Tots els contes - Pere Calders</a>
-    <a href="Tot_en_un/Separador_sil-labes.html" class="link-box">Separador de síl·labes i cercador</a>
-    <a href="Eines/Extractor_frases.html" class="link-box">Extractor de frases d'un pdf</a>
-  </div>
-  
-  <div class="category" id="eines">
-    <h2>🧰 Eines</h2>
-    <a href="Eines/Iban2.html" class="link-box">🔢 Verificador IBAN</a>
-    <a href="https://videostv3.vercel.app/" target="_blank">Descarregador vídeos de TV3</a></p>
-    <a href="Eines/Extractor_frases.html" class="link-box">Extractor de frases d'un pdf</a>
-    <a href="Eines/diccionari.html" class="link-box">Diccionari i gramàtica</a>
-    <a href="https://tienda.hamelyn.com/?gad_source=1&gad_campaignid=22310764537&gbraid=0AAAAABty6l8EGjj9Sy7VcnE3oMGmQfvFg&gclid=Cj0KCQiAiKzIBhCOARIsAKpKLAMN2Vmd2as5_oZzHaTDdVbgOjOpD3dEixSnMgb9WwD64ygKOz4_YfkaAheeEALw_wcB" target="_blank">Hamelyn - compra i venda de llibres de segona mà</a></p>
-  </div>
-
-  <div class="category" id="eines">
-    <h2>Poemes P3</h2>
-    <a href="Poemes_P3/Desig_i_esperança.html" class="link-box">Desig i Esperança</a>
-  </div>
-
+      // Filtre per botons
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Actualitza botons actius
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filtra categories
+          categories.forEach(category => {
+            if (filter === 'all' || category.getAttribute('data-category') === filter) {
+              category.style.display = 'block';
+            } else {
+              category.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // Cerca en temps real
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        categories.forEach(category => {
+          const links = category.querySelectorAll('.link-box');
+          let hasVisibleLinks = false;
+          
+          links.forEach(link => {
+            const text = link.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+              link.style.display = 'flex';
+              hasVisibleLinks = true;
+            } else {
+              link.style.display = 'none';
+            }
+          });
+          
+          // Amaga categories sense resultats
+          const subcategories = category.querySelectorAll('.subcategory');
+          subcategories.forEach(sub => {
+            const subLinks = sub.querySelectorAll('.link-box');
+            const hasVisibleSubLinks = Array.from(subLinks).some(link => 
+              link.style.display !== 'none'
+            );
+            sub.style.display = hasVisibleSubLinks ? 'block' : 'none';
+          });
+          
+          // Comprova si la categoria té algun resultat
+          const visibleSubcategories = category.querySelectorAll('.subcategory[style="display: block"]');
+          category.style.display = visibleSubcategories.length > 0 ? 'block' : 'none';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
