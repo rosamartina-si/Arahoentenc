@@ -1,610 +1,657 @@
+<!-- /ui/sesamath012b-plus.html -->
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitxa Matemàtiques 5è - Sèrie 1</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
-        .header {
-            background: linear-gradient(135deg, #ffcc00, #ffb300);
-            color: #333;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.4em;
-            margin-bottom: 25px;
-            text-align: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        .section {
-            background: white;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            page-break-inside: avoid;
-        }
-        .section h3 {
-            background: #ffeb3b;
-            padding: 12px 18px;
-            margin: -20px -20px 20px -20px;
-            border-radius: 12px 12px 0 0;
-            font-size: 1.25em;
-            font-weight: bold;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-            font-size: 0.95em;
-        }
-        th, td {
-            border: 1.5px solid #999;
-            padding: 10px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        th {
-            background-color: #fff9c4;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 6px;
-            border: 1px solid #aaa;
-            border-radius: 4px;
-            font-size: 1em;
-            box-sizing: border-box;
-        }
-        input[type="radio"] {
-            transform: scale(1.3);
-            margin: 0 8px;
-        }
-        /* FRACCIÓ VERTICAL */
-        .frac {
-          display: inline-grid;
-          grid-auto-flow: row;
-          justify-items: center;
-          align-items: center;
-          font-size: 1em;
-          line-height: 1;
-          margin: 0 4px;
-          padding: 0 2px;
-          vertical-align: middle;
-          font-variant-numeric: tabular-nums;
-        }
-        .frac * { white-space: nowrap; }
-        .frac .num,
-        .frac .den { line-height: 1; font-weight: 600; }
-        .frac .bar {
-            width: 100%;
-            border-top: 1.2px solid #000;
-            margin: 2px 0;
-            align-self: stretch;
-            height: 0;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .grid-item {
-            text-align: center;
-            padding: 12px;
-            border: 1.5px dashed #999;
-            border-radius: 8px;
-            background-color: #fafafa;
-            min-height: 70px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .grid-item input[type="checkbox"] {
-            margin-top: 8px;
-            transform: scale(1.5);
-        }
-        .match-line {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .match-item {
-            flex: 1;
-            min-width: 100px;
-            text-align: center;
-            padding: 10px;
-            border: 1.5px solid #ccc;
-            border-radius: 8px;
-            background-color: #f0f0f0;
-        }
-        .match-item select {
-            width: 100%;
-            padding: 6px;
-            margin-top: 6px;
-            border-radius: 4px;
-            font-size: 0.95em;
-        }
-        .checkbox-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 8px 0;
-        }
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9em;
-        }
-        .note {
-            text-align: center;
-            font-size: 0.85em;
-            color: #666;
-            margin-top: 30px;
-            font-style: italic;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fitxa Matemàtiques 5è · Sèrie 1 · Versió gamer</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* ========== Design tokens ========== */
+    :root{
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1c1d20;
+      --muted: #666a73;
+      --brand: #735cff;
+      --brand-2: #00d4a6;
+      --warn: #ffb020;
+      --ok: #1ab45c;
+      --err: #ff4d6d;
+      --border: #e6e7ee;
+      --radius: 16px;
+      --shadow: 0 6px 18px rgba(22,25,40,.08);
+      --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0f1116;
+        --card: #151822;
+        --text: #e7e9ee;
+        --muted: #a4adbd;
+        --brand: #7b7bff;
+        --brand-2: #20d6b8;
+        --warn: #ffc36a;
+        --ok: #26d07c;
+        --err: #ff6b81;
+        --border: #222738;
+        --shadow: none;
+      }
+    }
+    [data-theme="dark"]{
+      --bg: #0f1116;
+      --card: #151822;
+      --text: #e7e9ee;
+      --muted: #a4adbd;
+      --border: #222738;
+      --shadow: none;
+    }
 
-        /* === ESTIL PER A TOTS ELS EXERCICIS === */
-        .exo3, .exo5, .exo6 {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 14px 22px;
-          font-size: 1.05em;
-        }
-        .exo3 .item, .exo5 .item, .exo6 .item {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .exo3 .label, .exo5 .label, .exo6 .label {
-          color: #e09b00;
-          font-weight: 700;
-          width: 18px;
-          text-align: right;
-        }
-        .exo3 input.line, .exo5 input.line, .exo6 input.line {
-          width: 52px;
-          border: none;
-          border-bottom: 2px dotted #666;
-          background: transparent;
-          text-align: center;
-          font-size: 1em;
-          padding: 2px 0;
-        }
+    /* ========== Base ========== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text); font-family:var(--font);
+      line-height:1.55; -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--brand); text-decoration:none}
+    .container{max-width:1100px; margin-inline:auto; padding:20px}
+    .sr-only{position:absolute; left:-9999px}
 
-        /* === ESTIL PER A L'EXERCICI 5 (trencat editable) === */
-        .exo5 .frac .num .line,
-        .exo5 .frac .den .line {
-          width: 40px;
-          border: none;
-          border-bottom: 2px dotted #666;
-          background: transparent;
-          text-align: center;
-          font-size: 1em;
-          padding: 2px 0;
-          font-family: inherit;
-        }
+    /* ========== Header ========== */
+    header.appbar{
+      position:sticky; top:0; z-index:10; backdrop-filter:saturate(160%) blur(8px);
+      background:color-mix(in srgb, var(--bg) 85%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .appbar-inner{
+      display:flex; align-items:center; gap:12px; padding:12px 20px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px;
+      font-size:1.15rem;
+    }
+    .brand .logo{
+      width:36px; aspect-ratio:1; border-radius:10px;
+      background: radial-gradient(60% 60% at 30% 30%, var(--brand) 0%, var(--brand-2) 100%);
+      box-shadow: inset 0 0 20px rgba(255,255,255,.2), var(--shadow);
+    }
+    .spacer{flex:1}
+    .xp-badge{
+      display:flex; align-items:center; gap:8px;
+      padding:6px 10px; border:1px solid var(--border); border-radius:999px;
+      background:var(--card); box-shadow:var(--shadow); font-variant-numeric:tabular-nums;
+    }
+    .toggle{
+      appearance:none; width:50px; height:28px; border-radius:999px; position:relative;
+      background:var(--border); cursor:pointer; outline:none; border:1px solid var(--border);
+    }
+    .toggle:after{
+      content:""; position:absolute; inset:3px auto 3px 3px; width:22px; border-radius:50%;
+      background:var(--card); transition:transform .25s ease;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+    }
+    .toggle:checked{background:linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%)}
+    .toggle:checked:after{transform:translateX(22px)}
 
-        /* === ESTIL PER A L'EXERCICI 6 (trencat editable només aquí) === */
-        .exo6 .frac .num .line,
-        .exo6 .frac .den .line {
-          width: 40px;
-          border: none;
-          border-bottom: 2px dotted #666;
-          background: transparent;
-          text-align: center;
-          font-size: 1em;
-          padding: 2px 0;
-          font-family: inherit;
-        }
+    /* ========== Progress ========== */
+    .progress{
+      margin:16px 0 24px; background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:14px; box-shadow:var(--shadow);
+    }
+    .progress-row{display:flex; align-items:center; gap:10px}
+    .bar{
+      position:relative; flex:1; height:12px; background:#e8ebf5; border-radius:999px; overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .bar > i{
+      display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      transition:width .3s ease;
+    }
+    .progress small{color:var(--muted)}
 
-        /* === ESTIL PER ALS APARTATS D'ENUNCIAT === */
-        .apartat {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin: 10px 0;
-        }
-        .apartat .label {
-          color: #e09b00;
-          font-weight: 700;
-          width: 18px;
-          text-align: right;
-        }
+    /* ========== Cards/Sections ========== */
+    section.card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:18px; margin:18px 0; box-shadow:var(--shadow);
+    }
+    .card h2{
+      margin:0 0 12px; font-size:1.05rem; letter-spacing:.2px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px;
+      font-size:.85rem; border:1px solid var(--border); background:color-mix(in srgb, var(--card) 92%, transparent);
+    }
 
-        @media print {
-            body { margin: 10px; background: white; }
-            .section { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
-            .header, .section h3 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            input, select { border: 1px dashed #000 !important; background: transparent !important; }
-            .exo3 input.line,
-            .exo5 .frac .num .line, .exo5 .frac .den .line,
-            .exo6 .frac .num .line, .exo6 .frac .den .line { border-bottom: 2px dotted #000 !important; }
-        }
-    </style>
+    /* ========== Tables / Grids ========== */
+    table{
+      width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px;
+      border:1px solid var(--border);
+    }
+    th,td{padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; vertical-align:middle}
+    th{background:color-mix(in srgb, var(--card) 90%, var(--brand) 10%); font-weight:700}
+    tr:last-child td{border-bottom:none}
+    .grid{display:grid; gap:12px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}
+    @media (max-width:800px){ .grid.cols-6{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:520px){ .grid.cols-3{grid-template-columns:repeat(2,1fr)} }
+
+    /* ========== Inputs ========== */
+    input[type="text"], input[type="number"], select{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+      background:var(--card); color:var(--text); font-size:1rem;
+    }
+    input[type="radio"], input[type="checkbox"]{width:20px; height:20px}
+    .ghost-input{
+      border:none; border-bottom:2px dotted color-mix(in srgb, var(--muted) 60%, transparent);
+      border-radius:0; padding:4px 2px; background:transparent; width:80px; text-align:center;
+    }
+    .frac{
+      display:inline-grid; grid-auto-flow:row; justify-items:center; align-items:center; font-variant-numeric:tabular-nums;
+      margin:0 4px;
+    }
+    .frac .bar{width:100%; height:0; border-top:2px solid currentColor; margin:2px 0}
+    .answer.ok{outline:2px solid var(--ok); outline-offset:2px}
+    .answer.ko{outline:2px solid var(--err); outline-offset:2px}
+
+    /* ========== Badges ========== */
+    .hint{color:var(--muted); font-size:.95rem}
+    .note{color:var(--muted); font-size:.9rem; text-align:center; margin:18px 0}
+
+    /* ========== Footer actions ========== */
+    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:22px 0}
+    .btn{
+      border:1px solid var(--border); background:var(--card); padding:10px 14px; border-radius:12px;
+      font-weight:700; cursor:pointer; box-shadow:var(--shadow)
+    }
+    .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:white; border:none}
+    .btn.warn{background:linear-gradient(90deg,#ff9a3c,#ffd66b); color:#241a00; border:none}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .status{min-height:24px; text-align:center}
+    .status[aria-live]{padding:6px 10px}
+
+    /* ========== Print ========== */
+    @media print{
+      header, .actions, .progress{display:none !important}
+      section.card{box-shadow:none; border:1px solid #000}
+      .answer.ok, .answer.ko{outline:none}
+    }
+  </style>
 </head>
 <body>
-<div class="header">Sèrie 1 Escriptures diferents </div>
+  <header class="appbar">
+    <div class="appbar-inner container">
+      <div class="brand" aria-label="Fitxa de matemàtiques">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Sèrie 1 · Escriptures diferents</span>
+        <span class="pill" title="Nivell">🧮 5è</span>
+      </div>
+      <div class="spacer"></div>
+      <div class="xp-badge" aria-live="polite" id="xpBadge">⭐ XP: <strong>0</strong></div>
+      <label class="pill" for="themeToggle" title="Mode fosc/clar">🌙
+        <input id="themeToggle" class="toggle" type="checkbox" aria-label="Canvia tema" />
+      </label>
+    </div>
+  </header>
 
-<!-- Exercici 1 -->
-<div class="section">
-    <h3>1 Nombre fraccionari</h3>
-    <p>La Maria ha escrit: « <span class="frac"><span class="num">5</span><span class="bar"></span><span class="den">3</span></span> = 1,66 ». 1,66 ha de ser el resultat de dividir 5 entre 3, però 1,66 × 3 = 4,98 i no és igual a 5. La Maria no ha obtingut una igualtat exacta, sinó un valor decimal aproximat. Seguint aquest model, indica si els resultats trobats per aquests alumnes són <strong>exactes</strong> o <strong>aproximats</strong>.</p>
-    <table>
-        <tr>
-            <th>Els alumnes han escrit:</th>
-            <th>Els teus càlculs:</th>
-            <th>Exacte</th>
-            <th>Aproximat</th>
-        </tr>
-        <tr>
-            <td>Laura: <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span> = 0,33</td>
-            <td><input type="text"></td>
-            <td><input type="radio" name="laura" value="exacte"></td>
-            <td><input type="radio" name="laura" value="aproximat"></td>
-        </tr>
-        <tr>
-            <td>Max: <span class="frac"><span class="num">4</span><span class="bar"></span><span class="den">5</span></span> = 0,8</td>
-            <td><input type="text"></td>
-            <td><input type="radio" name="max" value="exacte"></td>
-            <td><input type="radio" name="max" value="aproximat"></td>
-        </tr>
-        <tr>
-            <td>Abdou: <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den">8</span></span> = 0,12</td>
-            <td><input type="text"></td>
-            <td><input type="radio" name="abdou" value="exacte"></td>
-            <td><input type="radio" name="abdou" value="aproximat"></td>
-        </tr>
-        <tr>
-            <td>Emma: <span class="frac"><span class="num">5</span><span class="bar"></span><span class="den">3</span></span> = 1,67</td>
-            <td><input type="text"></td>
-            <td><input type="radio" name="emma" value="exacte"></td>
-            <td><input type="radio" name="emma" value="aproximat"></td>
-        </tr>
-    </table>
-</div>
+  <main class="container">
+    <div class="progress" aria-label="Progrés">
+      <div class="progress-row">
+        <strong>Progrés</strong>
+        <div class="bar" aria-hidden="true"><i id="progressFill"></i></div>
+        <small id="progressText">0%</small>
+      </div>
+      <small class="hint">Completa camps i marca opcions per guanyar XP ✨</small>
+    </div>
 
-<!-- Exercici 2 -->
-<div class="section">
-    <h3>2 Entre les fraccions següents:</h3>
-    
-    <div class="apartat">
-        <span class="label">a.</span> 
-        <span>Marca les que <strong>no tenen</strong> un valor decimal exacte.</span>
-    </div>
-    
-    <div class="grid">
-        <div class="grid-item"><div class="frac"><span class="num">15</span><span class="bar"></span><span class="den">3</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">8</span><span class="bar"></span><span class="den">10</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">7</span><span class="bar"></span><span class="den">25</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">3</span><span class="bar"></span><span class="den">15</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">7</span><span class="bar"></span><span class="den">6</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">25</span><span class="bar"></span><span class="den">4</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">10</span><span class="bar"></span><span class="den">6</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">10</span><span class="bar"></span><span class="den">30</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">9</span><span class="bar"></span><span class="den">4</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">6</span><span class="bar"></span><span class="den">10</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">8</span><span class="bar"></span><span class="den">7</span></div><input type="checkbox"></div>
-        <div class="grid-item"><div class="frac"><span class="num">30</span><span class="bar"></span><span class="den">10</span></div><input type="checkbox"></div>
-    </div>
-    
-    <div class="apartat">
-        <span class="label">b.</span> 
-        <span>Dona un valor arrodonit al centèsim dels quocients marcats.</span>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-    </div>
-    
-    <div class="apartat">
-        <span class="label">c.</span> 
-        <span>Dona un valor arrodonit a la unitat dels quocients marcats.</span>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-        <div><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100%;"></div>
-    </div>
-</div>
+    <!-- EX1 -->
+    <section class="card" id="ex1">
+      <h2>1 · Nombre fraccionari <span class="pill">🎯 exacte o aproximat</span></h2>
+      <p class="hint">Exemple: 5/3 = 1,66 és <em>aproximat</em>. 1,66 ha de ser el resultat de dividir 5 entre 3, però 1,66 × 3 = 4,98 i no és igual a 5. No hem obtingut una igualtat exacta, sinó un valor decimal aproximat. Seguint aquest model, indica si els resultats són <strong>exactes</strong> o <strong>aproximats</strong>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Enunciat</th><th>Els teus càlculs</th><th>Exacte</th><th>Aproximat</th>
+          </tr></thead>
+          <tbody>
+            <tr data-key="laura">
+              <td>Laura: <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den">3</span></span> = 0,33</td>
+              <td><input type="text" inputmode="decimal" aria-label="Càlcul Laura"></td>
+              <td><input type="radio" name="laura" value="exacte"></td>
+              <td><input type="radio" name="laura" value="aproximat"></td>
+            </tr>
+            <tr data-key="max">
+              <td>Max: <span class="frac"><span class="num">4</span><span class="bar"></span><span class="den">5</span></span> = 0,8</td>
+              <td><input type="text" inputmode="decimal" aria-label="Càlcul Max"></td>
+              <td><input type="radio" name="max" value="exacte"></td>
+              <td><input type="radio" name="max" value="aproximat"></td>
+            </tr>
+            <tr data-key="abdou">
+              <td>Abdou: <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den">8</span></span> = 0,12</td>
+              <td><input type="text" inputmode="decimal" aria-label="Càlcul Abdou"></td>
+              <td><input type="radio" name="abdou" value="exacte"></td>
+              <td><input type="radio" name="abdou" value="aproximat"></td>
+            </tr>
+            <tr data-key="emma">
+              <td>Emma: <span class="frac"><span class="num">5</span><span class="bar"></span><span class="den">3</span></span> = 1,67</td>
+              <td><input type="text" inputmode="decimal" aria-label="Càlcul Emma"></td>
+              <td><input type="radio" name="emma" value="exacte"></td>
+              <td><input type="radio" name="emma" value="aproximat"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- Exercici 3 -->
-<div class="section">
-  <h3>3 Completa.</h3>
-  <div class="exo3">
-    <div class="item"><span class="label">a.</span> <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">2</span></span> = 1</div>
-    <div class="item"><span class="label">b.</span> <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">3</span></span> = 4</div>
-    <div class="item"><span class="label">c.</span> <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">18</span></span> = 0</div>
-    <div class="item"><span class="label">d.</span> <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">3</span></span> = 10</div>
-    <div class="item"><span class="label">e.</span> <span class="frac"><span class="num">7</span><span class="bar"></span><span class="den"><input class="line" type="text"></span></span> = 3,5</div>
-    <div class="item"><span class="label">f.</span> <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den"><input class="line" type="text"></span></span> = 0,1</div>
-    <div class="item"><span class="label">g.</span> 3 = <span class="frac"><span class="num">9</span><span class="bar"></span><span class="den"><input class="line" type="text"></span></span></div>
-    <div class="item"><span class="label">h.</span> 3 = <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">9</span></span></div>
-    <div class="item"><span class="label">i.</span> 9 = <span class="frac"><span class="num"><input class="line" type="text"></span><span class="bar"></span><span class="den">3</span></span></div>
-  </div>
-</div>
+    <!-- EX2 -->
+    <section class="card" id="ex2">
+      <h2>2 · Entre les fraccions següents <span class="pill">🧠 decimals exactes?</span></h2>
+      <p class="hint">Marca les que <strong>no tenen</strong> valor decimal exacte.</p>
+      <div class="grid cols-6" id="ex2Grid" aria-label="Llista de fraccions">
+        <!-- items -->
+        <!-- data-num / data-den serveixen per validar -->
+        <label class="card" style="padding:10px" aria-label="15 sobre 3">
+          <div class="frac" data-num="15" data-den="3"><span class="num">15</span><span class="bar"></span><span class="den">3</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="8 sobre 10">
+          <div class="frac" data-num="8" data-den="10"><span class="num">8</span><span class="bar"></span><span class="den">10</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="7 sobre 25">
+          <div class="frac" data-num="7" data-den="25"><span class="num">7</span><span class="bar"></span><span class="den">25</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="3 sobre 15">
+          <div class="frac" data-num="3" data-den="15"><span class="num">3</span><span class="bar"></span><span class="den">15</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="7 sobre 6">
+          <div class="frac" data-num="7" data-den="6"><span class="num">7</span><span class="bar"></span><span class="den">6</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="25 sobre 4">
+          <div class="frac" data-num="25" data-den="4"><span class="num">25</span><span class="bar"></span><span class="den">4</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="10 sobre 6">
+          <div class="frac" data-num="10" data-den="6"><span class="num">10</span><span class="bar"></span><span class="den">6</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="10 sobre 30">
+          <div class="frac" data-num="10" data-den="30"><span class="num">10</span><span class="bar"></span><span class="den">30</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="9 sobre 4">
+          <div class="frac" data-num="9" data-den="4"><span class="num">9</span><span class="bar"></span><span class="den">4</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="6 sobre 10">
+          <div class="frac" data-num="6" data-den="10"><span class="num">6</span><span class="bar"></span><span class="den">10</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="8 sobre 7">
+          <div class="frac" data-num="8" data-den="7"><span class="num">8</span><span class="bar"></span><span class="den">7</span></div>
+          <input type="checkbox" />
+        </label>
+        <label class="card" style="padding:10px" aria-label="30 sobre 10">
+          <div class="frac" data-num="30" data-den="10"><span class="num">30</span><span class="bar"></span><span class="den">10</span></div>
+          <input type="checkbox" />
+        </label>
+      </div>
 
-<!-- Exercici 4 -->
-<div class="section">
-    <h3>4 Indica la (les) naturalesa(es) de cadascuna de les fraccions següents (una mateixa fracció pot tenir més d'una naturalesa), i després la forma decimal, si existeix.</h3>
-    <table>
-        <tr>
-            <th>Nombre</th>
-            <th>Natura</th>
-            <th>Escriptura decimal</th>
-        </tr>
-        <tr>
+      <p class="hint">Ara dona valors arrodonits als marcats:</p>
+      <div class="grid cols-3">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="centèsim">
+      </div>
+
+      <p class="hint">I a la unitat:</p>
+      <div class="grid cols-3">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+        <input class="ghost-input" type="text" inputmode="decimal" placeholder="unitat">
+      </div>
+    </section>
+
+    <!-- EX3 -->
+    <section class="card" id="ex3">
+      <h2>3 · Completa <span class="pill">✍️ escriu el nombre que falta</span></h2>
+      <div class="grid cols-3">
+        <div> a) <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3a" aria-label="ex3a"></span><span class="bar"></span><span class="den">2</span></span> = 1 </div>
+        <div> b) <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3b"></span><span class="bar"></span><span class="den">3</span></span> = 4 </div>
+        <div> c) <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3c"></span><span class="bar"></span><span class="den">18</span></span> = 0 </div>
+        <div> d) <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3d"></span><span class="bar"></span><span class="den">3</span></span> = 10 </div>
+        <div> e) <span class="frac"><span class="num">7</span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex3e"></span></span> = 3,5 </div>
+        <div> f) <span class="frac"><span class="num">1</span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex3f"></span></span> = 0,1 </div>
+        <div> g) 3 = <span class="frac"><span class="num">9</span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex3g"></span></span> </div>
+        <div> h) 3 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3h"></span><span class="bar"></span><span class="den">9</span></span> </div>
+        <div> i) 9 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex3i"></span><span class="bar"></span><span class="den">3</span></span> </div>
+      </div>
+    </section>
+
+    <!-- EX4 -->
+    <section class="card" id="ex4">
+      <h2>4 · Naturalesa i forma decimal <span class="pill">🔎 classifica</span></h2>
+      <table>
+        <thead><tr><th>Nombre</th><th>Natura</th><th>Escriptura decimal</th></tr></thead>
+        <tbody>
+          <tr>
             <td><span class="frac"><span class="num">9</span><span class="bar"></span><span class="den">6</span></span></td>
             <td>
-                <div class="checkbox-group">
-                    <label><input type="checkbox"> enter</label>
-                    <label><input type="checkbox"> decimal exacte</label>
-                    <label><input type="checkbox"> decimal periòdic</label>
-                </div>
+              <label><input type="checkbox"> enter</label>
+              <label><input type="checkbox"> decimal exacte</label>
+              <label><input type="checkbox"> decimal periòdic</label>
             </td>
-            <td><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100px;"></td>
-        </tr>
-        <tr>
+            <td><input class="ghost-input" type="text" aria-label="9/6 decimal"></td>
+          </tr>
+          <tr>
             <td><span class="frac"><span class="num">12</span><span class="bar"></span><span class="den">7</span></span></td>
             <td>
-                <div class="checkbox-group">
-                    <label><input type="checkbox"> enter</label>
-                    <label><input type="checkbox"> decimal exacte</label>
-                    <label><input type="checkbox"> decimal periòdic</label>
-                </div>
+              <label><input type="checkbox"> enter</label>
+              <label><input type="checkbox"> decimal exacte</label>
+              <label><input type="checkbox"> decimal periòdic</label>
             </td>
-            <td><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100px;"></td>
-        </tr>
-        <tr>
+            <td><input class="ghost-input" type="text" aria-label="12/7 decimal"></td>
+          </tr>
+          <tr>
             <td><span class="frac"><span class="num">36</span><span class="bar"></span><span class="den">4</span></span></td>
             <td>
-                <div class="checkbox-group">
-                    <label><input type="checkbox"> enter</label>
-                    <label><input type="checkbox"> decimal exacte</label>
-                    <label><input type="checkbox"> decimal periòdic</label>
-                </div>
+              <label><input type="checkbox"> enter</label>
+              <label><input type="checkbox"> decimal exacte</label>
+              <label><input type="checkbox"> decimal periòdic</label>
             </td>
-            <td><input type="text" style="border: none; border-bottom: 2px dotted #666; background: transparent; text-align: center; font-size: 1em; padding: 2px 0; width: 100px;"></td>
-        </tr>
-    </table>
-</div>
+            <td><input class="ghost-input" type="text" aria-label="36/4 decimal"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-<!-- Exercici 5 -->
-<div class="section">
-    <h3>5 Per quin nombre cal:</h3>
-    <div class="exo3">
-        <div class="item">
-            <span class="label">a.</span>
-            multiplicar 5 per obtenir 3?
-            <span class="frac">
-                <span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador a"></span>
-                <span class="bar"></span>
-                <span class="den"><input class="line" type="text" inputmode="decimal" aria-label="Denominador a"></span>
-            </span>
-        </div>
-        <div class="item">
-            <span class="label">b.</span>
-            multiplicar 19 per obtenir 97?
-            <span class="frac">
-                <span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador b"></span>
-                <span class="bar"></span>
-                <span class="den"><input class="line" type="text" inputmode="decimal" aria-label="Denominador b"></span>
-            </span>
-        </div>
-        <div class="item">
-            <span class="label">c.</span>
-            multiplicar 12 per obtenir 11?
-            <span class="frac">
-                <span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador c"></span>
-                <span class="bar"></span>
-                <span class="den"><input class="line" type="text" inputmode="decimal" aria-label="Denominador c"></span>
-            </span>
-        </div>
+    <!-- EX5 -->
+    <section class="card" id="ex5">
+      <h2>5 · Per quin nombre cal… <span class="pill">🧩 factor</span></h2>
+      <div class="grid cols-3">
+        <div>a) multiplicar 5 per obtenir 3? <span class="frac"><span class="num"><input class="ghost-input" data-q="ex5aN"></span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex5aD"></span></span></div>
+        <div>b) multiplicar 19 per obtenir 97? <span class="frac"><span class="num"><input class="ghost-input" data-q="ex5bN"></span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex5bD"></span></span></div>
+        <div>c) multiplicar 12 per obtenir 11? <span class="frac"><span class="num"><input class="ghost-input" data-q="ex5cN"></span><span class="bar"></span><span class="den"><input class="ghost-input" data-q="ex5cD"></span></span></div>
+      </div>
+    </section>
+
+    <!-- EX6 -->
+    <section class="card" id="ex6">
+      <h2>6 · Completa amb el nombre que falta <span class="pill">🧮 proporcions</span></h2>
+      <div class="grid cols-3">
+        <div>a) 68 × <span class="frac"><span class="num"><input class="ghost-input" data-q="ex6aN"></span><span class="bar"></span><span class="den">68</span></span> = 52</div>
+        <div>b) <span class="frac"><span class="num">57</span><span class="bar"></span><span class="den">90</span></span> × <input class="ghost-input" data-q="ex6b"> = 57</div>
+        <div>c) <input class="ghost-input" data-q="ex6c"> × <span class="frac"><span class="num">9</span><span class="bar"></span><span class="den">85</span></span> = 9</div>
+        <div>d) <span class="frac"><span class="num"><input class="ghost-input" data-q="ex6dN"></span><span class="bar"></span><span class="den">59</span></span> × 59 = 17</div>
+      </div>
+    </section>
+
+    <!-- EX7 -->
+    <section class="card" id="ex7">
+      <h2>7 · Completa <span class="pill">🟰 equivalències</span></h2>
+      <div class="grid cols-3">
+        <div>a) 3 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7a"></span><span class="bar"></span><span class="den">2</span></span></div>
+        <div>b) 5 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7b"></span><span class="bar"></span><span class="den">2</span></span></div>
+        <div>c) 4,5 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7c"></span><span class="bar"></span><span class="den">2</span></span></div>
+        <div>d) 11,5 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7d"></span><span class="bar"></span><span class="den">2</span></span></div>
+        <div>e) 12 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7e"></span><span class="bar"></span><span class="den">2</span></span></div>
+        <div>f) 15,5 = <span class="frac"><span class="num"><input class="ghost-input" data-q="ex7f"></span><span class="bar"></span><span class="den">2</span></span></div>
+      </div>
+    </section>
+
+    <!-- EX8 -->
+    <section class="card" id="ex8">
+      <h2>8 · Percentatge → fracció <span class="pill">📊 tria</span></h2>
+      <div class="grid cols-3">
+        <!-- Cada select te data-answer amb la solució correcta -->
+        <label> a) 100 % 
+          <select data-answer="1">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> b) 25 % 
+          <select data-answer="1/4">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> c) 20 % 
+          <select data-answer="1/5">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> d) 1 % 
+          <select data-answer="1/100">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> e) 5 % 
+          <select data-answer="1/20">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> f) 80 % 
+          <select data-answer="4/5">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> g) 60 % 
+          <select data-answer="3/5">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+        <label> h) 2 % 
+          <select data-answer="1/50">
+            <option value="">--</option>
+            <option>1/100</option><option>1/50</option><option>1/5</option><option>1/20</option>
+            <option>1/4</option><option>3/5</option><option>4/5</option><option>1</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button class="btn primary" id="checkBtn">Comprova ✅</button>
+      <button class="btn" id="resetBtn">Reinicia ♻️</button>
+      <button class="btn warn" onclick="window.print()">Imprimeix 🖨️</button>
     </div>
-</div>
+    <div class="status" aria-live="polite" id="statusArea"></div>
 
-<!-- Exercici 6 -->
-<div class="section">
-    <h3>6 Completa amb el nombre que falta.</h3>
-    <div class="exo3">
-        <div class="item">
-            <span class="label">a.</span> 68 ×
-            <span class="frac">
-                <span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 6a"></span>
-                <span class="bar"></span>
-                <span class="den">68</span>
-            </span>
-            = 52
-        </div>
-        <div class="item">
-            <span class="label">b.</span> <span class="frac"><span class="num">57</span><span class="bar"></span><span class="den">90</span></span> × 
-            <input class="line" type="text" style="width: 60px;"> = 57
-        </div>
-        <div class="item">
-            <span class="label">c.</span> 
-            <input class="line" type="text" style="width: 60px;"> × <span class="frac"><span class="num">9</span><span class="bar"></span><span class="den">85</span></span> = 9
-        </div>
-        <div class="item">
-            <span class="label">d.</span> 
-            <span class="frac">
-                <span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 6d"></span>
-                <span class="bar"></span>
-                <span class="den">59</span>
-            </span>
-            × 59 = 17
-        </div>
-    </div>
-</div>
+    <p class="note">Fitxa de matemàtiques per a 5è de primària — Sèrie 1 (versió millorada gamer)</p>
+  </main>
 
-<!-- Exercici 7 -->
-<div class="section">
-    <h3>7 Completa.</h3>
-    <div class="exo3">
-        <div class="item">
-            <span class="label">a.</span> 3 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7a"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-        <div class="item">
-            <span class="label">b.</span> 5 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7b"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-        <div class="item">
-            <span class="label">c.</span> 4,5 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7c"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-        <div class="item">
-            <span class="label">d.</span> 11,5 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7d"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-        <div class="item">
-            <span class="label">e.</span> 12 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7e"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-        <div class="item">
-            <span class="label">f.</span> 15,5 = <span class="frac"><span class="num"><input class="line" type="text" inputmode="decimal" aria-label="Numerador 7f"></span><span class="bar"></span><span class="den">2</span></span>
-        </div>
-    </div>
-</div>
+  <script>
+    // ===== Utils =====
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-<!-- Exercici 8 -->
-<div class="section">
-    <h3>8 Tria la fracció que correspon a cada percentatge.</h3>
-    <div class="exo3">
-        <div class="item">
-            <span class="label">a.</span> 100 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">b.</span> 25 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">c.</span> 20 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">d.</span> 1 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">e.</span> 5 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">f.</span> 80 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">g.</span> 60 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-        <div class="item">
-            <span class="label">h.</span> 2 %<br>
-            <select>
-                <option>--</option>
-                <option>1/100</option>
-                <option>1/50</option>
-                <option>1/5</option>
-                <option>1/20</option>
-                <option>1/4</option>
-                <option>3/5</option>
-                <option>4/5</option>
-                <option>1</option>
-            </select>
-        </div>
-    </div>
-</div>
+    // Tema
+    const themeToggle = $('#themeToggle');
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme === 'dark'){ root.setAttribute('data-theme','dark'); themeToggle.checked = true; }
+    themeToggle.addEventListener('change', () => {
+      if(themeToggle.checked){ root.setAttribute('data-theme','dark'); localStorage.setItem('theme','dark'); }
+      else { root.removeAttribute('data-theme'); localStorage.setItem('theme','light'); }
+    });
 
-<div class="note">
-    Fitxa de matemàtiques per a 5è de primària - Sèrie 1
-</div>
+    // Barra de progrés
+    const progressFill = $('#progressFill');
+    const progressText = $('#progressText');
+    const inputs = $$('input, select').filter(el => !['radio','checkbox'].includes(el.type) || el.closest('table, .grid, label'));
+    const updaters = ['input','change'];
+    updaters.forEach(evt => document.addEventListener(evt, updateProgress));
+    function updateProgress(){
+      const allFillables = $$('input[type="text"], input[type="number"], select, input[type="radio"], input[type="checkbox"]');
+      const total = allFillables.length;
+      const filled = allFillables.filter(el=>{
+        if(el.type==='radio'){
+          const group = $$(`input[type="radio"][name="${el.name}"]`);
+          return group.some(r=>r.checked);
+        }
+        if(el.type==='checkbox') return el.checked;
+        if(el.tagName==='SELECT') return el.value !== '';
+        return el.value.trim()!==''; 
+      }).length;
+      const pct = Math.round((filled/total)*100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+    }
+    updateProgress();
 
+    // XP (gamificació senzilla)
+    let xp = 0;
+    const xpBadge = $('#xpBadge strong');
+    function addXP(n){ xp = clamp(xp + n, 0, 9999); xpBadge.textContent = xp; }
+
+    // ===== Validacions simples =====
+    const statusArea = $('#statusArea');
+
+    // EX1: exactes/aproximats
+    // claus correctes: laura=aproximat, max=exacte, abdou=aproximat, emma=aproximat
+    const ex1Key = { laura:'aproximat', max:'exacte', abdou:'aproximat', emma:'aproximat' };
+    function checkEx1(){
+      let ok=0, total=4;
+      Object.entries(ex1Key).forEach(([k,v])=>{
+        const row = document.querySelector(`tr[data-key="${k}"]`);
+        const picked = $(`input[type="radio"][name="${k}"]:checked`, row);
+        const cells = $$('td', row);
+        cells.forEach(td=>td.classList.remove('ok','ko','answer'));
+        if(picked){
+          const correct = picked.value===v;
+          (correct?ok:0);
+          if(correct){ cells.forEach(td=>td.classList.add('answer','ok')); ok++; addXP(2); }
+          else { cells.forEach(td=>td.classList.add('answer','ko')); }
+        }
+      });
+      return ok===total;
+    }
+
+    // EX2: decimal exacte si, reduït, el denominador només té factors 2 i/o 5
+    function gcd(a,b){ return b?gcd(b,a%b):Math.abs(a); }
+    function hasOnly2and5(n){
+      n=Math.abs(n);
+      if(n===0) return false;
+      while(n%2===0) n/=2;
+      while(n%5===0) n/=5;
+      return n===1;
+    }
+    function checkEx2(){
+      let allOk = true;
+      $$('#ex2Grid label').forEach(lab=>{
+        const f = $('.frac', lab);
+        const num = +f.dataset.num, den = +f.dataset.den;
+        const g = gcd(num,den);
+        const rDen = den/g;
+        const shouldMark = !hasOnly2and5(rDen); // NO decimal exacte
+        const checked = $('input[type="checkbox"]', lab).checked;
+        lab.classList.remove('answer','ok','ko');
+        const correct = (checked === shouldMark);
+        if(correct){ lab.classList.add('answer','ok'); addXP(1); }
+        else { lab.classList.add('answer','ko'); allOk=false; }
+      });
+      return allOk;
+    }
+
+    // EX8: mapa percent→fracció segons data-answer
+    function checkEx8(){
+      let ok=true;
+      $$('#ex8 select').forEach(sel=>{
+        const ans = sel.dataset.answer;
+        const value = sel.value;
+        sel.classList.remove('answer','ok','ko');
+        if(value===''){ ok=false; return; }
+        const correct = value===ans;
+        sel.classList.add('answer', correct?'ok':'ko');
+        if(correct) addXP(1);
+        else ok=false;
+      });
+      return ok;
+    }
+
+    // Les altres: es consideren "OK" si estan omplertes (per incentivar completar)
+    function checkFilled(scope){
+      let ok=true;
+      $$('#'+scope+' input[type="text"], #'+scope+' input[type="number"], #'+scope+' select').forEach(inp=>{
+        const filled = (inp.value || '').trim() !== '';
+        inp.classList.remove('answer','ok','ko');
+        if(filled){ inp.classList.add('answer','ok'); addXP(.2); }
+        else { inp.classList.add('answer','ko'); ok=false; }
+      });
+      return ok;
+    }
+
+    // Botons
+    $('#checkBtn').addEventListener('click', ()=>{
+      const results = [];
+      results.push(['Ex1', checkEx1()]);
+      results.push(['Ex2', checkEx2()]);
+      results.push(['Ex3', checkFilled('ex3')]);
+      results.push(['Ex4', checkFilled('ex4')]);
+      results.push(['Ex5', checkFilled('ex5')]);
+      results.push(['Ex6', checkFilled('ex6')]);
+      results.push(['Ex7', checkFilled('ex7')]);
+      results.push(['Ex8', checkEx8()]);
+      updateProgress();
+
+      const passed = results.filter(([,ok])=>ok).length;
+      const total = results.length;
+      statusArea.textContent = `Resultat: ${passed}/${total} exercicis correctes o completats. 🎉`;
+      if(passed===total){
+        // confeti minimalista
+        try{ document.startViewTransition?.(()=>{}) }catch(e){}
+        addXP(10);
+      }else{
+        if('vibrate' in navigator) navigator.vibrate(80);
+      }
+    });
+
+    $('#resetBtn').addEventListener('click', ()=>{
+      $$('input[type="text"], input[type="number"]').forEach(i=>i.value='');
+      $$('input[type="radio"]').forEach(r=>r.checked=false);
+      $$('input[type="checkbox"]').forEach(c=>c.checked=false);
+      $$('select').forEach(s=>s.value='');
+      $$('.answer').forEach(a=>a.classList.remove('answer','ok','ko'));
+      xp = 0; xpBadge.textContent = xp;
+      statusArea.textContent = '';
+      updateProgress();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    // Focus nice-to-have
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='/' && !e.target.matches('input,select,textarea')){
+        const first = $('input,select');
+        if(first){ first.focus(); e.preventDefault(); }
+      }
+    });
+  </script>
 </body>
 </html>
