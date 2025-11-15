@@ -29,6 +29,14 @@
       --grid-gap: 22px;
     }
 
+  /* Número gran i gris per a les targetes de l’accentuació */
+  .card-index{
+    font-weight: 900;
+    color: var(--muted);          /* gris mitjà del teu tema */
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    letter-spacing: .01em;
+  }
+
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0b1220;
@@ -317,18 +325,15 @@
     /* ======= Mostra grans/petites per a accents ======= */
     .char-board { display: grid; gap: 6px; margin: 8px 0 4px; }
     .char-row { display: flex; gap: 14px; align-items: baseline; justify-content: center; flex-wrap: wrap; }
-    /*.char-large { font-size: clamp(6rem, 22vw, 28rem); line-height: .9; }*/
-    /*.char-tiny  { font-size: clamp(0.72rem, 1.6vw, 0.9rem); line-height: 1.1; }*/
     .char-large { 
-  font-size: clamp(10rem, 35vw, 40rem); 
-  line-height: .85;
-}
+      font-size: clamp(10rem, 35vw, 40rem); 
+      line-height: .85;
+    }
 
-.char-tiny { 
-  font-size: clamp(0.35rem, 0.9vw, 0.4rem); 
-  line-height: 1.1;
-}
-
+    .char-tiny { 
+      font-size: clamp(0.35rem, 0.9vw, 0.4rem); 
+      line-height: 1.1;
+    }
 
     /* ======= Responsive ======= */
     @media (max-width: 720px) {
@@ -350,10 +355,11 @@
       <div class="tablist">
         <button class="tab" role="tab" id="tab-teoria" aria-controls="teoria" aria-selected="true" data-tab="teoria">Esdrúixoles</button>
         <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
+        <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d’esdrúixoles</button>
       </div>
     </nav>
 
-    <!-- Contingut: Teoria -->
+    <!-- Contingut: Teoria (CONTINGUT ORIGINAL COMPLET) -->
     <section id="teoria" class="tab-content active" role="tabpanel" aria-labelledby="tab-teoria">
       <div class="section">
         <h2>Què és una paraula esdrúixola?</h2>
@@ -522,10 +528,40 @@
         <div class="instructions" id="feedback" style="display:none"></div>
       </div>
     </section>
+
+    <!-- NOVA SECCIÓ: Accentuació d’esdrúixoles -->
+    <section id="accentuacio-esdruixoles" class="tab-content" role="tabpanel" aria-labelledby="tab-accent">
+      <div class="section exercise-container">
+        <h2>Exercici d’accentuació d’esdrúixoles · 10 paraules</h2>
+        <div class="instructions">
+          <p><strong>Objectiu:</strong> Afegeix l’accent correcte a la síl·laba antepenúltima.</p>
+          <p><strong>Com?</strong> Clica les vocals per <span class="highlight-word">alternar</span> l’accent:
+            <span class="kbd">a↔à</span>,
+            <span class="kbd">e↔è↔é</span>,
+            <span class="kbd">i↔í</span>,
+            <span class="kbd">o↔ò↔ó</span>,
+            <span class="kbd">u↔ú</span>. Prem <span class="kbd">Enter</span> per comprovar la targeta.
+          </p>
+        </div>
+
+        <div class="syllable-exercise" id="accent-exercise"></div>
+
+        <div class="progress-bar"><div class="progress" id="accent-progress"></div></div>
+        <p class="score" id="accent-score">Paraules encertades: 0/10 (0 comprovades)</p>
+
+        <div class="controls">
+          <button class="btn btn-check" id="accent-check-all-btn">Comprova-ho tot</button>
+          <button class="btn btn-reset" id="accent-reset-all-btn">Reinicia</button>
+          <button class="btn" id="accent-new-exercise-btn">Nou exercici</button>
+        </div>
+
+        <div class="instructions" id="accent-feedback" style="display:none"></div>
+      </div>
+    </section>
   </main>
 
   <script>
-    // ===== Tabs accessibles =====
+    /* ===== Tabs accessibles ===== */
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -539,7 +575,7 @@
       });
     });
 
-    // ===== Exercici de síl·labes =====
+    /* ===== Exercici de síl·labes (ORIGINAL) ===== */
     const words = [
       { word: "Amèlia", syllables: ["A", "mè", "li", "a"] },
       { word: "matemàtiques", syllables: ["ma", "te", "mà", "ti", "ques"] },
@@ -895,7 +931,262 @@
     newExerciseBtn.addEventListener('click', generateNewExercise);
 
     generateNewExercise();
+
+    /* ===== NOVA LÒGICA: Accentuació d’esdrúixoles ===== */
+
+    // Dataset: plain (sense accents) -> target (amb accents i · si escau)
+    const ACCENT_WORDS = [
+      { plain: "musica", target: "música" },
+      { plain: "camera", target: "càmera" },
+      { plain: "pagina", target: "pàgina" },
+      { plain: "hipotesi", target: "hipòtesi" },
+      { plain: "familia", target: "família" },
+      { plain: "clinica", target: "clínica" },
+      { plain: "continua", target: "contínua" },
+      { plain: "fisica", target: "física" },
+      { plain: "practica", target: "pràctica" },
+      { plain: "elegancia", target: "elegància" },
+      { plain: "coherencia", target: "coherència" },
+      { plain: "ocurrencia", target: "ocurrència" },
+      { plain: "al·lergia", target: "al·lèrgia" },
+      { plain: "ambulancia", target: "ambulància" },
+      { plain: "angunia", target: "angúnia" },
+      { plain: "esdruixola", target: "esdrúixola" },
+      // Excepcions amb tancat
+      { plain: "ferestega", target: "feréstega" },
+      { plain: "cervola", target: "cérvola" },
+      { plain: "esglesia", target: "església" },
+      { plain: "escorpora", target: "escórpora" },
+      { plain: "formula", target: "fórmula" },
+      { plain: "polvora", target: "pólvora" },
+      { plain: "tombola", target: "tómbola" },
+      { plain: "tortora", target: "tórtora" }
+    ];
+
+    // Elements UI
+    const accentExercise = document.getElementById('accent-exercise');
+    const accentCheckAllBtn = document.getElementById('accent-check-all-btn');
+    const accentResetAllBtn = document.getElementById('accent-reset-all-btn');
+    const accentNewExerciseBtn = document.getElementById('accent-new-exercise-btn');
+    const accentScoreEl = document.getElementById('accent-score');
+    const accentProgressEl = document.getElementById('accent-progress');
+    const accentFeedbackEl = document.getElementById('accent-feedback');
+
+    // Estat
+    let currentAccentWords = [];
+    let userAccent = {}; // index -> string amb lletres actuals
+    // accentStatus[index] = { checked, correct, attempts, scored, late }
+    let accentStatus = {};
+
+    // ✅ Conjunts de cicle d'accents
+    const CYCLE_SETS = {
+      'A': ['A','À'],
+      'a': ['a','à'],
+      'E': ['E','È','É'],
+      'e': ['e','è','é'],
+      'I': ['I','Í'],
+      'i': ['i','í'],
+      'O': ['O','Ò','Ó'],
+      'o': ['o','ò','ó'],
+      'U': ['U','Ú'],
+      'u': ['u','ú']
+    };
+
+    function cycleChar(ch) {
+      for (const seq of Object.values(CYCLE_SETS)) {
+        const idx = seq.indexOf(ch);
+        if (idx !== -1) return seq[(idx + 1) % seq.length];
+      }
+      return ch; // consonants, dièresi, punt volat, etc.
+    }
+
+function generateAccentExercise() {
+  currentAccentWords = [...ACCENT_WORDS].sort(() => Math.random() - 0.5).slice(0, 10);
+  userAccent = {};
+  accentStatus = {};
+  accentExercise.innerHTML = '';
+  updateAccentScore();
+  accentFeedbackEl.style.display = 'none';
+
+  currentAccentWords.forEach((item, index) => {
+    const initial = item.plain; // sense diacrítics
+    userAccent[index] = initial;
+    accentStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+
+    const card = document.createElement('div');
+    card.className = 'word-exercise';
+    card.id = `accent-card-${index}`;
+
+    card.innerHTML = `
+      <div class="word-title">
+        <!-- ✅ Número gran i gris, sense punt final -->
+        <span class="card-index">${index + 1}</span>
+        <span class="word-status" id="accent-status-${index}">Pendent</span>
+      </div>
+      <div class="word-container" id="accent-container-${index}" tabindex="0"
+           aria-label="Paraula sense accent: ${initial}. Clica les vocals per afegir-ne."></div>
+      <div class="word-controls">
+        <button class="word-check-btn" data-index="${index}" aria-label="Comprova la paraula">Comprova-ho</button>
+      </div>
+      <div class="word-feedback" id="accent-feedback-${index}" aria-live="polite"></div>
+    `;
+    accentExercise.appendChild(card);
+    renderAccentWord(index);
+
+    const checkBtn = card.querySelector('.word-check-btn');
+    checkBtn.addEventListener('click', () => checkSingleAccent(index));
+    const container = document.getElementById(`accent-container-${index}`);
+    container.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkSingleAccent(index); });
+  });
+}
+
+
+    function renderAccentWord(index) {
+      const container = document.getElementById(`accent-container-${index}`);
+      container.innerHTML = '';
+      const current = userAccent[index];
+      for (let i = 0; i < current.length; i++) {
+        const ch = current[i];
+        if (ch === '·') {
+          const dot = document.createElement('span');
+          dot.className = 'special-char';
+          dot.textContent = '·';
+          container.appendChild(dot);
+          continue;
+        }
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.textContent = ch;
+        span.dataset.index = i;
+
+        // 🔁 Cicle sobre la lletra viva cada clic
+        span.addEventListener('click', () => {
+          const live = userAccent[index];
+          const arr = live.split('');
+          arr[i] = cycleChar(arr[i]);
+          userAccent[index] = arr.join('');
+          renderAccentWord(index);
+          if (accentStatus[index].checked) softResetAccentDisplay(index);
+        });
+
+        // Accessibilitat: Espai per ciclar, Enter per comprovar
+        span.addEventListener('keydown', (e) => {
+          if (e.key === ' ') {
+            e.preventDefault();
+            const live = userAccent[index];
+            const arr = live.split('');
+            arr[i] = cycleChar(arr[i]);
+            userAccent[index] = arr.join('');
+            renderAccentWord(index);
+            if (accentStatus[index].checked) softResetAccentDisplay(index);
+          } else if (e.key === 'Enter') {
+            checkSingleAccent(index);
+          }
+        });
+
+        span.tabIndex = 0;
+        container.appendChild(span);
+      }
+    }
+
+    function softResetAccentDisplay(index) {
+      accentStatus[index].checked = false;
+      accentStatus[index].correct = false;
+      const card = document.getElementById(`accent-card-${index}`);
+      const st = document.getElementById(`accent-status-${index}`);
+      const fb = document.getElementById(`accent-feedback-${index}`);
+      card.className = 'word-exercise';
+      st.textContent = 'Pendent';
+      st.className = 'word-status';
+      fb.textContent = '';
+      fb.className = 'word-feedback';
+    }
+
+    function updateAccentDisplay(index, state, solution) {
+      const card = document.getElementById(`accent-card-${index}`);
+      const st = document.getElementById(`accent-status-${index}`);
+      const fb = document.getElementById(`accent-feedback-${index}`);
+      if (state === 'correct') {
+        card.className = 'word-exercise correct';
+        st.textContent = 'Correcte';
+        st.className = 'word-status correct';
+        fb.textContent = '✓ Correcte!';
+        fb.className = 'word-feedback correct';
+      } else if (state === 'late') {
+        card.className = 'word-exercise late';
+        st.textContent = 'Correcte';
+        st.className = 'word-status late';
+        fb.textContent = '✓ Correcte (sense punt)';
+        fb.className = 'word-feedback late';
+      } else {
+        card.className = 'word-exercise incorrect';
+        st.textContent = 'Incorrecte';
+        st.className = 'word-status incorrect';
+        fb.textContent = `✗ Correcte: ${solution}`;
+        fb.className = 'word-feedback incorrect';
+      }
+    }
+
+    function checkSingleAccent(index) {
+      const item = currentAccentWords[index];
+      accentStatus[index].attempts += 1;
+
+      const isCorrect = userAccent[index] === item.target;
+
+      if (isCorrect && accentStatus[index].attempts === 1) {
+        accentStatus[index].scored = true; accentStatus[index].late = false;
+      }
+      if (isCorrect && accentStatus[index].attempts > 1) {
+        accentStatus[index].scored = accentStatus[index].scored || false;
+        accentStatus[index].late = !accentStatus[index].scored;
+      }
+
+      accentStatus[index].checked = true;
+      accentStatus[index].correct = isCorrect;
+
+      if (isCorrect && accentStatus[index].late && !accentStatus[index].scored) {
+        updateAccentDisplay(index, 'late', item.target);
+      } else {
+        updateAccentDisplay(index, isCorrect ? 'correct' : 'incorrect', item.target);
+      }
+      updateAccentScore();
+    }
+
+    function checkAllAccents() {
+      currentAccentWords.forEach((_, idx) => { if (!accentStatus[idx].checked) checkSingleAccent(idx); });
+      const scoredCount = Object.values(accentStatus).filter(s => s.scored).length;
+      if (scoredCount === 10) {
+        accentFeedbackEl.textContent = 'Brutal! Has accentuat totes les paraules a la primera.';
+      } else {
+        accentFeedbackEl.textContent = `Has encertat ${scoredCount} de 10 paraules a la primera. Torna-ho a provar!`;
+      }
+      accentFeedbackEl.className = 'instructions';
+      accentFeedbackEl.style.display = 'block';
+    }
+
+    function resetAllAccents() {
+      currentAccentWords.forEach((item, idx) => {
+        userAccent[idx] = item.plain;
+        renderAccentWord(idx);
+        accentStatus[idx] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+        softResetAccentDisplay(idx);
+      });
+      updateAccentScore();
+      accentFeedbackEl.style.display = 'none';
+    }
+
+    function updateAccentScore() {
+      const scored = Object.values(accentStatus).filter(s => s.scored).length;
+      const checked = Object.values(accentStatus).filter(s => s.checked).length;
+      accentScoreEl.textContent = `Paraules encertades: ${scored}/10 (${checked} comprovades)`;
+      accentProgressEl.style.width = `${(scored / 10) * 100}%`;
+    }
+
+    accentCheckAllBtn.addEventListener('click', checkAllAccents);
+    accentResetAllBtn.addEventListener('click', resetAllAccents);
+    accentNewExerciseBtn.addEventListener('click', generateAccentExercise);
+
+    generateAccentExercise();
   </script>
 </body>
 </html>
-
