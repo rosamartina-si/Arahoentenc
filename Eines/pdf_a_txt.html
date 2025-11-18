@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de PDF a Text - Paràgrafs Preservats</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #6a11cb;
+            font-size: 1.2rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed #6a11cb;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f8f9ff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            background-color: #eef2ff;
+            border-color: #2575fc;
+        }
+        
+        .upload-area.dragover {
+            background-color: #e0e7ff;
+            border-color: #2575fc;
+            transform: scale(1.02);
+        }
+        
+        .upload-area i {
+            font-size: 60px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #eef2ff;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn i {
+            font-size: 1.2rem;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .preview-box {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .preview-header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .preview-content {
+            padding: 15px;
+            background-color: white;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+        
+        #pdfPreview {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #textOutput {
+            width: 100%;
+            height: 100%;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .instructions {
+            background-color: #eef2ff;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+        }
+        
+        .instructions h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #6a11cb;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .status-message {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #2575fc;
+        }
+        
+        .error-message {
+            background-color: #ffe6e6;
+            color: #d63031;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .features-panel {
+            background-color: #f0f4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #d0d8ff;
+            text-align: center;
+        }
+        
+        .features-title {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .features-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            color: #6a11cb;
+            font-weight: bold;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .preview-container {
+                flex-direction: column;
+            }
+            
+            .preview-box {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .features-list {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Conversor de PDF a Text</h1>
+            <p class="subtitle">Paràgrafs preservats i espaiat intel·ligent</p>
+        </header>
+        
+        <div class="features-panel">
+            <div class="features-title">Funcionalitats actives:</div>
+            <div class="features-list">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Preservació de paràgrafs</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Espaiat intel·ligent</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Text net i llegible</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="upload-area" id="dropArea">
+            <i>📄</i>
+            <p class="upload-text">Arrossega el teu fitxer PDF aquí o fes clic per seleccionar-lo</p>
+            <input type="file" id="fileInput" class="file-input" accept=".pdf">
+            <button class="btn" id="selectFileBtn">
+                <i>📂</i> Selecciona un PDF
+            </button>
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p id="loadingText">Processant el PDF...</p>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="status-message" id="statusMessage"></div>
+        
+        <div class="preview-container">
+            <div class="preview-box">
+                <div class="preview-header">
+                    <i>👁️</i> Vista prèvia del PDF
+                </div>
+                <div class="preview-content">
+                    <canvas id="pdfPreview"></canvas>
+                </div>
+            </div>
+            
+            <div class="preview-box">
+                <div class="preview-header">
+                    <i>📝</i> Text extret
+                </div>
+                <div class="preview-content">
+                    <pre id="textOutput">El text extret del PDF apareixerà aquí amb paràgrafs preservats...</pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn" id="convertBtn" disabled>
+                <i>🔄</i> Converteix a Text
+            </button>
+            <button class="btn" id="downloadBtn" disabled>
+                <i>💾</i> Descarrega Text
+            </button>
+            <button class="btn" id="copyBtn" disabled>
+                <i>📋</i> Copia Text
+            </button>
+            <button class="btn" id="clearBtn">
+                <i>🗑️</i> Neteja
+            </button>
+        </div>
+        
+        <div class="instructions">
+            <h3>Instruccions d'ús:</h3>
+            <ol>
+                <li>Selecciona un fitxer PDF fent clic al botó o arrossegant-lo a l'àrea indicada.</li>
+                <li>Es mostrarà una vista prèvia del PDF seleccionat.</li>
+                <li>Fes clic a "Converteix a Text" per extreure el text del document.</li>
+                <li>Revisa el text extret a la caixa de la dreta amb els paràgrafs preservats.</li>
+                <li>Copia el text al porta-retalls o descarrega'l com a fitxer de text.</li>
+                <li>Utilitza el botó "Neteja" per començar de nou.</li>
+            </ol>
+            <p><strong>Nota:</strong> Aquesta versió preserva automàticament els paràgrafs i aplica espaiat intel·ligent per a un text net i ben estructurat.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Aquesta eina funciona completament al teu navegador. Els teus fitxers no s'envien a cap servidor.</p>
+    </footer>
+
+    <script>
+        // Configuració de PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // Elements del DOM
+        const fileInput = document.getElementById('fileInput');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const dropArea = document.getElementById('dropArea');
+        const convertBtn = document.getElementById('convertBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const pdfPreview = document.getElementById('pdfPreview');
+        const textOutput = document.getElementById('textOutput');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const loadingText = document.getElementById('loadingText');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const statusMessage = document.getElementById('statusMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const fileInfo = document.getElementById('fileInfo');
+        
+        let currentPdf = null;
+        let extractedText = '';
+        
+        // Event Listeners
+        selectFileBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        convertBtn.addEventListener('click', convertPdfToText);
+        downloadBtn.addEventListener('click', downloadText);
+        copyBtn.addEventListener('click', copyTextToClipboard);
+        clearBtn.addEventListener('click', clearAll);
+        
+        // Funcions per arrossegar i deixar anar
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => highlight(true), false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => highlight(false), false);
+        });
+        
+        function highlight(shouldHighlight) {
+            if (shouldHighlight) {
+                dropArea.classList.add('dragover');
+            } else {
+                dropArea.classList.remove('dragover');
+            }
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        }
+        
+        // Funcions principals
+        function handleFileSelect() {
+            if (!fileInput.files.length) return;
+            
+            const file = fileInput.files[0];
+            
+            if (file.type !== 'application/pdf') {
+                showError('Si us plau, selecciona un fitxer PDF vàlid.');
+                return;
+            }
+            
+            // Mostrar informació del fitxer
+            fileInfo.style.display = 'block';
+            fileInfo.textContent = `Fitxer: ${file.name} (${formatFileSize(file.size)})`;
+            
+            // Amagar missatge d'error si n'hi havia
+            hideError();
+            
+            // Mostrar indicador de càrrega
+            showLoading('Carregant PDF...');
+            
+            const fileReader = new FileReader();
+            
+            fileReader.onload = function() {
+                const typedarray = new Uint8Array(this.result);
+                
+                // Carregar el PDF
+                pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                    currentPdf = pdf;
+                    hideLoading();
+                    convertBtn.disabled = false;
+                    showStatus(`PDF carregat correctament. ${pdf.numPages} pàgina(s) detectada(s).`);
+                    
+                    // Renderitzar la primera pàgina com a vista prèvia
+                    renderPage(pdf, 1);
+                }).catch(error => {
+                    console.error('Error carregant el PDF:', error);
+                    hideLoading();
+                    showError('Error carregant el PDF. Assegura\'t que és un fitxer vàlid i no està protegit per contrasenya.');
+                });
+            };
+            
+            fileReader.onerror = function() {
+                hideLoading();
+                showError('Error llegint el fitxer. Torna a intentar-ho.');
+            };
+            
+            fileReader.readAsArrayBuffer(file);
+        }
+        
+        function renderPage(pdf, pageNumber) {
+            pdf.getPage(pageNumber).then(page => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = pdfPreview;
+                const context = canvas.getContext('2d');
+                
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                
+                page.render(renderContext).promise.then(() => {
+                    console.log('Pàgina renderitzada');
+                });
+            });
+        }
+        
+        function convertPdfToText() {
+            if (!currentPdf) return;
+            
+            showLoading('Extraient text...');
+            showProgress();
+            textOutput.textContent = 'Processant...';
+            extractedText = '';
+            convertBtn.disabled = true;
+            
+            const extractTextPromises = [];
+            const totalPages = currentPdf.numPages;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                extractTextPromises.push(
+                    currentPdf.getPage(i).then(page => {
+                        return page.getTextContent().then(textContent => {
+                            // Actualitzar progrés
+                            const progress = (i / totalPages) * 100;
+                            updateProgress(progress);
+                            showStatus(`Processant pàgina ${i} de ${totalPages}...`);
+                            
+                            // Processar el contingut de text preservant paràgrafs
+                            return processTextWithParagraphs(textContent);
+                        });
+                    })
+                );
+            }
+            
+            Promise.all(extractTextPromises).then(pagesText => {
+                // Unir totes les pàgines i eliminar línies en blanc dels separadors
+                let fullText = pagesText.join('\n\n');
+                
+                // CORRECCIÓ DEFINITIVA: Unir línies que haurien d'estar juntes
+                fullText = joinBrokenLines(fullText);
+                
+                extractedText = fullText;
+                textOutput.textContent = extractedText;
+                hideLoading();
+                hideProgress();
+                downloadBtn.disabled = false;
+                copyBtn.disabled = false;
+                showStatus(`Text extret correctament de ${totalPages} pàgina(s) amb paràgrafs preservats.`);
+            }).catch(error => {
+                console.error('Error extraient text:', error);
+                textOutput.textContent = 'Error extraient text del PDF.';
+                hideLoading();
+                hideProgress();
+                showError('Error extraient text. El PDF podria contenir imatges o estar protegit.');
+                convertBtn.disabled = false;
+            });
+        }
+        
+        // FUNCIÓ DEFINITIVA: Unir línies trencades per salts de pàgina
+        function joinBrokenLines(text) {
+            // Dividir el text en línies
+            const lines = text.split('\n');
+            const result = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const currentLine = lines[i].trim();
+                
+                // Si és la primera línia, afegir-la directament
+                if (i === 0) {
+                    result.push(currentLine);
+                    continue;
+                }
+                
+                // Si la línia actual està buida, saltar-la (ja no la necessitem)
+                if (currentLine === '') {
+                    continue;
+                }
+                
+                const previousLine = result[result.length - 1];
+                
+                // Si la línia anterior no existeix, afegir la current
+                if (!previousLine) {
+                    result.push(currentLine);
+                    continue;
+                }
+                
+                // DECIDIR si unim amb la línia anterior o no
+                const shouldJoin = shouldJoinLines(previousLine, currentLine);
+                
+                if (shouldJoin) {
+                    // UNIR: Ajuntar amb la línia anterior amb un espai
+                    result[result.length - 1] = previousLine + ' ' + currentLine;
+                } else {
+                    // NO UNIR: Mantenir com a línies separades
+                    result.push(currentLine);
+                }
+            }
+            
+            // Unir les línies processades
+            return result.join('\n');
+        }
+        
+        // Funció per decidir si dues línies s'han d'unir
+        function shouldJoinLines(prevLine, currLine) {
+            // CASOS ON SÍ que s'han d'unir:
+            
+            // 1. Si la línia anterior acaba amb una paraula incompleta (sense punt)
+            if (!prevLine.endsWith('.') && 
+                !prevLine.endsWith('!') && 
+                !prevLine.endsWith('?') && 
+                !prevLine.endsWith(':') &&
+                !prevLine.endsWith(';')) {
+                
+                // 2. I la línia actual comença amb parèntesi, coma, o paraula en minúscules
+                if (currLine.startsWith('(') ||
+                    currLine.startsWith('"') ||
+                    currLine.startsWith('«') ||
+                    currLine.startsWith("'") ||
+                    currLine.startsWith(',') ||
+                    currLine.startsWith(';') ||
+                    /^[a-zà-ú0-9]/.test(currLine)) {
+                    return true;
+                }
+                
+                // 3. O si la línia anterior és molt curta (probablement incompleta)
+                if (prevLine.length < 40 && !prevLine.includes('.') && !prevLine.includes('!') && !prevLine.includes('?')) {
+                    return true;
+                }
+            }
+            
+            // CASOS ON NO s'han d'unir:
+            
+            // 1. Si la línia anterior acaba amb punt final
+            if (prevLine.endsWith('.') || prevLine.endsWith('!') || prevLine.endsWith('?')) {
+                return false;
+            }
+            
+            // 2. Si la línia actual comença amb majúscula (nova frase)
+            if (/^[A-ZÀ-Ú]/.test(currLine)) {
+                return false;
+            }
+            
+            // 3. Si la línia anterior acaba amb dos punts
+            if (prevLine.endsWith(':')) {
+                return false;
+            }
+            
+            // Per defecte, no unim
+            return false;
+        }
+        
+        // Funció per processar text preservant paràgrafs (com l'opció del teu HTML original)
+        function processTextWithParagraphs(textContent) {
+            let pageText = '';
+            let lastY = null;
+            let currentLine = '';
+            
+            // Processar cada element de text
+            for (let i = 0; i < textContent.items.length; i++) {
+                const item = textContent.items[i];
+                const currentY = item.transform[5]; // Posició Y
+                const currentText = item.str;
+                
+                // Si és el primer element, inicialitzar
+                if (lastY === null) {
+                    currentLine += currentText;
+                    lastY = currentY;
+                    continue;
+                }
+                
+                // Calcular diferència en Y
+                const yDiff = Math.abs(currentY - lastY);
+                
+                // PRESERVAR PARÀGRAFS: Nou paràgraf quan hi ha un canvi gran en Y
+                if (yDiff > 25) {
+                    // Afegir la línia actual com a paràgraf
+                    if (currentLine.trim()) {
+                        pageText += currentLine.trim() + '\n\n';
+                    }
+                    currentLine = currentText;
+                    lastY = currentY;
+                } 
+                // ESPAIAT INTEL·LIGENT: Unir línies del mateix paràgraf
+                else if (yDiff > 8) {
+                    currentLine += ' ' + currentText;
+                    lastY = currentY;
+                } 
+                // Mateixa línia: afegir sense espai extra
+                else {
+                    currentLine += currentText;
+                }
+            }
+            
+            // Afegir l'última línia si existeix
+            if (currentLine.trim()) {
+                pageText += currentLine.trim();
+            }
+            
+            return pageText;
+        }
+        
+        function downloadText() {
+            if (!extractedText) return;
+            
+            const blob = new Blob([extractedText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            // Crear nom de fitxer basat en el PDF original
+            let fileName = 'text_extret.txt';
+            if (fileInput.files.length > 0) {
+                const originalName = fileInput.files[0].name;
+                fileName = originalName.replace('.pdf', '') + '_text.txt';
+            }
+            
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('Text descarregat correctament.');
+        }
+        
+        function copyTextToClipboard() {
+            if (!extractedText) return;
+            
+            navigator.clipboard.writeText(extractedText).then(() => {
+                showStatus('Text copiat al porta-retalls!');
+                
+                // Canviar temporalment l'icona i text del botó
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i>✅</i> Text Copiat!';
+                copyBtn.disabled = true;
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                    copyBtn.disabled = false;
+                }, 2000);
+            }).catch(err => {
+                console.error('Error copiant text: ', err);
+                showError('Error copiant text al porta-retalls.');
+            });
+        }
+        
+        function clearAll() {
+            fileInput.value = '';
+            currentPdf = null;
+            extractedText = '';
+            textOutput.textContent = 'El text extret del PDF apareixerà aquí amb paràgrafs preservats...';
+            
+            const context = pdfPreview.getContext('2d');
+            context.clearRect(0, 0, pdfPreview.width, pdfPreview.height);
+            
+            convertBtn.disabled = true;
+            downloadBtn.disabled = true;
+            copyBtn.disabled = true;
+            fileInfo.style.display = 'none';
+            hideError();
+            hideProgress();
+            hideStatus();
+        }
+        
+        // Funcions auxiliars
+        function showLoading(message) {
+            loadingText.textContent = message;
+            loadingIndicator.style.display = 'block';
+        }
+        
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+        
+        function showProgress() {
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+        }
+        
+        function updateProgress(percent) {
+            progressBar.style.width = `${percent}%`;
+        }
+        
+        function hideProgress() {
+            progressContainer.style.display = 'none';
+        }
+        
+        function showStatus(message) {
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+        }
+        
+        function hideStatus() {
+            statusMessage.style.display = 'none';
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
