@@ -258,12 +258,37 @@
             transform: translateY(0);
         }
         
+        .search-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .search-option-radio {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .search-option-radio input {
+            width: auto;
+        }
+        
+        .search-option-radio label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
             }
             
             .results-actions {
+                flex-direction: column;
+            }
+            
+            .search-options {
                 flex-direction: column;
             }
         }
@@ -274,6 +299,7 @@
         <header>
             <h1>Cercador Lingüístic</h1>
             <p>Carrega un fitxer de text i fes cerques lingüístiques avançades</p>
+            <p><strong>Nota:</strong> Totes les aparicions de "l.l" es canvien automàticament a "l·l"</p>
         </header>
         
         <div class="panel controls-panel">
@@ -299,6 +325,17 @@
                 <div class="form-group">
                     <label for="search-term">Terme de cerca</label>
                     <input type="text" id="search-term" placeholder="Introdueix el text a buscar">
+                </div>
+                
+                <div class="search-options">
+                    <div class="search-option-radio">
+                        <input type="radio" id="whole-word" name="search-mode" value="whole-word" checked>
+                        <label for="whole-word">Paraula completa</label>
+                    </div>
+                    <div class="search-option-radio">
+                        <input type="radio" id="substring" name="search-mode" value="substring">
+                        <label for="substring">Cadena de caràcters</label>
+                    </div>
                 </div>
             </div>
             
@@ -432,7 +469,17 @@
                         alert('Si us plau, introdueix un terme de cerca.');
                         return;
                     }
-                    pattern = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escapar caràcters especials
+                    
+                    // Determinar el mode de cerca seleccionat
+                    const searchMode = document.querySelector('input[name="search-mode"]:checked').value;
+                    
+                    if (searchMode === 'whole-word') {
+                        // Cerca de paraula completa
+                        pattern = '\\b' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b';
+                    } else {
+                        // Cerca de cadena de caràcters
+                        pattern = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    }
                 } else if (searchTypeValue === 'linguistic') {
                     const linguisticPattern = document.getElementById('linguistic-pattern').value;
                     pattern = getLinguisticPattern(linguisticPattern);
@@ -498,10 +545,11 @@
                         // Per cerca simple, trobar totes les frases completes que contenen el patró
                         const sentences = fileContent.split(/[.!?]+/);
                         const searchTerm = document.getElementById('search-term').value.trim();
+                        const searchMode = document.querySelector('input[name="search-mode"]:checked').value;
                         
                         sentences.forEach(sentence => {
                             if (sentence.trim()) {
-                                // Utilitzem una expressió regular que coincideixi exactament amb el patró
+                                // Utilitzem una expressió regular que coincideixi amb el patró
                                 const regex = new RegExp(pattern, 'gi');
                                 let match;
                                 let hasMatch = false;
@@ -531,6 +579,7 @@
                                     resultsHTML += `
                                         <div class="result-item">
                                             <p>${highlightedSentence.trim()}.</p>
+                                            <small>Mode: ${searchMode === 'whole-word' ? 'Paraula completa' : 'Cadena de caràcters'}</small>
                                         </div>
                                     `;
                                 }
