@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditació per a Basquetbolistes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .meditation-content {
+            padding: 40px 30px;
+            font-size: 1.2rem;
+            text-align: justify;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .affirmation {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196f3;
+            margin: 20px 0;
+            font-style: italic;
+            text-align: center;
+        }
+        
+        .basketball-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #ff5722;
+            border-radius: 50%;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+        
+        .breathing-instructions {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        #start-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        #pause-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        #reset-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .meditation-content {
+                padding: 20px 15px;
+                font-size: 1.1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meditació Guiada</h1>
+            <p class="subtitle">Visualització per a basquetbolistes</p>
+        </header>
+        
+        <div class="meditation-content">
+            <div class="section">
+                <p><span class="basketball-icon"></span> Tanca els ulls…</p>
+                <p><span class="basketball-icon"></span> Respira profundament… com si inflessis una pilota ben gran dins la panxa… i la deixes anar… una vegada… dues… tres vegades…</p>
+            </div>
+            
+            <div class="section">
+                <p>Ara ets al pavelló… ets a <span class="highlight">TOT ARREU</span> al mateix temps.</p>
+                <p>Els ulls veuen tot el camp com si fos en càmera lenta.</p>
+            </div>
+            
+            <div class="section">
+                <p>Mira… la pilota surt de les mans del rival… tu ja saps on anirà abans que toqui a terra.</p>
+                <p>El teu cos es mou sol, lleuger com una ploma.</p>
+            </div>
+            
+            <div class="section">
+                <p>Sota la cistella ets com una ombra invisible…</p>
+                <p>la pilota rebota al tauler… tothom salta… però tu ja ets allà, amb les mans obertes com una xarxa, agafes el rebot suaument… amb agilitat. La pilota és teva!</p>
+            </div>
+            
+            <div class="section">
+                <p>Ara veus com el rival llança la pilota…</p>
+                <p>Però tu ja has captat cap on va la pilota i robes la pilota. Ha estat molt ràpid!</p>
+            </div>
+            
+            <div class="section">
+                <p>Corres per la pista… les cames són com molles, saltas més alt, canvies de direcció en un segon… ningú et pot agafar.</p>
+                <p>Quan ataques, esquives braços i cames com si fossin obstacles d'un videojoc… dansant amb la pilota.</p>
+            </div>
+            
+            <div class="section">
+                <p>Un company tira a cistella i falla, tu ja ets sota la cistella, esperant el rebot… veus venir la pilota… 3… 2… 1… l'agafes, gires, i… <span class="highlight">CISTELLA!</span></p>
+            </div>
+            
+            <div class="section">
+                <p>El rival va sol cap a cistella… però veus la jugada a càmera lenta, la veus amb precisió, t'anticipes i li robes la pilota amb un toc perfecte i surts corrent cap a l'altra cistella… esquives un, dos, tres rivals… com si tinguessis ulls al clatell… i… cistella fàcil!</p>
+            </div>
+            
+            <div class="section">
+                <p>Ara de cop… els teus sentits veuen més enllà:</p>
+                <p>mires tot el camp i… veus el teu company que s'ha desmarcat perfectament!</p>
+                <p>Sense pensar-ho, fas una passada ràpida i precisa, exacta fins a les seves mans.</p>
+                <p>Tu somrius perquè has fet l'equip més fort.</p>
+            </div>
+            
+            <div class="section">
+                <p>Ara posa't les dues mans al pit…</p>
+                <p>i repeteix dins teu, ben fort però en silenci:</p>
+                
+                <div class="affirmation">
+                    "Demà veig totes les jugades abans que passin.<br>
+                    Sóc ràpid, sóc àgil, rebo tots els rebots i robo sense falta.<br>
+                    Joc net i guanyo amb el meu equip."
+                </div>
+            </div>
+            
+            <div class="section">
+                <p class="breathing-instructions">Respira profund…</p>
+                <p class="breathing-instructions">Somriu…</p>
+            </div>
+            
+            <div class="section">
+                <p>Quan vulguis, mou suaument els dits de les mans… després els dels peus…</p>
+                <p>i quan estiguis a punt, obre els ulls…</p>
+                <p>amb la força d'aranya a dins teu, llest per demà.</p>
+            </div>
+            
+            <div class="section">
+                <p>I recorda: amb gran poder… ve de gaudir al camp amb els teus companys!</p>
+                <p class="breathing-instructions">Fes tres respiracions profundes</p>
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn">Començar Meditació</button>
+                <button id="pause-btn">Pausar</button>
+                <button id="reset-btn">Reiniciar</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Meditació guiada per a basquetbolistes - Visualització i concentració</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            const startBtn = document.getElementById('start-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            
+            let currentSection = 0;
+            let intervalId = null;
+            let isPaused = false;
+            
+            // Funció per destacar la secció actual
+            function highlightCurrentSection() {
+                sections.forEach(section => {
+                    section.style.backgroundColor = '';
+                    section.style.transition = 'background-color 0.5s ease';
+                });
+                
+                if (sections[currentSection]) {
+                    sections[currentSection].style.backgroundColor = '#f0f8ff';
+                }
+            }
+            
+            // Funció per avançar a la següent secció
+            function nextSection() {
+                if (currentSection < sections.length - 1) {
+                    currentSection++;
+                    highlightCurrentSection();
+                    
+                    // Desplaçar la vista a la secció actual
+                    sections[currentSection].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                } else {
+                    // Finalitzar la meditació quan arribem a l'última secció
+                    clearInterval(intervalId);
+                    startBtn.textContent = 'Començar de nou';
+                    isPaused = false;
+                }
+            }
+            
+            // Funció per iniciar la meditació
+            function startMeditation() {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+                
+                if (currentSection >= sections.length - 1) {
+                    currentSection = 0;
+                }
+                
+                highlightCurrentSection();
+                
+                // Desplaçar a la secció actual
+                sections[currentSection].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Configurar l'interval per avançar automàticament cada 15 segons
+                intervalId = setInterval(nextSection, 15000);
+                isPaused = false;
+                startBtn.textContent = 'Continuar';
+            }
+            
+            // Funció per pausar la meditació
+            function pauseMeditation() {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                    isPaused = true;
+                    pauseBtn.textContent = 'Continuar';
+                } else {
+                    startMeditation();
+                }
+            }
+            
+            // Funció per reiniciar la meditació
+            function resetMeditation() {
+                clearInterval(intervalId);
+                currentSection = 0;
+                highlightCurrentSection();
+                
+                // Tornar al principi
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                isPaused = false;
+                startBtn.textContent = 'Començar Meditació';
+                pauseBtn.textContent = 'Pausar';
+            }
+            
+            // Afegir esdeveniments als botons
+            startBtn.addEventListener('click', startMeditation);
+            pauseBtn.addEventListener('click', pauseMeditation);
+            resetBtn.addEventListener('click', resetMeditation);
+            
+            // Destacar la primera secció inicialment
+            highlightCurrentSection();
+        });
+    </script>
+</body>
+</html>
