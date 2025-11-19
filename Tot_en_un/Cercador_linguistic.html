@@ -395,7 +395,8 @@
                     
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        fileContent = e.target.result;
+                        // Substituir "l.l" per "l·l" en el contingut del fitxer
+                        fileContent = e.target.result.replace(/l\.l/g, 'l·l');
                     };
                     reader.readAsText(file);
                 }
