@@ -1,0 +1,138 @@
+“Gramàtica aplicada” amb exemples reals dels contes de Pere Calders
+
+@@cada@@
+
+### 1. Què és *cada*?
+
+**`cada` = determinant distributiu invariable**
+Sempre va en **singular** i significa “tots, però mirats un per un”.
+
+> cada persona, cada casa, cada dia, cada carretera, cada seguici, cada xemeneia, cada tren...
+
+Encara que el nom sigui singular, el sentit és plural:
+**“cada persona” = totes les persones, considerades d’una en una.**
+
+---
+
+### 2. Estructura bàsica: *cada + nom en singular*
+
+És l’ús més general:
+
+* **Sense preposició**
+
+  * *Cada matí sortíem a recórrer les línies…*
+  * *Cada gest que em menarà a col…*
+  * *Cada idioma té el seu color.*
+  * *Cada mot, cada concepte…*
+
+* **Amb preposició davant**
+
+  * *a cada porta, a cada cantonada, a cada extrem, a cada moment*
+  * *per a cada flor*, *amb cada braç*, *davant de cada mausoleu*
+  * *entre cada casa*, *en cada actuació*, *en cada ocasió*
+
+> 🧩 **Regla de correcció:**
+> Si després de **cada** hi veus un **nom en plural** (*cada persones, cada dies*), és gairebé segur que està malament → caldria **singular** (*cada persona, cada dia*).
+
+---
+
+### 3. *Cada* + unitats de temps → hàbit / periodicitat
+
+Molt freqüent amb **dies, anys, mesos, matins, vespres…**
+
+* *Cada matí el primer pare es desenganxava la lassitud de l’ensonyament…*
+* *Cada vespre el portava fins a la porta.*
+* *Cada dia, després de dinar, l’oncle i jo ens assèiem al sofà…*
+* *Hi vaig cada dijous.*
+* *Cada any porto regals als nebots…*
+
+👉 Aquí **cada** marca **hàbit**, **rutina** o **freqüència regular**.
+
+---
+
+### 4. *Cada vegada / cada cop / cada volta*
+
+Locucions temporals:
+
+* *Cada vegada que mirava l’escultor funerari…*
+* *Cada vegada que hi ha un bombardeig…*
+* *Cada cop que se li presentava…*
+* *Cada vegada que pensava en els dotze mesos…*
+
+Sovint van amb **“que”** i introdueixen una subordinada temporal:
+
+> *Cada vegada que el nen em veia, es quedava mirant-me…*
+
+Funció: indicar **repetició** d’un fet.
+
+---
+
+### 5. *Cada* en comparatives de grau: “cada vegada més…”
+
+És molt productiu el patró:
+
+> **cada vegada / cada cop / cada dia + més + adj/adv**
+
+Del text que m’has donat hi surten coses com:
+
+* *cada vegada més petit*,
+* *cada vegada més delicada*,
+* *cada vegada hi ha més lectors…*
+
+També:
+
+* *cada dia més intens*,
+* *cada cop amb menys força…*
+
+👉 Marca una **progressió**: una cosa augmenta o empitjora amb el temps.
+
+---
+
+### 6. *Per cada* → relació / proporció
+
+Apareix en contextos de **quantitat** o **repartiment**:
+
+* *una cullerada sopera de llavor de puça **per cada tres litres***
+* *mitja unça de pols **per cada dues peces***
+* *un rellotge **per cada un** de nosaltres*
+
+Aquí **per cada** equival a **“per a cada unitat de”**.
+
+---
+
+### 7. Matís semàntic davant d’altres quantificadors
+
+No és exactament per corregir, però va bé per entendre-la:
+
+* **cada + nom** → destaca la mirada **unitària**:
+  *Cada nen va rebre un regal* (un per cap, individualment).
+* **tots els + nom** → destaca el grup sencer:
+  *Tots els nens van rebre regals* (el conjunt com a bloc).
+
+En molts contextos es poden intercanviar, però **cada** sempre porta aquest punt de “un per un”.
+
+---
+
+### 8. Resum per a correcció
+
+Quan revisis un text, mira:
+
+1. **Forma del nom:**
+
+   * Després de *cada* → **nom en singular**:
+
+     * ✅ *cada persona, cada casa, cada número*
+     * ❌ *cada persones, cada cases, cada números*
+
+2. **Valor semàntic:**
+
+   * Habitualitat: *cada dia, cada any, cada dimecres…*
+   * Repetició puntual: *cada vegada, cada cop, cada moment…*
+   * Repartiment/relació: *per cada tres litres, per cada nen…*
+
+3. **Coherència de temps:**
+
+   * Si tens un verb d’acció repetida i una expressió de temps → *cada dia / cada matí* encaixa molt bé.
+   * Si parles de repetició d’un mateix esdeveniment → *cada vegada / cada cop*.
+
+--------
