@@ -171,7 +171,7 @@ tots els mals del senyor Vilaró desaparegueren amb una dormida llarga --> un se
 
 
 
-2) marc temporal
+2) marc temporal: per expressar regularitat (freqüència de temps)
 
 Cada dia
 
