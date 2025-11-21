@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Etiquetador sintàctic i morfològic (demo)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p.desc {
+      max-width: 700px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 0.75rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #222;
+      color: #fff;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .output {
+      margin-top: 1.5rem;
+      background: #fff;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .tokens {
+      margin-bottom: 1rem;
+      line-height: 2.2;
+      font-size: 1.05rem;
+    }
+
+    .token {
+      display: inline-block;
+      padding: 0.1rem 0.35rem;
+      margin: 0.1rem 0.12rem;
+      border-radius: 0.4rem;
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .token[data-pos="NOM"] { background: #e3f2fd; border-color: #90caf9; }
+    .token[data-pos="VERB"] { background: #e8f5e9; border-color: #a5d6a7; }
+    .token[data-pos="ADJ"] { background: #fff3e0; border-color: #ffcc80; }
+    .token[data-pos="ADV"] { background: #f3e5f5; border-color: #ce93d8; }
+    .token[data-pos="PRON"] { background: #ede7f6; border-color: #b39ddb; }
+    .token[data-pos="DET"] { background: #ffebee; border-color: #ef9a9a; }
+    .token[data-pos="PREP"] { background: #e0f2f1; border-color: #80cbc4; }
+    .token[data-pos="CONJ"] { background: #f9fbe7; border-color: #dce775; }
+    .token[data-pos="PUNCT"] { background: #eeeeee; border-color: #bdbdbd; }
+
+    .token:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 0;
+      top: 100%;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      background: #222;
+      color: #fff;
+      font-size: 0.75rem;
+      border-radius: 0.35rem;
+      white-space: pre;
+      z-index: 10;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid #eee;
+      padding: 0.35rem 0.4rem;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      background: #fafafa;
+    }
+
+    .pos-tag {
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: #eee;
+    }
+
+    .note {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h1>Etiquetador sintàctic i morfològic (demo)</h1>
+  <p class="desc">
+    Escriu una frase en català i clica «Etiqueta». Aquest prototip intenta identificar
+    la categoria gramatical (nom, verb, adjectiu, adverbi, etc.) i alguns trets morfològics
+    bàsics. És només una demostració didàctica, no pas un analitzador complet.
+    S’hi han afegit regles especials per a <strong>profund / profundament</strong> i <strong>cada</strong>.
+  </p>
+
+  <textarea id="inputText" placeholder="Prova: Cada matí respira profundament i pensa en cada persona que estimes. O: Cada dies faig això."></textarea>
+  <button id="analyzeBtn">Etiqueta</button>
+
+  <div id="output" class="output" style="display:none;">
+    <div class="tokens" id="tokensView"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Token</th>
+          <th>Lema</th>
+          <th>Categoria</th>
+          <th>Trets morfològics / Comentaris</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <p class="note">
+      Nota: Aquest etiquetador és heurístic i simplificat. Per a una anàlisi professional,
+      caldria un model de PLN complet (spaCy, Freeling, etc.). Les regles de
+      <em>profund / profundament</em> i <em>cada</em> són il·lustratives i poden donar
+      falsos positius o negatius segons el context.
+    </p>
+  </div>
+
+  <script>
+    // Diccionaris mínims de paraules funcionals en català
+    const DETS = new Set([
+      "el","la","els","les","un","una","uns","unes",
+      "aquest","aquesta","aquests","aquestes",
+      "aquell","aquella","aquells","aquelles",
+      "al","als","del","dels"
+    ]);
+    const PREPS = new Set([
+      "a","de","per","amb","sense","entre","sobre",
+      "sota","fins","cap","contra","davant","en"
+    ]);
+    const CONJS = new Set([
+      "i","o","o bé","però","sinó","que","mentre","si",
+      "tanmateix","malgrat","perquè","doncs"
+    ]);
+    const PRONOMS = new Set([
+      "jo","tu","ell","ella","nosaltres","vosaltres","ells","elles",
+      "em","et","es","ens","us","se",
+      "mi","ti","sí",
+      "meu","teva","teu","meva","nostre","vostre",
+      "això","allò","aquest","aquell","algú","ningú","res","tot"
+    ]);
+    const PUNCT = /^[\.\,\;\:\?\!\-\…“”"'\(\)\[\]]$/;
+
+    // Caps temporals típics després de "cada"
+    const TEMPORAL_AFTER_CADA = new Set([
+      "vegada","cop","volta",
+      "dia","any","mes","jorn",
+      "matí","tarda","vespre"
+    ]);
+
+    function simpleLemma(token) {
+      // Lema molt naïf: minúscula i sense comes/punts finals
+      return token.toLowerCase().replace(/[\.!,;:\?\…]+$/, "");
+    }
+
+    function guessPOS(token) {
+  const raw = token;
+  const lower = token.toLowerCase();
+
+  if (PUNCT.test(raw)) {
+    return { pos: "PUNCT", feats: "" };
+  }
+
+  if (DETS.has(lower)) return { pos: "DET", feats: "" };
+  if (PREPS.has(lower)) return { pos: "PREP", feats: "" };
+  if (CONJS.has(lower)) return { pos: "CONJ", feats: "" };
+  if (PRONOMS.has(lower)) return { pos: "PRON", feats: "" };
+
+  // 🚫 Cas especial: "cada" no és participi, és determinant distributiu
+  if (lower === "cada") {
+    return { pos: "DET", feats: "determinant distributiu" };
+  }
+
+  // Adverbi en -ment
+  if (lower.endsWith("ment")) {
+    return { pos: "ADV", feats: "derivat en -ment" };
+  }
+
+  // Verb en infinitiu (-ar, -er, -re, -ir)
+  if (lower.match(/(ar|er|re|ir)$/)) {
+    return { pos: "VERB", feats: "infinitiu (suposat)" };
+  }
+
+  // Participi passat molt simple (cat.)
+  if (lower.match(/(at|ada|ats|ades|ut|uda|uts|udes)$/)) {
+    return { pos: "VERB", feats: "participi (probable)" };
+  }
+
+
+
+      // Possibles adjectius en -al, -ant, -ós, -enca, -iu...
+      if (lower.match(/(al|als|ant|ants|iva|iu|ial|iosa|iós|oses)$/)) {
+        return { pos: "ADJ", feats: "" };
+      }
+
+      // Paraules amb majúscula inicial: probable nom propi
+      if (raw[0] === raw[0].toUpperCase() && lower !== raw.toLowerCase()) {
+        return { pos: "NOM", feats: "nom propi (probable)" };
+      }
+
+      // Heurística de masculí/femení plural/singular
+      let feats = [];
+      if (lower.endsWith("es")) feats.push("fem./pl. (probable)");
+      else if (lower.endsWith("a")) feats.push("fem./sg. (probable)");
+      else if (lower.endsWith("s")) feats.push("masc./pl. (probable)");
+      else feats.push("sg. (probable)");
+
+      // Per defecte, assumim nom com a categoria de contingut
+      return { pos: "NOM", feats: feats.join(", ") };
+    }
+
+    function tokenize(text) {
+      // Separa puntuació bàsica i paraules
+      return text
+        .replace(/([\.\,\;\:\?\!\(\)\[\]\“\”"'])/g, ' $1 ')
+        .split(/\s+/)
+        .filter(t => t.length > 0);
+    }
+
+    function analyzeText() {
+      const input = document.getElementById("inputText").value.trim();
+      const output = document.getElementById("output");
+      const tokensView = document.getElementById("tokensView");
+      const tableBody = document.getElementById("tableBody");
+
+      if (!input) {
+        output.style.display = "none";
+        return;
+      }
+
+      const tokens = tokenize(input);
+
+      // Primera passada: anàlisi bàsica
+      const analyses = tokens.map(tok => {
+        const lemma = simpleLemma(tok);
+        const base = guessPOS(tok);
+        return {
+          token: tok,
+          lemma: lemma,
+          pos: base.pos,
+          feats: base.feats || ""
+        };
+      });
+
+      // Segona passada: regles específiques (profund/profundament + cada)
+      for (let i = 0; i < analyses.length; i++) {
+        const a = analyses[i];
+        const lower = a.lemma; // ja en minúscula i sense puntuació
+        const prev = analyses[i - 1];
+        const next = analyses[i + 1];
+
+        // --- Cas "profundament" ---
+        if (lower === "profundament") {
+          a.pos = "ADV";
+          const extra = "adverbi de manera corresponent a «profund»";
+          a.feats = a.feats ? a.feats + " | " + extra : extra;
+        }
+
+        // --- Cas "profund" ---
+        if (lower === "profund") {
+          const prevIsVerb = prev && prev.pos === "VERB";
+          const nextIsVerb = next && next.pos === "VERB";
+
+          if (prevIsVerb || nextIsVerb) {
+            const extra = "⚠ possible ús adverbial; considera «profundament»";
+            a.feats = a.feats ? a.feats + " | " + extra : extra;
+          } else {
+            const extra = "adjectiu: ús correcte en principi (modifica un nom)";
+            a.pos = "ADJ";
+            a.feats = a.feats ? a.feats + " | " + extra : extra;
+          }
+        }
+
+        // --- Cas "cada" ---
+        if (lower === "cada") {
+          a.pos = "DET";
+          let extra = "determinant distributiu; va amb nom en singular";
+
+          if (next) {
+            // Avís si el nom següent sembla plural
+            if (next.pos === "NOM" && next.lemma.endsWith("s")) {
+              extra += ` | ⚠ el nom que segueix («${next.token}») és plural; després de «cada» normalment s’espera el singular`;
+            }
+
+            // Expressió temporal habitual: cada vegada / cop / volta / dia / any / mes / jorn / matí / tarda / vespre
+            if (TEMPORAL_AFTER_CADA.has(next.lemma)) {
+              extra += " | expressió temporal d’hàbit o repetició";
+            }
+          }
+
+          a.feats = a.feats ? a.feats + " | " + extra : extra;
+        }
+      }
+
+      // Sortida gràfica
+      tokensView.innerHTML = "";
+      tableBody.innerHTML = "";
+
+      analyses.forEach((a, i) => {
+        // Vista gràfica de tokens
+        const span = document.createElement("span");
+        span.className = "token";
+        span.textContent = a.token;
+        span.dataset.pos = a.pos;
+        const tooltip = `Token: ${a.token}\nLema: ${a.lemma}\nCategoria: ${a.pos}${a.feats ? "\nTrets: " + a.feats : ""}`;
+        span.dataset.tooltip = tooltip;
+        tokensView.appendChild(span);
+        tokensView.appendChild(document.createTextNode(" "));
+
+        // Fila de taula
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${a.token}</td>
+          <td>${a.lemma}</td>
+          <td><span class="pos-tag">${a.pos}</span></td>
+          <td>${a.feats}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      output.style.display = "block";
+    }
+
+    document.getElementById("analyzeBtn").addEventListener("click", analyzeText);
+  </script>
+</body>
+</html>
