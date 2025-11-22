@@ -3,764 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador Lingüístic</title>
+    <title>Cercador</title>
     <style>
-        :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #6b8cbc;
-            --accent-color: #ff7e5f;
-            --light-color: #f5f7fa;
-            --dark-color: #333;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.6;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
-        }
-        
-        header {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .panel {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 20px;
-        }
-        
-        .controls-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .results-panel {
-            min-height: 500px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        input, select, textarea, button {
+        textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 16px;
+            height: 150px;
         }
-        
+        input[type="text"],
+        select {
+            width: 100%;
+            margin-top: 10px;
+        }
         button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: 600;
+            margin-top: 10px;
         }
-        
-        button:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        .btn-accent {
-            background-color: var(--accent-color);
-        }
-        
-        .btn-accent:hover {
-            background-color: #ff9a7f;
-        }
-        
-        .btn-success {
-            background-color: #28a745;
-        }
-        
-        .btn-success:hover {
-            background-color: #218838;
-        }
-        
-        .file-input-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .file-input-container input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
-        .file-input-button {
-            display: block;
-            padding: 10px;
-            background-color: #eee;
-            text-align: center;
-            border: 1px dashed #ccc;
-            border-radius: var(--border-radius);
-        }
-        
-        .file-name {
-            margin-top: 5px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .search-results {
-            margin-top: 20px;
-            max-height: 600px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            border-radius: var(--border-radius);
-            padding: 10px;
-        }
-        
-        .result-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 10px;
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        
         .highlight {
-            background-color: #fff9c4;
-            padding: 2px 0;
-            border-radius: 3px;
-            display: inline;
-        }
-        
-        .result-count {
-            margin-top: 10px;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .definition-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
-        .definition-item {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: var(--border-radius);
-            margin-bottom: 10px;
-        }
-        
-        .definition-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        
-        .definition-name {
-            font-weight: 600;
-        }
-        
-        .definition-pattern {
-            font-family: monospace;
-            background-color: #eee;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-        
-        .delete-definition {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .results-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .results-actions button {
-            flex: 1;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background-color: #28a745;
-            color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s ease;
-        }
-        
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .search-options {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .search-option-radio {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .search-option-radio input {
-            width: auto;
-        }
-        
-        .search-option-radio label {
-            margin-bottom: 0;
-            font-weight: normal;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .results-actions {
-                flex-direction: column;
-            }
-            
-            .search-options {
-                flex-direction: column;
-            }
+            background-color: yellow;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Cercador Lingüístic</h1>
-            <p>Carrega un fitxer de text i fes cerques lingüístiques avançades</p>
-            <p><strong>Nota:</strong> Totes les aparicions de "l.l" es canvien automàticament a "l·l"</p>
-        </header>
-        
-        <div class="panel controls-panel">
-            <div class="form-group">
-                <label for="file-input">Carregar fitxer de text</label>
-                <div class="file-input-container">
-                    <div class="file-input-button">Selecciona un fitxer</div>
-                    <input type="file" id="file-input" accept=".txt">
-                </div>
-                <div id="file-name" class="file-name"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="search-type">Tipus de cerca</label>
-                <select id="search-type">
-                    <option value="simple">Cerca simple</option>
-                    <option value="linguistic">Cerca lingüística</option>
-                    <option value="custom">Cerca personalitzada</option>
-                </select>
-            </div>
-            
-            <div id="simple-search" class="search-option">
-                <div class="form-group">
-                    <label for="search-term">Terme de cerca</label>
-                    <input type="text" id="search-term" placeholder="Introdueix el text a buscar">
-                </div>
-                
-                <div class="search-options">
-                    <div class="search-option-radio">
-                        <input type="radio" id="whole-word" name="search-mode" value="whole-word" checked>
-                        <label for="whole-word">Paraula completa</label>
-                    </div>
-                    <div class="search-option-radio">
-                        <input type="radio" id="substring" name="search-mode" value="substring">
-                        <label for="substring">Cadena de caràcters</label>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="linguistic-search" class="search-option" style="display: none;">
-                <div class="form-group">
-                    <label for="linguistic-pattern">Patró lingüístic</label>
-                    <select id="linguistic-pattern">
-                        <option value="gerundi">Gerundis (-ant, -ent, -int)</option>
-                        <option value="participi">Participis (-at, -ut, -it, -ert)</option>
-                        <option value="infinitiu">Infinitius (-ar, -er, -re, -ir)</option>
-                        <option value="femení">Formes femenines (-a, -essa, -triz)</option>
-                        <option value="augmentatiu">Augmentatius (-às, -ot, -arro)</option>
-                        <option value="diminutiu">Diminutius (-et, -eta, -ó, -alla)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div id="custom-search" class="search-option" style="display: none;">
-                <div class="form-group">
-                    <label for="custom-pattern">Expressió regular</label>
-                    <input type="text" id="custom-pattern" placeholder="Ex: \b\w+ant\b">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <button id="search-btn" class="btn-accent">Cercar</button>
-            </div>
-            
-            <div class="definition-section">
-                <h3>Definicions lingüístiques</h3>
-                <div class="form-group">
-                    <label for="definition-name">Nom de la definició</label>
-                    <input type="text" id="definition-name" placeholder="Ex: Gerundis">
-                </div>
-                <div class="form-group">
-                    <label for="definition-pattern">Patró (expressió regular)</label>
-                    <input type="text" id="definition-pattern" placeholder="Ex: \b\w+ant\b">
-                </div>
-                <button id="add-definition-btn">Afegir definició</button>
-                
-                <div id="definitions-list" class="definitions-list">
-                    <!-- Les definicions s'afegiran aquí dinàmicament -->
-                </div>
-            </div>
-        </div>
-        
-        <div class="panel results-panel">
-            <h2>Resultats de la cerca</h2>
-            <div id="search-results" class="search-results">
-                <p class="no-results">Carrega un fitxer i fes una cerca per veure els resultats.</p>
-            </div>
-            <div id="result-count" class="result-count"></div>
-            
-            <div class="results-actions">
-                <button id="copy-results-btn" class="btn-success" disabled>Copiar resultats</button>
-                <button id="download-results-btn" class="btn-accent" disabled>Descarregar resultats</button>
-            </div>
-        </div>
-    </div>
 
-    <div id="notification" class="notification"></div>
+<h1>Cercador</h1>
+<input type="file" id="fileInput" accept=".txt">
+<button onclick="clearText()">Netejar</button>
+<textarea id="textInput" placeholder="Introdueix el text aquí..."></textarea>
+<input type="text" id="searchWord" placeholder="Paraula a cercar">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elements del DOM
-            const fileInput = document.getElementById('file-input');
-            const fileName = document.getElementById('file-name');
-            const searchType = document.getElementById('search-type');
-            const searchOptions = document.querySelectorAll('.search-option');
-            const searchBtn = document.getElementById('search-btn');
-            const searchResults = document.getElementById('search-results');
-            const resultCount = document.getElementById('result-count');
-            const definitionName = document.getElementById('definition-name');
-            const definitionPattern = document.getElementById('definition-pattern');
-            const addDefinitionBtn = document.getElementById('add-definition-btn');
-            const definitionsList = document.getElementById('definitions-list');
-            const copyResultsBtn = document.getElementById('copy-results-btn');
-            const downloadResultsBtn = document.getElementById('download-results-btn');
-            const notification = document.getElementById('notification');
-            
-            // Variables globals
-            let fileContent = '';
-            let definitions = [];
-            let currentSearchResults = [];
-            
-            // Carregar definicions desades a localStorage
-            loadDefinitions();
-            
-            // Gestionar la selecció de fitxer
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    fileName.textContent = `Fitxer seleccionat: ${file.name}`;
-                    
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // Substituir "l.l" per "l·l" en el contingut del fitxer
-                        fileContent = e.target.result.replace(/l\.l/g, 'l·l');
-                    };
-                    reader.readAsText(file);
-                }
-            });
-            
-            // Canviar tipus de cerca
-            searchType.addEventListener('change', function() {
-                // Amagar totes les opcions
-                searchOptions.forEach(option => {
-                    option.style.display = 'none';
-                });
-                
-                // Mostrar l'opció seleccionada
-                const selectedOption = document.getElementById(`${this.value}-search`);
-                if (selectedOption) {
-                    selectedOption.style.display = 'block';
-                }
-            });
-            
-            // Realitzar cerca
-            searchBtn.addEventListener('click', function() {
-                if (!fileContent) {
-                    alert('Si us plau, carrega primer un fitxer de text.');
-                    return;
-                }
-                
-                const searchTypeValue = searchType.value;
-                let pattern = '';
-                
-                if (searchTypeValue === 'simple') {
-                    const searchTerm = document.getElementById('search-term').value.trim();
-                    if (!searchTerm) {
-                        alert('Si us plau, introdueix un terme de cerca.');
-                        return;
-                    }
-                    
-                    // Determinar el mode de cerca seleccionat
-                    const searchMode = document.querySelector('input[name="search-mode"]:checked').value;
-                    
-                    if (searchMode === 'whole-word') {
-                        // Cerca de paraula completa
-                        pattern = '\\b' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b';
-                    } else {
-                        // Cerca de cadena de caràcters
-                        pattern = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    }
-                } else if (searchTypeValue === 'linguistic') {
-                    const linguisticPattern = document.getElementById('linguistic-pattern').value;
-                    pattern = getLinguisticPattern(linguisticPattern);
-                } else if (searchTypeValue === 'custom') {
-                    pattern = document.getElementById('custom-pattern').value.trim();
-                    if (!pattern) {
-                        alert('Si us plau, introdueix un patró vàlid.');
-                        return;
-                    }
-                }
-                
-                if (pattern) {
-                    performSearch(pattern, searchTypeValue);
-                }
-            });
-            
-            // Afegir definició
-            addDefinitionBtn.addEventListener('click', function() {
-                const name = definitionName.value.trim();
-                const pattern = definitionPattern.value.trim();
-                
-                if (!name || !pattern) {
-                    alert('Si us plau, omple tots els camps per afegir una definició.');
-                    return;
-                }
-                
-                addDefinition(name, pattern);
-                definitionName.value = '';
-                definitionPattern.value = '';
-            });
-            
-            // Copiar resultats
-            copyResultsBtn.addEventListener('click', function() {
-                copyResultsToClipboard();
-            });
-            
-            // Descarregar resultats
-            downloadResultsBtn.addEventListener('click', function() {
-                downloadResults();
-            });
-            
-            // Funcions auxiliars
-            function getLinguisticPattern(type) {
-                const patterns = {
-                    'gerundi': '\\b\\w+(?:ant|ent|int)\\b',
-                    'participi': '\\b\\w+(?:at|ut|it|ert)\\b',
-                    'infinitiu': '\\b\\w+(?:ar|er|re|ir)\\b',
-                    'femení': '\\b\\w+(?:a|essa|triz)\\b',
-                    'augmentatiu': '\\b\\w+(?:às|ot|arro)\\b',
-                    'diminutiu': '\\b\\w+(?:et|eta|ó|alla)\\b'
-                };
-                
-                return patterns[type] || '';
-            }
-            
-            function performSearch(pattern, searchTypeValue) {
-                try {
-                    let resultsHTML = '';
-                    let count = 0;
-                    currentSearchResults = [];
-                    
-                    if (searchTypeValue === 'simple') {
-                        // Per cerca simple, trobar totes les frases completes que contenen el patró
-                        const sentences = fileContent.split(/[.!?]+/);
-                        const searchTerm = document.getElementById('search-term').value.trim();
-                        const searchMode = document.querySelector('input[name="search-mode"]:checked').value;
-                        
-                        sentences.forEach(sentence => {
-                            if (sentence.trim()) {
-                                // Utilitzem una expressió regular que coincideixi amb el patró
-                                const regex = new RegExp(pattern, 'gi');
-                                let match;
-                                let hasMatch = false;
-                                let highlightedSentence = sentence;
-                                
-                                // Processar totes les coincidències en la frase
-                                while ((match = regex.exec(sentence)) !== null) {
-                                    hasMatch = true;
-                                    // Reemplaçar només la part exacta que coincideix
-                                    const before = highlightedSentence.substring(0, match.index);
-                                    const exactMatch = match[0];
-                                    const after = highlightedSentence.substring(match.index + exactMatch.length);
-                                    
-                                    highlightedSentence = before + 
-                                        '<span class="highlight">' + exactMatch + '</span>' + 
-                                        after;
-                                    
-                                    // Ajustar l'índex per a la propera iteració
-                                    regex.lastIndex = match.index + '<span class="highlight">'.length + exactMatch.length + '</span>'.length;
-                                }
-                                
-                                if (hasMatch) {
-                                    count++;
-                                    const cleanSentence = sentence.trim() + '.';
-                                    currentSearchResults.push(cleanSentence);
-                                    
-                                    resultsHTML += `
-                                        <div class="result-item">
-                                            <p>${highlightedSentence.trim()}.</p>
-                                            <small>Mode: ${searchMode === 'whole-word' ? 'Paraula completa' : 'Cadena de caràcters'}</small>
-                                        </div>
-                                    `;
-                                }
-                            }
-                        });
-                    } else {
-                        // Per cerques lingüístiques i personalitzades, mantenim el comportament anterior
-                        const regex = new RegExp(pattern, 'gi');
-                        const matches = fileContent.match(regex);
-                        
-                        if (!matches) {
-                            searchResults.innerHTML = '<p class="no-results">No s\'han trobat resultats.</p>';
-                            resultCount.textContent = '0 resultats trobats';
-                            copyResultsBtn.disabled = true;
-                            downloadResultsBtn.disabled = true;
-                            return;
-                        }
-                        
-                        // Crear HTML amb els resultats
-                        const uniqueMatches = [...new Set(matches)]; // Eliminar duplicats
-                        
-                        uniqueMatches.forEach(match => {
-                            // Trobar totes les aparicions del patró al text
-                            const matchRegex = new RegExp(pattern.replace(/\\b/g, ''), 'gi');
-                            let matchOccurrences = [];
-                            let occurrence;
-                            
-                            while ((occurrence = matchRegex.exec(fileContent)) !== null) {
-                                if (occurrence[0].toLowerCase() === match.toLowerCase()) {
-                                    // Obtenir el context de la paraula (50 caràcters abans i després)
-                                    const start = Math.max(0, occurrence.index - 50);
-                                    const end = Math.min(fileContent.length, occurrence.index + match.length + 50);
-                                    const context = fileContent.substring(start, end);
-                                    
-                                    // Destacar la paraula trobada
-                                    const highlightedContext = context.replace(
-                                        new RegExp(match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
-                                        '<span class="highlight">$&</span>'
-                                    );
-                                    
-                                    matchOccurrences.push(highlightedContext);
-                                    currentSearchResults.push(match + ': ' + context);
-                                }
-                            }
-                            
-                            resultsHTML += `
-                                <div class="result-item">
-                                    <h4>${match}</h4>
-                                    <p>${matchOccurrences[0]}</p>
-                                    ${matchOccurrences.length > 1 ? `<p><em>+ ${matchOccurrences.length - 1} aparició(s) més</em></p>` : ''}
-                                </div>
-                            `;
-                        });
-                        
-                        count = uniqueMatches.length;
-                    }
-                    
-                    if (count === 0) {
-                        searchResults.innerHTML = '<p class="no-results">No s\'han trobat resultats.</p>';
-                        copyResultsBtn.disabled = true;
-                        downloadResultsBtn.disabled = true;
-                    } else {
-                        searchResults.innerHTML = resultsHTML;
-                        copyResultsBtn.disabled = false;
-                        downloadResultsBtn.disabled = false;
-                    }
-                    
-                    resultCount.textContent = `${count} resultats trobats`;
-                    
-                } catch (error) {
-                    alert('Error en el patró de cerca. Si us plau, verifica que l\'expressió regular és vàlida.');
-                    console.error(error);
-                }
-            }
-            
-            function copyResultsToClipboard() {
-                if (currentSearchResults.length === 0) return;
-                
-                const textToCopy = currentSearchResults.join('\n\n');
-                
-                navigator.clipboard.writeText(textToCopy).then(function() {
-                    showNotification('Resultats copiats al porta-retalls!');
-                }).catch(function(err) {
-                    console.error('Error en copiar al porta-retalls: ', err);
-                    showNotification('Error en copiar els resultats', true);
-                });
-            }
-            
-            function downloadResults() {
-                if (currentSearchResults.length === 0) return;
-                
-                const searchTerm = document.getElementById('search-term').value.trim() || 'cerca';
-                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-                const filename = `resultats-cerca-${searchTerm}-${timestamp}.txt`;
-                
-                const textToDownload = currentSearchResults.join('\n\n');
-                const blob = new Blob([textToDownload], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showNotification('Resultats descarregats correctament!');
-            }
-            
-            function showNotification(message, isError = false) {
-                notification.textContent = message;
-                notification.style.backgroundColor = isError ? '#dc3545' : '#28a745';
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-            
-            function addDefinition(name, pattern) {
-                const definition = {
-                    id: Date.now(),
-                    name: name,
-                    pattern: pattern
-                };
-                
-                definitions.push(definition);
-                saveDefinitions();
-                renderDefinitions();
-            }
-            
-            function deleteDefinition(id) {
-                definitions = definitions.filter(def => def.id !== id);
-                saveDefinitions();
-                renderDefinitions();
-            }
-            
-            function renderDefinitions() {
-                definitionsList.innerHTML = '';
-                
-                if (definitions.length === 0) {
-                    definitionsList.innerHTML = '<p>No hi ha definicions guardades.</p>';
-                    return;
-                }
-                
-                definitions.forEach(def => {
-                    const definitionElement = document.createElement('div');
-                    definitionElement.className = 'definition-item';
-                    definitionElement.innerHTML = `
-                        <div class="definition-header">
-                            <span class="definition-name">${def.name}</span>
-                            <button class="delete-definition" data-id="${def.id}">×</button>
-                        </div>
-                        <div class="definition-pattern">${def.pattern}</div>
-                    `;
-                    
-                    definitionsList.appendChild(definitionElement);
-                });
-                
-                // Afegir event listeners als botons d'eliminar
-                document.querySelectorAll('.delete-definition').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = parseInt(this.getAttribute('data-id'));
-                        deleteDefinition(id);
-                    });
-                });
-            }
-            
-            function saveDefinitions() {
-                localStorage.setItem('linguisticDefinitions', JSON.stringify(definitions));
-            }
-            
-            function loadDefinitions() {
-                const savedDefinitions = localStorage.getItem('linguisticDefinitions');
-                if (savedDefinitions) {
-                    definitions = JSON.parse(savedDefinitions);
-                    renderDefinitions();
-                }
-            }
+<label>
+    <input type="checkbox" id="exactMatch"> Cercar coincidència exacta
+</label>
+
+<label for="precedingCount">Quantes paraules precedeixen:</label>
+<select id="precedingCount">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+
+<label for="followingCount">Quantes paraules segueixen:</label>
+<select id="followingCount">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+
+<button onclick="searchText()">Cercar</button>
+
+
+<h2>Resultats:</h2>
+<div id="results"></div>
+
+<script>
+document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('textInput').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    function clearText() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('searchWord').value = '';
+        document.getElementById('results').innerHTML = '';
+    }
+
+function searchText() {
+    const text = document.getElementById('textInput').value;
+    const searchWord = document.getElementById('searchWord').value.trim();
+    const isExactMatch = document.getElementById('exactMatch').checked;
+    const precedingCount = parseInt(document.getElementById('precedingCount').value);
+    const followingCount = parseInt(document.getElementById('followingCount').value);
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    const punctuationRegex = /[.,!?;:—()»]/g;
+
+    // Dividir el text en frases i cercar coincidències
+    const sentences = text.split(/[.?!]/);
+    const matchedSentences = sentences.filter(sentence => 
+        isExactMatch 
+        ? new RegExp(`\\b${searchWord}\\b`, 'i').test(sentence.replace(punctuationRegex, '')) 
+        : sentence.toLowerCase().includes(searchWord.toLowerCase())
+    );
+
+    if (matchedSentences.length > 0) {
+        resultsDiv.innerHTML += '<h3>Frases que contenen "' + searchWord + '":</h3>';
+        matchedSentences.forEach(sentence => {
+            const highlightedSentence = sentence.replace(new RegExp(`(\\b${searchWord}\\b)`, 'gi'), '<span class="highlight">$1</span>');
+            resultsDiv.innerHTML += '<p>' + highlightedSentence.trim() + '.</p>';
         });
-    </script>
+    } else {
+        resultsDiv.innerHTML += 'No s\'ha trobat cap frase.';
+    }
+
+    // Càlcul de paraules que precedeixen i segueixen
+    const words = text.split(/\s+/);
+    const followingWords = {};
+    const precedingWords = {};
+    
+    for (let i = 0; i < words.length; i++) {
+        const currentWord = isExactMatch 
+            ? words[i].replace(punctuationRegex, '') 
+            : words[i].toLowerCase().replace(punctuationRegex, '');
+        
+        if (new RegExp(`^${searchWord}$`, 'i').test(currentWord)) {
+            // Paraules que segueixen
+            for (let j = 1; j <= followingCount; j++) {
+                if (i + j < words.length) {
+                    const followingWord = words[i + j].replace(punctuationRegex, '');
+                    followingWords[followingWord] = (followingWords[followingWord] || 0) + 1;
+                }
+            }
+            
+            // Paraules que precedeixen
+            for (let k = 1; k <= precedingCount; k++) {
+                if (i - k >= 0) {
+                    const precedingWord = words[i - k].replace(punctuationRegex, '');
+                    precedingWords[precedingWord] = (precedingWords[precedingWord] || 0) + 1;
+                }
+            }
+        }
+    }
+
+    // Mostrar paraules que segueixen
+    if (Object.keys(followingWords).length > 0) {
+        resultsDiv.innerHTML += '<h3>Paraules que segueixen "' + searchWord + '":</h3>';
+        const sortedFollowing = Object.entries(followingWords).sort((a, b) => b[1] - a[1]);
+        resultsDiv.innerHTML += '<p>' + sortedFollowing.map(entry => `${entry[0]} (${entry[1]})`).join(', ') + '</p>';
+    } else {
+        resultsDiv.innerHTML += 'No s\'han trobat paraules que segueixin aquesta paraula.';
+    }
+
+    // Mostrar paraules que precedeixen
+    if (Object.keys(precedingWords).length > 0) {
+        resultsDiv.innerHTML += '<h3>Paraules que precedeixen "' + searchWord + '":</h3>';
+        const sortedPreceding = Object.entries(precedingWords).sort((a, b) => b[1] - a[1]);
+        resultsDiv.innerHTML += '<p>' + sortedPreceding.map(entry => `${entry[0]} (${entry[1]})`).join(', ') + '</p>';
+    } else {
+        resultsDiv.innerHTML += 'No s\'han trobat paraules que precedeixin aquesta paraula.';
+    }
+}
+</script>
 </body>
 </html>
