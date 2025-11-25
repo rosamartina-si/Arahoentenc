@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omple els buits: gens, cap i res</title>
+
+  <style>
+    :root {
+      --color-primary: #003366;
+      --color-primary-light: #005599;
+      --color-success: #2e7d32;
+      --color-success-bg: #e8f5e9;
+      --color-error: #c62828;
+      --color-error-bg: #ffebee;
+      --color-warning: #ef6c00;
+      --color-warning-bg: #fff3e0;
+      --color-bg-section: #fffbe6;
+      --color-border-section: #f0e1a0;
+      --color-bg-note: #f4f8ff;
+      --color-text-light: #555;
+      --border-radius: 8px;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      line-height: 1.6;
+    }
+
+    h1 { 
+      color: var(--color-primary);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: 0.5rem;
+    }
+
+    h2 {
+      color: var(--color-primary);
+      margin-top: 0;
+    }
+
+    h3 {
+      color: var(--color-primary);
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: auto;
+      min-width: 100px;
+      padding: 8px 10px;
+      font-size: 16px;
+      margin: 0 6px;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      box-sizing: border-box;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.2);
+    }
+
+    input.correct { 
+      border: 2px solid var(--color-success); 
+      background: var(--color-success-bg); 
+    }
+    
+    input.incorrect { 
+      border: 2px solid var(--color-error); 
+      background: var(--color-error-bg); 
+    }
+    
+    input.corrected { 
+      border: 2px solid var(--color-warning); 
+      background: var(--color-warning-bg); 
+    }
+
+    button {
+      margin: 5px 5px 15px 0;
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover { 
+      background-color: var(--color-primary-light); 
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .phrase-block { 
+      margin-bottom: 25px;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      background: #f9f9f9;
+      box-shadow: var(--shadow);
+    }
+    
+    .correction { 
+      margin-top: 8px; 
+      font-style: italic; 
+      padding: 5px 0;
+    }
+    
+    .frase-cas { 
+      color: var(--color-text-light); 
+      font-style: italic; 
+      margin-bottom: 8px; 
+    }
+    
+    .frase-cat { 
+      margin: 10px 0; 
+      font-weight: 500;
+    }
+
+    #resultat {
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      background: var(--color-bg-note);
+      text-align: center;
+    }
+
+    section {
+      background: var(--color-bg-section);
+      border: 1px solid var(--color-border-section);
+      border-radius: var(--border-radius);
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .nota {
+      margin-top: 30px;
+      padding: 15px;
+      background: var(--color-bg-note);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .progress-container {
+      margin: 15px 0;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: var(--color-primary);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+    }
+
+    .success-message {
+      color: var(--color-success);
+      font-weight: bold;
+      text-align: center;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      background-color: var(--color-success-bg);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .comparison-table th {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    .comparison-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .example-block {
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-left: 4px solid var(--color-primary);
+      margin: 15px 0;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+
+    .usage-note {
+      background-color: #e8f4fd;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin: 15px 0;
+      border-left: 4px solid #4a90e2;
+    }
+
+    .rule-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .rule-box h3 {
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .highlight {
+      background-color: #fff3cd;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      border-left: 4px solid #ffc107;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin: 15px 0;
+    }
+
+    .tip-box h4 {
+      color: white;
+      margin-top: 0;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+      
+      input[type="text"] {
+        width: 80px;
+        margin: 5px 0;
+      }
+      
+      .frase-cat {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .comparison-table {
+        font-size: 0.9rem;
+      }
+      
+      .comparison-table th, .comparison-table td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Omple els buits: Gens, cap i res</h1>
+
+<p>
+  Escriu la paraula correcta dins la frase. Fes clic a <strong>Comprova</strong> o prem <strong>Retorn</strong> per verificar la resposta i escoltar la frase completa.
+</p>
+
+<section>
+  <h2>Explicació gramatical</h2>
+  <ul>
+    <li><strong>Gens de</strong> → amb noms incomptables: <em>gens de sucre</em>, <em>gens d'aigua</em>, <em>gens de gràcia</em>, <em>gens de sentit</em>. Es pot reforçar amb <strong>Gens ni mica</strong>. Contrari: poc</li>
+    <li><strong>Cap</strong> → amb noms comptables: <em>cap alumne</em>, <em>cap motiu</em>. Es pot reforçar amb <strong>Cap ni un</strong>.</li>
+    <li><strong>Res</strong> → com a pronom: <em>No entenc res</em>. Es pot reforçar amb <strong>Res de res</strong>. Contrari: moltes coses.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Formes bàsiques i reforçades</h2>
+  
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Forma</th>
+        <th>Reforç</th>
+        <th>Exemple</th>
+        <th>Exemple amb reforç</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>gens / gens de</strong></td>
+        <td><em>gens ni mica (de)</em></td>
+        <td>No tinc <strong>gens de</strong> paciència.</td>
+        <td>No tinc <strong>gens ni mica de</strong> paciència.</td>
+      </tr>
+      <tr>
+        <td><strong>cap</strong></td>
+        <td><em>cap ni un / cap ni una</em></td>
+        <td>No he llegit <strong>cap</strong> llibre.</td>
+        <td>No he llegit <strong>cap ni un</strong> llibre.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Les formes reforçades com a pista</h2>
+  
+  <div class="highlight">
+    <p><strong>💡 CONSELL PRÀCTIC:</strong> Les formes reforçades et donen una pista immediata per saber si cal usar 'gens' o 'cap'.</p>
+  </div>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Forma bàsica</th>
+        <th>Forma reforçada</th>
+        <th>Pista que ens dóna</th>
+        <th>Exemple</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>gens / gens de</strong></td>
+        <td><strong>gens ni mica (de)</strong></td>
+        <td>Si pots dir "gens ni mica", llavors la forma correcta és <strong>gens de</strong></td>
+        <td>No tinc <strong>gens de</strong> paciència → No tinc <strong>gens ni mica de</strong> paciència</td>
+      </tr>
+      <tr>
+        <td><strong>cap</strong></td>
+        <td><strong>cap ni un / cap ni una</strong></td>
+        <td>Si pots dir "cap ni un", llavors la forma correcta és <strong>cap</strong></td>
+        <td>No he llegit <strong>cap</strong> llibre → No he llegit <strong>cap ni un</strong> llibre</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="example-block">
+    <h3>Com utilitzar aquesta pista:</h3>
+    <p>Quan dubtis entre "gens de" i "cap", <strong>prova mentalment la forma reforçada</strong>:</p>
+    <ul>
+      <li>Si "gens ni mica de" sona natural → usa <strong>gens de</strong></li>
+      <li>Si "cap ni un/una" sona natural → usa <strong>cap</strong></li>
+    </ul>
+    <p><strong>Exemple pràctic:</strong></p>
+    <p>"No tinc ______ por"</p>
+    <p>Prova: "No tinc <strong>gens ni mica de</strong> por" → ✅ Sona bé → Resposta: <strong>gens de</strong></p>
+    <p>"No tinc <strong>cap ni una</strong> por" → ❌ No sona bé → Descarta <strong>cap</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>Com triar entre 'cap' i 'gens de': La tècnica de la rèplica</h2>
+  
+  <div class="rule-box">
+    <h3>🔑 REGLA D'OR</h3>
+    <p><strong>Imagina la rèplica afirmativa i mira el quantificador:</strong></p>
+    <p>Si la rèplica diu <strong>"molt/molta"</strong> → <strong>"gens de"</strong></p>
+    <p>Si la rèplica diu <strong>"molts/moltes"</strong> → <strong>"cap"</strong></p>
+  </div>
+
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Forma</th>
+        <th>Exemple</th>
+        <th>Rèplica</th>
+        <th>Quantificador de la rèplica</th>
+        <th>Tipus de nom</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>gens / gens de</strong></td>
+        <td>No tinc <strong>gens de</strong> paciència.</td>
+        <td>Jo, en canvi, en tinc <strong>molta</strong>.</td>
+        <td><strong>molt / molta</strong> (singular)</td>
+        <td><strong>No comptable</strong></td>
+      </tr>
+      <tr>
+        <td><strong>cap</strong></td>
+        <td>No he llegit <strong>cap</strong> llibre.</td>
+        <td>Doncs jo n'he llegit <strong>molts</strong>.</td>
+        <td><strong>molts / moltes</strong> (plural)</td>
+        <td><strong>Comptable</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight">
+    <p><strong>💡 Recorda:</strong> La clau està en la rèplica. Si imagines com seria la resposta afirmativa, sabràs immediatament si cal usar 'cap' o 'gens de'.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Diferències subtils: Res vs Gens</h2>
+  
+  <h3>No veig res vs No m'hi veig gens</h3>
+  
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Expressió</th>
+        <th>Significat</th>
+        <th>Causa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>No veig res</strong></td>
+        <td>No percebo res ara mateix</td>
+        <td>Externa (foscor, boira, obstacle…)</td>
+      </tr>
+      <tr>
+        <td><strong>No m'hi veig gens</strong></td>
+        <td>Tinc poca capacitat de visió</td>
+        <td>Interna (vista deficient, cansament, calen ulleres)</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h3>No ha rumiat res vs No s'ho ha rumiat gens</h3>
+  
+  <div class="example-block">
+    <p><strong>No va rumiar res</strong></p>
+    <p>Aquesta expressió indica que la persona no va pensar ni reflexionar sobre cap qüestió. "Res" implica una absència total de pensament o consideració d'idees. La implicació aquí és que no hi va haver cap tipus de reflexió.</p>
+    <p><em>Exemple d'ús:</em> "Sobre la proposta que li vaig fer, no va rumiar res."</p>
+  </div>
+  
+  <div class="example-block">
+    <p><strong>No s'ho va rumiar gens</strong></p>
+    <p>Aquesta frase indica que, encara que hi va haver un cert nivell de reflexió, aquest va ser mínim o gairebé inexistent.</p>
+    <p><em>Exemple d'ús:</em> "El rector es va interessar de seguida per la descoberta. No s'ho va rumiar gens. —Això cal veure-ho!"</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ús especial de "cap" amb noms incomptables</h2>
+  
+  <div class="usage-note">
+    <p><strong>"Cap" també es pot fer servir acompanyant noms incomptables</strong>, però només en construccions negatives, acompanyant determinats noms incomptables susceptibles de formar part d'una escala de gradació o d'una tipologia, indica l'absència o la inexistència de la qualitat o l'element que designa el nom que l'acompanya.</p>
+  </div>
+  
+  <div class="example-block">
+    <p><strong>Exemple:</strong> "Després hi hagué representacions de titelles o d'altres coses que <strong>no tenien cap importància</strong>."</p>
+    <p>En aquest cas, "importància" és un nom incomptable, però s'utilitza "cap" per indicar l'absència total d'aquesta qualitat.</p>
+  </div>
+  
+  <h3>Altres exemples d'aquest ús:</h3>
+  <ul>
+    <li>"Aquesta situació <strong>no té cap sentit</strong>."</li>
+    <li>"El seu discurs <strong>no va tenir cap efecte</strong> en l'audiència."</li>
+    <li>"Aquest problema <strong>no presenta cap dificultat</strong>."</li>
+    <li>"La seva explicació <strong>no tenia cap lògica</strong>."</li>
+  </ul>
+</section>
+
+<div class="stats">
+  <span id="progress-text">Progrés: 0/10</span>
+  <span id="score-text">Puntuació: 0%</span>
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progress-bar"></div>
+</div>
+
+<div id="exercici"></div>
+
+<div class="controls" id="controls"></div>
+
+<div id="resultat"></div>
+
+<div class="nota">
+  Fitxa interactiva: Traducció del castellà al català — Gens, cap, res.
+</div>
+
+<script>
+  /* FRASES AMB LA RESPOSTA CORRECTA COMPLETA (incloent "gens de", "gens d'") */
+  const frases = [
+    ["No hay ningún problema.", "No hi ha", "cap", "problema.", false],
+    ["No entiendo nada.", "No entenc", "res", ".", false],
+    ["No hay nada de agua.", "No hi ha", "gens d'", "aigua.", false],
+    ["No hay ningún estudiante en clase.", "No hi ha", "cap", "estudiant a classe.", false],
+    ["No hay ningún motivo para preocuparse.", "No hi ha", "cap", "motiu per preocupar-se.", false],
+    ["No me hace ninguna gracia.", "No em fa", "gens de", "gràcia.", false],
+    ["No veo nada raro en eso.", "No veig", "res", "estrany en això.", false],
+    ["No ha llegado ningún alumno.", "No ha arribat", "cap", "alumne.", false],
+    ["No había nada de azúcar en el café.", "No hi havia", "gens de", "sucre al cafè.", false],
+    ["No tiene ningún sentido.", "No té", "gens de", "sentit.", false],
+    ["No ha dicho nada interesante.", "No ha dit", "res", "interessant.", false],
+    ["O todo o nada.", "O tot o ", "res", ".", false],
+    ["No temo nada.", "No temo ", "res", ".", false],
+    ["Ahora nada más.", "Ara ", "res", " més.", false],
+    ["No has hecho nada.", "No has fet ", "res", ".", false],
+    ["No pasa nada.", "No passa ", "res", ".", false],
+    ["No tiene que hacer nada de ello.", "No n'ha de fer ", "res", ".", false],
+    ["Aquí no ha pasado nada.", "Aquí no ha passat ", "res", ".", false],
+    ["No tiene nada que ver.", "No hi té ", "res", " a veure.", false],
+    ["No tengo que explicar nada.", "No he d'explicar ", "res", ".", false],
+    ["No me duele nada.", "No em fa mal ", "res", ".", false],
+    ["No habéis encontrado nada más.", "No heu trobat ", "res", " més.", false],
+    ["Nada del otro mundo.", "No ", "res", " de l'altre món.", false],
+    ["Aquí no hemos pedido nada.", "Aquí no hem demanat ", "res", ".", false],
+    ["No hay nada que lo ate.", "No hi ha ", "res", " que lligui.", false],
+    ["No le dice nada, todo eso.", "No li diu ", "res", ", tot això.", false],
+    ["No hay nada como casa.", "No hi ha ", "res", " com a casa.", false],
+    ["No saben ni sospechan nada.", "No saben ni sospiten ", "res", ".", false],
+    ["Pero es que no tengo nada.", "Però és que no tinc ", "res", ".", false],
+    ["Esto no tiene nada de notable.", "Això no té ", "res", " de notable.", false],
+    ["Y esto no se va con nada.", "I això no se'n va amb ", "res", ".", false],
+    ["¿Te he pedido algo alguna vez, yo?", "T'he demanat mai ", "res", ", jo?", false],
+    ["Usted no le he hecho nada.", "vostè no li he fet ", "res", ".", false],
+    ["No quiere añadir nada más.", "No vol afegir-hi ", "res", " més.", false],
+    ["No has entendido nada.", "No has entès ", "res", ".", false],
+    ["No tienen nada para darle.", "No tenen ", "res", " per a donar-li.", false],
+    ["De verdad no le temblaba nada.", "De debò no li tremolava ", "res", ".", false],
+    ["A mí ya no me viene nada nuevo.", "A mi ja no em ve ", "res", " de nou.", false],
+    ["Si ha sido un golpe de nada.", "Si ha estat un cop de no ", "res", ".", false],
+    ["Y él, nada, como un poste.", "I ell, ", "res", ", com un estaquirot.", false],
+    ["Que no te dijo nada el médico.", "Que no et va dir ", "res", " el metge.", false],
+    ["¿No notas nada de inusual, hoy?", "No notes ", "res", " d'inusitat, avui.", false],
+    ["Nada, si hemos de ser francos.", "No ", "res", ", si hem d'ésser francs.", false],
+    ["Se ve que no ha sido nada esto.", "Es veu que no ha estat ", "res", " això.", false],
+    ["Esto de ahora no tiene nada que ver.", "Això d'ara no hi té ", "res", " a veure.", false],
+    ["«¿Le importaría explicárnoslo?", "«Li faria ", "res", " d'explicar-nos-ho.", false],
+    ["—Tiene que entender que no entiende nada.", "—Ha d'entendre que no entén ", "res", ".", false],
+    ["No perderá nada si prueba uno.", "No hi perdrà ", "res", " si en prova un.", false],
+    ["Pero esto no tiene nada que ver, ahora.", "—Però això no té ", "res", " a veure, ara.", false],
+    ["—No digáis nada más, ya sé quién es.", "—No digueu ", "res", " més, ja sé qui és.", false],
+    ["—Nada —respondí por fuera.", "—No ", "res", " —vaig respondre per fora.", false],
+    ["De momento, nada de vino ni de tabaco.", "De moment, ", "res", " de vi ni de tabac.", false],
+    ["No se me había perdido nada aquí.", "No se m'hi havia perdut ", "res", " aquí.", false],
+    ["En este mundo no hay nada seguro.", "En aquest món no hi ha ", "res", " segur.", false],
+    ["Me parece que no me descuido nada.", "Em sembla que no em descuido ", "res", ".", false],
+    ["Pero no hubo tiempo para nada.", "Però no hi va haver temps de ", "res", ".", false],
+    ["Si no la molestáis, no os hará nada.", "Si no la molesteu, no us farà ", "res", ".", false],
+    ["—¿Que os pensáis que no pasará nada?", "—Que us penseu que no passarà ", "res", ".", false],
+    ["—Yo no puedo hacer nada —le dijo—.", "—Jo no hi puc fer ", "res", " —va dir-li—.", false],
+    ["—No me parece nada —era la verdad—.", "—No em sembla ", "res", " —era la veritat—.", false],
+    ["—Nada, nada —respondió el Abel—.", "—No ", "res", ", no ", "res", " —respongué l'Abel—.", false],
+    ["Si mucho conviene, no hay nada de nada.", "Si molt convé, no hi ha ", "res", " de ", "res", ".", false],
+    ["Si no, deja ir jugo y no vale nada.", "Si no, deixa anar suc i no val ", "res", ".", false],
+    ["Tranquilízate, que no pasa nada.", "Tranquil·litza't, que no passa ", "res", ".", false],
+    ["Realmente, no había sido casi nada.", "Realment, no havia estat quasi ", "res", ".", false],
+    ["Pero no me arrepiento de nada, Lerena.", "Però no em penedeixo de ", "res", ", Lerena.", false],
+    ["—Ah, nada: es una cosa de poca monta.", "—Ah, no ", "res", ": és una cosa poca-solta.", false],
+    ["Ya sabes que los abejorros no hacen nada.", "Ja saps que els borinots no fan ", "res", ".", false],
+    ["—No tengas miedo, que no te hará nada.", "—No tinguis por, que no et farà ", "res", ".", false],
+    ["—Es por su bien, no le ha pasado nada.", "—És pel seu bé, no li ha passat ", "res", ".", false],
+    ["—¿Le importaría quitarse el sombrero.", "—Li faria ", "res", " de treure's el barret.", false],
+    ["Hace días que no sé nada —respondré—.", "Fa dies que no en sé ", "res", " —respondré—.", false],
+    ["—¿Te molesta que te diga «Calígula»?", "—Et fa ", "res", " que et digui «Cal·lígula».", false],
+    ["Quiero decir que, si me muero, nada de nada.", "Vull dir que, si em moro, ", "res", " de ", "res", ".", false],
+    ["A partir de ahora, todo irá como si nada.", "A partir d'ara, tot anirà com si ", "res", ".", false],
+    ["A mí no me pasaba nada irreparable.", "A mi no em passava ", "res", " d'irreparable.", false],
+    ["Cuando éste llegue, no respondo de nada.", "Quan aquest arribi, no responc de ", "res", ".", false],
+    ["Cuando ya no tenga humor para nada, ¿eh?", "Quan ja no tingui humor per a ", "res", ", oi.", false],
+    ["Los otros no creían nada, lo ignoraban.", "Els altres no creien ", "res", ", l'ignoraven.", false],
+    ["No puedo explicar nada que venga de nuevo.", "No puc explicar ", "res", " que vingui de nou.", false],
+    ["No se encuentra bien, ni mal, ni nada.", "No es troba bé, ni malament, ni ", "res", ".", false],
+    ["No sirve de nada alargar el martirio.", "No serveix de ", "res", " allargar el martiri.", false],
+    ["Usaremos magnesio y no sentiréis nada.", "Usarem magnesi i no us sentireu de ", "res", ".", false],
+    ["Lávatelas bien y no hagas nunca más nada.", "Renta-te-les bé i no facis mai més ", "res", ".", false],
+    ["—No veo nada —afirmó con rotundidad.", "—No hi veig ", "res", " —afirmà amb rotunditat.", false],
+    ["—Nada —le respondió el Rodasardà—.", "—No ", "res", " —va respondre-li en Rodasardà—.", false],
+    ["No he tenido nunca nada que se le asemeje.", "No he tingut mai ", "res", " que s'hi assembli.", false],
+    ["Él no tenía nada concreto para explicar.", "Ell no tenia ", "res", " concret per a explicar.", false],
+    ["La verdad es que no tuvo tiempo para nada.", "La veritat és que no tingué temps de ", "res", ".", false],
+    ["«No te puedo prometer nada», dijo al amigo.", "«No et puc prometre ", "res", "», digué a l'amic.", false],
+    ["A mí no me cuesta nada tirar donde usted diga.", "A mi no em costa ", "res", " tirar on vostè digui.", false],
+    ["Las nubes no se quedan, ni viven, ni nada.", "Els núvols no es queden, ni viuen, ni ", "res", ".", false],
+    ["Y me consta que de ésta no saben nada.", "I em consta que d'aquesta no en saben ", "res", ".", false],
+    ["»Nunca he dicho nada a las chicas, por la calle.", "»Mai no he dit ", "res", " a les noies, pel carrer.", false],
+    ["Os daré un poco de bicarbonato y nada más.", "Us donaré una mica de bicarbonat i ", "res", " més.", false],
+    ["—Nadie me ha dicho nada, ni falta que me hace.", "—Ningú no m'ha dit ", "res", ", ni falta que em fa.", false],
+    ["Saldrás al canal Grande en cosa de nada.", "Sortiràs al canal Grande en cosa de no ", "res", ".", false],
+    ["No me costaba nada, y le llevé el agua.", "No em costava ", "res", ", i vaig portar-li l'aigua.", false],
+    ["Las cosas eran así y no se podía hacer nada.", "Les coses eren així i no s'hi podia fer ", "res", ".", false],
+    ["Pero a partir de ahora ya no puedo ver nada más.", "Però a partir d'ara ja no puc veure ", "res", " més.", false],
+    ["Vale más ir haciendo y no creérselos de nada».", "Val més anar fent i no creure-se'ls de ", "res", "».", false],
+    ["Y ellos que me responden: «Cincuenta mil o nada.", "I ells que em responen: «Cinquanta mil o ", "res", ".", false],
+    ["—Primero que nada, os tenéis que procurar la caja.", "—Primer que ", "res", ", us heu de procurar la caixa.", false],
+    ["—A tu primo no lo conozco de nada —le dije—.", "—Al teu cosí no el conec de ", "res", " —vaig dir-li.", false],
+    ["«Si rompes algo», pensaba, «ya me oirás».", "«Si trenques ", "res", "», pensava, «ja em sentiràs».", false],
+    ["Desengáñate, en este mundo no dan nada más.", "Desenganya't, en aquest món no donen ", "res", " més.", false],
+    ["De esta vida ya hace días que no espero nada.", "D'aquesta vida ja fa dies que no n'espero ", "res", ".", false],
+    ["Hace años que tomo Somnalina y no me pasa nada.", "Fa anys que prenc Somnalina i no em passa ", "res", ".", false],
+    ["Bastante trabajo tenemos vigilando que no rompan nada.", "Prou feina tenim vigilant que no trenquin ", "res", ".", false],
+    ["Me dijo que no sufriera, que no me pasaría nada.", "Em digué que no patís, que no em passaria ", "res", ".", false],
+    ["No, no le había pasado nada que se le asemejase.", "No, no li havia passat ", "res", " que s'hi assemblés.", false],
+    ["Entonces nada, nos queda la cuestión del favor.", "Aleshores ", "res", ", ens queda la qüestió del favor.", false],
+    ["No se puede tocar nada hasta que venga la policía.", "No es pot tocar ", "res", " fins que vingui la policia.", false],
+    ["—A éstos no les pasa nada —contestó Zigonni—.", "—A aquests no els passa ", "res", " —contestà Zigonni—.", false],
+    ["La primera, fue así: —No hay nada nuevo.", "La primera, va anar així: —No hi ha ", "res", " de nou.", false],
+    ["—Le aseguro que no sabía nada —le dije—.", "—Li asseguro que no en sabia ", "res", " —vaig dir-li—.", false],
+    ["—No es que tenga nada contra los cazadores, sabes.", "—No és que tingui ", "res", " contra els caçadors, saps.", false],
+    ["Doctor Benet: Tenemos que entender que no entendemos nada.", "Doctor Benet: Hem d'entendre que no entenem ", "res", ".", false],
+    ["A mí me hacen pagar una cuota extra, pero nada más.", "A mi em fan pagar una quota extra, però ", "res", " més.", false],
+    ["—No toquéis nada hasta que venga la policía —dijo.", "—No toqueu ", "res", " fins que vingui la policia —digué.", false],
+    ["No hemos visto nada, no hemos oído nada, no diremos nada.", "No hem vist ", "res", ", no hem sentit ", "res", ", no direm ", "res", ".", false],
+    ["En mi balcón no cae nada que no venga de arriba.", "Al meu balcó no hi cau ", "res", " que no vingui de dalt.", false],
+    ["Pero, ahora que me lo dice, no creo que pierda nada.", "Però, ara que m'ho diu, no crec que hi perdi ", "res", ".", false],
+    ["Le dije: —La razón es mía, no me podéis hacer nada.", "Vaig dir-li: —La raó és meva, no em podeu fer ", "res", ".", false],
+    ["«Según el buen sentido, no hay nada de lo que vemos.", "«Segons el bon sentit, no hi ha ", "res", " del que veiem.", false],
+    ["Y autorizó el sepelio, al cual no lamentamos nada.", "I autoritzà el sepeli, al qual no vam plànyer ", "res", ".", false],
+    ["Que nadie toque nada hasta que venga la policía.", "Que ningú no toqui ", "res", " fins que vingui la policia.", false],
+    ["Pero también intuyo que nunca nadie sabrá nada».", "Però també intueixo que mai ningú no en sabrà ", "res", "».", false],
+    ["No hay nada de importante que pueda hacerse a ciegas.", "No hi ha ", "res", " d'important que pugui fer-se a cegues.", false],
+    ["No le gustaba nada a medias, ni nada que fuese inocuo.", "No li agradava ", "res", " a mitges, ni ", "res", " que fos innocu.", false],
+    ["No se le ocurre nada más y acaba así la oración fúnebre.", "No se li acut ", "res", " més i acaba així l'oració fúnebre.", false],
+    ["Le aseguramos ella y yo que no nos conocíamos de nada.", "Li asseguràrem ella i jo que no ens coneixíem de ", "res", ".", false],
+    ["Gente tranquila y desprevenida, que no sospecha nada.", "Gent tranquil·la i desprevinguda, que no sospita ", "res", ".", false],
+    ["A veces estos golpes de corazón no sirven para nada”.", "A vegades aquests cops de cor no serveixen per a ", "res", "”.", false],
+    ["Por hablar de ello, no se pierde nada, y me harás quedar bien.", "Per parlar-ne, no s'hi perd ", "res", ", i em faràs quedar bé.", false],
+    ["Desde entonces se puede decir que no pensó en nada más.", "Des d'aleshores es pot dir que no va pensar en ", "res", " més.", false],
+    ["No toquen el cadáver, ni nada, hasta que venga el juez.", "No toquin el cadàver, ni ", "res", ", fins que vingui el jutge.", false],
+    ["—En estos momentos, joven, no se puede comprometer a nada.", "—En aquests moments, jove, no es pot comprometre a ", "res", ".", false],
+    ["Nosotros no podemos hacer nada, porque el equipo funciona.", "Nosaltres no podem fer-hi ", "res", ", perquè l'equip funciona.", false],
+    ["¿Te parece que vale la pena arreglar algo en un caso así?", "Et sembla que val la pena d'arreglar ", "res", " en un cas així.", false],
+    ["Un nombre solo no es nada, si no corresponde a alguna cosa.", "Un nom tot sol no és ", "res", ", si no correspon a alguna cosa.", false],
+    ["—No quiero ningún examen, ni análisis ni radiografías ni nada.", "—No vull cap examen, ni anàlisis ni radiografies ni ", "res", ".", false],
+    ["Dicen que no podemos llevarnos nada, pero yo lo probaré.", "Diuen que no ens podem emportar ", "res", ", però jo ho provaré.", false],
+    ["No perderá nada viendo el muestrario, sin ningún compromiso.", "No hi perdrà ", "res", " veient el mostrari, sense cap compromís.", false],
+    ["Sé que soy este tal Marc por el retrato, pero no sé nada más.", "Sé que sóc aquest tal Marc pel retrat, però no sé ", "res", " més.", false],
+    ["Pero yo insistía, a pesar de los enfados, sin sacar nada.", "Però jo insistia, a despit dels renys, sense treure'n ", "res", ".", false],
+    ["—No queremos decir nada que pueda interferir la acción de la ley.", "—No volem dir ", "res", " que pugui interferir l'acció de la llei.", false],
+    ["—En ningún caso.", "—En ", "cap", " cas.", false],
+    ["—Ninguna, ni una.", "—", "cap", ", ni una.", false],
+    ["De ninguna manera.", "De ", "cap", " manera.", false],
+    ["—De ninguna manera.", "—De ", "cap", " manera.", false],
+    ["—De ninguna manera.", "—De ", "cap", " manera.", false],
+    ["—Ningún precedente.", "—", "cap", " precedent.", false],
+    ["—No tengo ninguna.", "—No en tinc ", "cap", ".", false],
+    ["—No, molestia ninguna.", "—No, molèstia ", "cap", ".", false],
+    ["No había ninguna.", "No n'hi havia ", "cap", ".", false],
+    ["—No, de ninguna manera.", "—No, de ", "cap", " manera.", false],
+    ["El viejo giró la cabeza.", "El vell girà el ", "cap", ".", false],
+    ["Subimos hacia la azotea.", "Pugem ", "cap", " al terrat.", false],
+    ["No es ningún mal, esto.", "No és ", "cap", " mal, això.", false],
+    ["Yo no te quiero ningún mal.", "Jo no et vull ", "cap", " mal.", false],
+    ["—rumió el cabeza de familia.", "—remugà el ", "cap", " de casa.", false],
+    ["Gira hacia la izquierda.", "Tomba ", "cap", " a l'esquerra.", false],
+    ["No le salió ninguna palabra.", "No li sortí ", "cap", " paraula.", false],
+    ["No huyo de ningún compromiso.", "No fujo de ", "cap", " compromís.", false],
+    ["—Sin ningún tipo de duda.", "—Sense ", "cap", " mena de dubte.", false],
+    ["Yo iré hacia allí cuando pueda.", "Jo hi faré ", "cap", " quan pugui.", false],
+    ["«Les sube a la cabeza y abusan».", "«Els puja al ", "cap", " i abusen».", false],
+    ["Yo temblaba de cabeza a pies.", "Jo tremolava de ", "cap", " a peus.", false],
+    ["De molestia no les hará ninguna.", "De nosa no els en farà ", "cap", ".", false],
+    ["(Hice que sí con la cabeza.", "(Vaig fer que sí amb el ", "cap", ".", false],
+    ["A mí, no me cuesta ningún esfuerzo.", "A mi, no em costa ", "cap", " esforç.", false],
+    ["No soy ningún gran inventor, yo.", "No sóc ", "cap", " gran inventor, jo.", false],
+    ["A la derecha, un fin de semana.", "A la dreta, un ", "cap", " de setmana.", false],
+    ["—expresó el jefe del almacén.", "—expressà el ", "cap", " del magatzem.", false],
+    ["No lo entenderían de ninguna manera.", "No ho entendrien de ", "cap", " manera.", false],
+    ["No lo puedo admitir de ninguna manera.", "No ho puc admetre de ", "cap", " manera.", false],
+    ["Pero Lalo ya no tenía ninguna fuerza.", "Però Lalo ja no tenia ", "cap", " força.", false],
+    ["«Aún me harían bailar la cabeza.", "«Encara em farien ballar el ", "cap", ".", false],
+    ["No sé dónde debía tener la cabeza.", "No sé pas on devia tenir el ", "cap", ".", false],
+    ["Vamos hacia a comer, que ya es hora.", "Anem ", "cap", " a dinar, que ja és hora.", false],
+    ["De verdad, ya no le querían ningún mal.", "De debò, ja no li volien ", "cap", " mal.", false],
+    ["«Yo no tengo ninguna culpa», dijo.", "«Jo no hi tinc ", "cap", " culpa», digué.", false],
+    ["El álbum no me produjo ninguna sorpresa.", "L'àlbum no em produí ", "cap", " sorpresa.", false],
+    ["Pero entonces no había ningún tema.", "Però llavors no hi havia ", "cap", " tema.", false],
+    [") y me dirigía hacia mi mesa.", ") i em dirigia ", "cap", " a la meva taula.", false],
+    ["—Sí —afirmó al cabo de pocos segundos.", "—Sí —afirmà al ", "cap", " de pocs segons.", false],
+    ["Tenía la cabeza espesa y la boca seca.", "Tenia el ", "cap", " espès i la boca seca.", false],
+    ["Un hombre que tenía una cabeza tan clara.", "Un home que tenia un ", "cap", " tan clar.", false],
+    ["Gritos y golpes de cabeza por las paredes.", "Crits i cops de ", "cap", " per les parets.", false],
+    ["—gritó el cabeza de familia de repente—.", "—cridà el ", "cap", " de casa sobtadament—.", false],
+    ["Si tu pobre madre alzara la cabeza.", "Si la teva pobra mare alcés el ", "cap", ".", false],
+    ["De todo y de ninguna cosa, si mucho conviene.", "De tot i de ", "cap", " cosa, si molt convé.", false],
+    ["Ya nos veremos este fin de semana.", "Ja ens veurem aquest ", "cap", " de setmana.", false],
+    ["Aunque no tenga ninguna importancia.", "Encara que no tingui ", "cap", " importància.", false],
+    ["Y añadió: —La casa le ha subido a la cabeza.", "I afegí: —La casa li ha pujat al ", "cap", ".", false],
+    ["No ha visto nunca ningún ataque de asma, usted.", "No ha vist mai ", "cap", " atac d'asma, vostè.", false],
+    ["No me podía sacar al japonés de la cabeza.", "No em podia treure el japonès del ", "cap", ".", false],
+    ["Giro en redondo y me encamino hacia el puerto.", "Giro en rodó i m'encamino ", "cap", " al port.", false],
+    ["—A mí no tenían ningún derecho a meterse.", "—A mi no tenien ", "cap", " dret a ficar-m'hi.", false],
+    ["Ningún muerto se debe levantar a las ocho.", "Cap mort no s'ha de llevar a les vuit.", false],
+    ["—Dígales que no tienen ninguna, de razón.", "—Digui'ls que no en tenen ", "cap", ", de raó.", false],
+    ["Y yo, ya lo sabes, no doy ninguna molestia.", "I jo, ja ho saps, no dono ", "cap", " molèstia.", false],
+    ["Pero yo, de mano, no pediré nunca ninguna.", "Però jo, de mà, no en demanaré mai ", "cap", ".", false],
+    ["—Sí, es claro —replicó el jefe sindical—.", "—Sí, és clar —replicà el ", "cap", " sindical—.", false],
+    ["No necesitas ninguna placa del ayuntamiento.", "No necessites ", "cap", " placa de l'ajuntament.", false],
+    ["El caballero movió la cabeza dulcemente.", "El cavaller va moure el ", "cap", " dolgudament.", false],
+    ["Lo estiramos hacia un rincón de la sala.", "El vam estirar ", "cap", " a un racó de la sala.", false],
+    ["Os aseguro que no se perdía ningún detalle.", "Us asseguro que no es perdia ", "cap", " detall.", false],
+    ["—Se encaja en tierra sin ninguna dificultad.", "—S'encaixa a terra sense ", "cap", " dificultat.", false],
+    ["—De ninguna manera, señor rico, de ninguna manera.", "—De ", "cap", " manera, senyor ric, de ", "cap", " manera.", false],
+    ["Ya sé que Hargis te empuja hacia la locura.", "Ja sé que Hargis t'empeny ", "cap", " a la follia.", false],
+    ["Yo no me quitaba la letra de cambio de la cabeza.", "Jo no em treia la lletra de canvi del ", "cap", ".", false],
+    ["Créeme, no te tires ninguna piedra al hígado.", "Creu-me, no t'hi tiris ", "cap", " pedra al fetge.", false],
+    ["—No, al menos nadie ha hecho ninguna denuncia.", "—No, almenys ningú no ha fet ", "cap", " denúncia.", false],
+    ["No había visto nunca ninguna que diese tanto gusto”.", "No n'havia vist mai ", "cap", " que fes tant goig”.", false],
+    ["Y se respondía gravemente: «No, de ninguna manera».", "I es responia greument: «No, de ", "cap", " manera».", false],
+    ["Después sí, me han llenado la cabeza de teorías.", "Després sí, m'han omplert el ", "cap", " de teories.", false],
+    ["—Pues en esta pared no hay ningún enchufe.", "—Doncs en aquesta paret no hi ha ", "cap", " endoll.", false],
+    ["—preguntó él con los ojos fuera de la cabeza.", "—va preguntar ell amb els ulls fora del ", "cap", ".", false],
+    ["Un pequeño tornillo de vanadio no tiene ninguna importancia.", "Un petit vis de vanadi no té ", "cap", " importància.", false],
+    ["El silencio no nos permitirá ninguna fuga, Arnau.", "El silenci no ens permetrà ", "cap", " fugida, Arnau.", false],
+    ["Procedía con calma, sin olvidar ningún extremo.", "Procedia amb calma, sense oblidar ", "cap", " extrem.", false],
+    ["No se trata de ningún descubrimiento sensacional.", "No es tracta de ", "cap", " descobriment sensacional.", false],
+    ["—No me digas que no has visto nunca ninguna sirena.", "—No em diguis que no has vist mai ", "cap", " sirena.", false],
+    ["Ninguno de mis pequeños actos de ahora se perderá.", "Cap dels meus petits actes d'ara no es perdrà.", false],
+    ["Ahora solo pienso cómo pasaré el fin de semana.", "Ara només penso com passaré el ", "cap", " de setmana.", false],
+    ["Me agaché cogiendo la cabeza con las manos.", "Em vaig ajupir agafant-me el ", "cap", " amb les mans.", false],
+    ["Antes, el sol se metía en la cabeza de los alborotados.", "Abans, el sol es ficava al ", "cap", " dels eixelebrats.", false],
+    ["No hace nada de daño.", "No fa ", "gens de", " mal.", false],
+    ["No está nada mal.", "No està ", "gens", " malament.", false],
+    ["No se lo pensó nada.", "No s'ho va rumiar ", "gens", ".", false],
+    ["No estoy nada orgulloso.", "No n'estic ", "gens", " orgullós.", false],
+    ["No se le veía nada interesado.", "No se'l veia ", "gens", " interessat.", false],
+    ["El defensa no se alteró nada.", "El defensor no es va esverar ", "gens", ".", false],
+    ["Antes no me gustaba nada, pero ahora sí.", "Abans no m'agradava ", "gens", ", però ara sí.", false],
+    ["Hombre, yo, agradecido, no me siento nada.", "—Home, jo, d'agraït, no me'n sento ", "gens", ".", false],
+    ["Es más: la idea no me tranquiliza nada.", "És més: la idea no em tranquil·litza ", "gens", ".", false],
+    ["A mi mujer no le hizo ninguna gracia.", "A la meva dona no va fer-li ", "gens de", " gràcia.", false],
+    ["—No estoy nada seguro —le respondí—.", "—No n'estic ", "gens", " segur —vaig respondre-li—.", false],
+    ["Si he de ser sincero, de tranquilo no estaba nada.", "Si he d'ésser sincer, de tranquil no n'estava ", "gens", ".", false],
+    ["Por ti no sufro nada, porque sé que te saldrás adelante.", "Per tu no pateixo ", "gens", ", perquè sé que te'n sortiràs.", false],
+    ["Estoy seguro de que no le importaba nada mi opinión.", "Estic segur que no li importava ", "gens", " la meva opinió.", false]
+  ];
+
+  let currentPhrases = [];
+  let score = 0;
+  let completed = 0;
+
+  /* BARREJA */
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* GENERAR EXERCICI */
+  function generaExercici(arr) {
+    currentPhrases = arr;
+    score = 0;
+    completed = 0;
+    updateProgress();
+    
+    const cont = document.getElementById('exercici');
+    cont.innerHTML = "";
+
+    arr.forEach((f, i) => {
+      const [cast, inici, resp, final] = f;
+
+      const fraseCompleta = `${inici} ${resp} ${final}`.replace(/\s+/g, " ").trim();
+
+      const bloc = document.createElement("div");
+      bloc.className = "phrase-block";
+
+      bloc.innerHTML = `
+        <p class="frase-cas"><strong>${i+1}.</strong> ${cast}</p>
+        <p class="frase-cat">${inici}
+          <input type="text"
+                 data-index="${i}"
+                 data-state="unchecked"
+                 data-correct="${resp}"
+                 data-complet="${fraseCompleta}">
+          ${final}
+          <button>Comprova</button>
+        </p>
+        <div class="correction"></div>
+      `;
+
+      cont.appendChild(bloc);
+
+      const btn = bloc.querySelector("button");
+      const input = bloc.querySelector("input");
+
+      btn.addEventListener("click", () => comprovaIndividual(btn));
+
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          comprovaIndividual(btn);
+        }
+      });
+      
+      // Auto-focus en el primer camp
+      if (i === 0) {
+        setTimeout(() => input.focus(), 100);
+      }
+    });
+
+    document.getElementById('controls').innerHTML = `
+      <button onclick="comprovaTotes()">Comprova-ho tot</button>
+      <button onclick="reinicia()">Esborra-ho tot</button>
+      <button onclick="reiniciaAleatori()">🔁 Frases noves</button>
+    `;
+  }
+
+  function normalitza(t) {
+    return t.trim().toLowerCase().replace(/[.,!?']/g, "");
+  }
+
+  function parla(text) {
+    const s = window.speechSynthesis;
+    if (s) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "ca-ES";
+      u.rate = 0.9;
+      s.speak(u);
+    }
+  }
+
+  /* COMPROVACIÓ */
+  function comprovaIndividual(btn) {
+    const bloc = btn.closest(".phrase-block");
+    const input = bloc.querySelector("input");
+
+    const correcta = normalitza(input.dataset.correct);
+    const resposta = normalitza(input.value);
+    const estatAnterior = input.dataset.state;
+    const correccio = bloc.querySelector(".correction");
+    const fraseCompleta = input.dataset.complet;
+
+    const ok = (resposta === correcta);
+
+    if (ok) {
+      if (estatAnterior === "incorrect" || estatAnterior === "corrected") {
+        input.classList.remove("incorrect", "correct");
+        input.classList.add("corrected");
+        correccio.innerHTML = `<span style="color:var(--color-warning);">✓ Ara ja és correcte</span>`;
+        input.dataset.state = "corrected";
+      } else {
+        input.classList.remove("incorrect", "corrected");
+        input.classList.add("correct");
+        correccio.innerHTML = `<span style="color:var(--color-success);">✓ Correcte!</span>`;
+        input.dataset.state = "correct";
+        score++;
+      }
+      parla(fraseCompleta);
+    } else {
+      input.classList.remove("correct", "corrected");
+      input.classList.add("incorrect");
+      correccio.innerHTML = `<span style="color:var(--color-error);">❌ Resposta correcta: ${input.dataset.correct}</span>`;
+      input.dataset.state = "incorrect";
+      parla(fraseCompleta);
+    }
+    
+    // Actualitzar progrés
+    if (estatAnterior === "unchecked" && ok) {
+      completed++;
+      updateProgress();
+    }
+  }
+
+  function comprovaTotes() {
+    let encerts = 0;
+    document.querySelectorAll(".phrase-block").forEach(bloc => {
+      const input = bloc.querySelector("input");
+      const estatAnterior = input.dataset.state;
+      comprovaIndividual(bloc.querySelector("button"));
+      if (input.classList.contains("correct") && estatAnterior === "unchecked") {
+        encerts++;
+      }
+    });
+    
+    // Mostrar resultat final
+    const percentatge = Math.round((score / currentPhrases.length) * 100);
+    let missatge = `Has encertat ${score} de ${currentPhrases.length} (${percentatge}%). `;
+    
+    if (percentatge === 100) {
+      missatge += "Excel·lent! 🎉";
+      document.getElementById("resultat").className = "success-message";
+    } else if (percentatge >= 70) {
+      missatge += "Molt bé! 👏";
+    } else if (percentatge >= 50) {
+      missatge += "No està malament!";
+    } else {
+      missatge += "Continua practicant! 💪";
+    }
+    
+    document.getElementById("resultat").innerHTML = missatge;
+  }
+
+  function reinicia() {
+    document.querySelectorAll(".phrase-block").forEach(bloc => {
+      const input = bloc.querySelector("input");
+      input.value = "";
+      input.classList.remove("correct", "incorrect", "corrected");
+      input.dataset.state = "unchecked";
+      bloc.querySelector(".correction").textContent = "";
+    });
+    
+    score = 0;
+    completed = 0;
+    updateProgress();
+    document.getElementById("resultat").textContent = "";
+  }
+
+  function reiniciaAleatori() {
+    reinicia();
+    generaExercici(shuffle(frases).slice(0, 10));
+  }
+  
+  function updateProgress() {
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const scoreText = document.getElementById('score-text');
+    
+    const progressPercent = (completed / currentPhrases.length) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    progressText.textContent = `Progrés: ${completed}/${currentPhrases.length}`;
+    scoreText.textContent = `Puntuació: ${score}/${currentPhrases.length}`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    generaExercici(shuffle(frases).slice(0, 10));
+  });
+</script>
+
+</body>
+</html>
