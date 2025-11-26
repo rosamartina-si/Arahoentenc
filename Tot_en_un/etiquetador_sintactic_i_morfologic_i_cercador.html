@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cercador i Analitzador Lingüístic - PDF/TXT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .desc {
+            max-width: 900px;
+            font-size: 0.95rem;
+            color: #555;
+            margin: 0 auto 1rem;
+            line-height: 1.5;
+        }
+        
+        .instructions {
+            background-color: #eef2ff;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .file-input-area {
+            border: 3px dashed #6a11cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            background-color: #f8f9ff;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .file-input-area:hover {
+            background-color: #eef2ff;
+            border-color: #2575fc;
+        }
+        
+        .file-input-area.dragover {
+            background-color: #e0e7ff;
+            border-color: #2575fc;
+            transform: scale(1.02);
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #eef2ff;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn i {
+            font-size: 1.2rem;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2575fc;
+            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+        }
+        
+        .options-panel {
+            background-color: #f0f4ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #d0d8ff;
+        }
+        
+        .options-title {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .option-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2575fc;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .results-container {
+            margin-top: 30px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .results-title {
+            color: #2575fc;
+            font-size: 1.5rem;
+        }
+        
+        .results-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            min-height: 200px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .frase {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .linguistic-analysis {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #b3d9ff;
+        }
+        
+        .analysis-title {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        /* Estils per als tokens d'anàlisi morfològic */
+        .tokens {
+            margin-bottom: 1rem;
+            line-height: 2.2;
+            font-size: 1.05rem;
+        }
+
+        .token {
+            display: inline-block;
+            padding: 0.1rem 0.35rem;
+            margin: 0.1rem 0.12rem;
+            border-radius: 0.4rem;
+            border: 1px solid transparent;
+            position: relative;
+            cursor: help;
+        }
+
+        .token[data-pos="NOM"] { background: #e3f2fd; border-color: #90caf9; }
+        .token[data-pos="VERB"] { background: #e8f5e9; border-color: #a5d6a7; }
+        .token[data-pos="ADJ"] { background: #fff3e0; border-color: #ffcc80; }
+        .token[data-pos="ADV"] { background: #f3e5f5; border-color: #ce93d8; }
+        .token[data-pos="PRON"] { background: #ede7f6; border-color: #b39ddb; }
+        .token[data-pos="DET"] { background: #ffebee; border-color: #ef9a9a; }
+        .token[data-pos="PREP"] { background: #e0f2f1; border-color: #80cbc4; }
+        .token[data-pos="CONJ"] { background: #f9fbe7; border-color: #dce775; }
+        .token[data-pos="PUNCT"] { background: #eeeeee; border-color: #bdbdbd; }
+        .token[data-pos="OTHER"] { background: #f5f5f5; border-color: #e0e0e0; }
+
+        .token:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            margin-top: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: #222;
+            color: #fff;
+            font-size: 0.75rem;
+            border-radius: 0.35rem;
+            white-space: pre;
+            z-index: 10;
+            min-width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            border-bottom: 1px solid #eee;
+            padding: 0.5rem 0.6rem;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            background: #fafafa;
+        }
+
+        .pos-tag {
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 999px;
+            background: #eee;
+        }
+
+        .note {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        .word-count-section {
+            margin-top: 30px;
+        }
+        
+        .word-count-panel {
+            background-color: #eef2ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #d0d8ff;
+        }
+        
+        .word-count-panel h4 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .word-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .word-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .word-count-value {
+            background-color: #2575fc;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-message {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #2575fc;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .error-message {
+            background-color: #ffe6e6;
+            color: #d63031;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #e8f7ef;
+            color: #27ae60;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #2575fc;
+            color: #2575fc;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #6a11cb;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .status-message {
+                width: 90%;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cercador i Analitzador Lingüístic</h1>
+            <p class="desc">
+                Eina per a cercar text en documents PDF o TXT i realitzar anàlisi lingüística avançada 
+                incloent etiquetatge morfològic, lematització i anàlisi sintàctic. Inclou regles especials 
+                per a casos com <strong>profund / profundament</strong> i <strong>cada</strong>.
+            </p>
+            <div class="instructions">
+                <h3>Instruccions d'ús:</h3>
+                <ol>
+                    <li>Arrossegueu un fitxer PDF o TXT a l'àrea indicada o feu clic a "Selecciona un fitxer"</li>
+                    <li>Escriviu la paraula o frase que voleu cercar (opcional per a anàlisi complet del text)</li>
+                    <li>Seleccioneu les opcions de cerca i anàlisi lingüístic</li>
+                    <li>Feu clic a "Cercar" per obtenir els resultats</li>
+                    <li>Exploreu les diferents pestanyes d'anàlisi (Resultats, Anàlisi Lingüístic, Estadístiques)</li>
+                </ol>
+            </div>
+        </header>
+        
+        <div class="file-input-area" id="dropArea">
+            <p class="upload-text">Arrossega un fitxer PDF o TXT aquí o fes clic al botó</p>
+            <input type="file" id="fileInput" class="file-input" accept=".pdf,.txt">
+            <div class="action-buttons">
+                <button class="btn" id="selectFileBtn">
+                    <i>📂</i> Selecciona un fitxer
+                </button>
+            </div>
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar, l·l, etc.) - opcional per a anàlisi complet">
+        
+        <div class="options-panel">
+            <div class="options-title">Opcions de cerca i anàlisi</div>
+            <div class="options-grid">
+                <div class="option-group">
+                    <label for="exactMatch">Tipus de cerca:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="exactMatch">
+                        <label for="exactMatch">Cercar coincidència exacta</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableLinguistic" checked>
+                        <label for="enableLinguistic">Anàlisi lingüístic avançat</label>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label for="precedingCount">Paraules que precedeixen:</label>
+                    <select id="precedingCount">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="followingCount">Paraules que segueixen:</label>
+                    <select id="followingCount">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn" id="searchBtn">
+                <i>🔍</i> Cercar i Analitzar
+            </button>
+            <button class="btn" id="copyBtn">
+                <i>📋</i> Copiar resultats
+            </button>
+            <button class="btn" id="clearBtn">
+                <i>🗑️</i> Neteja
+            </button>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p id="loadingText">Processant...</p>
+        </div>
+        
+        <div class="status-message" id="statusMessage"></div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="results">Resultats de Cerca</div>
+            <div class="tab" data-tab="linguistic">Anàlisi Lingüístic</div>
+            <div class="tab" data-tab="statistics">Estadístiques</div>
+        </div>
+        
+        <div class="tab-content active" id="results-tab">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title">Resultats de la Cerca</h2>
+                </div>
+                <div class="results-content" id="results"></div>
+            </div>
+            
+            <div class="word-count-section">
+                <div class="word-count-panel" id="precedingWordsPanel" style="display: none;">
+                    <h4>Paraules que precedeixen "<span id="precedingSearchWord"></span>":</h4>
+                    <div class="word-list" id="precedingWordsList"></div>
+                </div>
+                
+                <div class="word-count-panel" id="followingWordsPanel" style="display: none;">
+                    <h4>Paraules que segueixen "<span id="followingSearchWord"></span>":</h4>
+                    <div class="word-list" id="followingWordsList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="linguistic-tab">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title">Anàlisi Lingüístic</h2>
+                </div>
+                <div class="results-content" id="linguisticResults"></div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="statistics-tab">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title">Estadístiques del Text</h2>
+                </div>
+                <div class="results-content" id="statisticsResults"></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Aquesta eina inclou anàlisi lingüístic avançat amb regles específiques per al català</p>
+    </footer>
+
+    <script>
+        // Configuració de PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // Diccionaris de paraules funcionals en català (millorats)
+        const DETS = new Set([
+            "el","la","els","les","un","una","uns","unes","cada",
+            "aquest","aquesta","aquests","aquestes",
+            "aquell","aquella","aquells","aquelles",
+            "al","als","del","dels","cap","gens","gaire"
+        ]);
+        
+        const PREPS = new Set([
+            "a","de","per","amb","sense","entre","sobre",
+            "sota","fins","cap","contra","davant","en","durant"
+        ]);
+        
+        const CONJS = new Set([
+            "i","o","o bé","però","sinó","que","mentre","si",
+            "tanmateix","malgrat","perquè","doncs","com","quan"
+        ]);
+        
+        const PRONOMS = new Set([
+            "jo","tu","ell","ella","nosaltres","vosaltres","ells","elles",
+            "em","et","es","ens","us","se","li","los","les","ho",
+            "mi","ti","sí","en","hi",
+            "meu","teva","teu","meva","nostre","vostre","seu",
+            "això","allò","aquest","aquell","algú","ningú","res","tot"
+        ]);
+        
+        const PUNCT = /^[\.\,\;\:\?\!\-\…“”"'\(\)\[\]]$/;
+        
+        // Caps temporals típics després de "cada"
+        const TEMPORAL_AFTER_CADA = new Set([
+            "vegada","cop","volta",
+            "dia","any","mes","jorn","setmana",
+            "matí","tarda","vespre","nit"
+        ]);
+
+        // Elements del DOM
+        const fileInput = document.getElementById('fileInput');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const dropArea = document.getElementById('dropArea');
+        const searchBtn = document.getElementById('searchBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const searchTextInput = document.getElementById('searchText');
+        const resultsDiv = document.getElementById('results');
+        const linguisticResultsDiv = document.getElementById('linguisticResults');
+        const statisticsResultsDiv = document.getElementById('statisticsResults');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const loadingText = document.getElementById('loadingText');
+        const statusMessage = document.getElementById('statusMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const fileInfo = document.getElementById('fileInfo');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Elements per a les paraules que precedeixen i segueixen
+        const precedingWordsPanel = document.getElementById('precedingWordsPanel');
+        const followingWordsPanel = document.getElementById('followingWordsPanel');
+        const precedingWordsList = document.getElementById('precedingWordsList');
+        const followingWordsList = document.getElementById('followingWordsList');
+        const precedingSearchWord = document.getElementById('precedingSearchWord');
+        const followingSearchWord = document.getElementById('followingSearchWord');
+
+        // Variables globals
+        let currentText = '';
+        let linguisticData = [];
+        
+        // Event Listeners
+        selectFileBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        searchBtn.addEventListener('click', searchFile);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearAll);
+        
+        // Tabs functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Funcions per arrossegar i deixar anar
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => highlight(true), false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => highlight(false), false);
+        });
+        
+        function highlight(shouldHighlight) {
+            if (shouldHighlight) {
+                dropArea.classList.add('dragover');
+            } else {
+                dropArea.classList.remove('dragover');
+            }
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        }
+        
+        // Funcions principals
+        function handleFileSelect() {
+            if (!fileInput.files.length) return;
+            
+            const file = fileInput.files[0];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileExtension !== 'pdf' && fileExtension !== 'txt') {
+                showError('Si us plau, selecciona un fitxer PDF o TXT vàlid.');
+                return;
+            }
+            
+            // Mostrar informació del fitxer
+            fileInfo.style.display = 'block';
+            fileInfo.textContent = `Fitxer: ${file.name} (${formatFileSize(file.size)})`;
+            
+            // Amagar missatge d'error si n'hi havia
+            hideError();
+            showStatus(`Fitxer ${fileExtension.toUpperCase()} seleccionat. Ara pots fer la cerca.`);
+        }
+        
+        async function searchFile() {
+            const file = fileInput.files[0];
+            const searchText = searchTextInput.value.trim();
+            const isExactMatch = document.getElementById('exactMatch').checked;
+            const enableLinguistic = document.getElementById('enableLinguistic').checked;
+            const precedingCount = parseInt(document.getElementById('precedingCount').value);
+            const followingCount = parseInt(document.getElementById('followingCount').value);
+            
+            resultsDiv.innerHTML = '';
+            linguisticResultsDiv.innerHTML = '';
+            statisticsResultsDiv.innerHTML = '';
+            precedingWordsPanel.style.display = 'none';
+            followingWordsPanel.style.display = 'none';
+            precedingWordsList.innerHTML = '';
+            followingWordsList.innerHTML = '';
+            
+            if (!file) {
+                showError('Si us plau, selecciona un fitxer.');
+                return;
+            }
+            
+            showLoading('Processant fitxer...');
+            
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileExtension === 'pdf') {
+                await processPDF(file, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic);
+            } else if (fileExtension === 'txt') {
+                await processTXT(file, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic);
+            }
+        }
+        
+        async function processPDF(file, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic) {
+            const reader = new FileReader();
+            
+            reader.onload = async function(e) {
+                try {
+                    const typedArray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedArray).promise;
+                    let allText = "";
+                    
+                    // Llegeix totes les pàgines
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        allText += pageText + " ";
+                    }
+                    
+                    currentText = allText;
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic);
+                    
+                } catch (error) {
+                    hideLoading();
+                    showError(`Error processant el PDF: ${error.message}`);
+                    console.error(error);
+                }
+            };
+            
+            reader.onerror = function() {
+                hideLoading();
+                showError("Error en llegir el fitxer PDF. Torna a intentar-ho.");
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+        
+        async function processTXT(file, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const allText = e.target.result;
+                    currentText = allText;
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic);
+                } catch (error) {
+                    hideLoading();
+                    showError(`Error processant el fitxer TXT: ${error.message}`);
+                    console.error(error);
+                }
+            };
+            
+            reader.onerror = function() {
+                hideLoading();
+                showError("Error en llegir el fitxer TXT. Torna a intentar-ho.");
+            };
+            
+            reader.readAsText(file, 'UTF-8');
+        }
+        
+        function processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, enableLinguistic) {
+            // Separa frases amb un mètode intel·ligent que ignora l.l
+            const frases = splitSentencesIntelligently(allText);
+            
+            // Filtra per cerca si s'ha especificat text de cerca
+            const frasesFiltrades = searchText ? frases.filter(frase => {
+                const normalizedFrase = normalizeText(frase);
+                const normalizedSearchText = normalizeText(searchText);
+                
+                if (isExactMatch) {
+                    const punctuationRegex = /[.,!?;:—()»]/g;
+                    const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
+                    return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
+                } else {
+                    return normalizedFrase.includes(normalizedSearchText);
+                }
+            }) : frases;
+            
+            // Mostra resultats
+            if (searchText) {
+                displayResults(frasesFiltrades, searchText, isExactMatch);
+            } else {
+                resultsDiv.innerHTML = `<div class="success-message">S'han processat ${frases.length} frases del document. Utilitza les pestanyes d'Anàlisi Lingüístic i Estadístiques per explorar el contingut.</div>`;
+            }
+            
+            // Anàlisi lingüístic si està activat
+            if (enableLinguistic) {
+                const frasesPerAnalitzar = searchText ? frasesFiltrades : frases.slice(0, 50); // Límit per a rendiment
+                performLinguisticAnalysis(frasesPerAnalitzar, searchText);
+                calculateStatistics(allText);
+            }
+            
+            // Càlcul de paraules que precedeixen i segueixen (només si hi ha cerca)
+            if (searchText && (precedingCount > 0 || followingCount > 0)) {
+                const normalizedSearchText = normalizeText(searchText);
+                calculateAdjacentWords(allText, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount);
+            }
+            
+            hideLoading();
+            const msg = searchText ? 
+                `Cerca completada. S'han trobat ${frasesFiltrades.length} frases coincidents.` :
+                `Anàlisi completat. S'han processat ${frases.length} frases.`;
+            showStatus(msg);
+        }
+        
+        // Funció per realitzar anàlisi lingüístic
+        function performLinguisticAnalysis(frases, searchText) {
+            linguisticData = [];
+            let html = '<div class="success-message">Anàlisi lingüístic de les frases:</div>';
+            
+            if (frases.length === 0) {
+                html += '<p>No hi ha frases per analitzar.</p>';
+                linguisticResultsDiv.innerHTML = html;
+                return;
+            }
+            
+            frases.forEach((frase, index) => {
+                const analysis = analyzeSentence(frase, searchText);
+                linguisticData.push(analysis);
+                
+                html += `<div class="linguistic-analysis">`;
+                html += `<div class="analysis-title">Frase ${index + 1}:</div>`;
+                html += `<p><strong>Text:</strong> ${frase}</p>`;
+                
+                // Visualització de tokens amb colors
+                html += `<p><strong>Anàlisi morfològic:</strong></p>`;
+                html += `<div class="tokens">`;
+                analysis.tokens.forEach(token => {
+                    const tooltip = `Forma: ${token.token}\nLema: ${token.lemma}\nCategoria: ${token.pos}${token.feats ? '\nTrets: ' + token.feats : ''}`;
+                    html += `<span class="token" data-pos="${token.pos}" data-tooltip="${tooltip}">${token.token}</span> `;
+                });
+                html += `</div>`;
+                
+                // Taula detallada
+                html += `<table>`;
+                html += `<thead><tr><th>#</th><th>Token</th><th>Lema</th><th>Categoria</th><th>Trets morfològics</th></tr></thead>`;
+                html += `<tbody>`;
+                analysis.tokens.forEach((token, i) => {
+                    html += `<tr>`;
+                    html += `<td>${i + 1}</td>`;
+                    html += `<td>${token.token}</td>`;
+                    html += `<td>${token.lemma}</td>`;
+                    html += `<td><span class="pos-tag">${token.pos}</span></td>`;
+                    html += `<td>${token.feats || '-'}</td>`;
+                    html += `</tr>`;
+                });
+                html += `</tbody></table>`;
+                
+                html += `</div>`;
+            });
+            
+            // Nota informativa
+            html += `<p class="note">
+                Nota: Aquest etiquetador és heurístic i simplificat. Inclou regles específiques per a 
+                <em>profund / profundament</em> i <em>cada</em>. Per a una anàlisi professional, 
+                caldria un model de PLN complet.
+            </p>`;
+            
+            linguisticResultsDiv.innerHTML = html;
+        }
+        
+        // Funció per analitzar una frase (millorada amb les regles de l'etiquetador de referència)
+        function analyzeSentence(sentence, searchText) {
+            const tokens = tokenize(sentence);
+            const analyses = [];
+            
+            // Primera passada: anàlisi bàsica
+            tokens.forEach(token => {
+                const lemma = simpleLemma(token);
+                const base = guessPOS(token);
+                analyses.push({
+                    token: token,
+                    lemma: lemma,
+                    pos: base.pos,
+                    feats: base.feats || ""
+                });
+            });
+            
+            // Segona passada: regles específiques (profund/profundament + cada)
+            for (let i = 0; i < analyses.length; i++) {
+                const a = analyses[i];
+                const lower = a.lemma;
+                const prev = analyses[i - 1];
+                const next = analyses[i + 1];
+                
+                // --- Cas "profundament" ---
+                if (lower === "profundament") {
+                    a.pos = "ADV";
+                    const extra = "adverbi de manera corresponent a «profund»";
+                    a.feats = a.feats ? a.feats + " | " + extra : extra;
+                }
+                
+                // --- Cas "profund" ---
+                if (lower === "profund") {
+                    const prevIsVerb = prev && prev.pos === "VERB";
+                    const nextIsVerb = next && next.pos === "VERB";
+                    
+                    if (prevIsVerb || nextIsVerb) {
+                        const extra = "⚠ possible ús adverbial; considera «profundament»";
+                        a.feats = a.feats ? a.feats + " | " + extra : extra;
+                    } else {
+                        const extra = "adjectiu: ús correcte en principi (modifica un nom)";
+                        a.pos = "ADJ";
+                        a.feats = a.feats ? a.feats + " | " + extra : extra;
+                    }
+                }
+                
+                // --- Cas "cada" ---
+                if (lower === "cada") {
+                    a.pos = "DET";
+                    let extra = "determinant distributiu; va amb nom en singular";
+                    
+                    if (next) {
+                        // Avís si el nom següent sembla plural
+                        if (next.pos === "NOM" && next.lemma.endsWith("s")) {
+                            extra += ` | ⚠ el nom que segueix («${next.token}») és plural; després de «cada» normalment s'espera el singular`;
+                        }
+                        
+                        // Expressió temporal habitual
+                        if (TEMPORAL_AFTER_CADA.has(next.lemma)) {
+                            extra += " | expressió temporal d'hàbit o repetició";
+                        }
+                    }
+                    
+                    a.feats = a.feats ? a.feats + " | " + extra : extra;
+                }
+            }
+            
+            return {
+                sentence: sentence,
+                tokens: analyses
+            };
+        }
+        
+        // Funcions d'anàlisi lingüística (del etiquetador de referència)
+        function tokenize(text) {
+            return text
+                .replace(/([\.\,\;\:\?\!\(\)\[\]\“\”"'])/g, ' $1 ')
+                .split(/\s+/)
+                .filter(t => t.length > 0);
+        }
+        
+        function simpleLemma(token) {
+            return token.toLowerCase().replace(/[\.!,;:\?\…]+$/, "");
+        }
+        
+        function guessPOS(token) {
+            const raw = token;
+            const lower = token.toLowerCase();
+            
+            if (PUNCT.test(raw)) {
+                return { pos: "PUNCT", feats: "" };
+            }
+            
+            if (DETS.has(lower)) return { pos: "DET", feats: "" };
+            if (PREPS.has(lower)) return { pos: "PREP", feats: "" };
+            if (CONJS.has(lower)) return { pos: "CONJ", feats: "" };
+            if (PRONOMS.has(lower)) return { pos: "PRON", feats: "" };
+            
+            // Adverbi en -ment
+            if (lower.endsWith("ment")) {
+                return { pos: "ADV", feats: "derivat en -ment" };
+            }
+            
+            // Verb en infinitiu (-ar, -er, -re, -ir)
+            if (lower.match(/(ar|er|re|ir)$/)) {
+                return { pos: "VERB", feats: "infinitiu (suposat)" };
+            }
+            
+            // Participi passat
+            if (lower.match(/(at|ada|ats|ades|ut|uda|uts|udes|it|ida|its|ides)$/)) {
+                return { pos: "VERB", feats: "participi (probable)" };
+            }
+            
+            // Possibles adjectius
+            if (lower.match(/(al|als|ant|ants|iva|iu|ial|iosa|iós|oses|enc|enca|encs|enques)$/)) {
+                return { pos: "ADJ", feats: "" };
+            }
+            
+            // Paraules amb majúscula inicial: probable nom propi
+            if (raw[0] === raw[0].toUpperCase() && lower !== raw.toLowerCase()) {
+                return { pos: "NOM", feats: "nom propi (probable)" };
+            }
+            
+            // Heurística de masculí/femení plural/singular
+            let feats = [];
+            if (lower.endsWith("es")) feats.push("fem./pl. (probable)");
+            else if (lower.endsWith("a")) feats.push("fem./sg. (probable)");
+            else if (lower.endsWith("s")) feats.push("masc./pl. (probable)");
+            else feats.push("sg. (probable)");
+            
+            // Per defecte, assumim nom com a categoria de contingut
+            return { pos: "NOM", feats: feats.join(", ") };
+        }
+        
+        // Funció per calcular estadístiques
+        function calculateStatistics(text) {
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const sentences = splitSentencesIntelligently(text);
+            const uniqueWords = [...new Set(words.map(w => w.toLowerCase().replace(/[.,!?;:—()»«'"“”]/g, '')))].filter(w => w.length > 0);
+            
+            // Freqüència de paraules
+            const wordFreq = {};
+            words.forEach(word => {
+                const cleanWord = word.toLowerCase().replace(/[.,!?;:—()»«'"“”]/g, '');
+                if (cleanWord.length > 0) {
+                    wordFreq[cleanWord] = (wordFreq[cleanWord] || 0) + 1;
+                }
+            });
+            
+            // Paraules més freqüents
+            const sortedWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 25);
+            
+            let html = '<div class="success-message">Estadístiques generals del text:</div>';
+            
+            html += `<div class="linguistic-analysis">`;
+            html += `<p><strong>Mètriques bàsiques:</strong></p>`;
+            html += `<ul>`;
+            html += `<li>Total de paraules: <strong>${words.length.toLocaleString()}</strong></li>`;
+            html += `<li>Total de frases: <strong>${sentences.length.toLocaleString()}</strong></li>`;
+            html += `<li>Vocabulari únic: <strong>${uniqueWords.length.toLocaleString()}</strong> paraules diferents</li>`;
+            html += `<li>Longitud mitjana de frase: <strong>${(words.length / sentences.length).toFixed(1)}</strong> paraules</li>`;
+            html += `<li>Riquesa lexical (TTR): <strong>${((uniqueWords.length / words.length) * 100).toFixed(1)}%</strong></li>`;
+            html += `</ul>`;
+            
+            html += `<p><strong>25 paraules més freqüents:</strong></p>`;
+            html += `<div class="word-list">`;
+            sortedWords.forEach(([word, count]) => {
+                html += `<div class="word-item">${word} <span class="word-count-value">${count}</span></div>`;
+            });
+            html += `</div>`;
+            
+            html += `</div>`;
+            
+            statisticsResultsDiv.innerHTML = html;
+        }
+        
+        // Funció per separar frases de manera intel·ligent
+        function splitSentencesIntelligently(text) {
+            const protectedText = text.replace(/l[·.•]l/gi, 'L_GEMINADA');
+            const sentences = protectedText.split(/(?<=[.!?])\s+/);
+            
+            return sentences.map(sentence => 
+                sentence.replace(/L_GEMINADA/gi, match => {
+                    const originalIndex = text.indexOf(match);
+                    if (originalIndex !== -1) {
+                        return text.substring(originalIndex, originalIndex + 3);
+                    }
+                    return 'l·l';
+                })
+            ).filter(sentence => sentence.trim().length > 0);
+        }
+        
+        // Funció per normalitzar el text per a la cerca
+        function normalizeText(text) {
+            return text.toLowerCase()
+                .replace(/l[·.•]l/g, 'l·l')
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+        
+        // Funció per mostrar els resultats
+        function displayResults(frases, originalSearchText, isExactMatch) {
+            if (frases.length === 0) {
+                resultsDiv.innerHTML = `<div class="error-message">No s'han trobat frases amb "${originalSearchText}".</div>`;
+                return;
+            }
+            
+            let html = `<div class="success-message">S'han trobat ${frases.length} frases amb "${originalSearchText}":</div>`;
+            
+            frases.forEach((frase) => {
+                let highlightedFrase = frase;
+                
+                let regex;
+                if (isExactMatch) {
+                    regex = new RegExp(`\\b${escapeRegExp(originalSearchText)}\\b`, 'gi');
+                } else {
+                    regex = new RegExp(`(${escapeRegExp(originalSearchText)})`, 'gi');
+                }
+                
+                const matches = [...frase.matchAll(regex)];
+                
+                if (matches.length > 0) {
+                    matches.sort((a, b) => b.index - a.index);
+                    
+                    matches.forEach(match => {
+                        const start = match.index;
+                        const end = start + match[0].length;
+                        highlightedFrase = highlightedFrase.substring(0, start) + 
+                                          `<span class="highlight">${match[0]}</span>` + 
+                                          highlightedFrase.substring(end);
+                    });
+                }
+                
+                html += `<div class="frase">${highlightedFrase.trim()}</div>`;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Funció per calcular paraules adjacents
+        function calculateAdjacentWords(text, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount) {
+            const words = text.split(/\s+/);
+            const followingWords = {};
+            const precedingWords = {};
+            
+            for (let i = 0; i < words.length; i++) {
+                const currentWord = isExactMatch 
+                    ? normalizeText(words[i].replace(/[.,!?;:—()»]/g, ''))
+                    : normalizeText(words[i].toLowerCase().replace(/[.,!?;:—()»]/g, ''));
+                
+                if (isExactMatch 
+                    ? new RegExp(`^${normalizedSearchText}$`, 'i').test(currentWord)
+                    : currentWord.includes(normalizedSearchText)) {
+                    
+                    // Paraules que precedeixen
+                    if (precedingCount > 0 && i - precedingCount >= 0) {
+                        let precedingPhrase = '';
+                        for (let k = precedingCount; k >= 1; k--) {
+                            const precedingWord = words[i - k].replace(/[.,!?;:—()»]/g, '');
+                            if (precedingWord) {
+                                precedingPhrase += (precedingPhrase ? ' ' : '') + precedingWord;
+                            }
+                        }
+                        if (precedingPhrase) {
+                            precedingWords[precedingPhrase] = (precedingWords[precedingPhrase] || 0) + 1;
+                        }
+                    }
+                    
+                    // Paraules que segueixen
+                    if (followingCount > 0 && i + followingCount < words.length) {
+                        let followingPhrase = '';
+                        for (let j = 1; j <= followingCount; j++) {
+                            const followingWord = words[i + j].replace(/[.,!?;:—()»]/g, '');
+                            if (followingWord) {
+                                followingPhrase += (followingPhrase ? ' ' : '') + followingWord;
+                            }
+                        }
+                        if (followingPhrase) {
+                            followingWords[followingPhrase] = (followingWords[followingPhrase] || 0) + 1;
+                        }
+                    }
+                }
+            }
+            
+            // Mostrar paraules que precedeixen
+            if (Object.keys(precedingWords).length > 0) {
+                precedingSearchWord.textContent = searchText;
+                const sortedPreceding = Object.entries(precedingWords).sort((a, b) => b[1] - a[1]);
+                sortedPreceding.forEach(entry => {
+                    precedingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
+                });
+                precedingWordsPanel.style.display = 'block';
+            }
+            
+            // Mostrar paraules que segueixen
+            if (Object.keys(followingWords).length > 0) {
+                followingSearchWord.textContent = searchText;
+                const sortedFollowing = Object.entries(followingWords).sort((a, b) => b[1] - a[1]);
+                sortedFollowing.forEach(entry => {
+                    followingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
+                });
+                followingWordsPanel.style.display = 'block';
+            }
+        }
+        
+        // Funció per copiar els resultats al porta-retalls
+        function copyResults() {
+            if (!resultsDiv.innerHTML || resultsDiv.innerHTML === '') {
+                showError('No hi ha resultats per copiar.');
+                return;
+            }
+            
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = resultsDiv.innerHTML;
+            
+            const successMessage = tempDiv.querySelector('.success-message');
+            if (successMessage) {
+                successMessage.remove();
+            }
+            
+            const frases = tempDiv.querySelectorAll('.frase');
+            
+            let textToCopy = '';
+            frases.forEach((frase, index) => {
+                const highlights = frase.querySelectorAll('.highlight');
+                highlights.forEach(el => {
+                    const textNode = document.createTextNode(el.textContent);
+                    el.parentNode.replaceChild(textNode, el);
+                });
+                
+                if (index > 0) {
+                    textToCopy += '\n\n';
+                }
+                textToCopy += frase.textContent.trim();
+            });
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showStatus('Resultats copiats al porta-retalls!');
+                
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i>✅</i> Copiat!';
+                copyBtn.disabled = true;
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                    copyBtn.disabled = false;
+                }, 2000);
+            }).catch(err => {
+                console.error('Error copiant text: ', err);
+                showError('Error copiant resultats al porta-retalls.');
+            });
+        }
+        
+        function clearAll() {
+            fileInput.value = '';
+            searchTextInput.value = '';
+            resultsDiv.innerHTML = '';
+            linguisticResultsDiv.innerHTML = '';
+            statisticsResultsDiv.innerHTML = '';
+            precedingWordsPanel.style.display = 'none';
+            followingWordsPanel.style.display = 'none';
+            precedingWordsList.innerHTML = '';
+            followingWordsList.innerHTML = '';
+            fileInfo.style.display = 'none';
+            hideError();
+            hideStatus();
+            
+            // Restablir opcions per defecte
+            document.getElementById('exactMatch').checked = false;
+            document.getElementById('enableLinguistic').checked = true;
+            document.getElementById('precedingCount').value = '0';
+            document.getElementById('followingCount').value = '0';
+            
+            // Restablir pestanyes
+            tabs.forEach((tab, index) => {
+                if (index === 0) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach((content, index) => {
+                if (index === 0) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            showStatus('S\'ha netejat tot el contingut.');
+        }
+        
+        // Funcions auxiliars
+        function showLoading(message) {
+            loadingText.textContent = message;
+            loadingIndicator.style.display = 'block';
+        }
+        
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+        
+        function showStatus(message) {
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function hideStatus() {
+            statusMessage.style.display = 'none';
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+        
+        // Permetre la cerca amb la tecla Enter
+        document.getElementById('searchText').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchFile();
+            }
+        });
+    </script>
+</body>
+</html>
