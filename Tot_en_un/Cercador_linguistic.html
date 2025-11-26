@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador</title>
+    <title>Cercador de Frases en PDF i TXT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -66,7 +67,7 @@
             line-height: 1.5;
         }
         
-        .text-input-area {
+        .file-input-area {
             border: 3px dashed #6a11cb;
             border-radius: 10px;
             padding: 20px;
@@ -76,12 +77,12 @@
             position: relative;
         }
         
-        .text-input-area:hover {
+        .file-input-area:hover {
             background-color: #eef2ff;
             border-color: #2575fc;
         }
         
-        .text-input-area.dragover {
+        .file-input-area.dragover {
             background-color: #e0e7ff;
             border-color: #2575fc;
             transform: scale(1.02);
@@ -140,24 +141,6 @@
         
         .btn i {
             font-size: 1.2rem;
-        }
-        
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            resize: vertical;
-            transition: border-color 0.3s;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #2575fc;
-            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
         }
         
         input[type="text"] {
@@ -265,6 +248,16 @@
             overflow-y: auto;
         }
         
+        .frase {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        
         .highlight {
             background-color: #ffeb3b;
             font-weight: bold;
@@ -351,6 +344,14 @@
             display: none;
         }
         
+        .success-message {
+            background-color: #e8f7ef;
+            color: #27ae60;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
         footer {
             margin-top: 30px;
             text-align: center;
@@ -408,23 +409,23 @@
 <body>
     <div class="container">
         <header>
-            <h1>Cercador</h1>
+            <h1>Cercador de Frases en PDF i TXT</h1>
             <div class="instructions">
                 <h3>Instruccions d'ús:</h3>
                 <ol>
-                    <li>Introduïu text directament a l'àrea de text o arrossegueu un fitxer .txt</li>
+                    <li>Arrossegueu un fitxer PDF o TXT a l'àrea indicada o feu clic a "Selecciona un fitxer"</li>
                     <li>Escriviu la paraula o frase que voleu cercar</li>
                     <li>Seleccioneu les opcions de cerca (coincidència exacta, paraules adjacents)</li>
                     <li>Feu clic a "Cercar" per obtenir els resultats</li>
                     <li>Utilitzeu "Copiar resultats" per exportar els resultats</li>
                 </ol>
+                <p><strong>Nota:</strong> Aquest cercador reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l, l.l, etc.)</p>
             </div>
         </header>
         
-        <div class="text-input-area" id="dropArea">
-            <p class="upload-text">Introdueix el text aquí o arrossega un fitxer de text</p>
-            <textarea id="textInput" placeholder="Pega el text aquí o arrossega un fitxer..."></textarea>
-            <input type="file" id="fileInput" class="file-input" accept=".txt">
+        <div class="file-input-area" id="dropArea">
+            <p class="upload-text">Arrossega un fitxer PDF o TXT aquí o fes clic al botó</p>
+            <input type="file" id="fileInput" class="file-input" accept=".pdf,.txt">
             <div class="action-buttons">
                 <button class="btn" id="selectFileBtn">
                     <i>📂</i> Selecciona un fitxer
@@ -435,7 +436,7 @@
         
         <div class="error-message" id="errorMessage"></div>
         
-        <input type="text" id="searchWord" placeholder="Paraula a cercar">
+        <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar, l·l, etc.)">
         
         <div class="options-panel">
             <div class="options-title">Opcions de cerca</div>
@@ -514,10 +515,13 @@
     </div>
     
     <footer>
-        <p>Aquesta eina reconeix automàticament els caràcters especials del català</p>
+        <p>Aquesta eina reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l)</p>
     </footer>
 
     <script>
+        // Configuració de PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
         // Elements del DOM
         const fileInput = document.getElementById('fileInput');
         const selectFileBtn = document.getElementById('selectFileBtn');
@@ -525,8 +529,7 @@
         const searchBtn = document.getElementById('searchBtn');
         const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const textInput = document.getElementById('textInput');
-        const searchWordInput = document.getElementById('searchWord');
+        const searchTextInput = document.getElementById('searchText');
         const resultsDiv = document.getElementById('results');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const loadingText = document.getElementById('loadingText');
@@ -545,7 +548,7 @@
         // Event Listeners
         selectFileBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileSelect);
-        searchBtn.addEventListener('click', searchText);
+        searchBtn.addEventListener('click', searchFile);
         copyBtn.addEventListener('click', copyResults);
         clearBtn.addEventListener('click', clearAll);
         
@@ -592,9 +595,10 @@
             if (!fileInput.files.length) return;
             
             const file = fileInput.files[0];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
             
-            if (!file.type.includes('text/') && !file.name.endsWith('.txt')) {
-                showError('Si us plau, selecciona un fitxer de text vàlid (.txt).');
+            if (fileExtension !== 'pdf' && fileExtension !== 'txt') {
+                showError('Si us plau, selecciona un fitxer PDF o TXT vàlid.');
                 return;
             }
             
@@ -604,34 +608,12 @@
             
             // Amagar missatge d'error si n'hi havia
             hideError();
-            
-            // Mostrar indicador de càrrega
-            showLoading('Carregant fitxer...');
-            
-            const fileReader = new FileReader();
-            
-            fileReader.onload = function() {
-                textInput.value = this.result;
-                hideLoading();
-                showStatus('Fitxer carregat correctament.');
-            };
-            
-            fileReader.onerror = function() {
-                hideLoading();
-                showError('Error llegint el fitxer. Torna a intentar-ho.');
-            };
-            
-            fileReader.readAsText(file);
+            showStatus(`Fitxer ${fileExtension.toUpperCase()} seleccionat. Ara pots fer la cerca.`);
         }
         
-        function normalizeText(text) {
-            // Normalitza el text per a una cerca insensible a accents
-            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        }
-        
-        function searchText() {
-            const text = textInput.value;
-            const searchWord = searchWordInput.value.trim();
+        async function searchFile() {
+            const file = fileInput.files[0];
+            const searchText = searchTextInput.value.trim();
             const isExactMatch = document.getElementById('exactMatch').checked;
             const precedingCount = parseInt(document.getElementById('precedingCount').value);
             const followingCount = parseInt(document.getElementById('followingCount').value);
@@ -642,114 +624,254 @@
             precedingWordsList.innerHTML = '';
             followingWordsList.innerHTML = '';
             
-            if (!searchWord) {
-                showError('Si us plau, introdueix una paraula a cercar.');
+            if (!searchText) {
+                showError('Si us plau, introdueix un text a cercar.');
                 return;
             }
             
-            if (!text) {
-                showError('Si us plau, introdueix text o carrega un fitxer.');
+            if (!file) {
+                showError('Si us plau, selecciona un fitxer.');
                 return;
             }
             
-            showLoading('Cercant...');
+            showLoading('Processant fitxer...');
             
-            // Simulem una petita espera per a una millor experiència d'usuari
-            setTimeout(() => {
-                const punctuationRegex = /[.,!?;:—()»]/g;
-                
-                // Crear una versió normalitzada del text per a la cerca
-                const normalizedText = normalizeText(text);
-                const normalizedSearchWord = normalizeText(searchWord);
-                
-                // Dividir el text en frases i cercar coincidències
-                const sentences = text.split(/[.?!]/);
-                const matchedSentences = sentences.filter(sentence => {
-                    const normalizedSentence = normalizeText(sentence);
-                    if (isExactMatch) {
-                        // Utilitzem \b per a límits de paraula, però amb la versió normalitzada
-                        return new RegExp(`\\b${normalizedSearchWord}\\b`, 'i').test(normalizedSentence.replace(punctuationRegex, ''));
-                    } else {
-                        return normalizedSentence.toLowerCase().includes(normalizedSearchWord.toLowerCase());
-                    }
-                });
-                
-                // Mostrar frases coincidents
-                if (matchedSentences.length > 0) {
-                    matchedSentences.forEach(sentence => {
-                        // Crear una expressió regular que reconegui la paraula amb possibles accents
-                        const accentRegex = new RegExp(`(${searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-                        const highlightedSentence = sentence.replace(accentRegex, '<span class="highlight">$1</span>');
-                        resultsDiv.innerHTML += '<p>' + highlightedSentence.trim() + '.</p>';
-                    });
-                } else {
-                    resultsDiv.innerHTML += '<p>No s\'ha trobat cap frase.</p>';
-                }
-                
-                // Càlcul de paraules que precedeixen i segueixen
-                const words = text.split(/\s+/);
-                const followingWords = {};
-                const precedingWords = {};
-                
-                for (let i = 0; i < words.length; i++) {
-                    const currentWord = isExactMatch 
-                        ? normalizeText(words[i].replace(punctuationRegex, ''))
-                        : normalizeText(words[i].toLowerCase().replace(punctuationRegex, ''));
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileExtension === 'pdf') {
+                await processPDF(file, searchText, isExactMatch, precedingCount, followingCount);
+            } else if (fileExtension === 'txt') {
+                await processTXT(file, searchText, isExactMatch, precedingCount, followingCount);
+            }
+        }
+        
+        async function processPDF(file, searchText, isExactMatch, precedingCount, followingCount) {
+            const reader = new FileReader();
+            
+            reader.onload = async function(e) {
+                try {
+                    const typedArray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedArray).promise;
+                    let allText = "";
                     
-                    if (new RegExp(`^${normalizedSearchWord}$`, 'i').test(currentWord)) {
-                        // Paraules que precedeixen (grups de paraules)
-                        if (precedingCount > 0 && i - precedingCount >= 0) {
-                            let precedingPhrase = '';
-                            for (let k = precedingCount; k >= 1; k--) {
-                                const precedingWord = words[i - k].replace(punctuationRegex, '');
-                                if (precedingWord) {
-                                    precedingPhrase += (precedingPhrase ? ' ' : '') + precedingWord;
-                                }
-                            }
-                            if (precedingPhrase) {
-                                precedingWords[precedingPhrase] = (precedingWords[precedingPhrase] || 0) + 1;
+                    // Llegeix totes les pàgines
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        allText += pageText + " ";
+                    }
+                    
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount);
+                    
+                } catch (error) {
+                    hideLoading();
+                    showError(`Error processant el PDF: ${error.message}`);
+                    console.error(error);
+                }
+            };
+            
+            reader.onerror = function() {
+                hideLoading();
+                showError("Error en llegir el fitxer PDF. Torna a intentar-ho.");
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+        
+        async function processTXT(file, searchText, isExactMatch, precedingCount, followingCount) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const allText = e.target.result;
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount);
+                } catch (error) {
+                    hideLoading();
+                    showError(`Error processant el fitxer TXT: ${error.message}`);
+                    console.error(error);
+                }
+            };
+            
+            reader.onerror = function() {
+                hideLoading();
+                showError("Error en llegir el fitxer TXT. Torna a intentar-ho.");
+            };
+            
+            reader.readAsText(file, 'UTF-8');
+        }
+        
+        function processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount) {
+            // Normalitza el text per a la cerca (incloent variants de l·l)
+            const normalizedText = normalizeText(allText);
+            const normalizedSearchText = normalizeText(searchText);
+            
+            // Separa frases amb un mètode intel·ligent que ignora l.l
+            const frases = splitSentencesIntelligently(allText).filter(frase => {
+                const normalizedFrase = normalizeText(frase);
+                
+                if (isExactMatch) {
+                    // Utilitzem \b per a límits de paraula, però amb la versió normalitzada
+                    const punctuationRegex = /[.,!?;:—()»]/g;
+                    const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
+                    return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
+                } else {
+                    return normalizedFrase.includes(normalizedSearchText);
+                }
+            });
+            
+            // Mostra resultats
+            displayResults(frases, searchText, normalizedSearchText, isExactMatch);
+            
+            // Càlcul de paraules que precedeixen i segueixen
+            if (precedingCount > 0 || followingCount > 0) {
+                calculateAdjacentWords(allText, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount);
+            }
+            
+            hideLoading();
+            showStatus(`Cerca completada. S'han trobat ${frases.length} frases coincidents.`);
+        }
+        
+        // Funció per separar frases de manera intel·ligent
+        function splitSentencesIntelligently(text) {
+            // Primer, protegeix les el·l geminades reemplaçant-les temporalment
+            const protectedText = text.replace(/l[·.•]l/gi, 'L_GEMINADA');
+            
+            // Separa per punt, exclamació i interrogació
+            const sentences = protectedText.split(/(?<=[.!?])\s+/);
+            
+            // Restaura les el·l geminades
+            return sentences.map(sentence => 
+                sentence.replace(/L_GEMINADA/gi, match => {
+                    // Restaura la forma original
+                    const originalIndex = text.indexOf(match);
+                    if (originalIndex !== -1) {
+                        return text.substring(originalIndex, originalIndex + 3); // l·l o l.l
+                    }
+                    return 'l·l'; // fallback
+                })
+            ).filter(sentence => sentence.trim().length > 0);
+        }
+        
+        // Funció per normalitzar el text per a la cerca
+        function normalizeText(text) {
+            return text.toLowerCase()
+                // Normalitza les diferents representacions de la ela geminada
+                .replace(/l[·.•]l/g, 'l·l')
+                // Normalitza altres caràcters problemàtics
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Elimina accents per a cerca més flexible
+        }
+        
+        // Funció per mostrar els resultats
+        function displayResults(frases, originalSearchText, normalizedSearchText, isExactMatch) {
+            if (frases.length === 0) {
+                resultsDiv.innerHTML = `<div class="error-message">No s'han trobat frases amb "${originalSearchText}".</div>`;
+                return;
+            }
+            
+            let html = `<div class="success-message">S'han trobat ${frases.length} frases amb "${originalSearchText}":</div>`;
+            
+            frases.forEach((frase) => {
+                // Destacar el text cercat a la frase
+                const normalizedFrase = normalizeText(frase);
+                let highlightedFrase = frase;
+                
+                // Crea una expressió regular per trobar totes les coincidències
+                let regex;
+                if (isExactMatch) {
+                    regex = new RegExp(`\\b${escapeRegExp(originalSearchText)}\\b`, 'gi');
+                } else {
+                    regex = new RegExp(`(${escapeRegExp(originalSearchText)})`, 'gi');
+                }
+                
+                const matches = [...frase.matchAll(regex)];
+                
+                // Si hi ha coincidències, destaca-les
+                if (matches.length > 0) {
+                    // Ordena les coincidències per posició (de dreta a esquerra) per evitar problemes amb reemplaçaments
+                    matches.sort((a, b) => b.index - a.index);
+                    
+                    // Aplica els destacats
+                    matches.forEach(match => {
+                        const start = match.index;
+                        const end = start + match[0].length;
+                        highlightedFrase = highlightedFrase.substring(0, start) + 
+                                          `<span class="highlight">${match[0]}</span>` + 
+                                          highlightedFrase.substring(end);
+                    });
+                }
+                
+                // Mostra la frase sense numeració
+                html += `<div class="frase">${highlightedFrase.trim()}</div>`;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Funció per calcular paraules adjacents
+        function calculateAdjacentWords(text, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount) {
+            const words = text.split(/\s+/);
+            const followingWords = {};
+            const precedingWords = {};
+            
+            for (let i = 0; i < words.length; i++) {
+                const currentWord = isExactMatch 
+                    ? normalizeText(words[i].replace(/[.,!?;:—()»]/g, ''))
+                    : normalizeText(words[i].toLowerCase().replace(/[.,!?;:—()»]/g, ''));
+                
+                if (isExactMatch 
+                    ? new RegExp(`^${normalizedSearchText}$`, 'i').test(currentWord)
+                    : currentWord.includes(normalizedSearchText)) {
+                    
+                    // Paraules que precedeixen (grups de paraules)
+                    if (precedingCount > 0 && i - precedingCount >= 0) {
+                        let precedingPhrase = '';
+                        for (let k = precedingCount; k >= 1; k--) {
+                            const precedingWord = words[i - k].replace(/[.,!?;:—()»]/g, '');
+                            if (precedingWord) {
+                                precedingPhrase += (precedingPhrase ? ' ' : '') + precedingWord;
                             }
                         }
-                        
-                        // Paraules que segueixen (grups de paraules)
-                        if (followingCount > 0 && i + followingCount < words.length) {
-                            let followingPhrase = '';
-                            for (let j = 1; j <= followingCount; j++) {
-                                const followingWord = words[i + j].replace(punctuationRegex, '');
-                                if (followingWord) {
-                                    followingPhrase += (followingPhrase ? ' ' : '') + followingWord;
-                                }
+                        if (precedingPhrase) {
+                            precedingWords[precedingPhrase] = (precedingWords[precedingPhrase] || 0) + 1;
+                        }
+                    }
+                    
+                    // Paraules que segueixen (grups de paraules)
+                    if (followingCount > 0 && i + followingCount < words.length) {
+                        let followingPhrase = '';
+                        for (let j = 1; j <= followingCount; j++) {
+                            const followingWord = words[i + j].replace(/[.,!?;:—()»]/g, '');
+                            if (followingWord) {
+                                followingPhrase += (followingPhrase ? ' ' : '') + followingWord;
                             }
-                            if (followingPhrase) {
-                                followingWords[followingPhrase] = (followingWords[followingPhrase] || 0) + 1;
-                            }
+                        }
+                        if (followingPhrase) {
+                            followingWords[followingPhrase] = (followingWords[followingPhrase] || 0) + 1;
                         }
                     }
                 }
-                
-                // Mostrar paraules que precedeixen
-                if (Object.keys(precedingWords).length > 0) {
-                    precedingSearchWord.textContent = searchWord;
-                    const sortedPreceding = Object.entries(precedingWords).sort((a, b) => b[1] - a[1]);
-                    sortedPreceding.forEach(entry => {
-                        precedingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
-                    });
-                    precedingWordsPanel.style.display = 'block';
-                }
-                
-                // Mostrar paraules que segueixen
-                if (Object.keys(followingWords).length > 0) {
-                    followingSearchWord.textContent = searchWord;
-                    const sortedFollowing = Object.entries(followingWords).sort((a, b) => b[1] - a[1]);
-                    sortedFollowing.forEach(entry => {
-                        followingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
-                    });
-                    followingWordsPanel.style.display = 'block';
-                }
-                
-                hideLoading();
-                showStatus(`Cerca completada. S'han trobat ${matchedSentences.length} frases coincidents.`);
-            }, 500);
+            }
+            
+            // Mostrar paraules que precedeixen
+            if (Object.keys(precedingWords).length > 0) {
+                precedingSearchWord.textContent = searchText;
+                const sortedPreceding = Object.entries(precedingWords).sort((a, b) => b[1] - a[1]);
+                sortedPreceding.forEach(entry => {
+                    precedingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
+                });
+                precedingWordsPanel.style.display = 'block';
+            }
+            
+            // Mostrar paraules que segueixen
+            if (Object.keys(followingWords).length > 0) {
+                followingSearchWord.textContent = searchText;
+                const sortedFollowing = Object.entries(followingWords).sort((a, b) => b[1] - a[1]);
+                sortedFollowing.forEach(entry => {
+                    followingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
+                });
+                followingWordsPanel.style.display = 'block';
+            }
         }
         
         // Funció per copiar els resultats al porta-retalls
@@ -759,17 +881,35 @@
                 return;
             }
             
-            // Creem un element temporal per copiar el text net
+            // Creem un element temporal per copiar només les frases
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = resultsDiv.innerHTML;
             
-            // Eliminem els estils i elements visuals
-            const highlights = tempDiv.querySelectorAll('.highlight');
-            highlights.forEach(el => {
-                el.removeAttribute('class');
-            });
+            // Eliminem el missatge de capçalera (success-message)
+            const successMessage = tempDiv.querySelector('.success-message');
+            if (successMessage) {
+                successMessage.remove();
+            }
             
-            const textToCopy = tempDiv.textContent || tempDiv.innerText || '';
+            // Obtenim totes les frases
+            const frases = tempDiv.querySelectorAll('.frase');
+            
+            // Construïm el text a copiar amb salts de línia entre frases
+            let textToCopy = '';
+            frases.forEach((frase, index) => {
+                // Eliminem els estils de highlight
+                const highlights = frase.querySelectorAll('.highlight');
+                highlights.forEach(el => {
+                    const textNode = document.createTextNode(el.textContent);
+                    el.parentNode.replaceChild(textNode, el);
+                });
+                
+                // Afegim la frase al text a copiar
+                if (index > 0) {
+                    textToCopy += '\n\n'; // Dos salts de línia entre frases
+                }
+                textToCopy += frase.textContent.trim();
+            });
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 showStatus('Resultats copiats al porta-retalls!');
@@ -791,8 +931,7 @@
         
         function clearAll() {
             fileInput.value = '';
-            textInput.value = '';
-            searchWordInput.value = '';
+            searchTextInput.value = '';
             resultsDiv.innerHTML = '';
             precedingWordsPanel.style.display = 'none';
             followingWordsPanel.style.display = 'none';
@@ -855,6 +994,18 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
+        
+        // Funció per escapar caràcters especials en expressions regulars
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+        
+        // Permetre la cerca amb la tecla Enter
+        document.getElementById('searchText').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchFile();
+            }
+        });
     </script>
 </body>
 </html>
