@@ -3,163 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conjugador de Verbs Catalans</title>
+    <title>Conjugador de Verbs Catalans - 1a Conjugació</title>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         
         .container {
-            max-width: 900px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            margin-top: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         header {
             text-align: center;
             margin-bottom: 30px;
+            color: white;
         }
         
         h1 {
-            color: #2575fc;
-            margin-bottom: 10px;
             font-size: 2.5rem;
-        }
-        
-        .instructions {
-            background-color: #eef2ff;
-            border-left: 4px solid #2575fc;
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-top: 15px;
-            text-align: left;
-        }
-        
-        .instructions h3 {
-            color: #2575fc;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
-        .instructions ol {
-            padding-left: 20px;
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
         
-        .instructions li {
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .result-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: auto;
+            max-height: 70vh;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
             margin-bottom: 8px;
-            line-height: 1.5;
+            font-weight: 600;
+            color: var(--primary);
         }
         
-        .input-area {
-            margin-bottom: 30px;
-        }
-        
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        input[type="text"] {
-            flex: 1;
-            padding: 15px;
-            border: 1px solid #ddd;
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
             border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            font-size: 16px;
+            transition: all 0.3s;
         }
         
-        input[type="text"]:focus {
+        input:focus, select:focus {
+            border-color: var(--secondary);
             outline: none;
-            border-color: #2575fc;
-            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
         
-        .btn {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+        button {
+            background: var(--secondary);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1rem;
+            padding: 14px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            display: inline-flex;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         
-        .btn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .btn:active {
-            transform: translateY(1px);
+        button:active {
+            transform: translateY(0);
         }
         
-        .btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .verb-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
         }
         
-        .results-container {
-            margin-top: 30px;
+        .verb-example {
+            background: var(--light);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
-        .results-header {
+        .verb-example:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
         
-        .results-title {
-            color: #2575fc;
-            font-size: 1.5rem;
+        .verb-title {
+            font-size: 1.8rem;
+            color: var(--primary);
         }
         
-        .results-content {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            min-height: 200px;
-            max-height: 500px;
-            overflow-y: auto;
+        .conjugation-type {
+            background: var(--light);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
         }
         
         .conjugation-section {
             margin-bottom: 25px;
         }
         
-        .conjugation-title {
-            color: #2575fc;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 1.1rem;
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #eee;
         }
         
         .conjugation-grid {
@@ -169,86 +193,136 @@
         }
         
         .conjugation-item {
+            padding: 10px;
             background: #f8f9fa;
-            padding: 10px 15px;
-            border-radius: 5px;
-            border-left: 3px solid #3498db;
-            font-size: 1.05rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary);
         }
         
-        .conjugation-item strong {
-            color: #2575fc;
+        .pronoun {
+            font-weight: 600;
+            color: var(--dark);
         }
         
-        .status-message {
-            text-align: center;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #2575fc;
-            background-color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            display: none;
-        }
-        
-        .error-message {
-            background-color: #ffe6e6;
-            color: #d63031;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: none;
-        }
-        
-        .success-message {
-            background-color: #e8f7ef;
-            color: #27ae60;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: white;
-            font-size: 0.9rem;
+        .conjugated-form {
+            margin-left: 5px;
         }
         
         .loading {
             display: none;
             text-align: center;
-            margin: 20px 0;
+            padding: 20px;
         }
         
         .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #6a11cb;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--secondary);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
         
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
         
-        @media (max-width: 768px) {
-            .input-group {
-                flex-direction: column;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .conjugation-grid {
-                grid-template-columns: 1fr;
-            }
+        .error-message {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+        
+        .history-panel {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .history-title {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .history-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .history-item {
+            background: var(--light);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .history-item:hover {
+            background: #d5dbdb;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .conjugation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .conjugation-table th,
+        .conjugation-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .conjugation-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .conjugation-table tr:hover {
+            background: #f8f9fa;
         }
     </style>
 </head>
@@ -256,435 +330,716 @@
     <div class="container">
         <header>
             <h1>Conjugador de Verbs Catalans</h1>
-            <div class="instructions">
-                <h3>Instruccions d'ús:</h3>
-                <ol>
-                    <li>Introdueix un verb en infinitiu (ex: cantar, perdre, sentir)</li>
-                    <li>Fes clic a "Conjuga" per obtenir totes les formes verbals</li>
-                    <li>Les formes conjugades es mostraran per temps i mode</li>
-                    <li>Utilitza "Neteja" per reiniciar el conjugador</li>
-                </ol>
-                <p><strong>Nota:</strong> Aquest conjugador reconeix verbs regulars i irregulars del català.</p>
-            </div>
+            <p class="subtitle">1a Conjugació - Verbs en -ar</p>
         </header>
         
-        <div class="input-area">
-            <div class="input-group">
-                <input type="text" id="verbInput" placeholder="Introdueix un verb en infinitiu (ex: cantar, perdre, sentir)">
-                <button class="btn" id="conjugateBtn">
-                    <i>🔍</i> Conjuga
+        <div class="app-container">
+            <div class="input-panel">
+                <div class="form-group">
+                    <label for="verbInput">Verb en infinitiu (acabat en -ar)</label>
+                    <input type="text" id="verbInput" placeholder="Ex: cantar, menjar, estar...">
+                </div>
+                
+                <div class="form-group">
+                    <label>Exemples ràpids</label>
+                    <div class="verb-examples">
+                        <div class="verb-example" data-verb="cantar">cantar</div>
+                        <div class="verb-example" data-verb="menjar">menjar</div>
+                        <div class="verb-example" data-verb="estar">estar</div>
+                        <div class="verb-example" data-verb="sacar">sacar</div>
+                        <div class="verb-example" data-verb="regar">regar</div>
+                        <div class="verb-example" data-verb="canviar">canviar</div>
+                    </div>
+                </div>
+                
+                <button id="conjugateBtn">
+                    <span>Conjuga</span>
                 </button>
-                <button class="btn" id="clearBtn">
-                    <i>🗑️</i> Neteja
-                </button>
+                
+                <div class="action-buttons">
+                    <button id="clearBtn" class="btn-secondary">
+                        <span>Neteja</span>
+                    </button>
+                </div>
+                
+                <div class="history-panel">
+                    <div class="history-title">Historial</div>
+                    <div class="history-list" id="historyList">
+                        <!-- Historial es generarà dinàmicament -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-panel">
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Conjugant el verb...</p>
+                </div>
+                
+                <div id="conjugationResult">
+                    <div class="empty-state">
+                        <i>📝</i>
+                        <h3>Introdueix un verb per començar</h3>
+                        <p>Escriu un verb en infinitiu acabat en -ar al camp de l'esquerra</p>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="error-message" id="errorMessage"></div>
-        
-        <div class="loading" id="loadingIndicator">
-            <div class="spinner"></div>
-            <p id="loadingText">Conjugant verb...</p>
-        </div>
-        
-        <div class="status-message" id="statusMessage"></div>
-        
-        <div class="results-container">
-            <div class="results-header">
-                <h2 class="results-title">Conjugació</h2>
-            </div>
-            <div class="results-content" id="results"></div>
-        </div>
+        <footer>
+            <p>Conjugador de verbs catalans &copy; 2023 - 1a conjugació (-ar)</p>
+        </footer>
     </div>
-    
-    <footer>
-        <p>Conjugador de verbs catalans - Compatible amb verbs regulars i irregulars</p>
-    </footer>
 
     <script>
+        // Definim els pronoms una vegada per a tot el programa
+        const PRONOMS = ['jo', 'tu', 'ell/ella/vostè', 'nosaltres', 'vosaltres/vós', 'ells/elles/vostès'];
+        const PRONOMS_IMPERATIU = ['tu', 'ell/ella/vostè', 'nosaltres', 'vosaltres', 'ells/elles/vostès'];
+
+        // Variable global per emmagatzemar el text
+        let conjugationHistory = [];
+        
         // Elements del DOM
         const verbInput = document.getElementById('verbInput');
         const conjugateBtn = document.getElementById('conjugateBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const resultsDiv = document.getElementById('results');
+        const conjugationResult = document.getElementById('conjugationResult');
         const loadingIndicator = document.getElementById('loadingIndicator');
-        const loadingText = document.getElementById('loadingText');
-        const statusMessage = document.getElementById('statusMessage');
         const errorMessage = document.getElementById('errorMessage');
+        const historyList = document.getElementById('historyList');
+        const verbExamples = document.querySelectorAll('.verb-example');
         
-        // Event Listeners
-        conjugateBtn.addEventListener('click', conjugateVerb);
-        clearBtn.addEventListener('click', clearAll);
-        
-        // Permetre la conjugació amb la tecla Enter
-        verbInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                conjugateVerb();
-            }
+        // Inicialització
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+            setupEventListeners();
         });
+        
+        // Configuració dels event listeners
+        function setupEventListeners() {
+            conjugateBtn.addEventListener('click', conjugateVerb);
+            clearBtn.addEventListener('click', clearInput);
+            verbInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') conjugateVerb();
+            });
+            
+            // Exemples ràpids
+            verbExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    verbInput.value = this.getAttribute('data-verb');
+                    conjugateVerb();
+                });
+            });
+        }
         
         // Funció principal de conjugació
         function conjugateVerb() {
             const verb = verbInput.value.trim().toLowerCase();
             
-            resultsDiv.innerHTML = '';
-            
             if (!verb) {
-                showError('Si us plau, introdueix un verb en infinitiu.');
+                showError('Si us plau, introdueix un verb');
                 return;
             }
             
-            showLoading('Conjugant verb...');
-            
-            // Simulem una petita espera per a l'efecte visual
-            setTimeout(() => {
-                try {
-                    // Aquí aniria la lògica de conjugació
-                    // Per ara, farem una simulació amb verbs coneguts
-                    const result = simulateConjugation(verb);
-                    displayResults(result);
-                    hideLoading();
-                    showStatus(`Verb "${verb}" conjugat correctament.`);
-                } catch (error) {
-                    hideLoading();
-                    showError(`Error en la conjugació: ${error.message}`);
-                    console.error(error);
-                }
-            }, 800);
-        }
-        
-        // Funció per simular la conjugació (en un cas real, aquesta seria la lògica completa)
-        function simulateConjugation(verb) {
-            // Aquesta és una simulació. En un cas real, s'utilitzaria la lògica del conjugador
-            const conjugations = {
-                "cantar": {
-                    "Infinitiu": ["cantar"],
-                    "Gerundi": ["cantant"],
-                    "Participi": ["cantat", "cantada", "cantats", "cantades"],
-                    "Present d'indicatiu": [
-                        "canto", "cantes", "canta", 
-                        "cantem", "canteu", "canten"
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        "cantava", "cantaves", "cantava", 
-                        "cantàvem", "cantàveu", "cantaven"
-                    ],
-                    "Passat simple": [
-                        "cantí", "cantares", "cantà", 
-                        "cantàrem", "cantàreu", "cantaren"
-                    ],
-                    "Futur": [
-                        "cantaré", "cantaràs", "cantarà", 
-                        "cantarem", "cantareu", "cantaran"
-                    ],
-                    "Condicional": [
-                        "cantaria", "cantaries", "cantaria", 
-                        "cantaríem", "cantaríeu", "cantarien"
-                    ],
-                    "Present de subjuntiu": [
-                        "canti", "cantis", "canti", 
-                        "cantem", "canteu", "cantin"
-                    ],
-                    "Imperfet de subjuntiu": [
-                        "cantés", "cantessis", "cantés", 
-                        "cantéssim", "cantéssiu", "cantessin"
-                    ],
-                    "Imperatiu": [
-                        "canta", "canti", 
-                        "cantem", "canteu", "cantin"
-                    ]
-                },
-                "perdre": {
-                    "Infinitiu": ["perdre"],
-                    "Gerundi": ["perdent"],
-                    "Participi": ["perdut", "perduda", "perduts", "perdudes"],
-                    "Present d'indicatiu": [
-                        "perdo", "perds", "perd", 
-                        "perdem", "perdeu", "perden"
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        "perdia", "perdies", "perdia", 
-                        "perdíem", "perdíeu", "perdien"
-                    ],
-                    "Passat simple": [
-                        "perdí", "perderes", "perdé", 
-                        "perdérem", "perdéreu", "perderen"
-                    ],
-                    "Futur": [
-                        "perdré", "perdràs", "perdrà", 
-                        "perdrem", "perdreu", "perdran"
-                    ],
-                    "Condicional": [
-                        "perdria", "perdries", "perdria", 
-                        "perdríem", "perdríeu", "perdrien"
-                    ],
-                    "Present de subjuntiu": [
-                        "perdi", "perdis", "perdi", 
-                        "perdem", "perdeu", "perdin"
-                    ],
-                    "Imperfet de subjuntiu": [
-                        "perdés", "perdessis", "perdés", 
-                        "perdéssim", "perdéssiu", "perdessin"
-                    ],
-                    "Imperatiu": [
-                        "perd", "perdi", 
-                        "perdem", "perdeu", "perdin"
-                    ]
-                },
-                "sentir": {
-                    "Infinitiu": ["sentir"],
-                    "Gerundi": ["sentint"],
-                    "Participi": ["sentit", "sentida", "sentits", "sentides"],
-                    "Present d'indicatiu": [
-                        "sento", "sents", "sent", 
-                        "sentim", "sentiu", "senten"
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        "sentia", "senties", "sentia", 
-                        "sentíem", "sentíeu", "sentien"
-                    ],
-                    "Passat simple": [
-                        "sentí", "sentires", "sentí", 
-                        "sentírem", "sentíreu", "sentiren"
-                    ],
-                    "Futur": [
-                        "sentiré", "sentiràs", "sentirà", 
-                        "sentirem", "sentireu", "sentiran"
-                    ],
-                    "Condicional": [
-                        "sentiria", "sentiries", "sentiria", 
-                        "sentiríem", "sentiríeu", "sentirien"
-                    ],
-                    "Present de subjuntiu": [
-                        "senti", "sentis", "senti", 
-                        "sentim", "sentiu", "sentin"
-                    ],
-                    "Imperfet de subjuntiu": [
-                        "sentís", "sentissis", "sentís", 
-                        "sentíssim", "sentíssiu", "sentissin"
-                    ],
-                    "Imperatiu": [
-                        "sent", "senti", 
-                        "sentim", "sentiu", "sentin"
-                    ]
-                }
-            };
-            
-            // Si el verb està a la nostra llista de simulació, el retornem
-            if (conjugations[verb]) {
-                return {
-                    verb: verb,
-                    conjugations: conjugations[verb]
-                };
+            if (!verb.endsWith('ar')) {
+                showError('Aquest conjugador només funciona per a verbs de la 1a conjugació (acabats en -ar)');
+                return;
             }
             
-            // Si no, creem una conjugació regular basada en la terminació
-            let regularConjugation = {};
-            
-            if (verb.endsWith('ar')) {
-                // Primera conjugació (-ar)
-                const root = verb.slice(0, -2);
-                regularConjugation = {
-                    "Infinitiu": [verb],
-                    "Gerundi": [`${root}ant`],
-                    "Participi": [`${root}at`, `${root}ada`, `${root}ats`, `${root}ades`],
-                    "Present d'indicatiu": [
-                        `${root}o`, `${root}es`, `${root}a`, 
-                        `${root}em`, `${root}eu`, `${root}en`
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        `${root}ava`, `${root}aves`, `${root}ava`, 
-                        `${root}àvem`, `${root}àveu`, `${root}aven`
-                    ],
-                    "Passat simple": [
-                        `${root}í`, `${root}ares`, `${root}à`, 
-                        `${root}àrem`, `${root}àreu`, `${root}aren`
-                    ],
-                    "Futur": [
-                        `${root}aré`, `${root}aràs`, `${root}arà`, 
-                        `${root}arem`, `${root}areu`, `${root}aran`
-                    ],
-                    "Condicional": [
-                        `${root}aria`, `${root}aries`, `${root}aria`, 
-                        `${root}aríem`, `${root}aríeu`, `${root}arien`
-                    ],
-                    "Present de subjuntiu": [
-                        `${root}i`, `${root}is`, `${root}i`, 
-                        `${root}em`, `${root}eu`, `${root}in`
-                    ],
-                    "Imperfet de subjuntiu": [
-                        `${root}és`, `${root}essis`, `${root}és`, 
-                        `${root}éssim`, `${root}éssiu`, `${root}essin`
-                    ],
-                    "Imperatiu": [
-                        `${root}a`, `${root}i`, 
-                        `${root}em`, `${root}eu`, `${root}in`
-                    ]
-                };
-            } else if (verb.endsWith('er') || verb.endsWith('re')) {
-                // Segona conjugació (-er, -re)
-                const root = verb.endsWith('er') ? verb.slice(0, -2) : verb.slice(0, -2);
-                regularConjugation = {
-                    "Infinitiu": [verb],
-                    "Gerundi": [`${root}ent`],
-                    "Participi": [`${root}ut`, `${root}uda`, `${root}uts`, `${root}udes`],
-                    "Present d'indicatiu": [
-                        `${root}o`, `${root}s`, `${root}`, 
-                        `${root}em`, `${root}eu`, `${root}en`
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        `${root}ia`, `${root}ies`, `${root}ia`, 
-                        `${root}íem`, `${root}íeu`, `${root}ien`
-                    ],
-                    "Passat simple": [
-                        `${root}í`, `${root}eres`, `${root}é`, 
-                        `${root}érem`, `${root}éreu`, `${root}eren`
-                    ],
-                    "Futur": [
-                        `${root}ré`, `${root}ràs`, `${root}rà`, 
-                        `${root}rem`, `${root}reu`, `${root}ran`
-                    ],
-                    "Condicional": [
-                        `${root}ria`, `${root}ries`, `${root}ria`, 
-                        `${root}ríem`, `${root}ríeu`, `${root}rien`
-                    ],
-                    "Present de subjuntiu": [
-                        `${root}i`, `${root}is`, `${root}i`, 
-                        `${root}em`, `${root}eu`, `${root}in`
-                    ],
-                    "Imperfet de subjuntiu": [
-                        `${root}és`, `${root}essis`, `${root}és`, 
-                        `${root}éssim`, `${root}éssiu`, `${root}essin`
-                    ],
-                    "Imperatiu": [
-                        `${root}`, `${root}i`, 
-                        `${root}em`, `${root}eu`, `${root}in`
-                    ]
-                };
-            } else if (verb.endsWith('ir')) {
-                // Tercera conjugació (-ir)
-                const root = verb.slice(0, -2);
-                regularConjugation = {
-                    "Infinitiu": [verb],
-                    "Gerundi": [`${root}int`],
-                    "Participi": [`${root}it`, `${root}ida`, `${root}its`, `${root}ides`],
-                    "Present d'indicatiu": [
-                        `${root}eixo`, `${root}eixes`, `${root}eix`, 
-                        `${root}im`, `${root}iu`, `${root}eixen`
-                    ],
-                    "Pretèrit imperfet d'indicatiu": [
-                        `${root}ia`, `${root}ies`, `${root}ia`, 
-                        `${root}íem`, `${root}íeu`, `${root}ien`
-                    ],
-                    "Passat simple": [
-                        `${root}í`, `${root}ires`, `${root}í`, 
-                        `${root}írem`, `${root}íreu`, `${root}iren`
-                    ],
-                    "Futur": [
-                        `${root}iré`, `${root}iràs`, `${root}irà`, 
-                        `${root}irem`, `${root}ireu`, `${root}iran`
-                    ],
-                    "Condicional": [
-                        `${root}iria`, `${root}iries`, `${root}iria`, 
-                        `${root}iríem`, `${root}iríeu`, `${root}irien`
-                    ],
-                    "Present de subjuntiu": [
-                        `${root}eixi`, `${root}eixis`, `${root}eixi`, 
-                        `${root}im`, `${root}iu`, `${root}eixin`
-                    ],
-                    "Imperfet de subjuntiu": [
-                        `${root}ís`, `${root}issis`, `${root}ís`, 
-                        `${root}íssim`, `${root}íssiu`, `${root}issin`
-                    ],
-                    "Imperatiu": [
-                        `${root}eix`, `${root}eixi`, 
-                        `${root}im`, `${root}iu`, `${root}eixin`
-                    ]
-                };
-            } else {
-                throw new Error(`El verb "${verb}" no és reconegut.`);
-            }
-            
-            return {
-                verb: verb,
-                conjugations: regularConjugation
-            };
-        }
-        
-        // Funció per mostrar els resultats
-        function displayResults(result) {
-            const { verb, conjugations } = result;
-            
-            let html = `<div class="success-message">Conjugació del verb "${verb}":</div>`;
-            
-            for (const [tense, forms] of Object.entries(conjugations)) {
-                html += `<div class="conjugation-section">`;
-                html += `<div class="conjugation-title">${tense}</div>`;
-                html += `<div class="conjugation-grid">`;
-                
-                // Afegim les persones gramaticals com a etiquetes si cal
-                const persons = ["jo", "tu", "ell/ella", "nosaltres", "vosaltres", "ells/elles"];
-                
-                forms.forEach((form, index) => {
-                    let personLabel = "";
-                    if (tense !== "Infinitiu" && tense !== "Gerundi" && tense !== "Participi") {
-                        personLabel = persons[index] ? `<strong>${persons[index]}</strong> ` : "";
-                    }
-                    
-                    html += `<div class="conjugation-item">${personLabel}${form}</div>`;
-                });
-                
-                html += `</div></div>`;
-            }
-            
-            resultsDiv.innerHTML = html;
-        }
-        
-        function clearAll() {
-            verbInput.value = '';
-            resultsDiv.innerHTML = '';
+            // Amaga errors i mostra l'indicador de càrrega
             hideError();
-            hideStatus();
+            showLoading();
             
-            showStatus('S\'ha netejat tot el contingut.');
+            // Processem el verb
+            try {
+                const resultat = conjugaVerb(verb);
+                
+                // Mostrem el resultat
+                mostrarResultat(verb, resultat);
+                
+                // Afegim a l'historial
+                addToHistory(verb);
+                
+            } catch (error) {
+                showError('Error en conjugar el verb: ' + error.message);
+                console.error(error);
+            } finally {
+                hideLoading();
+            }
         }
         
-        // Funcions auxiliars
-        function showLoading(message) {
-            loadingText.textContent = message;
+        // FUNCIONS DE CONJUGACIÓ
+        
+function corregeixOrtografia(forma, verb, temps = '') {
+    // 1. PRIMER les substitucions específiques
+    let formaCorregida = forma
+        .replace(/je/g, 'ge') // je → ge
+        .replace(/jé/g, 'gé') // jé → gé
+        .replace(/ji/g, 'gi') // ji → gi
+        .replace(/jí/g, 'gí') // jí → gí
+        .replace(/ççe/g, 'ce') // ççe → ce
+        .replace(/ççé/g, 'cé') // ççé → cé
+        .replace(/ççí/g, 'cí') // ççí → cí
+        .replace(/ççi/g, 'ci') // ççi → ci
+        .replace(/cce/g, 'que') // cce → que
+        .replace(/ccé/g, 'qué') // ccé → qué
+        .replace(/ccí/g, 'quí') // ccí → quí
+        .replace(/cci/g, 'qui') // cci → qui
+        .replace(/gge/g, 'gue') // gge → gue
+        .replace(/ggé/g, 'gué') // ggé → gué
+        .replace(/ggi/g, 'gui') // ggi → gui
+        .replace(/ggí/g, 'guí') // ggí → guí
+        .replace(/güa/g, 'gua') // güa → gua
+        .replace(/güà/g, 'guà') // güà → guà
+        .replace(/güo/g, 'guo') // güo → guo
+        .replace(/qüa/g, 'qua') // qüa → qua
+        .replace(/qüà/g, 'quà') // qüà → quà
+        .replace(/qüo/g, 'quo') // qüo → quo
+        .replace(/ayi/g, 'aï')  // ayi → aï
+        .replace(/eyi/g, 'eï')  // eyi → eï
+        .replace(/iyi/g, 'iï')  // iyi → iï
+        .replace(/oyi/g, 'oï')  // oyi → oï
+        .replace(/uyi/g, 'uï'); // uyi → uï
+    
+    // 2. Correccions per a verbs irregulars
+    if (verb === 'aguar') {
+        formaCorregida = formaCorregida
+            .replace(/aguo/g, 'agúo')
+            .replace(/agües/g, 'agúes')
+            .replace(/^agua$/g, 'agúa')        // només quan sigui exactament "agua" 
+            .replace(/agüen/g, 'agúen')
+            .replace(/agüi/g, 'aguï')
+            .replace(/agüis/g, 'aguïs')
+            .replace(/agüin/g, 'aguïn');
+    }
+    
+    if (verb === 'estar') {
+        // Substituccions generals (sense ^ i $ per ser més flexibles) ***
+
+    if (temps === 'present') {
+        formaCorregida = formaCorregida
+            .replace(/^esto$/g, 'estic')
+            .replace(/^estes$/g, 'estàs')  
+            .replace(/^esta$/g, 'està')
+            .replace(/^esten$/g, 'estan');
+    }
+
+    else if (temps === 'passatSimple') {
+        formaCorregida = formaCorregida         
+            .replace(/^estí$/g, 'estiguí')
+            .replace(/^estares$/g, 'estigueres')
+            .replace(/^està$/g, 'estigué')
+            .replace(/^estàrem$/g, 'estiguérem')
+            .replace(/^estàreu$/g, 'estiguéreu')
+            .replace(/^estaren$/g, 'estigueren');
+    }
+        
+        else if (temps === 'subjuntiuPresent') {
+            formaCorregida = formaCorregida
+                .replace(/^esti$/g, 'estigui')
+                .replace(/^estis$/g, 'estiguis')
+                .replace(/^esteu$/g, 'estigueu')
+                .replace(/^estem$/g, 'estiguem')
+                .replace(/^estin$/g, 'estiguin'); 
+        }
+        
+        else if (temps === 'imperatiu') {
+            formaCorregida = formaCorregida
+                .replace(/^esta$/g, 'estigues')
+                .replace(/^esti$/g, 'estigui')
+                .replace(/^estem$/g, 'estiguem')
+                .replace(/^esteu$/g, 'estigueu')
+                .replace(/^estin$/g, 'estiguin'); 
+        }
+    }
+
+    if (verb === 'ser') {
+        formaCorregida = formaCorregida
+            .replace(/so/g, 'soc')
+            .replace(/ses/g, 'ets')
+            .replace(/se/g, 'és')
+            .replace(/sem/g, 'som')
+            .replace(/seu/g, 'sou')
+            .replace(/sen/g, 'són');
+    }
+    if (verb === 'anar') {
+        formaCorregida = formaCorregida
+            .replace(/ano/g, 'vaig')
+            .replace(/anes/g, 'vas')
+            .replace(/ana/g, 'va')
+            .replace(/anen/g, 'van');
+    }
+    
+    // 3. DESPRÉS les eliminacions de duplicacions
+    formaCorregida = formaCorregida
+        .replace(/cc/g, 'c')
+        .replace(/gg/g, 'g')
+        .replace(/çç/g, 'ç')
+        .replace(/ay/g, 'a')
+        .replace(/ey/g, 'e')
+        .replace(/iy/g, 'i')
+        .replace(/oy/g, 'o')
+        .replace(/uy/g, 'u');
+    
+    return formaCorregida;
+}
+        
+function corregeixOrtografiaResultat(resultat, verb) {
+    Object.keys(resultat).forEach(temps => {
+        if (Array.isArray(resultat[temps])) {
+            resultat[temps] = resultat[temps].map(item => ({
+                ...item,
+                forma: corregeixOrtografia(item.forma, verb, temps) // Passem el temps directament
+            }));
+        } else if (typeof resultat[temps] === 'object') {
+            if (resultat[temps].infinitiu) {
+                resultat[temps].infinitiu.forma = corregeixOrtografia(resultat[temps].infinitiu.forma, verb, 'infinitiu');
+            }
+            if (resultat[temps].gerundi) {
+                resultat[temps].gerundi.forma = corregeixOrtografia(resultat[temps].gerundi.forma, verb, 'gerundi');
+            }
+            if (Array.isArray(resultat[temps].participi)) {
+                resultat[temps].participi = resultat[temps].participi.map(item => ({
+                    ...item,
+                    forma: corregeixOrtografia(item.forma, verb, 'participi')
+                }));
+            }
+        }
+    });
+    
+    return resultat;
+}
+        
+        function conjugaPresent(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'o', radical + 'es', radical + 'a', 
+                             radical + 'em', radical + 'eu', radical + 'en'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS[index],
+                forma: forma,
+                temps: 'present'
+            }));
+        }
+        
+        function conjugaImperfet(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'ava', radical + 'aves', radical + 'ava', 
+                             radical + 'àvem', radical + 'àveu', radical + 'aven'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS[index],
+                forma: forma,
+                temps: 'imperfet'
+            }));
+        }
+
+
+
+function conjugaPassatSimple(radical, conjugacio) {
+    let formes = [];
+    
+    switch(conjugacio) {
+        case 'ar': 
+            formes = [radical + 'í', radical + 'ares', radical + 'à', 
+                     radical + 'àrem', radical + 'àreu', radical + 'aren'];
+            break;
+        default: 
+            formes = [];
+    }
+    
+    return formes.map((forma, index) => ({
+        etiqueta: PRONOMS[index],
+        forma: forma,
+        temps: 'passatSimple'
+    }));
+}
+
+
+
+        
+        function conjugaFutur(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'aré', radical + 'aràs', radical + 'arà', 
+                             radical + 'arem', radical + 'areu', radical + 'aran'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS[index],
+                forma: forma,
+                temps: 'futur'
+            }));
+        }
+        
+        function conjugaCondicional(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'aria', radical + 'aries', radical + 'aria', 
+                             radical + 'aríem', radical + 'aríeu', radical + 'arien'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS[index],
+                forma: forma,
+                temps: 'condicional'
+            }));
+        }
+        
+        function conjugaSubjuntiuPresent(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'i', radical + 'is', radical + 'i', 
+                             radical + 'em', radical + 'eu', radical + 'in'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS[index],
+                forma: forma,
+                temps: 'subjuntiuPresent'
+            }));
+        }
+        
+        function conjugaImperatiu(radical, conjugacio) {
+            let formes = [];
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = [radical + 'a', radical + 'i', 
+                             radical + 'em', radical + 'eu', radical + 'in'];
+                    break;
+                default: 
+                    formes = [];
+            }
+            
+            return formes.map((forma, index) => ({
+                etiqueta: PRONOMS_IMPERATIU[index],
+                forma: forma,
+                temps: 'imperatiu'
+            }));
+        }
+        
+        function conjugaFormesNominals(radical, conjugacio) {
+            let formes = {};
+            
+            switch(conjugacio) {
+                case 'ar': 
+                    formes = {
+                        infinitiu: { etiqueta: 'infinitiu', forma: radical + 'ar' },
+                        gerundi: { etiqueta: 'gerundi', forma: radical + 'ant' },
+                        participi: [
+                            { etiqueta: 'participi masculí singular', forma: radical + 'at' },
+                            { etiqueta: 'participi masculí plural', forma: radical + 'ats' },
+                            { etiqueta: 'participi femení singular', forma: radical + 'ada' },
+                            { etiqueta: 'participi femení plural', forma: radical + 'ades' }
+                        ]
+                    };
+                    break;
+                default: 
+                    formes = {};
+            }
+            
+            return formes;
+        }
+        
+        function conjugaVerb(verb) {
+            let conjugacio, radical;
+            
+            // Verbs irregulars específics
+            if (verb === 'estar') {
+                conjugacio = 'ar';
+                radical = 'est';
+            }
+            else if (verb === 'ser') {
+                conjugacio = 'ar';
+                radical = 's';
+            }
+            else if (verb === 'anar') {
+                conjugacio = 'ar';
+                radical = 'an';
+            }
+            // Verbs amb canvis ortogràfics
+            else if (verb.endsWith('guar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -4) + 'gü';
+            }
+            // Verbs amb canvis ortogràfics
+            else if (verb.endsWith('quar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -4) + 'qü';
+            }
+            else if (verb.endsWith('car')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -3) + 'cc';
+            }
+            else if (verb.endsWith('çar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -3) + 'çç';
+            }
+            else if (verb.endsWith('gar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -3) + 'gg';
+            }
+            // Verbs en -iar, -uar, etc.
+            else if (verb.endsWith('iar') || verb.endsWith('uar') || verb.endsWith('uar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -2) + 'y';
+            }
+            // Tots els altres verbs en -ar
+            else if (verb.endsWith('ar')) {
+                conjugacio = 'ar';
+                radical = verb.slice(0, -2);
+            } else {
+                return null;
+            }
+            
+            // Conjugació regular
+            const resultat = {
+                present: conjugaPresent(radical, conjugacio),
+                imperfet: conjugaImperfet(radical, conjugacio),
+		passatSimple: conjugaPassatSimple(radical, conjugacio),
+                futur: conjugaFutur(radical, conjugacio),
+                condicional: conjugaCondicional(radical, conjugacio),
+                subjuntiuPresent: conjugaSubjuntiuPresent(radical, conjugacio),
+                imperatiu: conjugaImperatiu(radical, conjugacio),
+                formesNominals: conjugaFormesNominals(radical, conjugacio)
+            };
+            
+            // Aplica correccions ortogràfiques
+            return corregeixOrtografiaResultat(resultat, verb);
+        }
+        
+        // FUNCIONS DE VISUALITZACIÓ
+        
+        function mostrarResultat(verb, resultat) {
+            let html = `
+                <div class="result-header">
+                    <h2 class="verb-title">${verb}</h2>
+                    <span class="conjugation-type">1a Conjugació (-ar)</span>
+                </div>
+            `;
+            
+            // Present d'indicatiu
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Present d'indicatiu</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.present.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            // Imperfet d'indicatiu
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Imperfet d'indicatiu</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.imperfet.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+
+
+    // Passat simple 
+    html += `<div class="conjugation-section">
+        <h3 class="section-title">Passat simple</h3>
+        <table class="conjugation-table">
+            <tbody>`;
+    resultat.passatSimple.forEach(item => {
+        html += `<tr>
+            <td class="pronoun">${item.etiqueta}</td>
+            <td class="conjugated-form">${item.forma}</td>
+        </tr>`;
+    });
+    html += `</tbody></table></div>`;
+
+
+
+            
+            // Futur
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Futur</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.futur.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            // Condicional
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Condicional</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.condicional.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            // Subjuntiu present
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Subjuntiu present</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.subjuntiuPresent.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            // Imperatiu
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Imperatiu</h3>
+                <table class="conjugation-table">
+                    <tbody>`;
+            resultat.imperatiu.forEach(item => {
+                html += `<tr>
+                    <td class="pronoun">${item.etiqueta}</td>
+                    <td class="conjugated-form">${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            // Formes no personals
+            html += `<div class="conjugation-section">
+                <h3 class="section-title">Formes no personals</h3>
+                <table class="conjugation-table">
+                    <tbody>
+                        <tr>
+                            <td>${resultat.formesNominals.infinitiu.etiqueta}</td>
+                            <td>${resultat.formesNominals.infinitiu.forma}</td>
+                        </tr>
+                        <tr>
+                            <td>${resultat.formesNominals.gerundi.etiqueta}</td>
+                            <td>${resultat.formesNominals.gerundi.forma}</td>
+                        </tr>`;
+            resultat.formesNominals.participi.forEach(item => {
+                html += `<tr>
+                    <td>${item.etiqueta}</td>
+                    <td>${item.forma}</td>
+                </tr>`;
+            });
+            html += `</tbody></table></div>`;
+            
+            conjugationResult.innerHTML = html;
+        }
+        
+        // Gestió d'errors
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        // Gestió de càrrega
+        function showLoading() {
             loadingIndicator.style.display = 'block';
+            conjugationResult.innerHTML = '';
         }
         
         function hideLoading() {
             loadingIndicator.style.display = 'none';
         }
         
-        function showStatus(message) {
-            statusMessage.textContent = message;
-            statusMessage.style.display = 'block';
+        // Neteja l'entrada
+        function clearInput() {
+            verbInput.value = '';
+            conjugationResult.innerHTML = `
+                <div class="empty-state">
+                    <i>📝</i>
+                    <h3>Introdueix un verb per començar</h3>
+                    <p>Escriu un verb en infinitiu acabat en -ar al camp de l'esquerra</p>
+                </div>
+            `;
+            hideError();
+        }
+        
+        // Gestió de l'historial
+        function addToHistory(verb) {
+            conjugationHistory = conjugationHistory.filter(v => v !== verb);
+            conjugationHistory.unshift(verb);
             
-            // Amagar el missatge després de 5 segons
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
-        }
-        
-        function hideStatus() {
-            statusMessage.style.display = 'none';
-        }
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+            if (conjugationHistory.length > 10) {
+                conjugationHistory = conjugationHistory.slice(0, 10);
+            }
             
-            // Amagar el missatge després de 5 segons
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
+            saveHistory();
+            updateHistoryUI();
         }
         
-        function hideError() {
-            errorMessage.style.display = 'none';
+        function updateHistoryUI() {
+            historyList.innerHTML = '';
+            
+            conjugationHistory.forEach(verb => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.textContent = verb;
+                item.addEventListener('click', () => {
+                    verbInput.value = verb;
+                    conjugateVerb();
+                });
+                historyList.appendChild(item);
+            });
+        }
+        
+        function saveHistory() {
+            localStorage.setItem('conjugationHistory', JSON.stringify(conjugationHistory));
+        }
+        
+        function loadHistory() {
+            const saved = localStorage.getItem('conjugationHistory');
+            if (saved) {
+                conjugationHistory = JSON.parse(saved);
+                updateHistoryUI();
+            }
         }
     </script>
 </body>
