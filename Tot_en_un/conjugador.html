@@ -555,6 +555,43 @@ function corregeixOrtografia(forma, verb, temps = '') {
         }
     }
 
+    if (verb === 'anar') {
+        // Substituccions generals (sense ^ i $ per ser més flexibles) *** 'imperfet'
+
+    if (temps === 'present') {
+        formaCorregida = formaCorregida
+            .replace(/^ano$/g, 'vaig')
+            .replace(/^anes$/g, 'vas')  
+            .replace(/^ana$/g, 'va')
+            .replace(/^anen$/g, 'van');
+    }
+
+
+    else if (temps === 'futur') {
+        formaCorregida = formaCorregida         
+            .replace(/^anaré$/g, 'aniré')
+            .replace(/^anaràs$/g, 'aniràs')
+            .replace(/^anarà$/g, 'anirà')
+            .replace(/^anarem$/g, 'anirem')
+            .replace(/^anareu$/g, 'anireu')
+            .replace(/^anaran$/g, 'aniran');
+    }
+        
+        else if (temps === 'subjuntiuPresent') {
+            formaCorregida = formaCorregida
+                .replace(/^ani$/g, 'vagi')
+                .replace(/^anis$/g, 'vagis')
+                .replace(/^anin$/g, 'vagin'); 
+        }
+        
+        else if (temps === 'imperatiu') {
+            formaCorregida = formaCorregida
+                .replace(/^ana$/g, 'ves')
+                .replace(/^ani$/g, 'vagi')
+                .replace(/^anin$/g, 'vagin'); 
+        }
+    }
+
     if (verb === 'ser') {
         formaCorregida = formaCorregida
             .replace(/so/g, 'soc')
@@ -564,13 +601,7 @@ function corregeixOrtografia(forma, verb, temps = '') {
             .replace(/seu/g, 'sou')
             .replace(/sen/g, 'són');
     }
-    if (verb === 'anar') {
-        formaCorregida = formaCorregida
-            .replace(/ano/g, 'vaig')
-            .replace(/anes/g, 'vas')
-            .replace(/ana/g, 'va')
-            .replace(/anen/g, 'van');
-    }
+
     
     // 3. DESPRÉS les eliminacions de duplicacions
     formaCorregida = formaCorregida
