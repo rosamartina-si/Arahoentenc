@@ -111,30 +111,34 @@
     }
 
     /* ======= Tabs accessibles ======= */
-    .tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: end;
-      margin-top: 14px;
-      border-bottom: 1px solid rgb(2 6 23 / 8%);
-      position: sticky;
-      top: 0;
-      background: linear-gradient( to bottom, color-mix(in oklab, var(--surface), transparent 0%), color-mix(in oklab, var(--surface), transparent 20%) );
-      z-index: 10;
-    }
+ .tabs {
+  display: flex; /* Canvia de grid a flex */
+  flex-direction: column; /* Col·loca el tablist a dalt i qualsevol altre contingut a sota */
+  margin-top: 14px;
+  border-bottom: 1px solid rgb(2 6 23 / 8%);
+  position: sticky;
+  top: 0;
+  background: linear-gradient( to bottom, color-mix(in oklab, var(--surface), transparent 0%), color-mix(in oklab, var(--surface), transparent 20%) );
+  z-index: 10;
+}
 
-    .tablist {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+.tablist {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  width: 100%; /* Assegura que ocupi tot l'amplada */
+}
 
     .tab {
       -webkit-appearance: none;
       appearance: none;
       background: transparent;
       border: 0;
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 10px 10px 0 0;
       color: var(--muted);
       font-weight: 700;
@@ -142,7 +146,22 @@
       cursor: pointer;
       position: relative;
       transition: color .2s ease;
+      white-space: nowrap; /* Evita que el text es trenqui */
     }
+
+/* Aquestes regles són per a la barra de desplaçament (opcional) */
+.tablist::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tablist::-webkit-scrollbar-track {
+  background: color-mix(in oklab, var(--surface), var(--bg) 20%);
+}
+
+.tablist::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
+}
 
     .tab[aria-selected="true"] { color: var(--text); }
 
@@ -502,15 +521,14 @@
     </header>
 
     <!-- Tabs -->
-    <nav class="tabs" role="tablist" aria-label="Seccions">
-      <div class="tablist">
-        <button class="tab" role="tab" id="tab-teoria" aria-controls="teoria" aria-selected="true" data-tab="teoria">Esdrúixoles</button>
-        <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
-        <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d'esdrúixoles</button>
-        <!-- NOVA PESTANYA -->
-        <button class="tab" role="tab" id="tab-tonica" aria-controls="sil-laba-tonica" aria-selected="false" data-tab="sil-laba-tonica">Síl·laba tònica</button>
-      </div>
-    </nav>
+<nav class="tabs" role="tablist" aria-label="Seccions">
+  <div class="tablist">
+    <button class="tab" role="tab" id="tab-teoria" aria-controls="teoria" aria-selected="true" data-tab="teoria">Esdrúixoles</button>
+    <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
+    <button class="tab" role="tab" id="tab-tonica" aria-controls="sil-laba-tonica" aria-selected="false" data-tab="sil-laba-tonica">Síl·laba tònica</button>
+    <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d'esdrúixoles</button>
+  </div>
+</nav>
 
     <!-- Contingut: Teoria (CONTINGUT ORIGINAL COMPLET) -->
     <section id="teoria" class="tab-content active" role="tabpanel" aria-labelledby="tab-teoria">
@@ -687,13 +705,13 @@
       <div class="section exercise-container">
         <h2>Exercici d'accentuació d'esdrúixoles · 10 paraules</h2>
         <div class="instructions">
-          <p><strong>Objectiu:</strong> Accentua la paraula si cal.</p>
-          <p><strong>Com?</strong> Clica les vocals per <span class="highlight-word">canviar</span> l'accent:
+          <p><strong>Objectiu:</strong> Afegeix l'accent correcte a la síl·laba antepenúltima.</p>
+          <p><strong>Com?</strong> Clica les vocals per <span class="highlight-word">alternar</span> l'accent:
             <span class="kbd">a↔à</span>,
             <span class="kbd">e↔è↔é</span>,
             <span class="kbd">i↔í</span>,
             <span class="kbd">o↔ò↔ó</span>,
-            <span class="kbd">u↔ú</span>. Prem <span class="kbd">Retorn</span> per comprovar la paraula.
+            <span class="kbd">u↔ú</span>. Prem <span class="kbd">Enter</span> per comprovar la targeta.
           </p>
         </div>
 
@@ -705,7 +723,7 @@
         <div class="controls">
           <button class="btn btn-check" id="accent-check-all-btn">Comprova-ho tot</button>
           <button class="btn btn-reset" id="accent-reset-all-btn">Reinicia</button>
-          <button class="btn" id="accent-new-exercise-btn">Exercici nou</button>
+          <button class="btn" id="accent-new-exercise-btn">Nou exercici</button>
         </div>
 
         <div class="instructions" id="accent-feedback" style="display:none"></div>
@@ -718,7 +736,11 @@
         <h2>Exercici de síl·laba tònica · 10 paraules</h2>
         <div class="instructions">
           <p><strong>Objectiu:</strong> Escolta la paraula i identifica la síl·laba tònica (la que porta l'accent).</p>
-          <p><strong>Com?</strong> Prem el botó d'àudio per escoltar la paraula. Després, clica sobre el punt que correspon a la síl·laba tònica. </p>
+          <p><strong>Com?</strong> Prem el botó d'àudio per escoltar la paraula. Després, clica sobre el punt que correspon a la síl·laba tònica. Els colors indiquen:
+            <span style="color: var(--success)">Verd</span> = correcte a la primera,
+            <span style="color: var(--danger)">Vermell</span> = incorrecte,
+            <span style="color: var(--warning)">Groc</span> = correcte després d'haver fallat (sense punt).
+          </p>
           <p>Prem <span class="kbd">Enter</span> per comprovar la targeta quan hagis seleccionat una síl·laba.</p>
         </div>
 
@@ -758,17 +780,17 @@
       separation: {
         correct: { icon: '✅', text: 'Molt bé!' },
         late: { icon: '✅', text: 'Ara sí!' },
-        incorrect: { icon: '❌', text: 'Torna-hi' }
+        incorrect: { icon: '❌', text: 'Prova de nou' }
       },
       accent: {
         correct: { icon: '✅', text: 'Molt bé!' },
         late: { icon: '✅', text: 'Ara sí!' },
-        incorrect: { icon: '❌', text: 'Torna-hi' }
+        incorrect: { icon: '❌', text: 'Prova de nou' }
       },
       tonic: {
         correct: { icon: '✅', text: 'Molt bé!' },
         late: { icon: '✅', text: 'Ara sí!' },
-        incorrect: { icon: '❌', text: 'Torna-hi' }
+        incorrect: { icon: '❌', text: 'Prova de nou' }
       }
     };
 
