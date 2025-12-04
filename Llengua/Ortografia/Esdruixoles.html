@@ -29,7 +29,7 @@
       --grid-gap: 22px;
     }
 
-  /* Número gran i gris per a les targetes de l’accentuació */
+  /* Número gran i gris per a les targetes de l'accentuació */
   .card-index{
     font-weight: 900;
     color: var(--muted);          /* gris mitjà del teu tema */
@@ -126,6 +126,7 @@
     .tablist {
       display: flex;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .tab {
@@ -231,7 +232,7 @@
     }
     .word-status.correct { background: color-mix(in oklab, var(--success), transparent 86%); color: color-mix(in oklab, var(--success), black 20%); border-color: color-mix(in oklab, var(--success), black 10%); }
     .word-status.incorrect { background: color-mix(in oklab, var(--danger), transparent 86%); color: color-mix(in oklab, var(--danger), black 20%); border-color: color-mix(in oklab, var(--danger), black 10%); }
-    /* ✅ Xip d’estat groc per als encerts sense punt */
+    /* ✅ Xip d'estat groc per als encerts sense punt */
     .word-status.late {
       background: color-mix(in oklab, var(--warning), transparent 86%);
       color: color-mix(in oklab, var(--warning), black 20%);
@@ -248,13 +249,48 @@
     .letter { font-size: 1.45rem; padding: 8px 3px; border-bottom: 2px solid transparent; border-radius: 6px; cursor: pointer; }
     .letter:hover { background: color-mix(in oklab, var(--surface), var(--bg) 24%); }
 
+    .syllable {
+      font-size: 1.45rem;
+      padding: 8px 10px;
+      margin: 2px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+      background: color-mix(in oklab, var(--surface), var(--bg) 10%);
+    }
+    
+    .syllable:hover {
+      background: color-mix(in oklab, var(--surface), var(--bg) 24%);
+      transform: translateY(-2px);
+    }
+    
+    .syllable.selected { 
+      border-color: var(--primary);
+      background: color-mix(in oklab, var(--primary), transparent 88%);
+    }
+    
+    .syllable.correct { 
+      border-color: var(--success);
+      background: color-mix(in oklab, var(--success), transparent 88%);
+    }
+    
+    .syllable.incorrect { 
+      border-color: var(--danger);
+      background: color-mix(in oklab, var(--danger), transparent 88%);
+    }
+    
+    .syllable.late { 
+      border-color: var(--warning);
+      background: color-mix(in oklab, var(--warning), transparent 88%);
+    }
+
     .special-char { font-size: 1.45rem; padding: 8px 2px; color: #8e44ad; font-weight: 800; cursor: pointer; border-radius: 6px; }
     .special-char:hover { background: color-mix(in oklab, var(--surface), var(--bg) 24%); color: var(--primary); }
 
     .separator { font-size: 1.45rem; padding: 8px 4px; color: var(--primary); font-weight: 800; cursor: pointer; border-radius: 6px; position: relative; }
-    /* Abans: fons groc i text vermell + ✕. Ara: sense ✕ i amb fons suau blau */
     .separator:hover { background: color-mix(in oklab, var(--primary), transparent 88%); color: var(--primary); }
-    .separator::after { content: none !important; }           /* ✕ eliminada en qualsevol estat */
+    .separator::after { content: none !important; }
 
     .separator-placeholder { width: 9px; height: 30px; cursor: pointer; border: 2px dashed rgb(2 6 23 / 20%); border-radius: 3px; transition: 120ms ease; }
     .separator-placeholder:hover { background: color-mix(in oklab, var(--primary), transparent 88%); border-color: var(--primary); }
@@ -269,13 +305,73 @@
     .word-check-btn:hover { background: var(--primary-600); transform: translateY(-1px); }
     .word-check-btn:active { transform: translateY(0); }
 
-    .word-feedback { margin-top: 10px; font-weight: 700; min-height: 22px; text-align: center; padding: 8px; border-radius: 8px; }
-    .word-feedback.correct { color: var(--success-600); background: color-mix(in oklab, var(--success), transparent 88%); }
-    .word-feedback.incorrect { color: var(--danger-600); background: color-mix(in oklab, var(--danger), transparent 88%); }
-    /* ✅ Missatge groc per a “Correcte (sense punt)” */
+    .word-feedback { 
+      margin-top: 10px; 
+      font-weight: 700; 
+      min-height: 22px; 
+      text-align: center; 
+      padding: 8px; 
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .word-feedback.correct { 
+      color: var(--success-600); 
+      background: color-mix(in oklab, var(--success), transparent 88%); 
+    }
+    .word-feedback.incorrect { 
+      color: var(--danger-600); 
+      background: color-mix(in oklab, var(--danger), transparent 88%); 
+    }
     .word-feedback.late { 
       color: #b45309; 
       background: color-mix(in oklab, var(--warning), transparent 88%);
+    }
+    
+    /* Icones per al feedback */
+    .feedback-icon {
+      font-size: 1.1em;
+    }
+
+    /* ======= Botó d'àudio ======= */
+    .audio-btn {
+      background: color-mix(in oklab, var(--primary), transparent 90%);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .audio-btn:hover {
+      background: color-mix(in oklab, var(--primary), transparent 80%);
+      transform: translateY(-2px);
+    }
+    
+    .audio-btn:active {
+      transform: translateY(0);
+    }
+    
+    .audio-btn.playing {
+      background: var(--primary);
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
     }
 
     /* ======= Controls generals ======= */
@@ -335,11 +431,66 @@
       line-height: 1.1;
     }
 
+    /* ======= Puntets per indicar síl·labes ======= */
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+    
+    .dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: color-mix(in oklab, var(--surface), var(--bg) 30%);
+      border: 2px solid color-mix(in oklab, var(--text), transparent 60%);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dot:hover {
+      background: color-mix(in oklab, var(--primary), transparent 80%);
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+    
+    .dot.selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary), transparent 70%);
+    }
+    
+    .dot.correct {
+      background: var(--success);
+      border-color: var(--success);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--success), transparent 70%);
+    }
+    
+    .dot.incorrect {
+      background: var(--danger);
+      border-color: var(--danger);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--danger), transparent 70%);
+    }
+    
+    .dot.late {
+      background: var(--warning);
+      border-color: var(--warning);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--warning), transparent 70%);
+    }
+
     /* ======= Responsive ======= */
     @media (max-width: 720px) {
       body { padding: 16px; }
       .tablist { overflow-x: auto; }
       .word-container { min-height: 52px; }
+      .dot { width: 25px; height: 25px; }
     }
   </style>
 </head>
@@ -355,7 +506,9 @@
       <div class="tablist">
         <button class="tab" role="tab" id="tab-teoria" aria-controls="teoria" aria-selected="true" data-tab="teoria">Esdrúixoles</button>
         <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
-        <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d’esdrúixoles</button>
+        <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d'esdrúixoles</button>
+        <!-- NOVA PESTANYA -->
+        <button class="tab" role="tab" id="tab-tonica" aria-controls="sil-laba-tonica" aria-selected="false" data-tab="sil-laba-tonica">Síl·laba tònica</button>
       </div>
     </nav>
 
@@ -505,7 +658,7 @@
       </div>
     </section>
 
-    <!-- Contingut: Exercici -->
+    <!-- Contingut: Exercici de separació -->
     <section id="separacio-sil-labes" class="tab-content" role="tabpanel" aria-labelledby="tab-separacio">
       <div class="section exercise-container">
         <h2>Exercici de separació de síl·labes · 10 paraules</h2>
@@ -529,13 +682,13 @@
       </div>
     </section>
 
-    <!-- NOVA SECCIÓ: Accentuació d’esdrúixoles -->
+    <!-- SECCIÓ: Accentuació d'esdrúixoles -->
     <section id="accentuacio-esdruixoles" class="tab-content" role="tabpanel" aria-labelledby="tab-accent">
       <div class="section exercise-container">
-        <h2>Exercici d’accentuació d’esdrúixoles · 10 paraules</h2>
+        <h2>Exercici d'accentuació d'esdrúixoles · 10 paraules</h2>
         <div class="instructions">
-          <p><strong>Objectiu:</strong> Afegeix l’accent correcte a la síl·laba antepenúltima.</p>
-          <p><strong>Com?</strong> Clica les vocals per <span class="highlight-word">alternar</span> l’accent:
+          <p><strong>Objectiu:</strong> Afegeix l'accent correcte a la síl·laba antepenúltima.</p>
+          <p><strong>Com?</strong> Clica les vocals per <span class="highlight-word">alternar</span> l'accent:
             <span class="kbd">a↔à</span>,
             <span class="kbd">e↔è↔é</span>,
             <span class="kbd">i↔í</span>,
@@ -558,6 +711,35 @@
         <div class="instructions" id="accent-feedback" style="display:none"></div>
       </div>
     </section>
+
+    <!-- NOVA SECCIÓ: Síl·laba tònica -->
+    <section id="sil-laba-tonica" class="tab-content" role="tabpanel" aria-labelledby="tab-tonica">
+      <div class="section exercise-container">
+        <h2>Exercici de síl·laba tònica · 10 paraules</h2>
+        <div class="instructions">
+          <p><strong>Objectiu:</strong> Escolta la paraula i identifica la síl·laba tònica (la que porta l'accent).</p>
+          <p><strong>Com?</strong> Prem el botó d'àudio per escoltar la paraula. Després, clica sobre el punt que correspon a la síl·laba tònica. Els colors indiquen:
+            <span style="color: var(--success)">Verd</span> = correcte a la primera,
+            <span style="color: var(--danger)">Vermell</span> = incorrecte,
+            <span style="color: var(--warning)">Groc</span> = correcte després d'haver fallat (sense punt).
+          </p>
+          <p>Prem <span class="kbd">Enter</span> per comprovar la targeta quan hagis seleccionat una síl·laba.</p>
+        </div>
+
+        <div class="syllable-exercise" id="tonica-exercise"></div>
+
+        <div class="progress-bar"><div class="progress" id="tonica-progress"></div></div>
+        <p class="score" id="tonica-score">Paraules encertades: 0/10 (0 comprovades)</p>
+
+        <div class="controls">
+          <button class="btn btn-check" id="tonica-check-all-btn">Comprova-ho tot</button>
+          <button class="btn btn-reset" id="tonica-reset-all-btn">Reinicia</button>
+          <button class="btn" id="tonica-new-exercise-btn">Nou exercici</button>
+        </div>
+
+        <div class="instructions" id="tonica-feedback" style="display:none"></div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -574,6 +756,25 @@
         document.getElementById(tabId).classList.add('active');
       });
     });
+
+    /* ===== Sistema de missatges de feedback ===== */
+    const feedbackMessages = {
+      separation: {
+        correct: { icon: '✅', text: 'Molt bé!' },
+        late: { icon: '✅', text: 'Ara sí!' },
+        incorrect: { icon: '❌', text: 'Prova de nou' }
+      },
+      accent: {
+        correct: { icon: '✅', text: 'Molt bé!' },
+        late: { icon: '✅', text: 'Ara sí!' },
+        incorrect: { icon: '❌', text: 'Prova de nou' }
+      },
+      tonic: {
+        correct: { icon: '✅', text: 'Molt bé!' },
+        late: { icon: '✅', text: 'Ara sí!' },
+        incorrect: { icon: '❌', text: 'Prova de nou' }
+      }
+    };
 
     /* ===== Exercici de síl·labes (ORIGINAL) ===== */
     const words = [
@@ -594,8 +795,8 @@
       { word: "síl·laba", syllables: ["síl", "la", "ba"] },
       { word: "exemple", syllables: ["e", "xem", "ple"] },
       { word: "pràctica", syllables: ["pràc", "ti", "ca"] },
-      { word: "ciència", syllables: ["ci","èn", "ci", "a"] },
-      { word: "paciència", syllables: ["pa", "ci","èn", "ci", "a"] },
+      { word: "ciència", syllables: ["ci", "èn", "ci", "a"] },
+      { word: "paciència", syllables: ["pa", "ci", "èn", "ci", "a"] },
       { word: "clínica", syllables: ["clí", "ni", "ca"] },
       { word: "contínua", syllables: ["con", "tí", "nu", "a"] },
       { word: "plaques", syllables: ["pla", "ques"] },
@@ -619,9 +820,40 @@
       { word: "alegria", syllables: ["a", "le", "gri", "a"] },
       { word: "al·lèrgia", syllables: ["al", "lèr", "gi", "a"] },
       { word: "ambulància", syllables: ["am", "bu", "làn", "ci", "a"] },
-      { word: "angúnia", syllables: ["an", "gú", "ni", "a"] }
+      { word: "angúnia", syllables: ["an", "gú", "ni", "a"] },
+      { word: "història", syllables: ["his", "tò", "ri", "a"] },
+      { word: "victòria", syllables: ["vic", "tò", "ri", "a"] },
+      { word: "estàtua", syllables: ["es", "tà", "tu", "a"] },
+      { word: "infància", syllables: ["in", "fàn", "ci", "a"] },
+      { word: "quilòmetre", syllables: ["qui", "lò", "me", "tre"] },
+      { word: "indústria", syllables: ["in", "dús", "tri", "a"] },
+      { word: "colònia", syllables: ["co", "lò", "ni", "a"] },
+      { word: "solitària", syllables: ["so", "li", "tà", "ri", "a"] },
+      { word: "memòries", syllables: ["me", "mò", "ri", "es"] },
+      { word: "gàbies", syllables: ["gà", "bi", "es"] },
+      { word: "misèria", syllables: ["mi", "sè", "ri", "a"] },
+      { word: "matèria", syllables: ["ma", "tè", "ri", "a"] },
+      { word: "galàxies", syllables: ["ga", "là", "xi", "es"] },
+      { word: "farmàcia", syllables: ["far", "mà", "ci", "a"] },
+      { word: "assistència", syllables: ["as", "sis", "tèn", "ci", "a"] },
+      { word: "àrea", syllables: ["à", "re", "a"] },
+      { word: "fúcsia", syllables: ["fúc", "si", "a"] },
+      { word: "justícia", syllables: ["jus", "tí", "ci", "a"] },
+      { word: "mútua", syllables: ["mú", "tu", "a"] },
+      { word: "guàrdia", syllables: ["guàr", "di", "a"] },
+      { word: "ràdio", syllables: ["rà", "di", "o"] },
+      { word: "anècdota", syllables: ["a", "nèc", "do", "ta"] },
+      { word: "dècimes", syllables: ["dè", "ci", "mes"] },
+      { word: "mètode", syllables: ["mè", "to", "de"] },
+      { word: "etcètera", syllables: ["et", "cè", "te", "ra"] },
+      { word: "tènue", syllables: ["tè", "nu", "e"] },
+      { word: "comèdia", syllables: ["co", "mè", "di", "a"] },
+      { word: "còmode", syllables: ["cò", "mo", "de"] },
+      { word: "òpera", syllables: ["ò", "pe", "ra"] },
+      { word: "còpia", syllables: ["cò", "pi", "a"] },
+      { word: "memòria", syllables: ["me", "mò", "ri", "a"] }
     ];
-
+    
     const syllableExercise = document.getElementById('syllable-exercise');
     const checkAllBtn = document.getElementById('check-all-btn');
     const resetAllBtn = document.getElementById('reset-all-btn');
@@ -632,7 +864,6 @@
 
     let currentExerciseWords = [];
     let userSeparators = {};
-    // wordStatus[index] = { checked, correct, attempts, scored, late }
     let wordStatus = {};
 
     function generateNewExercise() {
@@ -819,37 +1050,27 @@
       const wordObj = currentExerciseWords[index];
       const userSyllables = buildUserSyllables(wordObj, userSeparators[index]);
 
-      // Comptem intents
       wordStatus[index].attempts += 1;
 
       const isCorrect = JSON.stringify(userSyllables) === JSON.stringify(wordObj.syllables);
 
-      // Correcte a la primera -> suma punt
       if (isCorrect && wordStatus[index].attempts === 1) {
         wordStatus[index].scored = true;
         wordStatus[index].late = false;
       }
 
-      // Correcte però després d'haver fallat -> no suma, marca "late"
       if (isCorrect && wordStatus[index].attempts > 1) {
-        wordStatus[index].scored = wordStatus[index].scored || false; // manté si ja havia puntuat
-        wordStatus[index].late = !wordStatus[index].scored;           // late només si no havia puntuat
+        wordStatus[index].scored = wordStatus[index].scored || false;
+        wordStatus[index].late = !wordStatus[index].scored;
       }
 
       wordStatus[index].checked = true;
       wordStatus[index].correct = isCorrect;
 
-      // Visualització segons estat
-      if (isCorrect && wordStatus[index].late && !wordStatus[index].scored) {
-        updateWordDisplay(index, 'late', wordObj.syllables.join('-'));
-      } else {
-        updateWordDisplay(index, isCorrect ? 'correct' : 'incorrect', wordObj.syllables.join('-'));
-      }
-
+      updateWordDisplay(index, isCorrect ? (wordStatus[index].late ? 'late' : 'correct') : 'incorrect', wordObj.syllables.join('-'));
       updateGlobalScore();
     }
 
-    // Reseteig suau de la vista si es modifica després de comprovar, sense tocar intents ni "scored"
     function softResetWordDisplay(index) {
       wordStatus[index].checked = false;
       wordStatus[index].correct = false;
@@ -867,26 +1088,18 @@
       const wordExercise = document.getElementById(`word-exercise-${index}`);
       const wordStatusElement = document.getElementById(`word-status-${index}`);
       const wordFeedback = document.getElementById(`feedback-${index}`);
+      const messages = feedbackMessages.separation[state];
 
-      if (state === 'correct') {
-        wordExercise.className = 'word-exercise correct';
-        wordStatusElement.textContent = 'Correcte';
-        wordStatusElement.className = 'word-status correct';
-        wordFeedback.textContent = '✓ Correcte!';
-        wordFeedback.className = 'word-feedback correct';
-      } else if (state === 'late') {
-        wordExercise.className = 'word-exercise late';
-        wordStatusElement.textContent = 'Correcte';
-        wordStatusElement.className = 'word-status late';
-        wordFeedback.textContent = '✓ Correcte (sense punt)';
-        wordFeedback.className = 'word-feedback late';
-      } else {
-        wordExercise.className = 'word-exercise incorrect';
-        wordStatusElement.textContent = 'Incorrecte';
-        wordStatusElement.className = 'word-status incorrect';
-        wordFeedback.textContent = `✗ Correcte: ${correctAnswer}`;
-        wordFeedback.className = 'word-feedback incorrect';
-      }
+      wordExercise.className = `word-exercise ${state}`;
+      wordStatusElement.textContent = state === 'incorrect' ? 'Incorrecte' : 'Correcte';
+      wordStatusElement.className = `word-status ${state}`;
+      
+      // Crear el feedback amb icona i text
+      wordFeedback.innerHTML = `
+        <span class="feedback-icon">${messages.icon}</span>
+        <span>${messages.text}</span>
+      `;
+      wordFeedback.className = `word-feedback ${state}`;
     }
 
     function checkAllAnswers() {
@@ -906,7 +1119,6 @@
       currentExerciseWords.forEach((_, index) => {
         userSeparators[index] = [];
         renderWord(index);
-        // Reinicia completament l’estat:
         wordStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
         softResetWordDisplay(index);
       });
@@ -932,9 +1144,7 @@
 
     generateNewExercise();
 
-    /* ===== NOVA LÒGICA: Accentuació d’esdrúixoles ===== */
-
-    // Dataset: plain (sense accents) -> target (amb accents i · si escau)
+    /* ===== NOVA LÒGICA: Accentuació d'esdrúixoles ===== */
     const ACCENT_WORDS = [
       { plain: "musica", target: "música" },
       { plain: "camera", target: "càmera" },
@@ -942,9 +1152,7 @@
       { plain: "hipotesi", target: "hipòtesi" },
       { plain: "familia", target: "família" },
       { plain: "clinica", target: "clínica" },
-      { plain: "continua", target: "contínua" },
       { plain: "fisica", target: "física" },
-      { plain: "practica", target: "pràctica" },
       { plain: "elegancia", target: "elegància" },
       { plain: "coherencia", target: "coherència" },
       { plain: "ocurrencia", target: "ocurrència" },
@@ -952,7 +1160,38 @@
       { plain: "ambulancia", target: "ambulància" },
       { plain: "angunia", target: "angúnia" },
       { plain: "esdruixola", target: "esdrúixola" },
-      // Excepcions amb tancat
+      { plain: "ciencia", target: "ciència" },
+      { plain: "historia", target: "història" },
+      { plain: "victoria", target: "victòria" },
+      { plain: "estatua", target: "estàtua" },
+      { plain: "infancia", target: "infància" },
+      { plain: "quilometre", target: "quilòmetre" },
+      { plain: "industria", target: "indústria" },
+      { plain: "colonia", target: "colònia" },
+      { plain: "solitaria", target: "solitària" },
+      { plain: "memories", target: "memòries" },
+      { plain: "gabies", target: "gàbies" },
+      { plain: "miseria", target: "misèria" },
+      { plain: "materia", target: "matèria" },
+      { plain: "galaxies", target: "galàxies" },
+      { plain: "farmacia", target: "farmàcia" },
+      { plain: "assistencia", target: "assistència" },
+      { plain: "area", target: "àrea" },
+      { plain: "fucsia", target: "fúcsia" },
+      { plain: "justicia", target: "justícia" },
+      { plain: "mutua", target: "mútua" },
+      { plain: "guardia", target: "guàrdia" },
+      { plain: "radio", target: "ràdio" },
+      { plain: "anecdota", target: "anècdota" },
+      { plain: "decimes", target: "dècimes" },
+      { plain: "metode", target: "mètode" },
+      { plain: "etcetera", target: "etcètera" },
+      { plain: "tenue", target: "tènue" },
+      { plain: "comedia", target: "comèdia" },
+      { plain: "comode", target: "còmode" },
+      { plain: "opera", target: "òpera" },
+      { plain: "copia", target: "còpia" },
+      { plain: "memoria", target: "memòria" },
       { plain: "ferestega", target: "feréstega" },
       { plain: "cervola", target: "cérvola" },
       { plain: "esglesia", target: "església" },
@@ -960,10 +1199,9 @@
       { plain: "formula", target: "fórmula" },
       { plain: "polvora", target: "pólvora" },
       { plain: "tombola", target: "tómbola" },
-      { plain: "tortora", target: "tórtora" }
+      { plain: "tortores", target: "tórtores" }
     ];
 
-    // Elements UI
     const accentExercise = document.getElementById('accent-exercise');
     const accentCheckAllBtn = document.getElementById('accent-check-all-btn');
     const accentResetAllBtn = document.getElementById('accent-reset-all-btn');
@@ -972,13 +1210,10 @@
     const accentProgressEl = document.getElementById('accent-progress');
     const accentFeedbackEl = document.getElementById('accent-feedback');
 
-    // Estat
     let currentAccentWords = [];
-    let userAccent = {}; // index -> string amb lletres actuals
-    // accentStatus[index] = { checked, correct, attempts, scored, late }
+    let userAccent = {};
     let accentStatus = {};
 
-    // ✅ Conjunts de cicle d'accents
     const CYCLE_SETS = {
       'A': ['A','À'],
       'a': ['a','à'],
@@ -997,49 +1232,47 @@
         const idx = seq.indexOf(ch);
         if (idx !== -1) return seq[(idx + 1) % seq.length];
       }
-      return ch; // consonants, dièresi, punt volat, etc.
+      return ch;
     }
 
-function generateAccentExercise() {
-  currentAccentWords = [...ACCENT_WORDS].sort(() => Math.random() - 0.5).slice(0, 10);
-  userAccent = {};
-  accentStatus = {};
-  accentExercise.innerHTML = '';
-  updateAccentScore();
-  accentFeedbackEl.style.display = 'none';
+    function generateAccentExercise() {
+      currentAccentWords = [...ACCENT_WORDS].sort(() => Math.random() - 0.5).slice(0, 10);
+      userAccent = {};
+      accentStatus = {};
+      accentExercise.innerHTML = '';
+      updateAccentScore();
+      accentFeedbackEl.style.display = 'none';
 
-  currentAccentWords.forEach((item, index) => {
-    const initial = item.plain; // sense diacrítics
-    userAccent[index] = initial;
-    accentStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+      currentAccentWords.forEach((item, index) => {
+        const initial = item.plain;
+        userAccent[index] = initial;
+        accentStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
 
-    const card = document.createElement('div');
-    card.className = 'word-exercise';
-    card.id = `accent-card-${index}`;
+        const card = document.createElement('div');
+        card.className = 'word-exercise';
+        card.id = `accent-card-${index}`;
 
-    card.innerHTML = `
-      <div class="word-title">
-        <!-- ✅ Número gran i gris, sense punt final -->
-        <span class="card-index">${index + 1}</span>
-        <span class="word-status" id="accent-status-${index}">Pendent</span>
-      </div>
-      <div class="word-container" id="accent-container-${index}" tabindex="0"
-           aria-label="Paraula sense accent: ${initial}. Clica les vocals per afegir-ne."></div>
-      <div class="word-controls">
-        <button class="word-check-btn" data-index="${index}" aria-label="Comprova la paraula">Comprova-ho</button>
-      </div>
-      <div class="word-feedback" id="accent-feedback-${index}" aria-live="polite"></div>
-    `;
-    accentExercise.appendChild(card);
-    renderAccentWord(index);
+        card.innerHTML = `
+          <div class="word-title">
+            <span class="card-index">${index + 1}</span>
+            <span class="word-status" id="accent-status-${index}">Pendent</span>
+          </div>
+          <div class="word-container" id="accent-container-${index}" tabindex="0"
+               aria-label="Paraula sense accent: ${initial}. Clica les vocals per afegir-ne."></div>
+          <div class="word-controls">
+            <button class="word-check-btn" data-index="${index}" aria-label="Comprova la paraula">Comprova-ho</button>
+          </div>
+          <div class="word-feedback" id="accent-feedback-${index}" aria-live="polite"></div>
+        `;
+        accentExercise.appendChild(card);
+        renderAccentWord(index);
 
-    const checkBtn = card.querySelector('.word-check-btn');
-    checkBtn.addEventListener('click', () => checkSingleAccent(index));
-    const container = document.getElementById(`accent-container-${index}`);
-    container.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkSingleAccent(index); });
-  });
-}
-
+        const checkBtn = card.querySelector('.word-check-btn');
+        checkBtn.addEventListener('click', () => checkSingleAccent(index));
+        const container = document.getElementById(`accent-container-${index}`);
+        container.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkSingleAccent(index); });
+      });
+    }
 
     function renderAccentWord(index) {
       const container = document.getElementById(`accent-container-${index}`);
@@ -1059,7 +1292,6 @@ function generateAccentExercise() {
         span.textContent = ch;
         span.dataset.index = i;
 
-        // 🔁 Cicle sobre la lletra viva cada clic
         span.addEventListener('click', () => {
           const live = userAccent[index];
           const arr = live.split('');
@@ -1069,7 +1301,6 @@ function generateAccentExercise() {
           if (accentStatus[index].checked) softResetAccentDisplay(index);
         });
 
-        // Accessibilitat: Espai per ciclar, Enter per comprovar
         span.addEventListener('keydown', (e) => {
           if (e.key === ' ') {
             e.preventDefault();
@@ -1106,25 +1337,18 @@ function generateAccentExercise() {
       const card = document.getElementById(`accent-card-${index}`);
       const st = document.getElementById(`accent-status-${index}`);
       const fb = document.getElementById(`accent-feedback-${index}`);
-      if (state === 'correct') {
-        card.className = 'word-exercise correct';
-        st.textContent = 'Correcte';
-        st.className = 'word-status correct';
-        fb.textContent = '✓ Correcte!';
-        fb.className = 'word-feedback correct';
-      } else if (state === 'late') {
-        card.className = 'word-exercise late';
-        st.textContent = 'Correcte';
-        st.className = 'word-status late';
-        fb.textContent = '✓ Correcte (sense punt)';
-        fb.className = 'word-feedback late';
-      } else {
-        card.className = 'word-exercise incorrect';
-        st.textContent = 'Incorrecte';
-        st.className = 'word-status incorrect';
-        fb.textContent = `✗ Correcte: ${solution}`;
-        fb.className = 'word-feedback incorrect';
-      }
+      const messages = feedbackMessages.accent[state];
+      
+      card.className = `word-exercise ${state}`;
+      st.textContent = state === 'incorrect' ? 'Incorrecte' : 'Correcte';
+      st.className = `word-status ${state}`;
+      
+      // Crear el feedback amb icona i text
+      fb.innerHTML = `
+        <span class="feedback-icon">${messages.icon}</span>
+        <span>${messages.text}</span>
+      `;
+      fb.className = `word-feedback ${state}`;
     }
 
     function checkSingleAccent(index) {
@@ -1134,7 +1358,8 @@ function generateAccentExercise() {
       const isCorrect = userAccent[index] === item.target;
 
       if (isCorrect && accentStatus[index].attempts === 1) {
-        accentStatus[index].scored = true; accentStatus[index].late = false;
+        accentStatus[index].scored = true; 
+        accentStatus[index].late = false;
       }
       if (isCorrect && accentStatus[index].attempts > 1) {
         accentStatus[index].scored = accentStatus[index].scored || false;
@@ -1144,11 +1369,7 @@ function generateAccentExercise() {
       accentStatus[index].checked = true;
       accentStatus[index].correct = isCorrect;
 
-      if (isCorrect && accentStatus[index].late && !accentStatus[index].scored) {
-        updateAccentDisplay(index, 'late', item.target);
-      } else {
-        updateAccentDisplay(index, isCorrect ? 'correct' : 'incorrect', item.target);
-      }
+      updateAccentDisplay(index, isCorrect ? (accentStatus[index].late ? 'late' : 'correct') : 'incorrect', item.target);
       updateAccentScore();
     }
 
@@ -1187,6 +1408,313 @@ function generateAccentExercise() {
     accentNewExerciseBtn.addEventListener('click', generateAccentExercise);
 
     generateAccentExercise();
+
+    /* ===== NOVA LÒGICA: Exercici de síl·laba tònica amb àudio ===== */
+    const TONIC_WORDS = [
+      { word: "música", syllables: ["mú", "si", "ca"], tonicIndex: 0 },
+      { word: "càmera", syllables: ["cà", "me", "ra"], tonicIndex: 0 },
+      { word: "pàgina", syllables: ["pà", "gi", "na"], tonicIndex: 0 },
+      { word: "hipòtesi", syllables: ["hi", "pò", "te", "si"], tonicIndex: 1 },
+      { word: "família", syllables: ["fa", "mí", "li", "a"], tonicIndex: 1 },
+      { word: "clínica", syllables: ["clí", "ni", "ca"], tonicIndex: 0 },
+      { word: "física", syllables: ["fí", "si", "ca"], tonicIndex: 0 },
+      { word: "elegància", syllables: ["e", "le", "gàn", "ci", "a"], tonicIndex: 2 },
+      { word: "coherència", syllables: ["co", "he", "rèn", "ci", "a"], tonicIndex: 2 },
+      { word: "ocurrència", syllables: ["o", "cur", "rèn", "ci", "a"], tonicIndex: 2 },
+      { word: "al·lèrgia", syllables: ["al", "lèr", "gi", "a"], tonicIndex: 1 },
+      { word: "ambulància", syllables: ["am", "bu", "làn", "ci", "a"], tonicIndex: 2 },
+      { word: "angúnia", syllables: ["an", "gú", "ni", "a"], tonicIndex: 1 },
+      { word: "esdrúixola", syllables: ["es", "drúi", "xo", "la"], tonicIndex: 1 },
+      { word: "ciència", syllables: ["ci", "èn", "ci", "a"], tonicIndex: 1 },
+      { word: "història", syllables: ["his", "tò", "ri", "a"], tonicIndex: 1 },
+      { word: "victòria", syllables: ["vic", "tò", "ri", "a"], tonicIndex: 1 },
+      { word: "estàtua", syllables: ["es", "tà", "tu", "a"], tonicIndex: 1 },
+      { word: "infància", syllables: ["in", "fàn", "ci", "a"], tonicIndex: 1 },
+      { word: "quilòmetre", syllables: ["qui", "lò", "me", "tre"], tonicIndex: 1 },
+      { word: "indústria", syllables: ["in", "dús", "tri", "a"], tonicIndex: 1 },
+      { word: "colònia", syllables: ["co", "lò", "ni", "a"], tonicIndex: 1 },
+      { word: "solitària", syllables: ["so", "li", "tà", "ri", "a"], tonicIndex: 2 },
+      { word: "memòries", syllables: ["me", "mò", "ri", "es"], tonicIndex: 1 },
+      { word: "gàbies", syllables: ["gà", "bi", "es"], tonicIndex: 0 },
+      { word: "misèria", syllables: ["mi", "sè", "ri", "a"], tonicIndex: 1 },
+      { word: "matèria", syllables: ["ma", "tè", "ri", "a"], tonicIndex: 1 },
+      { word: "galàxies", syllables: ["ga", "là", "xi", "es"], tonicIndex: 1 },
+      { word: "farmàcia", syllables: ["far", "mà", "ci", "a"], tonicIndex: 1 },
+      { word: "assistència", syllables: ["as", "sis", "tèn", "ci", "a"], tonicIndex: 2 },
+      { word: "àrea", syllables: ["à", "re", "a"], tonicIndex: 0 },
+      { word: "fúcsia", syllables: ["fúc", "si", "a"], tonicIndex: 0 },
+      { word: "justícia", syllables: ["jus", "tí", "ci", "a"], tonicIndex: 1 },
+      { word: "mútua", syllables: ["mú", "tu", "a"], tonicIndex: 0 },
+      { word: "guàrdia", syllables: ["guàr", "di", "a"], tonicIndex: 0 },
+      { word: "ràdio", syllables: ["rà", "di", "o"], tonicIndex: 0 },
+      { word: "anècdota", syllables: ["a", "nèc", "do", "ta"], tonicIndex: 1 },
+      { word: "dècimes", syllables: ["dè", "ci", "mes"], tonicIndex: 0 },
+      { word: "mètode", syllables: ["mè", "to", "de"], tonicIndex: 0 },
+      { word: "etcètera", syllables: ["et", "cè", "te", "ra"], tonicIndex: 1 },
+      { word: "tènue", syllables: ["tè", "nu", "e"], tonicIndex: 0 },
+      { word: "comèdia", syllables: ["co", "mè", "di", "a"], tonicIndex: 1 },
+      { word: "còmode", syllables: ["cò", "mo", "de"], tonicIndex: 0 },
+      { word: "òpera", syllables: ["ò", "pe", "ra"], tonicIndex: 0 },
+      { word: "còpia", syllables: ["cò", "pi", "a"], tonicIndex: 0 },
+      { word: "memòria", syllables: ["me", "mò", "ri", "a"], tonicIndex: 1 },
+      { word: "feréstega", syllables: ["fe", "rés", "te", "ga"], tonicIndex: 1 },
+      { word: "cérvola", syllables: ["cér", "vo", "la"], tonicIndex: 0 },
+      { word: "església", syllables: ["es", "glé", "si", "a"], tonicIndex: 1 },
+      { word: "escórpora", syllables: ["es", "cór", "po", "ra"], tonicIndex: 1 },
+      { word: "fórmula", syllables: ["fór", "mu", "la"], tonicIndex: 0 },
+      { word: "pólvora", syllables: ["pól", "vo", "ra"], tonicIndex: 0 },
+      { word: "tómbola", syllables: ["tóm", "bo", "la"], tonicIndex: 0 },
+      { word: "tórtores", syllables: ["tór", "to", "res"], tonicIndex: 0 }
+    ];
+
+    const tonicaExercise = document.getElementById('tonica-exercise');
+    const tonicaCheckAllBtn = document.getElementById('tonica-check-all-btn');
+    const tonicaResetAllBtn = document.getElementById('tonica-reset-all-btn');
+    const tonicaNewExerciseBtn = document.getElementById('tonica-new-exercise-btn');
+    const tonicaScoreEl = document.getElementById('tonica-score');
+    const tonicaProgressEl = document.getElementById('tonica-progress');
+    const tonicaFeedbackEl = document.getElementById('tonica-feedback');
+
+    let currentTonicWords = [];
+    let userTonicSelection = {};
+    let tonicStatus = {};
+
+    // Funció per parlar text (utilitza l'API Web Speech)
+    function speakText(text, lang = 'ca-ES') {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        speechSynthesis.speak(utterance);
+        return utterance;
+      } else {
+        console.warn('SpeechSynthesis no està suportat en aquest navegador');
+        return null;
+      }
+    }
+
+    function generateTonicExercise() {
+      currentTonicWords = [...TONIC_WORDS].sort(() => Math.random() - 0.5).slice(0, 10);
+      userTonicSelection = {};
+      tonicStatus = {};
+      tonicaExercise.innerHTML = '';
+      updateTonicScore();
+      tonicaFeedbackEl.style.display = 'none';
+
+      currentTonicWords.forEach((item, index) => {
+        userTonicSelection[index] = null;
+        tonicStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+
+        const card = document.createElement('div');
+        card.className = 'word-exercise';
+        card.id = `tonic-card-${index}`;
+
+        card.innerHTML = `
+          <div class="word-title">
+            <span class="card-index">${index + 1}</span>
+            <span class="word-status" id="tonic-status-${index}">Pendent</span>
+          </div>
+          <div class="word-container">
+            <button class="audio-btn" id="audio-btn-${index}" aria-label="Escolta la paraula">
+              <span>🎵</span> Escolta la paraula
+            </button>
+            <div class="dots-container" id="dots-container-${index}" aria-label="Selecciona la síl·laba tònica"></div>
+          </div>
+          <div class="word-controls">
+            <button class="word-check-btn" data-index="${index}" aria-label="Comprova la síl·laba tònica">Comprova-ho</button>
+          </div>
+          <div class="word-feedback" id="tonic-feedback-${index}" aria-live="polite"></div>
+        `;
+        tonicaExercise.appendChild(card);
+        
+        renderTonicDots(index);
+        
+        const audioBtn = document.getElementById(`audio-btn-${index}`);
+        audioBtn.addEventListener('click', () => {
+          speechSynthesis.cancel();
+          audioBtn.classList.add('playing');
+          
+          const utterance = speakText(item.word);
+          
+          if (utterance) {
+            utterance.onend = () => {
+              audioBtn.classList.remove('playing');
+            };
+          } else {
+            setTimeout(() => {
+              audioBtn.classList.remove('playing');
+            }, 1500);
+          }
+        });
+
+        const checkBtn = card.querySelector('.word-check-btn');
+        checkBtn.addEventListener('click', () => checkSingleTonic(index));
+        
+        card.addEventListener('keydown', (e) => { 
+          if (e.key === 'Enter' && e.target.classList.contains('word-check-btn')) {
+            checkSingleTonic(index);
+          }
+        });
+      });
+    }
+
+    function renderTonicDots(index) {
+      const container = document.getElementById(`dots-container-${index}`);
+      container.innerHTML = '';
+      const item = currentTonicWords[index];
+      
+      item.syllables.forEach((_, syllableIndex) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.dataset.index = syllableIndex;
+        dot.setAttribute('role', 'button');
+        dot.setAttribute('tabindex', '0');
+        dot.setAttribute('aria-label', `Síl·laba ${syllableIndex + 1}`);
+        
+        dot.addEventListener('click', () => {
+          if (userTonicSelection[index] === syllableIndex) {
+            userTonicSelection[index] = null;
+          } else {
+            userTonicSelection[index] = syllableIndex;
+          }
+          renderTonicDots(index);
+          if (tonicStatus[index].checked) softResetTonicDisplay(index);
+        });
+        
+        dot.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            if (userTonicSelection[index] === syllableIndex) {
+              userTonicSelection[index] = null;
+            } else {
+              userTonicSelection[index] = syllableIndex;
+            }
+            renderTonicDots(index);
+            if (tonicStatus[index].checked) softResetTonicDisplay(index);
+          }
+        });
+        
+        if (userTonicSelection[index] === syllableIndex) {
+          dot.classList.add('selected');
+        }
+        
+        container.appendChild(dot);
+      });
+    }
+
+    function softResetTonicDisplay(index) {
+      tonicStatus[index].checked = false;
+      tonicStatus[index].correct = false;
+      const card = document.getElementById(`tonic-card-${index}`);
+      const st = document.getElementById(`tonic-status-${index}`);
+      const fb = document.getElementById(`tonic-feedback-${index}`);
+      card.className = 'word-exercise';
+      st.textContent = 'Pendent';
+      st.className = 'word-status';
+      fb.textContent = '';
+      fb.className = 'word-feedback';
+      renderTonicDots(index);
+    }
+
+    function updateTonicDisplay(index, state) {
+      const card = document.getElementById(`tonic-card-${index}`);
+      const st = document.getElementById(`tonic-status-${index}`);
+      const fb = document.getElementById(`tonic-feedback-${index}`);
+      const item = currentTonicWords[index];
+      const messages = feedbackMessages.tonic[state];
+      
+      const container = document.getElementById(`dots-container-${index}`);
+      const dots = container.querySelectorAll('.dot');
+      
+      dots.forEach((dot, syllableIndex) => {
+        dot.classList.remove('selected', 'correct', 'incorrect', 'late');
+        
+        if (state === 'correct' || state === 'late') {
+          if (syllableIndex === item.tonicIndex) {
+            dot.classList.add(state === 'correct' ? 'correct' : 'late');
+          }
+        } else if (state === 'incorrect') {
+          if (syllableIndex === item.tonicIndex) {
+            dot.classList.add('correct');
+          } else if (syllableIndex === userTonicSelection[index]) {
+            dot.classList.add('incorrect');
+          }
+        }
+      });
+      
+      card.className = `word-exercise ${state}`;
+      st.textContent = state === 'incorrect' ? 'Incorrecte' : 'Correcte';
+      st.className = `word-status ${state}`;
+      
+      // Crear el feedback amb icona i text
+      fb.innerHTML = `
+        <span class="feedback-icon">${messages.icon}</span>
+        <span>${messages.text}</span>
+      `;
+      fb.className = `word-feedback ${state}`;
+    }
+
+    function checkSingleTonic(index) {
+      const item = currentTonicWords[index];
+      tonicStatus[index].attempts += 1;
+
+      const isCorrect = userTonicSelection[index] === item.tonicIndex;
+
+      if (isCorrect && tonicStatus[index].attempts === 1) {
+        tonicStatus[index].scored = true; 
+        tonicStatus[index].late = false;
+      }
+      
+      if (isCorrect && tonicStatus[index].attempts > 1) {
+        tonicStatus[index].scored = tonicStatus[index].scored || false;
+        tonicStatus[index].late = !tonicStatus[index].scored;
+      }
+
+      tonicStatus[index].checked = true;
+      tonicStatus[index].correct = isCorrect;
+
+      updateTonicDisplay(index, isCorrect ? (tonicStatus[index].late ? 'late' : 'correct') : 'incorrect');
+      updateTonicScore();
+    }
+
+    function checkAllTonics() {
+      currentTonicWords.forEach((_, idx) => { 
+        if (!tonicStatus[idx].checked) checkSingleTonic(idx); 
+      });
+      const scoredCount = Object.values(tonicStatus).filter(s => s.scored).length;
+      if (scoredCount === 10) {
+        tonicaFeedbackEl.textContent = 'Perfecte! Has identificat totes les síl·labes tòniques a la primera.';
+      } else {
+        tonicaFeedbackEl.textContent = `Has encertat ${scoredCount} de 10 síl·labes tòniques a la primera. Continua practicant!`;
+      }
+      tonicaFeedbackEl.className = 'instructions';
+      tonicaFeedbackEl.style.display = 'block';
+    }
+
+    function resetAllTonics() {
+      currentTonicWords.forEach((item, idx) => {
+        userTonicSelection[idx] = null;
+        renderTonicDots(idx);
+        tonicStatus[idx] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+        softResetTonicDisplay(idx);
+      });
+      updateTonicScore();
+      tonicaFeedbackEl.style.display = 'none';
+    }
+
+    function updateTonicScore() {
+      const scored = Object.values(tonicStatus).filter(s => s.scored).length;
+      const checked = Object.values(tonicStatus).filter(s => s.checked).length;
+      tonicaScoreEl.textContent = `Paraules encertades: ${scored}/10 (${checked} comprovades)`;
+      tonicaProgressEl.style.width = `${(scored / 10) * 100}%`;
+    }
+
+    tonicaCheckAllBtn.addEventListener('click', checkAllTonics);
+    tonicaResetAllBtn.addEventListener('click', resetAllTonics);
+    tonicaNewExerciseBtn.addEventListener('click', generateTonicExercise);
+
+    generateTonicExercise();
   </script>
 </body>
 </html>
