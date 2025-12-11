@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
@@ -504,12 +504,69 @@
       box-shadow: 0 0 0 3px color-mix(in oklab, var(--warning), transparent 70%);
     }
 
+    /* ======= Estils per a frases en context amb accentuació directa ======= */
+    .context-phrase {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgb(2 6 23 / 8%);
+      box-shadow: var(--shadow-2);
+      margin-bottom: 20px;
+    }
+
+    /* Frases en context - IDÈNTIC a "Accentuació d'esdrúixoles" */
+    /* Frases en context - Text més natural sense espais entre lletres */
+    .phrase-content {
+      display: block; /* Canvia de flex a block */
+      margin: 12px 0; 
+      padding: 16px 20px; 
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--surface), var(--bg) 12%);
+      border: 1px solid rgb(2 6 23 / 10%);
+      font-size: 1.3rem;
+      line-height: 1.6;
+      text-align: left; /* Text a l'esquerra, no centrat */
+      word-wrap: break-word;
+      white-space: normal;
+      cursor: text;
+      letter-spacing: -0.01em;
+      word-spacing: 0.2em;
+      min-height: auto; /* Elimina altura mínima fixa */
+    }
+    
+    /* Eliminar espais entre lletres (marges negatius) */
+    .phrase-content .letter {
+      margin: 0 -0.5px; /* Això elimina l'espai entre lletres */
+      display: inline; /* Mantenir inline, no inline-block */
+    }
+    
+    /* Espais entre paraules */
+    .phrase-content .space {
+      margin: 0 0.2em; /* Espai normal entre paraules */
+      padding: 0;
+      cursor: default;
+      background: transparent !important;
+    }
+
     /* ======= Responsive ======= */
     @media (max-width: 720px) {
       body { padding: 16px; }
       .tablist { overflow-x: auto; }
       .word-container { min-height: 52px; }
       .dot { width: 25px; height: 25px; }
+      .phrase-content { 
+        font-size: 1.15rem; 
+        padding: 14px 16px; 
+        line-height: 1.5;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .phrase-content { 
+        font-size: 1.05rem; 
+        padding: 12px 14px; 
+        line-height: 1.4;
+      }
     }
   </style>
 </head>
@@ -527,6 +584,7 @@
     <button class="tab" role="tab" id="tab-separacio" aria-controls="separacio-sil-labes" aria-selected="false" data-tab="separacio-sil-labes">Separació de síl·labes</button>
     <button class="tab" role="tab" id="tab-tonica" aria-controls="sil-laba-tonica" aria-selected="false" data-tab="sil-laba-tonica">Síl·laba tònica</button>
     <button class="tab" role="tab" id="tab-accent" aria-controls="accentuacio-esdruixoles" aria-selected="false" data-tab="accentuacio-esdruixoles">Accentuació d'esdrúixoles</button>
+    <button class="tab" role="tab" id="tab-context" aria-controls="context-frases" aria-selected="false" data-tab="context-frases">Paraules en Context</button>
   </div>
 </nav>
 
@@ -730,7 +788,7 @@
       </div>
     </section>
 
-    <!-- NOVA SECCIÓ: Síl·laba tònica -->
+    <!-- SECCIÓ: Síl·laba tònica -->
     <section id="sil-laba-tonica" class="tab-content" role="tabpanel" aria-labelledby="tab-tonica">
       <div class="section exercise-container">
         <h2>Exercici de síl·laba tònica · 10 paraules</h2>
@@ -756,6 +814,36 @@
         </div>
 
         <div class="instructions" id="tonica-feedback" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- NOVA SECCIÓ: Paraules en Context (amb accentuació directa a la frase) -->
+    <section id="context-frases" class="tab-content" role="tabpanel" aria-labelledby="tab-context">
+      <div class="section exercise-container">
+        <h2>Accentuació en context · 10 frases</h2>
+        <div class="instructions">
+          <p><strong>Objectiu:</strong> Afegeix tots els accents que faltin a la frase.</p>
+          <p><strong>Com?</strong> Llegeix la frase i <strong>clica sobre qualsevol lletra</strong> de qualsevol paraula per afegir o treure accents:
+            <span class="kbd">a↔à</span>,
+            <span class="kbd">e↔è↔é</span>,
+            <span class="kbd">i↔í</span>,
+            <span class="kbd">o↔ò↔ó</span>,
+            <span class="kbd">u↔ú</span>. Prem <span class="kbd">Enter</span> per comprovar.
+          </p>
+        </div>
+
+        <div class="syllable-exercise" id="context-exercise"></div>
+
+        <div class="progress-bar"><div class="progress" id="context-progress"></div></div>
+        <p class="score" id="context-score">Frases encertades: 0/10 (0 comprovades)</p>
+
+        <div class="controls">
+          <button class="btn btn-check" id="context-check-all-btn">Comprova-ho tot</button>
+          <button class="btn btn-reset" id="context-reset-all-btn">Reinicia</button>
+          <button class="btn" id="context-new-exercise-btn">Noves frases</button>
+        </div>
+
+        <div class="instructions" id="context-feedback" style="display:none"></div>
       </div>
     </section>
   </main>
@@ -791,6 +879,11 @@
         correct: { icon: '✅', text: 'Molt bé!' },
         late: { icon: '✅', text: 'Ara sí!' },
         incorrect: { icon: '❌', text: 'Prova de nou' }
+      },
+      context: {
+        correct: { icon: '✅', text: 'Perfecte! Tots els accents són correctes.' },
+        late: { icon: '✅', text: 'Ara sí! Tots els accents són correctes.' },
+        incorrect: { icon: '❌', text: 'Alguns accents no són correctes.' }
       }
     };
 
@@ -1233,8 +1326,8 @@
     let accentStatus = {};
 
     const CYCLE_SETS = {
-      'A': ['A','À'],
-      'a': ['a','à'],
+      'A': ['A','À','Á'],
+      'a': ['a','à','á'],
       'E': ['E','È','É'],
       'e': ['e','è','é'],
       'I': ['I','Í'],
@@ -1733,6 +1826,307 @@
     tonicaNewExerciseBtn.addEventListener('click', generateTonicExercise);
 
     generateTonicExercise();
+
+/* ===== LÒGICA: Paraules en Context (IDÈNTICA a Accentuació d'esdrúixoles) ===== */
+const CONTEXT_PHRASES = [
+  { plain: "—Com us expliqueu aquesta coincidencia tan singular?", target: "—Com us expliqueu aquesta coincidència tan singular?" },
+  { plain: "Els casos son a milers, i extraordinariament populars...", target: "Els casos són a milers, i extraordinàriament populars..." },
+  { plain: "Desitjaria que em tinguessiu al corrent de les vostres experiencies...", target: "Desitjaria que em tinguéssiu al corrent de les vostres experiències..." },
+  { plain: "En dies successius ens visitarem amb freqüencia.", target: "En dies successius ens visitàrem amb freqüència." },
+  { plain: "—Estem passant sobre Armenia i ens dirigim cap al nord.", target: "—Estem passant sobre Armènia i ens dirigim cap al nord." },
+  { plain: "—Per que m'has fet cridar amb tanta urgencia?", target: "—Per què m'has fet cridar amb tanta urgència?" },
+  { plain: "Encara vaig haver de donar-li les gracies.", target: "Encara vaig haver de donar-li les gràcies." },
+  { plain: "La musica va omplir el local en un instant.", target: "La música va omplir el local en un instant." },
+  { plain: "Al pati del costat, uns senyors arreglats escoltaven la radio.", target: "Al pati del costat, uns senyors arreglats escoltaven la ràdio." },
+  { plain: "Jo m'adonava que vivia una experiencia inoblidable.", target: "Jo m'adonava que vivia una experiència inoblidable." },
+  { plain: "I aixo, digui's el que es vulgui, es historia.", target: "I això, digui's el que es vulgui, és història." },
+  { plain: "La convivencia amb una persona aixi era senzilla.", target: "La convivència amb una persona així era senzilla." },
+  { plain: "Els diaris de la nit portaran la noticia de l'accident.", target: "Els diaris de la nit portaran la notícia de l'accident." },
+  { plain: "Coneixeu la historia de l'home de la barba?", target: "Coneixeu la història de l'home de la barba?" },
+  { plain: "S'ha dit tant que les besties parlen!", target: "S'ha dit tant que les bèsties parlen!" },
+  { plain: "La nau brillava i emetia una fosforescencia intermitent.", target: "La nau brillava i emetia una fosforescència intermitent." },
+  { plain: "Els combustibles liquids son per als reactors d'emergencia.", target: "Els combustibles líquids són per als reactors d'emergència." },
+  { plain: "Estic sorpresa, perque em pensava que tot aixo eren histories.", target: "Estic sorpresa, perquè em pensava que tot això eren històries." },
+  { plain: "I si es tractes d'una paraula magica?", target: "I si es tractés d'una paraula màgica?" },
+  { plain: "Aquestes coses, per sort, encara son voluntaries.", target: "Aquestes coses, per sort, encara són voluntàries." },
+  { plain: "Ho deixarem en braços de la ciencia.", target: "Ho deixarem en braços de la ciència." },
+  { plain: "Pero trobar pis vol temps i paciencia.", target: "Però trobar pis vol temps i paciència." },
+  { plain: "—Pero si es una fabrica de sopes en sobres!", target: "—Però si és una fàbrica de sopes en sobres!" },
+  { plain: "Es respectaven mutuament i es tenien afecte.", target: "Es respectaven mútuament i es tenien afecte." },
+  { plain: "A la familia el disgust prengue proporcions dramatiques.", target: "A la família el disgust prengué proporcions dramàtiques." },
+  { plain: "—Tinc set —digue un adolescent, aprofitant una pausa momentania.", target: "—Tinc set —digué un adolescent, aprofitant una pausa momentània." },
+  { plain: "Jo, es clar, vaig posar-me en guardia.", target: "Jo, és clar, vaig posar-me en guàrdia." },
+  { plain: "Va preguntar al pacient si experimentava alguna altra molestia.", target: "Va preguntar al pacient si experimentava alguna altra molèstia." },
+  { plain: "—No vull cap examen, ni analisis ni radiografies ni res.", target: "—No vull cap examen, ni anàlisis ni radiografies ni res." },
+  { plain: "Tinc l'esperanca que, un dia o altre, arreglarem les diferencies.", target: "Tinc l'esperança que, un dia o altre, arreglarem les diferències." },
+  { plain: "Aquí podriem penjar-hi una gabia amb un ocell.", target: "Aquí podríem penjar-hi una gàbia amb un ocell." },
+  { plain: "Ara vol que li compri una radio!", target: "Ara vol que li compri una ràdio!" },
+  { plain: "La venedora encara em mira amb una certa impertinencia.", target: "La venedora encara em mira amb una certa impertinència." },
+  { plain: "—No obstant aixo —afegi—, la meva presencia sera util.", target: "—No obstant això —afegí—, la meva presència serà útil." },
+  { plain: "Es com un cinema on passessin sempre la mateixa pel·licula.", target: "És com un cinema on passessin sempre la mateixa pel·lícula." },
+  { plain: "«I la historia», afegia mordaçment, «es irreversible».", target: "«I la història», afegia mordaçment, «és irreversible»." },
+  { plain: "Ara: si li donaven tanta importancia, alguna cosa devia tenir.", target: "Ara: si li donaven tanta importància, alguna cosa devia tenir." },
+  { plain: "Movent la superficie de l'aigua, feia l'efecte que bategava.", target: "Movent la superfície de l'aigua, feia l'efecte que bategava." },
+  { plain: "Jo dic que la lluna no te tanta importancia.", target: "Jo dic que la lluna no té tanta importància." },
+  { plain: "—Jo crec que te importancia —va dir amb discrecio—.", target: "—Jo crec que té importància —va dir amb discreció—." },
+  { plain: "Es veu que no t'adones de les conseqüencies!", target: "Es veu que no t'adones de les conseqüències!" },
+  { plain: "A la teva epoca us complicaveu la vida.", target: "A la teva època us complicàveu la vida." },
+  { plain: "La trajectoria cap a Mart s'ha seguit d'una manera impecable.", target: "La trajectòria cap a Mart s'ha seguit d'una manera impecable." },
+  { plain: "Ara ens queda la ciencia pura i simple.", target: "Ara ens queda la ciència pura i simple." },
+  { plain: "Si no t'expliques satisfactoriament, et negaran l'entrada.", target: "Si no t'expliques satisfactòriament, et negaran l'entrada." },
+  { plain: "Al capdavall, aixo d'ara es una experiencia inoblidable.", target: "Al capdavall, això d'ara és una experiència inoblidable." },
+  { plain: "Mai no havia vist dues cares tan identiques...", target: "Mai no havia vist dues cares tan idèntiques..." },
+  { plain: "—Pero hi ha situacions excepcionals —vaig replicar timidament—.", target: "—Però hi ha situacions excepcionals —vaig replicar tímidament—." },
+  { plain: "—He perdut la memoria i no la trobo enlloc!", target: "—He perdut la memòria i no la trobo enlloc!" },
+  { plain: "—Diria que soc un creient sense esglesia determinada...", target: "—Diria que soc un creient església determinada..." },
+  { plain: "La competencia, en aquest cas, es deslleial.", target: "La competència, en aquest cas, és deslleial." },
+  { plain: "Tècnicament, no podem plegar ni podem continuar.", target: "Tècnicament, no podem plegar ni podem continuar." },
+  { plain: "—I se'n poden treure conseqüencies, de tot plegat?", target: "—I se'n poden treure conseqüències, de tot plegat?" },
+  { plain: "Pero de conseqüencies se'n poden treure sempre, de tot.", target: "Però de conseqüències se'n poden treure sempre, de tot." },
+  { plain: "La Gloria se'n va anar a fora.", target: "La Glòria se'n va anar a fora." },
+  { plain: "Es va posar en guardia, sense la menor agitacio externa.", target: "Es va posar en guàrdia, sense la menor agitació externa." },
+  { plain: "Si mes no, riurem novament la gracia.", target: "Si més no, riurem novament la gràcia." },
+  { plain: "Aquesta es l'habitacio de la tieta Emilia.", target: "Aquesta és l'habitació de la tieta Emília." },
+  { plain: "Es famosa la gota simbolica que fa vessar els gots.", target: "És famosa la gota simbòlica que fa vessar els gots." },
+  { plain: "Vaig accedir-hi, per una serie de motius.", target: "Vaig accedir-hi, per una sèrie de motius." },
+  { plain: "M'inclino per un afer clandesti de comerç de momies.", target: "M'inclino per un afer clandestí de comerç de mòmies." },
+  { plain: "—Per estrany que resulti, obeeix a una logica implacable.", target: "—Per estrany que resulti, obeeix a una lògica implacable." },
+  { plain: "—I que en farem, de la momia?", target: "—I què en farem, de la mòmia?" },
+  { plain: "Ja se qui es i conec tota la seva historia.", target: "Ja sé qui és i conec tota la seva història." },
+  { plain: "—Voste deu tenir molt poca experiencia en qüestions policiaques.", target: "—Vostè deu tenir molt poca experiència en qüestions policíaques." },
+  { plain: "Timidament, vaig dir-li: Es una noticia extraordinaria.", target: "Tímidament, vaig dir-li: —És una notícia extraordinària." },
+  { plain: "En aquesta epoca, la ciutat es preciosa...", target: "En aquesta època, la ciutat és preciosa..." },
+  { plain: "—Home, per a nosaltres son un punt de referencia.", target: "—Home, per a nosaltres són un punt de referència." },
+  { plain: "Que no ho veu que aixo es un centre d'urgencies?", target: "Que no ho veu que això és un centre d'urgències?" },
+  { plain: "Al final, digue: Hi hem d'anar amb una gran prudencia.", target: "Al final, digué: —Hi hem d'anar amb una gran prudència." },
+  { plain: "Desentona, encara que es mogui amb eficacia.", target: "Desentona, encara que es mogui amb eficàcia." },
+  { plain: "Pero quant a determinats detalls hi havia diferencies.", target: "Però quant a determinats detalls hi havia diferències." },
+  { plain: "Et vinc a fer una confidencia, em digue.", target: "«Et vinc a fer una confidència», em digué." },
+  { plain: "Pero nosaltres no portem mai la contraria al client.", target: "Però nosaltres no portem mai la contrària al client." },
+  { plain: "—Tenint en compte les circumstancies, es podria dir que si.", target: "—Tenint en compte les circumstàncies, es podria dir que sí." },
+  { plain: "La Claudia digue: —I que farem, ara?", target: "La Clàudia digué: —I què farem, ara?" }
+];
+
+const contextExercise = document.getElementById('context-exercise');
+const contextCheckAllBtn = document.getElementById('context-check-all-btn');
+const contextResetAllBtn = document.getElementById('context-reset-all-btn');
+const contextNewExerciseBtn = document.getElementById('context-new-exercise-btn');
+const contextScoreEl = document.getElementById('context-score');
+const contextProgressEl = document.getElementById('context-progress');
+const contextFeedbackEl = document.getElementById('context-feedback');
+
+let currentContextPhrases = [];
+let userContextState = {};
+let contextStatus = {};
+
+function generateContextExercise() {
+  currentContextPhrases = [...CONTEXT_PHRASES].sort(() => Math.random() - 0.5).slice(0, 10);
+  userContextState = {};
+  contextStatus = {};
+  contextExercise.innerHTML = '';
+  updateContextScore();
+  contextFeedbackEl.style.display = 'none';
+
+  currentContextPhrases.forEach((item, index) => {
+    const initial = item.plain;
+    userContextState[index] = initial;
+    contextStatus[index] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+
+    const card = document.createElement('div');
+    card.className = 'word-exercise';
+    card.id = `context-card-${index}`;
+
+    card.innerHTML = `
+      <div class="word-title">
+        <span class="card-index">${index + 1}</span>
+        <span class="word-status" id="context-status-${index}">Pendent</span>
+      </div>
+      <div class="phrase-content" id="context-container-${index}" tabindex="0"
+           aria-label="Frase: ${initial}. Clica les lletres per afegir accents."></div>
+      <div class="word-controls">
+        <button class="word-check-btn" data-index="${index}" aria-label="Comprova la frase">Comprova-ho</button>
+      </div>
+      <div class="word-feedback" id="context-feedback-${index}" aria-live="polite"></div>
+    `;
+    contextExercise.appendChild(card);
+    renderContextPhrase(index);
+
+    const checkBtn = card.querySelector('.word-check-btn');
+    checkBtn.addEventListener('click', () => checkSingleContext(index));
+    const container = document.getElementById(`context-container-${index}`);
+    container.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkSingleContext(index); });
+  });
+}
+
+function renderContextPhrase(index) {
+  const container = document.getElementById(`context-container-${index}`);
+  container.innerHTML = '';
+  const current = userContextState[index];
+  
+  for (let i = 0; i < current.length; i++) {
+    const ch = current[i];
+    
+    // Tractar espais
+    if (ch === ' ') {
+      const spaceSpan = document.createElement('span');
+      spaceSpan.textContent = ' ';
+      spaceSpan.className = 'letter space';
+      spaceSpan.dataset.index = i;
+      container.appendChild(spaceSpan);
+      continue;
+    }
+    
+    // Tractar signes de puntuació (també clicables per consistència)
+    if (/[.,;!?'"-]/.test(ch)) {
+      const punctSpan = document.createElement('span');
+      punctSpan.textContent = ch;
+      punctSpan.className = 'letter';
+      punctSpan.dataset.index = i;
+      
+      // Fer també clicable (per si acas hi ha accents en puntuació)
+      punctSpan.addEventListener('click', () => {
+        const live = userContextState[index];
+        const arr = live.split('');
+        arr[i] = cycleChar(arr[i]);
+        userContextState[index] = arr.join('');
+        renderContextPhrase(index);
+        if (contextStatus[index].checked) softResetContextDisplay(index);
+      });
+      
+      container.appendChild(punctSpan);
+      continue;
+    }
+    
+    // Lletres normals (clicables)
+    const span = document.createElement('span');
+    span.className = 'letter';
+    span.textContent = ch;
+    span.dataset.index = i;
+
+    // Fer les lletres clicables per canviar accents
+    span.addEventListener('click', () => {
+      const live = userContextState[index];
+      const arr = live.split('');
+      arr[i] = cycleChar(arr[i]);
+      userContextState[index] = arr.join('');
+      renderContextPhrase(index);
+      if (contextStatus[index].checked) softResetContextDisplay(index);
+    });
+
+    span.addEventListener('keydown', (e) => {
+      if (e.key === ' ') {
+        e.preventDefault();
+        const live = userContextState[index];
+        const arr = live.split('');
+        arr[i] = cycleChar(arr[i]);
+        userContextState[index] = arr.join('');
+        renderContextPhrase(index);
+        if (contextStatus[index].checked) softResetContextDisplay(index);
+      } else if (e.key === 'Enter') {
+        checkSingleContext(index);
+      }
+    });
+
+    span.tabIndex = 0;
+    container.appendChild(span);
+  }
+}
+function softResetContextDisplay(index) {
+  contextStatus[index].checked = false;
+  contextStatus[index].correct = false;
+  const card = document.getElementById(`context-card-${index}`);
+  const st = document.getElementById(`context-status-${index}`);
+  const fb = document.getElementById(`context-feedback-${index}`);
+  card.className = 'word-exercise';
+  st.textContent = 'Pendent';
+  st.className = 'word-status';
+  fb.textContent = '';
+  fb.className = 'word-feedback';
+}
+
+function updateContextDisplay(index, state, solution) {
+  const card = document.getElementById(`context-card-${index}`);
+  const st = document.getElementById(`context-status-${index}`);
+  const fb = document.getElementById(`context-feedback-${index}`);
+  const messages = feedbackMessages.context[state];
+  
+  card.className = `word-exercise ${state}`;
+  st.textContent = state === 'incorrect' ? 'Incorrecte' : 'Correcte';
+  st.className = `word-status ${state}`;
+  
+  // Crear el feedback amb icona i text
+  fb.innerHTML = `
+    <span class="feedback-icon">${messages.icon}</span>
+    <span>${messages.text}</span>
+  `;
+  
+  // Si és incorrecte, mostrar la solució
+  if (state === 'incorrect') {
+    fb.innerHTML += `<br><small>Correcte: <strong>${solution}</strong></small>`;
+  }
+  
+  fb.className = `word-feedback ${state}`;
+}
+
+function checkSingleContext(index) {
+  const item = currentContextPhrases[index];
+  contextStatus[index].attempts += 1;
+
+  const isCorrect = userContextState[index] === item.target;
+
+  if (isCorrect && contextStatus[index].attempts === 1) {
+    contextStatus[index].scored = true; 
+    contextStatus[index].late = false;
+  }
+  if (isCorrect && contextStatus[index].attempts > 1) {
+    contextStatus[index].scored = contextStatus[index].scored || false;
+    contextStatus[index].late = !contextStatus[index].scored;
+  }
+
+  contextStatus[index].checked = true;
+  contextStatus[index].correct = isCorrect;
+
+  updateContextDisplay(index, isCorrect ? (contextStatus[index].late ? 'late' : 'correct') : 'incorrect', item.target);
+  updateContextScore();
+}
+
+function checkAllContexts() {
+  currentContextPhrases.forEach((_, idx) => { if (!contextStatus[idx].checked) checkSingleContext(idx); });
+  const scoredCount = Object.values(contextStatus).filter(s => s.scored).length;
+  if (scoredCount === 10) {
+    contextFeedbackEl.textContent = 'Excel·lent! Has accentuat totes les frases correctament a la primera.';
+  } else {
+    contextFeedbackEl.textContent = `Has encertat ${scoredCount} de 10 frases a la primera. Continua practicant!`;
+  }
+  contextFeedbackEl.className = 'instructions';
+  contextFeedbackEl.style.display = 'block';
+}
+
+function resetAllContexts() {
+  currentContextPhrases.forEach((item, idx) => {
+    userContextState[idx] = item.plain;
+    renderContextPhrase(idx);
+    contextStatus[idx] = { checked: false, correct: false, attempts: 0, scored: false, late: false };
+    softResetContextDisplay(idx);
+  });
+  updateContextScore();
+  contextFeedbackEl.style.display = 'none';
+}
+
+function updateContextScore() {
+  const scored = Object.values(contextStatus).filter(s => s.scored).length;
+  const checked = Object.values(contextStatus).filter(s => s.checked).length;
+  contextScoreEl.textContent = `Frases encertades: ${scored}/10 (${checked} comprovades)`;
+  contextProgressEl.style.width = `${(scored / 10) * 100}%`;
+}
+
+// Configurar esdeveniments
+contextCheckAllBtn.addEventListener('click', checkAllContexts);
+contextResetAllBtn.addEventListener('click', resetAllContexts);
+contextNewExerciseBtn.addEventListener('click', generateContextExercise);
+
+// Generar exercici inicial
+generateContextExercise();
   </script>
 </body>
 </html>
