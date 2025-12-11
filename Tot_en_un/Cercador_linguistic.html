@@ -24,7 +24,7 @@
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -199,6 +199,20 @@
             background-color: white;
         }
         
+        .number-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .number-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -260,6 +274,14 @@
         
         .highlight {
             background-color: #ffeb3b;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .esdruixola {
+            background-color: #ff9800;
+            color: white;
             font-weight: bold;
             padding: 2px 4px;
             border-radius: 3px;
@@ -352,6 +374,13 @@
             margin-bottom: 15px;
         }
         
+        .stats {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
         footer {
             margin-top: 30px;
             text-align: center;
@@ -403,6 +432,10 @@
                 width: 90%;
                 text-align: center;
             }
+            
+            .number-input-group {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -414,12 +447,13 @@
                 <h3>Instruccions d'ús:</h3>
                 <ol>
                     <li>Arrossegueu un fitxer PDF o TXT a l'àrea indicada o feu clic a "Selecciona un fitxer"</li>
-                    <li>Escriviu la paraula o frase que voleu cercar</li>
+                    <li>Escriviu la paraula o frase que voleu cercar, o deixeu-ho buit per a l'anàlisi d'esdrúixoles</li>
                     <li>Seleccioneu les opcions de cerca (coincidència exacta, paraules adjacents)</li>
-                    <li>Feu clic a "Cercar" per obtenir els resultats</li>
+                    <li>Configureu el nombre mínim i màxim de paraules per frase</li>
+                    <li>Feu clic a "Cercar" per obtenir els resultats, o "Cerca Esdrúixoles" per trobar frases amb paraules esdrúixoles</li>
                     <li>Utilitzeu "Copiar resultats" per exportar els resultats</li>
                 </ol>
-                <p><strong>Nota:</strong> Aquest cercador reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l, l.l, etc.)</p>
+                <p><strong>Nota:</strong> Aquest cercador reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l, l.l, etc.) i detecta paraules esdrúixoles (paraules amb accent a l'antepenúltima o anteantepenúltima síl·laba).</p>
             </div>
         </header>
         
@@ -436,7 +470,7 @@
         
         <div class="error-message" id="errorMessage"></div>
         
-        <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar, l·l, etc.)">
+        <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar, l·l, etc.) Deixa buit per a l'anàlisi d'esdrúixoles">
         
         <div class="options-panel">
             <div class="options-title">Opcions de cerca</div>
@@ -472,12 +506,38 @@
                         <option value="5">5</option>
                     </select>
                 </div>
+                
+                <div class="option-group">
+                    <label for="esdruixolesMode">Mode d'anàlisi:</label>
+                    <select id="esdruixolesMode">
+                        <option value="no">Cerca normal</option>
+                        <option value="solamente">Només esdrúixoles</option>
+                        <option value="amb">Cerca i destaca esdrúixoles</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label>Nombre de paraules per frase:</label>
+                    <div class="number-input-group">
+                        <div>
+                            <small>Mínim:</small>
+                            <input type="number" id="minWords" class="number-input" min="1" max="100" value="1">
+                        </div>
+                        <div>
+                            <small>Màxim:</small>
+                            <input type="number" id="maxWords" class="number-input" min="1" max="100" value="100">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="action-buttons">
             <button class="btn" id="searchBtn">
                 <i>🔍</i> Cercar
+            </button>
+            <button class="btn" id="esdruixolesBtn">
+                <i>🎯</i> Cerca Esdrúixoles
             </button>
             <button class="btn" id="copyBtn">
                 <i>📋</i> Copiar resultats
@@ -515,7 +575,7 @@
     </div>
     
     <footer>
-        <p>Aquesta eina reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l)</p>
+        <p>Aquesta eina reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l) i detecta paraules esdrúixoles</p>
     </footer>
 
     <script>
@@ -527,6 +587,7 @@
         const selectFileBtn = document.getElementById('selectFileBtn');
         const dropArea = document.getElementById('dropArea');
         const searchBtn = document.getElementById('searchBtn');
+        const esdruixolesBtn = document.getElementById('esdruixolesBtn');
         const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
         const searchTextInput = document.getElementById('searchText');
@@ -536,6 +597,9 @@
         const statusMessage = document.getElementById('statusMessage');
         const errorMessage = document.getElementById('errorMessage');
         const fileInfo = document.getElementById('fileInfo');
+        const esdruixolesMode = document.getElementById('esdruixolesMode');
+        const minWordsInput = document.getElementById('minWords');
+        const maxWordsInput = document.getElementById('maxWords');
         
         // Elements per a les paraules que precedeixen i segueixen
         const precedingWordsPanel = document.getElementById('precedingWordsPanel');
@@ -548,9 +612,28 @@
         // Event Listeners
         selectFileBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileSelect);
-        searchBtn.addEventListener('click', searchFile);
+        searchBtn.addEventListener('click', () => searchFile(false));
+        esdruixolesBtn.addEventListener('click', () => searchFile(true));
         copyBtn.addEventListener('click', copyResults);
         clearBtn.addEventListener('click', clearAll);
+        
+        // Validació dels inputs de nombre de paraules
+        minWordsInput.addEventListener('change', validateWordCounts);
+        maxWordsInput.addEventListener('change', validateWordCounts);
+        
+        function validateWordCounts() {
+            const min = parseInt(minWordsInput.value);
+            const max = parseInt(maxWordsInput.value);
+            
+            if (min < 1) minWordsInput.value = 1;
+            if (max < 1) maxWordsInput.value = 1;
+            if (min > 100) minWordsInput.value = 100;
+            if (max > 100) maxWordsInput.value = 100;
+            
+            if (min > max) {
+                maxWordsInput.value = min;
+            }
+        }
         
         // Funcions per arrossegar i deixar anar
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -611,12 +694,15 @@
             showStatus(`Fitxer ${fileExtension.toUpperCase()} seleccionat. Ara pots fer la cerca.`);
         }
         
-        async function searchFile() {
+        async function searchFile(esdruixolesModeOnly = false) {
             const file = fileInput.files[0];
             const searchText = searchTextInput.value.trim();
             const isExactMatch = document.getElementById('exactMatch').checked;
             const precedingCount = parseInt(document.getElementById('precedingCount').value);
             const followingCount = parseInt(document.getElementById('followingCount').value);
+            const mode = esdruixolesMode.value;
+            const minWords = parseInt(minWordsInput.value) || 1;
+            const maxWords = parseInt(maxWordsInput.value) || 100;
             
             resultsDiv.innerHTML = '';
             precedingWordsPanel.style.display = 'none';
@@ -624,13 +710,19 @@
             precedingWordsList.innerHTML = '';
             followingWordsList.innerHTML = '';
             
-            if (!searchText) {
-                showError('Si us plau, introdueix un text a cercar.');
+            if (!file) {
+                showError('Si us plau, selecciona un fitxer.');
                 return;
             }
             
-            if (!file) {
-                showError('Si us plau, selecciona un fitxer.');
+            // Validar els valors de nombre de paraules
+            if (minWords > maxWords) {
+                showError('El nombre mínim de paraules no pot ser superior al màxim.');
+                return;
+            }
+            
+            if (minWords < 1 || maxWords < 1) {
+                showError('El nombre de paraules ha de ser com a mínim 1.');
                 return;
             }
             
@@ -639,13 +731,15 @@
             const fileExtension = file.name.split('.').pop().toLowerCase();
             
             if (fileExtension === 'pdf') {
-                await processPDF(file, searchText, isExactMatch, precedingCount, followingCount);
+                await processPDF(file, searchText, isExactMatch, precedingCount, followingCount, 
+                               esdruixolesModeOnly ? 'solamente' : mode, minWords, maxWords);
             } else if (fileExtension === 'txt') {
-                await processTXT(file, searchText, isExactMatch, precedingCount, followingCount);
+                await processTXT(file, searchText, isExactMatch, precedingCount, followingCount,
+                               esdruixolesModeOnly ? 'solamente' : mode, minWords, maxWords);
             }
         }
         
-        async function processPDF(file, searchText, isExactMatch, precedingCount, followingCount) {
+        async function processPDF(file, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
             const reader = new FileReader();
             
             reader.onload = async function(e) {
@@ -662,7 +756,7 @@
                         allText += pageText + " ";
                     }
                     
-                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount);
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords);
                     
                 } catch (error) {
                     hideLoading();
@@ -679,13 +773,13 @@
             reader.readAsArrayBuffer(file);
         }
         
-        async function processTXT(file, searchText, isExactMatch, precedingCount, followingCount) {
+        async function processTXT(file, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
             const reader = new FileReader();
             
             reader.onload = function(e) {
                 try {
                     const allText = e.target.result;
-                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount);
+                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords);
                 } catch (error) {
                     hideLoading();
                     showError(`Error processant el fitxer TXT: ${error.message}`);
@@ -701,27 +795,79 @@
             reader.readAsText(file, 'UTF-8');
         }
         
-        function processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount) {
+        function processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
             // Normalitza el text per a la cerca (incloent variants de l·l)
             const normalizedText = normalizeText(allText);
             const normalizedSearchText = normalizeText(searchText);
             
             // Separa frases amb un mètode intel·ligent que ignora l.l
-            const frases = splitSentencesIntelligently(allText).filter(frase => {
-                const normalizedFrase = normalizeText(frase);
+            const frases = splitSentencesIntelligently(allText);
+            
+            let frasesFiltrades = [];
+            let totalParaules = 0;
+            let frasesAmbParaulesCorrectes = 0;
+            
+            // Primer filtrar per paraules esdrúixoles si cal
+            if (mode === 'solamente' || mode === 'amb') {
+                // Mode esdrúixoles: filtrar o marcar frases amb paraules esdrúixoles
+                frasesFiltrades = frases.filter(frase => {
+                    // Buscar paraules esdrúixoles a la frase
+                    const paraules = frase.split(/\s+/);
+                    const teEsdruixola = paraules.some(paraula => esEsdruixola(paraula));
+                    
+                    if (mode === 'solamente') {
+                        return teEsdruixola;
+                    } else {
+                        return true; // En mode 'amb', mostrem totes les frases però destaquem les esdrúixoles
+                    }
+                });
                 
-                if (isExactMatch) {
-                    // Utilitzem \b per a límits de paraula, però amb la versió normalitzada
-                    const punctuationRegex = /[.,!?;:—()»]/g;
-                    const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
-                    return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
-                } else {
-                    return normalizedFrase.includes(normalizedSearchText);
+                if (mode === 'amb' && searchText) {
+                    // Si hi ha text de cerca, filtrar també per la cerca normal
+                    frasesFiltrades = frasesFiltrades.filter(frase => {
+                        const normalizedFrase = normalizeText(frase);
+                        if (isExactMatch) {
+                            const punctuationRegex = /[.,!?;:—()»]/g;
+                            const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
+                            return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
+                        } else {
+                            return normalizedFrase.includes(normalizedSearchText);
+                        }
+                    });
                 }
+            } else {
+                // Mode normal: filtrar per text de cerca
+                frasesFiltrades = frases.filter(frase => {
+                    if (!searchText) return true; // Si no hi ha text de cerca, mostrar totes
+                    
+                    const normalizedFrase = normalizeText(frase);
+                    if (isExactMatch) {
+                        const punctuationRegex = /[.,!?;:—()»]/g;
+                        const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
+                        return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
+                    } else {
+                        return normalizedFrase.includes(normalizedSearchText);
+                    }
+                });
+            }
+            
+            // Ara filtrar per nombre de paraules
+            frasesFiltrades = frasesFiltrades.filter(frase => {
+                // Comptar paraules a la frase
+                const paraules = frase.split(/\s+/).filter(p => p.trim().length > 0);
+                const numParaules = paraules.length;
+                totalParaules += numParaules;
+                
+                // Comprovar si el nombre de paraules està dins del rang
+                if (numParaules >= minWords && numParaules <= maxWords) {
+                    frasesAmbParaulesCorrectes++;
+                    return true;
+                }
+                return false;
             });
             
             // Mostra resultats
-            displayResults(frases, searchText, normalizedSearchText, isExactMatch);
+            displayResults(frasesFiltrades, searchText, normalizedSearchText, isExactMatch, mode, minWords, maxWords, totalParaules);
             
             // Càlcul de paraules que precedeixen i segueixen
             if (precedingCount > 0 || followingCount > 0) {
@@ -729,7 +875,223 @@
             }
             
             hideLoading();
-            showStatus(`Cerca completada. S'han trobat ${frases.length} frases coincidents.`);
+            showStatus(`Cerca completada. S'han trobat ${frasesFiltrades.length} frases coincidents.`);
+        }
+        
+        // FUNCIÓ PER DETERMINAR SI UNA PARAULA ÉS ESDRÚIXOLA (CORRECTA)
+        function esEsdruixola(paraula) {
+            // Neteja la paraula (elimina signes de puntuació al final)
+            const paraulaNeta = paraula.replace(/[.,!?;:—()»]$/, '');
+            
+            // Si la paraula és massa curta, no pot ser esdrúixola
+            if (paraulaNeta.length < 3) return false;
+            
+            // Separa la paraula en síl·labes utilitzant les mateixes regles
+            const paraulaSeparada = processarParaulaSilabes(paraulaNeta);
+            const silabes = paraulaSeparada.split('-').filter(s => s.length > 0);
+            
+            // Necessita almenys 3 síl·labes per ser esdrúixola
+            if (silabes.length < 3) return false;
+            
+            // Comprovar si l'antepenúltima o l'anteantepenúltima síl·laba té accent
+            const antepenultima = silabes.length - 3;
+            const anteantepenultima = silabes.length - 4; // per a sobreesdrúixoles
+            
+            // Comprovar l'antepenúltima (esdrúixoles)
+            if (antepenultima >= 0) {
+                if (/(à|è|é|í|ï|ò|ó|ú|ü)/.test(silabes[antepenultima])) {
+                    return true; // És esdrúixola
+                }
+            }
+            
+            // Comprovar l'anteantepenúltima (sobreesdrúixoles)
+            if (anteantepenultima >= 0) {
+                if (/(à|è|é|í|ï|ò|ó|ú|ü)/.test(silabes[anteantepenultima])) {
+                    return true; // És sobreesdrúixola
+                }
+            }
+            
+            // Si cap té accent, no és esdrúixola/sobreesdrúixola
+            return false;
+        }
+        
+        // FUNCIÓ DE SEPARACIÓ DE SÍL·LABES - IGUAL QUE LA TEVA
+        function processarParaulaSilabes(paraula) {
+            let paraulaProcessada = paraula;
+            let canvi;
+            
+            // REGLA ESPECIAL: argüir i derivats - APLICAR PRIMER!
+            paraulaProcessada = paraulaProcessada.replace(/argü(eix|i|í)/gi, 'argü-$1');
+
+            // REGLA excepció: Màrius → Màri-us. Sírius → Síri-us (APLICAR ABANS)
+            paraulaProcessada = paraulaProcessada.replace(/(Màri|Síri)us($)/gi, '$1-us$2');
+            
+            // REGLA 1: l·l → l-l (separació entre les dues eles)
+            paraulaProcessada = paraulaProcessada.replace(/l·l/gi, 'l-l');
+            
+            // REGLA 2: Una consonant entre vocals → separació abans de la consonant
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç])([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return vocal1 + '-' + consonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 3: Dígrafs i grups consonàntics
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([a-zçàèéíïòóúü])(ll|ny|kh|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr)([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return vocal1 + '-' + consonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 4: Dues o més consonants entre vocals
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç]{2,})([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonants, vocal2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        const consonantsSenseUltima = consonants.substring(0, consonants.length - 1);
+                        const ultimaConsonant = consonants.substring(consonants.length - 1);
+                        return vocal1 + consonantsSenseUltima + '-' + ultimaConsonant + vocal2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 5: g,q + u + vocal excepte ï → inseparables (marcar amb asteriscs)
+            paraulaProcessada = paraulaProcessada.replace(/([gq])u([aeiouàèéíòóúü])/gi, '$1*u*$2');
+
+            // REGLA 6: dèieu - vocal + iu + vocal + iu
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aàeéèiíoòóuú])([iu])([aeiou])([iu])/gi, function(match, v1, iu1, v2, iu2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + iu1 + '*' + v2 + iu2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 7: cauen - vocal + i/u + vocal
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíòóú])([iu])([aeiouàèéíïòóúü])/gi, function(match, v1, iu, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + iu + '*' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 8: país - vocal àtona + vocal accentuada
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiou])([àèéíòóúïü])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 9: Maria - consonant + iu + aeo
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([bcdfgjklmnpqrstvwxyzç])([iu])([aeo])/gi, function(match, c, iu, v) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return c + iu + '-' + v;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 10: teatre - a/e/o + a/e/o
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeoàèéòó])([aeoàèéòó])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 11: vocal accentuada + vocal àtona
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([àèéíòóú])([aeiou])/gi, function(match, v1, v2) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v1 + '-' + v2;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+
+            // REGLA 12: aquàrium - vocal + um final
+            do {
+                canvi = false;
+                const novaParaula = paraulaProcessada.replace(/([aeiou])um($|s$)/gi, function(match, v, final) {
+                    if (!match.includes('-')) {
+                        canvi = true;
+                        return v + '-um' + final;
+                    }
+                    return match;
+                });
+                if (canvi) {
+                    paraulaProcessada = novaParaula;
+                }
+            } while (canvi);
+            
+            // Suprimir els asteriscs
+            paraulaProcessada = paraulaProcessada.replace(/\*/gi, '');
+            
+            // Netejar guions duplicats o al principi
+            paraulaProcessada = paraulaProcessada.replace(/--+/g, '-');
+            paraulaProcessada = paraulaProcessada.replace(/^-/, '');
+            
+            return paraulaProcessada;
         }
         
         // Funció per separar frases de manera intel·ligent
@@ -763,47 +1125,79 @@
         }
         
         // Funció per mostrar els resultats
-        function displayResults(frases, originalSearchText, normalizedSearchText, isExactMatch) {
+        function displayResults(frases, originalSearchText, normalizedSearchText, isExactMatch, mode, minWords, maxWords, totalParaules) {
             if (frases.length === 0) {
-                resultsDiv.innerHTML = `<div class="error-message">No s'han trobat frases amb "${originalSearchText}".</div>`;
+                resultsDiv.innerHTML = `<div class="error-message">No s'han trobat frases ${mode === 'solamente' ? 'amb paraules esdrúixoles' : 'coincidents'} amb ${minWords}-${maxWords} paraules.</div>`;
                 return;
             }
             
-            let html = `<div class="success-message">S'han trobat ${frases.length} frases amb "${originalSearchText}":</div>`;
+            let titleText = '';
+            if (mode === 'solamente') {
+                titleText = `S'han trobat ${frases.length} frases amb paraules esdrúixoles (${minWords}-${maxWords} paraules):`;
+            } else if (mode === 'amb') {
+                titleText = `S'han trobat ${frases.length} frases ${originalSearchText ? `amb "${originalSearchText}" i ` : ''}destacant paraules esdrúixoles (${minWords}-${maxWords} paraules):`;
+            } else {
+                titleText = originalSearchText ? 
+                    `S'han trobat ${frases.length} frases amb "${originalSearchText}" (${minWords}-${maxWords} paraules):` :
+                    `S'han trobat ${frases.length} frases (${minWords}-${maxWords} paraules):`;
+            }
             
-            frases.forEach((frase) => {
-                // Destacar el text cercat a la frase
-                const normalizedFrase = normalizeText(frase);
+            let html = `<div class="success-message">${titleText}</div>`;
+            
+            frases.forEach((frase, index) => {
                 let highlightedFrase = frase;
                 
-                // Crea una expressió regular per trobar totes les coincidències
-                let regex;
-                if (isExactMatch) {
-                    regex = new RegExp(`\\b${escapeRegExp(originalSearchText)}\\b`, 'gi');
-                } else {
-                    regex = new RegExp(`(${escapeRegExp(originalSearchText)})`, 'gi');
+                // Destacar el text cercat (si n'hi ha)
+                if (originalSearchText && mode !== 'solamente') {
+                    let regex;
+                    if (isExactMatch) {
+                        regex = new RegExp(`\\b${escapeRegExp(originalSearchText)}\\b`, 'gi');
+                    } else {
+                        regex = new RegExp(`(${escapeRegExp(originalSearchText)})`, 'gi');
+                    }
+                    
+                    const matches = [...frase.matchAll(regex)];
+                    
+                    if (matches.length > 0) {
+                        matches.sort((a, b) => b.index - a.index);
+                        
+                        matches.forEach(match => {
+                            const start = match.index;
+                            const end = start + match[0].length;
+                            highlightedFrase = highlightedFrase.substring(0, start) + 
+                                              `<span class="highlight">${match[0]}</span>` + 
+                                              highlightedFrase.substring(end);
+                        });
+                    }
                 }
                 
-                const matches = [...frase.matchAll(regex)];
-                
-                // Si hi ha coincidències, destaca-les
-                if (matches.length > 0) {
-                    // Ordena les coincidències per posició (de dreta a esquerra) per evitar problemes amb reemplaçaments
-                    matches.sort((a, b) => b.index - a.index);
+                // Destacar paraules esdrúixoles
+                if (mode === 'solamente' || mode === 'amb') {
+                    const paraules = frase.split(/\s+/);
                     
-                    // Aplica els destacats
-                    matches.forEach(match => {
-                        const start = match.index;
-                        const end = start + match[0].length;
-                        highlightedFrase = highlightedFrase.substring(0, start) + 
-                                          `<span class="highlight">${match[0]}</span>` + 
-                                          highlightedFrase.substring(end);
+                    // Ordenar per longitud per evitar problemes amb reemplaçaments
+                    paraules.sort((a, b) => b.length - a.length);
+                    
+                    paraules.forEach(paraula => {
+                        if (esEsdruixola(paraula)) {
+                            const paraulaNeta = paraula.replace(/[.,!?;:—()»]$/, '');
+                            highlightedFrase = highlightedFrase.replace(
+                                new RegExp(`\\b${escapeRegExp(paraulaNeta)}\\b`, 'g'),
+                                `<span class="esdruixola">${paraulaNeta}</span>`
+                            );
+                        }
                     });
                 }
                 
-                // Mostra la frase sense numeració
+                // Comptar paraules en aquesta frase
+                const numParaules = frase.split(/\s+/).filter(p => p.trim().length > 0).length;
+                
+                // Mostra la frase sense numeració amb informació de paraules
                 html += `<div class="frase">${highlightedFrase.trim()}</div>`;
             });
+            
+            // Afegir estadístiques
+            html += `<div class="stats">Total de paraules en les frases seleccionades: ${totalParaules} | Mitjana de paraules per frase: ${(totalParaules/frases.length).toFixed(1)}</div>`;
             
             resultsDiv.innerHTML = html;
         }
@@ -891,14 +1285,20 @@
                 successMessage.remove();
             }
             
+            // Eliminem les estadístiques
+            const stats = tempDiv.querySelector('.stats');
+            if (stats) {
+                stats.remove();
+            }
+            
             // Obtenim totes les frases
             const frases = tempDiv.querySelectorAll('.frase');
             
             // Construïm el text a copiar amb salts de línia entre frases
             let textToCopy = '';
             frases.forEach((frase, index) => {
-                // Eliminem els estils de highlight
-                const highlights = frase.querySelectorAll('.highlight');
+                // Eliminem els estils de highlight i esdruixola
+                const highlights = frase.querySelectorAll('.highlight, .esdruixola');
                 highlights.forEach(el => {
                     const textNode = document.createTextNode(el.textContent);
                     el.parentNode.replaceChild(textNode, el);
@@ -945,6 +1345,9 @@
             document.getElementById('exactMatch').checked = false;
             document.getElementById('precedingCount').value = '0';
             document.getElementById('followingCount').value = '0';
+            document.getElementById('esdruixolesMode').value = 'no';
+            document.getElementById('minWords').value = '1';
+            document.getElementById('maxWords').value = '100';
             
             showStatus('S\'ha netejat tot el contingut.');
         }
