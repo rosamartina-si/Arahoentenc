@@ -9,6 +9,9 @@
     /* =============================
        Disseny modern i accessible
        ============================= */
+    /* =============================
+       Disseny modern i accessible
+       ============================= */
     :root {
       --bg: #f6f8fb;
       --surface: #ffffff;
@@ -111,27 +114,29 @@
     }
 
     /* ======= Tabs accessibles ======= */
- .tabs {
-  display: flex; /* Canvia de grid a flex */
-  flex-direction: column; /* Col·loca el tablist a dalt i qualsevol altre contingut a sota */
-  margin-top: 14px;
-  border-bottom: 1px solid rgb(2 6 23 / 8%);
-  position: sticky;
-  top: 0;
-  background: linear-gradient( to bottom, color-mix(in oklab, var(--surface), transparent 0%), color-mix(in oklab, var(--surface), transparent 20%) );
-  z-index: 10;
-}
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      margin-top: 14px;
+      border-bottom: 1px solid rgb(2 6 23 / 8%);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1000;
+      padding-bottom: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
 
-.tablist {
-  display: flex;
-  gap: 6px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  width: 100%; /* Assegura que ocupi tot l'amplada */
-}
+    .tablist {
+      display: flex;
+      gap: 6px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      width: 100%;
+    }
 
     .tab {
       -webkit-appearance: none;
@@ -146,22 +151,21 @@
       cursor: pointer;
       position: relative;
       transition: color .2s ease;
-      white-space: nowrap; /* Evita que el text es trenqui */
+      white-space: nowrap;
     }
 
-/* Aquestes regles són per a la barra de desplaçament (opcional) */
-.tablist::-webkit-scrollbar {
-  height: 4px;
-}
+    .tablist::-webkit-scrollbar {
+      height: 4px;
+    }
 
-.tablist::-webkit-scrollbar-track {
-  background: color-mix(in oklab, var(--surface), var(--bg) 20%);
-}
+    .tablist::-webkit-scrollbar-track {
+      background: color-mix(in oklab, var(--surface), var(--bg) 20%);
+    }
 
-.tablist::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 2px;
-}
+    .tablist::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 2px;
+    }
 
     .tab[aria-selected="true"] { color: var(--text); }
 
@@ -504,6 +508,193 @@
       box-shadow: 0 0 0 3px color-mix(in oklab, var(--warning), transparent 70%);
     }
 
+/* Colors INTENSOS per a les síl·labes segons posició (des de la dreta) */
+/* Síl·laba tònica (dreta) - Groc intens */
+.dot:nth-last-child(1) {
+  background: #fde047;
+  border-color: #eab308;
+}
+
+/* Síl·laba anterior (segona des de la dreta) - Taronja intens */
+.dot:nth-last-child(2) {
+  background: #fdba74;
+  border-color: #f97316;
+}
+
+/* Tercera des de la dreta - Vermell intens */
+.dot:nth-last-child(3) {
+  background: #fca5a5;
+  border-color: #ef4444;
+}
+
+/* Quarta des de la dreta - Lila intens */
+.dot:nth-last-child(4) {
+  background: #d8b4fe;
+  border-color: #a855f7;
+}
+
+/* Resta de síl·labes (si n'hi ha més) - Blau intens */
+.dot:nth-last-child(n+5) {
+  background: #93c5fd;
+  border-color: #3b82f6;
+}
+    
+/* Estats hover amb colors MOLT més intensos */
+.dot:nth-last-child(1):hover {
+  background: #facc15;
+  border-color: #eab308;
+}
+
+.dot:nth-last-child(2):hover {
+  background: #fb923c;
+  border-color: #ea580c;
+}
+
+.dot:nth-last-child(3):hover {
+  background: #f87171;
+  border-color: #dc2626;
+}
+
+.dot:nth-last-child(4):hover {
+  background: #c084fc;
+  border-color: #9333ea;
+}
+
+.dot:nth-last-child(n+5):hover {
+  background: #60a5fa;
+  border-color: #2563eb;
+}
+
+/* Estats selected - colors MOLT intensos */
+.dot:nth-last-child(1).selected {
+  background: #eab308;
+  border-color: #ca8a04;
+}
+
+.dot:nth-last-child(2).selected {
+  background: #f97316;
+  border-color: #ea580c;
+}
+
+.dot:nth-last-child(3).selected {
+  background: #ef4444;
+  border-color: #dc2626;
+}
+
+.dot:nth-last-child(4).selected {
+  background: #a855f7;
+  border-color: #9333ea;
+}
+
+.dot:nth-last-child(n+5).selected {
+  background: #3b82f6;
+  border-color: #2563eb;
+}
+    
+    /* Estats selected - colors més intensos (mantenint la mateixa gamma) */
+    .dot:nth-last-child(1).selected {
+      background: #fcd34d;
+      border-color: #f59e0b;
+    }
+    
+    .dot:nth-last-child(2).selected {
+      background: #fdba74;
+      border-color: #f97316;
+    }
+    
+    .dot:nth-last-child(3).selected {
+      background: #fca5a5;
+      border-color: #ef4444;
+    }
+    
+    .dot:nth-last-child(4).selected {
+      background: #d8b4fe;
+      border-color: #a855f7;
+    }
+    
+    .dot:nth-last-child(n+5).selected {
+      background: #93c5fd;
+      border-color: #3b82f6;
+    }
+    
+    /* Assegurar que els estats correct/incorrect/late prevalguin sobre els colors de posició */
+    .dot:nth-last-child(1).correct {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+    }
+    
+    .dot:nth-last-child(2).correct {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+    }
+    
+    .dot:nth-last-child(3).correct {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+    }
+    
+    .dot:nth-last-child(4).correct {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+    }
+    
+    .dot:nth-last-child(n+5).correct {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+    }
+    
+    /* Mateix per incorrect */
+    .dot:nth-last-child(1).incorrect {
+      background: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+    
+    .dot:nth-last-child(2).incorrect {
+      background: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+    
+    .dot:nth-last-child(3).incorrect {
+      background: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+    
+    .dot:nth-last-child(4).incorrect {
+      background: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+    
+    .dot:nth-last-child(n+5).incorrect {
+      background: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+    
+    /* I per late */
+    .dot:nth-last-child(1).late {
+      background: var(--warning) !important;
+      border-color: var(--warning) !important;
+    }
+    
+    .dot:nth-last-child(2).late {
+      background: var(--warning) !important;
+      border-color: var(--warning) !important;
+    }
+    
+    .dot:nth-last-child(3).late {
+      background: var(--warning) !important;
+      border-color: var(--warning) !important;
+    }
+    
+    .dot:nth-last-child(4).late {
+      background: var(--warning) !important;
+      border-color: var(--warning) !important;
+    }
+    
+    .dot:nth-last-child(n+5).late {
+      background: var(--warning) !important;
+      border-color: var(--warning) !important;
+    }
+
     /* ======= Estils per a frases en context amb accentuació directa ======= */
     .context-phrase {
       background: var(--surface);
@@ -594,6 +785,20 @@
         <h2>Què és una paraula esdrúixola?</h2>
         <p>Una paraula <strong>esdrúixola</strong> té l'accent tònic (la síl·laba que es pronuncia amb més força) a la  síl·laba <strong>antepenúltima</strong> (la tercera començant pel final).</p>
         <p class="instructions"><strong>Exemples:</strong> <em><strong>mú</strong>-si-ca</em>, <em>es-<strong>drúi</strong>-xo-la</em>, <em><strong>cà</strong>-me-ra</em>.</p>
+
+  <div class="important-box" style="margin-top: 20px; font-size: 0.9em;">
+    <p>
+  També hi ha paraules <strong>sobreesdrúixoles</strong>, que tenen l’accent a l’<strong>anteantepenúltima síl·laba</strong>
+  (és a dir, a la <strong>quarta síl·laba</strong> comptant des del final). Però, només són sobreesdrúixols
+  els adverbis acabats en <strong>-ment</strong> derivats d’un adjectiu esdrúixol.
+</p>
+
+<p>
+  Per exemple: <em><strong>clí</strong>-ni-ca-ment</em> o <em>es-pon-<strong>tà</strong>-ni-a-ment</em>.
+</p>
+
+  </div>
+</div>
       </div>
 
       <div class="section">
@@ -2059,11 +2264,6 @@ function updateContextDisplay(index, state, solution) {
     <span class="feedback-icon">${messages.icon}</span>
     <span>${messages.text}</span>
   `;
-  
-  // Si és incorrecte, mostrar la solució
-  if (state === 'incorrect') {
-    fb.innerHTML += `<br><small>Correcte: <strong>${solution}</strong></small>`;
-  }
   
   fb.className = `word-feedback ${state}`;
 }
