@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extractor de Paraules amb Accent i Vocals</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.5rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .results-container {
+            margin-top: 20px;
+        }
+        
+        .word-list {
+            list-style-type: none;
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .word-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .word-text {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .word-details {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .examples {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+            border-left: 4px solid #f1c40f;
+        }
+        
+        .examples h3 {
+            color: #d35400;
+            margin-bottom: 10px;
+        }
+        
+        .rules {
+            background-color: #e8f6f3;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #1abc9c;
+        }
+        
+        .rules h3 {
+            color: #16a085;
+            margin-bottom: 15px;
+        }
+        
+        .rule-item {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid #1abc9c;
+            font-size: 0.95rem;
+        }
+        
+        .highlight {
+            background-color: #ffeaa7;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .highlight-accent {
+            background-color: #ffcccc;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .highlight-vowels {
+            background-color: #ccffcc;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .highlight-ignored {
+            background-color: #ff9999;
+            padding: 2px;
+            border-radius: 3px;
+            text-decoration: line-through;
+            font-weight: 600;
+        }
+        
+        .highlight-diaeresis {
+            background-color: #ffcc99;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .highlight-puntvolat {
+            background-color: #ccccff;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .highlight-puntuacio {
+            background-color: #ffccff;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Extractor de Paraules amb Accent i Vocals</h1>
+        <p class="description">Aquesta eina analitza un text i extreu les paraules que tenen accents i almenys 3 vocals DESPRÉS de la lletra accentuada, amb TOTES les regles especials del català.</p>
+    </header>
+    
+    <div class="container">
+        <section class="input-section">
+            <h2>Introdueix el text</h2>
+            <textarea id="textInput" placeholder="Escriu o enganxa el text que vols analitzar aquí...">DARRERES REGLES AFEGIDES:
+
+1. l.l (punt baix) igual que l·l: NO para de comptar vocals
+   - "col.laboració" - el punt baix no para el recompte
+   
+2. q+ü: La 'ü' després de 'q' tampoc compta com a vocal
+   - "qüestió" - la 'ü' s'ignora (igual que 'u' en q+u)
+   - "qüotidiana" - la 'ü' s'ignora
+   
+3. g+ü: La 'ü' després de 'g' tampoc compta com a vocal
+   - "desagüe" - la 'ü' s'ignora
+   - "aigües" - la 'ü' s'ignora
+   - "pingüí" - la 'ü' s'ignora
+
+EXEMPLES COMPLETS:
+
+AMB ACCENT I 3+ VOCALS:
+- "espontàniament" - accent 'à', després: i, a, e (3 vocals)
+- "ràpidament" - accent 'à', després: i, a, e (3 vocals)
+
+SENSE POU VOCALS:
+- "qüestió" - accent 'ó' (final), 'ü' ignorada (0 vocals)
+- "pingüí" - accent 'í' (final), 'ü' ignorada (0 vocals)
+- "desagüe" - no té accent vàlid (ü no compta)
+- "aigües" - no té accent vàlid
+- "col·laboració" - accent 'ó' (final), punt volat no para (0 vocals)
+- "col.laboració" - accent 'ó' (final), punt baix no para (0 vocals)
+
+CASOS LÍMIT:
+- "llengües" - 'ü' no accent, no hi ha altre accent
+- "antigüitat" - 'ü' no accent, accent 'í' i després 't', 'a', 't' → 'a' (1 vocal)
+- "qüotidiana" - 'ü' ignorada, accent 'í' i després 'a', 'n', 'a' → 'a', 'a' (2 vocals)
+- "exqüisit" - 'ü' ignorada, accent 'í' i després 's', 'i', 't' → 'i' (1 vocal)
+
+PROVA AMB:
+"Espontàniament és una paraula qüotidiana que apareix ràpidament en textos col·laboratius i col.laboratius. El desagüe de les aigües és un tema pingüí."</textarea>
+            <button id="analyzeButton">Analitza el text</button>
+            
+            <div class="rules">
+                <h3>📋 TOTES les regles de cerca</h3>
+                <div class="rule-item"><strong>1. ACCENTS VÀLIDS:</strong> à, è, é, í, ó, ò, ú</div>
+                <div class="rule-item"><strong>2. DIÈRESIS NO ACCENT:</strong> ï, ü NO compta com a accents</div>
+                <div class="rule-item"><strong>3. Q+U/Ü:</strong> 'u' o 'ü' després de 'q' NO compta com a vocal</div>
+                <div class="rule-item"><strong>4. G+U/Ü:</strong> 'u' o 'ü' després de 'g' NO compta com a vocal</div>
+                <div class="rule-item"><strong>5. PUNTUACIÓ PARA:</strong> Signes (.,;:'"¿?¡!()[]{}/-) paren recompte</div>
+                <div class="rule-item"><strong>6. EXCEPCIÓ PUNT VOLAT/BAIX:</strong> l·l i l.l NO paren recompte</div>
+                <div class="rule-item"><strong>7. REQUISIT FINAL:</strong> ≥3 vocals vàlides després del primer accent</div>
+            </div>
+            
+            <div class="examples">
+                <h3>Exemples d'aplicació de totes les regles:</h3>
+                <p><span class="highlight">qüestió</span> → <span class="highlight-ignored">ü</span> ignorada (q+ü), accent <span class="highlight-accent">ó</span> final</p>
+                <p><span class="highlight">pingüí</span> → <span class="highlight-ignored">ü</span> ignorada (g+ü), accent <span class="highlight-accent">í</span> final</p>
+                <p><span class="highlight">col·laboració</span> → punt volat <span class="highlight-puntvolat">·</span> no para, accent <span class="highlight-accent">ó</span> final</p>
+                <p><span class="highlight">col.laboració</span> → punt baix <span class="highlight-puntvolat">.</span> no para, accent <span class="highlight-accent">ó</span> final</p>
+                <p><span class="highlight">desagüe</span> → <span class="highlight-ignored">ü</span> ignorada (g+ü), no hi ha accent vàlid</p>
+            </div>
+        </section>
+        
+        <section class="results-section">
+            <h2>Paraules trobades</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalWords">0</div>
+                    <div class="stat-label">Paraules analitzades</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="foundWords">0</div>
+                    <div class="stat-label">Paraules trobades</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="withAccents">0</div>
+                    <div class="stat-label">Amb accents</div>
+                </div>
+            </div>
+            
+            <div class="results-container">
+                <ul id="wordList" class="word-list">
+                    <li class="no-results">Encara no s'ha analitzat cap text. Fes clic a "Analitza el text" per començar.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Eina desenvolupada per a l'anàlisi de text en català | TOTES les regles especials aplicades</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const analyzeButton = document.getElementById('analyzeButton');
+            const wordList = document.getElementById('wordList');
+            const totalWordsElement = document.getElementById('totalWords');
+            const foundWordsElement = document.getElementById('foundWords');
+            const withAccentsElement = document.getElementById('withAccents');
+            
+            // Vocals en català (incloent accentuades)
+            const vocals = new Set(['a', 'e', 'i', 'o', 'u', 'à', 'è', 'é', 'í', 'ï', 'ó', 'ò', 'ú', 'ü']);
+            
+            // Lletres accentuades (EXCLOENT dièresis)
+            const lletresAmbAccent = new Set(['à', 'è', 'é', 'í', 'ó', 'ò', 'ú']);
+            
+            // Signes de puntuació que paren el recompte
+            const signesPuntuacio = new Set([',', ';', ':', "'", '"', '¿', '?', '¡', '!', '(', ')', '[', ']', '{', '}', '/', '\\', '-']);
+            
+            // Funció per comprovar si és punt volat/baix entre dues 'l' (l·l o l.l)
+            function esPuntVolatOCompost(text, index) {
+                const char = text[index];
+                
+                // Comprovar si és punt volat (·) o punt baix (.) entre l i l
+                if (char === '·' || char === '.' || char === '•') {
+                    // Comprovar si hi ha 'l' abans i després
+                    const abans = index > 0 ? text[index-1].toLowerCase() : '';
+                    const despres = index < text.length - 1 ? text[index+1].toLowerCase() : '';
+                    
+                    // Comprovar si és l.l o l·l (l seguit de punt/punt volat seguit de l)
+                    return (abans === 'l' && despres === 'l');
+                }
+                
+                return false;
+            }
+            
+            // Funció per comprovar si és 'u' o 'ü' que s'ha d'ignorar (regles Q+U/Ü i G+U/Ü)
+            function esUOÜIgnorada(text, index) {
+                const char = text[index].toLowerCase();
+                
+                // Només processem 'u' i 'ü'
+                if (char !== 'u' && char !== 'ü') return false;
+                
+                // Regla Q+U/Ü
+                if (index > 0 && text[index-1].toLowerCase() === 'q') {
+                    return true;
+                }
+                
+                // Regla G+U/Ü - 'u' o 'ü' després de 'g'
+                if (index > 0 && text[index-1].toLowerCase() === 'g') {
+                    // 'u' o 'ü' després de 'g' sempre s'ignora
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            // Funció per netejar i preparar el text
+            function netejarParaula(paraula) {
+                // Eliminar signes de puntuació només al principi i final
+                return paraula.replace(/^[^a-zA-ZàèéíïóòúüÀÈÉÍÏÓÒÚÜ·•]+|[^a-zA-ZàèéíïóòúüÀÈÉÍÏÓÒÚÜ·•]+$/g, '');
+            }
+            
+            // Funció per comprovar si una paraula té accents (EXCLOENT dièresis)
+            function teAccent(paraula) {
+                for (let i = 0; i < paraula.length; i++) {
+                    const lletra = paraula[i].toLowerCase();
+                    if (lletresAmbAccent.has(lletra)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            // Funció per comprovar si una paraula té vocals i consonants
+            function teVocalsIConsonants(paraula) {
+                const paraulaMin = paraula.toLowerCase();
+                let teVocal = false;
+                let teConsonant = false;
+                
+                for (let i = 0; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    
+                    // Saltar punt volat/baix entre l·l o l.l
+                    if (esPuntVolatOCompost(paraulaMin, i)) continue;
+                    
+                    // Saltar signes de puntuació
+                    if (signesPuntuacio.has(lletra)) continue;
+                    
+                    // Comprovar si és vocal (tenint en compte regles Q+U/Ü i G+U/Ü)
+                    let esVocal = vocals.has(lletra) && !esUOÜIgnorada(paraulaMin, i);
+                    
+                    if (esVocal) {
+                        teVocal = true;
+                    } else if (lletra >= 'a' && lletra <= 'z') {
+                        teConsonant = true;
+                    }
+                    
+                    if (teVocal && teConsonant) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+            
+            // Funció per comprovar si hi ha almenys 3 vocals DESPRÉS de l'accent (amb TOTES les regles)
+            function teTresVocalsDespresAccent(paraula) {
+                const paraulaMin = paraula.toLowerCase();
+                let posicioAccent = -1;
+                
+                // Trobar la posició de la primera lletra accentuada (EXCLOENT dièresis)
+                for (let i = 0; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    if (lletresAmbAccent.has(lletra)) {
+                        posicioAccent = i;
+                        break;
+                    }
+                }
+                
+                // Si no hi ha accent (excloent dièresis), retorna false
+                if (posicioAccent === -1) return false;
+                
+                // Comptar vocals DESPRÉS de la posició de l'accent (amb TOTES les regles)
+                let comptadorVocals = 0;
+                for (let i = posicioAccent + 1; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    
+                    // Comprovar si és punt volat/baix entre l·l o l.l (NO para)
+                    if (esPuntVolatOCompost(paraulaMin, i)) {
+                        continue;
+                    }
+                    
+                    // Comprovar si és signe de puntuació (PARA el recompte)
+                    if (signesPuntuacio.has(lletra)) {
+                        break;
+                    }
+                    
+                    // Comprovar si és vocal (tenint en compte regles Q+U/Ü i G+U/Ü)
+                    let esVocal = vocals.has(lletra) && !esUOÜIgnorada(paraulaMin, i);
+                    
+                    if (esVocal) {
+                        comptadorVocals++;
+                        if (comptadorVocals >= 3) {
+                            return true;
+                        }
+                    }
+                }
+                
+                return false;
+            }
+            
+            // Funció auxiliar per destacar tots els elements especials
+            function destacarParaula(paraula) {
+                const paraulaMin = paraula.toLowerCase();
+                let resultat = '';
+                let posicioAccent = -1;
+                
+                // Trobar la posició de l'accent (excloent dièresis)
+                for (let i = 0; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    if (lletresAmbAccent.has(lletra)) {
+                        posicioAccent = i;
+                        break;
+                    }
+                }
+                
+                // Construir el resultat amb tots els elements destacats
+                for (let i = 0; i < paraula.length; i++) {
+                    const lletra = paraula[i];
+                    const lletraMin = paraulaMin[i];
+                    
+                    // Determinar tipus d'element
+                    const esPuntCompost = esPuntVolatOCompost(paraulaMin, i);
+                    const esUIgnorada = esUOÜIgnorada(paraulaMin, i);
+                    const esDiaeresis = (lletraMin === 'ï' || lletraMin === 'ü');
+                    const esAccent = (i === posicioAccent);
+                    const esPuntuacio = signesPuntuacio.has(lletraMin) && !esPuntCompost;
+                    const esVocalValidaDespres = (i > posicioAccent && vocals.has(lletraMin) && !esUIgnorada && !esPuntuacio && !esPuntCompost);
+                    
+                    if (esPuntCompost) {
+                        resultat += `<span class="highlight-puntvolat">${lletra}</span>`;
+                    } else if (esAccent) {
+                        resultat += `<span class="highlight-accent">${lletra}</span>`;
+                    } else if (esDiaeresis && !esUIgnorada) {
+                        resultat += `<span class="highlight-diaeresis">${lletra}</span>`;
+                    } else if (esUIgnorada) {
+                        resultat += `<span class="highlight-ignored">${lletra}</span>`;
+                    } else if (esPuntuacio) {
+                        resultat += `<span class="highlight-puntuacio">${lletra}</span>`;
+                    } else if (esVocalValidaDespres) {
+                        resultat += `<span class="highlight-vowels">${lletra}</span>`;
+                    } else {
+                        resultat += lletra;
+                    }
+                }
+                
+                return resultat;
+            }
+            
+            // Funció auxiliar per trobar totes les vocals vàlides després de l'accent (amb totes les regles)
+            function trobarVocalsDespresAccent(paraula) {
+                const paraulaMin = paraula.toLowerCase();
+                let posicioAccent = -1;
+                
+                // Trobar la posició de l'accent (excloent dièresis)
+                for (let i = 0; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    if (lletresAmbAccent.has(lletra)) {
+                        posicioAccent = i;
+                        break;
+                    }
+                }
+                
+                if (posicioAccent === -1) return '';
+                
+                // Trobar totes les vocals vàlides després de l'accent (amb TOTES les regles)
+                let vocalsTrobades = '';
+                
+                for (let i = posicioAccent + 1; i < paraulaMin.length; i++) {
+                    const lletra = paraulaMin[i];
+                    
+                    // Comprovar si és punt volat/baix entre l·l o l.l (NO para)
+                    if (esPuntVolatOCompost(paraulaMin, i)) {
+                        continue;
+                    }
+                    
+                    // Comprovar si és signe de puntuació (PARA el recompte)
+                    if (signesPuntuacio.has(lletra)) {
+                        break;
+                    }
+                    
+                    // Comprovar si és vocal vàlida (tenint en compte TOTES les regles)
+                    const esVocal = vocals.has(lletra) && !esUOÜIgnorada(paraulaMin, i);
+                    
+                    if (esVocal) {
+                        vocalsTrobades += lletra;
+                    }
+                }
+                
+                return vocalsTrobades;
+            }
+            
+            // Funció principal per analitzar el text
+            function analitzarText() {
+                const text = textInput.value;
+                // Separar per espais, salts de línia i alguns signes de puntuació
+                const paraules = text.split(/[\s\n\r]+/);
+                const paraulesValides = [];
+                let totalParaules = 0;
+                let paraulesAmbAccent = 0;
+                
+                // Netejar la llista de resultats
+                wordList.innerHTML = '';
+                
+                // Analitzar cada paraula
+                for (let paraula of paraules) {
+                    const paraulaNeta = netejarParaula(paraula);
+                    
+                    // Ignorar paraules buides
+                    if (paraulaNeta.length === 0) continue;
+                    
+                    totalParaules++;
+                    
+                    // Comprovar si té accents (excloent dièresis)
+                    const accent = teAccent(paraulaNeta);
+                    if (accent) paraulesAmbAccent++;
+                    
+                    // Comprovar els criteris (AMB TOTES LES REGLES)
+                    if (accent && 
+                        teVocalsIConsonants(paraulaNeta) && 
+                        teTresVocalsDespresAccent(paraulaNeta)) {
+                        
+                        paraulesValides.push({
+                            text: paraulaNeta,
+                            accent: accent,
+                            vocalsDespres: trobarVocalsDespresAccent(paraulaNeta)
+                        });
+                    }
+                }
+                
+                // Actualitzar estadístiques
+                totalWordsElement.textContent = totalParaules;
+                foundWordsElement.textContent = paraulesValides.length;
+                withAccentsElement.textContent = paraulesAmbAccent;
+                
+                // Mostrar resultats
+                if (paraulesValides.length === 0) {
+                    const noResults = document.createElement('li');
+                    noResults.className = 'no-results';
+                    noResults.textContent = 'No s\'han trobat paraules que compleixin tots els criteris.';
+                    wordList.appendChild(noResults);
+                } else {
+                    paraulesValides.forEach(paraula => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'word-item';
+                        
+                        listItem.innerHTML = `
+                            <div>
+                                <span class="word-text">${destacarParaula(paraula.text)}</span>
+                                <div class="word-details">Vocals vàlides després de l'accent: "${paraula.vocalsDespres}" (${paraula.vocalsDespres.length} vocals)</div>
+                            </div>
+                            <div class="word-details">${paraula.text.length} caràcters</div>
+                        `;
+                        
+                        wordList.appendChild(listItem);
+                    });
+                }
+            }
+            
+            // Afegir event listener al botó
+            analyzeButton.addEventListener('click', analitzarText);
+            
+            // Analitzar automàticament el text d'exemple al carregar la pàgina
+            setTimeout(() => {
+                analyzeButton.click();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
