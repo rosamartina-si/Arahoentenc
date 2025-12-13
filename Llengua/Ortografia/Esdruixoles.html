@@ -9,9 +9,7 @@
     /* =============================
        Disseny modern i accessible
        ============================= */
-    /* =============================
-       Disseny modern i accessible
-       ============================= */
+
     :root {
       --bg: #f6f8fb;
       --surface: #ffffff;
@@ -112,6 +110,13 @@
       color: var(--muted);
       font-size: 0.98rem;
     }
+
+.note-literaria {
+  font-size: 0.9em;
+  color: #666;
+  font-style: italic;
+  margin-top: 0.5em;
+}
 
     /* ======= Tabs accessibles ======= */
     .tabs {
@@ -1022,21 +1027,25 @@
       </div>
     </section>
 
-    <!-- NOVA SECCIÓ: Paraules en Context (amb accentuació directa a la frase) -->
-    <section id="context-frases" class="tab-content" role="tabpanel" aria-labelledby="tab-context">
-      <div class="section exercise-container">
-        <h2>Accentuació en context · 10 frases</h2>
-        <div class="instructions">
-          <p><strong>Objectiu:</strong> Afegeix tots els accents que faltin a la frase.</p>
-          <p><strong>Com?</strong> Llegeix la frase i <strong>clica sobre qualsevol lletra</strong> de qualsevol paraula per afegir o treure accents:
-            <span class="kbd">a↔à</span>,
-            <span class="kbd">e↔è↔é</span>,
-            <span class="kbd">i↔í</span>,
-            <span class="kbd">o↔ò↔ó</span>,
-            <span class="kbd">u↔ú</span>. Prem <span class="kbd">Enter</span> per comprovar.
-          </p>
-        </div>
+Aquí tens el text amb l'afegit que demanes, integrat de manera natural en les instruccions per contextualitzar i donar valor literari a l'exercici:
 
+---
+
+<!-- NOVA SECCIÓ: Paraules en Context (amb accentuació directa a la frase) -->
+<section id="context-frases" class="tab-content" role="tabpanel" aria-labelledby="tab-context">
+  <div class="section exercise-container">
+    <h2>Accentuació en context · 10 frases</h2>
+    <div class="instructions">
+      <p><strong>Objectiu:</strong> Afegeix tots els accents que faltin a la frase.</p>
+      <p><strong>Com?</strong> Llegeix la frase i <strong>clica sobre qualsevol lletra</strong> de qualsevol paraula per afegir o treure accents:
+        <span class="kbd">a↔à</span>,
+        <span class="kbd">e↔è↔é</span>,
+        <span class="kbd">i↔í</span>,
+        <span class="kbd">o↔ò↔ó</span>,
+        <span class="kbd">u↔ú</span>. Prem <span class="kbd">Enter</span> per comprovar.
+      </p>
+<p class="note-literaria">Totes les frases són fragments extrets dels contes de Pere Calders.</p>
+    </div>
         <div class="syllable-exercise" id="context-exercise"></div>
 
         <div class="progress-bar"><div class="progress" id="context-progress"></div></div>
@@ -1531,8 +1540,8 @@
     let accentStatus = {};
 
     const CYCLE_SETS = {
-      'A': ['A','À','Á'],
-      'a': ['a','à','á'],
+      'A': ['A','À'],
+      'a': ['a','à'],
       'E': ['E','È','É'],
       'e': ['e','è','é'],
       'I': ['I','Í'],
@@ -2037,7 +2046,7 @@ const CONTEXT_PHRASES = [
   { plain: "—Com us expliqueu aquesta coincidencia tan singular?", target: "—Com us expliqueu aquesta coincidència tan singular?" },
   { plain: "Els casos son a milers, i extraordinariament populars...", target: "Els casos són a milers, i extraordinàriament populars..." },
   { plain: "Desitjaria que em tinguessiu al corrent de les vostres experiencies...", target: "Desitjaria que em tinguéssiu al corrent de les vostres experiències..." },
-  { plain: "En dies successius ens visitarem amb freqüencia.", target: "En dies successius ens visitàrem amb freqüència." },
+  { plain: "En dies successius ens veierem amb freqüencia.", target: "En dies successius ens veiérem amb freqüència." },
   { plain: "—Estem passant sobre Armenia i ens dirigim cap al nord.", target: "—Estem passant sobre Armènia i ens dirigim cap al nord." },
   { plain: "—Per que m'has fet cridar amb tanta urgencia?", target: "—Per què m'has fet cridar amb tanta urgència?" },
   { plain: "Encara vaig haver de donar-li les gracies.", target: "Encara vaig haver de donar-li les gràcies." },
@@ -2083,7 +2092,7 @@ const CONTEXT_PHRASES = [
   { plain: "Mai no havia vist dues cares tan identiques...", target: "Mai no havia vist dues cares tan idèntiques..." },
   { plain: "—Pero hi ha situacions excepcionals —vaig replicar timidament—.", target: "—Però hi ha situacions excepcionals —vaig replicar tímidament—." },
   { plain: "—He perdut la memoria i no la trobo enlloc!", target: "—He perdut la memòria i no la trobo enlloc!" },
-  { plain: "—Diria que soc un creient sense esglesia determinada...", target: "—Diria que soc un creient església determinada..." },
+  { plain: "—Diria que soc un creient sense esglesia determinada...", target: "—Diria que soc un creient sense església determinada..." },
   { plain: "La competencia, en aquest cas, es deslleial.", target: "La competència, en aquest cas, és deslleial." },
   { plain: "Tècnicament, no podem plegar ni podem continuar.", target: "Tècnicament, no podem plegar ni podem continuar." },
   { plain: "—I se'n poden treure conseqüencies, de tot plegat?", target: "—I se'n poden treure conseqüències, de tot plegat?" },
