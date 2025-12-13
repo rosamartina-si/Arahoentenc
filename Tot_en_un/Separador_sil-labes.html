@@ -188,7 +188,7 @@
         
         <div class="input-group">
             <label for="text">Introdueix el text:</label>
-            <textarea id="text" placeholder="Exemple: La casa nova, el llibre interessant..." autofocus>casa nova paraula llibre butlla blau brau clau carro passat exemple neboda infernal raïm taüll argüir argüeix argüí guant quota guaita poema veí país aïllar coïncidir paella Màrius Sírius</textarea>
+            <textarea id="text" placeholder="Exemple: La casa nova, el llibre interessant..." autofocus>casa nova paraula llibre butlla blau brau clau carro passat exemple neboda infernal raïm taüll argüir argüeix argüí guant quota guaita poema veí país aïllar coïncidir paella Màrius Sírius reaparèixer</textarea>
         </div>
         
         <div class="search-group">
@@ -481,7 +481,7 @@
                 }
             } while (canvi);
 
-            // REGLA 11: vocal accentuada + vocal àtona
+ /*           // REGLA 11: vocal accentuada + vocal àtona
             do {
                 canvi = false;
                 const novaParaula = paraulaProcessada.replace(/([àèéíòóú])([aeiou])/gi, function(match, v1, v2) {
@@ -495,6 +495,7 @@
                     paraulaProcessada = novaParaula;
                 }
             } while (canvi);
+*/
 
             // REGLA 12: aquàrium - vocal + um final
             do {
