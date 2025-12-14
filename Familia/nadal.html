@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poemes i Cançons de Nadal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Source+Serif+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Source Serif Pro', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f5f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" width="100" height="100"/><path fill="%23e8e1d5" d="M0,50 Q50,0 100,50 Q50,100 0,50" opacity="0.1"/></svg>');
+            padding-bottom: 50px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #1a472a;
+            background: linear-gradient(to right, #1a472a, #2d6a4f);
+            color: white;
+            padding: 2.5rem 0;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-bottom: 8px solid #b91c1c;
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .poema-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            border-left: 5px solid #b91c1c;
+        }
+        
+        .poema-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e8e1d5;
+        }
+        
+        .poema-titol {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: #1a472a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .poema-autor {
+            font-size: 1.2rem;
+            color: #555;
+            font-style: italic;
+        }
+        
+        .poema-descripcio {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2d6a4f;
+        }
+        
+        .poema-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            white-space: pre-line;
+            text-align: center;
+            font-family: 'Source Serif Pro', serif;
+            padding: 1.5rem;
+            background-color: #fefefe;
+            border-radius: 8px;
+            border: 1px solid #e8e1d5;
+        }
+        
+        .poema-nota {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+            font-style: italic;
+        }
+        
+        .nav-poemes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Source Serif Pro', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: #1a472a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .decoracio-nadalenca {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .bola-nadal {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #b91c1c;
+            box-shadow: 0 0 8px rgba(185, 28, 28, 0.5);
+        }
+        
+        .bola-nadal:nth-child(2) {
+            background-color: #1a472a;
+            box-shadow: 0 0 8px rgba(26, 71, 42, 0.5);
+        }
+        
+        .bola-nadal:nth-child(3) {
+            background-color: #f59e0b;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+        }
+        
+        .bola-nadal:nth-child(4) {
+            background-color: #1a472a;
+            box-shadow: 0 0 8px rgba(26, 71, 42, 0.5);
+        }
+        
+        .bola-nadal:nth-child(5) {
+            background-color: #b91c1c;
+            box-shadow: 0 0 8px rgba(185, 28, 28, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                padding: 0 15px;
+            }
+            
+            .poema-container {
+                padding: 1.8rem;
+            }
+            
+            .poema-titol {
+                font-size: 1.8rem;
+            }
+            
+            .poema-text {
+                font-size: 1.2rem;
+                padding: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .nav-poemes {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Poemes i Cançons de Nadal</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="decoracio-nadalenca">
+            <div class="bola-nadal"></div>
+            <div class="bola-nadal"></div>
+            <div class="bola-nadal"></div>
+            <div class="bola-nadal"></div>
+            <div class="bola-nadal"></div>
+        </div>
+        
+        <div class="poema-container">
+            <div class="poema-header">
+                <h2 class="poema-titol">Nadala</h2>
+                <p class="poema-autor">Ramon Alabau (Ripoll, 1949)</p>
+            </div>
+            
+            <div class="poema-descripcio">
+                Aquest poema utilitza exclusivament la vocal "a".
+            </div>
+            
+            <div class="poema-text">
+Nadal. Alba blanca.
+Sagals amb samarra,
+rabadans amb capa,
+saltant fan gatzara.
+Ja glaça. A la quadra
+la flassada calfa,
+la palla amanyaga.
+Brama la vacada:
+bafarada calda.
+S’atansa la tarda,
+s’abranda a bastança.
+La campana canta.
+La ratxa tardana
+arrasa la plaça.
+S’apaga la brasa.
+L’almanac s’acaba.
+            </div>
+            
+        </div>
+        
+        <div class="nav-poemes">
+            <button class="nav-btn" id="btn-anterior" disabled>← Poema anterior</button>
+            <button class="nav-btn" id="btn-seguent">Següent poema →</button>
+        </div>
+        
+    </div>
+
+    <script>
+        // Simulació de més poemes per a la navegació
+        const poemes = [
+            {
+                titol: "Nadala",
+                autor: "Ramon Alabau (Ripoll, 1949)",
+                descripcio: "Aquest poema utilitza exclusivament la vocal 'a'.",
+                text: `Nadal. Alba blanca.
+Sagals amb samarra,
+rabadans amb capa,
+saltant fan gatzara.
+Ja glaça. A la quadra
+la flassada calfa,
+la palla amanyaga.
+Brama la vacada:
+bafarada calda.
+S'atansa la tarda,
+s'abranda a bastança.
+La campana canta.
+La ratxa tardana
+arrasa la plaça.
+S'apaga la brasa.
+L'almanac s'acaba.`,
+               
+            },
+            {
+                titol: "Els Pastorets",
+                autor: "Tradicional català",
+                descripcio: "Cançó tradicional nadalenca que evoca l'escena dels pastors anant a adorar el nounat Jesús. És una de les cançons més populars del repertori nadalenc català.",
+                text: `Als pastorets
+ja se'ls ha vist
+amb el bastó
+anar de pressa
+cap a la ciutat de Betlem.
+
+Porten ous i formatge,
+porten llet i mel,
+per a la Mare de Déu
+i per al Nounat també.
+
+I al passar pel riu
+les aigües s'han obert,
+i al passar pel bosc
+els arbres s'han inclinat.`,
+                nota: "Cançó tradicional que sovint s'interpreta durant les representacions de 'Els Pastorets', una tradició teatral nadalenca molt arrelada a Catalunya."
+            },
+            {
+                titol: "Vinent de Lluny",
+                autor: "Miquel Martí i Pol",
+                descripcio: "Poema nadalenc del reconegut poeta Miquel Martí i Pol que reflexiona sobre l'arribada del Nadal i el seu significat en temps difícils.",
+                text: `Vinent de lluny, el fred s'estén
+i cobreix el paisatge amb un vel blanc.
+Els camps ja no són verds, sinó de neu,
+i el vent xiula entre les branques seques.
+
+Però a les cases hi ha llum i caliu,
+i la taula preparada per a tothom.
+El Nadal arriba amb el seu missatge
+de pau i esperança per al món.
+
+I encara que el camí sigui fosc,
+i la nit s'allargui més del compte,
+sabem que després del hivern,
+tornarà la llum i la calor.`,
+                nota: "Miquel Martí i Pol és un dels poetes catalans més llegits del segle XX. Aquest poema reflecteix la seva visió humana i esperançada del Nadal."
+            }
+        ];
+        
+        let poemaActual = 0;
+        const btnAnterior = document.getElementById('btn-anterior');
+        const btnSeguent = document.getElementById('btn-seguent');
+        
+        function actualitzarPoema() {
+            const poema = poemes[poemaActual];
+            
+            document.querySelector('.poema-titol').textContent = poema.titol;
+            document.querySelector('.poema-autor').textContent = poema.autor;
+            document.querySelector('.poema-descripcio').innerHTML = poema.descripcio;
+            document.querySelector('.poema-text').textContent = poema.text;
+            document.querySelector('.poema-nota').textContent = poema.nota;
+            
+            // Actualitzar estats dels botons
+            btnAnterior.disabled = poemaActual === 0;
+            btnSeguent.disabled = poemaActual === poemes.length - 1;
+        }
+        
+        btnAnterior.addEventListener('click', () => {
+            if (poemaActual > 0) {
+                poemaActual--;
+                actualitzarPoema();
+            }
+        });
+        
+        btnSeguent.addEventListener('click', () => {
+            if (poemaActual < poemes.length - 1) {
+                poemaActual++;
+                actualitzarPoema();
+            }
+        });
+        
+        // Inicialitzar amb el primer poema
+        actualitzarPoema();
+    </script>
+</body>
+</html>
