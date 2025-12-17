@@ -1,1414 +1,1458 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador de Frases en PDF i TXT</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .container {
-            max-width: 1000px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            margin-top: 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            color: #2575fc;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-        }
-        
-        .instructions {
-            background-color: #eef2ff;
-            border-left: 4px solid #2575fc;
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-top: 15px;
-            text-align: left;
-        }
-        
-        .instructions h3 {
-            color: #2575fc;
-            margin-bottom: 10px;
-        }
-        
-        .instructions ol {
-            padding-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-        
-        .file-input-area {
-            border: 3px dashed #6a11cb;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            background-color: #f8f9ff;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .file-input-area:hover {
-            background-color: #eef2ff;
-            border-color: #2575fc;
-        }
-        
-        .file-input-area.dragover {
-            background-color: #e0e7ff;
-            border-color: #2575fc;
-            transform: scale(1.02);
-        }
-        
-        .upload-text {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #333;
-            text-align: center;
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .file-info {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #eef2ff;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .btn {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn i {
-            font-size: 1.2rem;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #2575fc;
-            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
-        }
-        
-        .options-panel {
-            background-color: #f0f4ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #d0d8ff;
-        }
-        
-        .options-title {
-            color: #2575fc;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .option-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .option-group label {
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #444;
-        }
-        
-        select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: white;
-        }
-        
-        .number-input-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .number-input {
-            width: 80px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: center;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #2575fc;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .results-container {
-            margin-top: 30px;
-        }
-        
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .results-title {
-            color: #2575fc;
-            font-size: 1.5rem;
-        }
-        
-        .results-content {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            min-height: 200px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .frase {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-left: 4px solid #3498db;
-            border-radius: 4px;
-            line-height: 1.6;
-            font-size: 1.05rem;
-        }
-        
-        .highlight {
-            background-color: #ffeb3b;
-            font-weight: bold;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        
-        .esdruixola {
-            background-color: #ff9800;
-            color: white;
-            font-weight: bold;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        
-        .word-count-section {
-            margin-top: 30px;
-        }
-        
-        .word-count-panel {
-            background-color: #eef2ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 1px solid #d0d8ff;
-        }
-        
-        .word-count-panel h4 {
-            color: #2575fc;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .word-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .word-item {
-            background: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s;
-        }
-        
-        .word-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        
-        .word-count-value {
-            background-color: #2575fc;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .status-message {
-            text-align: center;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #2575fc;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            display: none;
-        }
-        
-        .error-message {
-            background-color: #ffe6e6;
-            color: #d63031;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: none;
-        }
-        
-        .success-message {
-            background-color: #e8f7ef;
-            color: #27ae60;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .stats {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: white;
-            font-size: 0.9rem;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #6a11cb;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 250px;
-            }
-            
-            .status-message {
-                width: 90%;
-                text-align: center;
-            }
-            
-            .number-input-group {
-                flex-wrap: wrap;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Extractor de Frases — Eines lingüístiques</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --accent: #7c3aed;   /* violeta */
+      --accent2:#22c55e;   /* verd */
+      --warn: #fb7185;     /* rosa */
+      --ring: 0 0 0 3px rgba(124,58,237,.22);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    * { box-sizing: border-box; font-family: var(--sans); }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(124,58,237,.28), transparent 60%),
+        radial-gradient(1000px 600px at 90% 15%, rgba(34,197,94,.18), transparent 55%),
+        radial-gradient(900px 600px at 70% 95%, rgba(251,113,133,.14), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 22px;
+    }
+
+    .app{
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px){
+      .app{ grid-template-columns: 1fr; }
+    }
+
+    .topbar{
+      max-width: 1240px;
+      margin: 0 auto 18px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(to right, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex; align-items:center; gap: 12px;
+    }
+    .logo{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(34,197,94,.75));
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .2px;
+      line-height: 1.2;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .quick{
+      display:flex; align-items:center; gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* Cards */
+    .card{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .card-header{
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+    }
+    .card-title{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+    }
+    .card-body{
+      padding: 16px;
+    }
+
+    /* Form UI */
+    .field{ margin-bottom: 14px; }
+    label{
+      display:block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+    }
+    .hint{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    input[type="text"], input[type="number"], select, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(10,16,30,.55);
+      color: var(--text);
+      outline: none;
+      transition: .15s;
+    }
+    textarea{
+      min-height: 190px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(124,58,237,.55);
+      box-shadow: var(--ring);
+    }
+
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .sep{
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    /* Buttons */
+    .btn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: .15s;
+      font-weight: 600;
+      font-size: 13px;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+    .btn:active{ transform: translateY(0); }
+    .btn:focus-visible{ outline: none; box-shadow: var(--ring); }
+
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(124,58,237,.55));
+      border-color: rgba(124,58,237,.45);
+    }
+    .btn-primary:hover{ background: linear-gradient(135deg, rgba(124,58,237,1), rgba(124,58,237,.65)); }
+    .btn-ghost{
+      background: transparent;
+    }
+    .btn-danger{
+      background: linear-gradient(135deg, rgba(251,113,133,.95), rgba(251,113,133,.55));
+      border-color: rgba(251,113,133,.45);
+    }
+
+    .btn[disabled]{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none !important;
+    }
+
+    .pillrow{
+      display:flex; gap: 10px; flex-wrap: wrap;
+    }
+
+    /* Dropzone */
+    .dropzone{
+      border: 1px dashed rgba(255,255,255,.28);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding: 14px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      transition:.15s;
+    }
+    .dropzone:hover{ background: rgba(255,255,255,.06); }
+    .dropzone.dragover{
+      border-color: rgba(34,197,94,.7);
+      background: rgba(34,197,94,.08);
+      transform: scale(1.01);
+    }
+    .dz-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dz-title{
+      display:flex; flex-direction: column; gap: 2px;
+    }
+    .dz-title strong{ font-size: 13px; }
+    .dz-title span{ font-size: 12px; color: var(--muted); }
+    .fileinfo{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Check/radio */
+    .checks{ display:flex; flex-direction: column; gap: 10px; }
+    .check{
+      display:flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+    }
+    .check input{ margin-top: 2px; }
+    .check b{ font-size: 13px; display:block; }
+    .check small{ color: var(--muted); font-size: 12px; }
+
+    /* Results */
+    .results-toolbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .count-badge{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.86);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+    }
+
+    .results-list{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+      max-height: 560px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .result{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .result-head{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 8px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .result-body{
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.92);
+    }
+    .result-meta{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .empty{
+      padding: 22px 14px;
+      border: 1px dashed rgba(255,255,255,.24);
+      border-radius: 18px;
+      color: var(--muted);
+      text-align:center;
+    }
+
+    /* Highlights */
+    .highlight{ background: rgba(255,249,196,.92); color: #111827; padding: 1px 4px; border-radius: 6px; font-weight: 700; }
+    .esdruixola-highlight{ background:#ff9800; color:#111827; padding:1px 4px; border-radius:6px; font-weight:900; }
+    .temps-highlight{ background:#22c55e; color:#052e12; padding:1px 4px; border-radius:6px; font-weight:900; }
+    .verb-highlight{ background:#a855f7; color:#1f0930; padding:1px 4px; border-radius:6px; font-weight:900; }
+
+    .word-count-info{
+      display:inline-block;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      font-family: var(--mono);
+    }
+
+    /* Sticky action footer (mobile-friendly) */
+    .sticky-actions{
+      position: sticky;
+      bottom: 14px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+    .sticky-actions .btn{ flex: 1; justify-content: center; min-width: 140px; }
+
+    /* Loading + toast */
+    .loading{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.85);
+      font-size: 12px;
+      align-items:center;
+      gap: 10px;
+    }
+    .dot{
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.15);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity:.9 }
+      50%{ transform: scale(1.2); opacity:.55 }
+    }
+
+    .toast{
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      max-width: min(520px, 92vw);
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      display:none;
+      z-index: 999;
+      font-size: 13px;
+    }
+    .toast.ok{ border-color: rgba(34,197,94,.35); }
+    .toast.err{ border-color: rgba(251,113,133,.45); }
+    .toast b{ display:block; margin-bottom:2px; }
+    .toast span{ color: var(--muted); font-size: 12px; }
+
+    .kbd{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82);
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>Cercador de Frases en PDF i TXT</h1>
-            <div class="instructions">
-                <h3>Instruccions d'ús:</h3>
-                <ol>
-                    <li>Arrossegueu un fitxer PDF o TXT a l'àrea indicada o feu clic a "Selecciona un fitxer"</li>
-                    <li>Escriviu la paraula o frase que voleu cercar, o deixeu-ho buit per a l'anàlisi d'esdrúixoles</li>
-                    <li>Seleccioneu les opcions de cerca (coincidència exacta, paraules adjacents)</li>
-                    <li>Configureu el nombre mínim i màxim de paraules per frase</li>
-                    <li>Feu clic a "Cercar" per obtenir els resultats, o "Cerca Esdrúixoles" per trobar frases amb paraules esdrúixoles</li>
-                    <li>Utilitzeu "Copiar resultats" per exportar els resultats</li>
-                </ol>
-                <p><strong>Nota:</strong> Aquest cercador reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l, l.l, etc.) i detecta paraules esdrúixoles (paraules amb accent a l'antepenúltima o anteantepenúltima síl·laba).</p>
-            </div>
-        </header>
-        
-        <div class="file-input-area" id="dropArea">
-            <p class="upload-text">Arrossega un fitxer PDF o TXT aquí o fes clic al botó</p>
-            <input type="file" id="fileInput" class="file-input" accept=".pdf,.txt">
-            <div class="action-buttons">
-                <button class="btn" id="selectFileBtn">
-                    <i>📂</i> Selecciona un fitxer
-                </button>
-            </div>
-            <div class="file-info" id="fileInfo"></div>
-        </div>
-        
-        <div class="error-message" id="errorMessage"></div>
-        
-        <input type="text" id="searchText" placeholder="Text a cercar (ex: alçar, l·l, etc.) Deixa buit per a l'anàlisi d'esdrúixoles">
-        
-        <div class="options-panel">
-            <div class="options-title">Opcions de cerca</div>
-            <div class="options-grid">
-                <div class="option-group">
-                    <label for="exactMatch">Tipus de cerca:</label>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="exactMatch">
-                        <label for="exactMatch">Cercar coincidència exacta</label>
-                    </div>
-                </div>
-                
-                <div class="option-group">
-                    <label for="precedingCount">Paraules que precedeixen:</label>
-                    <select id="precedingCount">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                
-                <div class="option-group">
-                    <label for="followingCount">Paraules que segueixen:</label>
-                    <select id="followingCount">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                
-                <div class="option-group">
-                    <label for="esdruixolesMode">Mode d'anàlisi:</label>
-                    <select id="esdruixolesMode">
-                        <option value="no">Cerca normal</option>
-                        <option value="solamente">Només esdrúixoles</option>
-                        <option value="amb">Cerca i destaca esdrúixoles</option>
-                    </select>
-                </div>
-                
-                <div class="option-group">
-                    <label>Nombre de paraules per frase:</label>
-                    <div class="number-input-group">
-                        <div>
-                            <small>Mínim:</small>
-                            <input type="number" id="minWords" class="number-input" min="1" max="100" value="1">
-                        </div>
-                        <div>
-                            <small>Màxim:</small>
-                            <input type="number" id="maxWords" class="number-input" min="1" max="100" value="100">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="btn" id="searchBtn">
-                <i>🔍</i> Cercar
-            </button>
-            <button class="btn" id="esdruixolesBtn">
-                <i>🎯</i> Cerca Esdrúixoles
-            </button>
-            <button class="btn" id="copyBtn">
-                <i>📋</i> Copiar resultats
-            </button>
-            <button class="btn" id="clearBtn">
-                <i>🗑️</i> Neteja
-            </button>
-        </div>
-        
-        <div class="loading" id="loadingIndicator">
-            <div class="spinner"></div>
-            <p id="loadingText">Processant...</p>
-        </div>
-        
-        <div class="status-message" id="statusMessage"></div>
-        
-        <div class="results-container">
-            <div class="results-header">
-                <h2 class="results-title">Resultats</h2>
-            </div>
-            <div class="results-content" id="results"></div>
-        </div>
-        
-        <div class="word-count-section">
-            <div class="word-count-panel" id="precedingWordsPanel" style="display: none;">
-                <h4>Paraules que precedeixen "<span id="precedingSearchWord"></span>":</h4>
-                <div class="word-list" id="precedingWordsList"></div>
-            </div>
-            
-            <div class="word-count-panel" id="followingWordsPanel" style="display: none;">
-                <h4>Paraules que segueixen "<span id="followingSearchWord"></span>":</h4>
-                <div class="word-list" id="followingWordsList"></div>
-            </div>
-        </div>
+  <div id="toast" class="toast"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Extractor de Frases</h1>
+        <p>Filtres lingüístics (esdrúixoles, temps, verbs) + context i longitud</p>
+      </div>
     </div>
-    
-    <footer>
-        <p>Aquesta eina reconeix automàticament els caràcters especials del català, incloent la ela geminada (l·l) i detecta paraules esdrúixoles</p>
-    </footer>
+    <div class="quick">
+      <span class="kbd">PDF/TXT</span>
+      <span class="kbd">Ctrl/Cmd + C</span>
+      <span class="kbd">Resultats</span>
+    </div>
+  </div>
 
-    <script>
-        // Configuració de PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-        
-        // Elements del DOM
-        const fileInput = document.getElementById('fileInput');
-        const selectFileBtn = document.getElementById('selectFileBtn');
-        const dropArea = document.getElementById('dropArea');
-        const searchBtn = document.getElementById('searchBtn');
-        const esdruixolesBtn = document.getElementById('esdruixolesBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const searchTextInput = document.getElementById('searchText');
-        const resultsDiv = document.getElementById('results');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const loadingText = document.getElementById('loadingText');
-        const statusMessage = document.getElementById('statusMessage');
-        const errorMessage = document.getElementById('errorMessage');
-        const fileInfo = document.getElementById('fileInfo');
-        const esdruixolesMode = document.getElementById('esdruixolesMode');
-        const minWordsInput = document.getElementById('minWords');
-        const maxWordsInput = document.getElementById('maxWords');
-        
-        // Elements per a les paraules que precedeixen i segueixen
-        const precedingWordsPanel = document.getElementById('precedingWordsPanel');
-        const followingWordsPanel = document.getElementById('followingWordsPanel');
-        const precedingWordsList = document.getElementById('precedingWordsList');
-        const followingWordsList = document.getElementById('followingWordsList');
-        const precedingSearchWord = document.getElementById('precedingSearchWord');
-        const followingSearchWord = document.getElementById('followingSearchWord');
-        
-        // Event Listeners
-        selectFileBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleFileSelect);
-        searchBtn.addEventListener('click', () => searchFile(false));
-        esdruixolesBtn.addEventListener('click', () => searchFile(true));
-        copyBtn.addEventListener('click', copyResults);
-        clearBtn.addEventListener('click', clearAll);
-        
-        // Validació dels inputs de nombre de paraules
-        minWordsInput.addEventListener('change', validateWordCounts);
-        maxWordsInput.addEventListener('change', validateWordCounts);
-        
-        function validateWordCounts() {
-            const min = parseInt(minWordsInput.value);
-            const max = parseInt(maxWordsInput.value);
-            
-            if (min < 1) minWordsInput.value = 1;
-            if (max < 1) maxWordsInput.value = 1;
-            if (min > 100) minWordsInput.value = 100;
-            if (max > 100) maxWordsInput.value = 100;
-            
-            if (min > max) {
-                maxWordsInput.value = min;
+  <div class="app">
+    <!-- SIDEBAR: Entrada + Filtres -->
+    <aside class="card">
+      <div class="card-header">
+        <h2 class="card-title">Entrada & Filtres</h2>
+        <div id="loadingIndicator" class="loading" aria-live="polite">
+          <div class="dot" aria-hidden="true"></div>
+          <div>Processant…</div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- Dropzone -->
+        <div class="field">
+          <div id="dropArea" class="dropzone" tabindex="0" role="button" aria-label="Arrossega un fitxer o fes clic per seleccionar-ne un">
+            <div class="dz-top">
+              <div class="dz-title">
+                <strong>Carrega un fitxer</strong>
+                <span>Arrossega aquí o fes clic (PDF o TXT)</span>
+              </div>
+              <div class="pillrow">
+                <button type="button" class="btn btn-ghost" id="selectFileBtn">📎 Seleccionar</button>
+                <button type="button" class="btn btn-ghost" id="clearFileBtn">🧹 Netejar</button>
+              </div>
+            </div>
+            <input type="file" id="fileInput" style="display:none" accept=".pdf,.txt" />
+            <div id="fileInfo" class="fileinfo"></div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="field">
+          <label for="inputText">Text a analitzar</label>
+          <textarea id="inputText" placeholder="Enganxa aquí el text o carrega un PDF/TXT…">L'àvia d'en Pere menja pèls de cotó mentre canta una cançó esdrúixola. Avui fa un dia plujós i molt ventós, però demà serà diferent. Els núvols omplen el cel gris i amenaçador. La Mònica i el seu germà viatgen cap a Barcelona per visitar els seus cosins. És fantàstic quan tot surt bé al final. Vam anar a comprar pa, llet i galetes al supermercat. La música clàssica em relaxa profundament. El telèfon sona constantment. És pràcticament impossible no escoltar-lo. Les paraules esdrúixoles són divertides. L'ètica i l'ética són coses diferents. La brúixola i l'àngel són paraules esdrúixoles. És fantàstic i pràctic. La música i la pràctica són importants. La fruïció és una paraula plana, no esdrúixola. L'ètica a muntanya és important.</textarea>
+          <div class="pillrow" style="margin-top:10px;">
+            <button type="button" class="btn" id="sampleTextBtn">✨ Exemple</button>
+            <button type="button" class="btn" id="clearTextBtn">🗑️ Buida</button>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Cerca -->
+        <div class="field">
+          <label for="searchType">Tipus de cerca</label>
+          <select id="searchType">
+            <option value="text">Cadena de text</option>
+            <option value="esdruixoles">Paraules esdrúixoles</option>
+            <option value="temps">Expressions de temps</option>
+            <option value="verb">Formes verbals</option>
+          </select>
+        </div>
+
+        <div class="grid2">
+          <div class="field" id="textSearchGroup">
+            <label for="searchText">Text a buscar</label>
+            <input type="text" id="searchText" placeholder="Ex: música, Barcelona, etc."/>
+            <div class="hint">Deixa buit per extreure totes les frases.</div>
+          </div>
+
+          <div class="field" id="lletresEspecifiquesGroup" style="display:none;">
+            <label for="lletresEspecifiques">Seqüència dins esdrúixoles</label>
+            <input type="text" id="lletresEspecifiques" placeholder="Ex: pr, l·l, ment"/>
+            <div class="hint">Pots posar-ne més d'una: <span class="kbd">pr, l·l</span></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="matchPattern">Patró</label>
+          <select id="matchPattern">
+            <option value="anywhere">En qualsevol posició</option>
+            <option value="exact">Coincidència exacta</option>
+            <option value="starts">Començada per</option>
+            <option value="ends">Acabada en</option>
+            <option value="notends">No acabada en</option>
+            <option value="notcontains">Que no contingui</option>
+          </select>
+
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field" id="notEndsWithInput" style="display:none; margin:0;">
+              <label for="notEndsWithText">No acaba amb</label>
+              <input type="text" id="notEndsWithText" placeholder="Ex: ment, ció…"/>
+            </div>
+
+            <div class="field" id="notContainsInput" style="display:none; margin:0;">
+              <label for="notContainsText">No conté</label>
+              <input type="text" id="notContainsText" placeholder="Ex: l·l, gua…"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="field">
+          <label>Opcions</label>
+          <div class="checks">
+            <div class="check">
+              <input type="checkbox" id="category1" checked/>
+              <div>
+                <b>Destacar coincidències</b>
+                <small>Marca en color les paraules trobades.</small>
+              </div>
+            </div>
+            <div class="check">
+              <input type="checkbox" id="category2"/>
+              <div>
+                <b>Incloure marques sil·làbiques</b>
+                <small>Mostra la separació en síl·labes (només en esdrúixoles).</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Extensió del fragment</label>
+          <div class="checks">
+            <div class="check">
+              <input type="radio" id="allPhrase" name="phraseScope" checked/>
+              <div>
+                <b>Tota la frase</b>
+                <small>Retorna la frase completa.</small>
+              </div>
+            </div>
+            <div class="check">
+              <input type="radio" id="adjacentWords" name="phraseScope"/>
+              <div>
+                <b>Paraules adjacents</b>
+                <small>Retorna només un context al voltant de la coincidència.</small>
+              </div>
+            </div>
+          </div>
+
+          <div id="adjacentWordsControls" style="display:none; margin-top:10px;">
+            <div class="grid2">
+              <div class="field" style="margin:0;">
+                <label for="precedingWords">Abans</label>
+                <input type="number" id="precedingWords" value="0" min="0" max="10"/>
+              </div>
+              <div class="field" style="margin:0;">
+                <label for="followingWords">Després</label>
+                <input type="number" id="followingWords" value="1" min="0" max="10"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Longitud (paraules per frase)</label>
+          <div class="grid2">
+            <div class="field" style="margin:0;">
+              <label for="minWords">Mínim</label>
+              <input type="number" id="minWords" value="1" min="1" max="50"/>
+            </div>
+            <div class="field" style="margin:0;">
+              <label for="maxWords">Màxim</label>
+              <input type="number" id="maxWords" value="50" min="1" max="100"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="sticky-actions">
+          <button type="button" class="btn btn-primary" id="extractButton">🔎 Extreure</button>
+          <button type="button" class="btn" id="copyResultsBtn">📋 Copiar</button>
+          <button type="button" class="btn btn-danger" id="resetBtn">↩️ Reiniciar</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN: Resultats -->
+    <main class="card">
+      <div class="card-header">
+        <h2 class="card-title">Resultats</h2>
+        <div class="results-toolbar">
+          <div class="count-badge">Frases trobades: <span id="resultsCount">0</span></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="resultsList" class="results-list">
+          <div class="empty">Quan executis <b>Extreure</b>, aquí veuràs les frases filtrades.</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // DOM
+      const el = {
+        searchType: document.getElementById("searchType"),
+        extractButton: document.getElementById("extractButton"),
+        resultsList: document.getElementById("resultsList"),
+        resultsCount: document.getElementById("resultsCount"),
+        inputText: document.getElementById("inputText"),
+        matchPattern: document.getElementById("matchPattern"),
+        loadingIndicator: document.getElementById("loadingIndicator"),
+
+        fileInput: document.getElementById("fileInput"),
+        selectFileBtn: document.getElementById("selectFileBtn"),
+        dropArea: document.getElementById("dropArea"),
+        fileInfo: document.getElementById("fileInfo"),
+        clearFileBtn: document.getElementById("clearFileBtn"),
+
+        sampleTextBtn: document.getElementById("sampleTextBtn"),
+        clearTextBtn: document.getElementById("clearTextBtn"),
+        copyResultsBtn: document.getElementById("copyResultsBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+
+        textSearchGroup: document.getElementById("textSearchGroup"),
+        lletresEspecifiquesGroup: document.getElementById("lletresEspecifiquesGroup"),
+
+        allPhraseRadio: document.getElementById("allPhrase"),
+        adjacentWordsRadio: document.getElementById("adjacentWords"),
+        adjacentWordsControls: document.getElementById("adjacentWordsControls"),
+
+        notEndsWithInput: document.getElementById("notEndsWithInput"),
+        notContainsInput: document.getElementById("notContainsInput"),
+
+        toast: document.getElementById("toast"),
+      };
+
+      const controlsToDisable = [
+        el.extractButton, el.copyResultsBtn, el.resetBtn,
+        el.selectFileBtn, el.clearFileBtn, el.sampleTextBtn, el.clearTextBtn
+      ];
+
+      function setBusy(isBusy, message = "Processant…") {
+        controlsToDisable.forEach(b => b.disabled = isBusy);
+        el.loadingIndicator.style.display = isBusy ? "inline-flex" : "none";
+        if (isBusy) el.loadingIndicator.querySelector("div:last-child").textContent = message;
+      }
+
+      function toast(kind, title, detail = "", ms = 3200){
+        el.toast.className = "toast " + (kind === "err" ? "err" : "ok");
+        el.toast.innerHTML = `<b>${title}</b><span>${detail}</span>`;
+        el.toast.style.display = "block";
+        setTimeout(() => (el.toast.style.display = "none"), ms);
+      }
+
+      // UI: show/hide
+      function updateSearchTypeUI(){
+        const v = el.searchType.value;
+        if (v === "esdruixoles") {
+          el.textSearchGroup.style.display = "none";
+          el.lletresEspecifiquesGroup.style.display = "block";
+        } else {
+          el.textSearchGroup.style.display = "block";
+          el.lletresEspecifiquesGroup.style.display = "none";
+        }
+      }
+
+      function updateNegationUI(){
+        el.notEndsWithInput.style.display = "none";
+        el.notContainsInput.style.display = "none";
+        if (el.matchPattern.value === "notends") el.notEndsWithInput.style.display = "block";
+        if (el.matchPattern.value === "notcontains") el.notContainsInput.style.display = "block";
+      }
+
+      function updateAdjacentUI(){
+        el.adjacentWordsControls.style.display = el.adjacentWordsRadio.checked ? "block" : "none";
+      }
+
+      el.searchType.addEventListener("change", () => { updateSearchTypeUI(); updateNegationUI(); });
+      el.matchPattern.addEventListener("change", updateNegationUI);
+      el.allPhraseRadio.addEventListener("change", updateAdjacentUI);
+      el.adjacentWordsRadio.addEventListener("change", updateAdjacentUI);
+
+      // Dropzone clicks (avoid button conflicts)
+      el.dropArea.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        el.fileInput.click();
+      });
+      el.dropArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          el.fileInput.click();
+        }
+      });
+      el.selectFileBtn.addEventListener("click", (e) => { e.stopPropagation(); el.fileInput.click(); });
+      el.clearFileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        el.fileInput.value = "";
+        el.fileInfo.style.display = "none";
+        el.fileInfo.textContent = "";
+        toast("ok", "Fitxer eliminat", "S'ha netejat la selecció.");
+      });
+
+      // Drag and drop
+      ["dragenter","dragover","dragleave","drop"].forEach(evt => {
+        el.dropArea.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); });
+      });
+      ["dragenter","dragover"].forEach(evt => {
+        el.dropArea.addEventListener(evt, () => el.dropArea.classList.add("dragover"));
+      });
+      ["dragleave","drop"].forEach(evt => {
+        el.dropArea.addEventListener(evt, () => el.dropArea.classList.remove("dragover"));
+      });
+      el.dropArea.addEventListener("drop", (e) => {
+        const files = e.dataTransfer.files;
+        if (files && files.length) {
+          el.fileInput.files = files;
+          handleFileSelect();
+        }
+      });
+
+      el.fileInput.addEventListener("change", handleFileSelect);
+
+      async function handleFileSelect(){
+        if (!el.fileInput.files.length) return;
+        const file = el.fileInput.files[0];
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (ext !== "pdf" && ext !== "txt"){
+          toast("err", "Fitxer no vàlid", "Només PDF o TXT.");
+          return;
+        }
+
+        el.fileInfo.style.display = "block";
+        el.fileInfo.textContent = `Fitxer: ${file.name} (${formatFileSize(file.size)})`;
+
+        setBusy(true, "Carregant fitxer…");
+        try{
+          let textContent = "";
+          if (ext === "pdf") textContent = await extractTextFromPDF(file);
+          else textContent = await extractTextFromTXT(file);
+
+          el.inputText.value = textContent.trim();
+          toast("ok", "Fitxer carregat", `S'ha importat el contingut (${ext.toUpperCase()}).`);
+        }catch(err){
+          console.error(err);
+          toast("err", "Error en carregar", err.message || "No s'ha pogut llegir el fitxer.");
+        }finally{
+          setBusy(false);
+        }
+      }
+
+      async function extractTextFromPDF(file){
+        const buffer = await file.arrayBuffer();
+        const typedArray = new Uint8Array(buffer);
+        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+
+        let allText = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(" ");
+          allText += pageText + " ";
+        }
+        return allText;
+      }
+
+      async function extractTextFromTXT(file){
+        return await file.text();
+      }
+
+      function formatFileSize(bytes){
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes","KB","MB","GB"];
+        const i = Math.floor(Math.log(bytes)/Math.log(k));
+        return parseFloat((bytes/Math.pow(k,i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      // Text helpers
+      function escapeRegExp(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+      function splitIntoSentences(text){
+        const protectedText = text.replace(/l[·.•]l/gi, "L_GEMINADA");
+        const sentences = protectedText.split(/(?<=[.!?])\s+/);
+        return sentences.map(s => s.replace(/L_GEMINADA/gi, "l·l")).map(s => s.trim()).filter(Boolean);
+      }
+
+      // SÍL·LABES (tal com el teu)
+      function processarParaulaSilabes(paraula) {
+        let paraulaProcessada = paraula;
+        let canvi;
+
+        paraulaProcessada = paraulaProcessada.replace(/argü(eix|i|í)/gi, 'argü-$1');
+        paraulaProcessada = paraulaProcessada.replace(/(Màri|Síri)us($)/gi, '$1-us$2');
+        paraulaProcessada = paraulaProcessada.replace(/l·l/gi, 'l-l');
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç])([aeiouàèéíïòóúü])/gi,
+            (match, v1, c, v2) => (!match.includes('-') ? (canvi = true, v1 + '-' + c + v2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([a-zçàèéíïòóúü])(ll|ny|kh|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr)([aeiouàèéíïòóúü])/gi,
+            (match, v1, cons, v2) => (!match.includes('-') ? (canvi = true, v1 + '-' + cons + v2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç]{2,})([aeiouàèéíïòóúü])/gi,
+            (match, v1, cons, v2) => {
+              if (!match.includes('-')) {
+                canvi = true;
+                const pre = cons.substring(0, cons.length - 1);
+                const last = cons.substring(cons.length - 1);
+                return v1 + pre + '-' + last + v2;
+              }
+              return match;
             }
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        paraulaProcessada = paraulaProcessada.replace(/([gq])u([aeiouàèéíòóúü])/gi, '$1*u*$2');
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aàeéèiíoòóuú])([iu])([aeiou])([iu])/gi,
+            (match, v1, iu1, v2, iu2) => (!match.includes('-') ? (canvi = true, v1 + '-' + iu1 + '*' + v2 + iu2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeiouàèéíòóú])([iu])([aeiouàèéíïòóúü])/gi,
+            (match, v1, iu, v2) => (!match.includes('-') ? (canvi = true, v1 + '-' + iu + '*' + v2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeiou])([àèéíòóúïü])/gi,
+            (match, v1, v2) => (!match.includes('-') ? (canvi = true, v1 + '-' + v2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([bcdfgjklmnpqrstvwxyzç])([iu])([aeo])/gi,
+            (match, c, iu, v) => (!match.includes('-') ? (canvi = true, c + iu + '-' + v) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeoàèéòó])([aeoàèéòó])/gi,
+            (match, v1, v2) => (!match.includes('-') ? (canvi = true, v1 + '-' + v2) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        do {
+          canvi = false;
+          const novaParaula = paraulaProcessada.replace(/([aeiou])um($|s$)/gi,
+            (match, v, fin) => (!match.includes('-') ? (canvi = true, v + '-um' + fin) : match)
+          );
+          if (canvi) paraulaProcessada = novaParaula;
+        } while (canvi);
+
+        paraulaProcessada = paraulaProcessada.replace(/\*/gi, '');
+        paraulaProcessada = paraulaProcessada.replace(/--+/g, '-');
+        paraulaProcessada = paraulaProcessada.replace(/^-/, '');
+
+        return paraulaProcessada;
+      }
+
+      // FUNCIÓ CORREGIDA: Determinar si una paraula és esdrúixola
+      function esEsdruixola(paraula) {
+        // Neteja la paraula - tractar apòstrofs
+        const paraulaNeta = paraula.replace(/^[lLdDsSnNtTmM]['’]|[.,!?;:—()»]$/gi, '').replace(/[.,!?;:—()»]$/, '');
+        
+        // Si la paraula és massa curta, no pot ser esdrúixola
+        if (paraulaNeta.length < 3) return false;
+        
+        // Separa la paraula en síl·labes
+        const paraulaSeparada = processarParaulaSilabes(paraulaNeta);
+        const silabes = paraulaSeparada.split('-').filter(s => s.length > 0);
+        
+        // Necessita almenys 3 síl·labes per ser esdrúixola
+        if (silabes.length < 3) return false;
+        
+        // Buscar accent a les síl·labes (només accents reals, no dièresis)
+        for (let i = 0; i < silabes.length; i++) {
+          if (/[àèéíòóú]/.test(silabes[i])) {
+            // Si l'accent està a la antepenúltima o abans, és esdrúixola
+            const posicioDesDelFinal = silabes.length - 1 - i;
+            return posicioDesDelFinal >= 2;
+          }
         }
         
-        // Funcions per arrossegar i deixar anar
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
+        return false;
+      }
+
+      // FUNCIÓ CORREGIDA: Obtenir totes les paraules esdrúixoles d'una frase
+      function obtenirEsdruixolesDeFrase(frase) {
+        // Regex per trobar paraules (incloent les amb apòstrof)
+        const paraules = frase.match(/\b(?:[lLdDsSnNtTmM]['’])?[a-zA-ZÀ-ÿçÇ]+/g) || [];
+        const esdruixoles = [];
+        
+        paraules.forEach(paraula => {
+          if (esEsdruixola(paraula)) {
+            esdruixoles.push(paraula);
+          }
         });
         
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        return esdruixoles;
+      }
+
+      // FUNCIÓ MILLORADA: Per destacar paraules esdrúixoles sense incloure l'apòstrof
+      function highlightEsdruixoles(frase) {
+        // Obtenir totes les esdrúixoles
+        const esdruixoles = obtenirEsdruixolesDeFrase(frase);
+        let resultat = frase;
         
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => highlight(true), false);
-        });
+        // Ordenar de més llarga a més curta per evitar reemplaçaments parcials
+        esdruixoles.sort((a, b) => b.length - a.length);
         
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => highlight(false), false);
-        });
-        
-        function highlight(shouldHighlight) {
-            if (shouldHighlight) {
-                dropArea.classList.add('dragover');
+        // Per a cada esdrúixola, reemplaçar-la amb highlight
+        esdruixoles.forEach(paraula => {
+          // Hem de trobar la forma exacta tal com apareix a la frase
+          // Això inclou apòstrofs i altres caràcters
+          const paraulesFrase = frase.match(/\b(?:[lLdDsSnNtTmM]['’])?[a-zA-ZÀ-ÿçÇ]+\b/g) || [];
+          
+          // Buscar la paraula tal com apareix a la frase
+          let paraulaFrase = paraula;
+          for (let pf of paraulesFrase) {
+            // Comprovar si aquesta paraula de la frase és l'esdrúixola
+            // Però neteja primer els apòstrofs
+            const pfNeta = pf.replace(/^[lLdDsSnNtTmM]['’]/, '');
+            if (pfNeta === paraula.replace(/^[lLdDsSnNtTmM]['']/, '')) {
+              paraulaFrase = pf;
+              break;
+            }
+          }
+          
+          // Escapar caràcters especials per a regex
+          const paraulaEscapada = paraulaFrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          
+          // Crear l'highlight només per la part de la paraula, no l'apòstrof
+          // Separar l'apòstrof inicial de la paraula
+          const match = paraulaFrase.match(/^([lLdDsSnNtTmM][''])?(.+)$/);
+          if (match) {
+            const apostrof = match[1] || '';
+            const paraulaSenseApostrof = match[2];
+            
+            // Si hi ha apòstrof, mantenir-lo fora de l'highlight
+            if (apostrof) {
+              const regex = new RegExp(`(${escapeRegExp(apostrof)}${escapeRegExp(paraulaSenseApostrof)})`, 'g');
+              resultat = resultat.replace(regex, 
+                `${apostrof}<span class="esdruixola-highlight">${paraulaSenseApostrof}</span>`);
             } else {
-                dropArea.classList.remove('dragover');
+              // Sense apòstrof, destacar la paraula sencera
+              const regex = new RegExp(`\\b${escapeRegExp(paraulaFrase)}\\b`, 'g');
+              resultat = resultat.replace(regex, 
+                `<span class="esdruixola-highlight">${paraulaFrase}</span>`);
             }
-        }
-        
-        dropArea.addEventListener('drop', handleDrop, false);
-        
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            
-            if (files.length) {
-                fileInput.files = files;
-                handleFileSelect();
-            }
-        }
-        
-        // Funcions principals
-        function handleFileSelect() {
-            if (!fileInput.files.length) return;
-            
-            const file = fileInput.files[0];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            
-            if (fileExtension !== 'pdf' && fileExtension !== 'txt') {
-                showError('Si us plau, selecciona un fitxer PDF o TXT vàlid.');
-                return;
-            }
-            
-            // Mostrar informació del fitxer
-            fileInfo.style.display = 'block';
-            fileInfo.textContent = `Fitxer: ${file.name} (${formatFileSize(file.size)})`;
-            
-            // Amagar missatge d'error si n'hi havia
-            hideError();
-            showStatus(`Fitxer ${fileExtension.toUpperCase()} seleccionat. Ara pots fer la cerca.`);
-        }
-        
-        async function searchFile(esdruixolesModeOnly = false) {
-            const file = fileInput.files[0];
-            const searchText = searchTextInput.value.trim();
-            const isExactMatch = document.getElementById('exactMatch').checked;
-            const precedingCount = parseInt(document.getElementById('precedingCount').value);
-            const followingCount = parseInt(document.getElementById('followingCount').value);
-            const mode = esdruixolesMode.value;
-            const minWords = parseInt(minWordsInput.value) || 1;
-            const maxWords = parseInt(maxWordsInput.value) || 100;
-            
-            resultsDiv.innerHTML = '';
-            precedingWordsPanel.style.display = 'none';
-            followingWordsPanel.style.display = 'none';
-            precedingWordsList.innerHTML = '';
-            followingWordsList.innerHTML = '';
-            
-            if (!file) {
-                showError('Si us plau, selecciona un fitxer.');
-                return;
-            }
-            
-            // Validar els valors de nombre de paraules
-            if (minWords > maxWords) {
-                showError('El nombre mínim de paraules no pot ser superior al màxim.');
-                return;
-            }
-            
-            if (minWords < 1 || maxWords < 1) {
-                showError('El nombre de paraules ha de ser com a mínim 1.');
-                return;
-            }
-            
-            showLoading('Processant fitxer...');
-            
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            
-            if (fileExtension === 'pdf') {
-                await processPDF(file, searchText, isExactMatch, precedingCount, followingCount, 
-                               esdruixolesModeOnly ? 'solamente' : mode, minWords, maxWords);
-            } else if (fileExtension === 'txt') {
-                await processTXT(file, searchText, isExactMatch, precedingCount, followingCount,
-                               esdruixolesModeOnly ? 'solamente' : mode, minWords, maxWords);
-            }
-        }
-        
-        async function processPDF(file, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
-            const reader = new FileReader();
-            
-            reader.onload = async function(e) {
-                try {
-                    const typedArray = new Uint8Array(e.target.result);
-                    const pdf = await pdfjsLib.getDocument(typedArray).promise;
-                    let allText = "";
-                    
-                    // Llegeix totes les pàgines
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        const pageText = textContent.items.map(item => item.str).join(' ');
-                        allText += pageText + " ";
-                    }
-                    
-                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords);
-                    
-                } catch (error) {
-                    hideLoading();
-                    showError(`Error processant el PDF: ${error.message}`);
-                    console.error(error);
-                }
-            };
-            
-            reader.onerror = function() {
-                hideLoading();
-                showError("Error en llegir el fitxer PDF. Torna a intentar-ho.");
-            };
-            
-            reader.readAsArrayBuffer(file);
-        }
-        
-        async function processTXT(file, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                try {
-                    const allText = e.target.result;
-                    processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords);
-                } catch (error) {
-                    hideLoading();
-                    showError(`Error processant el fitxer TXT: ${error.message}`);
-                    console.error(error);
-                }
-            };
-            
-            reader.onerror = function() {
-                hideLoading();
-                showError("Error en llegir el fitxer TXT. Torna a intentar-ho.");
-            };
-            
-            reader.readAsText(file, 'UTF-8');
-        }
-        
-        function processTextContent(allText, searchText, isExactMatch, precedingCount, followingCount, mode, minWords, maxWords) {
-            // Normalitza el text per a la cerca (incloent variants de l·l)
-            const normalizedText = normalizeText(allText);
-            const normalizedSearchText = normalizeText(searchText);
-            
-            // Separa frases amb un mètode intel·ligent que ignora l.l
-            const frases = splitSentencesIntelligently(allText);
-            
-            let frasesFiltrades = [];
-            let totalParaules = 0;
-            let frasesAmbParaulesCorrectes = 0;
-            
-            // Primer filtrar per paraules esdrúixoles si cal
-            if (mode === 'solamente' || mode === 'amb') {
-                // Mode esdrúixoles: filtrar o marcar frases amb paraules esdrúixoles
-                frasesFiltrades = frases.filter(frase => {
-                    // Buscar paraules esdrúixoles a la frase
-                    const paraules = frase.split(/\s+/);
-                    const teEsdruixola = paraules.some(paraula => esEsdruixola(paraula));
-                    
-                    if (mode === 'solamente') {
-                        return teEsdruixola;
-                    } else {
-                        return true; // En mode 'amb', mostrem totes les frases però destaquem les esdrúixoles
-                    }
-                });
-                
-                if (mode === 'amb' && searchText) {
-                    // Si hi ha text de cerca, filtrar també per la cerca normal
-                    frasesFiltrades = frasesFiltrades.filter(frase => {
-                        const normalizedFrase = normalizeText(frase);
-                        if (isExactMatch) {
-                            const punctuationRegex = /[.,!?;:—()»]/g;
-                            const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
-                            return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
-                        } else {
-                            return normalizedFrase.includes(normalizedSearchText);
-                        }
-                    });
-                }
-            } else {
-                // Mode normal: filtrar per text de cerca
-                frasesFiltrades = frases.filter(frase => {
-                    if (!searchText) return true; // Si no hi ha text de cerca, mostrar totes
-                    
-                    const normalizedFrase = normalizeText(frase);
-                    if (isExactMatch) {
-                        const punctuationRegex = /[.,!?;:—()»]/g;
-                        const cleanFrase = normalizedFrase.replace(punctuationRegex, '');
-                        return new RegExp(`\\b${normalizedSearchText}\\b`, 'i').test(cleanFrase);
-                    } else {
-                        return normalizedFrase.includes(normalizedSearchText);
-                    }
-                });
-            }
-            
-            // Ara filtrar per nombre de paraules
-            frasesFiltrades = frasesFiltrades.filter(frase => {
-                // Comptar paraules a la frase
-                const paraules = frase.split(/\s+/).filter(p => p.trim().length > 0);
-                const numParaules = paraules.length;
-                totalParaules += numParaules;
-                
-                // Comprovar si el nombre de paraules està dins del rang
-                if (numParaules >= minWords && numParaules <= maxWords) {
-                    frasesAmbParaulesCorrectes++;
-                    return true;
-                }
-                return false;
-            });
-            
-            // Mostra resultats
-            displayResults(frasesFiltrades, searchText, normalizedSearchText, isExactMatch, mode, minWords, maxWords, totalParaules);
-            
-            // Càlcul de paraules que precedeixen i segueixen
-            if (precedingCount > 0 || followingCount > 0) {
-                calculateAdjacentWords(allText, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount);
-            }
-            
-            hideLoading();
-            showStatus(`Cerca completada. S'han trobat ${frasesFiltrades.length} frases coincidents.`);
-        }
-        
-        // FUNCIÓ PER DETERMINAR SI UNA PARAULA ÉS ESDRÚIXOLA (CORRECTA)
-        function esEsdruixola(paraula) {
-            // Neteja la paraula (elimina signes de puntuació al final)
-            const paraulaNeta = paraula.replace(/[.,!?;:—()»]$/, '');
-            
-            // Si la paraula és massa curta, no pot ser esdrúixola
-            if (paraulaNeta.length < 3) return false;
-            
-            // Separa la paraula en síl·labes utilitzant les mateixes regles
-            const paraulaSeparada = processarParaulaSilabes(paraulaNeta);
-            const silabes = paraulaSeparada.split('-').filter(s => s.length > 0);
-            
-            // Necessita almenys 3 síl·labes per ser esdrúixola
-            if (silabes.length < 3) return false;
-            
-            // Comprovar si l'antepenúltima o l'anteantepenúltima síl·laba té accent
-            const antepenultima = silabes.length - 3;
-            const anteantepenultima = silabes.length - 4; // per a sobreesdrúixoles
-            
-            // Comprovar l'antepenúltima (esdrúixoles)
-            if (antepenultima >= 0) {
-                if (/(à|è|é|í|ï|ò|ó|ú|ü)/.test(silabes[antepenultima])) {
-                    return true; // És esdrúixola
-                }
-            }
-            
-            // Comprovar l'anteantepenúltima (sobreesdrúixoles)
-            if (anteantepenultima >= 0) {
-                if (/(à|è|é|í|ï|ò|ó|ú|ü)/.test(silabes[anteantepenultima])) {
-                    return true; // És sobreesdrúixola
-                }
-            }
-            
-            // Si cap té accent, no és esdrúixola/sobreesdrúixola
-            return false;
-        }
-        
-        // FUNCIÓ DE SEPARACIÓ DE SÍL·LABES - IGUAL QUE LA TEVA
-        function processarParaulaSilabes(paraula) {
-            let paraulaProcessada = paraula;
-            let canvi;
-            
-            // REGLA ESPECIAL: argüir i derivats - APLICAR PRIMER!
-            paraulaProcessada = paraulaProcessada.replace(/argü(eix|i|í)/gi, 'argü-$1');
-
-            // REGLA excepció: Màrius → Màri-us. Sírius → Síri-us (APLICAR ABANS)
-            paraulaProcessada = paraulaProcessada.replace(/(Màri|Síri)us($)/gi, '$1-us$2');
-            
-            // REGLA 1: l·l → l-l (separació entre les dues eles)
-            paraulaProcessada = paraulaProcessada.replace(/l·l/gi, 'l-l');
-            
-            // REGLA 2: Una consonant entre vocals → separació abans de la consonant
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç])([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return vocal1 + '-' + consonant + vocal2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 3: Dígrafs i grups consonàntics
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([a-zçàèéíïòóúü])(ll|ny|kh|bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr)([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonant, vocal2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return vocal1 + '-' + consonant + vocal2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 4: Dues o més consonants entre vocals
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíïòóúü])([bcdfghjklmnpqrstvwxyzç]{2,})([aeiouàèéíïòóúü])/gi, function(match, vocal1, consonants, vocal2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        const consonantsSenseUltima = consonants.substring(0, consonants.length - 1);
-                        const ultimaConsonant = consonants.substring(consonants.length - 1);
-                        return vocal1 + consonantsSenseUltima + '-' + ultimaConsonant + vocal2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 5: g,q + u + vocal excepte ï → inseparables (marcar amb asteriscs)
-            paraulaProcessada = paraulaProcessada.replace(/([gq])u([aeiouàèéíòóúü])/gi, '$1*u*$2');
-
-            // REGLA 6: dèieu - vocal + iu + vocal + iu
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aàeéèiíoòóuú])([iu])([aeiou])([iu])/gi, function(match, v1, iu1, v2, iu2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v1 + '-' + iu1 + '*' + v2 + iu2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 7: cauen - vocal + i/u + vocal
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeiouàèéíòóú])([iu])([aeiouàèéíïòóúü])/gi, function(match, v1, iu, v2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v1 + '-' + iu + '*' + v2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 8: país - vocal àtona + vocal accentuada
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeiou])([àèéíòóúïü])/gi, function(match, v1, v2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v1 + '-' + v2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 9: Maria - consonant + iu + aeo
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([bcdfgjklmnpqrstvwxyzç])([iu])([aeo])/gi, function(match, c, iu, v) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return c + iu + '-' + v;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 10: teatre - a/e/o + a/e/o
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeoàèéòó])([aeoàèéòó])/gi, function(match, v1, v2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v1 + '-' + v2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 11: vocal accentuada + vocal àtona
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([àèéíòóú])([aeiou])/gi, function(match, v1, v2) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v1 + '-' + v2;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-
-            // REGLA 12: aquàrium - vocal + um final
-            do {
-                canvi = false;
-                const novaParaula = paraulaProcessada.replace(/([aeiou])um($|s$)/gi, function(match, v, final) {
-                    if (!match.includes('-')) {
-                        canvi = true;
-                        return v + '-um' + final;
-                    }
-                    return match;
-                });
-                if (canvi) {
-                    paraulaProcessada = novaParaula;
-                }
-            } while (canvi);
-            
-            // Suprimir els asteriscs
-            paraulaProcessada = paraulaProcessada.replace(/\*/gi, '');
-            
-            // Netejar guions duplicats o al principi
-            paraulaProcessada = paraulaProcessada.replace(/--+/g, '-');
-            paraulaProcessada = paraulaProcessada.replace(/^-/, '');
-            
-            return paraulaProcessada;
-        }
-        
-        // Funció per separar frases de manera intel·ligent
-        function splitSentencesIntelligently(text) {
-            // Primer, protegeix les el·l geminades reemplaçant-les temporalment
-            const protectedText = text.replace(/l[·.•]l/gi, 'L_GEMINADA');
-            
-            // Separa per punt, exclamació i interrogació
-            const sentences = protectedText.split(/(?<=[.!?])\s+/);
-            
-            // Restaura les el·l geminades
-            return sentences.map(sentence => 
-                sentence.replace(/L_GEMINADA/gi, match => {
-                    // Restaura la forma original
-                    const originalIndex = text.indexOf(match);
-                    if (originalIndex !== -1) {
-                        return text.substring(originalIndex, originalIndex + 3); // l·l o l.l
-                    }
-                    return 'l·l'; // fallback
-                })
-            ).filter(sentence => sentence.trim().length > 0);
-        }
-        
-        // Funció per normalitzar el text per a la cerca
-        function normalizeText(text) {
-            return text.toLowerCase()
-                // Normalitza les diferents representacions de la ela geminada
-                .replace(/l[·.•]l/g, 'l·l')
-                // Normalitza altres caràcters problemàtics
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Elimina accents per a cerca més flexible
-        }
-        
-        // Funció per mostrar els resultats
-        function displayResults(frases, originalSearchText, normalizedSearchText, isExactMatch, mode, minWords, maxWords, totalParaules) {
-            if (frases.length === 0) {
-                resultsDiv.innerHTML = `<div class="error-message">No s'han trobat frases ${mode === 'solamente' ? 'amb paraules esdrúixoles' : 'coincidents'} amb ${minWords}-${maxWords} paraules.</div>`;
-                return;
-            }
-            
-            let titleText = '';
-            if (mode === 'solamente') {
-                titleText = `S'han trobat ${frases.length} frases amb paraules esdrúixoles (${minWords}-${maxWords} paraules):`;
-            } else if (mode === 'amb') {
-                titleText = `S'han trobat ${frases.length} frases ${originalSearchText ? `amb "${originalSearchText}" i ` : ''}destacant paraules esdrúixoles (${minWords}-${maxWords} paraules):`;
-            } else {
-                titleText = originalSearchText ? 
-                    `S'han trobat ${frases.length} frases amb "${originalSearchText}" (${minWords}-${maxWords} paraules):` :
-                    `S'han trobat ${frases.length} frases (${minWords}-${maxWords} paraules):`;
-            }
-            
-            let html = `<div class="success-message">${titleText}</div>`;
-            
-            frases.forEach((frase, index) => {
-                let highlightedFrase = frase;
-                
-                // Destacar el text cercat (si n'hi ha)
-                if (originalSearchText && mode !== 'solamente') {
-                    let regex;
-                    if (isExactMatch) {
-                        regex = new RegExp(`\\b${escapeRegExp(originalSearchText)}\\b`, 'gi');
-                    } else {
-                        regex = new RegExp(`(${escapeRegExp(originalSearchText)})`, 'gi');
-                    }
-                    
-                    const matches = [...frase.matchAll(regex)];
-                    
-                    if (matches.length > 0) {
-                        matches.sort((a, b) => b.index - a.index);
-                        
-                        matches.forEach(match => {
-                            const start = match.index;
-                            const end = start + match[0].length;
-                            highlightedFrase = highlightedFrase.substring(0, start) + 
-                                              `<span class="highlight">${match[0]}</span>` + 
-                                              highlightedFrase.substring(end);
-                        });
-                    }
-                }
-                
-                // Destacar paraules esdrúixoles
-                if (mode === 'solamente' || mode === 'amb') {
-                    const paraules = frase.split(/\s+/);
-                    
-                    // Ordenar per longitud per evitar problemes amb reemplaçaments
-                    paraules.sort((a, b) => b.length - a.length);
-                    
-                    paraules.forEach(paraula => {
-                        if (esEsdruixola(paraula)) {
-                            const paraulaNeta = paraula.replace(/[.,!?;:—()»]$/, '');
-                            highlightedFrase = highlightedFrase.replace(
-                                new RegExp(`\\b${escapeRegExp(paraulaNeta)}\\b`, 'g'),
-                                `<span class="esdruixola">${paraulaNeta}</span>`
-                            );
-                        }
-                    });
-                }
-                
-                // Comptar paraules en aquesta frase
-                const numParaules = frase.split(/\s+/).filter(p => p.trim().length > 0).length;
-                
-                // Mostra la frase sense numeració amb informació de paraules
-                html += `<div class="frase">${highlightedFrase.trim()}</div>`;
-            });
-            
-            // Afegir estadístiques
-            html += `<div class="stats">Total de paraules en les frases seleccionades: ${totalParaules} | Mitjana de paraules per frase: ${(totalParaules/frases.length).toFixed(1)}</div>`;
-            
-            resultsDiv.innerHTML = html;
-        }
-        
-        // Funció per calcular paraules adjacents
-        function calculateAdjacentWords(text, searchText, normalizedSearchText, isExactMatch, precedingCount, followingCount) {
-            const words = text.split(/\s+/);
-            const followingWords = {};
-            const precedingWords = {};
-            
-            for (let i = 0; i < words.length; i++) {
-                const currentWord = isExactMatch 
-                    ? normalizeText(words[i].replace(/[.,!?;:—()»]/g, ''))
-                    : normalizeText(words[i].toLowerCase().replace(/[.,!?;:—()»]/g, ''));
-                
-                if (isExactMatch 
-                    ? new RegExp(`^${normalizedSearchText}$`, 'i').test(currentWord)
-                    : currentWord.includes(normalizedSearchText)) {
-                    
-                    // Paraules que precedeixen (grups de paraules)
-                    if (precedingCount > 0 && i - precedingCount >= 0) {
-                        let precedingPhrase = '';
-                        for (let k = precedingCount; k >= 1; k--) {
-                            const precedingWord = words[i - k].replace(/[.,!?;:—()»]/g, '');
-                            if (precedingWord) {
-                                precedingPhrase += (precedingPhrase ? ' ' : '') + precedingWord;
-                            }
-                        }
-                        if (precedingPhrase) {
-                            precedingWords[precedingPhrase] = (precedingWords[precedingPhrase] || 0) + 1;
-                        }
-                    }
-                    
-                    // Paraules que segueixen (grups de paraules)
-                    if (followingCount > 0 && i + followingCount < words.length) {
-                        let followingPhrase = '';
-                        for (let j = 1; j <= followingCount; j++) {
-                            const followingWord = words[i + j].replace(/[.,!?;:—()»]/g, '');
-                            if (followingWord) {
-                                followingPhrase += (followingPhrase ? ' ' : '') + followingWord;
-                            }
-                        }
-                        if (followingPhrase) {
-                            followingWords[followingPhrase] = (followingWords[followingPhrase] || 0) + 1;
-                        }
-                    }
-                }
-            }
-            
-            // Mostrar paraules que precedeixen
-            if (Object.keys(precedingWords).length > 0) {
-                precedingSearchWord.textContent = searchText;
-                const sortedPreceding = Object.entries(precedingWords).sort((a, b) => b[1] - a[1]);
-                sortedPreceding.forEach(entry => {
-                    precedingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
-                });
-                precedingWordsPanel.style.display = 'block';
-            }
-            
-            // Mostrar paraules que segueixen
-            if (Object.keys(followingWords).length > 0) {
-                followingSearchWord.textContent = searchText;
-                const sortedFollowing = Object.entries(followingWords).sort((a, b) => b[1] - a[1]);
-                sortedFollowing.forEach(entry => {
-                    followingWordsList.innerHTML += `<div class="word-item">${entry[0]} <span class="word-count-value">${entry[1]}</span></div>`;
-                });
-                followingWordsPanel.style.display = 'block';
-            }
-        }
-        
-        // Funció per copiar els resultats al porta-retalls
-        function copyResults() {
-            if (!resultsDiv.innerHTML || resultsDiv.innerHTML === '') {
-                showError('No hi ha resultats per copiar.');
-                return;
-            }
-            
-            // Creem un element temporal per copiar només les frases
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = resultsDiv.innerHTML;
-            
-            // Eliminem el missatge de capçalera (success-message)
-            const successMessage = tempDiv.querySelector('.success-message');
-            if (successMessage) {
-                successMessage.remove();
-            }
-            
-            // Eliminem les estadístiques
-            const stats = tempDiv.querySelector('.stats');
-            if (stats) {
-                stats.remove();
-            }
-            
-            // Obtenim totes les frases
-            const frases = tempDiv.querySelectorAll('.frase');
-            
-            // Construïm el text a copiar amb salts de línia entre frases
-            let textToCopy = '';
-            frases.forEach((frase, index) => {
-                // Eliminem els estils de highlight i esdruixola
-                const highlights = frase.querySelectorAll('.highlight, .esdruixola');
-                highlights.forEach(el => {
-                    const textNode = document.createTextNode(el.textContent);
-                    el.parentNode.replaceChild(textNode, el);
-                });
-                
-                // Afegim la frase al text a copiar
-                if (index > 0) {
-                    textToCopy += '\n\n'; // Dos salts de línia entre frases
-                }
-                textToCopy += frase.textContent.trim();
-            });
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showStatus('Resultats copiats al porta-retalls!');
-                
-                // Canviar temporalment l'icona i text del botó
-                const originalHTML = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i>✅</i> Copiat!';
-                copyBtn.disabled = true;
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalHTML;
-                    copyBtn.disabled = false;
-                }, 2000);
-            }).catch(err => {
-                console.error('Error copiant text: ', err);
-                showError('Error copiant resultats al porta-retalls.');
-            });
-        }
-        
-        function clearAll() {
-            fileInput.value = '';
-            searchTextInput.value = '';
-            resultsDiv.innerHTML = '';
-            precedingWordsPanel.style.display = 'none';
-            followingWordsPanel.style.display = 'none';
-            precedingWordsList.innerHTML = '';
-            followingWordsList.innerHTML = '';
-            fileInfo.style.display = 'none';
-            hideError();
-            hideStatus();
-            
-            // Restablir opcions per defecte
-            document.getElementById('exactMatch').checked = false;
-            document.getElementById('precedingCount').value = '0';
-            document.getElementById('followingCount').value = '0';
-            document.getElementById('esdruixolesMode').value = 'no';
-            document.getElementById('minWords').value = '1';
-            document.getElementById('maxWords').value = '100';
-            
-            showStatus('S\'ha netejat tot el contingut.');
-        }
-        
-        // Funcions auxiliars
-        function showLoading(message) {
-            loadingText.textContent = message;
-            loadingIndicator.style.display = 'block';
-        }
-        
-        function hideLoading() {
-            loadingIndicator.style.display = 'none';
-        }
-        
-        function showStatus(message) {
-            statusMessage.textContent = message;
-            statusMessage.style.display = 'block';
-            
-            // Amagar el missatge després de 5 segons
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
-        }
-        
-        function hideStatus() {
-            statusMessage.style.display = 'none';
-        }
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            
-            // Amagar el missatge després de 5 segons
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
-        }
-        
-        function hideError() {
-            errorMessage.style.display = 'none';
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        // Funció per escapar caràcters especials en expressions regulars
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-        
-        // Permetre la cerca amb la tecla Enter
-        document.getElementById('searchText').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchFile();
-            }
+          }
         });
-    </script>
+        
+        return resultat;
+      }
+
+      // FUNCIÓ NOVA: Destacar lletres específiques dins les paraules esdrúixoles amb apòstrof
+      function highlightLletresEnEsdruixoles(frase, lletresEspecifiques, esdruixoles) {
+        if (!lletresEspecifiques || !esdruixoles || esdruixoles.length === 0) {
+          return frase;
+        }
+        
+        let resultat = frase;
+        
+        // Per cada paraula esdrúixola
+        esdruixoles.forEach(paraula => {
+          // Trobar la paraula com apareix a la frase (amb apòstrof si el té)
+          const paraulesFrase = frase.match(/\b(?:[lLdDsSnNtTmM][''])?[a-zA-ZÀ-ÿçÇ]+\b/g) || [];
+          let paraulaFrase = paraula;
+          
+          for (let pf of paraulesFrase) {
+            const pfNeta = pf.replace(/^[lLdDsSnNtTmM]['']/, '');
+            if (pfNeta === paraula.replace(/^[lLdDsSnNtTmM]['']/, '')) {
+              paraulaFrase = pf;
+              break;
+            }
+          }
+          
+          // Separar apòstrof si n'hi ha
+          const match = paraulaFrase.match(/^([lLdDsSnNtTmM][''])?(.+)$/);
+          if (!match) return;
+          
+          const apostrof = match[1] || '';
+          const paraulaSenseApostrof = match[2];
+          
+          // Crear versió amb les lletres destacades
+          let paraulaDestacada = paraulaSenseApostrof;
+          
+          // Destacar cada lletra específica
+          lletresEspecifiques.split('').forEach(lletra => {
+            const regex = new RegExp(`(${escapeRegExp(lletra)})`, 'gi');
+            paraulaDestacada = paraulaDestacada.replace(regex, 
+              `<span style="background-color: #ff5722; color: white; font-weight: bold; padding: 1px 3px; border-radius: 2px;">$1</span>`);
+          });
+          
+          // Reemplaçar a la frase
+          const paraulaCompleta = apostrof + paraulaSenseApostrof;
+          const paraulaDestacadaCompleta = apostrof + paraulaDestacada;
+          
+          const regex = new RegExp(escapeRegExp(paraulaCompleta), 'g');
+          resultat = resultat.replace(regex, paraulaDestacadaCompleta);
+        });
+        
+        return resultat;
+      }
+
+      function findTimeExpressions(text) {
+        const timePatterns = [
+          /\bavui\b/gi, /\bdemà\b/gi, /\bahir\b/gi, /\bsetmana\b/gi, /\bmes\b/gi, /\bany\b/gi,
+          /\bdilluns\b/gi, /\bdimarts\b/gi, /\bdimecres\b/gi, /\bdijous\b/gi, /\bdivendres\b/gi,
+          /\bdissabte\b/gi, /\bdiumenge\b/gi, /\bmatí\b/gi, /\btarda\b/gi, /\bnit\b/gi,
+          /\bprimavera\b/gi, /\bestiu\b/gi, /\btardor\b/gi, /\bhivern\b/gi,
+          /\bdia\b/gi, /\bhor[ae]\b/gi, /\bminut[os]?\b/gi, /\bsegon[os]?\b/gi
+        ];
+        const matches = [];
+        timePatterns.forEach(p => { const m = text.match(p); if (m) matches.push(...m); });
+        return [...new Set(matches)];
+      }
+
+      function highlightTimeExpressions(frase){
+        let out = frase;
+        findTimeExpressions(frase).forEach(expr=>{
+          out = out.replace(new RegExp(`\\b${escapeRegExp(expr)}\\b`, "gi"), `<span class="temps-highlight">$&</span>`);
+        });
+        return out;
+      }
+
+      function findVerbForms(text){
+        const verbPatterns = [
+          /\bvaig\b/gi, /\bvas\b/gi, /\bva\b/gi, /\bvam\b/gi, /\bvau\b/gi, /\bvan\b/gi,
+          /\bestic\b/gi, /\bestàs\b/gi, /\bestà\b/gi, /\bestem\b/gi, /\bestau\b/gi, /\bestan\b/gi,
+          /\bhe\b/gi, /\bhas\b/gi, /\bha\b/gi, /\bhem\b/gi, /\bheu\b/gi, /\bhan\b/gi,
+          /\bsóc\b/gi, /\bets\b/gi, /\bés\b/gi, /\bsom\b/gi, /\beu\b/gi, /\bsón\b/gi,
+          /\bera\b/gi, /\beres\b/gi, /\bérem\b/gi, /\béreu\b/gi, /\beren\b/gi,
+          /\bhavia\b/gi, /\bhavies\b/gi, /\bhaviem\b/gi, /\bhavíeu\b/gi, /\bhavien\b/gi,
+          /\bestava\b/gi, /\bestaves\b/gi, /\bestàvem\b/gi, /\bestàveu\b/gi, /\bestaven\b/gi
+        ];
+        const matches = [];
+        verbPatterns.forEach(p => { const m = text.match(p); if (m) matches.push(...m); });
+        return [...new Set(matches)];
+      }
+
+      function highlightVerbForms(frase){
+        let out = frase;
+        findVerbForms(frase).forEach(v=>{
+          out = out.replace(new RegExp(`\\b${escapeRegExp(v)}\\b`, "gi"), `<span class="verb-highlight">$&</span>`);
+        });
+        return out;
+      }
+
+      function matchesPattern(text, pattern, searchTerm, notEndsTerm="", notContainsTerm=""){
+        if (!searchTerm) return true;
+        const t = text.toLowerCase();
+        const s = searchTerm.toLowerCase();
+        const words = t.match(/[a-zàèéíïòóúüç]+/g) || [];
+
+        switch(pattern){
+          case "anywhere": return t.includes(s);
+          case "exact": return words.some(w => w === s);
+          case "starts": return words.some(w => w.startsWith(s));
+          case "ends": return words.some(w => w.endsWith(s));
+          case "notends": {
+            const ne = (notEndsTerm || "").toLowerCase();
+            if (!ne) return true;
+            return !words.some(w => w.endsWith(ne));
+          }
+          case "notcontains": {
+            const nc = (notContainsTerm || "").toLowerCase();
+            if (!nc) return true;
+            return !t.includes(nc);
+          }
+          default: return t.includes(s);
+        }
+      }
+
+      function getAdjacentContext(sentence, term, precedingCount, followingCount){
+        const regex = new RegExp(escapeRegExp(term), "gi");
+        const matches = [...sentence.matchAll(regex)];
+        if (!matches.length) return sentence;
+
+        const matchIndex = matches[0].index;
+        const words = sentence.split(/\s+/);
+
+        let wordIndex = 0;
+        let currentPos = 0;
+
+        for (let i = 0; i < words.length; i++){
+          if (currentPos <= matchIndex && matchIndex < currentPos + words[i].length + 1) { wordIndex = i; break; }
+          currentPos += words[i].length + 1;
+        }
+
+        const start = Math.max(0, wordIndex - precedingCount);
+        const end = Math.min(words.length - 1, wordIndex + followingCount);
+
+        const out = [];
+        for (let i = start; i <= end; i++){
+          out.push(i === wordIndex ? `<span class="highlight">${words[i]}</span>` : words[i]);
+        }
+        return out.join(" ");
+      }
+
+      // Lletres/patrons: múltiples seqüències (separades per espais o comes)
+      function parsePatrons(raw){
+        return (raw || "").split(/[\s,]+/).map(s=>s.trim()).filter(Boolean);
+      }
+      
+      // FUNCIÓ CORREGIDA: Comprovar si una paraula conté totes les lletres especificades
+      function paraulaContéLletres(paraula, lletres) {
+        const paraulaLower = paraula.toLowerCase();
+        return lletres.split('').every(lletra => paraulaLower.includes(lletra));
+      }
+
+      // Results render
+      function renderEmpty(msg){
+        el.resultsList.innerHTML = `<div class="empty">${msg}</div>`;
+        el.resultsCount.textContent = "0";
+      }
+
+      function renderResults(results, searchDescription){
+        el.resultsList.innerHTML = "";
+        el.resultsCount.textContent = results.length;
+
+        if (!results.length){
+          el.resultsList.innerHTML = `<div class="empty">${searchDescription}</div>`;
+          return;
+        }
+
+        let totalWords = 0;
+        let totalMatches = 0;
+        const uniques = new Set();
+
+        results.forEach((r, idx) => {
+          totalWords += r.wordCount;
+          if (r.matchedTerms && r.matchedTerms.length){
+            r.matchedTerms.forEach(p => { uniques.add(p); totalMatches++; });
+          } else if (r.matchedTerm){
+            uniques.add(r.matchedTerm);
+            totalMatches++;
+          }
+
+          const meta =
+            (el.searchType.value === "esdruixoles" && r.matchedTerms?.length)
+              ? `Paraules esdrúixoles (${r.matchedTerms.length}): ${r.matchedTerms.map(p=>`"${p}"`).join(", ")}${r.lletresEspecifiques ? ` | Conté: "${r.lletresEspecifiques}"` : ""}`
+              : (r.matchedTerm ? `Coincidència: "${r.matchedTerm}"` : "Sense cerca específica");
+
+          const node = document.createElement("div");
+          node.className = "result";
+          node.innerHTML = `
+            <div class="result-head">
+              <div><b>Frase ${idx+1}</b> · ${r.wordCount} paraules</div>
+              <div style="font-family:var(--mono);">${r.matchedTerm ? "match" : "ok"}</div>
+            </div>
+            <div class="result-body">${r.extracted}</div>
+            <div class="result-meta">${meta}</div>
+          `;
+          el.resultsList.appendChild(node);
+        });
+
+        // Stats card
+        const stats = document.createElement("div");
+        stats.className = "result";
+        stats.style.background = "rgba(255,255,255,.035)";
+
+        if (el.searchType.value === "esdruixoles"){
+          const per = (totalMatches / results.length).toFixed(1);
+          stats.innerHTML = `
+            <div class="result-head"><div><b>Estadístiques</b></div><div class="count-badge">esdrúixoles</div></div>
+            <div class="result-body">
+              <div><span class="kbd">${results.length}</span> frases · <span class="kbd">${totalWords}</span> paraules totals · <span class="kbd">${totalMatches}</span> esdrúixoles (${per}/frase)</div>
+              <div style="margin-top:10px; color: var(--muted); font-size:12px;">
+                <b style="color:rgba(255,255,255,.75)">Diferents (${uniques.size}):</b> ${Array.from(uniques).join(", ")}
+              </div>
+            </div>
+          `;
+        } else {
+          const avg = (totalWords / results.length).toFixed(1);
+          stats.innerHTML = `
+            <div class="result-head"><div><b>Estadístiques</b></div><div class="count-badge">general</div></div>
+            <div class="result-body">
+              <div><span class="kbd">${results.length}</span> frases · <span class="kbd">${totalWords}</span> paraules totals · <span class="kbd">${avg}</span> paraules/frase</div>
+            </div>
+          `;
+        }
+        el.resultsList.appendChild(stats);
+      }
+
+      // Main extraction
+      function extractSentences(){
+        setBusy(true, "Analitzant text…");
+
+        setTimeout(() => {
+          try{
+            const text = el.inputText.value.trim();
+            if (!text){
+              renderEmpty("Introdueix un text o carrega un fitxer.");
+              return;
+            }
+
+            const searchTypeValue = el.searchType.value;
+            const matchPatternValue = el.matchPattern.value;
+            const searchTextValue = document.getElementById("searchText").value.trim();
+            const notEndsText = document.getElementById("notEndsWithText").value.trim();
+            const notContainsTextValue = document.getElementById("notContainsText").value.trim();
+            const lletresEspecifiques = document.getElementById("lletresEspecifiques").value.trim().toLowerCase();
+
+            const allPhraseSelected = el.allPhraseRadio.checked;
+            const precedingWords = allPhraseSelected ? 999 : parseInt(document.getElementById("precedingWords").value);
+            const followingWords = allPhraseSelected ? 999 : parseInt(document.getElementById("followingWords").value);
+            const minWords = parseInt(document.getElementById("minWords").value);
+            const maxWords = parseInt(document.getElementById("maxWords").value);
+
+            const highlightElements = document.getElementById("category1").checked;
+            const includeSyllables = document.getElementById("category2").checked;
+
+            const sentences = splitIntoSentences(text);
+            const results = [];
+            let searchDescription = "";
+
+            sentences.forEach(sentence => {
+              const sentenceTrimmed = sentence.trim();
+              const wordCount = (sentenceTrimmed.split(/\s+/)).length;
+              if (wordCount < minWords || wordCount > maxWords) return;
+
+              let sentenceMatches = false;
+              let matchedTerms = [];
+              let matchedTerm = "";
+
+              if (searchTypeValue === "text"){
+                sentenceMatches = matchesPattern(sentenceTrimmed, matchPatternValue, searchTextValue, notEndsText, notContainsTextValue);
+                if (sentenceMatches){
+                  matchedTerm = searchTextValue;
+                  matchedTerms = searchTextValue ? [searchTextValue] : [];
+                }
+              } else if (searchTypeValue === "esdruixoles"){
+                const esd = obtenirEsdruixolesDeFrase(sentenceTrimmed);
+                if (esd.length){
+                  let filtered = esd;
+                  if (lletresEspecifiques){
+                    filtered = esd.filter(p => paraulaContéLletres(p, lletresEspecifiques));
+                  }
+                  if (filtered.length){
+                    sentenceMatches = true;
+                    matchedTerms = filtered;
+                    matchedTerm = filtered[0];
+                  }
+                }
+              } else if (searchTypeValue === "temps" || searchTypeValue === "verb"){
+                const terms = (searchTypeValue === "temps") ? findTimeExpressions(text) : findVerbForms(text);
+                for (const term of terms){
+                  if (matchesPattern(sentenceTrimmed, matchPatternValue, term)){
+                    sentenceMatches = true;
+                    matchedTerm = term;
+                    matchedTerms = [term];
+                    break;
+                  }
+                }
+              }
+
+              if (!sentenceMatches) return;
+
+              let processedSentence = sentenceTrimmed;
+
+              if (highlightElements){
+                if (searchTypeValue === "esdruixoles") {
+                  // Aplicar highlight a les esdrúixoles (VERSIÓ MILLORADA)
+                  processedSentence = highlightEsdruixoles(sentenceTrimmed);
+                  
+                  // Destacar les lletres específiques dins les paraules esdrúixoles
+                  if (lletresEspecifiques && matchedTerms.length > 0) {
+                    processedSentence = highlightLletresEnEsdruixoles(
+                      processedSentence, 
+                      lletresEspecifiques, 
+                      matchedTerms
+                    );
+                  }
+                } else if (searchTypeValue === "temps") {
+                  processedSentence = highlightTimeExpressions(processedSentence);
+                } else if (searchTypeValue === "verb") {
+                  processedSentence = highlightVerbForms(processedSentence);
+                }
+              }
+
+              if (searchTypeValue === "text" && searchTextValue){
+                const re = new RegExp(`(${escapeRegExp(searchTextValue)})`, "gi");
+                processedSentence = processedSentence.replace(re, `<span class="highlight">$1</span>`);
+              }
+
+              if (includeSyllables && searchTypeValue === "esdruixoles" && matchedTerms.length){
+                const info = matchedTerms.map(p => `${p}: ${processarParaulaSilabes(p)}`).join("; ");
+                processedSentence += ` <span class="word-count-info">Sil·labes: ${info}</span>`;
+              }
+
+              if ((precedingWords > 0 || followingWords > 0) && matchedTerm && !allPhraseSelected){
+                processedSentence = getAdjacentContext(sentenceTrimmed, matchedTerm, precedingWords, followingWords);
+              }
+
+              results.push({
+                fullSentence: sentenceTrimmed,
+                extracted: processedSentence,
+                matchedTerm,
+                matchedTerms,
+                wordCount,
+                lletresEspecifiques
+              });
+            });
+
+            if (searchTypeValue === "esdruixoles"){
+              searchDescription = lletresEspecifiques
+                ? `No s'han trobat frases amb paraules esdrúixoles que contenen "${lletresEspecifiques}".`
+                : "No s'han trobat frases amb paraules esdrúixoles.";
+            } else if (searchTypeValue === "text"){
+              searchDescription = searchTextValue
+                ? `No s'han trobat frases cercant "${searchTextValue}".`
+                : "No s'han trobat frases.";
+            } else if (searchTypeValue === "temps"){
+              searchDescription = "No s'han trobat frases amb expressions de temps.";
+            } else {
+              searchDescription = "No s'han trobat frases amb formes verbals.";
+            }
+
+            renderResults(results, searchDescription);
+            toast("ok", "Extracció completada", `${results.length} frase(s) trobada/es.`);
+          } catch(err){
+            console.error(err);
+            toast("err", "Error en analitzar", err.message || "S'ha produït un error.");
+          } finally {
+            setBusy(false);
+          }
+        }, 60);
+      }
+
+      // Copy
+      el.copyResultsBtn.addEventListener("click", async () => {
+        const items = el.resultsList.querySelectorAll(".result");
+        if (!items.length){
+          toast("err", "No hi ha resultats", "Executa una extracció primer.");
+          return;
+        }
+        let textToCopy = "";
+        let idx = 1;
+
+        items.forEach(node => {
+          // saltar estadístiques (últim bloc)
+          const head = node.querySelector(".result-head b")?.textContent || "";
+          if (head.toLowerCase().includes("estadístiques")) return;
+          const plain = node.textContent.replace(/\s+/g, " ").trim();
+          if (plain) textToCopy += `${idx++}. ${plain}\n\n`;
+        });
+
+        try{
+          await navigator.clipboard.writeText(textToCopy.trim());
+          toast("ok", "Copiat al porta-retalls", "Ja ho tens!");
+        }catch(err){
+          console.error(err);
+          toast("err", "No s'ha pogut copiar", "El navegador pot bloquejar el porta-retalls.");
+        }
+      });
+
+      // Reset
+      el.resetBtn.addEventListener("click", () => {
+        el.inputText.value = "";
+        el.fileInput.value = "";
+        el.fileInfo.style.display = "none";
+        el.fileInfo.textContent = "";
+
+        document.getElementById("searchText").value = "";
+        document.getElementById("lletresEspecifiques").value = "";
+        el.searchType.value = "text";
+        el.matchPattern.value = "anywhere";
+        document.getElementById("notEndsWithText").value = "";
+        document.getElementById("notContainsText").value = "";
+        el.allPhraseRadio.checked = true;
+        el.adjacentWordsRadio.checked = false;
+        document.getElementById("precedingWords").value = "0";
+        document.getElementById("followingWords").value = "1";
+        document.getElementById("minWords").value = "1";
+        document.getElementById("maxWords").value = "50";
+        document.getElementById("category1").checked = true;
+        document.getElementById("category2").checked = false;
+
+        updateSearchTypeUI();
+        updateNegationUI();
+        updateAdjacentUI();
+        renderEmpty("Quan executis Extreure, aquí veuràs les frases filtrades.");
+        toast("ok", "Reiniciat", "Opcions restaurades.");
+      });
+
+      // Sample + clear text
+      el.sampleTextBtn.addEventListener("click", () => {
+        el.inputText.value =
+`L'àvia d'en Pere menja pèls de cotó mentre canta una cançó esdrúixola. Avui fa un dia plujós i molt ventós, però demà serà diferent. Els núvols omplen el cel gris i amenaçador. La Mònica i el seu germà viatgen cap a Barcelona per visitar els seus cosins. És fantàstic quan tot surt bé al final. Vam anar a comprar pa, llet i galetes al supermercat. La música clàssica em relaxa profundament. El telèfon sona constantment. És pràcticament impossible no escoltar-lo. Les paraules esdrúixoles són divertides. L'ètica i l'ética són coses diferents. La brúixola i l'àngel són paraules esdrúixoles. És fantàstic i pràctic. La música i la pràctica són importants. La fruïció és una paraula plana, no esdrúixola. L'ètica a muntanya és important.`;
+        toast("ok", "Text d'exemple", "S'ha carregat un text de prova.");
+      });
+
+      el.clearTextBtn.addEventListener("click", () => {
+        el.inputText.value = "";
+        toast("ok", "Text netejat", "El camp de text és buit.");
+      });
+
+      // Extract
+      el.extractButton.addEventListener("click", extractSentences);
+
+      // Init
+      updateSearchTypeUI();
+      updateNegationUI();
+      updateAdjacentUI();
+      setTimeout(extractSentences, 450);
+    });
+  </script>
 </body>
 </html>
