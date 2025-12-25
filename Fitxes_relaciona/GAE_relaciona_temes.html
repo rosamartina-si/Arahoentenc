@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<title>Relaciona: Jocs en gaèlic d'Irlanda</title>
+<style>
+body {
+  font-family: 'Georgia', serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+  text-align: center;
+}
+#tema-selector {
+  margin-bottom: 20px;
+  background: #f4f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #003366;
+}
+#tema-selector select {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  padding: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.col h3 {
+  text-align: center;
+  color: #003366;
+  border-bottom: 2px solid #003366;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.item {
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.item:hover {
+  background-color: #f0f8ff;
+}
+.selected {
+  background-color: #d0ebff;
+  border: 2px solid #003366;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+}
+.fixed-irish {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.incorrect-irish, .incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  background: #f4f8ff;
+  border-radius: 8px;
+}
+#controls {
+  margin-top: 2em;
+  text-align: center;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+  border-radius: 0 8px 8px 0;
+}
+.pronuncia {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<h1>🌿 Relaciona en gaèlic d'Irlanda</h1>
+<div id="tema-selector">
+  <label for="tema">Tria un tema: </label>
+  <select id="tema">
+    <option value="colors">Colors</option>
+    <option value="fruites">Fruites</option>
+    <option value="animals">Animals</option>
+    <option value="cortesia">Frases de cortesia</option>
+    <option value="dies">Dies de la setmana</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="cos">Parts del cos</option>
+    <option value="familia">Familia</option>
+    <option value="verb_ser">Verb ser (a bheith)</option>
+    <option value="pronoms">Pronoms personals</option>
+    <option value="paisatge">Paisatge i natura</option>
+    <option value="transport">Transport</option>
+    <option value="menjar">Menjar i begudes</option>
+    <option value="temps">Temps atmosfèric</option>
+    <option value="ciutat">Ciutat i serveis</option>
+    <option value="verb_tener">Verb tenir (a bheith ag)</option>
+    <option value="adjectius">Adjectius bàsics</option>
+    <option value="interrogatius">Paraules interrogatives</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+<div class="match-container">
+  <svg class="match-lines"></svg>
+  <div class="col">
+    <h3>Gaèlic Irlandès</h3>
+    <div id="irlandes"></div>
+  </div>
+  <div class="col">
+    <h3>Català</h3>
+    <div id="catala"></div>
+  </div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+  <button onclick="pronunciaSeleccionat()">🔊 Pronuncia seleccionat</button>
+</div>
+
+<div class="nota">
+  <strong>Com jugar:</strong> Fes clic a una paraula en gaèlic i després a la seva traducció en català.<br>
+  <strong>Verd</strong> = encert a la primera | <strong>Groc</strong> = encert després d'errors (es repetirà a la següent ronda) | <strong>Vermell</strong> = error.<br>
+  <em>Nota sobre pronúncia: El gaèlic irlandès té una ortografia complexa amb consonants lenited (suau) i eclipsis. Els sons són diferents del català.</em>
+</div>
+
+<script>
+const TOTAL_PER_RONDA = 10;
+
+const TEMES = {
+  colors: [
+    {"id":1,"irish":"bán","cat":"blanc","pron":"bawn"},
+    {"id":2,"irish":"dubh","cat":"negre","pron":"duv"},
+    {"id":3,"irish":"dearg","cat":"vermell","pron":"jar-ug"},
+    {"id":4,"irish":"gorm","cat":"blau","pron":"gur-um"},
+    {"id":5,"irish":"glas","cat":"verd (de vegetació)","pron":"gloss"},
+    {"id":6,"irish":"uaine","cat":"verd (artificial)","pron":"oo-in-eh"},
+    {"id":7,"irish":"buí","cat":"groc","pron":"bwee"},
+    {"id":8,"irish":"oráiste","cat":"taronja","pron":"or-awsh-teh"},
+    {"id":9,"irish":"corcra","cat":"porpra","pron":"kur-kruh"},
+    {"id":10,"irish":"bándearg","cat":"rosa","pron":"bawn-jar-ug"},
+    {"id":11,"irish":"donn","cat":"marró","pron":"down"},
+    {"id":12,"irish":"liath","cat":"gris","pron":"lee-ah"}
+  ],
+  fruites: [
+    {"id":1,"irish":"úll","cat":"poma","pron":"ool"},
+    {"id":2,"irish":"piorra","cat":"pera","pron":"pyr-uh"},
+    {"id":3,"irish":"banana","cat":"plàtan","pron":"ban-ah-nuh"},
+    {"id":4,"irish":"oráiste","cat":"taronja","pron":"or-awsh-teh"},
+    {"id":5,"irish":"líomóid","cat":"llimona","pron":"lee-mo-ij"},
+    {"id":6,"irish":"fíonchaor","cat":"raïm","pron":"fee-un-kheer"},
+    {"id":7,"irish":"sú talún","cat":"maduixa","pron":"soo tah-loon"},
+    {"id":8,"irish":"silín","cat":"cirera","pron":"shil-een"},
+    {"id":9,"irish":"sú craobh","cat":"gerd","pron":"soo kreev"},
+    {"id":10,"irish":"mealbhacán","cat":"síndria","pron":"mal-vuh-kawn"},
+    {"id":11,"irish":"anann","cat":"pinya","pron":"an-an"},
+    {"id":12,"irish":"péitseog","cat":"préssec","pron":"pay-chog"}
+  ],
+  animals: [
+    {"id":1,"irish":"madra","cat":"gos","pron":"mah-druh"},
+    {"id":2,"irish":"cat","cat":"gat","pron":"kot"},
+    {"id":3,"irish":"capall","cat":"cavall","pron":"kop-uhl"},
+    {"id":4,"irish":"bó","cat":"vaca","pron":"boh"},
+    {"id":5,"irish":"caora","cat":"ovella","pron":"keer-uh"},
+    {"id":6,"irish":"gabhar","cat":"cabra","pron":"gowr"},
+    {"id":7,"irish":"éan","cat":"ocell","pron":"ayn"},
+    {"id":8,"irish":"iasc","cat":"peix","pron":"eesk"},
+    {"id":9,"irish":"luch","cat":"ratolí","pron":"lukh"},
+    {"id":10,"irish":"sionnach","cat":"guineu","pron":"shun-ukh"}
+  ],
+  cortesia: [
+    {"id":1,"irish":"tá","cat":"sí","pron":"taw"},
+    {"id":2,"irish":"níl","cat":"no","pron":"neel"},
+    {"id":3,"irish":"go raibh maith agat","cat":"gràcies","pron":"guh rev mah ug-ut"},
+    {"id":4,"irish":"le do thoil","cat":"si us plau","pron":"leh duh hull"},
+    {"id":5,"irish":"gabh mo leithscéal","cat":"perdó","pron":"gow muh leh-shkayl"},
+    {"id":6,"irish":"Dia dhuit","cat":"hola (literal: Déu amb tu)","pron":"jee-ah ghwich"},
+    {"id":7,"irish":"slán","cat":"adéu","pron":"slawn"},
+    {"id":8,"irish":"maidin mhaith","cat":"bon dia","pron":"mod-in wah"},
+    {"id":9,"irish":"tráthnóna maith","cat":"bona tarda","pron":"traw-noh-nuh wah"},
+    {"id":10,"irish":"oíche mhaith","cat":"bona nit","pron":"ee-huh wah"},
+    {"id":11,"irish":"fáilte","cat":"benvingut/da","pron":"fawl-cheh"},
+    {"id":12,"irish":"sláinte","cat":"salut (en brindar)","pron":"slawn-cheh"}
+  ],
+  dies: [
+    {"id":1,"irish":"Dé Luain","cat":"dilluns","pron":"jay loo-in"},
+    {"id":2,"irish":"Dé Máirt","cat":"dimarts","pron":"jay mawrt"},
+    {"id":3,"irish":"Dé Céadaoin","cat":"dimecres","pron":"jay kay-deen"},
+    {"id":4,"irish":"Déardaoin","cat":"dijous","pron":"jayr-deen"},
+    {"id":5,"irish":"Dé hAoine","cat":"divendres","pron":"jay heen-eh"},
+    {"id":6,"irish":"Dé Sathairn","cat":"dissabte","pron":"jay sa-hirn"},
+    {"id":7,"irish":"Dé Domhnaigh","cat":"diumenge","pron":"jay dow-nee"},
+    {"id":8,"irish":"inniu","cat":"avui","pron":"in-yoo"},
+    {"id":9,"irish":"amárach","cat":"demà","pron":"uh-maw-rukh"},
+    {"id":10,"irish":"inné","cat":"ahir","pron":"in-yay"}
+  ],
+  numeros: [
+    {"id":1,"irish":"a haon","cat":"1","pron":"uh hayn"},
+    {"id":2,"irish":"a dó","cat":"2","pron":"uh doh"},
+    {"id":3,"irish":"a trí","cat":"3","pron":"uh tree"},
+    {"id":4,"irish":"a ceathair","cat":"4","pron":"uh kah-her"},
+    {"id":5,"irish":"a cúig","cat":"5","pron":"uh koo-ig"},
+    {"id":6,"irish":"a sé","cat":"6","pron":"uh shay"},
+    {"id":7,"irish":"a seacht","cat":"7","pron":"uh shakht"},
+    {"id":8,"irish":"a hocht","cat":"8","pron":"uh hukht"},
+    {"id":9,"irish":"a naoi","cat":"9","pron":"uh nee"},
+    {"id":10,"irish":"a deich","cat":"10","pron":"uh jeh"}
+  ],
+  cos: [
+    {"id":1,"irish":"ceann","cat":"cap","pron":"kyaun"},
+    {"id":2,"irish":"lámh","cat":"mà","pron":"lawv"},
+    {"id":3,"irish":"cos","cat":"cama","pron":"kuss"},
+    {"id":4,"irish":"súil","cat":"ull","pron":"sool"},
+    {"id":5,"irish":"cluas","cat":"orella","pron":"kloos"},
+    {"id":6,"irish":"srón","cat":"nas","pron":"srohn"},
+    {"id":7,"irish":"béal","cat":"boca","pron":"bayl"},
+    {"id":8,"irish":"croí","cat":"cor","pron":"kree"},
+    {"id":9,"irish":"droim","cat":"esquena","pron":"drim"},
+    {"id":10,"irish":"fiacla","cat":"dent","pron":"fee-uh-kluh"}
+  ],
+  familia: [
+    {"id":1,"irish":"máthair","cat":"mare","pron":"maw-her"},
+    {"id":2,"irish":"athair","cat":"pare","pron":"ah-her"},
+    {"id":3,"irish":"deirfiúr","cat":"germana","pron":"der-fyoor"},
+    {"id":4,"irish":"deartháir","cat":"germà","pron":"jar-hawr"},
+    {"id":5,"irish":"iníon","cat":"filla","pron":"in-yun"},
+    {"id":6,"irish":"mac","cat":"fill","pron":"mok"},
+    {"id":7,"irish":"seanmháthair","cat":"àvia","pron":"shan-vaw-her"},
+    {"id":8,"irish":"seanathair","cat":"avi","pron":"shan-ah-her"},
+    {"id":9,"irish":"uncail","cat":"oncle","pron":"un-kul"},
+    {"id":10,"irish":"aintín","cat":"tia","pron":"an-cheen"}
+  ],
+  verb_ser: [
+    {"id":1,"irish":"tá mé","cat":"jo sóc","pron":"taw may"},
+    {"id":2,"irish":"tá tú","cat":"tu ets","pron":"taw too"},
+    {"id":3,"irish":"tá sé","cat":"ell és","pron":"taw shay"},
+    {"id":4,"irish":"tá sí","cat":"ella és","pron":"taw shee"},
+    {"id":5,"irish":"tá muid","cat":"nosaltres som","pron":"taw mij"},
+    {"id":6,"irish":"tá sibh","cat":"vosaltres sou","pron":"taw shiv"},
+    {"id":7,"irish":"tá siad","cat":"ells són","pron":"taw sheed"},
+    {"id":8,"irish":"níl mé","cat":"jo no sóc","pron":"neel may"},
+    {"id":9,"irish":"an bhfuil tú?","cat":"ets tu?","pron":"on wil too"},
+    {"id":10,"irish":"nach bhfuil sé?","cat":"no és ell?","pron":"nakh wil shay"}
+  ],
+  pronoms: [
+    {"id":1,"irish":"mé","cat":"jo","pron":"may"},
+    {"id":2,"irish":"tú","cat":"tu","pron":"too"},
+    {"id":3,"irish":"sé","cat":"ell","pron":"shay"},
+    {"id":4,"irish":"sí","cat":"ella","pron":"shee"},
+    {"id":5,"irish":"muid","cat":"nosaltres","pron":"mwij"},
+    {"id":6,"irish":"sibh","cat":"vosaltres","pron":"shiv"},
+    {"id":7,"irish":"siad","cat":"ells/elles","pron":"sheed"},
+    {"id":8,"irish":"é","cat":"ell (objecte)","pron":"ay"},
+    {"id":9,"irish":"í","cat":"ella (objecte)","pron":"ee"},
+    {"id":10,"irish":"iad","cat":"ells/elles (objecte)","pron":"eed"}
+  ],
+  paisatge: [
+    {"id":1,"irish":"sliabh","cat":"muntanya","pron":"shlee-uv"},
+    {"id":2,"irish":"abhainn","cat":"riu","pron":"ow-in"},
+    {"id":3,"irish":"loch","cat":"llac","pron":"lukh"},
+    {"id":4,"irish":"farraige","cat":"mar","pron":"far-uh-geh"},
+    {"id":5,"irish":"coill","cat":"bosc","pron":"kwil"},
+    {"id":6,"irish":"machaire","cat":"camp","pron":"mah-her-eh"},
+    {"id":7,"irish":"trá","cat":"platja","pron":"traw"},
+    {"id":8,"irish":"oileán","cat":"illa","pron":"ul-awn"},
+    {"id":9,"irish":"gleann","cat":"vall","pron":"glyaun"},
+    {"id":10,"irish":"cnoc","cat":"turó","pron":"kruk"}
+  ],
+  transport: [
+    {"id":1,"irish":"carr","cat":"cotxe","pron":"kor"},
+    {"id":2,"irish":"bus","cat":"autobús","pron":"buss"},
+    {"id":3,"irish":"traein","cat":"tren","pron":"tray-in"},
+    {"id":4,"irish":"rothar","cat":"bicicleta","pron":"ruh-her"},
+    {"id":5,"irish":"bád","cat":"vaixell","pron":"bawd"},
+    {"id":6,"irish":"eitleán","cat":"avió","pron":"et-lawn"},
+    {"id":7,"irish":"stáisiún","cat":"estació","pron":"staw-shoon"},
+    {"id":8,"irish":"aerfort","cat":"aeroport","pron":"ayr-furt"},
+    {"id":9,"irish":"droichead","cat":"pont","pron":"drikh-ud"},
+    {"id":10,"irish":"bóthar","cat":"carretera","pron":"boh-her"}
+  ],
+  menjar: [
+    {"id":1,"irish":"arán","cat":"pa","pron":"aw-rawn"},
+    {"id":2,"irish":"im","cat":"mantega","pron":"im"},
+    {"id":3,"irish":"uisce","cat":"aigua","pron":"ish-keh"},
+    {"id":4,"irish":"bainne","cat":"llet","pron":"bon-yeh"},
+    {"id":5,"irish":"feoil","cat":"carn","pron":"fyohl"},
+    {"id":6,"irish":"iasc","cat":"peix","pron":"eesk"},
+    {"id":7,"irish":"glasraí","cat":"verdures","pron":"gloss-ree"},
+    {"id":8,"irish":"torthaí","cat":"fruites","pron":"tur-hee"},
+    {"id":9,"irish":"caife","cat":"cafè","pron":"kaf-eh"},
+    {"id":10,"irish":"tae","cat":"te","pron":"tay"}
+  ],
+  temps: [
+    {"id":1,"irish":"grian","cat":"sol","pron":"gree-un"},
+    {"id":2,"irish":"scamall","cat":"núvol","pron":"skom-uhl"},
+    {"id":3,"irish":"báisteach","cat":"pluja","pron":"bawsh-tukh"},
+    {"id":4,"irish":"sneachta","cat":"neu","pron":"shnakht-uh"},
+    {"id":5,"irish":"gaoth","cat":"vent","pron":"ghee"},
+    {"id":6,"irish":"toirneach","cat":"tro","pron":"tirn-ukh"},
+    {"id":7,"irish":"tuar ceatha","cat":"arc de Sant Martí","pron":"too-er kah-huh"},
+    {"id":8,"irish":"doineann","cat":"tempesta","pron":"din-yun"},
+    {"id":9,"irish":"te","cat":"calent","pron":"cheh"},
+    {"id":10,"irish":"fuar","cat":"fred","pron":"foo-er"}
+  ],
+  ciutat: [
+    {"id":1,"irish":"cathair","cat":"ciutat","pron":"kah-her"},
+    {"id":2,"irish":"sráid","cat":"carrer","pron":"srawd"},
+    {"id":3,"irish":"siopa","cat":"botiga","pron":"shup-uh"},
+    {"id":4,"irish":"banc","cat":"banc","pron":"bonk"},
+    {"id":5,"irish":"ospidéal","cat":"hospital","pron":"uss-pee-dawl"},
+    {"id":6,"irish":"scoil","cat":"escola","pron":"skul"},
+    {"id":7,"irish":"leabharlann","cat":"biblioteca","pron":"lour-un"},
+    {"id":8,"irish":"páirc","cat":"parc","pron":"pawrk"},
+    {"id":9,"irish":"teach ósta","cat":"pub","pron":"chakh ohs-tuh"},
+    {"id":10,"irish":"óstán","cat":"hotel","pron":"ohs-tawn"}
+  ],
+  verb_tener: [
+    {"id":1,"irish":"tá ... agam","cat":"jo tinc","pron":"taw ... og-um"},
+    {"id":2,"irish":"tá ... agat","cat":"tu tens","pron":"taw ... og-ut"},
+    {"id":3,"irish":"tá ... aige","cat":"ell té","pron":"taw ... eg-eh"},
+    {"id":4,"irish":"tá ... aici","cat":"ella té","pron":"taw ... ek-ee"},
+    {"id":5,"irish":"tá ... againn","cat":"nosaltres tenim","pron":"taw ... og-in"},
+    {"id":6,"irish":"tá ... agaibh","cat":"vosaltres teniu","pron":"taw ... og-iv"},
+    {"id":7,"irish":"tá ... acu","cat":"ells tenen","pron":"taw ... ok-oo"},
+    {"id":8,"irish":"níl ... agam","cat":"jo no tinc","pron":"neel ... og-um"},
+    {"id":9,"irish":"an bhfuil ... agat?","cat":"tens tu ...?","pron":"on wil ... og-ut"},
+    {"id":10,"irish":"nach bhfuil ... aige?","cat":"no té ell ...?","pron":"nakh wil ... eg-eh"}
+  ],
+  adjectius: [
+    {"id":1,"irish":"mór","cat":"gran","pron":"mor"},
+    {"id":2,"irish":"beag","cat":"petit","pron":"byug"},
+    {"id":3,"irish":"álainn","cat":"bonic","pron":"aw-lin"},
+    {"id":4,"irish":"dona","cat":"dolent","pron":"dun-uh"},
+    {"id":5,"irish":"maith","cat":"bo","pron":"mah"},
+    {"id":6,"irish":"nua","cat":"nou","pron":"noo-uh"},
+    {"id":7,"irish":"sean","cat":"vell","pron":"shan"},
+    {"id":8,"irish":"deas","cat":"agradable","pron":"jas"},
+    {"id":9,"irish":"olc","cat":"maliciós","pron":"ulk"},
+    {"id":10,"irish":"tirim","cat":"sec","pron":"tir-im"}
+  ],
+  interrogatius: [
+    {"id":1,"irish":"cé","cat":"qui","pron":"kay"},
+    {"id":2,"irish":"cad","cat":"què","pron":"kod"},
+    {"id":3,"irish":"cathain","cat":"quan","pron":"kah-hin"},
+    {"id":4,"irish":"cén fáth","cat":"per què","pron":"kayn faw"},
+    {"id":5,"irish":"conas","cat":"com","pron":"kun-us"},
+    {"id":6,"irish":"cá háit","cat":"on","pron":"kaw hawtch"},
+    {"id":7,"irish":"cé mhéad","cat":"quant","pron":"kay vayd"},
+    {"id":8,"irish":"cén","cat":"quin","pron":"kayn"},
+    {"id":9,"irish":"cé acu","cat":"quin dels dos","pron":"kay ok-oo"},
+    {"id":10,"irish":"cad é mar atá","cat":"com estàs","pron":"kod ay mar uh-taw"}
+  ]
+};
+
+let frasesActuals = TEMES.colors;
+let encerts = 0;
+let selectedIrish = null;
+let currentAttempts = {};
+
+function canviaTema() {
+  frasesActuals = TEMES[document.getElementById("tema").value];
+  novaRonda();
+}
+
+function barreja(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function speakIrish(text) {
+  // Simulació de pronúncia amb síntesi de veu genèrica
+  // Nota: la síntesi de veu per al gaèlic irlandès no està àmpliament disponible
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ga-IE"; // Intentem amb el codi d'irlandès
+  utterance.rate = 0.8;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function pronunciaSeleccionat() {
+  if (selectedIrish) {
+    const text = selectedIrish.textContent.split('\n')[0]; // Agafa només el text principal
+    speakIrish(text);
+  } else {
+    alert("Selecciona primer una paraula en gaèlic");
+  }
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `Encerts: ${encerts} / ${TOTAL_PER_RONDA}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-irish").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = frasesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = frasesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-irish, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-irish", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const irishContainer = document.getElementById("irlandes");
+  const catContainer = document.getElementById("catala");
+
+  const matchedIrish = irishContainer.querySelectorAll(".matched, .fixed-irish");
+  matchedIrish.forEach(irish => {
+    const irishId = irish.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${irishId}"], .fixed-cat[data-id="${irishId}"]`);
+    if (cat) {
+      const irishRect = irish.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = irishRect.right - containerRect.left;
+      const y1 = irishRect.top + irishRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#003366");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-dasharray", "5,3");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const irishContainer = document.getElementById("irlandes");
+  const catContainer = document.getElementById("catala");
+  irishContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedIrish = null;
+  actualitzaPuntuacio();
+
+  const irishFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  irishFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    
+    const textDiv = document.createElement("div");
+    textDiv.textContent = f.irish;
+    
+    const pronDiv = document.createElement("div");
+    pronDiv.className = "pronuncia";
+    pronDiv.textContent = `Pronúncia: ${f.pron}`;
+    
+    div.appendChild(textDiv);
+    div.appendChild(pronDiv);
+
+    div.addEventListener("click", () => {
+      speakIrish(f.irish);
+      if (div.classList.contains("matched") || div.classList.contains("fixed-irish")) return;
+      netejaErrors();
+      document.querySelectorAll("#irlandes .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedIrish = div;
+    });
+
+    irishContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.cat;
+
+    div.addEventListener("click", () => {
+      if (!selectedIrish) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const irishId = selectedIrish.dataset.id;
+      const catId = div.dataset.id;
+
+      if (irishId === catId) {
+        if (currentAttempts[irishId] && currentAttempts[irishId].attempts > 0) {
+          selectedIrish.classList.add("fixed-irish");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedIrish.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedIrish);
+        mouAlTop(div);
+        dibuixaLinies();
+      } else {
+        selectedIrish.classList.add("incorrect-irish");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[irishId]) currentAttempts[irishId] = { attempts: 0 };
+        currentAttempts[irishId].attempts++;
+      }
+
+      selectedIrish.classList.remove("selected");
+      selectedIrish = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+</body>
+  </html>
