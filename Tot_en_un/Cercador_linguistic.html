@@ -15,13 +15,25 @@
       --muted: rgba(255,255,255,.62);
       --border: rgba(255,255,255,.12);
       --shadow: 0 20px 60px rgba(0,0,0,.35);
-      --accent: #7c3aed;   /* violeta */
-      --accent2:#22c55e;   /* verd */
-      --warn: #fb7185;     /* rosa */
+      --accent: #7c3aed;
+      --accent2:#22c55e;
+      --warn: #fb7185;
       --ring: 0 0 0 3px rgba(124,58,237,.22);
       --radius: 18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    /* TEMA CLAR */
+    body.light-theme {
+      --bg: #f8fafc;
+      --panel: rgba(255,255,255,.95);
+      --panel2: rgba(255,255,255,.98);
+      --text: rgba(0,0,0,.92);
+      --muted: rgba(0,0,0,.62);
+      --border: rgba(0,0,0,.12);
+      --shadow: 0 20px 60px rgba(0,0,0,.08);
+      --ring: 0 0 0 3px rgba(124,58,237,.15);
     }
 
     * { box-sizing: border-box; font-family: var(--sans); }
@@ -35,6 +47,15 @@
       color: var(--text);
       min-height: 100vh;
       padding: 22px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-theme {
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(124,58,237,.15), transparent 60%),
+        radial-gradient(1000px 600px at 90% 15%, rgba(34,197,94,.1), transparent 55%),
+        radial-gradient(900px 600px at 70% 95%, rgba(251,113,133,.08), transparent 55%),
+        var(--bg);
     }
 
     .app{
@@ -63,7 +84,13 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
+
+    body.light-theme .topbar {
+      background: linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.4));
+    }
+
     .brand{
       display:flex; align-items:center; gap: 12px;
     }
@@ -98,7 +125,13 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       overflow:hidden;
+      transition: all 0.3s ease;
     }
+
+    body.light-theme .card {
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+
     .card-header{
       padding: 14px 16px;
       display:flex;
@@ -107,14 +140,26 @@
       gap: 10px;
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,.04);
+      transition: all 0.3s ease;
     }
+
+    body.light-theme .card-header {
+      background: rgba(255,255,255,.7);
+    }
+
     .card-title{
       margin:0;
       font-size: 13px;
       letter-spacing: .3px;
       text-transform: uppercase;
       color: rgba(255,255,255,.78);
+      transition: color 0.3s ease;
     }
+
+    body.light-theme .card-title {
+      color: rgba(0,0,0,.78);
+    }
+
     .card-body{
       padding: 16px;
     }
@@ -126,7 +171,13 @@
       margin-bottom: 6px;
       font-size: 12px;
       color: rgba(255,255,255,.78);
+      transition: color 0.3s ease;
     }
+
+    body.light-theme label {
+      color: rgba(0,0,0,.78);
+    }
+
     .hint{
       margin-top: 6px;
       color: var(--muted);
@@ -143,6 +194,16 @@
       outline: none;
       transition: .15s;
     }
+
+    body.light-theme input[type="text"],
+    body.light-theme input[type="number"],
+    body.light-theme select,
+    body.light-theme textarea {
+      background: rgba(255,255,255,.9);
+      color: rgba(0,0,0,.92);
+      border-color: rgba(0,0,0,.15);
+    }
+
     textarea{
       min-height: 190px;
       resize: vertical;
@@ -178,7 +239,19 @@
       gap: 8px;
       user-select:none;
     }
+
+    body.light-theme .btn {
+      background: rgba(0,0,0,.06);
+      color: rgba(0,0,0,.92);
+      border-color: rgba(0,0,0,.12);
+    }
+
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+    
+    body.light-theme .btn:hover { 
+      background: rgba(0,0,0,.10); 
+    }
+
     .btn:active{ transform: translateY(0); }
     .btn:focus-visible{ outline: none; box-shadow: var(--ring); }
 
@@ -186,6 +259,13 @@
       background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(124,58,237,.55));
       border-color: rgba(124,58,237,.45);
     }
+
+    body.light-theme .btn-primary {
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(124,58,237,.75));
+      border-color: rgba(124,58,237,.55);
+      color: white;
+    }
+
     .btn-primary:hover{ background: linear-gradient(135deg, rgba(124,58,237,1), rgba(124,58,237,.65)); }
     .btn-ghost{
       background: transparent;
@@ -217,12 +297,28 @@
       cursor: pointer;
       transition:.15s;
     }
+
+    body.light-theme .dropzone {
+      background: rgba(255,255,255,.8);
+      border-color: rgba(0,0,0,.18);
+    }
+
     .dropzone:hover{ background: rgba(255,255,255,.06); }
+    
+    body.light-theme .dropzone:hover {
+      background: rgba(255,255,255,.9);
+    }
+
     .dropzone.dragover{
       border-color: rgba(34,197,94,.7);
       background: rgba(34,197,94,.08);
       transform: scale(1.01);
     }
+
+    body.light-theme .dropzone.dragover {
+      background: rgba(34,197,94,.12);
+    }
+
     .dz-top{
       display:flex;
       align-items:center;
@@ -249,6 +345,11 @@
       text-overflow: ellipsis;
     }
 
+    body.light-theme .fileinfo {
+      background: rgba(0,0,0,.05);
+      color: rgba(0,0,0,.85);
+    }
+
     /* Check/radio */
     .checks{ display:flex; flex-direction: column; gap: 10px; }
     .check{
@@ -258,6 +359,11 @@
       border-radius: 16px;
       background: rgba(255,255,255,.04);
     }
+
+    body.light-theme .check {
+      background: rgba(0,0,0,.04);
+    }
+
     .check input{ margin-top: 2px; }
     .check b{ font-size: 13px; display:block; }
     .check small{ color: var(--muted); font-size: 12px; }
@@ -280,6 +386,12 @@
       border: 1px solid var(--border);
     }
 
+    body.light-theme .count-badge {
+      background: rgba(0,0,0,.06);
+      color: rgba(0,0,0,.86);
+      border-color: rgba(0,0,0,.12);
+    }
+
     .results-list{
       display:flex;
       flex-direction: column;
@@ -295,7 +407,13 @@
       background: rgba(255,255,255,.05);
       border-radius: 18px;
       padding: 12px;
+      transition: all 0.3s ease;
     }
+
+    body.light-theme .result {
+      background: rgba(255,255,255,.9);
+    }
+
     .result-head{
       display:flex;
       justify-content: space-between;
@@ -305,11 +423,21 @@
       font-size: 12px;
       margin-bottom: 8px;
     }
+
+    body.light-theme .result-head {
+      color: rgba(0,0,0,.72);
+    }
+
     .result-body{
       font-size: 14px;
       line-height: 1.6;
       color: rgba(255,255,255,.92);
     }
+
+    body.light-theme .result-body {
+      color: rgba(0,0,0,.92);
+    }
+
     .result-meta{
       margin-top: 10px;
       color: var(--muted);
@@ -325,8 +453,17 @@
       text-align:center;
     }
 
-    /* Highlights */
+    body.light-theme .empty {
+      border-color: rgba(0,0,0,.24);
+    }
+
+    /* Highlights - CORREGIT: Només una classe sense accent */
     .highlight{ background: rgba(255,249,196,.92); color: #111827; padding: 1px 4px; border-radius: 6px; font-weight: 700; }
+    
+    body.light-theme .highlight {
+      background: rgba(255,235,59,.92);
+    }
+
     .esdruixola-highlight{ background:#ff9800; color:#111827; padding:1px 4px; border-radius:6px; font-weight:900; }
     .temps-highlight{ background:#22c55e; color:#052e12; padding:1px 4px; border-radius:6px; font-weight:900; }
     .verb-highlight{ background:#a855f7; color:#1f0930; padding:1px 4px; border-radius:6px; font-weight:900; }
@@ -343,7 +480,12 @@
       font-family: var(--mono);
     }
 
-    /* Sticky action footer (mobile-friendly) */
+    body.light-theme .word-count-info {
+      background: rgba(0,0,0,.05);
+      color: rgba(0,0,0,.78);
+    }
+
+    /* Sticky action footer */
     .sticky-actions{
       position: sticky;
       bottom: 14px;
@@ -358,6 +500,11 @@
       justify-content: space-between;
       margin-top: 14px;
     }
+
+    body.light-theme .sticky-actions {
+      background: rgba(255,255,255,.85);
+    }
+
     .sticky-actions .btn{ flex: 1; justify-content: center; min-width: 140px; }
 
     /* Loading + toast */
@@ -372,6 +519,12 @@
       align-items:center;
       gap: 10px;
     }
+
+    body.light-theme .loading {
+      background: rgba(0,0,0,.05);
+      color: rgba(0,0,0,.85);
+    }
+
     .dot{
       width: 8px; height: 8px;
       border-radius: 999px;
@@ -399,6 +552,11 @@
       z-index: 999;
       font-size: 13px;
     }
+
+    body.light-theme .toast {
+      background: rgba(255,255,255,.9);
+    }
+
     .toast.ok{ border-color: rgba(34,197,94,.35); }
     .toast.err{ border-color: rgba(251,113,133,.45); }
     .toast b{ display:block; margin-bottom:2px; }
@@ -412,6 +570,200 @@
       border: 1px solid var(--border);
       background: rgba(255,255,255,.06);
       color: rgba(255,255,255,.82);
+    }
+
+    body.light-theme .kbd {
+      background: rgba(0,0,0,.06);
+      color: rgba(0,0,0,.82);
+      border-color: rgba(0,0,0,.12);
+    }
+
+    /* Estils per a les paraules adjacents */
+    .adjacent-words-panel {
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding: 16px;
+      display: none;
+    }
+
+    body.light-theme .adjacent-words-panel {
+      background: rgba(255,255,255,.9);
+    }
+
+    .adjacent-words-title {
+      font-size: 14px;
+      color: rgba(255,255,255,.85);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    body.light-theme .adjacent-words-title {
+      color: rgba(0,0,0,.85);
+    }
+
+    .adjacent-words-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    @media (max-width: 768px) {
+      .adjacent-words-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .adjacent-section {
+      background: rgba(10,16,30,.6);
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    body.light-theme .adjacent-section {
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(0,0,0,.1);
+    }
+    
+    .adjacent-section-title {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .adjacent-section-count {
+      background: rgba(124,58,237,.2);
+      color: rgba(255,255,255,.9);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-family: var(--mono);
+    }
+
+    body.light-theme .adjacent-section-count {
+      color: rgba(0,0,0,.9);
+    }
+    
+    .adjacent-words-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    
+    .adjacent-word-item {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    body.light-theme .adjacent-word-item {
+      background: rgba(0,0,0,.05);
+      border: 1px solid rgba(0,0,0,.1);
+    }
+    
+    .adjacent-word-item:hover {
+      background: rgba(255,255,255,.12);
+      transform: translateY(-1px);
+    }
+
+    body.light-theme .adjacent-word-item:hover {
+      background: rgba(0,0,0,.08);
+    }
+    
+    .adjacent-word-text {
+      flex: 1;
+      color: rgba(255,255,255,.85);
+      word-break: break-word;
+    }
+
+    body.light-theme .adjacent-word-text {
+      color: rgba(0,0,0,.85);
+    }
+    
+    .adjacent-word-count {
+      background: rgba(34,197,94,.3);
+      color: rgba(255,255,255,.95);
+      min-width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      font-family: var(--mono);
+      margin-left: 10px;
+    }
+
+    body.light-theme .adjacent-word-count {
+      background: rgba(34,197,94,.4);
+      color: rgba(0,0,0,.95);
+    }
+    
+    .adjacent-words-empty {
+      color: var(--muted);
+      font-size: 12px;
+      font-style: italic;
+      text-align: center;
+      padding: 10px;
+    }
+    
+    /* Control per a la cerca de paraules adjacents */
+    .adjacent-words-controls {
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .adjacent-words-controls.active {
+      display: block;
+    }
+    
+    .adjacent-control-label {
+      font-size: 11px;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    body.light-theme .adjacent-control-label {
+      color: rgba(0,0,0,.7);
+    }
+    
+    .adjacent-controls-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .adjacent-control-input {
+      width: 80px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(10,16,30,.6);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    body.light-theme .adjacent-control-input {
+      background: rgba(255,255,255,.9);
+      color: rgba(0,0,0,.92);
     }
   </style>
 </head>
@@ -431,6 +783,9 @@
       <span class="kbd">PDF/TXT</span>
       <span class="kbd">Ctrl/Cmd + C</span>
       <span class="kbd">Resultats</span>
+      <button id="themeToggle" class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px;">
+        🌙 Tema
+      </button>
     </div>
   </div>
 
@@ -467,7 +822,7 @@
         <!-- Text -->
         <div class="field">
           <label for="inputText">Text a analitzar</label>
-          <textarea id="inputText" placeholder="Enganxa aquí el text o carrega un PDF/TXT…">L'àvia d'en Pere menja pèls de cotó mentre canta una cançó esdrúixola. Avui fa un dia plujós i molt ventós, però demà serà diferent. Els núvols omplen el cel gris i amenaçador. La Mònica i el seu germà viatgen cap a Barcelona per visitar els seus cosins. És fantàstic quan tot surt bé al final. Vam anar a comprar pa, llet i galetes al supermercat. La música clàssica em relaxa profundament. El telèfon sona constantment. És pràcticament impossible no escoltar-lo. Les paraules esdrúixoles són divertides. L'ètica i l'ética són coses diferents. La brúixola i l'àngel són paraules esdrúixoles. És fantàstic i pràctic. La música i la pràctica són importants. La fruïció és una paraula plana, no esdrúixola. L'ètica a muntanya és important.</textarea>
+          <textarea id="inputText" placeholder="Enganxa aquí el text o carrega un PDF/TXT…">Hi ha vegades que no entenc res del que passa. A vegades que jo recordi, això no havia passat mai. Hi ha moltes vegades que penso en això. De vegades en què m'avorreixo, llegeix. Vegades hi ha coses estranyes. Aquestes vegades que parlem són importants.</textarea>
           <div class="pillrow" style="margin-top:10px;">
             <button type="button" class="btn" id="sampleTextBtn">✨ Exemple</button>
             <button type="button" class="btn" id="clearTextBtn">🗑️ Buida</button>
@@ -527,6 +882,39 @@
 
         <div class="sep"></div>
 
+        <!-- NOVA OPCIÓ: Paraules adjacents -->
+        <div class="field">
+          <label>Paraules adjacents (NOVETAT)</label>
+          <div class="checks">
+            <div class="check">
+              <input type="checkbox" id="enableAdjacentWords"/>
+              <div>
+                <b>Mostrar anàlisi de freqüències</b>
+                <small>Mostra estadístiques de les paraules que precedeixen i segueixen.</small>
+              </div>
+            </div>
+          </div>
+          
+          <div id="adjacentWordsConfig" class="adjacent-words-controls">
+            <div class="adjacent-control-label">Nombre de paraules a analitzar (es compten com a grups):</div>
+            <div class="adjacent-controls-row">
+              <div style="flex: 1;">
+                <div class="adjacent-control-label">Que precedeixen:</div>
+                <input type="number" id="adjacentPrecedingCount" class="adjacent-control-input" value="1" min="1" max="5">
+              </div>
+              <div style="flex: 1;">
+                <div class="adjacent-control-label">Que segueixen:</div>
+                <input type="number" id="adjacentFollowingCount" class="adjacent-control-input" value="1" min="1" max="5">
+              </div>
+            </div>
+            <div class="hint" style="margin-top: 8px;">
+              Ex: Si poses 2, es comptaran parells de paraules adjacents (ex: 'hi ha', 'a vegades')
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
         <div class="field">
           <label>Opcions</label>
           <div class="checks">
@@ -542,39 +930,6 @@
               <div>
                 <b>Incloure marques sil·làbiques</b>
                 <small>Mostra la separació en síl·labes (només en esdrúixoles).</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Extensió del fragment</label>
-          <div class="checks">
-            <div class="check">
-              <input type="radio" id="allPhrase" name="phraseScope" checked/>
-              <div>
-                <b>Tota la frase</b>
-                <small>Retorna la frase completa.</small>
-              </div>
-            </div>
-            <div class="check">
-              <input type="radio" id="adjacentWords" name="phraseScope"/>
-              <div>
-                <b>Paraules adjacents</b>
-                <small>Retorna només un context al voltant de la coincidència.</small>
-              </div>
-            </div>
-          </div>
-
-          <div id="adjacentWordsControls" style="display:none; margin-top:10px;">
-            <div class="grid2">
-              <div class="field" style="margin:0;">
-                <label for="precedingWords">Abans</label>
-                <input type="number" id="precedingWords" value="0" min="0" max="10"/>
-              </div>
-              <div class="field" style="margin:0;">
-                <label for="followingWords">Després</label>
-                <input type="number" id="followingWords" value="1" min="0" max="10"/>
               </div>
             </div>
           </div>
@@ -614,6 +969,31 @@
         <div id="resultsList" class="results-list">
           <div class="empty">Quan executis <b>Extreure</b>, aquí veuràs les frases filtrades.</div>
         </div>
+        
+        <!-- NOU: Panell de paraules adjacents -->
+        <div id="adjacentWordsPanel" class="adjacent-words-panel">
+          <div class="adjacent-words-title">Anàlisi de freqüències de paraules adjacents</div>
+          <div class="adjacent-words-grid">
+            <div class="adjacent-section">
+              <div class="adjacent-section-title">
+                <span>Paraules que precedeixen "<span id="precedingSearchWord"></span>"</span>
+                <span id="precedingWordsCount" class="adjacent-section-count">0</span>
+              </div>
+              <div id="precedingWordsList" class="adjacent-words-list">
+                <div class="adjacent-words-empty">No hi ha dades</div>
+              </div>
+            </div>
+            <div class="adjacent-section">
+              <div class="adjacent-section-title">
+                <span>Paraules que segueixen "<span id="followingSearchWord"></span>"</span>
+                <span id="followingWordsCount" class="adjacent-section-count">0</span>
+              </div>
+              <div id="followingWordsList" class="adjacent-words-list">
+                <div class="adjacent-words-empty">No hi ha dades</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -623,6 +1003,34 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Botó de canvi de tema
+      const themeToggle = document.getElementById('themeToggle');
+
+      // Comprovar tema guardat o preferència del sistema
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const savedTheme = localStorage.getItem('theme') || (prefersLight ? 'light' : 'dark');
+
+      // Aplicar tema guardat
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeToggle.innerHTML = '☀️ Tema';
+      } else {
+        themeToggle.innerHTML = '🌙 Tema';
+      }
+
+      // Alternar tema
+      themeToggle.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light-theme');
+        
+        if (isLight) {
+          themeToggle.innerHTML = '☀️ Tema';
+          localStorage.setItem('theme', 'light');
+        } else {
+          themeToggle.innerHTML = '🌙 Tema';
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+
       // DOM
       const el = {
         searchType: document.getElementById("searchType"),
@@ -647,14 +1055,23 @@
         textSearchGroup: document.getElementById("textSearchGroup"),
         lletresEspecifiquesGroup: document.getElementById("lletresEspecifiquesGroup"),
 
-        allPhraseRadio: document.getElementById("allPhrase"),
-        adjacentWordsRadio: document.getElementById("adjacentWords"),
-        adjacentWordsControls: document.getElementById("adjacentWordsControls"),
-
         notEndsWithInput: document.getElementById("notEndsWithInput"),
         notContainsInput: document.getElementById("notContainsInput"),
 
         toast: document.getElementById("toast"),
+        
+        // NOUS ELEMENTS: Paraules adjacents
+        enableAdjacentWords: document.getElementById("enableAdjacentWords"),
+        adjacentWordsConfig: document.getElementById("adjacentWordsConfig"),
+        adjacentPrecedingCount: document.getElementById("adjacentPrecedingCount"),
+        adjacentFollowingCount: document.getElementById("adjacentFollowingCount"),
+        adjacentWordsPanel: document.getElementById("adjacentWordsPanel"),
+        precedingWordsList: document.getElementById("precedingWordsList"),
+        followingWordsList: document.getElementById("followingWordsList"),
+        precedingWordsCount: document.getElementById("precedingWordsCount"),
+        followingWordsCount: document.getElementById("followingWordsCount"),
+        precedingSearchWord: document.getElementById("precedingSearchWord"),
+        followingSearchWord: document.getElementById("followingSearchWord")
       };
 
       const controlsToDisable = [
@@ -694,14 +1111,18 @@
         if (el.matchPattern.value === "notcontains") el.notContainsInput.style.display = "block";
       }
 
-      function updateAdjacentUI(){
-        el.adjacentWordsControls.style.display = el.adjacentWordsRadio.checked ? "block" : "none";
+      // NOVA FUNCIÓ: Mostrar/amagar configuració de paraules adjacents
+      function updateAdjacentWordsUI() {
+        if (el.enableAdjacentWords.checked) {
+          el.adjacentWordsConfig.classList.add("active");
+        } else {
+          el.adjacentWordsConfig.classList.remove("active");
+        }
       }
 
       el.searchType.addEventListener("change", () => { updateSearchTypeUI(); updateNegationUI(); });
       el.matchPattern.addEventListener("change", updateNegationUI);
-      el.allPhraseRadio.addEventListener("change", updateAdjacentUI);
-      el.adjacentWordsRadio.addEventListener("change", updateAdjacentUI);
+      el.enableAdjacentWords.addEventListener("change", updateAdjacentWordsUI);
 
       // Dropzone clicks (avoid button conflicts)
       el.dropArea.addEventListener("click", (e) => {
@@ -800,6 +1221,11 @@
 
       // Text helpers
       function escapeRegExp(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+      // Funció millorada per escapar regex que inclou caràcters catalans
+      function escapeRegExpForSearch(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
 
       function splitIntoSentences(text){
         const protectedText = text.replace(/l[·.•]l/gi, "L_GEMINADA");
@@ -908,7 +1334,7 @@
       // FUNCIÓ CORREGIDA: Determinar si una paraula és esdrúixola
       function esEsdruixola(paraula) {
         // Neteja la paraula - tractar apòstrofs
-        const paraulaNeta = paraula.replace(/^[lLdDsSnNtTmM]['’]|[.,!?;:—()»]$/gi, '').replace(/[.,!?;:—()»]$/, '');
+        const paraulaNeta = paraula.replace(/^[lLdDsSnNtTmM]['']|[.,!?;:—()»]$/gi, '').replace(/[.,!?;:—()»]$/, '');
         
         // Si la paraula és massa curta, no pot ser esdrúixola
         if (paraulaNeta.length < 3) return false;
@@ -935,7 +1361,7 @@
       // FUNCIÓ CORREGIDA: Obtenir totes les paraules esdrúixoles d'una frase
       function obtenirEsdruixolesDeFrase(frase) {
         // Regex per trobar paraules (incloent les amb apòstrof)
-        const paraules = frase.match(/\b(?:[lLdDsSnNtTmM]['’])?[a-zA-ZÀ-ÿçÇ]+/g) || [];
+        const paraules = frase.match(/\b(?:[lLdDsSnNtTmM][''])?[a-zA-ZÀ-ÿçÇ]+/g) || [];
         const esdruixoles = [];
         
         paraules.forEach(paraula => {
@@ -947,7 +1373,7 @@
         return esdruixoles;
       }
 
-      // FUNCIÓ MILLORADA: Per destacar paraules esdrúixoles sense incloure l'apòstrof
+      // FUNCIÓ MILLORADA: Per destacar paraules esdrúixoles sense incloure l'apòstrof - CORREGIT
       function highlightEsdruixoles(frase) {
         // Obtenir totes les esdrúixoles
         const esdruixoles = obtenirEsdruixolesDeFrase(frase);
@@ -960,14 +1386,14 @@
         esdruixoles.forEach(paraula => {
           // Hem de trobar la forma exacta tal com apareix a la frase
           // Això inclou apòstrofs i altres caràcters
-          const paraulesFrase = frase.match(/\b(?:[lLdDsSnNtTmM]['’])?[a-zA-ZÀ-ÿçÇ]+\b/g) || [];
+          const paraulesFrase = frase.match(/\b(?:[lLdDsSnNtTmM][''])?[a-zA-ZÀ-ÿçÇ]+\b/g) || [];
           
           // Buscar la paraula tal com apareix a la frase
           let paraulaFrase = paraula;
           for (let pf of paraulesFrase) {
             // Comprovar si aquesta paraula de la frase és l'esdrúixola
             // Però neteja primer els apòstrofs
-            const pfNeta = pf.replace(/^[lLdDsSnNtTmM]['’]/, '');
+            const pfNeta = pf.replace(/^[lLdDsSnNtTmM]['']/, '');
             if (pfNeta === paraula.replace(/^[lLdDsSnNtTmM]['']/, '')) {
               paraulaFrase = pf;
               break;
@@ -990,7 +1416,7 @@
               resultat = resultat.replace(regex, 
                 `${apostrof}<span class="esdruixola-highlight">${paraulaSenseApostrof}</span>`);
             } else {
-              // Sense apòstrof, destacar la paraula sencera
+              // Sense apòstrof, destacar la paraula sencera - CORREGIT: sense accent
               const regex = new RegExp(`\\b${escapeRegExp(paraulaFrase)}\\b`, 'g');
               resultat = resultat.replace(regex, 
                 `<span class="esdruixola-highlight">${paraulaFrase}</span>`);
@@ -1095,21 +1521,38 @@
         return out;
       }
 
+      // FUNCIÓ CORREGIDA: matchesPattern que respecta caràcters catalans
       function matchesPattern(text, pattern, searchTerm, notEndsTerm="", notContainsTerm=""){
         if (!searchTerm) return true;
         const t = text.toLowerCase();
         const s = searchTerm.toLowerCase();
-        const words = t.match(/[a-zàèéíïòóúüç]+/g) || [];
-
+        
         switch(pattern){
           case "anywhere": return t.includes(s);
-          case "exact": return words.some(w => w === s);
-          case "starts": return words.some(w => w.startsWith(s));
-          case "ends": return words.some(w => w.endsWith(s));
+          case "exact": {
+            // CORRECCIÓ: Regex que considera caràcters catalans
+            const exactRegex = new RegExp(`(^|[^a-zàèéíïòóúüç·])${escapeRegExpForSearch(s)}(?![a-zàèéíïòóúüç·])`, 'i');
+            return exactRegex.test(text);
+          }
+          case "starts": {
+            // Paraules que comencen amb el text buscat
+            const startsRegex = new RegExp(`\\b${escapeRegExpForSearch(s)}`, 'i');
+            const words = t.match(new RegExp(`\\b${escapeRegExpForSearch(s)}[a-zàèéíïòóúüç·]*`, 'gi'));
+            return words && words.length > 0;
+          }
+          case "ends": {
+            // Paraules que acaben amb el text buscat
+            const endsRegex = new RegExp(`${escapeRegExpForSearch(s)}\\b`, 'i');
+            const words = t.match(new RegExp(`[a-zàèéíïòóúüç·]*${escapeRegExpForSearch(s)}\\b`, 'gi'));
+            return words && words.length > 0;
+          }
           case "notends": {
             const ne = (notEndsTerm || "").toLowerCase();
             if (!ne) return true;
-            return !words.some(w => w.endsWith(ne));
+            // Busca paraules que NO acabin amb ne
+            const endsRegex = new RegExp(`${escapeRegExpForSearch(ne)}\\b`, 'i');
+            const words = t.match(new RegExp(`[a-zàèéíïòóúüç·]*${escapeRegExpForSearch(ne)}\\b`, 'gi'));
+            return !words || words.length === 0;
           }
           case "notcontains": {
             const nc = (notContainsTerm || "").toLowerCase();
@@ -1157,10 +1600,176 @@
         return lletres.split('').every(lletra => paraulaLower.includes(lletra));
       }
 
-      // Results render
+      // NOVA FUNCIÓ: Normalitzar text per a cerca insensible a accents
+      function normalizeText(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+
+      // NOVA FUNCIÓ CORREGIDA: Analitzar paraules adjacents com a N-GRAMS (grups de paraules)
+      function analyzeAdjacentWords(text, searchWord, precedingCount, followingCount) {
+        // Netejar el text: eliminar puntuació, convertir a minúscules
+        const cleanedText = text.toLowerCase()
+          .replace(/[.,!?;:—()»'"`´]/g, ' ')  // Reemplaçar puntuació amb espais
+          .replace(/\s+/g, ' ')  // Normalitzar espais
+          .trim();
+        
+        // Dividir en paraules
+        const words = cleanedText.split(/\s+/);
+        
+        const precedingWords = {};
+        const followingWords = {};
+        
+        // Normalitzar la paraula de cerca
+        const normalizedSearchWord = normalizeText(searchWord.toLowerCase());
+        
+        for (let i = 0; i < words.length; i++) {
+          const currentWord = words[i];
+          const normalizedCurrentWord = normalizeText(currentWord);
+          
+          // Comprovar si és una coincidència exacta (insensible a accents)
+          if (normalizedCurrentWord === normalizedSearchWord) {
+            // PARAULES QUE PRECEDEIXEN: GRUPS DE N PARAULES
+            if (precedingCount > 0) {
+              // Crear un grup de 'precedingCount' paraules abans
+              let precedingGroup = [];
+              for (let k = 1; k <= precedingCount; k++) {
+                if (i - k >= 0) {
+                  const precedingWord = words[i - k];
+                  if (precedingWord && precedingWord.trim() !== '') {
+                    precedingGroup.unshift(precedingWord); // Afegir al principi
+                  }
+                }
+              }
+              
+              // Només comptar si tenim el nombre exacte de paraules demanades
+              if (precedingGroup.length === precedingCount) {
+                const precedingPhrase = precedingGroup.join(' ');
+                precedingWords[precedingPhrase] = (precedingWords[precedingPhrase] || 0) + 1;
+              }
+            }
+            
+            // PARAULES QUE SEGUEIXEN: GRUPS DE N PARAULES
+            if (followingCount > 0) {
+              // Crear un grup de 'followingCount' paraules després
+              let followingGroup = [];
+              for (let j = 1; j <= followingCount; j++) {
+                if (i + j < words.length) {
+                  const followingWord = words[i + j];
+                  if (followingWord && followingWord.trim() !== '') {
+                    followingGroup.push(followingWord);
+                  }
+                }
+              }
+              
+              // Només comptar si tenim el nombre exacte de paraules demanades
+              if (followingGroup.length === followingCount) {
+                const followingPhrase = followingGroup.join(' ');
+                followingWords[followingPhrase] = (followingWords[followingPhrase] || 0) + 1;
+              }
+            }
+          }
+        }
+        
+        return { precedingWords, followingWords };
+      }
+
+      // NOVA FUNCIÓ: Mostrar anàlisi de paraules adjacents
+      function renderAdjacentWordsAnalysis(precedingWords, followingWords, searchWord, precedingCount, followingCount) {
+        // Amagar el panell si no hi ha dades
+        if (Object.keys(precedingWords).length === 0 && Object.keys(followingWords).length === 0) {
+          el.adjacentWordsPanel.style.display = "none";
+          return;
+        }
+        
+        // Mostrar el panell
+        el.adjacentWordsPanel.style.display = "block";
+        
+        // Actualitzar la paraula de cerca als títols
+        el.precedingSearchWord.textContent = searchWord;
+        el.followingSearchWord.textContent = searchWord;
+        
+        // Netejar llistes anteriors
+        el.precedingWordsList.innerHTML = "";
+        el.followingWordsList.innerHTML = "";
+        
+        // Processar paraules que precedeixen
+        if (Object.keys(precedingWords).length > 0) {
+          // Ordenar per freqüència (més alt a més baix) i després alfabèticament
+          const sortedPreceding = Object.entries(precedingWords)
+            .sort((a, b) => {
+              if (b[1] !== a[1]) return b[1] - a[1]; // Ordenar per freqüència descendent
+              return a[0].localeCompare(b[0]); // Ordenar alfabèticament
+            });
+          
+          el.precedingWordsCount.textContent = sortedPreceding.length;
+          
+          sortedPreceding.forEach(([phrase, count]) => {
+            const item = document.createElement("div");
+            item.className = "adjacent-word-item";
+            item.innerHTML = `
+              <span class="adjacent-word-text">${phrase}</span>
+              <span class="adjacent-word-count">${count}</span>
+            `;
+            el.precedingWordsList.appendChild(item);
+          });
+        } else {
+          el.precedingWordsCount.textContent = "0";
+          el.precedingWordsList.innerHTML = '<div class="adjacent-words-empty">No hi ha dades</div>';
+        }
+        
+        // Processar paraules que segueixen
+        if (Object.keys(followingWords).length > 0) {
+          // Ordenar per freqüència (més alt a més baix) i després alfabèticament
+          const sortedFollowing = Object.entries(followingWords)
+            .sort((a, b) => {
+              if (b[1] !== a[1]) return b[1] - a[1]; // Ordenar per freqüència descendent
+              return a[0].localeCompare(b[0]); // Ordenar alfabèticament
+            });
+          
+          el.followingWordsCount.textContent = sortedFollowing.length;
+          
+          sortedFollowing.forEach(([phrase, count]) => {
+            const item = document.createElement("div");
+            item.className = "adjacent-word-item";
+            item.innerHTML = `
+              <span class="adjacent-word-text">${phrase}</span>
+              <span class="adjacent-word-count">${count}</span>
+            `;
+            el.followingWordsList.appendChild(item);
+          });
+        } else {
+          el.followingWordsCount.textContent = "0";
+          el.followingWordsList.innerHTML = '<div class="adjacent-words-empty">No hi ha dades</div>';
+        }
+        
+        // Informació sobre el rang analitzat
+        let infoText = "";
+        if (precedingCount === 1 && followingCount === 1) {
+          infoText = `Analitzant 1 paraula abans i 1 paraula després de "${searchWord}"`;
+        } else {
+          infoText = `Analitzant grups de ${precedingCount} paraula(s) abans i ${followingCount} paraula(s) després de "${searchWord}"`;
+        }
+        
+        const infoElement = document.createElement("div");
+        infoElement.className = "adjacent-control-label";
+        infoElement.style.marginTop = "10px";
+        infoElement.style.fontSize = "11px";
+        infoElement.style.color = "var(--muted)";
+        infoElement.textContent = infoText;
+        
+        // Assegurar-nos que la informació no es dupliqui
+        const existingInfo = el.adjacentWordsPanel.querySelector(".range-info");
+        if (existingInfo) existingInfo.remove();
+        
+        infoElement.classList.add("range-info");
+        el.adjacentWordsPanel.appendChild(infoElement);
+      }
+
+      // Results render - VERSIÓ SIMPLIFICADA (només frases)
       function renderEmpty(msg){
         el.resultsList.innerHTML = `<div class="empty">${msg}</div>`;
         el.resultsCount.textContent = "0";
+        el.adjacentWordsPanel.style.display = "none";
       }
 
       function renderResults(results, searchDescription){
@@ -1169,69 +1778,25 @@
 
         if (!results.length){
           el.resultsList.innerHTML = `<div class="empty">${searchDescription}</div>`;
+          el.adjacentWordsPanel.style.display = "none";
           return;
         }
 
-        let totalWords = 0;
-        let totalMatches = 0;
-        const uniques = new Set();
-
+        // Versió simplificada: només mostrem les frases
         results.forEach((r, idx) => {
-          totalWords += r.wordCount;
-          if (r.matchedTerms && r.matchedTerms.length){
-            r.matchedTerms.forEach(p => { uniques.add(p); totalMatches++; });
-          } else if (r.matchedTerm){
-            uniques.add(r.matchedTerm);
-            totalMatches++;
-          }
-
-          const meta =
-            (el.searchType.value === "esdruixoles" && r.matchedTerms?.length)
-              ? `Paraules esdrúixoles (${r.matchedTerms.length}): ${r.matchedTerms.map(p=>`"${p}"`).join(", ")}${r.lletresEspecifiques ? ` | Conté: "${r.lletresEspecifiques}"` : ""}`
-              : (r.matchedTerm ? `Coincidència: "${r.matchedTerm}"` : "Sense cerca específica");
-
           const node = document.createElement("div");
           node.className = "result";
+          
+          // NOMÉS la frase (amb highlights si estan activats)
           node.innerHTML = `
-            <div class="result-head">
-              <div><b>Frase ${idx+1}</b> · ${r.wordCount} paraules</div>
-              <div style="font-family:var(--mono);">${r.matchedTerm ? "match" : "ok"}</div>
-            </div>
             <div class="result-body">${r.extracted}</div>
-            <div class="result-meta">${meta}</div>
           `;
+          
           el.resultsList.appendChild(node);
         });
-
-        // Stats card
-        const stats = document.createElement("div");
-        stats.className = "result";
-        stats.style.background = "rgba(255,255,255,.035)";
-
-        if (el.searchType.value === "esdruixoles"){
-          const per = (totalMatches / results.length).toFixed(1);
-          stats.innerHTML = `
-            <div class="result-head"><div><b>Estadístiques</b></div><div class="count-badge">esdrúixoles</div></div>
-            <div class="result-body">
-              <div><span class="kbd">${results.length}</span> frases · <span class="kbd">${totalWords}</span> paraules totals · <span class="kbd">${totalMatches}</span> esdrúixoles (${per}/frase)</div>
-              <div style="margin-top:10px; color: var(--muted); font-size:12px;">
-                <b style="color:rgba(255,255,255,.75)">Diferents (${uniques.size}):</b> ${Array.from(uniques).join(", ")}
-              </div>
-            </div>
-          `;
-        } else {
-          const avg = (totalWords / results.length).toFixed(1);
-          stats.innerHTML = `
-            <div class="result-head"><div><b>Estadístiques</b></div><div class="count-badge">general</div></div>
-            <div class="result-body">
-              <div><span class="kbd">${results.length}</span> frases · <span class="kbd">${totalWords}</span> paraules totals · <span class="kbd">${avg}</span> paraules/frase</div>
-            </div>
-          `;
-        }
-        el.resultsList.appendChild(stats);
       }
 
-      // Main extraction
+      // Main extraction - MODIFICAT: Sempre frase completa
       function extractSentences(){
         setBusy(true, "Analitzant text…");
 
@@ -1250,14 +1815,19 @@
             const notContainsTextValue = document.getElementById("notContainsText").value.trim();
             const lletresEspecifiques = document.getElementById("lletresEspecifiques").value.trim().toLowerCase();
 
-            const allPhraseSelected = el.allPhraseRadio.checked;
-            const precedingWords = allPhraseSelected ? 999 : parseInt(document.getElementById("precedingWords").value);
-            const followingWords = allPhraseSelected ? 999 : parseInt(document.getElementById("followingWords").value);
+            // SEMPRE frase completa (999 paraules abans i després = tota la frase)
+            const precedingWords = 999;
+            const followingWords = 999;
             const minWords = parseInt(document.getElementById("minWords").value);
             const maxWords = parseInt(document.getElementById("maxWords").value);
 
             const highlightElements = document.getElementById("category1").checked;
             const includeSyllables = document.getElementById("category2").checked;
+
+            // NOVES VARIABLES: Paraules adjacents
+            const enableAdjacentWords = el.enableAdjacentWords.checked;
+            const adjacentPrecedingCount = enableAdjacentWords ? parseInt(el.adjacentPrecedingCount.value) : 1;
+            const adjacentFollowingCount = enableAdjacentWords ? parseInt(el.adjacentFollowingCount.value) : 1;
 
             const sentences = splitIntoSentences(text);
             const results = [];
@@ -1309,7 +1879,7 @@
 
               if (highlightElements){
                 if (searchTypeValue === "esdruixoles") {
-                  // Aplicar highlight a les esdrúixoles (VERSIÓ MILLORADA)
+                  // Aplicar highlight a les esdrúixoles (VERSIÓ CORREGIDA)
                   processedSentence = highlightEsdruixoles(sentenceTrimmed);
                   
                   // Destacar les lletres específiques dins les paraules esdrúixoles
@@ -1327,9 +1897,26 @@
                 }
               }
 
+              // VERSIÓ CORREGIDA: Highlight segons el patró de cerca
               if (searchTypeValue === "text" && searchTextValue){
-                const re = new RegExp(`(${escapeRegExp(searchTextValue)})`, "gi");
-                processedSentence = processedSentence.replace(re, `<span class="highlight">$1</span>`);
+                // Diferents maneres de destacar segons el patró
+                if (matchPatternValue === "exact") {
+                  // Per coincidència exacta: només paraules completes amb caràcters catalans
+                  const exactRegex = new RegExp(`(^|[^a-zàèéíïòóúüç·])(${escapeRegExpForSearch(searchTextValue)})(?![a-zàèéíïòóúüç·])`, "gi");
+                  processedSentence = processedSentence.replace(exactRegex, `$1<span class="highlight">$2</span>`);
+                } else if (matchPatternValue === "starts") {
+                  // Per comença per: paraules que comencen amb...
+                  const startsRegex = new RegExp(`\\b(${escapeRegExpForSearch(searchTextValue)}[a-zàèéíïòóúüç·]*)`, "gi");
+                  processedSentence = processedSentence.replace(startsRegex, `<span class="highlight">$1</span>`);
+                } else if (matchPatternValue === "ends") {
+                  // Per acaba en: paraules que acaben amb...
+                  const endsRegex = new RegExp(`([a-zàèéíïòóúüç·]*${escapeRegExpForSearch(searchTextValue)})\\b`, "gi");
+                  processedSentence = processedSentence.replace(endsRegex, `<span class="highlight">$1</span>`);
+                } else {
+                  // Per "en qualsevol posició": pot ser dins d'una paraula
+                  const re = new RegExp(`(${escapeRegExpForSearch(searchTextValue)})`, "gi");
+                  processedSentence = processedSentence.replace(re, `<span class="highlight">$1</span>`);
+                }
               }
 
               if (includeSyllables && searchTypeValue === "esdruixoles" && matchedTerms.length){
@@ -1337,9 +1924,8 @@
                 processedSentence += ` <span class="word-count-info">Sil·labes: ${info}</span>`;
               }
 
-              if ((precedingWords > 0 || followingWords > 0) && matchedTerm && !allPhraseSelected){
-                processedSentence = getAdjacentContext(sentenceTrimmed, matchedTerm, precedingWords, followingWords);
-              }
+              // NOTA: Ara sempre es mostra la frase completa
+              // No cal fer res aquí - processedSentence ja conté la frase sencera
 
               results.push({
                 fullSentence: sentenceTrimmed,
@@ -1366,6 +1952,15 @@
             }
 
             renderResults(results, searchDescription);
+            
+            // MODIFICAT: Mostrar anàlisi de paraules adjacents només quan s'ha activat el checkbox
+            if (enableAdjacentWords && searchTypeValue === "text" && searchTextValue) {
+              const analysis = analyzeAdjacentWords(text, searchTextValue, adjacentPrecedingCount, adjacentFollowingCount);
+              renderAdjacentWordsAnalysis(analysis.precedingWords, analysis.followingWords, searchTextValue, adjacentPrecedingCount, adjacentFollowingCount);
+            } else {
+              el.adjacentWordsPanel.style.display = "none";
+            }
+            
             toast("ok", "Extracció completada", `${results.length} frase(s) trobada/es.`);
           } catch(err){
             console.error(err);
@@ -1387,11 +1982,8 @@
         let idx = 1;
 
         items.forEach(node => {
-          // saltar estadístiques (últim bloc)
-          const head = node.querySelector(".result-head b")?.textContent || "";
-          if (head.toLowerCase().includes("estadístiques")) return;
           const plain = node.textContent.replace(/\s+/g, " ").trim();
-          if (plain) textToCopy += `${idx++}. ${plain}\n\n`;
+          if (plain) textToCopy += `${plain}\n\n`;
         });
 
         try{
@@ -1416,18 +2008,20 @@
         el.matchPattern.value = "anywhere";
         document.getElementById("notEndsWithText").value = "";
         document.getElementById("notContainsText").value = "";
-        el.allPhraseRadio.checked = true;
-        el.adjacentWordsRadio.checked = false;
-        document.getElementById("precedingWords").value = "0";
-        document.getElementById("followingWords").value = "1";
         document.getElementById("minWords").value = "1";
         document.getElementById("maxWords").value = "50";
         document.getElementById("category1").checked = true;
         document.getElementById("category2").checked = false;
+        
+        // Restablir opcions de paraules adjacents
+        el.enableAdjacentWords.checked = false;
+        el.adjacentPrecedingCount.value = "1";
+        el.adjacentFollowingCount.value = "1";
+        el.adjacentWordsPanel.style.display = "none";
 
         updateSearchTypeUI();
         updateNegationUI();
-        updateAdjacentUI();
+        updateAdjacentWordsUI();
         renderEmpty("Quan executis Extreure, aquí veuràs les frases filtrades.");
         toast("ok", "Reiniciat", "Opcions restaurades.");
       });
@@ -1435,7 +2029,7 @@
       // Sample + clear text
       el.sampleTextBtn.addEventListener("click", () => {
         el.inputText.value =
-`L'àvia d'en Pere menja pèls de cotó mentre canta una cançó esdrúixola. Avui fa un dia plujós i molt ventós, però demà serà diferent. Els núvols omplen el cel gris i amenaçador. La Mònica i el seu germà viatgen cap a Barcelona per visitar els seus cosins. És fantàstic quan tot surt bé al final. Vam anar a comprar pa, llet i galetes al supermercat. La música clàssica em relaxa profundament. El telèfon sona constantment. És pràcticament impossible no escoltar-lo. Les paraules esdrúixoles són divertides. L'ètica i l'ética són coses diferents. La brúixola i l'àngel són paraules esdrúixoles. És fantàstic i pràctic. La música i la pràctica són importants. La fruïció és una paraula plana, no esdrúixola. L'ètica a muntanya és important.`;
+`Hi ha vegades que no entenc res del que passa. A vegades que jo recordi, això no havia passat mai. Hi ha moltes vegades que penso en això. De vegades en què m'avorreixo, llegeix. Vegades hi ha coses estranyes. Aquestes vegades que parlem són importants.`;
         toast("ok", "Text d'exemple", "S'ha carregat un text de prova.");
       });
 
@@ -1450,7 +2044,7 @@
       // Init
       updateSearchTypeUI();
       updateNegationUI();
-      updateAdjacentUI();
+      updateAdjacentWordsUI();
       setTimeout(extractSentences, 450);
     });
   </script>
