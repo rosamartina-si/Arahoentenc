@@ -35,26 +35,26 @@
 
 <script>
   const frases = [
-    ["— M'agrada la pizza. — A mi també.", "— I like pizza. — ____ ____ ____.", "So do I", "I like pizza. — So do I."],
-    ["— Vaig anar a Londres. — Jo també.", "— I went to London. — ____ ____ ____.", "So did I", "I went to London. — So did I."],
-    ["— Ella parla francès. — Jo també.", "— She speaks French. — ____ ____ ____.", "So do I", "She speaks French. — So do I."],
-    ["— Estic cansat. — Jo també estic cansat.", "— I'm tired. — I am tired ____.", "too", "I'm tired. — I am tired too."],
-    ["— A ell li agrada la música. — A ella també li agrada la música.", "— He likes music. — She ____ likes music.", "also", "He likes music. — She also likes music."],
-    ["— Vam veure la pel·li. — Nosaltres també la vam veure.", "— They saw the film. — We saw it ____.", "too", "They saw the film. — We saw it too."],
-    ["— Estic aprenent italià. — Jo també estic aprenent italià.", "— I'm learning Italian. — ____ ____ ____.", "So am I", "I'm learning Italian. — So am I."],
-    ["— Puc ajudar. — Jo també puc ajudar.", "— I can help. — ____ ____ ____.", "So can I", "I can help. — So can I."],
-    ["— A ella li agrada llegir. — A mi també m’agrada llegir.", "— She likes reading. — I like it ____.", "too", "She likes reading. — I like it too."],
-    ["— Ell està content. — Ella també està contenta.", "— He is happy. — She is happy ____.", "too", "He is happy. — She is happy too."],
-    ["— Ell ha acabat l'exercici. — Jo també he acabat l'exercici.", "— He has finished the exercise. — ____ ____ ____.", "So have I", "He has finished the exercise. — So have I."],
-    ["— Vindran demà. — Nosaltres també vindrem demà.", "— They will come tomorrow. — We ____ will come.", "also", "They will come tomorrow. — We also will come."],
-    ["— Vaig estudiar matemàtiques. — Jo també vaig estudiar matemàtiques.", "— I studied maths. — ____ ____ ____.", "So did I", "I studied maths. — So did I."],
-    ["— Ella treballa a Oxford. — Ella també treballa a Londres.", "— She works in Oxford. — She ____ works in London.", "also", "She works in Oxford. — She also works in London."],
-    ["— M’agrada el cafè. — A mi també m’agrada el cafè.", "— I like coffee. — I like coffee ____.", "too", "I like coffee. — I like coffee too."],
-    ["— Ell viu a Girona. — Jo també visc a Girona.", "— He lives in Girona. — ____ ____ ____.", "So do I", "He lives in Girona. — So do I."],
-    ["— Ella vol venir. — Jo també vull venir.", "— She wants to come. — ____ ____ ____.", "So do I", "She wants to come. — So do I."],
-    ["— Ell pot conduir. — Jo també puc conduir.", "— He can drive. — ____ ____ ____.", "So can I", "He can drive. — So can I."],
-    ["— Estic nerviós. — Jo també estic nerviós.", "— I'm nervous. — I am nervous ____.", "too", "I'm nervous. — I am nervous too."],
-    ["— Jo vinc. — Ell també ve.", "— I'm coming. — He ____ is coming.", "also", "I'm coming. — He also is coming."]
+    ["— M'agrada la pizza. — A mi també.  (Fes servir <strong>so</strong>)", "— I like pizza. — ______________.", "So do I", "I like pizza. — So do I."],
+    ["— Vaig anar a Londres. — Jo també.  (Fes servir <strong>so</strong>)", "— I went to London. — ______________.", "So did I", "I went to London. — So did I."],
+    ["— Ella parla francès. — Jo també.  (Fes servir <strong>so</strong>)", "— She speaks French. — ______________.", "So do I", "She speaks French. — So do I."],
+    ["— Estic cansat. — Jo també estic cansat.  (Fes servir <strong>too</strong>)", "— I'm tired. — ______________.", "I am tired too", "I'm tired. — I am tired too."],
+    ["— A ell li agrada la música. — A ella també li agrada la música.  (Fes servir <strong>also</strong>)", "— He likes music. — ______________.", "She also likes music", "He likes music. — She also likes music."],
+    ["— Vam veure la pel·li. — Nosaltres també la vam veure.  (Fes servir <strong>too</strong>)", "— They saw the film. — ______________.", "She also likes music", "They saw the film. — She also likes music."],
+    ["— Estic aprenent italià. — Jo també estic aprenent italià.  (Fes servir <strong>so</strong>)", "— I'm learning Italian. — ______________.", "So am I", "I'm learning Italian. — So am I."],
+    ["— Puc ajudar. — Jo també puc ajudar.  (Fes servir <strong>so</strong>)", "— I can help. — ______________.", "So can I", "I can help. — So can I."],
+    ["— A ella li agrada llegir. — A mi també m’agrada llegir.  (Fes servir <strong>too</strong>)", "— She likes reading. — ______________.", "I like it too", "She likes reading. — I like it too."],
+    ["— Ell està content. — Ella també està contenta.  (Fes servir <strong>too</strong>)", "— He is happy. — ______________.", "She is happy too", "He is happy. — She is happy too."],
+    ["— Ell ha acabat l'exercici. — Jo també he acabat l'exercici.  (Fes servir <strong>so</strong>)", "— He has finished the exercise. — ______________.", "So have I", "He has finished the exercise. — So have I."],
+    ["— Vindran demà. — Nosaltres també vindrem demà.  (Fes servir <strong>also</strong>)", "— They will come tomorrow. — ______________.", "We also will come", "They will come tomorrow. — We also will come."],
+    ["— Vaig estudiar matemàtiques. — Jo també vaig estudiar matemàtiques.  (Fes servir <strong>so</strong>)", "— I studied maths. — ______________.", "So did I", "I studied maths. — So did I."],
+    ["— Ella treballa a Oxford. — Ella també treballa a Londres.  (Fes servir <strong>also</strong>)", "— She works in Oxford. — ______________.", "She also works in London", "She works in Oxford. — She also works in London."],
+    ["— M’agrada el cafè. — A mi també m’agrada el cafè.  (Fes servir <strong>too</strong>)", "— I like coffee. — ______________.", "I like coffee too", "I like coffee. — I like coffee too."],
+    ["— Ell viu a Girona. — Jo també visc a Girona.  (Fes servir <strong>so</strong>)", "— He lives in Girona. — ______________.", "So do I", "He lives in Girona. — So do I."],
+    ["— Ella vol venir. — Jo també vull venir.  (Fes servir <strong>so</strong>)", "— She wants to come. — ______________.", "So do I", "She wants to come. — So do I."],
+    ["— Ell pot conduir. — Jo també puc conduir.  (Fes servir <strong>so</strong>)", "— He can drive. — ______________.", "So can I", "He can drive. — So can I."],
+    ["— Estic nerviós. — Jo també estic nerviós.  (Fes servir <strong>too</strong>)", "— I'm nervous. — ______________.", "I am nervous too", "I'm nervous. — I am nervous too."],
+    ["— Jo vinc. — Ell també ve.  (Fes servir <strong>also</strong>)", "— I'm coming. — ______________.", "He also is coming", "I'm coming. — He also is coming."]
   ];
 </script>
 
