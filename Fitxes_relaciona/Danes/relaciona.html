@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<title>Relaciona: Jocs en danès</title>
+<style>
+body {
+  font-family: 'Georgia', serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+  text-align: center;
+}
+#tema-selector {
+  margin-bottom: 20px;
+  background: #f4f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #003366;
+}
+#tema-selector select {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  padding: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.col h3 {
+  text-align: center;
+  color: #003366;
+  border-bottom: 2px solid #003366;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.item {
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.item:hover {
+  background-color: #f0f8ff;
+}
+.selected {
+  background-color: #d0ebff;
+  border: 2px solid #003366;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+}
+.fixed-danish {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.incorrect-danish, .incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  background: #f4f8ff;
+  border-radius: 8px;
+}
+#controls {
+  margin-top: 2em;
+  text-align: center;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+  border-radius: 0 8px 8px 0;
+}
+.pronuncia {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<h1>🇩🇰 Relaciona en danès</h1>
+
+<div id="tema-selector">
+  <label for="tema">Tria un tema: </label>
+  <select id="tema">
+    <option value="colors">Colors</option>
+    <option value="fruites">Fruites</option>
+    <option value="animals">Animals</option>
+    <option value="cortesia">Frases de cortesia</option>
+    <option value="dies">Dies de la setmana</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="cos">Parts del cos</option>
+    <option value="familia">Família</option>
+    <option value="verb_ser">Verb ser (at være)</option>
+    <option value="pronoms">Pronoms personals</option>
+    <option value="paisatge">Paisatge i natura</option>
+    <option value="transport">Transport</option>
+    <option value="menjar">Menjar i begudes</option>
+    <option value="temps">Temps atmosfèric</option>
+    <option value="ciutat">Ciutat i serveis</option>
+    <option value="verb_tenir">Verb tenir (at have)</option>
+    <option value="adjectius">Adjectius bàsics</option>
+    <option value="interrogatius">Paraules interrogatives</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+<div class="match-container">
+  <svg class="match-lines"></svg>
+
+  <div class="col">
+    <h3>Danès</h3>
+    <div id="danes"></div>
+  </div>
+
+  <div class="col">
+    <h3>Català</h3>
+    <div id="catala"></div>
+  </div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+  <button onclick="pronunciaSeleccionat()">🔊 Pronuncia seleccionat</button>
+</div>
+
+
+<p>Fes clic a una paraula en <strong>danès</strong> i després a la traducció en català.<br></p>
+<p><strong>Verd</strong> = encert a la primera | <strong>Groc</strong> = encert després d'errors (es repetirà a la següent ronda) | <strong>Vermell</strong> = error.<br></p>
+
+<script>
+const TOTAL_PER_RONDA = 10;
+
+const TEMES = {
+  colors: [
+    {"id":1,"danish":"hvid","cat":"blanc","pron":"við"},
+    {"id":2,"danish":"sort","cat":"negre","pron":"sort"},
+    {"id":3,"danish":"rød","cat":"vermell","pron":"röð"},
+    {"id":4,"danish":"blå","cat":"blau","pron":"blo"},
+    {"id":5,"danish":"grøn","cat":"verd","pron":"grö'n"},
+    {"id":6,"danish":"gul","cat":"groc","pron":"gül"},
+    {"id":7,"danish":"orange","cat":"taronja","pron":"o-ran-je"},
+    {"id":8,"danish":"lilla","cat":"lila","pron":"lil-la"},
+    {"id":9,"danish":"brun","cat":"marró","pron":"brun"},
+    {"id":10,"danish":"grå","cat":"gris","pron":"gro"},
+    {"id":11,"danish":"lyserød","cat":"rosa","pron":"lü-se-röð"},
+    {"id":12,"danish":"mørkeblå","cat":"blau fosc","pron":"mör-ke-blo"}
+  ],
+  fruites: [
+    {"id":1,"danish":"æble","cat":"poma","pron":"eh-ble"},
+    {"id":2,"danish":"pære","cat":"pera","pron":"peh-re"},
+    {"id":3,"danish":"banan","cat":"plàtan","pron":"ba-nan"},
+    {"id":4,"danish":"appelsin","cat":"taronja","pron":"a-pel-sin"},
+    {"id":5,"danish":"citron","cat":"llimona","pron":"si-tron"},
+    {"id":6,"danish":"drue","cat":"raïm","pron":"droo-e"},
+    {"id":7,"danish":"jordbær","cat":"maduixa","pron":"yor-bair"},
+    {"id":8,"danish":"kirsebær","cat":"cirera","pron":"kir-se-bair"},
+    {"id":9,"danish":"hindbær","cat":"gerd","pron":"hin-bair"},
+    {"id":10,"danish":"melon","cat":"meló","pron":"me-lon"},
+    {"id":11,"danish":"ananas","cat":"pinya","pron":"a-na-nas"},
+    {"id":12,"danish":"fersken","cat":"préssec","pron":"fer-sken"}
+  ],
+  animals: [
+    {"id":1,"danish":"hund","cat":"gos","pron":"hun"},
+    {"id":2,"danish":"kat","cat":"gat","pron":"kat"},
+    {"id":3,"danish":"hest","cat":"cavall","pron":"hest"},
+    {"id":4,"danish":"ko","cat":"vaca","pron":"koo"},
+    {"id":5,"danish":"får","cat":"ovella","pron":"for"},
+    {"id":6,"danish":"ged","cat":"cabra","pron":"gehð"},
+    {"id":7,"danish":"fugl","cat":"ocell","pron":"foo-l"},
+    {"id":8,"danish":"fisk","cat":"peix","pron":"fisk"},
+    {"id":9,"danish":"mus","cat":"ratolí","pron":"moos"},
+    {"id":10,"danish":"ræv","cat":"guineu","pron":"rehv"}
+  ],
+  cortesia: [
+    {"id":1,"danish":"ja","cat":"sí","pron":"ya"},
+    {"id":2,"danish":"nej","cat":"no","pron":"nai"},
+    {"id":3,"danish":"tak","cat":"gràcies","pron":"tak"},
+    {"id":4,"danish":"værsgo","cat":"de res / aquí tens","pron":"vers-go"},
+    {"id":5,"danish":"undskyld","cat":"perdó","pron":"un-skül"},
+    {"id":6,"danish":"hej","cat":"hola","pron":"hai"},
+    {"id":7,"danish":"farvel","cat":"adéu","pron":"far-vel"},
+    {"id":8,"danish":"godmorgen","cat":"bon dia","pron":"go-mor-en"},
+    {"id":9,"danish":"godaften","cat":"bona tarda / vespre","pron":"go-af-ten"},
+    {"id":10,"danish":"godnat","cat":"bona nit","pron":"go-nat"},
+    {"id":11,"danish":"velkommen","cat":"benvingut/da","pron":"vel-kom-en"},
+    {"id":12,"danish":"skål","cat":"salut (en brindar)","pron":"skol"}
+  ],
+  dies: [
+    {"id":1,"danish":"mandag","cat":"dilluns","pron":"man-daw"},
+    {"id":2,"danish":"tirsdag","cat":"dimarts","pron":"tirs-daw"},
+    {"id":3,"danish":"onsdag","cat":"dimecres","pron":"ons-daw"},
+    {"id":4,"danish":"torsdag","cat":"dijous","pron":"tors-daw"},
+    {"id":5,"danish":"fredag","cat":"divendres","pron":"fre-daw"},
+    {"id":6,"danish":"lørdag","cat":"dissabte","pron":"lör-daw"},
+    {"id":7,"danish":"søndag","cat":"diumenge","pron":"sön-daw"},
+    {"id":8,"danish":"i dag","cat":"avui","pron":"i dai"},
+    {"id":9,"danish":"i morgen","cat":"demà","pron":"i mor-en"},
+    {"id":10,"danish":"i går","cat":"ahir","pron":"i gor"}
+  ],
+  numeros: [
+    {"id":1,"danish":"en","cat":"1","pron":"en"},
+    {"id":2,"danish":"to","cat":"2","pron":"too"},
+    {"id":3,"danish":"tre","cat":"3","pron":"tre"},
+    {"id":4,"danish":"fire","cat":"4","pron":"fi-re"},
+    {"id":5,"danish":"fem","cat":"5","pron":"fem"},
+    {"id":6,"danish":"seks","cat":"6","pron":"seks"},
+    {"id":7,"danish":"syv","cat":"7","pron":"süv"},
+    {"id":8,"danish":"otte","cat":"8","pron":"ot-te"},
+    {"id":9,"danish":"ni","cat":"9","pron":"nii"},
+    {"id":10,"danish":"ti","cat":"10","pron":"tii"}
+  ],
+  cos: [
+    {"id":1,"danish":"hoved","cat":"cap","pron":"ho-ved"},
+    {"id":2,"danish":"hånd","cat":"mà","pron":"hon"},
+    {"id":3,"danish":"ben","cat":"cama","pron":"ben"},
+    {"id":4,"danish":"øje","cat":"ull","pron":"ö-ye"},
+    {"id":5,"danish":"øre","cat":"orella","pron":"ö-re"},
+    {"id":6,"danish":"næse","cat":"nas","pron":"neh-se"},
+    {"id":7,"danish":"mund","cat":"boca","pron":"mun"},
+    {"id":8,"danish":"hjerte","cat":"cor","pron":"yair-te"},
+    {"id":9,"danish":"ryg","cat":"esquena","pron":"rüg"},
+    {"id":10,"danish":"tænder","cat":"dents","pron":"ten-ner"}
+  ],
+  familia: [
+    {"id":1,"danish":"mor","cat":"mare","pron":"mor"},
+    {"id":2,"danish":"far","cat":"pare","pron":"far"},
+    {"id":3,"danish":"søster","cat":"germana","pron":"sös-ter"},
+    {"id":4,"danish":"bror","cat":"germà","pron":"bror"},
+    {"id":5,"danish":"datter","cat":"filla","pron":"dat-ter"},
+    {"id":6,"danish":"søn","cat":"fill","pron":"sön"},
+    {"id":7,"danish":"bedstemor","cat":"àvia","pron":"best-e-mor"},
+    {"id":8,"danish":"bedstefar","cat":"avi","pron":"best-e-far"},
+    {"id":9,"danish":"onkel","cat":"oncle","pron":"on-kel"},
+    {"id":10,"danish":"tante","cat":"tia","pron":"tan-te"}
+  ],
+  verb_ser: [
+    {"id":1,"danish":"jeg er","cat":"jo sóc","pron":"yai er"},
+    {"id":2,"danish":"du er","cat":"tu ets","pron":"doo er"},
+    {"id":3,"danish":"han er","cat":"ell és","pron":"han er"},
+    {"id":4,"danish":"hun er","cat":"ella és","pron":"hun er"},
+    {"id":5,"danish":"vi er","cat":"nosaltres som","pron":"vi er"},
+    {"id":6,"danish":"I er","cat":"vosaltres sou","pron":"i er"},
+    {"id":7,"danish":"de er","cat":"ells/elles són","pron":"di er"},
+    {"id":8,"danish":"jeg er ikke","cat":"jo no sóc","pron":"yai er i-ke"},
+    {"id":9,"danish":"er du...?","cat":"ets tu...?","pron":"er doo"},
+    {"id":10,"danish":"er han ikke...?","cat":"no és ell...?","pron":"er han i-ke"}
+  ],
+  pronoms: [
+    {"id":1,"danish":"jeg","cat":"jo","pron":"yai"},
+    {"id":2,"danish":"du","cat":"tu","pron":"doo"},
+    {"id":3,"danish":"han","cat":"ell","pron":"han"},
+    {"id":4,"danish":"hun","cat":"ella","pron":"hun"},
+    {"id":5,"danish":"vi","cat":"nosaltres","pron":"vi"},
+    {"id":6,"danish":"I","cat":"vosaltres","pron":"i"},
+    {"id":7,"danish":"de","cat":"ells/elles","pron":"di"},
+    {"id":8,"danish":"mig","cat":"a mi","pron":"mai"},
+    {"id":9,"danish":"dig","cat":"a tu","pron":"dai"},
+    {"id":10,"danish":"dem","cat":"a ells/elles","pron":"dem"}
+  ],
+  paisatge: [
+    {"id":1,"danish":"bjerg","cat":"muntanya","pron":"byair"},
+    {"id":2,"danish":"flod","cat":"riu","pron":"floð"},
+    {"id":3,"danish":"sø","cat":"llac","pron":"sö"},
+    {"id":4,"danish":"hav","cat":"mar","pron":"hav"},
+    {"id":5,"danish":"skov","cat":"bosc","pron":"skov"},
+    {"id":6,"danish":"mark","cat":"camp","pron":"mark"},
+    {"id":7,"danish":"strand","cat":"platja","pron":"stran"},
+    {"id":8,"danish":"ø","cat":"illa","pron":"ö"},
+    {"id":9,"danish":"dal","cat":"vall","pron":"dal"},
+    {"id":10,"danish":"bakke","cat":"turó","pron":"bak-ke"}
+  ],
+  transport: [
+    {"id":1,"danish":"bil","cat":"cotxe","pron":"biil"},
+    {"id":2,"danish":"bus","cat":"autobús","pron":"bus"},
+    {"id":3,"danish":"tog","cat":"tren","pron":"tow"},
+    {"id":4,"danish":"cykel","cat":"bicicleta","pron":"sü-kel"},
+    {"id":5,"danish":"båd","cat":"vaixell","pron":"boð"},
+    {"id":6,"danish":"fly","cat":"avió","pron":"flü"},
+    {"id":7,"danish":"station","cat":"estació","pron":"sta-sjon"},
+    {"id":8,"danish":"lufthavn","cat":"aeroport","pron":"luf-havn"},
+    {"id":9,"danish":"bro","cat":"pont","pron":"bro"},
+    {"id":10,"danish":"vej","cat":"carretera","pron":"vai"}
+  ],
+  menjar: [
+    {"id":1,"danish":"brød","cat":"pa","pron":"bröð"},
+    {"id":2,"danish":"smør","cat":"mantega","pron":"smör"},
+    {"id":3,"danish":"vand","cat":"aigua","pron":"van"},
+    {"id":4,"danish":"mælk","cat":"llet","pron":"melk"},
+    {"id":5,"danish":"kød","cat":"carn","pron":"köð"},
+    {"id":6,"danish":"fisk","cat":"peix","pron":"fisk"},
+    {"id":7,"danish":"grøntsager","cat":"verdures","pron":"grö'n-sa-yer"},
+    {"id":8,"danish":"frugt","cat":"fruita","pron":"frugt"},
+    {"id":9,"danish":"kaffe","cat":"cafè","pron":"ka-fe"},
+    {"id":10,"danish":"te","cat":"te","pron":"te"}
+  ],
+  temps: [
+    {"id":1,"danish":"sol","cat":"sol","pron":"sohl"},
+    {"id":2,"danish":"himmel","cat":"cel","pron":"him-mel"},
+    {"id":3,"danish":"sky","cat":"núvol","pron":"sky"},
+    {"id":4,"danish":"regn","cat":"pluja","pron":"rain"},
+    {"id":5,"danish":"sne","cat":"neu","pron":"sne"},
+    {"id":6,"danish":"vind","cat":"vent","pron":"vin"},
+    {"id":7,"danish":"torden","cat":"tro","pron":"tor-den"},
+    {"id":8,"danish":"tåge","cat":"boira","pron":"to-ye"},
+    {"id":9,"danish":"varm","cat":"calent","pron":"varm"},
+    {"id":10,"danish":"kold","cat":"fred","pron":"kol"}
+  ],
+  ciutat: [
+    {"id":1,"danish":"by","cat":"ciutat","pron":"bü"},
+    {"id":2,"danish":"gade","cat":"carrer","pron":"ge-ðe"},
+    {"id":3,"danish":"butik","cat":"botiga","pron":"bu-tik"},
+    {"id":4,"danish":"bank","cat":"banc","pron":"bank"},
+    {"id":5,"danish":"hospital","cat":"hospital","pron":"hos-pi-tal"},
+    {"id":6,"danish":"skole","cat":"escola","pron":"sko-le"},
+    {"id":7,"danish":"bibliotek","cat":"biblioteca","pron":"bi-blio-tek"},
+    {"id":8,"danish":"park","cat":"parc","pron":"park"},
+    {"id":9,"danish":"posthus","cat":"oficina de correus","pron":"post-hus"},
+    {"id":10,"danish":"hotel","cat":"hotel","pron":"ho-tel"}
+  ],
+  verb_tenir: [
+    {"id":1,"danish":"jeg har","cat":"jo tinc","pron":"yai har"},
+    {"id":2,"danish":"du har","cat":"tu tens","pron":"doo har"},
+    {"id":3,"danish":"han har","cat":"ell té","pron":"han har"},
+    {"id":4,"danish":"hun har","cat":"ella té","pron":"hun har"},
+    {"id":5,"danish":"vi har","cat":"nosaltres tenim","pron":"vi har"},
+    {"id":6,"danish":"I har","cat":"vosaltres teniu","pron":"i har"},
+    {"id":7,"danish":"de har","cat":"ells/elles tenen","pron":"di har"},
+    {"id":8,"danish":"jeg har ikke","cat":"jo no tinc","pron":"yai har i-ke"},
+    {"id":9,"danish":"har du...?","cat":"tens tu...?","pron":"har doo"},
+    {"id":10,"danish":"har han ikke...?","cat":"no té ell...?","pron":"har han i-ke"}
+  ],
+  adjectius: [
+    {"id":1,"danish":"stor","cat":"gran","pron":"stor"},
+    {"id":2,"danish":"lille","cat":"petit","pron":"lil-le"},
+    {"id":3,"danish":"smuk","cat":"bonic","pron":"smuk"},
+    {"id":4,"danish":"dårlig","cat":"dolent","pron":"dohr-li"},
+    {"id":5,"danish":"god","cat":"bo","pron":"goð"},
+    {"id":6,"danish":"ny","cat":"nou","pron":"nü"},
+    {"id":7,"danish":"gammel","cat":"vell","pron":"gam-mel"},
+    {"id":8,"danish":"dejlig","cat":"agradable","pron":"dai-li"},
+    {"id":9,"danish":"ond","cat":"dolent (maliciós)","pron":"on"},
+    {"id":10,"danish":"tør","cat":"sec","pron":"tör"}
+  ],
+  interrogatius: [
+    {"id":1,"danish":"hvem","cat":"qui","pron":"vem"},
+    {"id":2,"danish":"hvad","cat":"què","pron":"væð"},
+    {"id":3,"danish":"hvornår","cat":"quan","pron":"vor-nor"},
+    {"id":4,"danish":"hvorfor","cat":"per què","pron":"vor-for"},
+    {"id":5,"danish":"hvordan","cat":"com","pron":"vor-dan"},
+    {"id":6,"danish":"hvor","cat":"on","pron":"vor"},
+    {"id":7,"danish":"hvor meget","cat":"quant","pron":"vor mai-et"},
+    {"id":8,"danish":"hvilken","cat":"quin/quina","pron":"vil-ken"},
+    {"id":9,"danish":"hvilke (to)","cat":"quin dels dos","pron":"vil-ke"},
+    {"id":10,"danish":"hvordan har du det?","cat":"com estàs?","pron":"vor-dan har doo de"}
+  ]
+};
+
+let paraulesActuals = TEMES.colors;
+let encerts = 0;
+let selectedDanish = null;
+let currentAttempts = {};
+
+function canviaTema() {
+  paraulesActuals = TEMES[document.getElementById("tema").value];
+  novaRonda();
+}
+
+function barreja(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function speakDanish(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "da-DK";
+  utterance.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function pronunciaSeleccionat() {
+  if (selectedDanish) {
+    const text = selectedDanish.querySelector("div")?.textContent || selectedDanish.textContent;
+    speakDanish(text);
+  } else {
+    alert("Selecciona primer una paraula en danès");
+  }
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `Encerts: ${encerts} / ${TOTAL_PER_RONDA}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-danish").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = paraulesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = paraulesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-danish, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-danish", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const danesContainer = document.getElementById("danes");
+  const catContainer = document.getElementById("catala");
+
+  const matchedDanish = danesContainer.querySelectorAll(".matched, .fixed-danish");
+  matchedDanish.forEach(danish => {
+    const danishId = danish.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${danishId}"], .fixed-cat[data-id="${danishId}"]`);
+    if (cat) {
+      const danishRect = danish.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = danishRect.right - containerRect.left;
+      const y1 = danishRect.top + danishRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#003366");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-dasharray", "5,3");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const danesContainer = document.getElementById("danes");
+  const catContainer = document.getElementById("catala");
+  danesContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedDanish = null;
+  actualitzaPuntuacio();
+
+  const danesFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  danesFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+
+    const textDiv = document.createElement("div");
+    textDiv.textContent = f.danish;
+
+    const pronDiv = document.createElement("div");
+    pronDiv.className = "pronuncia";
+    pronDiv.textContent = `Pronúncia (aprox.): ${f.pron}`;
+
+    div.appendChild(textDiv);
+    div.appendChild(pronDiv);
+
+    div.addEventListener("click", () => {
+      speakDanish(f.danish);
+      if (div.classList.contains("matched") || div.classList.contains("fixed-danish")) return;
+      netejaErrors();
+      document.querySelectorAll("#danes .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedDanish = div;
+    });
+
+    danesContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.cat;
+
+    div.addEventListener("click", () => {
+      if (!selectedDanish) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const danishId = selectedDanish.dataset.id;
+      const catId = div.dataset.id;
+
+      if (danishId === catId) {
+        if (currentAttempts[danishId] && currentAttempts[danishId].attempts > 0) {
+          selectedDanish.classList.add("fixed-danish");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedDanish.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedDanish);
+        mouAlTop(div);
+        dibuixaLinies();
+      } else {
+        selectedDanish.classList.add("incorrect-danish");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[danishId]) currentAttempts[danishId] = { attempts: 0 };
+        currentAttempts[danishId].attempts++;
+      }
+
+      selectedDanish.classList.remove("selected");
+      selectedDanish = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+</body>
+</html>
