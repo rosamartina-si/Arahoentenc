@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turisme - Generador de Llista</title>
+    <style>
+        :root { --primary: #2a9d8f; --secondary: #e76f51; --bg: #f4f1de; --text: #264653; }
+        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; }
+        
+        .input-section { background: white; padding: 20px; border-radius: 10px; display: flex; gap: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; background: var(--primary); color: white; }
+        .btn-view { background: var(--secondary); margin-top: 10px; width: 100%; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 8px; border-left: 5px solid var(--primary); position: relative; }
+        .card button { background: #e63946; padding: 2px 8px; position: absolute; top: 5px; right: 5px; font-size: 12px; }
+
+        /* Estils per al visor de text */
+        #visorText { 
+            display: none; background: #333; color: #fff; padding: 20px; border-radius: 10px; 
+            margin-top: 20px; white-space: pre-wrap; font-family: monospace; position: relative;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌍 Idees de Turisme</h1>
+    </header>
+
+    <div class="input-section">
+        <input type="text" id="travelIdea" placeholder="Escriu una idea nova...">
+        <button onclick="addIdea()">Afegir</button>
+    </div>
+
+    <div class="grid" id="ideasList"></div>
+
+    <button class="btn-view" onclick="generarTxt()">Veure Llista en format Text (per a GitHub)</button>
+
+    <div id="visorText">
+        <button onclick="document.getElementById('visorText').style.display='none'" style="background:#888; margin-bottom:10px;">Tancar</button>
+        <div id="contingutTxt"></div>
+    </div>
+</div>
+
+<script>
+    // Carregar idees en obrir
+    document.addEventListener('DOMContentLoaded', displayIdeas);
+
+    function addIdea() {
+        const input = document.getElementById('travelIdea');
+        if (input.value.trim() === "") return;
+        
+        let ideas = JSON.parse(localStorage.getItem('mevesIdees')) || [];
+        ideas.push(input.value.trim());
+        localStorage.setItem('mevesIdees', JSON.stringify(ideas));
+        
+        input.value = "";
+        displayIdeas();
+    }
+
+    function displayIdeas() {
+        const list = document.getElementById('ideasList');
+        const ideas = JSON.parse(localStorage.getItem('mevesIdees')) || [];
+        list.innerHTML = "";
+        
+        ideas.forEach((idea, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <strong>${index + 1}. ${idea}</strong>
+                <button onclick="removeIdea(${index})">X</button>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function removeIdea(index) {
+        let ideas = JSON.parse(localStorage.getItem('mevesIdees')) || [];
+        ideas.splice(index, 1);
+        localStorage.setItem('mevesIdees', JSON.stringify(ideas));
+        displayIdeas();
+    }
+
+    function generarTxt() {
+        const ideas = JSON.parse(localStorage.getItem('mevesIdees')) || [];
+        if (ideas.length === 0) return alert("No hi ha idees!");
+
+        const visor = document.getElementById('visorText');
+        const contingut = document.getElementById('contingutTxt');
+        
+        // Generem la llista numerada
+        let textFinal = "LLISTA D'IDEES DE TURISME\n";
+        textFinal += "==========================\n\n";
+        ideas.forEach((idea, index) => {
+            textFinal += `${index + 1}. ${idea}\n`;
+        });
+
+        contingut.innerText = textFinal;
+        visor.style.display = 'block';
+        visor.scrollIntoView();
+    }
+</script>
+
+</body>
+</html>
