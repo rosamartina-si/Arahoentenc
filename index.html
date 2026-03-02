@@ -4,374 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recursos Educatius - Activitats per Matèries</title>
-  <style>
-    :root {
-      --primary: #2c3e50;
-      --secondary: #3498db;
-      --accent: #e74c3c;
-      --light: #ecf0f1;
-      --dark: #34495e;
-      --success: #27ae60;
-      --warning: #f39c12;
-      --purple: #9b59b6;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 30px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border-radius: 15px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    header::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--warning), var(--success));
-    }
-    
-    h1 {
-      font-size: 2.8rem;
-      margin-bottom: 10px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-    }
-    
-    .subtitle {
-      font-size: 1.3rem;
-      opacity: 0.9;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .filters {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 30px;
-    }
-    
-    .filter-btn {
-      padding: 10px 20px;
-      background: white;
-      border: 2px solid var(--secondary);
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: 600;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .filter-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    
-    .filter-btn.active {
-      background: var(--secondary);
-      color: white;
-    }
-    
-    .search-box {
-      max-width: 500px;
-      margin: 0 auto 30px;
-      position: relative;
-    }
-    
-    .search-box input {
-      width: 100%;
-      padding: 12px 20px;
-      border: 2px solid var(--light);
-      border-radius: 25px;
-      font-size: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: all 0.3s;
-    }
-    
-    .search-box input:focus {
-      outline: none;
-      border-color: var(--secondary);
-      box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 25px;
-    }
-    
-    .category {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border-top: 5px solid var(--secondary);
-    }
-    
-    .category:hover {
-      transform: translateY(-7px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    }
-    
-    .category-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--light);
-    }
-    
-    .category-icon {
-      font-size: 2rem;
-      margin-right: 15px;
-      width: 50px;
-      text-align: center;
-    }
-    
-    .category h2 {
-      color: var(--primary);
-      font-size: 1.6rem;
-      flex: 1;
-    }
-    
-    .subcategory {
-      margin: 20px 0;
-    }
-    
-    .subcategory h3 {
-      font-size: 1.2rem;
-      color: var(--dark);
-      margin-bottom: 12px;
-      padding-left: 12px;
-      border-left: 4px solid var(--secondary);
-      display: flex;
-      align-items: center;
-    }
-    
-    .subcategory h3::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--light);
-      margin-left: 10px;
-    }
-    
-    .link-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    .link-box {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      background-color: var(--light);
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--dark);
-      transition: all 0.2s;
-      border-left: 4px solid transparent;
-    }
-    
-    .link-box:hover {
-      background-color: #dfe6e9;
-      border-left-color: var(--secondary);
-      transform: translateX(5px);
-    }
-    
-    .link-icon {
-      margin-right: 10px;
-      font-size: 1.2rem;
-      min-width: 24px;
-      text-align: center;
-    }
-    
-    .external::after {
-      content: "↗";
-      margin-left: auto;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-    
-    .level-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      background: var(--warning);
-      color: white;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-    
-    .level-1 { background: var(--success); }
-    .level-2 { background: var(--warning); }
-    .level-3 { background: var(--accent); }
-    
-    .counter {
-      display: inline-block;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      text-align: center;
-      line-height: 24px;
-      font-size: 0.8rem;
-      margin-left: 8px;
-    }
-    
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      .category {
-        padding: 20px;
-      }
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      padding: 20px;
-      color: var(--dark);
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
+<style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
+        h1 { border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2c3e50; margin-top: 30px; }
+        h3 { color: #555; border-left: 4px solid #3498db; padding-left: 10px; margin-top: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 8px; }
+        a { text-decoration: none; color: #3498db; font-weight: 500; }
+        a:hover { text-decoration: underline; color: #2980b9; }
+    </style>
 <body>
-  <div class="container">
-    <header>
-      <h1>Recursos Educatius</h1>
-      <p class="subtitle">Activitats i materials per a totes les edats i matèries</p>
-    </header>
 
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all">Tots els recursos</button>
-      <button class="filter-btn" data-filter="idiomes">Idiomes</button>
-      <button class="filter-btn" data-filter="ciencies">Ciències</button>
-      <button class="filter-btn" data-filter="llengua">Llengua</button>
-      <button class="filter-btn" data-filter="matematiques">Matemàtiques</button>
-      <button class="filter-btn" data-filter="altres">Altres</button>
-    </div>
+  <h1>📚 Índex de Recursos</h1>
+  
+<h2>🇬🇧 Anglès</h2>
+    <h3>Vocabulari i Gramàtica</h3>
+    <ul>
+        <li><a href="diferencia_conjugacio_angles_catala.html">Diferències verbs anglès vs català</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/futbol.html">Futbol (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/aniversari.html">Aniversari (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/nado.html">Nadó (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/muntanya.html">Excursió (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/abans_jugar.html">Surto a juga (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/habitacio.html">Habitacio (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/zoo.html">Zoo< (traducció frase)/a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/habits_saludables.html">Hàbits_saludables (traducció frase)</a></li>
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_de_lloc.html">Preposicions de lloc (traducció mot)</a></li>
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/preposicions_de_moviment.html">Preposicions de moviment (traducció mot)</a></li>  
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-in_on.html">Preposicions de transport: get in - get out (traducció mot)</a></li>   
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-out_of_off.html">Preposicions de transport: get out of - get off (traducció mot)</a></li> 
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport_get.html">Preposicions de transport: get in / get out of - get on / get off (traducció mot)</a></li>
+        <li><a href="Fitxes_traduccio_buits/fitxes/angles/behind_in-front-of_before_after.html">Davant / Darrere, Abans / Després (traducció mot)</a></li>
+        <li><a href="Fitxes_traduccio_10_frases/fitxes/angles/Past_simple_de_10_en_10.html">Past simple 10×10</a></li>
+    </ul>
 
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Cerca activitats...">
-    </div>
-
-    <div class="grid">
-      <!-- ANGLÈS -->
-      <div class="category" data-category="idiomes">
-        <div class="category-header">
-          <span class="category-icon">🇬🇧</span>
-          <h2>Anglès</h2>
-        </div>
-        
-        <div class="subcategory">
-          <h3>Com funciona</h3>
-          <div class="link-list">
-            <a href="diferencia_conjugacio_angles_catala.html" class="link-box">
-              <span class="link-icon">📘</span>
-              Diferències verbs anglès vs català
-            </a>
-          </div>
-        </div>
-        
-        <div class="subcategory">
-          <h3>Tradueix</h3>
-          <div class="link-list">
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/futbol.html" class="link-box">
-              <span class="link-icon">⚽</span>
-              Futbol
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/aniversari.html" class="link-box">
-              <span class="link-icon">🎂</span>
-              Aniversari
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/nado.html" class="link-box">
-              <span class="link-icon">👶</span>
-              Nadó
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/muntanya.html" class="link-box">
-              <span class="link-icon">🏔️</span>
-              Excursió
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/abans_jugar.html" class="link-box">
-              <span class="link-icon">🏃</span>
-              Surto a jugar
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/habitacio.html" class="link-box">
-              <span class="link-icon">🛏️</span>
-              Habitació
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/zoo.html" class="link-box">
-              <span class="link-icon">🐘</span>
-              Zoo
-            </a>
-            <a href="Fitxes_traduccio_10_frases/fitxes/angles/habits_saludables.html" class="link-box">
-              <span class="link-icon">🥗</span>
-              Hàbits saludables
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_de_lloc.html" class="link-box">
-              <span class="link-icon">📍</span>
-              Preposicions de lloc
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/preposicions_de_moviment.html" class="link-box">
-              <span class="link-icon">↔️</span>
-              Preposicions de moviment
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-in_on.html" class="link-box">
-              <span class="link-icon">🚌</span>
-              Preposicions de transport: get in - get out
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport-out_of_off.html" class="link-box">
-              <span class="link-icon">🚌</span>
-              Preposicions de transport: get out of - get off
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/Preposicions_transport_get.html" class="link-box">
-              <span class="link-icon">🚌</span>
-              Preposicions de transport: get in / get out of - get on / get off
-            </a>
-            <a href="Fitxes_traduccio_buits/fitxes/angles/behind_in-front-of_before_after.html" class="link-box">
-              <span class="link-icon">🔁</span>
-              Davant / Darrere, Abans / Després
-            </a>
             <a href="Fitxes_traduccio_10_frases/fitxes/angles/Past_simple_de_10_en_10.html" class="link-box">
               <span class="link-icon">⏳</span>
               Past simple 10×10
