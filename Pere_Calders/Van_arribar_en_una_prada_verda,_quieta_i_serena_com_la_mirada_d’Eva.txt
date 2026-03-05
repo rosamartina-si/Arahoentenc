@@ -472,7 +472,33 @@ Aquest tipus de precisió és molt característic de la prosa de Pere Calders.
 ***************************************
 ***************************************
 
-Si vols, també et puc explicar una cosa molt curiosa: **aquesta frase té una estructura molt semblant a moltes frases de Josep Carner**, i això no és casual. És bastant interessant veure-ho amb exemples.
+Van arribar a una urbs grisa, fressosa, esquerpa com l'esguard de l'Eva
 
 
+La teva frase
 
+Van arribar a una urbs grisa, fressosa, esquerpa com l'esguard de l'Eva.
+
+funciona molt bé per aquest objectiu perquè:
+
+urbs és fred i abstracte
+
+fressosa és soroll pur
+
+esquerpa és aspra
+
+esguard és més tallant que mirada
+
+Fonèticament també és molt més dura:
+
+urbs / grisa / fressosa / esquerpa / esguard
+
+hi ha moltes:
+
+fr
+
+gr
+
+rp
+
+sg
