@@ -115,27 +115,8 @@ També mantens una certa progressió:
 
 Això és estructuralment molt semblant al model.
 
-## 3️⃣ Però canvia el to
 
-A la frase de Calders hi ha **harmonia**:
-
-* prada
-* verda
-* quieta
-* serena
-
-Tot apunta cap a **calma i equilibri**.
-
-En la teva hi ha **tensió**:
-
-* ciutat
-* gris
-* moguda
-* estressada
-
-Això crea un **contrast molt més dur**.
-
-## 4️⃣ El punt que grinyola una mica
+## 3️⃣ El punt que grinyola una mica
 
 La comparació final:
 
@@ -198,20 +179,7 @@ Això produeix una sensació **suau i fluida**, coherent amb:
 
 **quieta i serena**
 
-## 3️⃣ Ritme ternari
-
-La seqüència:
-
-**verda, quieta i serena**
-
-té un ritme de **tres temps**, molt natural en català i en moltes llengües literàries.
-
-Aquest tipus de seqüència és molt habitual en:
-
-* **poesia**
-* **prosa molt treballada**
-
-## 4️⃣ Distribució molt equilibrada
+## 3️⃣ Distribució molt equilibrada
 
 Si la mires rítmicament:
 
@@ -219,13 +187,6 @@ Van arribar | en una prada | verda, quieta i serena | com la mirada d’Eva
 
 Cada segment és **una mica més llarg que l’anterior**, i això crea una sensació de **desplegament lent**, molt coherent amb el paisatge tranquil.
 
-## 5️⃣ El final suau
-
-La frase acaba amb:
-
-**Eva**
-
-És una paraula **breu, amb vocals obertes**, i funciona com un **tancament molt net**.
 
 ---
 
@@ -275,27 +236,6 @@ Aquest bloc final **humanitza el paisatge**.
 
 La prada no només és tranquil·la:
 és **tan serena com una mirada humana**.
-
-## 5️⃣ L’efecte d’allargament
-
-Els blocs també **s’allarguen progressivament**:
-
-1. Van arribar
-2. en una prada
-3. verda, quieta i serena
-4. com la mirada d’Eva
-
-Això crea una sensació de **desplegament lent**, molt coherent amb la calma que descriu la frase.
-
-## 6️⃣ El tancament perfecte
-
-La frase acaba amb **“Eva”**, una paraula:
-
-* curta
-* amb vocals obertes
-* molt clara
-
-És un **final suau i net**.
 
 
 
@@ -374,13 +314,6 @@ Van arribar | en una prada | verda, quieta i serena | com la mirada d’Eva
 
 Aquest ritme escalonat ajuda molt a retenir-la.
 
-6️⃣ Final curt i contundent
-
-La frase acaba amb una paraula molt breu:
-
-Eva
-
-Els finals curts solen ser molt memorables.
 
 ✨ Per això aquesta frase funciona tan bé: és clara, visual, rítmica i emocional alhora.
 
@@ -477,7 +410,7 @@ Van arribar a una urbs grisa, fressosa, esquerpa com l'esguard de l'Eva
 
 La teva frase
 
-Van arribar a una urbs grisa, fressosa, esquerpa com l'esguard de l'Eva.
+Van arribar a una urbs grisa, fressosa, esquerpa com l'esguard de la serpent.
 
 funciona molt bé per aquest objectiu perquè:
 
@@ -491,7 +424,7 @@ esguard és més tallant que mirada
 
 Fonèticament també és molt més dura:
 
-urbs / grisa / fressosa / esquerpa / esguard
+urbs / grisa / fressosa / esquerpa / esguard / serpent
 
 hi ha moltes:
 
