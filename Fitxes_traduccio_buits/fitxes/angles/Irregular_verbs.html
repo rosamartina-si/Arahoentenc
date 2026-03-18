@@ -1,0 +1,454 @@
+
+Converses
+32 % de 15 GB en ús
+Condicions · Privadesa · Normes del programa
+Darrera activitat del compte: fa 8 hores
+Detalls
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joc de Verbs Irregulars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animacions personalitzades per al feedback */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <div id="app" class="min-h-screen flex items-center justify-center p-4">
+        
+        <!-- ================= VISTA DE CONFIGURACIÓ ================= -->
+        <div id="view-setup" class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-slate-100">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-indigo-600 mb-2">Verbs Irregulars</h1>
+                <p class="text-slate-500">Configura el teu exercici</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="flex flex-col space-y-2">
+                    <label class="font-medium text-slate-700">Des de la fila (Mínim 1):</label>
+                    <input type="number" id="input-range-start" min="1" max="75" value="1"
+                        class="w-full border-2 border-slate-200 rounded-xl p-3 text-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all" />
+                </div>
+                
+                <div class="flex flex-col space-y-2">
+                    <label class="font-medium text-slate-700">Fins a la fila (Màxim 75):</label>
+                    <input type="number" id="input-range-end" min="1" max="75" value="75"
+                        class="w-full border-2 border-slate-200 rounded-xl p-3 text-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all" />
+                </div>
+
+                <button id="btn-start"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-md text-lg mt-4">
+                    Començar a practicar
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= VISTA DE JOC ================= -->
+        <div id="view-playing" class="hidden bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-100 flex-col">
+            
+            <!-- Capçalera amb progrés -->
+            <div class="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                <span id="ui-progress-text" class="font-semibold">Pregunta 1 / 10</span>
+                <span id="ui-score" class="bg-indigo-800 px-3 py-1 rounded-full text-sm font-bold">Punts: 0</span>
+            </div>
+            
+            <div class="h-1.5 w-full bg-slate-200">
+                <div id="ui-progress-bar" class="h-full bg-indigo-400 transition-all duration-300 ease-out" style="width: 0%"></div>
+            </div>
+
+            <div class="p-8 flex-grow">
+                <div class="text-center mb-8">
+                    <p class="text-sm text-slate-500 uppercase tracking-wider font-bold mb-1">Traducció al català</p>
+                    <h2 id="ui-current-word" class="text-3xl font-black text-slate-800">ser / estar</h2>
+                    <p id="ui-current-id" class="text-xs text-slate-400 mt-2">Fila original: 1</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1 ml-1">Infinitive:</label>
+                        <input type="text" id="input-inf" placeholder="Ex: go" autocomplete="off"
+                            class="w-full border-2 border-slate-200 rounded-xl p-4 text-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-500" />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1 ml-1">Past Simple:</label>
+                        <input type="text" id="input-ps" placeholder="Ex: went" autocomplete="off"
+                            class="w-full border-2 border-slate-200 rounded-xl p-4 text-lg focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-500" />
+                    </div>
+                </div>
+
+                <!-- Zona de Feedback -->
+                <div id="feedback-area" class="mt-6 min-h-[100px]">
+                    <!-- Correcte -->
+                    <div id="feedback-correct" class="hidden bg-green-100 text-green-800 p-4 rounded-xl border border-green-200 flex-col items-center animate-fade-in">
+                        <span class="text-xl font-bold mb-1 flex items-center gap-2 justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            Molt bé! Correcte!
+                        </span>
+                    </div>
+
+                    <!-- Incorrecte -->
+                    <div id="feedback-incorrect" class="hidden bg-red-50 text-red-800 p-4 rounded-xl border border-red-200 animate-fade-in">
+                        <span class="text-lg font-bold flex items-center gap-2 mb-2 text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            Incorrecte.
+                        </span>
+                        <p class="text-slate-700 font-medium">La resposta correcta era:</p>
+                        <div class="mt-2 flex gap-4 text-sm font-mono bg-white p-3 rounded border border-red-100">
+                            <div><span class="text-slate-400">Inf:</span> <strong id="correct-inf" class="text-slate-800 text-base"></strong></div>
+                            <div><span class="text-slate-400">Past:</span> <strong id="correct-ps" class="text-slate-800 text-base"></strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botons d'acció -->
+            <div class="p-4 bg-slate-50 border-t border-slate-100">
+                <button id="btn-action"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-sm text-lg">
+                    Comprovar
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= VISTA FINAL ================= -->
+        <div id="view-finished" class="hidden bg-white rounded-2xl shadow-xl p-8 w-full max-w-md text-center border border-slate-100">
+            <h2 class="text-3xl font-extrabold text-slate-800 mb-4">Resultats</h2>
+            
+            <div class="flex justify-center items-center mb-6">
+                <div id="final-ring" class="w-32 h-32 rounded-full flex items-center justify-center border-8 border-green-500 text-green-600">
+                    <span id="final-percentage" class="text-4xl font-black">100%</span>
+                </div>
+            </div>
+
+            <p class="text-xl mb-8 font-medium">
+                Has encertat <span id="final-score" class="font-bold text-indigo-600">0</span> de <span id="final-total" class="font-bold">0</span> verbs.
+            </p>
+
+            <button id="btn-restart"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-md text-lg">
+                Tornar a jugar
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ================= LOGICA JAVASCRIPT ================= -->
+    <script>
+        // Dades dels verbs
+        const VERBS = [
+            { id: 1, ca: "ser / estar", inf: "be", ps: "was / were" },
+            { id: 2, ca: "colpejar / derrotar", inf: "beat", ps: "beat" },
+            { id: 3, ca: "esdevenir / convertir-se", inf: "become", ps: "became" },
+            { id: 4, ca: "començar", inf: "begin", ps: "began" },
+            { id: 5, ca: "mossegar", inf: "bite", ps: "bit" },
+            { id: 6, ca: "bufar", inf: "blow", ps: "blew" },
+            { id: 7, ca: "trencar", inf: "break", ps: "broke" },
+            { id: 8, ca: "portar", inf: "bring", ps: "brought" },
+            { id: 9, ca: "construir", inf: "build", ps: "built" },
+            { id: 10, ca: "comprar", inf: "buy", ps: "bought" },
+            { id: 11, ca: "agafar / atrapar", inf: "catch", ps: "caught" },
+            { id: 12, ca: "triar / escollir", inf: "choose", ps: "chose" },
+            { id: 13, ca: "venir", inf: "come", ps: "came" },
+            { id: 14, ca: "costar", inf: "cost", ps: "cost" },
+            { id: 15, ca: "tallar", inf: "cut", ps: "cut" },
+            { id: 16, ca: "fer", inf: "do", ps: "did" },
+            { id: 17, ca: "dibuixar", inf: "draw", ps: "drew" },
+            { id: 18, ca: "beure", inf: "drink", ps: "drank" },
+            { id: 19, ca: "conduir", inf: "drive", ps: "drove" },
+            { id: 20, ca: "menjar", inf: "eat", ps: "ate" },
+            { id: 21, ca: "caure", inf: "fall", ps: "fell" },
+            { id: 22, ca: "sentir (sentiment)", inf: "feel", ps: "felt" },
+            { id: 23, ca: "lluitar / barallar-se", inf: "fight", ps: "fought" },
+            { id: 24, ca: "trobar", inf: "find", ps: "found" },
+            { id: 25, ca: "volar", inf: "fly", ps: "flew" },
+            { id: 26, ca: "oblidar", inf: "forget", ps: "forgot" },
+            { id: 27, ca: "aconseguir / obtenir", inf: "get", ps: "got" },
+            { id: 28, ca: "donar", inf: "give", ps: "gave" },
+            { id: 29, ca: "anar", inf: "go", ps: "went" },
+            { id: 30, ca: "créixer", inf: "grow", ps: "grew" },
+            { id: 31, ca: "tenir / haver", inf: "have", ps: "had" },
+            { id: 32, ca: "sentir (oïda)", inf: "hear", ps: "heard" },
+            { id: 33, ca: "amagar", inf: "hide", ps: "hid" },
+            { id: 34, ca: "colpejar / pegar", inf: "hit", ps: "hit" },
+            { id: 35, ca: "aguantar / sostenir", inf: "hold", ps: "held" },
+            { id: 36, ca: "fer mal / ferir", inf: "hurt", ps: "hurt" },
+            { id: 37, ca: "guardar / mantenir", inf: "keep", ps: "kept" },
+            { id: 38, ca: "saber / conèixer", inf: "know", ps: "knew" },
+            { id: 39, ca: "marxar / deixar", inf: "leave", ps: "left" },
+            { id: 40, ca: "perdre", inf: "lose", ps: "lost" },
+            { id: 41, ca: "fer / fabricar", inf: "make", ps: "made" },
+            { id: 42, ca: "significar / voler dir", inf: "mean", ps: "meant" },
+            { id: 43, ca: "conèixer / trobar-se", inf: "meet", ps: "met" },
+            { id: 44, ca: "pagar", inf: "pay", ps: "paid" },
+            { id: 45, ca: "posar", inf: "put", ps: "put" },
+            { id: 46, ca: "llegir", inf: "read", ps: "read" },
+            { id: 47, ca: "muntar / anar en (bici)", inf: "ride", ps: "rode" },
+            { id: 48, ca: "trucar / sonar", inf: "ring", ps: "rang" },
+            { id: 49, ca: "córrer", inf: "run", ps: "ran" },
+            { id: 50, ca: "dir", inf: "say", ps: "said" },
+            { id: 51, ca: "veure", inf: "see", ps: "saw" },
+            { id: 52, ca: "vendre", inf: "sell", ps: "sold" },
+            { id: 53, ca: "enviar", inf: "send", ps: "sent" },
+            { id: 54, ca: "brillar", inf: "shine", ps: "shone" },
+            { id: 55, ca: "disparar / xutar", inf: "shoot", ps: "shot" },
+            { id: 56, ca: "mostrar / ensenyar", inf: "show", ps: "showed" },
+            { id: 57, ca: "tancar", inf: "shut", ps: "shut" },
+            { id: 58, ca: "cantar", inf: "sing", ps: "sang" },
+            { id: 59, ca: "seure", inf: "sit", ps: "sat" },
+            { id: 60, ca: "dormir", inf: "sleep", ps: "slept" },
+            { id: 61, ca: "parlar", inf: "speak", ps: "spoke" },
+            { id: 62, ca: "gastar / passar (temps)", inf: "spend", ps: "spent" },
+            { id: 63, ca: "estar dret", inf: "stand", ps: "stood" },
+            { id: 64, ca: "robar", inf: "steal", ps: "stole" },
+            { id: 65, ca: "nedar", inf: "swim", ps: "swam" },
+            { id: 66, ca: "agafar / prendre", inf: "take", ps: "took" },
+            { id: 67, ca: "ensenyar (docència)", inf: "teach", ps: "taught" },
+            { id: 68, ca: "explicar / dir", inf: "tell", ps: "told" },
+            { id: 69, ca: "pensar", inf: "think", ps: "thought" },
+            { id: 70, ca: "llençar / tirar", inf: "throw", ps: "threw" },
+            { id: 71, ca: "entendre", inf: "understand", ps: "understood" },
+            { id: 72, ca: "despertar-se", inf: "wake", ps: "woke" },
+            { id: 73, ca: "portar posat (roba)", inf: "wear", ps: "wore" },
+            { id: 74, ca: "guanyar", inf: "win", ps: "won" },
+            { id: 75, ca: "escriure", inf: "write", ps: "wrote" }
+        ];
+
+        // Estat de l'aplicació
+        let state = {
+            gameVerbs: [],
+            currentIndex: 0,
+            score: 0,
+            feedback: null // null, 'correct', 'incorrect'
+        };
+
+        // Elements del DOM
+        const views = {
+            setup: document.getElementById('view-setup'),
+            playing: document.getElementById('view-playing'),
+            finished: document.getElementById('view-finished')
+        };
+
+        const inputs = {
+            start: document.getElementById('input-range-start'),
+            end: document.getElementById('input-range-end'),
+            inf: document.getElementById('input-inf'),
+            ps: document.getElementById('input-ps')
+        };
+
+        const ui = {
+            progressText: document.getElementById('ui-progress-text'),
+            score: document.getElementById('ui-score'),
+            progressBar: document.getElementById('ui-progress-bar'),
+            currentWord: document.getElementById('ui-current-word'),
+            currentId: document.getElementById('ui-current-id'),
+            feedbackCorrect: document.getElementById('feedback-correct'),
+            feedbackIncorrect: document.getElementById('feedback-incorrect'),
+            correctInf: document.getElementById('correct-inf'),
+            correctPs: document.getElementById('correct-ps'),
+            btnAction: document.getElementById('btn-action'),
+            finalRing: document.getElementById('final-ring'),
+            finalPercentage: document.getElementById('final-percentage'),
+            finalScore: document.getElementById('final-score'),
+            finalTotal: document.getElementById('final-total')
+        };
+
+        // Utilitats
+        const shuffleArray = (array) => {
+            const newArr = [...array];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        };
+
+        const normalize = (str) => {
+            if (!str) return "";
+            return str.toLowerCase().replace(/\s*[\/,]\s*/g, '/').trim();
+        };
+
+        // Funcions de navegació
+        function showView(viewName) {
+            views.setup.classList.add('hidden');
+            views.playing.classList.add('hidden');
+            views.playing.classList.remove('flex');
+            views.finished.classList.add('hidden');
+
+            if(viewName === 'playing') {
+                views.playing.classList.remove('hidden');
+                views.playing.classList.add('flex');
+            } else {
+                views[viewName].classList.remove('hidden');
+            }
+        }
+
+        // Lògica principal
+        function startGame() {
+            let start = parseInt(inputs.start.value) || 1;
+            let end = parseInt(inputs.end.value) || 75;
+            
+            start = Math.max(1, Math.min(start, end));
+            end = Math.min(VERBS.length, Math.max(start, end));
+
+            const selectedVerbs = VERBS.filter(v => v.id >= start && v.id <= end);
+            
+            state.gameVerbs = shuffleArray(selectedVerbs);
+            state.currentIndex = 0;
+            state.score = 0;
+            state.feedback = null;
+            
+            renderQuestion();
+            showView('playing');
+        }
+
+        function renderQuestion() {
+            const currentVerb = state.gameVerbs[state.currentIndex];
+            state.feedback = null;
+
+            // Netejar inputs
+            inputs.inf.value = '';
+            inputs.ps.value = '';
+            inputs.inf.disabled = false;
+            inputs.ps.disabled = false;
+
+            // Actualitzar UI Text
+            ui.currentWord.textContent = currentVerb.ca;
+            ui.currentId.textContent = `Fila original: ${currentVerb.id}`;
+            ui.progressText.textContent = `Pregunta ${state.currentIndex + 1} / ${state.gameVerbs.length}`;
+            ui.score.textContent = `Punts: ${state.score}`;
+            
+            // Actualitzar barra de progrés
+            const progress = (state.currentIndex / state.gameVerbs.length) * 100;
+            ui.progressBar.style.width = `${progress}%`;
+
+            // Amagar feedback
+            ui.feedbackCorrect.classList.add('hidden');
+            ui.feedbackCorrect.classList.remove('flex');
+            ui.feedbackIncorrect.classList.add('hidden');
+
+            // Actualitzar botó
+            ui.btnAction.textContent = 'Comprovar';
+            ui.btnAction.className = 'w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-sm text-lg';
+            checkInputState();
+
+            // Focus al primer input
+            setTimeout(() => inputs.inf.focus(), 50);
+        }
+
+        function checkAnswer() {
+            if (state.feedback !== null) return;
+
+            const currentVerb = state.gameVerbs[state.currentIndex];
+            const isInfCorrect = normalize(inputs.inf.value) === normalize(currentVerb.inf);
+            const isPsCorrect = normalize(inputs.ps.value) === normalize(currentVerb.ps);
+
+            inputs.inf.disabled = true;
+            inputs.ps.disabled = true;
+
+            if (isInfCorrect && isPsCorrect) {
+                state.feedback = 'correct';
+                state.score++;
+                ui.feedbackCorrect.classList.remove('hidden');
+                ui.feedbackCorrect.classList.add('flex');
+            } else {
+                state.feedback = 'incorrect';
+                ui.correctInf.textContent = currentVerb.inf;
+                ui.correctPs.textContent = currentVerb.ps;
+                ui.feedbackIncorrect.classList.remove('hidden');
+            }
+
+            ui.score.textContent = `Punts: ${state.score}`;
+
+            // Actualitzar botó
+            const isLast = state.currentIndex + 1 >= state.gameVerbs.length;
+            ui.btnAction.textContent = isLast ? 'Veure Resultats ➔' : 'Següent Verb ➔';
+            ui.btnAction.className = 'w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-sm text-lg';
+            ui.btnAction.disabled = false;
+            
+            ui.btnAction.focus();
+        }
+
+        function handleActionClick() {
+            if (state.feedback === null) {
+                checkAnswer();
+            } else {
+                if (state.currentIndex + 1 < state.gameVerbs.length) {
+                    state.currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishGame();
+                }
+            }
+        }
+
+        function finishGame() {
+            const total = state.gameVerbs.length;
+            const percentage = Math.round((state.score / total) * 100);
+
+            ui.finalScore.textContent = state.score;
+            ui.finalTotal.textContent = total;
+            ui.finalPercentage.textContent = `${percentage}%`;
+
+            // Colors de l'anell segons nota
+            ui.finalRing.className = `w-32 h-32 rounded-full flex items-center justify-center border-8 ${
+                percentage > 70 ? 'border-green-500 text-green-600' : 
+                percentage > 40 ? 'border-yellow-500 text-yellow-600' : 
+                'border-red-500 text-red-600'
+            }`;
+
+            showView('finished');
+        }
+
+        function checkInputState() {
+            if (state.feedback === null) {
+                ui.btnAction.disabled = !inputs.inf.value.trim() || !inputs.ps.value.trim();
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('btn-start').addEventListener('click', startGame);
+        document.getElementById('btn-restart').addEventListener('click', () => showView('setup'));
+        ui.btnAction.addEventListener('click', handleActionClick);
+
+        inputs.inf.addEventListener('input', checkInputState);
+        inputs.ps.addEventListener('input', checkInputState);
+
+        const handleEnterKey = (e) => {
+            if (e.key === 'Enter') {
+                if (state.feedback === null) {
+                    if (inputs.inf.value.trim() && inputs.ps.value.trim()) {
+                        checkAnswer();
+                    }
+                } else {
+                    handleActionClick();
+                }
+            }
+        };
+
+        inputs.inf.addEventListener('keydown', handleEnterKey);
+        inputs.ps.addEventListener('keydown', handleEnterKey);
+
+        // Validació per als inputs numèrics de configuració
+        inputs.start.addEventListener('change', () => {
+            if(parseInt(inputs.start.value) < 1) inputs.start.value = 1;
+            if(parseInt(inputs.start.value) > 75) inputs.start.value = 75;
+        });
+        inputs.end.addEventListener('change', () => {
+            if(parseInt(inputs.end.value) < 1) inputs.end.value = 1;
+            if(parseInt(inputs.end.value) > 75) inputs.end.value = 75;
+        });
+
+    </script>
+</body>
+</html>
