@@ -1,5 +1,133 @@
 No he sabut mai d’una manera prou clara com em pervingué en herència aquella petita casa.
 
+Per arribar a escriure frases com aquesta, el més útil és **desmuntar-la en “peces” (subestructures)** i practicar-les per separat. Aquesta frase no és difícil per vocabulari, sinó per **com combina diversos recursos alhora**.
+
+Et marco les **subfrases clau que hauries de practicar**:
+
+---
+
+## 🧩 1. Estructures d’experiència amb negació i durada
+
+👉 Model:
+
+* *No he sabut mai…*
+* *No he entès mai…*
+* *No he arribat a saber…*
+
+🎯 Què treballes:
+
+* Perfet (*he sabut*)
+* Adverbis de temps (*mai*)
+* To reflexiu
+
+---
+
+## 🎯 2. Expressions de grau i precisió
+
+👉 Model:
+
+* *d’una manera prou clara*
+* *amb prou precisió*
+* *de manera gaire definida*
+
+🎯 Què treballes:
+
+* Matisar el que dius (no és absolut → és imprecís)
+* Llenguatge més formal
+
+---
+
+## 🔗 3. Subordinades introduïdes per “com”
+
+👉 Model:
+
+* *com va passar…*
+* *com va arribar…*
+* *com es va produir…*
+
+🎯 Què treballes:
+
+* Subordinades completives indirectes
+* Construcció de frases llargues
+
+---
+
+## 📚 4. Lèxic narratiu formal (alternatives a “va arribar”)
+
+👉 Model:
+
+* *pervingué*
+* *li fou atribuït*
+* *li arribà*
+* *va acabar a les seves mans*
+
+🎯 Què treballes:
+
+* Registre literari
+* Varietat expressiva
+
+---
+
+## 🏡 5. Complements amb valor semàntic precís
+
+👉 Model:
+
+* *en herència*
+* *per casualitat*
+* *sense saber per què*
+
+🎯 Què treballes:
+
+* Afegir informació sense fer frases noves
+* Densitat expressiva
+
+---
+
+## 🎭 6. Sintagmes nominals amb matís (determinants + adjectius)
+
+👉 Model:
+
+* *aquella petita casa*
+* *aquell vell record*
+* *una estranya sensació*
+
+🎯 Què treballes:
+
+* Evocació i distància (*aquella*)
+* Valor expressiu dels adjectius
+
+---
+
+## 🧠 7. Combinar-ho tot (model complet)
+
+Quan ja controls les peces, les ajuntes:
+
+👉 Exemples:
+
+* *No he entès mai amb prou precisió com va arribar a les meves mans aquell vell llibre.*
+* *No he sabut mai de manera gaire clara com li fou atribuïda aquella estranya responsabilitat.*
+
+---
+
+## ✨ Idea clau
+
+Aquest tipus de frase funciona perquè combina:
+
+* **subjectivitat** (*no he sabut mai*)
+* **matís** (*prou clara*)
+* **subordinació** (*com…*)
+* **lèxic elevat** (*pervingué*)
+* **imatge evocadora** (*aquella petita casa*)
+
+👉 No és una sola cosa: és **la suma de petites habilitats**.
+
+---
+
+Si ho practiques així, en blocs, acabaràs produint frases d’aquest estil de manera natural.
+
+
+-----------
+
 Per escriure com Pere Calders, has de dominar l'art de la precisió en l'ambigüitat. Les seves frases no són complexes perquè siguin llargues, sinó perquè estan plenes de matisos, cortesia i una sintaxi una mica "estarrufada".
 
 Si vols practicar la construcció d'aquest tipus de frase, et recomano treballar aquestes quatre estructures o "subfrases":
@@ -68,3 +196,6 @@ Usa un nexe interrogatiu i un verb culte (https://www.google.com/search?q=...com
 Acaba amb un objecte quotidià i un demostratiu llunyà (...aquell barret de copa).
 
 Resultat: "No he comprès mai, d'una forma que es pugui considerar oficial, com s'esdevingué la pèrdua d'aquell barret de copa."
+
+
+
