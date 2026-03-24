@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filtre de Paraules IEC</title>
+    <title>Filtre de Paraules IEC - Columnes</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 20px; background-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #f0f2f5; }
         .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .controls { display: grid; gap: 12px; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 8px; border: 1px solid #ddd; }
         input, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
@@ -13,28 +13,40 @@
         .btn-cerca { background-color: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
         .btn-cerca:hover { background-color: #218838; }
         
-        .btn-print { background-color: #6c757d; color: white; border: none; cursor: pointer; margin-top: 10px; display: none; }
-        .btn-print:hover { background-color: #5a6268; }
+        .btn-print { background-color: #6c757d; color: white; border: none; cursor: pointer; margin-bottom: 20px; display: none; width: 100%; }
 
+        /* DISSENY DE COLUMNES */
         #resultats { 
-            white-space: pre-wrap; 
             background: #fff; 
             padding: 15px; 
             border: 1px solid #eee; 
             border-radius: 4px; 
-            max-height: 400px; 
-            overflow-y: auto; 
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
+            
+            /* Configuració de columnes */
+            column-count: 4; /* Nombre de columnes per defecte */
+            column-gap: 40px;
+            column-rule: 1px solid #f0f0f0; /* Línia divisòria suau */
         }
-        .stats { font-weight: bold; margin: 15px 0 5px 0; color: #333; }
+
+        /* Adaptació per a pantalles petites */
+        @media (max-width: 600px) {
+            #resultats { column-count: 2; }
+        }
+
+        .stats { font-weight: bold; margin: 15px 0 10px 0; color: #333; font-size: 1.1rem; }
 
         /* CONFIGURACIÓ PER A IMPRIMIR */
         @media print {
             .controls, h2, p, .btn-print, hr { display: none !important; }
-            body { background: white; margin: 0; padding: 0; }
-            .container { box-shadow: none; border: none; width: 100%; }
-            #resultats { max-height: none; overflow: visible; border: none; font-size: 12pt; }
-            .stats { font-size: 10pt; color: black; border-bottom: 1px solid #000; margin-bottom: 20px; }
+            body { background: white; margin: 0; padding: 0; max-width: 100%; }
+            .container { box-shadow: none; border: none; width: 100%; padding: 0; }
+            #resultats { 
+                column-count: 5; /* Més columnes al paper per estalviar espai */
+                font-size: 10pt; 
+                border: none;
+            }
+            .stats { border-bottom: 2px solid #333; padding-bottom: 5px; }
         }
     </style>
 </head>
@@ -47,15 +59,17 @@
     <div class="controls">
         <input type="file" id="fileInput" accept=".txt">
         <hr>
-        <input type="text" id="filtreText" placeholder="Conté (ex: ny)">
-        <input type="number" id="longitudMax" placeholder="Longitud màxima (ex: 4)">
-        <button class="btn-cerca" onclick="filtrarParaules()">Cerca paraules</button>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="filtreText" placeholder="Conté (ex: ny)" style="flex: 2;">
+            <input type="number" id="longitudMax" placeholder="Màx. lletres" style="flex: 1;">
+        </div>
+        <button class="btn-cerca" onclick="filtrarParaules()">Cerca i organitza</button>
     </div>
 
     <div id="zonaResultats" style="display:none;">
+        <button class="btn-print" id="btnPrint" onclick="window.print()">🖨️ Imprimir llista en columnes</button>
         <div class="stats" id="comptador"></div>
         <div id="resultats"></div>
-        <button class="btn-print" id="btnPrint" onclick="window.print()">🖨️ Imprimir resultats / Guardar PDF</button>
     </div>
 </div>
 
@@ -69,7 +83,7 @@
         const lector = new FileReader();
         lector.onload = function(e) {
             llistaOriginal = e.target.result.split(/\r?\n/).map(p => p.trim()).filter(p => p.length > 0);
-            alert("Carregat: " + llistaOriginal.length + " paraules.");
+            alert("Fitxer llest amb " + llistaOriginal.length + " paraules.");
         };
         lector.readAsText(fitxer);
     });
@@ -90,12 +104,13 @@
             return okText && okLen;
         });
 
-        // Mostrar zona de resultats
         document.getElementById('zonaResultats').style.display = 'block';
-        document.getElementById('comptador').innerText = "Resultats trobats: " + filtrades.length;
-        document.getElementById('resultats').innerText = filtrades.join("\n");
+        document.getElementById('comptador').innerText = "S'han trobat " + filtrades.length + " paraules:";
         
-        // Mostrar botó d'imprimir només si hi ha resultats
+        // Ara posem cada paraula en un <div> propi per facilitar el salt de columna
+        const divResultats = document.getElementById('resultats');
+        divResultats.innerHTML = filtrades.map(p => `<div>${p}</div>`).join("");
+        
         document.getElementById('btnPrint').style.display = filtrades.length > 0 ? 'block' : 'none';
     }
 </script>
