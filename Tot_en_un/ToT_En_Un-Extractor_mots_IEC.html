@@ -66,7 +66,7 @@
 
 <div class="container">
     <h2>Filtre de Paraules IEC</h2>
-    <p>Puja el fitxer i aplica els filtres. Pots netejar els accents per a jocs tipus Scrabble o Wordle.</p>
+    <p>Puja el fitxer i utilitza els filtres per trobar combinacions específiques.</p>
     
     <div class="controls">
         <input type="file" id="fileInput" accept=".txt">
@@ -75,6 +75,10 @@
         <div class="row">
             <input type="text" id="filtreText" placeholder="Conté (ex: ny)" style="flex: 1;">
             <input type="text" id="excloureText" placeholder="Exclou lletres (ex: kx)" style="flex: 1;">
+        </div>
+
+        <div class="row">
+            <input type="text" id="lletresPermeses" placeholder="Només aquestes lletres (ex: abcm)" style="flex: 1; border: 2px solid #28a745;">
         </div>
 
         <div class="row">
@@ -107,8 +111,9 @@
 <script>
     let llistaOriginal = [];
 
-    function treureAccents(text) {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // Funció auxiliar per treure accents i dièresis d'una cadena
+    function normalitzarText(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
 
     document.getElementById('fileInput').addEventListener('change', function(e) {
@@ -123,19 +128,14 @@
     });
 
     function netejarConsulta() {
-        // Buidar inputs de text i número
         document.getElementById('filtreText').value = "";
         document.getElementById('excloureText').value = "";
+        document.getElementById('lletresPermeses').value = "";
         document.getElementById('longitudMin').value = "";
         document.getElementById('longitudMax').value = "";
-        
-        // Desmarcar checkboxes
         document.getElementById('checkVocal').checked = false;
         document.getElementById('checkTreureAccents').checked = false;
-        
-        // Amagar resultats
         document.getElementById('zonaResultats').style.display = 'none';
-        document.getElementById('resultats').innerHTML = "";
     }
 
     function filtrarParaules() {
@@ -146,6 +146,7 @@
 
         const textBuscat = document.getElementById('filtreText').value.toLowerCase();
         const textExclos = document.getElementById('excloureText').value.toLowerCase();
+        const permeseStr = document.getElementById('lletresPermeses').value.toLowerCase();
         const minLen = parseInt(document.getElementById('longitudMin').value);
         const maxLen = parseInt(document.getElementById('longitudMax').value);
         const haDeTenirVocal = document.getElementById('checkVocal').checked;
@@ -155,20 +156,46 @@
 
         let filtrades = llistaOriginal.filter(paraula => {
             const pMin = paraula.toLowerCase();
+            const pPlana = normalitzarText(paraula); // Versió sense accents per facilitar la comparació
+
+            // 1. Inclusió
             const okInclusio = textBuscat === "" || pMin.includes(textBuscat);
+            
+            // 2. Exclusió
             let okExclusio = true;
             if (textExclos !== "") {
                 for (let char of textExclos) {
                     if (pMin.includes(char)) { okExclusio = false; break; }
                 }
             }
+
+            // 3. NOMÉS AQUESTES LLETRES (Lògica nova)
+            let okPermeses = true;
+            if (permeseStr !== "") {
+                // Normalitzem les lletres permeses per l'usuari (treiem accents si n'ha posat)
+                const setPermes = normalitzarText(permeseStr);
+                for (let char of pPlana) {
+                    // Si el caràcter de la paraula no és al set de lletres permeses, descartem
+                    if (!setPermes.includes(char)) {
+                        okPermeses = false;
+                        break;
+                    }
+                }
+            }
+
+            // 4. Longitud
             const okMin = isNaN(minLen) || paraula.length >= minLen;
             const okMax = isNaN(maxLen) || paraula.length <= maxLen;
+            
+            // 5. Vocal
             const okVocal = !haDeTenirVocal || vocalsRegex.test(pMin);
-            return okInclusio && okExclusio && okMin && okMax && okVocal;
+
+            return okInclusio && okExclusio && okPermeses && okMin && okMax && okVocal;
         });
 
-        if (netejarAccents) filtrades = filtrades.map(p => treureAccents(p));
+        if (netejarAccents) {
+            filtrades = filtrades.map(p => normalitzarText(p));
+        }
 
         document.getElementById('zonaResultats').style.display = 'block';
         document.getElementById('comptador').innerHTML = "📊 Resultat: <strong>" + filtrades.length + "</strong> paraules trobades.";
