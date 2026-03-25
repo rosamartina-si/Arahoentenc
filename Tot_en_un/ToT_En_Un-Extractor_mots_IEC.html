@@ -3,50 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filtre de Paraules IEC - Columnes</title>
+    <title>Filtre de Paraules IEC - Avançat</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #f0f2f5; }
         .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .controls { display: grid; gap: 12px; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 8px; border: 1px solid #ddd; }
-        input, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+        h2 { color: #333; border-bottom: 2px solid #28a745; padding-bottom: 10px; }
         
-        .btn-cerca { background-color: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .controls { display: grid; gap: 15px; margin-bottom: 20px; padding: 20px; background: #fafafa; border-radius: 8px; border: 1px solid #ddd; }
+        .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        input[type="text"], input[type="number"], button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+        
+        /* BOTONS */
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-cerca { background-color: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; flex: 3; transition: background 0.3s; }
         .btn-cerca:hover { background-color: #218838; }
+        .btn-reset { background-color: #dc3545; color: white; border: none; cursor: pointer; font-weight: bold; flex: 1; transition: background 0.3s; }
+        .btn-reset:hover { background-color: #c82333; }
         
-        .btn-print { background-color: #6c757d; color: white; border: none; cursor: pointer; margin-bottom: 20px; display: none; width: 100%; }
+        .btn-print { background-color: #6c757d; color: white; border: none; cursor: pointer; margin-bottom: 20px; display: none; width: 100%; padding: 10px; }
 
-        /* DISSENY DE COLUMNES */
+        .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; background: #eee; padding: 10px; border-radius: 6px; flex: 1; min-width: 180px; }
+        .checkbox-group input { width: 18px; height: 18px; cursor: pointer; }
+
+        .stats { 
+            font-weight: bold; 
+            margin: 20px 0 10px 0; 
+            color: #155724; 
+            background-color: #d4edda; 
+            padding: 10px 15px; 
+            border-radius: 6px; 
+            border: 1px solid #c3e6cb;
+            font-size: 1.2rem; 
+        }
+
         #resultats { 
             background: #fff; 
             padding: 15px; 
             border: 1px solid #eee; 
             border-radius: 4px; 
             font-family: 'Courier New', Courier, monospace;
-            
-            /* Configuració de columnes */
-            column-count: 4; /* Nombre de columnes per defecte */
+            column-count: 4; 
             column-gap: 40px;
-            column-rule: 1px solid #f0f0f0; /* Línia divisòria suau */
+            column-rule: 1px solid #f0f0f0;
         }
 
-        /* Adaptació per a pantalles petites */
         @media (max-width: 600px) {
             #resultats { column-count: 2; }
+            .row { flex-direction: column; align-items: stretch; }
+            .btn-group { flex-direction: column; }
         }
 
-        .stats { font-weight: bold; margin: 15px 0 10px 0; color: #333; font-size: 1.1rem; }
-
-        /* CONFIGURACIÓ PER A IMPRIMIR */
         @media print {
-            .controls, h2, p, .btn-print, hr { display: none !important; }
-            body { background: white; margin: 0; padding: 0; max-width: 100%; }
+            .controls, h2, p, .btn-print, .btn-reset, hr { display: none !important; }
+            body { background: white; margin: 0; padding: 0; }
             .container { box-shadow: none; border: none; width: 100%; padding: 0; }
-            #resultats { 
-                column-count: 5; /* Més columnes al paper per estalviar espai */
-                font-size: 10pt; 
-                border: none;
-            }
-            .stats { border-bottom: 2px solid #333; padding-bottom: 5px; }
+            .stats { background: none; border: none; border-bottom: 2px solid #333; color: black; padding-left: 0; }
+            #resultats { column-count: 5; font-size: 10pt; }
         }
     </style>
 </head>
@@ -54,21 +66,40 @@
 
 <div class="container">
     <h2>Filtre de Paraules IEC</h2>
-    <p>1. Puja el fitxer <strong>Entrades_IEC.txt</strong></p>
+    <p>Puja el fitxer i aplica els filtres. Pots netejar els accents per a jocs tipus Scrabble o Wordle.</p>
     
     <div class="controls">
         <input type="file" id="fileInput" accept=".txt">
-        <hr>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="filtreText" placeholder="Conté (ex: ny)" style="flex: 2;">
+        <hr style="width:100%; border: 0; border-top: 1px solid #eee;">
+        
+        <div class="row">
+            <input type="text" id="filtreText" placeholder="Conté (ex: ny)" style="flex: 1;">
+            <input type="text" id="excloureText" placeholder="Exclou lletres (ex: kx)" style="flex: 1;">
+        </div>
+
+        <div class="row">
+            <input type="number" id="longitudMin" placeholder="Mín. lletres" style="flex: 1;">
             <input type="number" id="longitudMax" placeholder="Màx. lletres" style="flex: 1;">
         </div>
-        <button class="btn-cerca" onclick="filtrarParaules()">Cerca i organitza</button>
+
+        <div class="row">
+            <label class="checkbox-group">
+                <input type="checkbox" id="checkVocal"> Mínim una vocal
+            </label>
+            <label class="checkbox-group">
+                <input type="checkbox" id="checkTreureAccents"> Treure accents i dièresis
+            </label>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-cerca" onclick="filtrarParaules()">FILTRAR PARAULES</button>
+            <button class="btn-reset" onclick="netejarConsulta()">NETEJAR</button>
+        </div>
     </div>
 
     <div id="zonaResultats" style="display:none;">
-        <button class="btn-print" id="btnPrint" onclick="window.print()">🖨️ Imprimir llista en columnes</button>
         <div class="stats" id="comptador"></div>
+        <button class="btn-print" id="btnPrint" onclick="window.print()">🖨️ Imprimir resultats</button>
         <div id="resultats"></div>
     </div>
 </div>
@@ -76,42 +107,74 @@
 <script>
     let llistaOriginal = [];
 
+    function treureAccents(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     document.getElementById('fileInput').addEventListener('change', function(e) {
         const fitxer = e.target.files[0];
         if (!fitxer) return;
-
         const lector = new FileReader();
         lector.onload = function(e) {
             llistaOriginal = e.target.result.split(/\r?\n/).map(p => p.trim()).filter(p => p.length > 0);
-            alert("Fitxer llest amb " + llistaOriginal.length + " paraules.");
+            alert("✅ Fitxer carregat: " + llistaOriginal.length + " paraules.");
         };
         lector.readAsText(fitxer);
     });
 
-    function filtrarParaules() {
-        const textBuscat = document.getElementById('filtreText').value.toLowerCase();
-        const maxLen = parseInt(document.getElementById('longitudMax').value);
+    function netejarConsulta() {
+        // Buidar inputs de text i número
+        document.getElementById('filtreText').value = "";
+        document.getElementById('excloureText').value = "";
+        document.getElementById('longitudMin').value = "";
+        document.getElementById('longitudMax').value = "";
         
+        // Desmarcar checkboxes
+        document.getElementById('checkVocal').checked = false;
+        document.getElementById('checkTreureAccents').checked = false;
+        
+        // Amagar resultats
+        document.getElementById('zonaResultats').style.display = 'none';
+        document.getElementById('resultats').innerHTML = "";
+    }
+
+    function filtrarParaules() {
         if (llistaOriginal.length === 0) {
-            alert("Siusplau, puja primer el fitxer txt.");
+            alert("Siusplau, puja primer el fitxer .txt");
             return;
         }
 
-        const filtrades = llistaOriginal.filter(paraula => {
+        const textBuscat = document.getElementById('filtreText').value.toLowerCase();
+        const textExclos = document.getElementById('excloureText').value.toLowerCase();
+        const minLen = parseInt(document.getElementById('longitudMin').value);
+        const maxLen = parseInt(document.getElementById('longitudMax').value);
+        const haDeTenirVocal = document.getElementById('checkVocal').checked;
+        const netejarAccents = document.getElementById('checkTreureAccents').checked;
+        
+        const vocalsRegex = /[aeiouàèéíòóúïü]/i;
+
+        let filtrades = llistaOriginal.filter(paraula => {
             const pMin = paraula.toLowerCase();
-            const okText = textBuscat === "" || pMin.includes(textBuscat);
-            const okLen = isNaN(maxLen) || paraula.length <= maxLen;
-            return okText && okLen;
+            const okInclusio = textBuscat === "" || pMin.includes(textBuscat);
+            let okExclusio = true;
+            if (textExclos !== "") {
+                for (let char of textExclos) {
+                    if (pMin.includes(char)) { okExclusio = false; break; }
+                }
+            }
+            const okMin = isNaN(minLen) || paraula.length >= minLen;
+            const okMax = isNaN(maxLen) || paraula.length <= maxLen;
+            const okVocal = !haDeTenirVocal || vocalsRegex.test(pMin);
+            return okInclusio && okExclusio && okMin && okMax && okVocal;
         });
 
+        if (netejarAccents) filtrades = filtrades.map(p => treureAccents(p));
+
         document.getElementById('zonaResultats').style.display = 'block';
-        document.getElementById('comptador').innerText = "S'han trobat " + filtrades.length + " paraules:";
-        
-        // Ara posem cada paraula en un <div> propi per facilitar el salt de columna
-        const divResultats = document.getElementById('resultats');
-        divResultats.innerHTML = filtrades.map(p => `<div>${p}</div>`).join("");
-        
+        document.getElementById('comptador').innerHTML = "📊 Resultat: <strong>" + filtrades.length + "</strong> paraules trobades.";
+        document.getElementById('resultats').innerHTML = filtrades.map(p => `<div>${p}</div>`).join("");
         document.getElementById('btnPrint').style.display = filtrades.length > 0 ? 'block' : 'none';
+        document.getElementById('zonaResultats').scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
