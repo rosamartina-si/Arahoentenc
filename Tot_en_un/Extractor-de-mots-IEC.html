@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador de Mots IEC - Suport Ç</title>
+    <title>Cercador IEC - Filtres i Impressió</title>
     <style>
+        /* ESTILS GENERALS */
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
         .box { background: white; max-width: 900px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { border-bottom: 2px solid #28a745; padding-bottom: 10px; margin-top: 0; }
         
         .form-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        input, select, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
+        input, select, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
         input[type="text"] { flex: 2; min-width: 250px; }
+        input[type="number"] { width: 120px; }
         
-        .btn-go { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; flex: 3; transition: 0.3s; }
-        .btn-go:hover { background: #218838; }
+        .btn-go { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; flex: 3; }
         .btn-reset { background: #6c757d; color: white; border: none; cursor: pointer; flex: 1; }
+        .btn-print { background: #007bff; color: white; border: none; cursor: pointer; flex: 1; display: none; } /* S'activa en tenir resultats */
         
         .status { font-size: 0.9em; padding: 12px; background: #e9ecef; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid #28a745; }
         
@@ -30,9 +32,19 @@
             margin-top: 20px;
             font-family: 'Courier New', monospace;
         }
-        .no-results { color: #dc3545; font-weight: bold; padding: 20px; text-align: center; background: #fff5f5; border-radius: 8px; }
+
+        /* ESTILS PER IMPRIMIR */
+        @media print {
+            body { background: white; padding: 0; }
+            .box { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+            .form-row, h2, .status, #loader, .btn-print, .btn-reset, .btn-go, input, #fileInput, hr { display: none !important; }
+            #res-box { display: block !important; }
+            #resultats { grid-template-columns: repeat(5, 1fr); color: black; }
+            #comptador { font-size: 14px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+        }
+
         .vocal-check { display: flex; align-items: center; gap: 8px; background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        .no-results { color: #dc3545; font-weight: bold; padding: 20px; text-align: center; width: 100%; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
@@ -40,43 +52,40 @@
 <div class="box">
     <h2>Cercador de Mots IEC</h2>
     
-    <div class="status" id="debug">Pujar un fitxer .txt per començar.</div>
-
+    <div class="status" id="debug">⚠️ Puja un fitxer .txt per començar.</div>
     <input type="file" id="fileInput" accept=".txt" multiple style="width:100%; margin-bottom:15px;">
 
     <div class="form-row">
-        <input type="text" id="cerca" placeholder="Seqüència (ex: ç o ny)">
+        <input type="text" id="cerca" placeholder="Lletres (ex: ABCA)">
         <select id="tipus">
             <option value="exacte">Seqüència exacta</option>
-            <option value="dispers">Lletres disperses</option>
+            <option value="dispers">Lletres disperses (repetició)</option>
         </select>
         <select id="on">
-            <option value="tot">Arreu de la paraula</option>
-            <option value="ini">Al principi</option>
-            <option value="fi">Al final</option>
+            <option value="tot">Arreu</option>
+            <option value="ini">Inici</option>
+            <option value="fi">Final</option>
         </select>
     </div>
 
     <div class="form-row">
-        <input type="text" id="no" placeholder="Exclou lletres (ex: kx)">
-        <input type="number" id="min" placeholder="Llargada mín" style="width:120px;">
-        <input type="number" id="max" placeholder="Llargada màx" style="width:120px;">
+        <input type="text" id="no" placeholder="Exclou (ex: kx)">
+        <input type="number" id="min" placeholder="Mín. llarg">
+        <input type="number" id="max" placeholder="Màx. llarg">
     </div>
 
     <div class="form-row">
-        <label class="vocal-check"><input type="checkbox" id="vocal"> Obligar mín. 1 vocal</label>
-        <label class="vocal-check"><input type="checkbox" id="net"> Resultat net (sense accents, manté ç)</label>
+        <label class="vocal-check"><input type="checkbox" id="vocal"> Mín. 1 vocal</label>
+        <label class="vocal-check"><input type="checkbox" id="net"> Mode Net (sense accents, manté ç)</label>
     </div>
 
     <div class="form-row">
         <button class="btn-go" id="btnFiltrar" onclick="prepararCerca()">FILTRAR PARAULES</button>
+        <button class="btn-print" id="btnPrint" onclick="window.print()">IMPRIMIR</button>
         <button class="btn-reset" onclick="location.reload()">REINICIAR</button>
     </div>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <span>Filtrant el diccionari...</span>
-    </div>
+    <div id="loader"><div class="spinner"></div><span>Processant...</span></div>
 
     <div id="res-box" style="display:none;">
         <hr>
@@ -91,60 +100,47 @@
     document.getElementById('fileInput').onchange = async function(e) {
         const files = e.target.files;
         if (!files.length) return;
-        
         let temporal = new Set();
-        document.getElementById('debug').innerText = "⏳ Carregant...";
-
+        document.getElementById('debug').innerText = "⏳ Llegint fitxer...";
         for (let f of files) {
             const buffer = await f.arrayBuffer();
             let text = "";
-            try {
-                text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
-            } catch {
-                text = new TextDecoder('windows-1252').decode(buffer);
-            }
-            
+            try { text = new TextDecoder('utf-8', { fatal: true }).decode(buffer); } 
+            catch { text = new TextDecoder('windows-1252').decode(buffer); }
             text.split(/\r?\n/).forEach(linia => {
                 let p = linia.trim();
                 if (p.length > 0) temporal.add(p);
             });
         }
-        
         dades = Array.from(temporal);
         document.getElementById('debug').innerText = `✅ Memòria: ${dades.length} paraules carregades.`;
     };
 
-    /**
-     * FUNCIÓ CLAU: Neteja accents però PROTEGEIX la 'ç'
-     */
-    function netejar(t, mantenirCrencilla = true) {
+    function netejar(t) {
         if (!t) return "";
-        let res = t.toLowerCase();
-        if (mantenirCrencilla) {
-            // Substituïm temporalment la ç per un símbol rar que no s'elimini
-            res = res.replace(/ç/g, "[[c]]");
-            res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            res = res.replace(/\[\[c\]\]/g, "ç");
-        } else {
-            res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        }
-        return res;
+        let res = t.toLowerCase().trim();
+        res = res.replace(/ç/g, "[[c]]");
+        res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return res.replace(/\[\[c\]\]/g, "ç");
+    }
+
+    function getMapaLletres(text) {
+        const mapa = {};
+        for (let l of text) { mapa[l] = (mapa[l] || 0) + 1; }
+        return mapa;
     }
 
     function prepararCerca() {
-        if (dades.length === 0) {
-            alert("Siusplau, puja primer el fitxer .txt");
-            return;
-        }
+        if (dades.length === 0) { alert("Primer puja un fitxer .txt"); return; }
         document.getElementById('loader').style.display = 'flex';
         document.getElementById('res-box').style.display = 'none';
+        document.getElementById('btnPrint').style.display = 'none';
         document.getElementById('btnFiltrar').disabled = true;
-        setTimeout(executarCerca, 300);
+        setTimeout(executarCerca, 100);
     }
 
     function executarCerca() {
-        const inputCerca = document.getElementById('cerca').value.toLowerCase();
-        const valCerca = netejar(inputCerca);
+        const valCercaNeta = netejar(document.getElementById('cerca').value);
         const valTipus = document.getElementById('tipus').value;
         const valOn = document.getElementById('on').value;
         const valNo = netejar(document.getElementById('no').value);
@@ -153,27 +149,32 @@
         const valVocal = document.getElementById('vocal').checked;
         const valNet = document.getElementById('net').checked;
 
+        const mapaCerca = getMapaLletres(valCercaNeta);
+
         let filtrats = dades.filter(paraula => {
-            const pNet = netejar(paraula);
+            const pNeta = netejar(paraula);
             const pLen = paraula.length;
 
             if (!isNaN(valMin) && pLen < valMin) return false;
             if (!isNaN(valMax) && pLen > valMax) return false;
 
-            if (valCerca) {
-                if (valTipus === "exacte") {
-                    if (valOn === "tot" && !pNet.includes(valCerca)) return false;
-                    if (valOn === "ini" && !pNet.startsWith(valCerca)) return false;
-                    if (valOn === "fi" && !pNet.endsWith(valCerca)) return false;
-                } else {
-                    for (let l of valCerca) { if (!pNet.includes(l)) return false; }
-                    if (valOn === "ini" && !valCerca.includes(pNet[0])) return false;
-                    if (valOn === "fi" && !valCerca.includes(pNet[pNet.length-1])) return false;
-                }
+            if (valNo) {
+                for (let l of valNo) { if (pNeta.includes(l)) return false; }
             }
 
-            if (valNo) {
-                for (let l of valNo) { if (pNet.includes(l)) return false; }
+            if (valCercaNeta) {
+                if (valTipus === "exacte") {
+                    if (valOn === "tot" && !pNeta.includes(valCercaNeta)) return false;
+                    if (valOn === "ini" && !pNeta.startsWith(valCercaNeta)) return false;
+                    if (valOn === "fi" && !pNeta.endsWith(valCercaNeta)) return false;
+                } else {
+                    const mapaParaula = getMapaLletres(pNeta);
+                    for (let l in mapaCerca) {
+                        if (!mapaParaula[l] || mapaParaula[l] < mapaCerca[l]) return false;
+                    }
+                    if (valOn === "ini" && !valCercaNeta.includes(pNeta[0])) return false;
+                    if (valOn === "fi" && !valCercaNeta.includes(pNeta[pNeta.length-1])) return false;
+                }
             }
 
             if (valVocal && !/[aeiouàèéíòóúïü]/.test(paraula.toLowerCase())) return false;
@@ -181,25 +182,21 @@
             return true;
         });
 
-        if (valNet) {
-            filtrats = Array.from(new Set(filtrats.map(p => netejar(p))));
-        }
-
+        if (valNet) filtrats = Array.from(new Set(filtrats.map(p => netejar(p))));
         filtrats.sort((a,b) => a.localeCompare(b, 'ca'));
         
         document.getElementById('loader').style.display = 'none';
         document.getElementById('btnFiltrar').disabled = false;
         document.getElementById('res-box').style.display = 'block';
         
-        const comptador = document.getElementById('comptador');
         const contenidor = document.getElementById('resultats');
-
+        document.getElementById('comptador').innerText = `Resultats: ${filtrats.length}`;
+        
         if (filtrats.length > 0) {
-            comptador.innerText = `Resultats: ${filtrats.length}`;
             contenidor.innerHTML = filtrats.map(p => `<div>${p}</div>`).join("");
+            document.getElementById('btnPrint').style.display = 'block';
         } else {
-            comptador.innerText = `Resultats: 0`;
-            contenidor.innerHTML = `<div class="no-results">Vaja! No s'ha trobat cap paraula que coincideixi amb la cerca.</div>`;
+            contenidor.innerHTML = `<div class="no-results">No s'ha trobat cap coincidència.</div>`;
         }
     }
 </script>
