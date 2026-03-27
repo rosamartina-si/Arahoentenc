@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador de Mots IEC - Pro</title>
+    <title>Cercador de Mots IEC - Suport Ç</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
         .box { background: white; max-width: 900px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -19,23 +19,8 @@
         
         .status { font-size: 0.9em; padding: 12px; background: #e9ecef; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid #28a745; }
         
-        /* LOADING SPINNER */
-        #loader { 
-            display: none; 
-            align-items: center; 
-            gap: 10px; 
-            font-weight: bold; 
-            color: #28a745; 
-            margin: 15px 0; 
-        }
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #28a745;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        #loader { display: none; align-items: center; gap: 10px; font-weight: bold; color: #28a745; margin: 15px 0; }
+        .spinner { width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #28a745; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         #resultats { 
@@ -45,6 +30,7 @@
             margin-top: 20px;
             font-family: 'Courier New', monospace;
         }
+        .no-results { color: #dc3545; font-weight: bold; padding: 20px; text-align: center; background: #fff5f5; border-radius: 8px; }
         .vocal-check { display: flex; align-items: center; gap: 8px; background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     </style>
@@ -59,7 +45,7 @@
     <input type="file" id="fileInput" accept=".txt" multiple style="width:100%; margin-bottom:15px;">
 
     <div class="form-row">
-        <input type="text" id="cerca" placeholder="Seqüència de lletres (ex: ar)">
+        <input type="text" id="cerca" placeholder="Seqüència (ex: ç o ny)">
         <select id="tipus">
             <option value="exacte">Seqüència exacta</option>
             <option value="dispers">Lletres disperses</option>
@@ -79,7 +65,7 @@
 
     <div class="form-row">
         <label class="vocal-check"><input type="checkbox" id="vocal"> Obligar mín. 1 vocal</label>
-        <label class="vocal-check"><input type="checkbox" id="net"> Resultat net (sense accents)</label>
+        <label class="vocal-check"><input type="checkbox" id="net"> Resultat net (sense accents, manté ç)</label>
     </div>
 
     <div class="form-row">
@@ -102,13 +88,12 @@
 <script>
     let dades = [];
 
-    // 1. CARREGAR FITXERS
     document.getElementById('fileInput').onchange = async function(e) {
         const files = e.target.files;
         if (!files.length) return;
         
         let temporal = new Set();
-        document.getElementById('debug').innerText = "⏳ Llegint i processant dades...";
+        document.getElementById('debug').innerText = "⏳ Carregant...";
 
         for (let f of files) {
             const buffer = await f.arrayBuffer();
@@ -126,32 +111,40 @@
         }
         
         dades = Array.from(temporal);
-        document.getElementById('debug').innerText = `✅ Memòria: ${dades.length} paraules carregades a punt per cercar.`;
+        document.getElementById('debug').innerText = `✅ Memòria: ${dades.length} paraules carregades.`;
     };
 
-    function netejar(t) {
-        return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    /**
+     * FUNCIÓ CLAU: Neteja accents però PROTEGEIX la 'ç'
+     */
+    function netejar(t, mantenirCrencilla = true) {
+        if (!t) return "";
+        let res = t.toLowerCase();
+        if (mantenirCrencilla) {
+            // Substituïm temporalment la ç per un símbol rar que no s'elimini
+            res = res.replace(/ç/g, "[[c]]");
+            res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            res = res.replace(/\[\[c\]\]/g, "ç");
+        } else {
+            res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+        return res;
     }
 
-    // 2. MOSTRAR EL "PENSANT" ABANS DE FILTRAR
     function prepararCerca() {
         if (dades.length === 0) {
             alert("Siusplau, puja primer el fitxer .txt");
             return;
         }
-
-        // Mostrem el loader i amaguem resultats vells
         document.getElementById('loader').style.display = 'flex';
         document.getElementById('res-box').style.display = 'none';
         document.getElementById('btnFiltrar').disabled = true;
-
-        // Donem un petit respir al navegador perquè pinti el loader
         setTimeout(executarCerca, 300);
     }
 
-    // 3. LA LÒGICA DE FILTRATGE
     function executarCerca() {
-        const valCerca = netejar(document.getElementById('cerca').value);
+        const inputCerca = document.getElementById('cerca').value.toLowerCase();
+        const valCerca = netejar(inputCerca);
         const valTipus = document.getElementById('tipus').value;
         const valOn = document.getElementById('on').value;
         const valNo = netejar(document.getElementById('no').value);
@@ -194,12 +187,20 @@
 
         filtrats.sort((a,b) => a.localeCompare(b, 'ca'));
         
-        // Finalitzem
         document.getElementById('loader').style.display = 'none';
         document.getElementById('btnFiltrar').disabled = false;
         document.getElementById('res-box').style.display = 'block';
-        document.getElementById('comptador').innerText = `Resultats: ${filtrats.length}`;
-        document.getElementById('resultats').innerHTML = filtrats.map(p => `<div>${p}</div>`).join("");
+        
+        const comptador = document.getElementById('comptador');
+        const contenidor = document.getElementById('resultats');
+
+        if (filtrats.length > 0) {
+            comptador.innerText = `Resultats: ${filtrats.length}`;
+            contenidor.innerHTML = filtrats.map(p => `<div>${p}</div>`).join("");
+        } else {
+            comptador.innerText = `Resultats: 0`;
+            contenidor.innerHTML = `<div class="no-results">Vaja! No s'ha trobat cap paraula que coincideixi amb la cerca.</div>`;
+        }
     }
 </script>
 
