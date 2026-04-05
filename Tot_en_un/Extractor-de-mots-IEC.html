@@ -3,202 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cercador IEC - Filtres i Impressió</title>
+    <title>Cercador Lingüístic IEC - Avançat</title>
     <style>
-        /* ESTILS GENERALS */
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
-        .box { background: white; max-width: 900px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { border-bottom: 2px solid #28a745; padding-bottom: 10px; margin-top: 0; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; color: #333; line-height: 1.5; }
+        .box { background: white; max-width: 1000px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { border-bottom: 2px solid #28a745; padding-bottom: 10px; margin-top: 0; color: #1e7e34; }
+        h3 { margin-bottom: 10px; font-size: 1.1em; color: #444; border-left: 4px solid #28a745; padding-left: 10px; }
         
-        .form-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        input, select, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
-        input[type="text"] { flex: 2; min-width: 250px; }
-        input[type="number"] { width: 120px; }
+        .section { background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end; }
+        .field { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 150px; }
         
-        .btn-go { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; flex: 3; }
+        input, select, button { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        input[type="text"] { background: #fff; }
+        
+        .btn-load { background: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn-go { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; padding: 15px; font-size: 16px; flex: 2; }
         .btn-reset { background: #6c757d; color: white; border: none; cursor: pointer; flex: 1; }
-        .btn-print { background: #007bff; color: white; border: none; cursor: pointer; flex: 1; display: none; } /* S'activa en tenir resultats */
+        .btn-print { background: #007bff; color: white; border: none; cursor: pointer; padding: 10px 20px; margin-top: 20px; width: auto; }
         
         .status { font-size: 0.9em; padding: 12px; background: #e9ecef; border-radius: 6px; margin-bottom: 15px; border-left: 5px solid #28a745; }
+        .status.error { border-left-color: #dc3545; background: #ffe6e6; }
+        .status.warning { border-left-color: #f1c40f; background: #fff3cd; }
         
-        #loader { display: none; align-items: center; gap: 10px; font-weight: bold; color: #28a745; margin: 15px 0; }
-        .spinner { width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #28a745; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .check-group { display: flex; gap: 15px; flex-wrap: wrap; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
+        label { cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.95em; }
 
         #resultats { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-            gap: 8px; 
-            margin-top: 20px;
-            font-family: 'Courier New', monospace;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 8px; margin-top: 20px; font-family: 'Courier New', monospace; 
+            max-height: 600px;
+            overflow-y: auto;
         }
+        .paraula { background: #fff; padding: 5px 10px; border: 1px solid #eee; border-radius: 4px; text-align: center; }
+        .no-results { color: #dc3545; font-weight: bold; padding: 20px; text-align: center; width: 100%; grid-column: 1 / -1; }
 
-        /* ESTILS PER IMPRIMIR */
         @media print {
-            body { background: white; padding: 0; }
-            .box { box-shadow: none; border: none; width: 100%; max-width: 100%; }
-            .form-row, h2, .status, #loader, .btn-print, .btn-reset, .btn-go, input, #fileInput, hr { display: none !important; }
-            #res-box { display: block !important; }
-            #resultats { grid-template-columns: repeat(5, 1fr); color: black; }
+            .section, h2, .status, button, #fileInput, .btn-print, .btn-reset, .btn-go, .check-group { display: none !important; }
+            .box { box-shadow: none; width: 100%; padding: 0; }
+            #resultats { grid-template-columns: repeat(5, 1fr); color: black; max-height: none; overflow-y: visible; }
             #comptador { font-size: 14px; border-bottom: 1px solid #000; padding-bottom: 5px; }
         }
-
-        .vocal-check { display: flex; align-items: center; gap: 8px; background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
-        .no-results { color: #dc3545; font-weight: bold; padding: 20px; text-align: center; width: 100%; grid-column: 1 / -1; }
+        
+        .small-note { font-size: 0.8em; color: #6c757d; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>Cercador de Mots IEC</h2>
-    
-    <div class="status" id="debug">⚠️ Puja un fitxer .txt per començar.</div>
-    <input type="file" id="fileInput" accept=".txt" multiple style="width:100%; margin-bottom:15px;">
+    <h2>Cercador de Mots IEC <span style="font-size:0.5rem; background:#28a745; color:white; padding:2px 6px; border-radius:20px;">v3.0 - Avançat</span></h2>
 
-    <div class="form-row">
-        <input type="text" id="cerca" placeholder="Lletres (ex: ABCA)">
-        <select id="tipus">
-            <option value="exacte">Seqüència exacta</option>
-            <option value="dispers">Lletres disperses (repetició)</option>
-        </select>
-        <select id="on">
-            <option value="tot">Arreu</option>
-            <option value="ini">Inici</option>
-            <option value="fi">Final</option>
-        </select>
+    <div class="section">
+        <h3>📂 1. Selecció de Diccionaris</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <label><input type="checkbox" class="dict-check" value="Entrades_IEC.txt" checked> Diccionari IEC (General)</label>
+            <label><input type="checkbox" class="dict-check" value="formari_verbal_part1.txt" checked> Verbs (Part 1)</label>
+            <label><input type="checkbox" class="dict-check" value="formari_verbal_part2.txt" checked> Verbs (Part 2)</label>
+            <input type="file" id="fileInput" accept=".txt" multiple>
+        </div>
+        <button class="btn-load" onclick="carregarDiccionaris()">🚀 CARREGAR/ACTUALITZAR DICCIONARI</button>
+        <div class="small-note">※ Els fitxers manuals s'afegiran als diccionaris seleccionats (sense duplicats).</div>
+        <div class="status" id="debug">📚 Selecciona els diccionaris i prem el botó de càrrega.</div>
+    </div>
+
+    <div class="section">
+        <h3>🔍 2. Tipus de Cerca</h3>
+        <div class="form-row">
+            <div class="field" style="flex: 2;">
+                <label><b>Text o Lletres:</b></label>
+                <input type="text" id="inputCerca" placeholder="Ex: per o aeiou">
+            </div>
+            <div class="field">
+                <label><b>Mode:</b></label>
+                <select id="modePrincipal" onchange="alternarModes()">
+                    <option value="sequencial">Bloc Exacte (Seqüencial)</option>
+                    <option value="lletres">Bloc Lletres (Combinatòria)</option>
+                </select>
+            </div>
+            <div class="field" id="subModeContainer">
+                <label><b>Opció:</b></label>
+                <select id="subMode"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>⚙️ 3. Filtres i Restriccions</h3>
+        <div class="form-row">
+            <div class="field">
+                <label>Excloure lletres:</label>
+                <input type="text" id="excloure" placeholder="Ex: kx">
+            </div>
+            <div class="field">
+                <label>Longitud Mín:</label>
+                <input type="number" id="minLen" placeholder="Cap">
+            </div>
+            <div class="field">
+                <label>Longitud Màx:</label>
+                <input type="number" id="maxLen" placeholder="Cap">
+            </div>
+        </div>
+        <div class="check-group">
+            <label><input type="checkbox" id="strictAccents"> <b>Distingir accents</b> (é ≠ è ≠ e)</label>
+            <label><input type="checkbox" id="vocalOblig"> <b>Mínim 1 vocal</b></label>
+            <label><input type="checkbox" id="modeNet"> <b>Mode Net</b> (sense duplicats)</label>
+        </div>
     </div>
 
     <div class="form-row">
-        <input type="text" id="no" placeholder="Exclou (ex: kx)">
-        <input type="number" id="min" placeholder="Mín. llarg">
-        <input type="number" id="max" placeholder="Màx. llarg">
-    </div>
-
-    <div class="form-row">
-        <label class="vocal-check"><input type="checkbox" id="vocal"> Mín. 1 vocal</label>
-        <label class="vocal-check"><input type="checkbox" id="net"> Mode Net (sense accents, manté ç)</label>
-    </div>
-
-    <div class="form-row">
-        <button class="btn-go" id="btnFiltrar" onclick="prepararCerca()">FILTRAR PARAULES</button>
-        <button class="btn-print" id="btnPrint" onclick="window.print()">IMPRIMIR</button>
+        <button class="btn-go" id="btnFiltrar" onclick="executarFiltrat()" disabled>FILTRAR PARAULES</button>
         <button class="btn-reset" onclick="location.reload()">REINICIAR</button>
     </div>
-
-    <div id="loader"><div class="spinner"></div><span>Processant...</span></div>
 
     <div id="res-box" style="display:none;">
         <hr>
         <h3 id="comptador">Resultats: 0</h3>
         <div id="resultats"></div>
+        <button class="btn-load btn-print" onclick="window.print()">🖨️ IMPRIMIR RESULTATS</button>
     </div>
 </div>
 
 <script>
-    let dades = [];
+    let dadesSet = new Set();
 
-    document.getElementById('fileInput').onchange = async function(e) {
-        const files = e.target.files;
-        if (!files.length) return;
-        let temporal = new Set();
-        document.getElementById('debug').innerText = "⏳ Llegint fitxer...";
-        for (let f of files) {
-            const buffer = await f.arrayBuffer();
-            let text = "";
-            try { text = new TextDecoder('utf-8', { fatal: true }).decode(buffer); } 
-            catch { text = new TextDecoder('windows-1252').decode(buffer); }
-            text.split(/\r?\n/).forEach(linia => {
-                let p = linia.trim();
-                if (p.length > 0) temporal.add(p);
-            });
+    // ---------- Canviar les opcions del segon selector segons el mode principal ----------
+    function alternarModes() {
+        const mode = document.getElementById('modePrincipal').value;
+        const sub = document.getElementById('subMode');
+        sub.innerHTML = "";
+
+        if (mode === 'sequencial') {
+            sub.innerHTML = `
+                <option value="arreu">Arreu (Conté)</option>
+                <option value="inici">Inici</option>
+                <option value="final">Final</option>`;
+        } else {
+            sub.innerHTML = `
+                <option value="minimes">TOTES aquestes lletres (+ altres)</option>
+                <option value="anagrama">Anagrama Exacte</option>
+                <option value="lliure">NOMÉS aquestes lletres (lliure quantitat)</option>
+                <option value="una_mes">Almenys UNA d'aquestes (+ altres)</option>`;
         }
-        dades = Array.from(temporal);
-        document.getElementById('debug').innerText = `✅ Memòria: ${dades.length} paraules carregades.`;
-    };
-
-    function netejar(t) {
+    }
+    
+    // ---------- Funcions de neteja ----------
+    function netejar(t, strict = false) {
         if (!t) return "";
         let res = t.toLowerCase().trim();
+        if (strict) return res;
         res = res.replace(/ç/g, "[[c]]");
         res = res.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         return res.replace(/\[\[c\]\]/g, "ç");
     }
 
-    function getMapaLletres(text) {
+    function getMapa(text) {
         const mapa = {};
         for (let l of text) { mapa[l] = (mapa[l] || 0) + 1; }
         return mapa;
     }
 
-    function prepararCerca() {
-        if (dades.length === 0) { alert("Primer puja un fitxer .txt"); return; }
-        document.getElementById('loader').style.display = 'flex';
-        document.getElementById('res-box').style.display = 'none';
-        document.getElementById('btnPrint').style.display = 'none';
-        document.getElementById('btnFiltrar').disabled = true;
-        setTimeout(executarCerca, 100);
+    // ---------- Missatges ----------
+    function updateMsg(msg, tipus = "info") {
+        const debugDiv = document.getElementById('debug');
+        debugDiv.innerHTML = msg;
+        debugDiv.classList.remove('error', 'warning');
+        if (tipus === "error") debugDiv.classList.add('error');
+        if (tipus === "warning") debugDiv.classList.add('warning');
     }
 
-    function executarCerca() {
-        const valCercaNeta = netejar(document.getElementById('cerca').value);
-        const valTipus = document.getElementById('tipus').value;
-        const valOn = document.getElementById('on').value;
-        const valNo = netejar(document.getElementById('no').value);
-        const valMin = parseInt(document.getElementById('min').value);
-        const valMax = parseInt(document.getElementById('max').value);
-        const valVocal = document.getElementById('vocal').checked;
-        const valNet = document.getElementById('net').checked;
+    // ---------- Càrrega de diccionaris ----------
+    async function carregarDiccionaris() {
+        const baseURL = 'https://raw.githubusercontent.com/rosamartina-si/Arahoentenc/main/Tot_en_un/';
+        const checkboxes = document.querySelectorAll('.dict-check:checked');
+        const manualFiles = document.getElementById('fileInput').files;
+        
+        if (checkboxes.length === 0 && manualFiles.length === 0) {
+            alert("⚠️ Selecciona almenys un diccionari automàtic o un fitxer manual.");
+            return;
+        }
+        
+        dadesSet.clear();
+        updateMsg("🔄 Carregant diccionaris...", "warning");
+        document.getElementById('btnFiltrar').disabled = true;
+        document.getElementById('res-box').style.display = 'none';
 
-        const mapaCerca = getMapaLletres(valCercaNeta);
-
-        let filtrats = dades.filter(paraula => {
-            const pNeta = netejar(paraula);
-            const pLen = paraula.length;
-
-            if (!isNaN(valMin) && pLen < valMin) return false;
-            if (!isNaN(valMax) && pLen > valMax) return false;
-
-            if (valNo) {
-                for (let l of valNo) { if (pNeta.includes(l)) return false; }
+        try {
+            // 1. Fitxers Automàtics des de GitHub
+            for (let cb of checkboxes) {
+                const response = await fetch(baseURL + cb.value);
+                if (!response.ok) throw new Error(`Error carregant ${cb.value}`);
+                const text = await response.text();
+                const linies = text.split(/\r?\n/);
+                for (let w of linies) {
+                    let clean = w.trim();
+                    if (clean.length > 1) dadesSet.add(clean);
+                }
             }
-
-            if (valCercaNeta) {
-                if (valTipus === "exacte") {
-                    if (valOn === "tot" && !pNeta.includes(valCercaNeta)) return false;
-                    if (valOn === "ini" && !pNeta.startsWith(valCercaNeta)) return false;
-                    if (valOn === "fi" && !pNeta.endsWith(valCercaNeta)) return false;
-                } else {
-                    const mapaParaula = getMapaLletres(pNeta);
-                    for (let l in mapaCerca) {
-                        if (!mapaParaula[l] || mapaParaula[l] < mapaCerca[l]) return false;
-                    }
-                    if (valOn === "ini" && !valCercaNeta.includes(pNeta[0])) return false;
-                    if (valOn === "fi" && !valCercaNeta.includes(pNeta[pNeta.length-1])) return false;
+            
+            // 2. Fitxers Manuals
+            for (let f of manualFiles) {
+                const buffer = await f.arrayBuffer();
+                let text = "";
+                try { text = new TextDecoder('utf-8', { fatal: true }).decode(buffer); } 
+                catch { text = new TextDecoder('windows-1252').decode(buffer); }
+                const linies = text.split(/\r?\n/);
+                for (let w of linies) {
+                    let clean = w.trim();
+                    if (clean.length > 1) dadesSet.add(clean);
                 }
             }
 
-            if (valVocal && !/[aeiouàèéíòóúïü]/.test(paraula.toLowerCase())) return false;
+            if (dadesSet.size > 0) {
+                updateMsg(`✅ Diccionari llest: ${dadesSet.size.toLocaleString()} paraules úniques.`, "info");
+                document.getElementById('btnFiltrar').disabled = false;
+            } else {
+                updateMsg("⚠️ No s'ha carregat cap paraula. Comprova els fitxers.", "warning");
+                document.getElementById('btnFiltrar').disabled = true;
+            }
+        } catch (e) {
+            console.error(e);
+            updateMsg(`❌ Error de càrrega: ${e.message}`, "error");
+            document.getElementById('btnFiltrar').disabled = true;
+        }
+    }
 
+    // ---------- Execució del filtrat amb tota la lògica ----------
+    function executarFiltrat() {
+        if (dadesSet.size === 0) {
+            alert("❌ No hi ha cap paraula carregada. Carrega els diccionaris primer.");
+            return;
+        }
+        
+        const inputVal = document.getElementById('inputCerca').value;
+        const mode = document.getElementById('modePrincipal').value;
+        const subMode = document.getElementById('subMode').value;
+        const isStrict = document.getElementById('strictAccents').checked;
+        const excloure = netejar(document.getElementById('excloure').value, isStrict);
+        const minL = parseInt(document.getElementById('minLen').value);
+        const maxL = parseInt(document.getElementById('maxLen').value);
+        const vocalO = document.getElementById('vocalOblig').checked;
+        const modeNet = document.getElementById('modeNet').checked;
+
+        const cercaNeta = netejar(inputVal, isStrict);
+        const mapaCerca = getMapa(cercaNeta);
+        const lletresCercaArr = Object.keys(mapaCerca);
+
+        let filtrats = Array.from(dadesSet).filter(pOriginal => {
+            const pNeta = netejar(pOriginal, isStrict);
+            
+            // Filtres Transversals
+            if (!isNaN(minL) && pOriginal.length < minL) return false;
+            if (!isNaN(maxL) && pOriginal.length > maxL) return false;
+            if (vocalO && !/[aeiouàèéíòóúïüAEIOUÀÈÉÍÒÓÚÏÜ]/.test(pOriginal)) return false;
+            if (excloure) {
+                for(let l of excloure) { 
+                    if(pNeta.includes(l)) return false; 
+                }
+            }
+
+            // Lògica de Cerca
+            if (!cercaNeta) return true;
+
+            if (mode === 'sequencial') {
+                if (subMode === 'arreu' && !pNeta.includes(cercaNeta)) return false;
+                if (subMode === 'inici' && !pNeta.startsWith(cercaNeta)) return false;
+                if (subMode === 'final' && !pNeta.endsWith(cercaNeta)) return false;
+            } 
+            else { // mode 'lletres' - Lògica combinatòria
+                const mapaP = getMapa(pNeta);
+                
+                if (subMode === 'anagrama') {
+                    // Ha de tenir exactament les mateixes lletres amb les mateixes quantitats
+                    if (pNeta.length !== cercaNeta.length) return false;
+                    for (let l in mapaCerca) { 
+                        if ((mapaP[l] || 0) !== mapaCerca[l]) return false; 
+                    }
+                    for (let l in mapaP) { 
+                        if ((mapaCerca[l] || 0) !== mapaP[l]) return false; 
+                    }
+                } 
+                else if (subMode === 'lliure') {
+                    // Només pot contenir lletres que estiguin a l'input
+                    for (let l in mapaP) { 
+                        if (!mapaCerca[l]) return false; 
+                    }
+                } 
+                else if (subMode === 'minimes') {
+                    // Ha de contenir TOTES les lletres de l'input (mínim les quantitats indicades)
+                    for (let l in mapaCerca) { 
+                        if ((mapaP[l] || 0) < mapaCerca[l]) return false; 
+                    }
+                }
+                else if (subMode === 'una_mes') {
+                    // Ha de contenir almenys UNA de les lletres de l'input
+                    if (!lletresCercaArr.some(l => pNeta.includes(l))) return false;
+                }
+            }
             return true;
         });
 
-        if (valNet) filtrats = Array.from(new Set(filtrats.map(p => netejar(p))));
-        filtrats.sort((a,b) => a.localeCompare(b, 'ca'));
+        // Mode Net: eliminar duplicats després de netejar (segons el mode d'accents)
+        if (modeNet) {
+            const vist = new Set();
+            filtrats = filtrats.filter(p => {
+                const net = netejar(p, isStrict);
+                if (vist.has(net)) return false;
+                vist.add(net);
+                return true;
+            });
+        }
         
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('btnFiltrar').disabled = false;
-        document.getElementById('res-box').style.display = 'block';
-        
+        mostrarResultats(filtrats);
+    }
+
+    function mostrarResultats(llista) {
+        llista.sort((a, b) => a.localeCompare(b, 'ca'));
+        const resBox = document.getElementById('res-box');
         const contenidor = document.getElementById('resultats');
-        document.getElementById('comptador').innerText = `Resultats: ${filtrats.length}`;
+        document.getElementById('comptador').innerText = `Resultats: ${llista.length}`;
         
-        if (filtrats.length > 0) {
-            contenidor.innerHTML = filtrats.map(p => `<div>${p}</div>`).join("");
-            document.getElementById('btnPrint').style.display = 'block';
+        resBox.style.display = 'block';
+        if (llista.length === 0) {
+            contenidor.innerHTML = '<div class="no-results">No s\'ha trobat cap coincidència.</div>';
         } else {
-            contenidor.innerHTML = `<div class="no-results">No s'ha trobat cap coincidència.</div>`;
+            contenidor.innerHTML = llista.map(p => `<div class="paraula">${p}</div>`).join("");
         }
     }
+    
+    // ---------- Inicialització ----------
+    window.addEventListener('DOMContentLoaded', () => {
+        alternarModes();
+        document.getElementById('btnFiltrar').disabled = true;
+        updateMsg("📚 Selecciona els diccionaris i prem 'CARREGAR/ACTUALITZAR DICCIONARI'", "warning");
+    });
 </script>
 
 </body>
