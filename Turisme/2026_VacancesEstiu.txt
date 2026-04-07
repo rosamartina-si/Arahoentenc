@@ -21,7 +21,8 @@ Tour de France - sortida a Barcelona
           * Fundació Joan Miró
           * Festa major de Gràcia
           * Inici de La Liga (2026-27): Està previst que la competició comenci el cap de setmana del 14 al 16 d'agost
-          * Museu de Matemàtiques MMACA (Museu de Matemàtiques de Catalunya): No és un museu de mirar, sinó de tocar. Hi ha centenars de reptes de lògica, geometria i combinatòria que s'han de resoldre manipulant peces físiques. És pur pensament algorítmic aplicat a objectes. Les Cúpules de Leonardo: Aquesta és l'activitat estrella. Consisteix a construir cúpules autoportants (que s'aguanten soles, sense cola ni claus) utilitzant només llistons de fusta, seguint els dissenys de Leonardo da Vinci. És un repte de coordinació i equilibri físic brutal.
+          * Museu de Matemàtiques MMACA a Cornellà de Llobregat (Museu de Matemàtiques de Catalunya): No és un museu de mirar, sinó de tocar. Hi ha centenars de reptes de lògica, geometria i combinatòria que s'han de resoldre manipulant peces físiques. És pur pensament algorítmic aplicat a objectes. Les Cúpules de Leonardo: Aquesta és l'activitat estrella. Consisteix a construir cúpules autoportants (que s'aguanten soles, sense cola ni claus) utilitzant només llistons de fusta, seguint els dissenys de Leonardo da Vinci. És un repte de coordinació i equilibri físic brutal.
+          * Sapakara Fun Parcs a Cornellà de Llobregat: Jungle Tag: És un circuit d'obstacles intel·ligent. Els jugadors porten una polsera electrònica i han d'anar tocant uns sensors (punts de control) que estan amagats per tot el recorregut (pujant xarxes, creuant ponts, etc.). Al final, tot queda registrat en una base de dades i pots veure la teva puntuació i rànquing. És com ser dins d'un videojoc real. Ubicació: Carrer de Silici, 9, Cornellà de Llobregat (molt a prop del Museu de Matemàtiques).
           * Trofeu Joan Gamper
           * Palau Sant Jordi
           * Gemma Saldaña
