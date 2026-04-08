@@ -179,7 +179,7 @@
 
     <div class="setup-box" id="setup">
         <h2>CARREGA ELS TEUS DICCIONARIS</h2>
-        <button id="autoLoadBtn" class="auto-load" style="padding: 12px; width: 100%; margin-bottom: 15px; font-size: 16px;">📚 CARREGAR DICCIONARI AUTOMÀTIC (IEC + Verbs)</button>
+        <button id="autoLoadBtn" class="auto-load" style="padding: 12px; width: 100%; margin-bottom: 15px; font-size: 16px;">📚 CARREGAR el Diccionari Informatitzat de l’Scrabble en Català</button>
         <div class="divider">━━━━━ O PUJA'LS MANUALMENT ━━━━━</div>
         <input type="file" id="fileInput" accept=".txt" multiple style="margin-top: 15px;">
         <p style="font-size: 11px; color: #aaa;">Selecciona un o més fitxers .txt alhora.</p>
@@ -665,10 +665,7 @@
         async function carregarDiccionariAutomata() {
             const baseURL = 'https://raw.githubusercontent.com/rosamartina-si/Arahoentenc/main/Tot_en_un/';
             const fitxers = [
-                'Entrades_Scrabble.txt',
-                'Entrades_IEC.txt',
-                'formari_verbal_part1.txt',
-                'formari_verbal_part2.txt'
+                'Entrades_Scrabble.txt'
             ];
             
             const autoBtn = document.getElementById('autoLoadBtn');
