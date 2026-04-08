@@ -151,17 +151,59 @@
         .manual-load { background: #7f8c8d; }
         .divider { margin: 10px 0; text-align: center; color: #888; font-size: 12px; }
         
-        /* Responsive: si la pantalla és massa petita, permetem que el contingut es reorganitzi */
-        @media (max-width: 900px) {
+        /* Configuració per a mòbils: Tot en columna i lletres sota el tauler */
+        @media (max-width: 800px) {
             .game-container {
-                flex-wrap: wrap;
-                justify-content: center;
+                flex-direction: column !important;
+                align-items: center;
             }
             .side-panel {
                 width: 100%;
-                max-width: 400px;
+                order: 2; /* Això posa els botons de control a sota de tot */
+            }
+            #virtual-keyboard {
+                display: flex !important;
+                order: 1;
+                margin-bottom: 15px;
+            }
+            #board {
+                order: 0;
             }
         }
+        
+        /* Disseny del teclat virtual */
+        #virtual-keyboard {
+            display: none; /* Amagat en ordinador, es mostra en mòbil via Media Query */
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+            padding: 5px;
+        }
+        
+        .kb-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+        
+        .key {
+            background: #444;
+            color: white;
+            border-radius: 4px;
+            padding: 10px 6px;
+            min-width: 25px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            touch-action: manipulation;
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .key:active { background: #666; }
+        .key.special { background: #c0392b; flex: 1.5; } /* Per a la tecla d'esborrar */
     </style>
 </head>
 <body>
@@ -176,6 +218,12 @@
 
     <div class="game-container">
         <div id="board"></div>
+        
+        <div id="virtual-keyboard">
+            <div class="kb-row" id="row1"></div>
+            <div class="kb-row" id="row2"></div>
+            <div class="kb-row" id="row3"></div>
+        </div>
 
         <div class="side-panel">
             <div id="score-box">
@@ -274,41 +322,33 @@
             return next;
         }
 
-        window.addEventListener('keydown', (e) => {
-            const row = Math.floor(focusIdx / 15);
-            const col = focusIdx % 15;
-
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-                e.preventDefault();
-                if (e.key === "ArrowUp" && row > 0) focusIdx -= 15;
-                if (e.key === "ArrowDown" && row < 14) focusIdx += 15;
-                if (e.key === "ArrowLeft" && col > 0) focusIdx -= 1;
-                if (e.key === "ArrowRight" && col < 14) focusIdx += 1;
-                selectedCells = [focusIdx];
-                updateUI();
-                return;
-            }
-
-            if (e.code === "Space") { e.preventDefault(); shuffleRack(); return; }
-
-            let key = e.key.toUpperCase();
+        // Funció centralitzada per manejar l'entrada (tant de teclat físic com virtual)
+        function handleInput(e) {
+            let key = (typeof e.key === 'string') ? e.key.toUpperCase() : e;
+            
             if (key === "BACKSPACE") {
                 if (draftState[focusIdx]) {
                     delete draftState[focusIdx];
                     document.getElementById('hint-box').style.display = 'none';
                     updateUI();
                 }
-                return;
+                return true;
             }
-
-            let char = (key === "Q") ? "QU" : (key === "Y") ? "NY" : (key === "." || key === "·") ? "L·L" : key;
-
+            
+            // Gestionar tecles especials del teclat virtual
+            let char;
+            if (key === "Q") char = "QU";
+            else if (key === "Y") char = "NY";
+            else if (key === "L·L" || key === "LL" || key === "L·L") char = "L·L";
+            else if (key === "Ç") char = "Ç";
+            else char = key;
+            
             if (conf[char]) {
-                if (boardState[focusIdx]) return;
-
+                if (boardState[focusIdx]) return false;
+                
                 let used = Object.values(draftState).filter(l => l === char).length;
                 let available = rack.filter(l => l === char).length;
-
+                
                 if (used < available) {
                     draftState[focusIdx] = char;
                     
@@ -319,10 +359,71 @@
                     }
                     
                     updateUI();
+                    return true;
                 } else {
                     updateMsg(`No tens la fitxa [${char}]`, "#ff7675");
+                    return false;
                 }
             }
+            return false;
+        }
+
+        // Configurar el teclat virtual
+        function setupVirtualKeyboard() {
+            const rows = [
+                ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+                ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ç"],
+                ["Z", "X", "C", "V", "B", "N", "M", "NY", "L·L", "⌫"]
+            ];
+
+            rows.forEach((row, i) => {
+                const rowDiv = document.getElementById(`row${i+1}`);
+                if (!rowDiv) return;
+                row.forEach(key => {
+                    const btn = document.createElement('div');
+                    btn.className = 'key' + (key === "⌫" ? " special" : "");
+                    btn.innerText = key;
+                    
+                    btn.onpointerdown = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Simulem l'esdeveniment que ja tens programat per al teclat físic
+                        let inputKey = key === "⌫" ? "BACKSPACE" : key;
+                        handleInput(inputKey);
+                    };
+                    rowDiv.appendChild(btn);
+                });
+            });
+        }
+
+        // Event listener per al teclat físic
+        window.addEventListener('keydown', (e) => {
+            const row = Math.floor(focusIdx / 15);
+            const col = focusIdx % 15;
+            
+            // Tecles de navegació
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+                e.preventDefault();
+                if (e.key === "ArrowUp" && row > 0) focusIdx -= 15;
+                if (e.key === "ArrowDown" && row < 14) focusIdx += 15;
+                if (e.key === "ArrowLeft" && col > 0) focusIdx -= 1;
+                if (e.key === "ArrowRight" && col < 14) focusIdx += 1;
+                selectedCells = [focusIdx];
+                updateUI();
+                return;
+            }
+            
+            // Barrejar atril amb espai
+            if (e.code === "Space") { 
+                e.preventDefault(); 
+                shuffleRack(); 
+                return;
+            }
+            
+            // Processar la tecla normal
+            let key = e.key.toUpperCase();
+            let fakeEvent = { key: key, toUpperCase: () => key };
+            handleInput(fakeEvent);
         });
 
         function shuffleRack() { rack.sort(() => Math.random() - 0.5); fillRack(); }
@@ -724,6 +825,9 @@
             const m = document.getElementById('msg');
             m.innerText = t; m.style.color = color;
         }
+        
+        // Inicialitzar el teclat virtual
+        setupVirtualKeyboard();
     </script>
 </body>
 </html>
