@@ -763,4 +763,26 @@
         }
 
         // Event listeners per als dos mètodes de càrrega
-        document.getElementById('autoLoadBtn
+        document.getElementById('autoLoadBtn').addEventListener('click', carregarDiccionariAutomata);
+        
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const files = e.target.files;
+            for (const file of files) {
+                const text = await file.text();
+                text.split(/\r?\n/).forEach(w => {
+                    let clean = w.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if (clean.length > 1) diccionari.add(clean);
+                });
+            }
+            document.getElementById('setup').style.display = 'none';
+            initBag(); fillRack(); updateUI();
+            updateMsg(`${diccionari.size} paraules carregades.`);
+        });
+
+        function updateMsg(t, color="white") {
+            const m = document.getElementById('msg');
+            m.innerText = t; m.style.color = color;
+        }
+    </script>
+</body>
+</html>
