@@ -151,62 +151,31 @@
         .manual-load { background: #7f8c8d; }
         .divider { margin: 10px 0; text-align: center; color: #888; font-size: 12px; }
         
-        /* Configuració per a mòbils: Tot en columna i lletres sota el tauler */
+        /* Configuració per a mòbils: Tot en columna */
         @media (max-width: 800px) {
             .game-container {
-                flex-direction: column !important;
+                display: flex;
+                flex-direction: column; /* Tauler a dalt, la resta a sota */
                 align-items: center;
             }
+            
+            #rack {
+                order: -1; /* Això fa que l'atril pugi per sobre dels botons */
+                margin-top: 10px;
+                width: 100%;
+            }
+
             .side-panel {
                 width: 100%;
-                order: 2; /* Això posa els botons de control a sota de tot */
-            }
-            #virtual-keyboard {
-                display: flex !important;
-                order: 1;
-                margin-bottom: 15px;
-            }
-            #board {
-                order: 0;
+                display: flex;
+                flex-direction: column;
             }
         }
-        
-        /* Disseny del teclat virtual */
-        #virtual-keyboard {
-            display: none; /* Amagat en ordinador, es mostra en mòbil via Media Query */
-            flex-direction: column;
-            gap: 5px;
-            width: 100%;
-            max-width: 500px;
-            margin-top: 10px;
-            padding: 5px;
-        }
-        
-        .kb-row {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-        }
-        
-        .key {
-            background: #444;
-            color: white;
-            border-radius: 4px;
-            padding: 10px 6px;
-            min-width: 25px;
-            text-align: center;
-            font-weight: bold;
-            cursor: pointer;
-            touch-action: manipulation;
-            flex: 1;
-            font-size: 14px;
-        }
-        
-        .key:active { background: #666; }
-        .key.special { background: #c0392b; flex: 1.5; } /* Per a la tecla d'esborrar */
     </style>
 </head>
 <body>
+
+    <input type="text" id="hidden-input" style="position: absolute; opacity: 0; pointer-events: none;">
 
     <div class="setup-box" id="setup">
         <h2>CARREGA ELS TEUS DICCIONARIS</h2>
@@ -218,12 +187,6 @@
 
     <div class="game-container">
         <div id="board"></div>
-        
-        <div id="virtual-keyboard">
-            <div class="kb-row" id="row1"></div>
-            <div class="kb-row" id="row2"></div>
-            <div class="kb-row" id="row3"></div>
-        </div>
 
         <div class="side-panel">
             <div id="score-box">
@@ -290,10 +253,34 @@
                 focusIdx = i;
                 selectedCells = [i];
                 updateUI();
+                
+                // CRÍTIC: Això obre el teclat natiu al mòbil
+                const input = document.getElementById('hidden-input');
+                input.focus();
             };
             
             bDiv.appendChild(c);
         }
+
+        const hiddenInput = document.getElementById('hidden-input');
+
+        hiddenInput.addEventListener('input', (e) => {
+            const lletra = e.data; // Agafa el caràcter que s'acaba d'escriure
+            if (!lletra) return;
+
+            // Simulem l'entrada com si fos una tecla física
+            handleInput({ key: lletra });
+            
+            // Netegem l'input perquè estigui buit per a la següent lletra
+            hiddenInput.value = '';
+        });
+
+        // Perquè la tecla d'esborrar del teclat natiu també funcioni:
+        hiddenInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace') {
+                handleInput({ key: 'Backspace' });
+            }
+        });
 
         function predictNextIndex() {
             let draftKeys = Object.keys(draftState).map(Number).sort((a, b) => a - b);
@@ -368,34 +355,6 @@
             return false;
         }
 
-        // Configurar el teclat virtual
-        function setupVirtualKeyboard() {
-            const rows = [
-                ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-                ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ç"],
-                ["Z", "X", "C", "V", "B", "N", "M", "NY", "L·L", "⌫"]
-            ];
-
-            rows.forEach((row, i) => {
-                const rowDiv = document.getElementById(`row${i+1}`);
-                if (!rowDiv) return;
-                row.forEach(key => {
-                    const btn = document.createElement('div');
-                    btn.className = 'key' + (key === "⌫" ? " special" : "");
-                    btn.innerText = key;
-                    
-                    btn.onpointerdown = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // Simulem l'esdeveniment que ja tens programat per al teclat físic
-                        let inputKey = key === "⌫" ? "BACKSPACE" : key;
-                        handleInput(inputKey);
-                    };
-                    rowDiv.appendChild(btn);
-                });
-            });
-        }
-
         // Event listener per al teclat físic
         window.addEventListener('keydown', (e) => {
             const row = Math.floor(focusIdx / 15);
@@ -443,7 +402,6 @@
                 
                 t.innerHTML = `${l}<sub>${conf[l].v}</sub>`;
                 
-                // Dins de la funció fillRack(), busca el t.onclick i canvia-ho:
                 t.onpointerdown = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -805,29 +763,4 @@
         }
 
         // Event listeners per als dos mètodes de càrrega
-        document.getElementById('autoLoadBtn').addEventListener('click', carregarDiccionariAutomata);
-        
-        document.getElementById('fileInput').addEventListener('change', async (e) => {
-            const files = e.target.files;
-            for (const file of files) {
-                const text = await file.text();
-                text.split(/\r?\n/).forEach(w => {
-                    let clean = w.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    if (clean.length > 1) diccionari.add(clean);
-                });
-            }
-            document.getElementById('setup').style.display = 'none';
-            initBag(); fillRack(); updateUI();
-            updateMsg(`${diccionari.size} paraules carregades.`);
-        });
-
-        function updateMsg(t, color="white") {
-            const m = document.getElementById('msg');
-            m.innerText = t; m.style.color = color;
-        }
-        
-        // Inicialitzar el teclat virtual
-        setupVirtualKeyboard();
-    </script>
-</body>
-</html>
+        document.getElementById('autoLoadBtn
