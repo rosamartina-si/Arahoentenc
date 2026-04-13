@@ -179,7 +179,7 @@
 
     <div class="setup-box" id="setup">
         <h2>CARREGA ELS TEUS DICCIONARIS</h2>
-        <button id="autoLoadBtn" class="auto-load" style="padding: 12px; width: 100%; margin-bottom: 15px; font-size: 16px;">📚 CARREGAR el Diccionari Informatitzat de l’Scrabble en Català</button>
+        <button id="autoLoadBtn" class="auto-load" style="padding: 12px; width: 100%; margin-bottom: 15px; font-size: 16px;">📚 CARREGAR el Diccionari Informatitzat de l'Scrabble en Català</button>
         <div class="divider">━━━━━ O PUJA'LS MANUALMENT ━━━━━</div>
         <input type="file" id="fileInput" accept=".txt" multiple style="margin-top: 15px;">
         <p style="font-size: 11px; color: #aaa;">Selecciona un o més fitxers .txt alhora.</p>
@@ -195,7 +195,7 @@
                 <div id="preview-score">Jugada actual: 0 pts</div>
             </div>
 
-            <div id="msg">Fes servir les fletxes per moure't i Shift per seleccionar.</div>
+            <div id="msg">Fes servir les fletxes per moure't. Clica una fitxa de l'esborrany per eliminar-la.</div>
 
             <div class="controls">
                 <button class="btn-play" onclick="confirmMove()">CONFIRMAR JUGADA</button>
@@ -213,7 +213,25 @@
                 • Prem <strong>Q</strong> per posar <strong>QU</strong><br>
                 • Prem <strong>Y</strong> per posar <strong>NY</strong><br>
                 • Prem <strong>.</strong> (punt) o <strong>·</strong> per posar <strong>L·L</strong><br>
-                • Prem <strong>Espai</strong> per barrejar l'atril.
+                • Prem <strong>Espai</strong> per barrejar l'atril.<br>
+                • <strong>Clica una fitxa de l'esborrany</strong> per eliminar-la.
+            </div>
+            
+            <!-- BANC DE PROVES MILLORAT AMB CÀLCUL DE PUNTS -->
+            <div class="scrambler-container" style="margin-top: 25px; padding: 20px; background: #1a1a1a; border-radius: 12px; border: 2px solid #333; width: 100%; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <span id="scrambler-msg" style="font-size: 13px; color: #aaa; font-weight: bold; text-transform: uppercase;">🧪 Banc de Proves</span>
+                    <span id="scrambler-points" style="font-size: 14px; background: #2ecc71; color: #000; padding: 2px 8px; border-radius: 4px; font-weight: bold; display: none;">0 PTS</span>
+                </div>
+                
+                <div id="visual-sync-rack" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 50px;"></div>
+
+                <input type="text" id="tile-scrambler" placeholder="Escriu per provar..." 
+                       style="width: 100%; background: #000; color: #fff; border: 2px solid #444; padding: 15px; font-size: 24px; text-align: center; font-family: 'Courier New', monospace; text-transform: uppercase; border-radius: 10px; outline: none; box-sizing: border-box; letter-spacing: 2px;">
+                
+                <div style="margin-top: 12px;">
+                    <button onclick="clearScrambler()" style="width: 100%; padding: 10px; font-size: 12px; background: #333; border: 1px solid #444; color: #ccc; border-radius: 6px; cursor: pointer; transition: 0.2s;">NETEJAR BANC DE PROVES</button>
+                </div>
             </div>
             
             <p style="font-size: 10px; color: #888; text-align: center;">
@@ -256,14 +274,20 @@
             c.className = 'cell';
             resetCellVisual(c, i);
             
-            // CANVI: pointerdown és molt més efectiu en mòbils
             c.onpointerdown = (e) => {
-                e.preventDefault(); // Evita comportaments estranys del navegador
+                e.preventDefault(); 
+                updateMsg(""); // <--- Neteja el missatge en clicar una casella
+
+                if (draftState[i]) {
+                    delete draftState[i];
+                    updateUI();
+                    return;
+                }
+
                 focusIdx = i;
                 selectedCells = [i];
                 updateUI();
                 
-                // CRÍTIC: Això obre el teclat natiu al mòbil
                 const input = document.getElementById('hidden-input');
                 input.focus();
             };
@@ -274,21 +298,41 @@
         const hiddenInput = document.getElementById('hidden-input');
 
         hiddenInput.addEventListener('input', (e) => {
-            const lletra = e.data; // Agafa el caràcter que s'acaba d'escriure
+            const lletra = e.data; 
             if (!lletra) return;
 
-            // Simulem l'entrada com si fos una tecla física
             handleInput({ key: lletra });
-            
-            // Netegem l'input perquè estigui buit per a la següent lletra
             hiddenInput.value = '';
         });
 
-        // Perquè la tecla d'esborrar del teclat natiu també funcioni:
-        hiddenInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace') {
-                handleInput({ key: 'Backspace' });
+        window.addEventListener('keydown', (e) => {
+            if (document.activeElement && document.activeElement.id === 'tile-scrambler') {
+                return;
             }
+
+            const row = Math.floor(focusIdx / 15);
+            const col = focusIdx % 15;
+            
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+                e.preventDefault();
+                if (e.key === "ArrowUp" && row > 0) focusIdx -= 15;
+                if (e.key === "ArrowDown" && row < 14) focusIdx += 15;
+                if (e.key === "ArrowLeft" && col > 0) focusIdx -= 1;
+                if (e.key === "ArrowRight" && col < 14) focusIdx += 1;
+                
+                updateMsg(""); // <--- Neteja el missatge en moure el cursor
+                selectedCells = [focusIdx];
+                updateUI();
+                return;
+            }
+            
+            if (e.code === "Space") { 
+                e.preventDefault(); 
+                shuffleRack(); 
+                return;
+            }
+            
+            hiddenInput.focus();
         });
 
         function predictNextIndex() {
@@ -318,8 +362,9 @@
             return next;
         }
 
-        // Funció centralitzada per manejar l'entrada (tant de teclat físic com virtual)
         function handleInput(e) {
+            updateMsg(""); // <--- Neteja qualsevol error previ en prémer una tecla
+            
             let key = (typeof e.key === 'string') ? e.key.toUpperCase() : e;
             
             if (key === "BACKSPACE") {
@@ -331,11 +376,10 @@
                 return true;
             }
             
-            // Gestionar tecles especials del teclat virtual
             let char;
             if (key === "Q") char = "QU";
             else if (key === "Y") char = "NY";
-            else if (key === "L·L" || key === "LL" || key === "L·L") char = "L·L";
+            else if (key === "." || key === "·") char = "L·L"; 
             else if (key === "Ç") char = "Ç";
             else char = key;
             
@@ -364,37 +408,97 @@
             return false;
         }
 
-        // Event listener per al teclat físic
-        window.addEventListener('keydown', (e) => {
-            const row = Math.floor(focusIdx / 15);
-            const col = focusIdx % 15;
+        function shuffleRack() { rack.sort(() => Math.random() - 0.5); fillRack(); }
+
+        function clearScrambler() {
+            const input = document.getElementById('tile-scrambler');
+            input.value = '';
+            syncVisualRack();
+        }
+
+        function syncVisualRack() {
+            const scramblerInput = document.getElementById('tile-scrambler');
+            const msgDiv = document.getElementById('scrambler-msg');
+            const ptsBadge = document.getElementById('scrambler-points');
+            const visualRack = document.getElementById('visual-sync-rack');
             
-            // Tecles de navegació
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-                e.preventDefault();
-                if (e.key === "ArrowUp" && row > 0) focusIdx -= 15;
-                if (e.key === "ArrowDown" && row < 14) focusIdx += 15;
-                if (e.key === "ArrowLeft" && col > 0) focusIdx -= 1;
-                if (e.key === "ArrowRight" && col < 14) focusIdx += 1;
-                selectedCells = [focusIdx];
-                updateUI();
-                return;
+            let inputVal = scramblerInput.value.toUpperCase();
+            
+            let displayVal = inputVal.replace(/L\.L/g, "L·L").replace(/LL/g, "L·L");
+            
+            let writtenTiles = tokenize(displayVal); 
+            
+            let currentPoints = 0;
+            writtenTiles.forEach(t => {
+                if (conf[t]) currentPoints += conf[t].v;
+            });
+
+            let checkVal = displayVal.replace(/Ç/g, "TEMP_CEDILLA")
+                                     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                                     .replace(/TEMP_CEDILLA/g, "Ç")
+                                     .replace(/·/g, "");
+
+            visualRack.innerHTML = '';
+            rack.forEach((tile) => {
+                const tileDiv = document.createElement('div');
+                tileDiv.style.padding = "10px";
+                tileDiv.style.borderRadius = "6px";
+                tileDiv.style.minWidth = "38px";
+                tileDiv.style.textAlign = "center";
+                tileDiv.style.fontWeight = "bold";
+                tileDiv.style.fontSize = "20px";
+                tileDiv.style.transition = "0.3s";
+                tileDiv.innerHTML = `${tile}<sub style="font-size: 10px; margin-left: 2px;">${conf[tile].v}</sub>`;
+
+                const indexInWritten = writtenTiles.indexOf(tile);
+                
+                if (indexInWritten !== -1) {
+                    tileDiv.style.background = "#222"; 
+                    tileDiv.style.color = "#444";
+                    tileDiv.style.border = "1px solid #333";
+                    tileDiv.style.transform = "scale(0.9)";
+                    writtenTiles.splice(indexInWritten, 1);
+                } else {
+                    tileDiv.style.background = "#e67e22";
+                    tileDiv.style.color = "white";
+                    tileDiv.style.border = "1px solid #d35400";
+                    tileDiv.style.boxShadow = "0 3px 0 #a34000";
+                }
+                visualRack.appendChild(tileDiv);
+            });
+
+            if (displayVal.length > 0) {
+                ptsBadge.style.display = "inline-block";
+                ptsBadge.innerText = `${currentPoints} PTS`;
+                
+                let checkValNoCedilla = checkVal.replace(/Ç/g, "C");
+
+                if (diccionari.has(checkVal) || diccionari.has(checkValNoCedilla)) {
+                    msgDiv.innerText = `✅ "${displayVal}" VÀLIDA`;
+                    msgDiv.style.color = "#2ecc71";
+                    scramblerInput.style.borderColor = "#2ecc71";
+                    ptsBadge.style.background = "#2ecc71";
+                } else {
+                    msgDiv.innerText = `❌ "${displayVal}" NO ÉS AL DICCIONARI`;
+                    msgDiv.style.color = "#ff7675";
+                    scramblerInput.style.borderColor = "#ff7675";
+                    ptsBadge.style.background = "#444";
+                }
+            } else {
+                msgDiv.innerText = "🧪 Banc de Proves";
+                msgDiv.style.color = "#aaa";
+                scramblerInput.style.borderColor = "#444";
+                ptsBadge.style.display = "none";
             }
-            
-            // Barrejar atril amb espai
-            if (e.code === "Space") { 
-                e.preventDefault(); 
-                shuffleRack(); 
-                return;
-            }
-            
-            // Processar la tecla normal
-            let key = e.key.toUpperCase();
-            let fakeEvent = { key: key, toUpperCase: () => key };
-            handleInput(fakeEvent);
+        }
+
+        document.getElementById('tile-scrambler').addEventListener('keydown', (e) => {
+            e.stopPropagation(); 
         });
 
-        function shuffleRack() { rack.sort(() => Math.random() - 0.5); fillRack(); }
+        document.getElementById('tile-scrambler').addEventListener('focus', () => {});
+
+        document.getElementById('tile-scrambler').addEventListener('input', syncVisualRack);
 
         function fillRack() {
             while(rack.length < 7 && bag.length > 0) {
@@ -423,6 +527,8 @@
                 };
                 rDiv.appendChild(t);
             });
+            
+            syncVisualRack();
         }
 
         function exchangeTiles() {
@@ -535,9 +641,7 @@
             let step = horizontal ? 1 : 15;
             let curr = idx;
 
-            // 1. Retrocedir fins a trobar la primera casella buida (inici de paraula)
             while (curr >= step && (boardState[curr - step] || draftState[curr - step])) {
-                // Bloqueig per no sortir de la fila en horitzontal
                 if (horizontal && curr % 15 === 0) break;
                 curr -= step;
             }
@@ -549,21 +653,17 @@
             let containsDraft = false;
             let tileCount = 0;
 
-            // 2. Avançar casella per casella (NO caràcter per caràcter)
             while (curr < 225 && (boardState[curr] || draftState[curr])) {
                 let fitxa = boardState[curr] || draftState[curr];
                 tileCount++;
                 
-                // Agafem el valor de la FITXA (QU val 8, A val 1, etc.)
                 let val = conf[fitxa] ? conf[fitxa].v : 0;
 
                 if (draftState[curr]) {
                     containsDraft = true;
-                    // Bonificacions de lletra (només si la fitxa és nova)
                     if (TL.includes(curr)) val *= 3;
                     else if (DL.includes(curr)) val *= 2;
                     
-                    // Bonificacions de paraula (només si la fitxa és nova)
                     if (TP.includes(curr)) wordMult *= 3;
                     else if (DP.includes(curr) || curr === 112) wordMult *= 2;
                 }
@@ -571,12 +671,10 @@
                 points += val;
                 word += fitxa;
                 
-                // Saltem a la següent casella del tauler
                 if (horizontal && curr % 15 === 14) break;
                 curr += step;
             }
 
-            // CANVIA LA CONDICIÓ: Useu tileCount en lloc de word.length
             if (!containsDraft || tileCount < 2) return null;
 
             return { word, points: points * wordMult, start };
@@ -604,7 +702,6 @@
                 curr += step;
             }
 
-            // Dins de confirmMove, on es neteja la paraula:
             let clean = word.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
             
             if (!diccionari.has(clean)) {
@@ -641,6 +738,9 @@
             
             updateUI(); 
             fillRack();
+            
+            clearScrambler(); 
+            
             updateMsg(`✅ "${clean}" +${jugadaPoints} pts`, "#2ecc71");
         }
 
@@ -660,6 +760,7 @@
             document.getElementById('preview-score').innerText = "Jugada actual: 0 pts";
             document.getElementById('hint-box').style.display = 'none';
             initBag(); rack = []; fillRack(); updateUI();
+            clearScrambler();
         }
 
         async function carregarDiccionariAutomata() {
@@ -677,13 +778,11 @@
             updateMsg("🔄 Carregant diccionaris (IEC + Verbs)...", "#f1c40f");
 
             try {
-                // Creem les tres promeses de descàrrega alhora
                 const peticions = fitxers.map(f => fetch(baseURL + f).then(res => {
                     if (!res.ok) throw new Error(`Error en ${f}`);
                     return res.text();
                 }));
 
-                // Esperem que totes acabin
                 const resultats = await Promise.all(peticions);
                 
                 diccionari.clear();
@@ -691,10 +790,11 @@
                 resultats.forEach(text => {
                     const linies = text.split(/\r?\n/);
                     linies.forEach(w => {
-                        // Netegem: majúscules, sense accents i sense punts volats per a la cerca
-                        let clean = w.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                        // Important: per als verbs que portin L·L, també traiem el punt volat
-                        clean = clean.replace(/·/g, "");
+                        let clean = w.trim().toUpperCase()
+                                     .replace(/Ç/g, "TEMP_C")
+                                     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                                     .replace(/TEMP_C/g, "Ç")
+                                     .replace(/·/g, "");
                         
                         if (clean.length > 1) {
                             diccionari.add(clean);
@@ -702,7 +802,6 @@
                     });
                 });
 
-                // UI i Inici del joc
                 document.getElementById('setup').style.display = 'none';
                 initBag(); 
                 fillRack(); 
@@ -744,7 +843,6 @@
                     }
                     
                     if (can) {
-                        // Calcular punts de manera CORRECTA: recorrent fitxa per fitxa
                         let puntsTotals = 0;
                         for (let fitxa of toks) {
                             puntsTotals += conf[fitxa] ? conf[fitxa].v : 0;
@@ -769,7 +867,6 @@
             return t;
         }
 
-        // Event listeners per als dos mètodes de càrrega
         document.getElementById('autoLoadBtn').addEventListener('click', carregarDiccionariAutomata);
         
         document.getElementById('fileInput').addEventListener('change', async (e) => {
@@ -777,7 +874,11 @@
             for (const file of files) {
                 const text = await file.text();
                 text.split(/\r?\n/).forEach(w => {
-                    let clean = w.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    let clean = w.trim().toUpperCase()
+                                 .replace(/Ç/g, "TEMP_C")
+                                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                                 .replace(/TEMP_C/g, "Ç")
+                                 .replace(/·/g, "");
                     if (clean.length > 1) diccionari.add(clean);
                 });
             }
