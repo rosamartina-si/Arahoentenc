@@ -1,0 +1,44 @@
+Hunspell és:
+
+Un corrector ortogràfic (detecta errors)
+I també un analitzador morfològic (entén formes de paraules)
+🔧 On s’utilitza?
+
+El trobaràs en molts programes coneguts:
+
+LibreOffice
+Firefox
+Google Chrome
+Microsoft Word (internament o amb diccionaris compatibles)
+🧩 Com funciona?
+
+Hunspell utilitza dos fitxers principals:
+
+.dic → llista de paraules
+.aff → regles (prefixos, sufixos, flexions…)
+
+👉 Això permet, per exemple:
+
+reconèixer “cantar”, “cantava”, “cantarem”… sense haver-les de llistar totes
+💡 Exemple
+
+Si tens:
+
+arrel: cantar
+regla: -em
+
+👉 pot generar: cantem
+
+🧠 Per què és important?
+
+És especialment útil per llengües com el català perquè:
+
+tenen molta flexió verbal
+moltes variants morfològiques
+
+👉 Hunspell permet tenir diccionaris compactes però potents
+
+🟡 Resum
+
+Hunspell =
+👉 motor de correcció ortogràfica + regles lingüístiques
