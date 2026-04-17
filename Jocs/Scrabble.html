@@ -141,10 +141,13 @@
         .btn-clear { background: #e67e22; }
         .btn-reset { background: #c0392b; }
         .btn-exchange { background: #34495e; }
+        .btn-extend { background: #9b59b6; }
+        .btn-scrambler-search { background: #1abc9c; }
         
         #msg { font-weight: bold; text-align: center; min-height: 24px; padding: 5px; font-size: 12px; }
         #hint-box { background: #000; padding: 10px; border-radius: 5px; font-size: 12px; max-height: 200px; overflow-y: auto; display: none; color: #ccc; border: 1px solid #444; }
-        .hint-item { border-bottom: 1px solid #333; padding: 4px 0; }
+        .hint-item { border-bottom: 1px solid #333; padding: 4px 0; cursor: pointer; transition: 0.2s; }
+        .hint-item:hover { background: #2c3e50; padding-left: 5px; }
         
         .loading-btn { background: #f39c12; cursor: wait; opacity: 0.7; }
         .auto-load { background: #16a085; margin-bottom: 10px; }
@@ -200,6 +203,8 @@
             <div class="controls">
                 <button class="btn-play" onclick="confirmMove()">CONFIRMAR JUGADA</button>
                 <button class="btn-exchange" onclick="exchangeTiles()">CANVIAR FITXES (CLICA-LES)</button>
+                <button class="btn-extend" onclick="findExtensions()">🔍 SUGGEREIX EXTENSIONS</button>
+                <button class="btn-scrambler-search" onclick="searchFromScrambler()">🧪 CERCA DES DE BANC DE PROVES</button>
                 <button class="btn-hint" onclick="findHints()">SUGGERIMENTS</button>
                 <button class="btn-clear" onclick="clearDraft()">ESBORRAR ESBORRANY</button>
                 <button class="btn-reset" onclick="resetGame()">REINICIAR</button>
@@ -675,8 +680,9 @@
                 curr += step;
             }
 
+            // Si només hi ha 1 lletra, no és una paraula vàlida
             if (!containsDraft || tileCount < 2) return null;
-
+            
             return { word, points: points * wordMult, start };
         }
 
@@ -684,45 +690,36 @@
             let draftKeys = Object.keys(draftState).map(Number).sort((a,b) => a-b);
             if (draftKeys.length === 0) return;
 
-            let isH = true;
-            if (draftKeys.length > 1 && draftKeys[1] - draftKeys[0] >= 15) isH = false;
-            
-            let start = draftKeys[0];
-            let step = isH ? 1 : 15;
-            while (start >= step && (boardState[start - step] || draftState[start - step])) {
-                if (isH && start % 15 === 0) break;
-                start -= step;
-            }
+            // Obtenim totes les paraules formades (incloent les que s'allarguen)
+            let allWords = getAllWordsFormed();
 
-            let word = "";
-            let curr = start;
-            while (curr < 225 && (boardState[curr] || draftState[curr])) {
-                word += (boardState[curr] || draftState[curr]);
-                if (isH && curr % 15 === 14) break;
-                curr += step;
-            }
-
-            let clean = word.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-            
-            if (!diccionari.has(clean)) {
-                updateMsg(`❌ "${clean}" no és al diccionari!`, "#ff7675");
+            if (allWords.length === 0) {
+                updateMsg("❌ La jugada ha de connectar amb el tauler.", "#ff7675");
                 return;
             }
 
-            let allWords = getAllWordsFormed();
-            let paraulesInvalides = allWords.filter(w => {
-                let cleanWord = w.word.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-                return !diccionari.has(cleanWord);
-            });
+            let paraulesInvalides = [];
+            for (let wObj of allWords) {
+                // Normalitzem per buscar al diccionari (sense punts volats ni accents si cal)
+                let cleanWord = wObj.word.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                
+                // Cas especial per a la Ç: la normalització NFD la separa en C + cedilla, la tornem a ajuntar
+                cleanWord = cleanWord.replace(/C\u0327/g, "Ç");
+
+                if (!diccionari.has(cleanWord)) {
+                    paraulesInvalides.push(wObj.word);
+                }
+            }
 
             if (paraulesInvalides.length > 0) {
-                updateMsg(`❌ Paraula invàlida: "${paraulesInvalides[0].word}"`, "#ff7675");
+                updateMsg(`❌ "${paraulesInvalides[0]}" no és vàlida.`, "#ff7675");
                 return;
             }
 
+            // Si tot és correcte, sumem punts i fixem
             let jugadaPoints = calculatePoints();
-            
             Object.assign(boardState, draftState);
+            
             Object.values(draftState).forEach(l => {
                 let idx = rack.indexOf(l);
                 if (idx > -1) rack.splice(idx, 1);
@@ -730,18 +727,11 @@
             
             totalScore += jugadaPoints;
             document.getElementById('total-score').innerText = totalScore;
-            
             draftState = {}; 
-            tilesToExchange.clear();
-            
-            document.getElementById('hint-box').style.display = 'none';
-            
             updateUI(); 
             fillRack();
-            
-            clearScrambler(); 
-            
-            updateMsg(`✅ "${clean}" +${jugadaPoints} pts`, "#2ecc71");
+            clearScrambler();
+            updateMsg(`✅ Jugada acceptada: +${jugadaPoints} pts`, "#2ecc71");
         }
 
         function clearDraft() {
@@ -817,6 +807,215 @@
                 autoBtn.disabled = false;
                 autoBtn.classList.remove('loading-btn');
             }
+        }
+
+        // Funció millorada per trobar paraules que "allarguin" o continguin lletres del tauler
+        function findExtensions() {
+            const hBox = document.getElementById('hint-box');
+            hBox.innerHTML = "🔍 Cerca exhaustiva en curs... (això pot trigar un poc)"; 
+            hBox.style.display = "block";
+
+            let rackC = {}; 
+            rack.forEach(l => rackC[l] = (rackC[l] || 0) + 1);
+
+            setTimeout(() => {
+                let results = [];
+                let vistes = new Set(); // Paraula + Posició + Direcció per evitar duplicats
+
+                // Analitzem cada casella del tauler
+                for (let i = 0; i < 225; i++) {
+                    if (boardState[i]) {
+                        const lletraPivot = boardState[i];
+                        const r = Math.floor(i / 15);
+                        const c = i % 15;
+
+                        diccionari.forEach(paraula => {
+                            let toks = tokenize(paraula);
+                            
+                            // Busquem totes les vegades que la lletra pivot apareix en aquesta paraula
+                            toks.forEach((t, indexInWord) => {
+                                if (t === lletraPivot) {
+                                    ['H', 'V'].forEach(dir => {
+                                        const idUnic = `${paraula}-${r}-${c}-${dir}`;
+                                        if (vistes.has(idUnic)) return;
+
+                                        if (esValidComAExtensionUnica(paraula, toks, indexInWord, r, c, dir, rackC)) {
+                                            let pts = toks.reduce((acc, l) => acc + (conf[l] ? conf[l].v : 0), 0);
+                                            
+                                            // Calculem índexs grocs (tauler)
+                                            let indicesTauler = [];
+                                            let startR = (dir === 'V') ? r - indexInWord : r;
+                                            let startC = (dir === 'H') ? c - indexInWord : c;
+                                            for (let k = 0; k < toks.length; k++) {
+                                                let cR = (dir === 'V') ? startR + k : r;
+                                                let cC = (dir === 'H') ? startC + k : c;
+                                                if (boardState[cR * 15 + cC]) indicesTauler.push(k);
+                                            }
+
+                                            results.push({ w: paraula, s: pts, onBoard: indicesTauler });
+                                            vistes.add(idUnic);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    }
+                }
+
+                // Ordenem per puntuació i mostrem fins a 100 resultats
+                results.sort((a, b) => b.s - a.s);
+                displayResults(results, hBox, 100); 
+            }, 50);
+        }
+
+        function esValidComAExtensionUnica(paraula, toks, idxInWord, r, c, dir, rackC) {
+            let startR = (dir === 'V') ? r - idxInWord : r;
+            let startC = (dir === 'H') ? c - idxInWord : c;
+
+            // 1. Control de límits del tauler
+            if (startR < 0 || startC < 0) return false;
+            let endR = (dir === 'V') ? startR + toks.length - 1 : r;
+            let endC = (dir === 'H') ? startC + toks.length - 1 : c;
+            if (endR >= 15 || endC >= 15) return false;
+
+            // 2. Control de fronteres (no pot haver-hi res just abans o just després)
+            let cellAbans = (dir === 'V') ? (startR - 1) * 15 + startC : startR * 15 + (startC - 1);
+            let cellDespres = (dir === 'V') ? (endR + 1) * 15 + endC : endR * 15 + (endC + 1);
+            
+            if (startR > 0 && startC > 0 && boardState[cellAbans]) return false;
+            if (endR < 14 && endC < 14 && boardState[cellDespres]) return false;
+
+            let lletresAtrilNecessaries = {...rackC};
+            let fitxesNovesAPosar = 0;
+            let tocaTauler = false;
+
+            // 3. Recorrem tota la longitud de la paraula suggerida
+            for (let i = 0; i < toks.length; i++) {
+                let currR = (dir === 'V') ? startR + i : r;
+                let currC = (dir === 'H') ? startC + i : c;
+                let currIdx = currR * 15 + currC;
+                let lletraNecessaria = toks[i];
+
+                if (boardState[currIdx]) {
+                    // SI LA CASELLA ESTÀ OCUPADA:
+                    // La lletra del tauler ha de coincidir amb la de la paraula del diccionari
+                    if (boardState[currIdx] !== lletraNecessaria) return false;
+                    tocaTauler = true; // Estem aprofitant una lletra existent
+                } else {
+                    // SI LA CASELLA ESTÀ BUIDA:
+                    // Hem de tenir la lletra a l'atril
+                    if (lletresAtrilNecessaries[lletraNecessaria] > 0) {
+                        lletresAtrilNecessaries[lletraNecessaria]--;
+                        fitxesNovesAPosar++;
+                        
+                        // Validem que no creem "mots creuats" invàlids als costats
+                        if (!validarParaulaPerpendicular(lletraNecessaria, currR, currC, dir === 'H' ? 'V' : 'H')) {
+                            return false;
+                        }
+                    } else {
+                        return false; // No tenim la lletra a l'atril
+                    }
+                }
+            }
+            
+            // Perquè sigui vàlida: hem d'haver tocat el tauler i haver posat almenys una fitxa nova
+            return tocaTauler && fitxesNovesAPosar > 0;
+        }
+
+        function validarParaulaPerpendicular(lletra, r, c, dirPerp) {
+            let step = (dirPerp === 'V') ? 15 : 1;
+            let start = r * 15 + c;
+            
+            // Anar enrere per trobar l'inici del mot perpendicular
+            let curr = start;
+            while (curr >= step && boardState[curr - step]) {
+                if (dirPerp === 'H' && curr % 15 === 0) break;
+                curr -= step;
+            }
+
+            // Llegir tota la paraula formada
+            let paraulaFormada = "";
+            let tempCurr = curr;
+            while (tempCurr < 225 && (tempCurr === start || boardState[tempCurr])) {
+                paraulaFormada += (tempCurr === start) ? lletra : boardState[tempCurr];
+                if (dirPerp === 'H' && tempCurr % 15 === 14) break;
+                tempCurr += step;
+            }
+
+            if (paraulaFormada.length === 1) return true; // No s'ha creat cap mot nou
+
+            let clean = paraulaFormada.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+            clean = clean.replace(/C\u0327/g, "Ç");
+            return diccionari.has(clean);
+        }
+
+        // Funció per cercar paraules a partir del text del "Banc de Proves"
+        function searchFromScrambler() {
+            const scramblerText = document.getElementById('tile-scrambler').value.toUpperCase().replace(/\s/g, '');
+            if (!scramblerText) {
+                updateMsg("Escriu lletres al banc de proves!", "#f1c40f");
+                return;
+            }
+
+            const hBox = document.getElementById('hint-box');
+            hBox.innerHTML = "🧪 Analitzant combinacions del banc de proves...";
+            hBox.style.display = "block";
+
+            setTimeout(() => {
+                let inputToks = tokenize(scramblerText);
+                let rackC = {};
+                inputToks.forEach(l => rackC[l] = (rackC[l] || 0) + 1);
+
+                let results = [];
+                diccionari.forEach(paraula => {
+                    let wordToks = tokenize(paraula);
+                    let tRack = { ...rackC };
+                    let can = true;
+
+                    for (let t of wordToks) {
+                        if (tRack[t] > 0) tRack[t]--;
+                        else { can = false; break; }
+                    }
+
+                    if (can) {
+                        let pts = wordToks.reduce((a, b) => a + (conf[b] ? conf[b].v : 0), 0);
+                        results.push({ w: paraula, s: pts, onBoard: [] }); // Cap lletra és del tauler aquí
+                    }
+                });
+
+                results.sort((a, b) => b.s - a.s);
+                displayResults(results, hBox, 100);
+            }, 50);
+        }
+
+        // Auxiliar per mostrar els resultats de forma neta
+        function displayResults(results, container, limit = 40) {
+            if (results.length === 0) {
+                container.innerHTML = "Cap combinació trobada.";
+                return;
+            }
+
+            let html = `<div style="padding:10px; position: sticky; top: 0; background: #2c3e50; border-bottom:1px solid #444; z-index:10;">
+                            <b>${results.length} opcions trobades:</b><br>
+                            <small>(Mostrant les millors ${Math.min(results.length, limit)})</small>
+                        </div>`;
+
+            html += results.slice(0, limit).map(r => {
+                let toks = tokenize(r.w);
+                let coloredWord = toks.map((l, index) => {
+                    if (r.onBoard && r.onBoard.includes(index)) {
+                        return `<span style="color:#f1c40f">${l}</span>`;
+                    }
+                    return l;
+                }).join("");
+
+                return `
+                    <div class="hint-item" onclick="document.getElementById('tile-scrambler').value='${r.w}'; syncVisualRack();" style="cursor:pointer">
+                        <b>${coloredWord}</b> (${r.s} pts)
+                    </div>`;
+            }).join("");
+
+            container.innerHTML = html;
         }
 
         function findHints() {
