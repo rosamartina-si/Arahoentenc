@@ -811,6 +811,7 @@
               <div class="pillrow">
                 <button type="button" class="btn btn-ghost" id="selectFileBtn">📎 Seleccionar</button>
                 <button type="button" class="btn btn-ghost" id="clearFileBtn">🧹 Netejar</button>
+                <button type="button" class="btn btn-ghost" id="loadGithubBtn">📚 Pere Calders</button>
               </div>
             </div>
             <input type="file" id="fileInput" style="display:none" accept=".pdf,.txt" />
@@ -1045,7 +1046,7 @@
         dropArea: document.getElementById("dropArea"),
         fileInfo: document.getElementById("fileInfo"),
         clearFileBtn: document.getElementById("clearFileBtn"),
-
+        loadGithubBtn: document.getElementById("loadGithubBtn"), // Afegeix aquesta línia
         sampleTextBtn: document.getElementById("sampleTextBtn"),
         clearTextBtn: document.getElementById("clearTextBtn"),
         copyResultsBtn: document.getElementById("copyResultsBtn"),
@@ -1075,7 +1076,8 @@
 
       const controlsToDisable = [
         el.extractButton, el.copyResultsBtn, el.resetBtn,
-        el.selectFileBtn, el.clearFileBtn, el.sampleTextBtn, el.clearTextBtn
+        el.selectFileBtn, el.clearFileBtn, el.loadGithubBtn, // Afegeix aquesta línia
+        el.sampleTextBtn, el.clearTextBtn
       ];
 
       function setBusy(isBusy, message = "Processant…") {
@@ -1141,6 +1143,32 @@
         el.fileInfo.style.display = "none";
         el.fileInfo.textContent = "";
         toast("ok", "Fitxer eliminat", "S'ha netejat la selecció.");
+      });
+
+      // NOU: Botó per carregar des de GitHub
+      el.loadGithubBtn.addEventListener("click", async () => {
+        const url = "https://rosamartina-si.github.io/Arahoentenc/Tot_en_un/Tots_els_contes-Pere_Calders.txt";
+        
+        setBusy(true, "Baixant llibre des de GitHub...");
+        
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("No s'ha pogut accedir al fitxer de GitHub");
+          
+          const text = await response.text();
+          el.inputText.value = text;
+          
+          // Simulem una info de fitxer
+          el.fileInfo.style.display = "block";
+          el.fileInfo.textContent = "Font: Tots els contes (Pere Calders) des de GitHub";
+          
+          toast("ok", "Èxit", "S'han carregat els contes de Pere Calders correctament.");
+        } catch (err) {
+          console.error(err);
+          toast("err", "Error de descàrrega", "No s'ha pogut carregar el fitxer: " + err.message);
+        } finally {
+          setBusy(false);
+        }
       });
 
       // Drag and drop
