@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- Aquest programa compara els fitxers d'entrades DIEC, formari verbal (1 i 2) amb diccionari Scrabble -->
+<!-- Treu un txt amb els mots compartits i amb accent, i si Scrabble té DOMINO, hi posa 'domino' i 'dòmino' -->
+<!-- Treu un segon txt amb la llista de mots de l'Scrabble que no ha trobat, 317.417 n -->
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Detector Lexicogràfic - Correcció de Càrrega</title>
+    <style>
+        body { font-family: sans-serif; max-width: 1100px; margin: 20px auto; padding: 20px; background-color: #f4f7f9; }
+        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        #status { background: #fff3e0; padding: 15px; border-left: 5px solid #ff9800; margin-bottom: 20px; font-family: monospace; white-space: pre-wrap; line-height: 1.4; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        textarea { width: 100%; height: 450px; font-family: 'Courier New', monospace; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; padding: 10px; box-sizing: border-box; }
+        button { padding: 12px 25px; cursor: pointer; background: #1a5276; color: white; border: none; border-radius: 6px; font-weight: bold; }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+        .success { color: #1e8449; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Anàlisi de Diccionaris (Correcció de la 'A')</h1>
+    <div id="status">Esperant inici... Si les paraules amb 'A' no sortien, aquesta versió les ha de forçar.</div>
+
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button id="btn">EXECUTAR PROCESSAMENT</button>
+        <button id="btnDl1" disabled>Baixar Expandida</button>
+        <button id="btnDl2" disabled>Baixar Neologismes</button>
+    </div>
+
+    <div class="grid">
+        <div>
+            <h3>Llista Expandida</h3>
+            <textarea id="txtExpandida" readonly></textarea>
+        </div>
+        <div>
+            <h3>Neologismes</h3>
+            <textarea id="txtNeologismes" readonly></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    const BASE_URL = "https://rosamartina-si.github.io/Arahoentenc/Tot_en_un/Dades_linguistiques/";
+    let dades = { exp: "", neo: "" };
+
+    // Funció de normalització profunda
+    function crearClau(s) {
+        if (!s) return "";
+        // Netegem caràcters de control invisibles, treiem accents i passem a minúscules
+        return s.trim()
+                .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Elimina caràcters de control ASCII invisibles
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase();
+    }
+
+    async function processar() {
+        const status = document.getElementById('status');
+        const btn = document.getElementById('btn');
+        btn.disabled = true;
+        
+        try {
+            const mapaNormatiu = new Map();
+            const fitxersNorm = ["Entrades_IEC.txt", "formari_verbal_part1.txt", "formari_verbal_part2.txt"];
+
+            // 1. Carregar normativa
+            for (const nom of fitxersNorm) {
+                status.innerText = `Carregant ${nom}...`;
+                const resp = await fetch(BASE_URL + nom);
+                const text = await resp.text();
+                // Neteja agressiva de línies
+                const linies = text.split(/\r?\n/);
+                
+                linies.forEach(l => {
+                    const motNet = l.trim().replace(/^\uFEFF/, "");
+                    if (motNet) {
+                        const clau = crearClau(motNet);
+                        if (!mapaNormatiu.has(clau)) mapaNormatiu.set(clau, new Set());
+                        mapaNormatiu.get(clau).add(motNet.toLowerCase());
+                    }
+                });
+            }
+
+            // 2. Carregar Scrabble
+            status.innerText = "Carregant fitxer Scrabble (Passant filtre de seguretat)...";
+            const respS = await fetch(BASE_URL + "Entrades_Scrabble.txt");
+            let textScrabble = await respS.text();
+            
+            // ELIMINACIÓ RADICAL DE CARÀCTERS ESTRANYS AL PRINCIPI DEL FITXER
+            textScrabble = textScrabble.replace(/^[\s\uFEFF\xA0]+/, ""); 
+
+            const llistaScrabble = textScrabble.split(/\r?\n/);
+            const setExpandida = new Set();
+            const setNeologismes = new Set();
+
+            // 3. Comparació amb comptador real
+            for (let i = 0; i < llistaScrabble.length; i++) {
+                const motS = llistaScrabble[i].trim();
+                if (!motS) continue;
+                
+                const clauS = crearClau(motS);
+                if (mapaNormatiu.has(clauS)) {
+                    mapaNormatiu.get(clauS).forEach(m => setExpandida.add(m));
+                } else {
+                    setNeologismes.add(motS.toLowerCase());
+                }
+                
+                if (i % 25000 === 0) {
+                    status.innerText = `Processant: ${i.toLocaleString()} / ${llistaScrabble.length.toLocaleString()}\nDetectats: ${setExpandida.size} normatius, ${setNeologismes.size} nous.`;
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+
+            status.innerText = "Ordenant llistes finals...";
+            await new Promise(r => setTimeout(r, 0));
+            
+            const sortCat = (a, b) => a.localeCompare('ca');
+            const arrayExp = Array.from(setExpandida).sort(sortCat);
+            const arrayNeo = Array.from(setNeologismes).sort(sortCat);
+
+            dades.exp = arrayExp.join('\n');
+            dades.neo = arrayNeo.join('\n');
+
+            // Visualització amb límit
+            const LIMIT = 10000;
+            document.getElementById('txtExpandida').value = arrayExp.length > LIMIT ? 
+                `LLISTA MASSA GRAN (${arrayExp.length.toLocaleString()} mots). Baixa el .txt.` : dades.exp;
+            
+            document.getElementById('txtNeologismes').value = arrayNeo.length > LIMIT ? 
+                `LLISTA MASSA GRAN (${arrayNeo.length.toLocaleString()} mots). Baixa el .txt.` : dades.neo;
+
+            document.getElementById('btnDl1').disabled = false;
+            document.getElementById('btnDl2').disabled = false;
+            status.innerHTML = `<span class="success">PROCÉS FINALITZAT!</span>\nS'han trobat ${arrayExp.length.toLocaleString()} paraules vàlides i ${arrayNeo.length.toLocaleString()} neologismes.\n\n*Si encara falta la 'A', comprova que el fitxer original no estigui malmès.`;
+
+        } catch (e) {
+            status.innerText = "ERROR: " + e.message;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function descarregar(text, nom) {
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = nom; a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('btn').onclick = processar;
+    document.getElementById('btnDl1').onclick = () => descarregar(dades.exp, "scrabble_accentuat.txt");
+    document.getElementById('btnDl2').onclick = () => descarregar(dades.neo, "neologismes.txt");
+</script>
+</body>
+</html>
