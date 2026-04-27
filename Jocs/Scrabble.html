@@ -12,20 +12,20 @@
         /* Contenidor principal que envolta el tauler i el panell lateral */
         .game-container {
             display: flex;
-            flex-direction: row; /* Força que estiguin un al costat de l'altre */
+            flex-direction: row;
             align-items: flex-start;
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
-            flex-wrap: nowrap; /* Evita que el panell baixi si la pantalla és petita */
+            flex-wrap: nowrap;
         }
         
         #board { 
             display: grid; 
-            grid-template-columns: repeat(15, 1fr); /* Les caselles s'adapten a l'espai */
+            grid-template-columns: repeat(15, 1fr);
             grid-template-rows: repeat(15, 1fr);
-            width: 95vw; /* Ocupa gairebé tot l'ample de la pantalla */
-            height: 95vw; /* Es manté quadrat */
+            width: 95vw;
+            height: 95vw;
             max-width: 600px;
             max-height: 600px;
             gap: 2px; 
@@ -33,13 +33,13 @@
             padding: 10px; 
             border: 8px solid #3d2b1f; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            touch-action: manipulation; /* Evita el retard del doble clic per fer zoom */
+            touch-action: manipulation;
         }
         
         .cell { 
-            width: auto; /* Que la graella controli la mida */
+            width: auto;
             height: auto;
-            aspect-ratio: 1 / 1; /* Manté les caselles quadrades */
+            aspect-ratio: 1 / 1;
             background: #e0d5b8; 
             color: #333; 
             font-size: 8px; 
@@ -69,7 +69,7 @@
 
         /* El panell de la dreta */
         .side-panel {
-            width: 280px; /* Una mica més estret per cabre millor */
+            width: 280px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -158,12 +158,12 @@
         @media (max-width: 800px) {
             .game-container {
                 display: flex;
-                flex-direction: column; /* Tauler a dalt, la resta a sota */
+                flex-direction: column;
                 align-items: center;
             }
             
             #rack {
-                order: -1; /* Això fa que l'atril pugi per sobre dels botons */
+                order: -1;
                 margin-top: 10px;
                 width: 100%;
             }
@@ -173,6 +173,11 @@
                 display: flex;
                 flex-direction: column;
             }
+        }
+        
+        /* Estil per al contenteditable */
+        [contenteditable="true"]:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -231,12 +236,20 @@
                 
                 <div id="visual-sync-rack" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 50px;"></div>
 
-                <input type="text" id="tile-scrambler" placeholder="Escriu per provar..." 
-                       style="width: 100%; background: #000; color: #fff; border: 2px solid #444; padding: 15px; font-size: 24px; text-align: center; font-family: 'Courier New', monospace; text-transform: uppercase; border-radius: 10px; outline: none; box-sizing: border-box; letter-spacing: 2px;">
+                <div id="tile-scrambler" contenteditable="true" 
+                     style="width: 100%; background: #000; color: #fff; border: 2px solid #444; padding: 15px; font-size: 24px; text-align: center; font-family: 'Courier New', monospace; text-transform: uppercase; border-radius: 10px; outline: none; box-sizing: border-box; letter-spacing: 2px; min-height: 60px;"></div>
                 
                 <div style="margin-top: 12px;">
                     <button onclick="clearScrambler()" style="width: 100%; padding: 10px; font-size: 12px; background: #333; border: 1px solid #444; color: #ccc; border-radius: 6px; cursor: pointer; transition: 0.2s;">NETEJAR BANC DE PROVES</button>
                 </div>
+            </div>
+
+            <!-- NOU PANELL: FITXES RESTANTS A LA BOSSA -->
+            <div id="remaining-bag" style="background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #444; margin-top: 10px;">
+                <p style="margin:0 0 10px 0; font-size:11px; text-align:center; color: #aaa;">FITXES RESTANTS A LA BOSSA</p>
+                <div id="bag-count" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 5px; font-size: 12px;">
+                </div>
+                <p id="total-bag-num" style="margin:10px 0 0 0; font-size:14px; text-align:center; font-weight:bold; color: #2ecc71;"></p>
             </div>
             
             <p style="font-size: 10px; color: #888; text-align: center;">
@@ -270,6 +283,64 @@
             for(let l in q) for(let i=0; i<q[l]; i++) bag.push(l);
         }
 
+        function updateBagDisplay() {
+            const container = document.getElementById('bag-count');
+            const totalDisplay = document.getElementById('total-bag-num');
+            
+            // Compta quantes fitxes de cada tipus queden
+            const counts = {};
+            bag.forEach(lletra => {
+                counts[lletra] = (counts[lletra] || 0) + 1;
+            });
+
+            // Ordena alfabèticament per facilitar la lectura
+            const sortedLetters = Object.keys(counts).sort();
+
+            container.innerHTML = sortedLetters.map(lletra => `
+                <div style="background: #2d3436; padding: 4px; border-radius: 4px; text-align: center; border: 1px solid #444;">
+                    <b style="color: #f1c40f;">${lletra}</b><br>
+                    <span style="font-size: 10px;">x${counts[lletra]}</span>
+                </div>
+            `).join('');
+
+            totalDisplay.innerText = `Total: ${bag.length} fitxes`;
+        }
+
+        function calcularPuntsPerpendicular(lletra, r, c, dirPerp) {
+            let step = (dirPerp === 'V') ? 15 : 1;
+            let start = r * 15 + c;
+            
+            // Trobar l'inici de la paraula perpendicular
+            let curr = start;
+            while (curr >= step && boardState[curr - step]) {
+                if (dirPerp === 'H' && curr % 15 === 0) break;
+                curr -= step;
+            }
+
+            let puntsBase = 0;
+            let teMésLletres = false;
+            let tempCurr = curr;
+
+            while (tempCurr < 225 && (tempCurr === start || boardState[tempCurr])) {
+                let lletraActual = (tempCurr === start) ? lletra : boardState[tempCurr];
+                let val = conf[lletraActual] ? conf[lletraActual].v : 0;
+                
+                // Apliquem bonus de lletra si és la nostra fitxa nova
+                if (tempCurr === start) {
+                    if (TL.includes(tempCurr)) val *= 3;
+                    else if (DL.includes(tempCurr)) val *= 2;
+                } else {
+                    teMésLletres = true; // Hem trobat lletres que ja estaven al tauler
+                }
+
+                puntsBase += val;
+                if (dirPerp === 'H' && tempCurr % 15 === 14) break;
+                tempCurr += step;
+            }
+
+            return teMésLletres ? puntsBase : 0; // Si només és la nostra lletra, no hi ha paraula lateral
+        }
+
         const TP=[0,7,14,105,119,210,217,224], DP=[16,28,32,42,48,56,64,70,154,160,168,176,182,192,196,208];
         const TL=[20,24,76,80,84,88,136,140,144,148,200,204], DL=[3,11,36,38,45,52,59,92,96,98,102,108,116,122,126,128,132,165,172,179,186,188,213,221];
 
@@ -281,7 +352,7 @@
             
             c.onpointerdown = (e) => {
                 e.preventDefault(); 
-                updateMsg(""); // <--- Neteja el missatge en clicar una casella
+                updateMsg("");
 
                 if (draftState[i]) {
                     delete draftState[i];
@@ -325,7 +396,7 @@
                 if (e.key === "ArrowLeft" && col > 0) focusIdx -= 1;
                 if (e.key === "ArrowRight" && col < 14) focusIdx += 1;
                 
-                updateMsg(""); // <--- Neteja el missatge en moure el cursor
+                updateMsg("");
                 selectedCells = [focusIdx];
                 updateUI();
                 return;
@@ -368,7 +439,7 @@
         }
 
         function handleInput(e) {
-            updateMsg(""); // <--- Neteja qualsevol error previ en prémer una tecla
+            updateMsg("");
             
             let key = (typeof e.key === 'string') ? e.key.toUpperCase() : e;
             
@@ -416,94 +487,103 @@
         function shuffleRack() { rack.sort(() => Math.random() - 0.5); fillRack(); }
 
         function clearScrambler() {
-            const input = document.getElementById('tile-scrambler');
-            input.value = '';
+            const div = document.getElementById('tile-scrambler');
+            div.innerHTML = '';
+            div.setAttribute('data-last', '');
             syncVisualRack();
         }
 
         function syncVisualRack() {
-            const scramblerInput = document.getElementById('tile-scrambler');
+            const scramblerDiv = document.getElementById('tile-scrambler');
             const msgDiv = document.getElementById('scrambler-msg');
             const ptsBadge = document.getElementById('scrambler-points');
             const visualRack = document.getElementById('visual-sync-rack');
             
-            let inputVal = scramblerInput.value.toUpperCase();
-            
-            let displayVal = inputVal.replace(/L\.L/g, "L·L").replace(/LL/g, "L·L");
-            
+            // Obtenim el text net (sense HTML) i el tokenitzem
+            let rawText = scramblerDiv.innerText.toUpperCase().replace(/\n/g, "");
+            let displayVal = rawText.replace(/L\.L/g, "L·L").replace(/LL/g, "L·L");
             let writtenTiles = tokenize(displayVal); 
             
             let currentPoints = 0;
-            writtenTiles.forEach(t => {
-                if (conf[t]) currentPoints += conf[t].v;
-            });
+            let boardTilesCount = {};
+            boardState.forEach(l => { if (l) boardTilesCount[l] = (boardTilesCount[l] || 0) + 1; });
 
-            let checkVal = displayVal.replace(/Ç/g, "TEMP_CEDILLA")
-                                     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                                     .replace(/TEMP_CEDILLA/g, "Ç")
-                                     .replace(/·/g, "");
-
+            // --- PART 1: ACTUALITZAR L'ATRIL VISUAL ---
+            let tempWrittenForRack = [...writtenTiles];
             visualRack.innerHTML = '';
             rack.forEach((tile) => {
                 const tileDiv = document.createElement('div');
-                tileDiv.style.padding = "10px";
-                tileDiv.style.borderRadius = "6px";
-                tileDiv.style.minWidth = "38px";
-                tileDiv.style.textAlign = "center";
-                tileDiv.style.fontWeight = "bold";
-                tileDiv.style.fontSize = "20px";
-                tileDiv.style.transition = "0.3s";
-                tileDiv.innerHTML = `${tile}<sub style="font-size: 10px; margin-left: 2px;">${conf[tile].v}</sub>`;
+                tileDiv.style = "padding:10px; border-radius:6px; min-width:38px; text-align:center; font-weight:bold; font-size:20px;";
+                tileDiv.innerHTML = `${tile}<sub style="font-size:10px;">${conf[tile].v}</sub>`;
 
-                const indexInWritten = writtenTiles.indexOf(tile);
-                
-                if (indexInWritten !== -1) {
-                    tileDiv.style.background = "#222"; 
-                    tileDiv.style.color = "#444";
-                    tileDiv.style.border = "1px solid #333";
-                    tileDiv.style.transform = "scale(0.9)";
-                    writtenTiles.splice(indexInWritten, 1);
+                const idx = tempWrittenForRack.indexOf(tile);
+                if (idx !== -1) {
+                    tileDiv.style.background = "#222"; tileDiv.style.color = "#444";
+                    tempWrittenForRack.splice(idx, 1);
                 } else {
-                    tileDiv.style.background = "#e67e22";
-                    tileDiv.style.color = "white";
-                    tileDiv.style.border = "1px solid #d35400";
-                    tileDiv.style.boxShadow = "0 3px 0 #a34000";
+                    tileDiv.style.background = "#e67e22"; tileDiv.style.color = "white";
                 }
                 visualRack.appendChild(tileDiv);
             });
 
+            // --- PART 2: COLOR LLETRA A LLETRA DINS DEL BANC ---
+            let currentRack = [...rack];
+            let currentBoard = {...boardTilesCount};
+            let newHTML = "";
+
+            writtenTiles.forEach(t => {
+                if (conf[t]) currentPoints += conf[t].v;
+                let color = "#ff7675"; // Vermell per defecte (no existeix)
+
+                let idxInRack = currentRack.indexOf(t);
+                if (idxInRack !== -1) {
+                    currentRack.splice(idxInRack, 1);
+                    color = "#ffffff"; // Blanc (Atril)
+                } else if (currentBoard[t] > 0) {
+                    currentBoard[t]--;
+                    color = "#f1c40f"; // Groc (Tauler)
+                }
+                
+                newHTML += `<span style="color:${color}">${t}</span>`;
+            });
+
+            // Actualitzem contingut sense perdre el cursor (només si ha canviat el text real)
+            if (scramblerDiv.getAttribute('data-last') !== displayVal) {
+                scramblerDiv.innerHTML = newHTML;
+                scramblerDiv.setAttribute('data-last', displayVal);
+                // Posar el cursor al final
+                let range = document.createRange();
+                let sel = window.getSelection();
+                range.selectNodeContents(scramblerDiv);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+
+            // --- PART 3: MISSATGES I PUNTS ---
             if (displayVal.length > 0) {
                 ptsBadge.style.display = "inline-block";
                 ptsBadge.innerText = `${currentPoints} PTS`;
+                let checkVal = displayVal.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/C\u0327/g, "Ç");
                 
-                let checkValNoCedilla = checkVal.replace(/Ç/g, "C");
-
-                if (diccionari.has(checkVal) || diccionari.has(checkValNoCedilla)) {
+                if (diccionari.has(checkVal)) {
                     msgDiv.innerText = `✅ "${displayVal}" VÀLIDA`;
                     msgDiv.style.color = "#2ecc71";
-                    scramblerInput.style.borderColor = "#2ecc71";
-                    ptsBadge.style.background = "#2ecc71";
                 } else {
                     msgDiv.innerText = `❌ "${displayVal}" NO ÉS AL DICCIONARI`;
                     msgDiv.style.color = "#ff7675";
-                    scramblerInput.style.borderColor = "#ff7675";
-                    ptsBadge.style.background = "#444";
                 }
             } else {
                 msgDiv.innerText = "🧪 Banc de Proves";
-                msgDiv.style.color = "#aaa";
-                scramblerInput.style.borderColor = "#444";
                 ptsBadge.style.display = "none";
             }
         }
 
+        document.getElementById('tile-scrambler').addEventListener('input', syncVisualRack);
         document.getElementById('tile-scrambler').addEventListener('keydown', (e) => {
             e.stopPropagation(); 
         });
-
         document.getElementById('tile-scrambler').addEventListener('focus', () => {});
-
-        document.getElementById('tile-scrambler').addEventListener('input', syncVisualRack);
 
         function fillRack() {
             while(rack.length < 7 && bag.length > 0) {
@@ -534,6 +614,7 @@
             });
             
             syncVisualRack();
+            updateBagDisplay(); // Actualitza el display de la bossa
         }
 
         function exchangeTiles() {
@@ -569,6 +650,7 @@
             document.getElementById('hint-box').style.display = 'none';
             
             updateMsg("Has canviat les lletres. Torn passat.", "#3498db");
+            updateBagDisplay();
         }
 
         function updateUI() {
@@ -680,7 +762,6 @@
                 curr += step;
             }
 
-            // Si només hi ha 1 lletra, no és una paraula vàlida
             if (!containsDraft || tileCount < 2) return null;
             
             return { word, points: points * wordMult, start };
@@ -690,7 +771,6 @@
             let draftKeys = Object.keys(draftState).map(Number).sort((a,b) => a-b);
             if (draftKeys.length === 0) return;
 
-            // Obtenim totes les paraules formades (incloent les que s'allarguen)
             let allWords = getAllWordsFormed();
 
             if (allWords.length === 0) {
@@ -700,10 +780,7 @@
 
             let paraulesInvalides = [];
             for (let wObj of allWords) {
-                // Normalitzem per buscar al diccionari (sense punts volats ni accents si cal)
                 let cleanWord = wObj.word.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-                
-                // Cas especial per a la Ç: la normalització NFD la separa en C + cedilla, la tornem a ajuntar
                 cleanWord = cleanWord.replace(/C\u0327/g, "Ç");
 
                 if (!diccionari.has(cleanWord)) {
@@ -716,7 +793,6 @@
                 return;
             }
 
-            // Si tot és correcte, sumem punts i fixem
             let jugadaPoints = calculatePoints();
             Object.assign(boardState, draftState);
             
@@ -732,6 +808,7 @@
             fillRack();
             clearScrambler();
             updateMsg(`✅ Jugada acceptada: +${jugadaPoints} pts`, "#2ecc71");
+            updateBagDisplay();
         }
 
         function clearDraft() {
@@ -751,6 +828,7 @@
             document.getElementById('hint-box').style.display = 'none';
             initBag(); rack = []; fillRack(); updateUI();
             clearScrambler();
+            updateBagDisplay();
         }
 
         async function carregarDiccionariAutomata() {
@@ -797,6 +875,7 @@
                 fillRack(); 
                 updateUI();
                 updateMsg(`✅ ${diccionari.size.toLocaleString()} paraules i formes verbals a punt!`, "#2ecc71");
+                updateBagDisplay();
 
             } catch (error) {
                 console.error(error);
@@ -809,7 +888,6 @@
             }
         }
 
-        // Funció millorada per trobar paraules que "allarguin" o continguin lletres del tauler
         function findExtensions() {
             const hBox = document.getElementById('hint-box');
             hBox.innerHTML = "🔍 Cerca exhaustiva en curs... (això pot trigar un poc)"; 
@@ -820,9 +898,8 @@
 
             setTimeout(() => {
                 let results = [];
-                let vistes = new Set(); // Paraula + Posició + Direcció per evitar duplicats
+                let vistes = new Set();
 
-                // Analitzem cada casella del tauler
                 for (let i = 0; i < 225; i++) {
                     if (boardState[i]) {
                         const lletraPivot = boardState[i];
@@ -832,7 +909,6 @@
                         diccionari.forEach(paraula => {
                             let toks = tokenize(paraula);
                             
-                            // Busquem totes les vegades que la lletra pivot apareix en aquesta paraula
                             toks.forEach((t, indexInWord) => {
                                 if (t === lletraPivot) {
                                     ['H', 'V'].forEach(dir => {
@@ -840,19 +916,56 @@
                                         if (vistes.has(idUnic)) return;
 
                                         if (esValidComAExtensionUnica(paraula, toks, indexInWord, r, c, dir, rackC)) {
-                                            let pts = toks.reduce((acc, l) => acc + (conf[l] ? conf[l].v : 0), 0);
-                                            
-                                            // Calculem índexs grocs (tauler)
+                                            let scorePrincipal = 0;
+                                            let multPrincipal = 1;
+                                            let scoreLaterals = 0;
                                             let indicesTauler = [];
+                                            
                                             let startR = (dir === 'V') ? r - indexInWord : r;
                                             let startC = (dir === 'H') ? c - indexInWord : c;
+
                                             for (let k = 0; k < toks.length; k++) {
                                                 let cR = (dir === 'V') ? startR + k : r;
                                                 let cC = (dir === 'H') ? startC + k : c;
-                                                if (boardState[cR * 15 + cC]) indicesTauler.push(k);
-                                            }
+                                                let currIdx = cR * 15 + cC;
+                                                let lletra = toks[k];
+                                                let val = conf[lletra] ? conf[lletra].v : 0;
 
-                                            results.push({ w: paraula, s: pts, onBoard: indicesTauler });
+                                                if (boardState[currIdx]) {
+                                                    indicesTauler.push(k);
+                                                    scorePrincipal += val;
+                                                } else {
+                                                    // 1. CÀLCUL PER A LA PARAULA PRINCIPAL
+                                                    let valAmbBonus = val;
+                                                    if (TL.includes(currIdx)) valAmbBonus *= 3;
+                                                    else if (DL.includes(currIdx)) valAmbBonus *= 2;
+                                                    
+                                                    if (TP.includes(currIdx)) multPrincipal *= 3;
+                                                    else if (DP.includes(currIdx) || currIdx === 112) multPrincipal *= 2;
+                                                    
+                                                    scorePrincipal += valAmbBonus;
+
+                                                    // 2. CÀLCUL DE PARAULES LATERALS (PERPENDICULARS)
+                                                    let dirPerp = (dir === 'H') ? 'V' : 'H';
+                                                    let puntsPerp = calcularPuntsPerpendicular(lletra, cR, cC, dirPerp);
+                                                    
+                                                    if (puntsPerp > 0) {
+                                                        // Apliquem el multiplicador de paraula de la casella actual a la lateral
+                                                        let multPerp = 1;
+                                                        if (TP.includes(currIdx)) multPerp = 3;
+                                                        else if (DP.includes(currIdx) || currIdx === 112) multPerp = 2;
+                                                        
+                                                        scoreLaterals += (puntsPerp * multPerp);
+                                                    }
+                                                }
+                                            }
+                                            
+                                            let scoreFinal = (scorePrincipal * multPrincipal) + scoreLaterals;
+                                            
+                                            // Bonus de 50 punts per Scrabble (usar les 7 fitxes)
+                                            if ((toks.length - indicesTauler.length) === 7) scoreFinal += 50;
+
+                                            results.push({ w: paraula, s: scoreFinal, onBoard: indicesTauler });
                                             vistes.add(idUnic);
                                         }
                                     });
@@ -862,7 +975,6 @@
                     }
                 }
 
-                // Ordenem per puntuació i mostrem fins a 100 resultats
                 results.sort((a, b) => b.s - a.s);
                 displayResults(results, hBox, 100); 
             }, 50);
@@ -872,13 +984,11 @@
             let startR = (dir === 'V') ? r - idxInWord : r;
             let startC = (dir === 'H') ? c - idxInWord : c;
 
-            // 1. Control de límits del tauler
             if (startR < 0 || startC < 0) return false;
             let endR = (dir === 'V') ? startR + toks.length - 1 : r;
             let endC = (dir === 'H') ? startC + toks.length - 1 : c;
             if (endR >= 15 || endC >= 15) return false;
 
-            // 2. Control de fronteres (no pot haver-hi res just abans o just després)
             let cellAbans = (dir === 'V') ? (startR - 1) * 15 + startC : startR * 15 + (startC - 1);
             let cellDespres = (dir === 'V') ? (endR + 1) * 15 + endC : endR * 15 + (endC + 1);
             
@@ -889,7 +999,6 @@
             let fitxesNovesAPosar = 0;
             let tocaTauler = false;
 
-            // 3. Recorrem tota la longitud de la paraula suggerida
             for (let i = 0; i < toks.length; i++) {
                 let currR = (dir === 'V') ? startR + i : r;
                 let currC = (dir === 'H') ? startC + i : c;
@@ -897,28 +1006,22 @@
                 let lletraNecessaria = toks[i];
 
                 if (boardState[currIdx]) {
-                    // SI LA CASELLA ESTÀ OCUPADA:
-                    // La lletra del tauler ha de coincidir amb la de la paraula del diccionari
                     if (boardState[currIdx] !== lletraNecessaria) return false;
-                    tocaTauler = true; // Estem aprofitant una lletra existent
+                    tocaTauler = true;
                 } else {
-                    // SI LA CASELLA ESTÀ BUIDA:
-                    // Hem de tenir la lletra a l'atril
                     if (lletresAtrilNecessaries[lletraNecessaria] > 0) {
                         lletresAtrilNecessaries[lletraNecessaria]--;
                         fitxesNovesAPosar++;
                         
-                        // Validem que no creem "mots creuats" invàlids als costats
                         if (!validarParaulaPerpendicular(lletraNecessaria, currR, currC, dir === 'H' ? 'V' : 'H')) {
                             return false;
                         }
                     } else {
-                        return false; // No tenim la lletra a l'atril
+                        return false;
                     }
                 }
             }
             
-            // Perquè sigui vàlida: hem d'haver tocat el tauler i haver posat almenys una fitxa nova
             return tocaTauler && fitxesNovesAPosar > 0;
         }
 
@@ -926,14 +1029,12 @@
             let step = (dirPerp === 'V') ? 15 : 1;
             let start = r * 15 + c;
             
-            // Anar enrere per trobar l'inici del mot perpendicular
             let curr = start;
             while (curr >= step && boardState[curr - step]) {
                 if (dirPerp === 'H' && curr % 15 === 0) break;
                 curr -= step;
             }
 
-            // Llegir tota la paraula formada
             let paraulaFormada = "";
             let tempCurr = curr;
             while (tempCurr < 225 && (tempCurr === start || boardState[tempCurr])) {
@@ -942,16 +1043,16 @@
                 tempCurr += step;
             }
 
-            if (paraulaFormada.length === 1) return true; // No s'ha creat cap mot nou
+            if (paraulaFormada.length === 1) return true;
 
             let clean = paraulaFormada.replace(/·/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
             clean = clean.replace(/C\u0327/g, "Ç");
             return diccionari.has(clean);
         }
 
-        // Funció per cercar paraules a partir del text del "Banc de Proves"
         function searchFromScrambler() {
-            const scramblerText = document.getElementById('tile-scrambler').value.toUpperCase().replace(/\s/g, '');
+            const scramblerDiv = document.getElementById('tile-scrambler');
+            const scramblerText = scramblerDiv.innerText.toUpperCase().replace(/\n/g, '').replace(/\s/g, '');
             if (!scramblerText) {
                 updateMsg("Escriu lletres al banc de proves!", "#f1c40f");
                 return;
@@ -978,8 +1079,11 @@
                     }
 
                     if (can) {
-                        let pts = wordToks.reduce((a, b) => a + (conf[b] ? conf[b].v : 0), 0);
-                        results.push({ w: paraula, s: pts, onBoard: [] }); // Cap lletra és del tauler aquí
+                        let pts = 0;
+                        for (let fitxa of wordToks) {
+                            pts += conf[fitxa] ? conf[fitxa].v : 0;
+                        }
+                        results.push({ w: paraula, s: pts, onBoard: [] });
                     }
                 });
 
@@ -988,7 +1092,6 @@
             }, 50);
         }
 
-        // Auxiliar per mostrar els resultats de forma neta
         function displayResults(results, container, limit = 40) {
             if (results.length === 0) {
                 container.innerHTML = "Cap combinació trobada.";
@@ -1010,7 +1113,7 @@
                 }).join("");
 
                 return `
-                    <div class="hint-item" onclick="document.getElementById('tile-scrambler').value='${r.w}'; syncVisualRack();" style="cursor:pointer">
+                    <div class="hint-item" onclick="document.getElementById('tile-scrambler').innerText='${r.w}'; syncVisualRack();" style="cursor:pointer">
                         <b>${coloredWord}</b> (${r.s} pts)
                     </div>`;
             }).join("");
@@ -1084,6 +1187,7 @@
             document.getElementById('setup').style.display = 'none';
             initBag(); fillRack(); updateUI();
             updateMsg(`${diccionari.size} paraules carregades.`);
+            updateBagDisplay();
         });
 
         function updateMsg(t, color="white") {
