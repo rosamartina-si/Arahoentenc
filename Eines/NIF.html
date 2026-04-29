@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de NIF</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background-color: #f4f4f9; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #resultat { margin-top: 15px; font-weight: bold; text-align: center; }
+        .valid { color: green; }
+        .invalid { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Validador de NIF</h2>
+    <input type="text" id="nifInput" placeholder="Exemple: 12345678Z" maxlength="9">
+    <button onclick="validarNIF()">Verificar</button>
+    <div id="resultat"></div>
+</div>
+
+<script>
+function validarNIF() {
+    const nif = document.getElementById('nifInput').value.toUpperCase().trim();
+    const resultatDiv = document.getElementById('resultat');
+    
+    // Expressió regular bàsica: 8 números i una lletra
+    const regexNIF = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/;
+
+    if (!regexNIF.test(nif)) {
+        resultatDiv.innerHTML = "<span class='invalid'>Format incorrecte</span>";
+        return;
+    }
+
+    const numero = nif.substring(0, 8);
+    const lletraDonada = nif.substring(8, 9);
+    const lletresDisponibles = "TRWAGMYFPDXBNJZSQVHLCKE";
+    
+    // El càlcul clau: el residu de la divisió per 23 determina la lletra
+    const lletraCorrecta = lletresDisponibles.charAt(numero % 23);
+
+    if (lletraDonada === lletraCorrecta) {
+        resultatDiv.innerHTML = "<span class='valid'>NIF vàlid ✓</span>";
+    } else {
+        resultatDiv.innerHTML = `<span class='invalid'>Lletra incorrecta (hauria de ser ${lletraCorrecta})</span>`;
+    }
+}
+</script>
+
+</body>
+</html>
