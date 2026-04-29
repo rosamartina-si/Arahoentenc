@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de NIF/NIE</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background-color: #f0f2f5; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: #007bff; outline: none; }
+        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        #resultat { margin-top: 20px; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; }
+        .valid { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .invalid { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 style="margin-top:0">Validador NIF / NIE</h2>
+    <p style="font-size: 0.9rem; color: #666;">Introdueix el document (Ex: 12345678Z o X1234567L)</p>
+    <input type="text" id="documentInput" placeholder="8 números + lletra" maxlength="10">
+    <button onclick="validarDocument()">Verificar</button>
+    <div id="resultat" style="display:none"></div>
+</div>
+
+<script>
+function validarDocument() {
+    const input = document.getElementById('documentInput').value.toUpperCase().trim();
+    const resultatDiv = document.getElementById('resultat');
+    resultatDiv.style.display = 'block';
+    
+    // Regex per DNI (8 números + lletra) o NIE (X/Y/Z + 7 números + lletra)
+    const regex = /^[XYZ0-9][0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKE]$/;
+
+    if (!regex.test(input)) {
+        resultatDiv.className = 'invalid';
+        resultatDiv.innerHTML = "Format no vàlid";
+        return;
+    }
+
+    let nifTreballable = input;
+    
+    // Substitució per a NIE
+    nifTreballable = nifTreballable
+        .replace('X', '0')
+        .replace('Y', '1')
+        .replace('Z', '2');
+
+    const numero = nifTreballable.substring(0, 8);
+    const lletraDonada = input.substring(input.length - 1);
+    const lletresValides = "TRWAGMYFPDXBNJZSQVHLCKE";
+    const lletraCorrecta = lletresValides.charAt(parseInt(numero) % 23);
+
+    if (lletraDonada === lletraCorrecta) {
+        resultatDiv.className = 'valid';
+        resultatDiv.innerHTML = `Vàlid ✓ (${input.startsWith('X') || input.startsWith('Y') || input.startsWith('Z') ? 'NIE' : 'DNI'})`;
+    } else {
+        resultatDiv.className = 'invalid';
+        resultatDiv.innerHTML = `Lletra incorrecta. Hauria de ser: ${lletraCorrecta}`;
+    }
+}
+</script>
+
+</body>
+</html>
