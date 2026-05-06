@@ -157,6 +157,14 @@
             background: var(--warning);
         }
         
+        .btn-purple {
+            background: #9b59b6;
+        }
+        
+        .btn-purple:hover {
+            background: #8e44ad;
+        }
+        
         /* Controls de mida */
         .size-control {
             display: flex;
@@ -231,6 +239,40 @@
             border-color: var(--primary);
         }
         
+        /* Controls d'importació */
+        .import-controls {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+        }
+        
+        .import-controls label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .import-controls input[type="range"] {
+            width: 100%;
+            height: 4px;
+            border-radius: 5px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .import-controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
         /* Canvas principal */
         .canvas-wrapper {
             background: var(--bg-panel);
@@ -250,18 +292,20 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         
-        .grid {
+        /* Estils principals del grid - SENSE VORES */
+        #pixelCanvas {
             display: grid;
+            width: 800px;
+            height: auto;
+            border: none;
             background: white;
             border-radius: 4px;
             overflow: hidden;
         }
         
         .cell {
-            width: 24px;
-            height: 24px;
-            border: 0.5px solid #e2e8f0;
-            box-sizing: border-box;
+            aspect-ratio: 1 / 1;
+            border: none !important; /* Molt important per no veure ratlles blanques */
             transition: filter 0.05s ease;
         }
         
@@ -269,13 +313,13 @@
             filter: brightness(0.95);
         }
         
-        /* Classe per amagar la quadrícula */
+        /* Classe per amagar la quadrícula (mantinguda per compatibilitat) */
         .no-grid .cell {
             border: none !important;
             outline: none;
         }
         
-        /* Línies guia per al centre */
+        /* Línies guia per al centre (opcionals) */
         .guide-v {
             border-right: 2px solid var(--primary) !important;
         }
@@ -311,8 +355,8 @@
             image-rendering: pixelated;
             background: white;
             border-radius: 6px;
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
         }
         
         /* Indicador d'eina activa */
@@ -329,12 +373,14 @@
         }
         
         /* Responsive */
-        @media (max-width: 768px) {
-            .cell {
-                width: 16px;
-                height: 16px;
+        @media (max-width: 900px) {
+            #pixelCanvas {
+                width: 100%;
+                max-width: 500px;
             }
-            
+        }
+        
+        @media (max-width: 768px) {
             .tool-section {
                 min-width: 100%;
             }
@@ -414,7 +460,7 @@
                     <div class="tool-section-title">📏 DIMENSIONS</div>
                     <div class="size-control">
                         <label>Mida:</label>
-                        <input type="number" id="size" value="16" min="2" max="64">
+                        <input type="number" id="size" value="154" min="2" max="200">
                         <button onclick="confirmNewGrid()" class="btn-primary">✨ Nova</button>
                     </div>
                 </div>
@@ -450,9 +496,17 @@
                         <button class="btn-success" onclick="saveAsPNG()" data-tooltip="Exporta com a PNG">📸 PNG</button>
                         <button onclick="saveProject()" data-tooltip="Desa projecte">💾 JSON</button>
                         <button onclick="loadProject()" data-tooltip="Carrega projecte">📂 Carregar</button>
-                        <button class="btn-warning" onclick="document.getElementById('imgLoader').click()" data-tooltip="Converteix imatge a pixel art">🖼️ Pixelar</button>
-                        <input type="file" id="imgLoader" style="display:none" accept="image/*" onchange="importImage(event)">
                     </div>
+                </div>
+                
+                <!-- Secció Importació Pixel Art -->
+                <div class="import-controls">
+                    <div class="tool-section-title">🖼️ PIXELAR IMATGE</div>
+                    <div class="button-group" style="margin-top: 10px;">
+                        <button class="btn-warning" onclick="document.getElementById('imgLoader').click()">📤 Pujar i Pixelar</button>
+                        <button class="btn-purple" onclick="cleanOrphanPixels()">✨ Puleix Píxels (Neteja)</button>
+                    </div>
+                    <input type="file" id="imgLoader" style="display:none" accept="image/*" onchange="importImage(event)">
                 </div>
             </div>
         </div>
@@ -467,7 +521,7 @@
     <!-- Vista prèvia en temps real -->
     <div class="preview-box">
         <div class="preview-label">🎯 VISTA REAL (1:1)</div>
-        <canvas id="previewCanvas" width="16" height="16"></canvas>
+        <canvas id="previewCanvas" width="154" height="154"></canvas>
     </div>
     
     <div class="active-tool-indicator" id="toolIndicator">
@@ -518,7 +572,57 @@
             }).join("");
         }
         
-        // --- FUNCIÓ PER IMPORTAR I PIXELAR UNA IMATGE (MILLORADA) ---
+        // --- FUNCIÓ PER NETEJAR PÍXELS ORFES (SOROLL) ---
+        function cleanOrphanPixels() {
+            const size = parseInt(document.getElementById('size').value);
+            const cells = document.querySelectorAll('.cell');
+            const colors = Array.from(cells).map(c => c.style.backgroundColor);
+            const newColors = [...colors];
+            
+            saveState();
+            
+            for (let i = 0; i < cells.length; i++) {
+                const x = i % size;
+                const y = Math.floor(i / size);
+                
+                let neighbors = [];
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        if (dx === 0 && dy === 0) continue;
+                        const nx = x + dx;
+                        const ny = y + dy;
+                        if (nx >= 0 && nx < size && ny >= 0 && ny < size) {
+                            neighbors.push(colors[ny * size + nx]);
+                        }
+                    }
+                }
+                
+                if (!neighbors.includes(colors[i])) {
+                    const frequency = {};
+                    neighbors.forEach(color => {
+                        frequency[color] = (frequency[color] || 0) + 1;
+                    });
+                    let mostFrequent = neighbors[0];
+                    let maxCount = 0;
+                    for (const [color, count] of Object.entries(frequency)) {
+                        if (count > maxCount) {
+                            maxCount = count;
+                            mostFrequent = color;
+                        }
+                    }
+                    newColors[i] = mostFrequent;
+                }
+            }
+            
+            cells.forEach((cell, i) => {
+                cell.style.backgroundColor = newColors[i];
+            });
+            
+            updatePreview();
+            alert('✨ Neteja de píxels completada!');
+        }
+        
+        // --- FUNCIÓ PER IMPORTAR I PIXELAR UNA IMATGE (AMB UNIFICACIÓ DE COLOR) ---
         function importImage(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -526,57 +630,65 @@
             showLoading(true);
             
             const reader = new FileReader();
+            const size = 154; // La mida fixa
+            
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    const size = parseInt(document.getElementById('size').value);
                     const tempCanvas = document.createElement('canvas');
                     const tempCtx = tempCanvas.getContext('2d');
-                    
                     tempCanvas.width = size;
                     tempCanvas.height = size;
                     
-                    // --- EL TRUC PER EVITAR EL DIFUMINAT ---
-                    tempCtx.imageSmoothingEnabled = false; // Desactiva el suavitzat
-                    
-                    // Opcional: Afegir una mica de contrast per evitar colors "morts"
-                    tempCtx.filter = 'contrast(1.2) saturate(1.2)';
-                    
-                    // Dibuixem la imatge redimensionada
+                    // Optimització visual abans de processar
+                    tempCtx.imageSmoothingEnabled = false;
+                    tempCtx.filter = 'contrast(160%) brightness(105%) saturate(140%)';
                     tempCtx.drawImage(img, 0, 0, size, size);
                     
-                    // Obtenim les dades dels píxels
                     const imgData = tempCtx.getImageData(0, 0, size, size).data;
-                    
-                    // Creem la graella amb la mida seleccionada
-                    createGrid(size);
+                    createGrid(size); 
                     const cells = document.querySelectorAll('.cell');
                     
-                    // Processem cada píxel
+                    // --- ALGORISME D'UNIFICACIÓ DE COLOR ---
                     for (let i = 0; i < cells.length; i++) {
-                        const r = imgData[i * 4];
-                        const g = imgData[i * 4 + 1];
-                        const b = imgData[i * 4 + 2];
-                        const a = imgData[i * 4 + 3];
+                        let r = imgData[i * 4];
+                        let g = imgData[i * 4 + 1];
+                        let b = imgData[i * 4 + 2];
                         
-                        // Llindar de transparència més exigent (125 enlloc de 50)
-                        if (a > 125) {
-                            const hex = rgbToHex(`rgb(${r},${g},${b})`);
-                            cells[i].style.backgroundColor = hex;
-                            cells[i].style.borderColor = hex;
-                        } else {
-                            cells[i].style.backgroundColor = 'white';
-                            cells[i].style.borderColor = '#f0f0f0';
+                        // 1. Detectem el "Blanc de Paper" (tot el que sigui molt clar)
+                        // Això netejarà el fons de forma radical
+                        if (r > 200 && g > 200 && b > 200) {
+                            r = 255; g = 255; b = 255;
+                        } 
+                        // 2. Unifiquem els liles/blaus de la flor
+                        else if (b > r && b > g) {
+                            // Si el blau domina, forcem un lila més saturat
+                            r = Math.max(r, 100);
+                            b = Math.min(b + 50, 255);
                         }
+                        // 3. Unifiquem els verds de la tija
+                        else if (g > r && g > b) {
+                            g = Math.min(g + 30, 255);
+                            r = Math.max(r - 20, 0);
+                        }
+                        
+                        // 4. Reducció final a una paleta de "bits" (posterització suau)
+                        // Dividim en trams de 42 per tenir uns 6 tons per canal
+                        r = Math.round(r / 42) * 42;
+                        g = Math.round(g / 42) * 42;
+                        b = Math.round(b / 42) * 42;
+                        
+                        const hex = rgbToHex(`rgb(${r},${g},${b})`);
+                        cells[i].style.backgroundColor = hex;
+                        // No posem border per evitar línies blanques
                     }
                     
-                    // Guardar estat a l'historial
                     history = [];
                     saveState();
                     updatePreview();
                     
                     showLoading(false);
-                    alert(`✅ Imatge pixelada correctament a mida ${size}x${size}!\n🎯 S'ha aplicat contrast i saturació per millorar colors.`);
+                    alert(`✅ Imatge pixelada correctament a mida ${size}x${size}!\n🎨 Algoritme d'unificació aplicat:\n• Fons blanc pur\n• Liles/blaus intensificats\n• Verds reforçats\n• Posterització a 6 tons per canal`);
                 };
                 img.src = e.target.result;
             };
@@ -585,7 +697,7 @@
                 alert('❌ Error carregant la imatge');
             };
             reader.readAsDataURL(file);
-            event.target.value = ''; // Netejar l'input
+            event.target.value = '';
         }
         
         // --- Sincronitzar el text Hexadecimal amb el selector de color ---
@@ -622,7 +734,7 @@
                 pCtx.fillRect(i % size, Math.floor(i / size), 1, 1);
             });
             
-            const displaySize = Math.min(80, size * 2);
+            const displaySize = Math.min(100, size);
             pCanvas.style.width = `${displaySize}px`;
             pCanvas.style.height = `${displaySize}px`;
         }
@@ -669,7 +781,6 @@
                 const cells = document.querySelectorAll('.cell');
                 previousState.forEach((color, i) => {
                     cells[i].style.backgroundColor = color;
-                    cells[i].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
                 });
                 updatePreview();
             }
@@ -682,7 +793,6 @@
                 const cells = document.querySelectorAll('.cell');
                 nextState.forEach((color, i) => {
                     cells[i].style.backgroundColor = color;
-                    cells[i].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
                 });
                 updatePreview();
             }
@@ -708,27 +818,14 @@
         
         // --- FUNCIÓ PER MOSTRAR/AMAGAR LA QUADRÍCULA ---
         function toggleGrid() {
-            const canvasContainer = document.querySelector('.canvas-container');
-            const isHidden = canvasContainer.classList.toggle('no-grid');
+            const container = document.querySelector('.canvas-container');
+            const isHidden = container.classList.toggle('no-grid');
             document.getElementById('gridBtn').innerHTML = isHidden ? '🔳 Quadrícula' : '🔲 Quadrícula';
         }
         
         // --- FUNCIÓ PER PINTAR UNA CEL·LA ---
         function paintCell(cell, color) {
             cell.style.backgroundColor = color;
-            const hasGuideV = cell.classList.contains('guide-v');
-            const hasGuideH = cell.classList.contains('guide-h');
-            
-            if (hasGuideV || hasGuideH) {
-                if (hasGuideV) cell.style.borderRight = '2px solid var(--primary)';
-                if (hasGuideH) cell.style.borderBottom = '2px solid var(--primary)';
-                if (!hasGuideV && !hasGuideH) {
-                    cell.style.borderColor = (color === 'white') ? '#f0f0f0' : color;
-                }
-            } else {
-                cell.style.borderColor = (color === 'white') ? '#f0f0f0' : color;
-            }
-            
             updatePreview();
         }
         
@@ -765,7 +862,7 @@
             const center = Math.floor(size / 2) - 1;
             
             canvas.innerHTML = '';
-            canvas.style.gridTemplateColumns = `repeat(${size}, 24px)`;
+            canvas.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
             
             for (let i = 0; i < size * size; i++) {
                 const cell = document.createElement('div');
@@ -858,21 +955,29 @@
             const cells = document.querySelectorAll('.cell');
             const canvas_temp = document.createElement('canvas');
             const ctx = canvas_temp.getContext('2d');
-            const pixelSize = 24;
+            const pixelSize = 4; // Mida petita perquè el canvas ja té aspect-ratio
             
-            canvas_temp.width = size * pixelSize;
-            canvas_temp.height = size * pixelSize;
+            canvas_temp.width = size;
+            canvas_temp.height = size;
             
             cells.forEach((cell, index) => {
-                const x = (index % size) * pixelSize;
-                const y = Math.floor(index / size) * pixelSize;
+                const x = (index % size);
+                const y = Math.floor(index / size);
                 ctx.fillStyle = cell.style.backgroundColor;
-                ctx.fillRect(x, y, pixelSize, pixelSize);
+                ctx.fillRect(x, y, 1, 1);
             });
+            
+            // Escalar per veure'l bé
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = size * 4;
+            finalCanvas.height = size * 4;
+            const finalCtx = finalCanvas.getContext('2d');
+            finalCtx.imageSmoothingEnabled = false;
+            finalCtx.drawImage(canvas_temp, 0, 0, size, size, 0, 0, size * 4, size * 4);
             
             const link = document.createElement('a');
             link.download = `pixel-art-${Date.now()}.png`;
-            link.href = canvas_temp.toDataURL();
+            link.href = finalCanvas.toDataURL();
             link.click();
         }
         
@@ -917,7 +1022,6 @@
                             project.colors.forEach((color, index) => {
                                 if (cells[index]) {
                                     cells[index].style.backgroundColor = color;
-                                    cells[index].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
                                 }
                             });
                             
