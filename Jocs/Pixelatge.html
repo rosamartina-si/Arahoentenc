@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Pro - Editor Professional</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-card: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #475569;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Scrollbar personalitzada */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-panel);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Contenidor principal */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Barra d'eines principal */
+        .toolbar {
+            background: var(--bg-panel);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        
+        .toolbar-sections {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tool-section {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        
+        .tool-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        button, .btn-like {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            background: var(--bg-dark);
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        /* Controls de mida */
+        .size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .size-control label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        input[type="number"] {
+            width: 70px;
+            padding: 8px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* Selector de color */
+        .color-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        #colorPicker {
+            width: 50px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--bg-dark);
+        }
+        
+        .hex-input {
+            flex: 1;
+            padding: 8px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        /* Paleta de colors recents */
+        .recent-palette {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid var(--border);
+        }
+        
+        .swatch:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+        
+        /* Canvas principal */
+        .canvas-wrapper {
+            background: var(--bg-panel);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .canvas-container {
+            background: #1a1a2e;
+            padding: 8px;
+            border-radius: 12px;
+            display: inline-block;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .grid {
+            display: grid;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .cell {
+            width: 24px;
+            height: 24px;
+            border: 0.5px solid #e2e8f0;
+            box-sizing: border-box;
+            transition: filter 0.05s ease;
+        }
+        
+        .cell:hover {
+            filter: brightness(0.95);
+        }
+        
+        /* Classe per amagar la quadrícula */
+        .no-grid .cell {
+            border: none !important;
+            outline: none;
+        }
+        
+        /* Línies guia per al centre */
+        .guide-v {
+            border-right: 2px solid var(--primary) !important;
+        }
+        .guide-h {
+            border-bottom: 2px solid var(--primary) !important;
+        }
+        
+        /* Vista prèvia millorada */
+        .preview-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-panel);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .preview-box .preview-label {
+            font-size: 10px;
+            color: var(--primary-light);
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        #previewCanvas {
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            background: white;
+            border-radius: 6px;
+            width: 80px;
+            height: 80px;
+        }
+        
+        /* Indicador d'eina activa */
+        .active-tool-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--bg-panel);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            border-left: 3px solid var(--primary);
+            font-family: monospace;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cell {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .tool-section {
+                min-width: 100%;
+            }
+            
+            .preview-box {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .active-tool-indicator {
+                bottom: 10px;
+                left: 10px;
+                font-size: 10px;
+            }
+        }
+        
+        /* Animacions */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .saving {
+            animation: pulse 1s ease infinite;
+        }
+        
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+        }
+        
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 8px;
+            background: var(--bg-dark);
+            color: white;
+            font-size: 11px;
+            border-radius: 4px;
+            white-space: nowrap;
+            display: none;
+            margin-bottom: 5px;
+            z-index: 1000;
+        }
+        
+        [data-tooltip]:hover:before {
+            display: block;
+        }
+        
+        /* Estil per l'indicador de càrrega */
+        .loading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-panel);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            z-index: 2000;
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1>🎨 Pixel Art Pro</h1>
+        
+        <div class="toolbar">
+            <div class="toolbar-sections">
+                <!-- Secció Mida -->
+                <div class="tool-section">
+                    <div class="tool-section-title">📏 DIMENSIONS</div>
+                    <div class="size-control">
+                        <label>Mida:</label>
+                        <input type="number" id="size" value="16" min="2" max="64">
+                        <button onclick="confirmNewGrid()" class="btn-primary">✨ Nova</button>
+                    </div>
+                </div>
+                
+                <!-- Secció Color -->
+                <div class="tool-section">
+                    <div class="tool-section-title">🎨 COLOR</div>
+                    <div class="color-preview">
+                        <input type="color" id="colorPicker" value="#6366f1">
+                        <input type="text" id="hexInput" class="hex-input" value="#6366F1">
+                    </div>
+                    <div class="tool-section-title" style="margin-top: 10px;">🔄 RECENTS</div>
+                    <div id="recentPalette" class="recent-palette"></div>
+                </div>
+                
+                <!-- Secció Eines -->
+                <div class="tool-section">
+                    <div class="tool-section-title">🛠️ EINES</div>
+                    <div class="button-group">
+                        <button id="penBtn" class="active" onclick="setTool('pen')" data-tooltip="Dibuixa">✏️ Llapis</button>
+                        <button id="eraserBtn" onclick="setTool('eraser')" data-tooltip="Esborra">🧽 Goma</button>
+                        <button id="bucketBtn" onclick="setTool('bucket')" data-tooltip="Omple">🪣 Pot</button>
+                        <button id="eyedropperBtn" onclick="setTool('eyedropper')" data-tooltip="Captura color">💧 Goter</button>
+                    </div>
+                </div>
+                
+                <!-- Secció Accions -->
+                <div class="tool-section">
+                    <div class="tool-section-title">⚡ ACCIONS</div>
+                    <div class="button-group">
+                        <button onclick="undo()" data-tooltip="Desfer (Ctrl+Z)">↩️ Desfer</button>
+                        <button id="gridBtn" onclick="toggleGrid()" data-tooltip="Mostra/Amaga quadrícula">🔲 Quadrícula</button>
+                        <button class="btn-success" onclick="saveAsPNG()" data-tooltip="Exporta com a PNG">📸 PNG</button>
+                        <button onclick="saveProject()" data-tooltip="Desa projecte">💾 JSON</button>
+                        <button onclick="loadProject()" data-tooltip="Carrega projecte">📂 Carregar</button>
+                        <button class="btn-warning" onclick="document.getElementById('imgLoader').click()" data-tooltip="Converteix imatge a pixel art">🖼️ Pixelar</button>
+                        <input type="file" id="imgLoader" style="display:none" accept="image/*" onchange="importImage(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <div class="canvas-container">
+                <div id="pixelCanvas" class="grid"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vista prèvia en temps real -->
+    <div class="preview-box">
+        <div class="preview-label">🎯 VISTA REAL (1:1)</div>
+        <canvas id="previewCanvas" width="16" height="16"></canvas>
+    </div>
+    
+    <div class="active-tool-indicator" id="toolIndicator">
+        ✏️ Llapis actiu
+    </div>
+    
+    <div class="loading-indicator" id="loadingIndicator">
+        🎨 Pixelant imatge...
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('pixelCanvas');
+        const colorPicker = document.getElementById('colorPicker');
+        const hexInput = document.getElementById('hexInput');
+        const recentPalette = document.getElementById('recentPalette');
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let history = [];
+        let currentHistoryIndex = -1;
+        const maxHistory = 50;
+        
+        // Actualitzar indicador d'eina
+        function updateToolIndicator() {
+            const indicator = document.getElementById('toolIndicator');
+            const tools = {
+                pen: '✏️ Llapis actiu',
+                eraser: '🧽 Goma activa',
+                bucket: '🪣 Pot de pintura actiu',
+                eyedropper: '💧 Goter actiu (clica per capturar color)'
+            };
+            indicator.textContent = tools[currentTool] || 'Eina activa';
+        }
+        
+        // Mostrar/amagar loading
+        function showLoading(show) {
+            const loader = document.getElementById('loadingIndicator');
+            loader.style.display = show ? 'block' : 'none';
+        }
+        
+        // --- FUNCIÓ AUXILIAR PER CONVERTIR RGB A HEXADECIMAL ---
+        function rgbToHex(rgb) {
+            if (!rgb || rgb === "white") return "#ffffff";
+            const rgbValues = rgb.match(/\d+/g);
+            if (!rgbValues) return "#ffffff";
+            return "#" + rgbValues.map(x => {
+                const hex = parseInt(x).toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join("");
+        }
+        
+        // --- FUNCIÓ PER IMPORTAR I PIXELAR UNA IMATGE (MILLORADA) ---
+        function importImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            showLoading(true);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const size = parseInt(document.getElementById('size').value);
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    
+                    tempCanvas.width = size;
+                    tempCanvas.height = size;
+                    
+                    // --- EL TRUC PER EVITAR EL DIFUMINAT ---
+                    tempCtx.imageSmoothingEnabled = false; // Desactiva el suavitzat
+                    
+                    // Opcional: Afegir una mica de contrast per evitar colors "morts"
+                    tempCtx.filter = 'contrast(1.2) saturate(1.2)';
+                    
+                    // Dibuixem la imatge redimensionada
+                    tempCtx.drawImage(img, 0, 0, size, size);
+                    
+                    // Obtenim les dades dels píxels
+                    const imgData = tempCtx.getImageData(0, 0, size, size).data;
+                    
+                    // Creem la graella amb la mida seleccionada
+                    createGrid(size);
+                    const cells = document.querySelectorAll('.cell');
+                    
+                    // Processem cada píxel
+                    for (let i = 0; i < cells.length; i++) {
+                        const r = imgData[i * 4];
+                        const g = imgData[i * 4 + 1];
+                        const b = imgData[i * 4 + 2];
+                        const a = imgData[i * 4 + 3];
+                        
+                        // Llindar de transparència més exigent (125 enlloc de 50)
+                        if (a > 125) {
+                            const hex = rgbToHex(`rgb(${r},${g},${b})`);
+                            cells[i].style.backgroundColor = hex;
+                            cells[i].style.borderColor = hex;
+                        } else {
+                            cells[i].style.backgroundColor = 'white';
+                            cells[i].style.borderColor = '#f0f0f0';
+                        }
+                    }
+                    
+                    // Guardar estat a l'historial
+                    history = [];
+                    saveState();
+                    updatePreview();
+                    
+                    showLoading(false);
+                    alert(`✅ Imatge pixelada correctament a mida ${size}x${size}!\n🎯 S'ha aplicat contrast i saturació per millorar colors.`);
+                };
+                img.src = e.target.result;
+            };
+            reader.onerror = function() {
+                showLoading(false);
+                alert('❌ Error carregant la imatge');
+            };
+            reader.readAsDataURL(file);
+            event.target.value = ''; // Netejar l'input
+        }
+        
+        // --- Sincronitzar el text Hexadecimal amb el selector de color ---
+        colorPicker.addEventListener('input', () => {
+            hexInput.value = colorPicker.value.toUpperCase();
+        });
+        
+        hexInput.addEventListener('change', () => {
+            let val = hexInput.value.trim();
+            if (!val.startsWith('#')) val = '#' + val;
+            if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+                colorPicker.value = val;
+                hexInput.value = val.toUpperCase();
+            } else {
+                hexInput.value = colorPicker.value.toUpperCase();
+            }
+        });
+        
+        // --- FUNCIÓ PER ACTUALITZAR LA VISTA PRÈVIA 1:1 ---
+        function updatePreview() {
+            const size = parseInt(document.getElementById('size').value);
+            const pCanvas = document.getElementById('previewCanvas');
+            const pCtx = pCanvas.getContext('2d');
+            const cells = document.querySelectorAll('.cell');
+            
+            if (!cells.length) return;
+            
+            pCanvas.width = size;
+            pCanvas.height = size;
+            pCtx.imageSmoothingEnabled = false;
+            
+            cells.forEach((cell, i) => {
+                pCtx.fillStyle = cell.style.backgroundColor || 'white';
+                pCtx.fillRect(i % size, Math.floor(i / size), 1, 1);
+            });
+            
+            const displaySize = Math.min(80, size * 2);
+            pCanvas.style.width = `${displaySize}px`;
+            pCanvas.style.height = `${displaySize}px`;
+        }
+        
+        // --- GESTIÓ D'EINES AMB CURSOR ---
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-group button, .button-group button').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(tool + 'Btn');
+            if (btn) btn.classList.add('active');
+            
+            if (tool === 'eyedropper') {
+                canvas.style.cursor = 'copy';
+            } else if (tool === 'eraser') {
+                canvas.style.cursor = 'not-allowed';
+            } else {
+                canvas.style.cursor = 'crosshair';
+            }
+            
+            updateToolIndicator();
+        }
+        
+        // --- GESTIÓ D'HISTORIAL ---
+        function saveState() {
+            const colors = Array.from(document.querySelectorAll('.cell')).map(c => c.style.backgroundColor);
+            
+            if (currentHistoryIndex < history.length - 1) {
+                history = history.slice(0, currentHistoryIndex + 1);
+            }
+            
+            history.push(colors);
+            currentHistoryIndex = history.length - 1;
+            
+            if (history.length > maxHistory) {
+                history.shift();
+                currentHistoryIndex--;
+            }
+        }
+        
+        function undo() {
+            if (currentHistoryIndex > 0) {
+                currentHistoryIndex--;
+                const previousState = history[currentHistoryIndex];
+                const cells = document.querySelectorAll('.cell');
+                previousState.forEach((color, i) => {
+                    cells[i].style.backgroundColor = color;
+                    cells[i].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
+                });
+                updatePreview();
+            }
+        }
+        
+        function redo() {
+            if (currentHistoryIndex < history.length - 1) {
+                currentHistoryIndex++;
+                const nextState = history[currentHistoryIndex];
+                const cells = document.querySelectorAll('.cell');
+                nextState.forEach((color, i) => {
+                    cells[i].style.backgroundColor = color;
+                    cells[i].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
+                });
+                updatePreview();
+            }
+        }
+        
+        // --- FUNCIÓ DE LA PALETA DE COLORS RECENTS ---
+        function addToPalette(color) {
+            const exists = Array.from(recentPalette.children).some(s => s.dataset.color === color);
+            if (exists || color === 'white') return;
+            
+            const swatch = document.createElement('div');
+            swatch.classList.add('swatch');
+            swatch.style.backgroundColor = color;
+            swatch.dataset.color = color;
+            swatch.onclick = () => {
+                colorPicker.value = color;
+                hexInput.value = color.toUpperCase();
+            };
+            
+            recentPalette.prepend(swatch);
+            if (recentPalette.children.length > 10) recentPalette.removeChild(recentPalette.lastChild);
+        }
+        
+        // --- FUNCIÓ PER MOSTRAR/AMAGAR LA QUADRÍCULA ---
+        function toggleGrid() {
+            const canvasContainer = document.querySelector('.canvas-container');
+            const isHidden = canvasContainer.classList.toggle('no-grid');
+            document.getElementById('gridBtn').innerHTML = isHidden ? '🔳 Quadrícula' : '🔲 Quadrícula';
+        }
+        
+        // --- FUNCIÓ PER PINTAR UNA CEL·LA ---
+        function paintCell(cell, color) {
+            cell.style.backgroundColor = color;
+            const hasGuideV = cell.classList.contains('guide-v');
+            const hasGuideH = cell.classList.contains('guide-h');
+            
+            if (hasGuideV || hasGuideH) {
+                if (hasGuideV) cell.style.borderRight = '2px solid var(--primary)';
+                if (hasGuideH) cell.style.borderBottom = '2px solid var(--primary)';
+                if (!hasGuideV && !hasGuideH) {
+                    cell.style.borderColor = (color === 'white') ? '#f0f0f0' : color;
+                }
+            } else {
+                cell.style.borderColor = (color === 'white') ? '#f0f0f0' : color;
+            }
+            
+            updatePreview();
+        }
+        
+        // --- HANDLE ACTION AMB GOTER INTEGRAT ---
+        function handleAction(cell) {
+            if (currentTool === 'eyedropper') {
+                const color = cell.style.backgroundColor;
+                const hex = rgbToHex(color);
+                colorPicker.value = hex;
+                if (hexInput) hexInput.value = hex.toUpperCase();
+                setTool('pen');
+                return;
+            }
+            
+            const color = colorPicker.value;
+            if (currentTool === 'pen') {
+                paintCell(cell, color);
+                addToPalette(color);
+            } else if (currentTool === 'eraser') {
+                paintCell(cell, 'white');
+            } else if (currentTool === 'bucket') {
+                saveState();
+                const startIndex = parseInt(cell.dataset.index);
+                const targetColor = cell.style.backgroundColor;
+                floodFill(startIndex, targetColor, color);
+                addToPalette(color);
+                isDrawing = false;
+            }
+        }
+        
+        // --- REIXA I PINTURA AMB GUIES CENTRALS ---
+        function createGrid(savedSize = null) {
+            const size = savedSize || parseInt(document.getElementById('size').value);
+            const center = Math.floor(size / 2) - 1;
+            
+            canvas.innerHTML = '';
+            canvas.style.gridTemplateColumns = `repeat(${size}, 24px)`;
+            
+            for (let i = 0; i < size * size; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                
+                const x = i % size;
+                const y = Math.floor(i / size);
+                if (x === center) cell.classList.add('guide-v');
+                if (y === center) cell.classList.add('guide-h');
+                
+                cell.dataset.index = i;
+                cell.style.backgroundColor = 'white';
+                cell.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    if (currentTool !== 'bucket') saveState();
+                    handleAction(cell);
+                });
+                cell.addEventListener('mouseenter', () => { 
+                    if(isDrawing && currentTool !== 'bucket' && currentTool !== 'eyedropper') handleAction(cell); 
+                });
+                canvas.appendChild(cell);
+            }
+            
+            history = [];
+            saveState();
+            updatePreview();
+            
+            while (recentPalette.firstChild) {
+                recentPalette.removeChild(recentPalette.firstChild);
+            }
+        }
+        
+        // --- ALGORITME POT DE PINTURA ---
+        function floodFill(startIndex, targetColor, replacementColor) {
+            if (targetColor === replacementColor) return;
+            
+            const size = parseInt(document.getElementById('size').value);
+            const cells = document.querySelectorAll('.cell');
+            const pixels = Array.from(cells);
+            const stack = [startIndex];
+            const visited = new Set();
+            
+            while (stack.length > 0) {
+                const idx = stack.pop();
+                if (visited.has(idx)) continue;
+                visited.add(idx);
+                const node = pixels[idx];
+                if (node.style.backgroundColor === targetColor) {
+                    paintCell(node, replacementColor);
+                    const x = idx % size;
+                    const y = Math.floor(idx / size);
+                    if (x > 0) stack.push(idx - 1);
+                    if (x < size - 1) stack.push(idx + 1);
+                    if (y > 0) stack.push(idx - size);
+                    if (y < size - 1) stack.push(idx + size);
+                }
+            }
+        }
+        
+        // Atall de teclat Ctrl+Z i Ctrl+Y
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'z') {
+                e.preventDefault();
+                undo();
+            } else if (e.ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                redo();
+            }
+        });
+        
+        window.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+        
+        window.addEventListener('mousedown', (e) => {
+            if (e.target.classList && e.target.classList.contains('cell')) {
+                isDrawing = true;
+            }
+        });
+        
+        function confirmNewGrid() { 
+            if(confirm("✨ Vols crear una nova reixa? Es perdran els canvis no desats.")) {
+                createGrid(); 
+            }
+        }
+        
+        // --- EXPORTAR I IMPORTAR ---
+        function saveAsPNG() {
+            const size = parseInt(document.getElementById('size').value);
+            const cells = document.querySelectorAll('.cell');
+            const canvas_temp = document.createElement('canvas');
+            const ctx = canvas_temp.getContext('2d');
+            const pixelSize = 24;
+            
+            canvas_temp.width = size * pixelSize;
+            canvas_temp.height = size * pixelSize;
+            
+            cells.forEach((cell, index) => {
+                const x = (index % size) * pixelSize;
+                const y = Math.floor(index / size) * pixelSize;
+                ctx.fillStyle = cell.style.backgroundColor;
+                ctx.fillRect(x, y, pixelSize, pixelSize);
+            });
+            
+            const link = document.createElement('a');
+            link.download = `pixel-art-${Date.now()}.png`;
+            link.href = canvas_temp.toDataURL();
+            link.click();
+        }
+        
+        function saveProject() {
+            const size = parseInt(document.getElementById('size').value);
+            const cells = document.querySelectorAll('.cell');
+            const colors = Array.from(cells).map(cell => cell.style.backgroundColor);
+            const project = {
+                size: size,
+                colors: colors,
+                version: '2.0',
+                timestamp: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(project, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `pixel-art-${Date.now()}.json`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert('💾 Projecte desat correctament!');
+        }
+        
+        function loadProject() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const project = JSON.parse(event.target.result);
+                        if (project.size && project.colors && project.colors.length === project.size * project.size) {
+                            document.getElementById('size').value = project.size;
+                            createGrid(project.size);
+                            
+                            const cells = document.querySelectorAll('.cell');
+                            project.colors.forEach((color, index) => {
+                                if (cells[index]) {
+                                    cells[index].style.backgroundColor = color;
+                                    cells[index].style.borderColor = (color === 'white') ? '#f0f0f0' : color;
+                                }
+                            });
+                            
+                            history = [];
+                            saveState();
+                            updatePreview();
+                            alert('✅ Projecte carregat correctament!');
+                        } else {
+                            alert('❌ Format de fitxer invàlid');
+                        }
+                    } catch (error) {
+                        alert('❌ Error carregant el fitxer: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+        
+        // Inicialitzar
+        createGrid();
+        updateToolIndicator();
+    </script>
+</body>
+</html>
