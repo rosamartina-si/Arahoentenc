@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aclaridor d'Imatges Fosques: Inversor de colors</title>
+    <style>
+        /* Estils de pantalla */
+        body { 
+            font-family: sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #f8f9fa;
+        }
+        
+        img { 
+            max-width: 300px; 
+            border: 1px solid #ccc; 
+            margin: 10px; 
+        }
+        
+        .inverted { 
+            filter: invert(100%); 
+        }
+        
+        .no-print { 
+            margin-bottom: 20px; 
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .upload-section {
+            border: 2px dashed #4a90e2;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            transition: background 0.3s;
+        }
+
+        .upload-section:hover {
+            background: #f0f7ff;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+        }
+
+        .result-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .result-container { grid-template-columns: 1fr; }
+        }
+
+        h3 {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .btn-imprimir {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-imprimir:hover {
+            background-color: #357abd;
+        }
+
+        /* --- CODI QUE CANVIA PER A LA IMPRESSIÓ --- */
+        @media print {
+            /* 1. Amaguem els elements de text i la imatge original, però NO els contenidors pare */
+            .no-print, h1, h3, p, .original-box {
+                display: none !important;
+            }
+
+            /* Amaguem també el botó i la secció de pujada */
+            .btn-imprimir, .upload-section, .card > h1, .card > p {
+                display: none !important;
+            }
+
+            /* 2. Assegurem que el cos i el contenidor de resultats siguin visibles */
+            body, #previewArea, .box {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white;
+            }
+
+            /* Assegurem que el contenidor de resultats es vegi correctament */
+            .result-container {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Amaguem la primera columna (original) */
+            .result-container > div:first-child {
+                display: none !important;
+            }
+
+            /* Mostrem només la segona columna (invertida) */
+            .result-container > div:last-child {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* 3. Ajustem la imatge invertida per a paper */
+            img.inverted {
+                display: block !important;
+                filter: invert(100%) !important; /* Torna a aplicar el filtre per si de cas */
+                max-width: 100% !important;
+                max-height: 95vh !important;
+                margin: 0 auto !important;
+                border: none !important;
+                object-fit: contain !important;
+            }
+
+            /* 4. Forcem el processament del filtre CSS al motor d'impressió */
+            * { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+            }
+
+            /* Eliminem marges i paddings sobrants */
+            html {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Aclaridor d'Imatges Fosques: Inversor de colors</h1>
+        <p>Selecciona una imatge amb fons negre i text blanc per invertir els colors.</p>
+        
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+
+        <div id="previewArea" style="display: none;">
+            <div class="result-container">
+                <div>
+                    <h3>Original</h3>
+                    <img id="originalImg" src="" alt="Original">
+                </div>
+                <div>
+                    <h3>Invertida (Fons Blanc)</h3>
+                    <img id="invertedImg" src="" alt="Invertida" class="inverted">
+                </div>
+            </div>
+            <button class="btn-imprimir" onclick="window.print()">Imprimir Imatge Clara</button>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const previewArea = document.getElementById('previewArea');
+        const originalImg = document.getElementById('originalImg');
+        const invertedImg = document.getElementById('invertedImg');
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    // Assignem la imatge carregada als dos elements <img>
+                    originalImg.src = event.target.result;
+                    invertedImg.src = event.target.result;
+                    // Mostrem el contenidor de resultats
+                    previewArea.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+</body>
+</html>
