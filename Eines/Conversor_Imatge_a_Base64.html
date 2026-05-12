@@ -1,107 +1,236 @@
+
 <!DOCTYPE html>
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
-    <title>Conversor d'Imatges a Base64</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor d'Imatges Intel·ligent - Base64 i Redimensionament</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; color: #333; }
-        #drop-zone {
-            border: 2px dashed #007bff;
-            padding: 40px;
-            text-align: center;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.3s;
+        @page {
+            size: A4;
+            margin: 15mm;
+            background-color: #f8fafc;
         }
-        #drop-zone.hover { background: #e7f1ff; }
-        #result-container { margin-top: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        h1 { color: #1e293b; font-size: 24pt; margin: 0; }
+        .description { color: #64748b; font-size: 11pt; }
+        
+        #drop-zone {
+            border: 3px dashed #3b82f6;
+            background-color: #eff6ff;
+            padding: 50px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+        #drop-zone:hover {
+            background-color: #dbeafe;
+            border-color: #2563eb;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .control-group { display: flex; flex-direction: column; }
+        label { font-weight: bold; font-size: 10pt; margin-bottom: 5px; }
+        
+        .result-area {
+            display: none;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 25px;
+        }
+        .preview-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
         textarea {
             width: 100%;
-            height: 150px;
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: monospace;
-            background: #fafafa;
+            height: 120px;
+            font-family: 'Courier New', monospace;
+            font-size: 9pt;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #f8fafc;
+            resize: vertical;
         }
-        img { max-width: 300px; display: block; margin-top: 10px; border: 1px solid #ddd; }
-        .label { font-weight: bold; margin-top: 15px; display: block; }
+        
+        .stats {
+            font-size: 9pt;
+            color: #475569;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
         button {
-            background: #007bff;
+            background-color: #3b82f6;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 5px;
+            width: 100%;
+            margin-top: 10px;
         }
-        button:hover { background: #0056b3; }
+        button:hover { background-color: #2563eb; }
+        
+        .info-box {
+            margin-top: 30px;
+            font-size: 9pt;
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            color: #92400e;
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Imatge a B64</h1>
+            <p class="description">Conversor intel·ligent amb redimensionament</p>
+        </header>
 
-    <h2>Conversor d'Imatges a Etiqueta HTML (Base64)</h2>
-    
-    <div id="drop-zone">Arrossega una imatge aquí o fes clic per seleccionar-la</div>
-    <input type="file" id="file-input" accept="image/*" style="display: none;">
+        <div id="drop-zone">
+            <strong>Arrossega la imatge aquí</strong><br>
+            <span style="font-size: 10pt; color: #64748b;">o fes clic per buscar al teu ordinador</span>
+        </div>
+        <input type="file" id="file-input" accept="image/*" style="display: none;">
 
-    <div id="result-container" style="display: none;">
-        <span class="label">Vista prèvia:</span>
-        <img id="preview" src="" alt="Vista prèvia">
+        <div class="controls">
+            <div class="control-group">
+                <label for="max-width">Amplada màxima (píxels):</label>
+                <input type="number" id="max-width" value="800" step="100">
+            </div>
+            <div class="control-group">
+                <label for="quality">Qualitat (0.1 a 1.0):</label>
+                <input type="number" id="quality" value="0.8" step="0.1" min="0.1" max="1">
+            </div>
+        </div>
 
-        <span class="label">Codi HTML generat:</span>
-        <textarea id="html-output" readonly></textarea>
-        <button onclick="copyToClipboard()">Copiar Codi</button>
+        <div id="result-area" class="result-area">
+            <div class="preview-box">
+                <img id="preview" src="" alt="Vista prèvia">
+                <div class="stats">
+                    <span id="orig-size">Mida original: -</span>
+                    <span id="new-size">Mida Base64: -</span>
+                </div>
+            </div>
+
+            <label>Codi HTML per incrustar:</label>
+            <textarea id="output-text" readonly></textarea>
+            <button onclick="copyCode()">Copiar etiqueta &lt;img&gt;</button>
+        </div>
+
+        <div class="info-box">
+            <strong>Nota de rendiment:</strong> Aquesta eina utilitza un <code>&lt;canvas&gt;</code> invisible per processar la imatge abans de convertir-la. Això evita que el teu projecte es bloquegi amb milers de línies de text innecessàries.
+        </div>
     </div>
 
     <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
-        const output = document.getElementById('html-output');
+        const resultArea = document.getElementById('result-area');
         const preview = document.getElementById('preview');
-        const resultContainer = document.getElementById('result-container');
+        const outputText = document.getElementById('output-text');
+        const maxWidthInput = document.getElementById('max-width');
+        const qualityInput = document.getElementById('quality');
 
-        // Obrir selector de fitxers en fer clic
         dropZone.onclick = () => fileInput.click();
-
-        // Gestionar arrossegament
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
-        dropZone.ondragleave = () => dropZone.classList.remove('hover');
+        fileInput.onchange = (e) => processImage(e.target.files[0]);
+        
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = '#10b981'; };
+        dropZone.ondragleave = () => { dropZone.style.borderColor = '#3b82f6'; };
         dropZone.ondrop = (e) => {
             e.preventDefault();
-            dropZone.classList.remove('hover');
-            processFile(e.dataTransfer.files[0]);
+            processImage(e.dataTransfer.files[0]);
         };
 
-        fileInput.onchange = (e) => processFile(e.target.files[0]);
-
-        function processFile(file) {
+        function processImage(file) {
             if (!file || !file.type.startsWith('image/')) return;
 
+            document.getElementById('orig-size').innerText = `Original: ${(file.size / 1024).toFixed(1)} KB`;
+
             const reader = new FileReader();
-            reader.onload = (e) => {
-                const base64 = e.target.result;
-                const fileName = file.name.split('.')[0]; // Nom del fitxer per a l'alt
-                
-                // Generem l'etiqueta HTML completa
-                const htmlTag = `<img src="${base64}" alt="${fileName}">`;
-                
-                // Mostrem resultats
-                output.value = htmlTag;
-                preview.src = base64;
-                resultContainer.style.display = 'block';
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const maxWidth = parseInt(maxWidthInput.value);
+
+                    // Redimensionament proporcional
+                    if (width > maxWidth) {
+                        height = (maxWidth / width) * height;
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Conversió a Base64 amb qualitat ajustada
+                    const base64 = canvas.toDataURL('image/jpeg', parseFloat(qualityInput.value));
+                    
+                    preview.src = base64;
+                    const finalTag = `<img src="${base64}" alt="${file.name.split('.')[0]}">`;
+                    outputText.value = finalTag;
+                    
+                    const b64Size = Math.round((base64.length * 3) / 4 / 1024);
+                    document.getElementById('new-size').innerText = `Base64 aprox: ${b64Size} KB`;
+                    
+                    resultArea.style.display = 'block';
+                };
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        function copyToClipboard() {
-            output.select();
+        function copyCode() {
+            outputText.select();
             document.execCommand('copy');
-            alert('Codi copiat al porta-retalls!');
+            alert('Codi copiat!');
         }
     </script>
-
 </body>
 </html>
