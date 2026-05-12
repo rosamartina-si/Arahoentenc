@@ -1,1 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor HTML</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    
+    <!-- Addons per autocompletat -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/xml-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/html-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/css-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/javascript-hint.min.js"></script>
+    
+    <!-- Addon per històric -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/history/history.min.js"></script>
+    
+    <!-- Fonts elegants -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-header: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            --bg-main: #f5f7fb;
+            --bg-panel: #ffffff;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --panel-header: #f1f5f9;
+            --toolbar-bg: #f8fafc;
+            --console-bg: #1e1e2e;
+            --console-text: #cdd6f4;
+            --console-border: #313244;
+            --tab-active-bg: #ffffff;
+            --tab-inactive-bg: #f1f5f9;
+            --drop-overlay: rgba(59, 130, 246, 0.1);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        body.dark-mode {
+            --bg-header: linear-gradient(135deg, #0f1117 0%, #090b10 100%);
+            --bg-main: #0f1117;
+            --bg-panel: #1a1c23;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --border-color: #2d3240;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --panel-header: #1e2128;
+            --toolbar-bg: #16181f;
+            --console-bg: #0a0c10;
+            --console-text: #cdd6f4;
+            --console-border: #1e2128;
+            --tab-active-bg: #1a1c23;
+            --tab-inactive-bg: #13151c;
+            --drop-overlay: rgba(96, 165, 250, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 400;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg-main);
+            color: var(--text-main);
+        }
+        
+        header { 
+            background: var(--bg-header);
+            color: white;
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .main-container { 
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .gutter {
+            background-color: var(--border-color);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            cursor: col-resize;
+            transition: background-color 0.2s;
+            width: 6px;
+        }
+        
+        .gutter:hover {
+            background-color: var(--accent);
+        }
+        
+        .editor-panel {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-panel);
+            min-width: 0;
+            position: relative;
+        }
+        
+        .left-panels {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 0;
+        }
+        
+        .files-container {
+            flex-shrink: 0;
+            min-height: auto;
+        }
+        
+        .files-container:last-child {
+            flex-shrink: 1;
+            flex: 1;
+        }
+        
+        .editor-panel.drop-active {
+            outline: 3px solid var(--accent);
+            outline-offset: -3px;
+        }
+        
+        .drop-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--drop-overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+        
+        .drop-overlay span {
+            background: var(--accent);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            background: var(--tab-inactive-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 12px;
+            height: 44px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            flex-shrink: 0;
+            gap: 4px;
+        }
+        
+        .tab {
+            padding: 0 20px;
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .tab:hover {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .tab.active {
+            background: var(--tab-active-bg);
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .tab-label {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .tab-edit-input {
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 4px 8px;
+            font-size: 11px;
+            width: 120px;
+            outline: none;
+            border-radius: 6px;
+        }
+        
+        .close-btn {
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            margin-left: 4px;
+            padding: 0 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            opacity: 0.5;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+            color: #ef4444;
+        }
+        
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-icon {
+            padding: 8px 12px;
+        }
+        
+        .btn-add-minimal {
+            color: var(--accent);
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: 0 12px;
+            font-size: 20px;
+            height: 100%;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            opacity: 0.7;
+        }
+        
+        .btn-add-minimal:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            color: var(--accent);
+        }
+        
+        .tab-group-title {
+            display: none !important;
+        }
+        
+        .separator {
+            width: 1px;
+            height: 28px;
+            background: var(--border-color);
+            margin: 0 8px;
+        }
+        
+        .toolbar { 
+            padding: 10px 20px; 
+            background: var(--toolbar-bg); 
+            display: flex; 
+            gap: 12px; 
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            align-items: center;
+        }
+        
+        .undo-redo-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .tab-content {
+            display: none;
+            flex: 1;
+            min-height: 300px;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .CodeMirror { 
+            height: 100%; 
+            flex: 1; 
+            font-size: 13px; 
+            min-height: 200px;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+        }
+        
+        iframe { 
+            flex: 1; 
+            border: none; 
+            background: white; 
+            width: 100%;
+            min-height: 0;
+        }
+        
+        #consoleSection { 
+            flex-shrink: 0;
+            background: var(--console-bg); 
+            color: var(--console-text); 
+            overflow: hidden;
+            font-family: 'SF Mono', 'Fira Code', monospace; 
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #consoleOutput {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            display: block;
+        }
+        
+        #consoleOutput div {
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--console-border);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 11px;
+        }
+        
+        #consoleOutput .log { color: #a5d6ff; }
+        #consoleOutput .error { color: #f98c8c; }
+        #consoleOutput .warn { color: #fde68a; }
+        
+        .console-header {
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--console-border);
+        }
+        
+        .console-tabs { display: flex; gap: 8px; }
+        
+        .btn-console {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-console:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-main);
+        }
+        
+        .btn-console.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        #notesArea {
+            flex: 1;
+            background: var(--console-bg);
+            color: var(--console-text);
+            border: none;
+            padding: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+        
+        #imageConverter {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+        
+        .drag-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-family: 'Inter', sans-serif;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .drag-info.visible {
+            opacity: 1;
+        }
+        
+        .console-actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
 
+<header>
+    <h1>editor html</h1>
+    <button class="btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 mode fosc</button>
+</header>
+
+<div class="main-container">
+    <div id="split-left" class="editor-panel">
+        <div class="toolbar">
+            <div class="undo-redo-buttons">
+                <button class="btn btn-icon" onclick="undo()" title="Desfer (Ctrl+Z)">↩</button>
+                <button class="btn btn-icon" onclick="redo()" title="Refer (Ctrl+Y)">↪</button>
+            </div>
+            <div class="separator"></div>
+            <button class="btn" onclick="descarregarProjecte()">💾 desar projecte</button>
+            <button class="btn" onclick="document.getElementById('importFile').click()">📂 importar projecte</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importarProjecte(this)">
+            <button class="btn" onclick="document.getElementById('importFolder').click()">📁 importar carpeta</button>
+            <button class="btn" onclick="netejarLocal()">🗑️ reiniciar</button>
+            <button class="btn" onclick="exportarAHTMLUnic()">🚀 exportar html</button>
+        </div>
+        
+        <div class="tabs-container">
+            <div id="htmlTabsContainer" style="display: flex; height: 100%;"></div>
+            <div id="cssTabsContainer" style="display: flex; height: 100%;"></div>
+            <div id="jsTabsContainer" style="display: flex; height: 100%;"></div>
+            <div style="flex-grow: 1;"></div>
+            <button class="btn-add-minimal" onclick="afegirFitxerHTML()" title="Nou HTML">+</button>
+            <button class="btn-add-minimal" onclick="afegirFitxerCSS()" title="Nou CSS">+</button>
+            <button class="btn-add-minimal" onclick="afegirFitxerJS()" title="Nou JS">+</button>
+        </div>
+        
+        <div class="left-panels">
+            <div id="htmlContentsContainer" class="files-container"></div>
+            <div id="cssContentsContainer" class="files-container"></div>
+            <div id="jsContentsContainer" class="files-container" style="flex: 1;"></div>
+        </div>
+    </div>
+    
+    <div id="split-right" class="editor-panel">
+        <iframe id="resultat" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+        
+        <div id="consoleSection">
+            <div class="console-header">
+                <div class="console-tabs">
+                    <button class="btn-console active" onclick="setBottomMode('console')">💻 consola</button>
+                    <button class="btn-console" onclick="setBottomMode('notes')">📝 notes</button>
+                    <button class="btn-console" onclick="setBottomMode('images')">🖼️ imatges</button>
+                </div>
+                <div class="console-actions">
+                    <button class="btn" style="padding: 4px 12px; font-size: 11px;" onclick="netejarConsola()">neteja</button>
+                    <button class="btn" style="padding: 4px 12px; font-size: 11px;" onclick="setBottomMode('hidden')">✕</button>
+                </div>
+            </div>
+            
+            <div id="consoleOutput"></div>
+            
+            <textarea id="notesArea" placeholder="Escriu les teves notes aquí..." style="display:none;"></textarea>
+            
+            <div id="imageConverter" style="display:none; color: var(--console-text); flex: 1; overflow-y: auto;">
+            </div>
+        </div>
+        
+        <button id="reopenConsole" class="btn" style="position:absolute; bottom:12px; right:12px; display:none; z-index:100; padding: 6px 12px; font-size: 11px;" onclick="setBottomMode('console')">🔼 mostra eines</button>
+    </div>
+</div>
+
+<div id="dragInfo" class="drag-info">📁 arrossega HTML aquí</div>
+
+<input type="file" id="importFolder" webkitdirectory directory multiple style="display: none;" onchange="importarCarpeta(this)">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.5/split.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+
+<script>
+    let splitInstance = Split(['#split-left', '#split-right'], {
+        sizes: [50, 50],
+        minSize: 280,
+        gutterSize: 6,
+        onDrag: () => {
+            if (htmlEditors) htmlEditors.forEach(e => e.refresh());
+            if (cssEditors) cssEditors.forEach(e => e.refresh());
+            if (jsEditors) jsEditors.forEach(e => e.refresh());
+        }
+    });
+    
+    let projecte = {
+        html_files: [
+            { nom: "index.html", contingut: "<h1>Editor HTML Pro</h1>\n<p>Importa una carpeta o crea fitxers nous</p>\n<button onclick=\"alert('Hola!')\">▶️ prova'm</button>" }
+        ],
+        css_files: [
+            { nom: "style.css", contingut: "body { font-family: 'Inter', sans-serif; margin: 2rem; }\nh1 { color: #3b82f6; }\nbutton { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }\nbutton:hover { opacity: 0.9; }" }
+        ],
+        js_files: [
+            { nom: "main.js", contingut: "console.log('Editor llest! Ctrl+Z per desfer, Ctrl+Y per refer');" }
+        ],
+        imatges: []
+    };
+    
+    let htmlEditors = [];
+    let cssEditors = [];
+    let jsEditors = [];
+    let currentHtmlPreview = null;
+    
+    const scriptConsola = `
+        <script>
+            (function() {
+                const originalLog = console.log;
+                const originalError = console.error;
+                const originalWarn = console.warn;
+                
+                function enviarAlPare(tipus, args) {
+                    const missatge = Array.from(args).map(arg => 
+                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                    ).join(' ');
+                    window.parent.postMessage({ tipus, missatge }, '*');
+                }
+                
+                console.log = function() { enviarAlPare('log', arguments); originalLog.apply(console, arguments); };
+                console.error = function() { enviarAlPare('error', arguments); originalError.apply(console, arguments); };
+                console.warn = function() { enviarAlPare('warn', arguments); originalWarn.apply(console, arguments); };
+                
+                window.onerror = function(msg, url, line) {
+                    enviarAlPare('error', ["Error: " + msg + " (Línia: " + line + ")"]);
+                };
+            })();
+        <\/script>
+    `;
+    
+    function undo() {
+        const activeEditor = getActiveEditor();
+        if (activeEditor && activeEditor.undo) {
+            activeEditor.undo();
+            updateProjectFromActiveEditor();
+        }
+    }
+    
+    function redo() {
+        const activeEditor = getActiveEditor();
+        if (activeEditor && activeEditor.redo) {
+            activeEditor.redo();
+            updateProjectFromActiveEditor();
+        }
+    }
+    
+    function getActiveEditor() {
+        const activeHtmlTab = document.querySelector('#htmlContentsContainer .tab-content.active');
+        const activeCssTab = document.querySelector('#cssContentsContainer .tab-content.active');
+        const activeJsTab = document.querySelector('#jsContentsContainer .tab-content.active');
+        
+        if (activeHtmlTab) {
+            const index = Array.from(activeHtmlTab.parentNode.children).indexOf(activeHtmlTab);
+            if (htmlEditors[index]) return htmlEditors[index];
+        }
+        if (activeCssTab) {
+            const index = Array.from(activeCssTab.parentNode.children).indexOf(activeCssTab);
+            if (cssEditors[index]) return cssEditors[index];
+        }
+        if (activeJsTab) {
+            const index = Array.from(activeJsTab.parentNode.children).indexOf(activeJsTab);
+            if (jsEditors[index]) return jsEditors[index];
+        }
+        return null;
+    }
+    
+    function updateProjectFromActiveEditor() {
+        const activeHtmlTab = document.querySelector('#htmlContentsContainer .tab-content.active');
+        const activeCssTab = document.querySelector('#cssContentsContainer .tab-content.active');
+        const activeJsTab = document.querySelector('#jsContentsContainer .tab-content.active');
+        
+        if (activeHtmlTab) {
+            const index = Array.from(activeHtmlTab.parentNode.children).indexOf(activeHtmlTab);
+            if (htmlEditors[index] && projecte.html_files[index]) {
+                projecte.html_files[index].contingut = htmlEditors[index].getValue();
+                if (currentHtmlPreview === index) actualitzarVistaPrevia();
+            }
+        }
+        if (activeCssTab) {
+            const index = Array.from(activeCssTab.parentNode.children).indexOf(activeCssTab);
+            if (cssEditors[index] && projecte.css_files[index]) {
+                projecte.css_files[index].contingut = cssEditors[index].getValue();
+                actualitzarVistaPrevia();
+            }
+        }
+        if (activeJsTab) {
+            const index = Array.from(activeJsTab.parentNode.children).indexOf(activeJsTab);
+            if (jsEditors[index] && projecte.js_files[index]) {
+                projecte.js_files[index].contingut = jsEditors[index].getValue();
+                actualitzarVistaPrevia();
+            }
+        }
+        desarALocalStorage();
+    }
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            if (e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undo();
+            } else if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) {
+                e.preventDefault();
+                redo();
+            }
+        }
+    });
+    
+    function setupDragAndDrop() {
+        const dropZone = document.getElementById('split-left');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drop-active');
+            let overlay = dropZone.querySelector('.drop-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'drop-overlay';
+                overlay.innerHTML = '<span>📄 arrossega HTML aquí</span>';
+                dropZone.style.position = 'relative';
+                dropZone.appendChild(overlay);
+            }
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drop-active');
+            const overlay = dropZone.querySelector('.drop-overlay');
+            if (overlay) overlay.remove();
+        });
+        
+        dropZone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drop-active');
+            const overlay = dropZone.querySelector('.drop-overlay');
+            if (overlay) overlay.remove();
+            
+            const files = e.dataTransfer.files;
+            for (let file of files) {
+                if (file.type === 'text/html' || file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+                    const reader = new FileReader();
+                    await new Promise((resolve) => {
+                        reader.onload = (event) => {
+                            let nomFitxer = file.name;
+                            let nomFinal = nomFitxer;
+                            let counter = 1;
+                            while (projecte.html_files.some(f => f.nom === nomFinal)) {
+                                const nomSenseExt = nomFitxer.replace(/\.(html|htm)$/, '');
+                                const ext = nomFitxer.match(/\.(html|htm)$/)[0];
+                                nomFinal = `${nomSenseExt}_${counter}${ext}`;
+                                counter++;
+                            }
+                            projecte.html_files.push({
+                                nom: nomFinal,
+                                contingut: event.target.result
+                            });
+                            mostrarMissatgeTemporal(`✅ afegit: ${nomFinal}`);
+                            resolve();
+                        };
+                        reader.readAsText(file);
+                    });
+                } else {
+                    mostrarMissatgeTemporal(`⚠️ només HTML: ${file.name}`);
+                }
+            }
+            renderAllTabs();
+            actualitzarVistaPrevia();
+            setTimeout(() => {
+                const lastIndex = projecte.html_files.length - 1;
+                if (lastIndex >= 0) showTab(`html-tab-${lastIndex}`);
+                if (lastIndex >= 0) showHtmlInPreview(lastIndex);
+            }, 100);
+        });
+    }
+    
+    function mostrarMissatgeTemporal(missatge) {
+        const dragInfo = document.getElementById('dragInfo');
+        dragInfo.textContent = missatge;
+        dragInfo.classList.add('visible');
+        setTimeout(() => dragInfo.classList.remove('visible'), 2000);
+    }
+    
+    function desarALocalStorage() {
+        localStorage.setItem('projecte_actual', JSON.stringify(projecte));
+    }
+    
+    function carregarDeLocalStorage() {
+        const projecteDesat = localStorage.getItem('projecte_actual');
+        if (projecteDesat) {
+            try {
+                const contingutDesat = JSON.parse(projecteDesat);
+                if (contingutDesat.html_files && contingutDesat.css_files && contingutDesat.js_files) {
+                    projecte = contingutDesat;
+                    if (!projecte.imatges) projecte.imatges = [];
+                    return true;
+                }
+            } catch(e) {}
+        }
+        return false;
+    }
+    
+    function crearEditor(id, mode, tema) {
+        const textarea = document.getElementById(id);
+        if (!textarea) return null;
+        return CodeMirror.fromTextArea(textarea, {
+            mode: mode,
+            theme: tema,
+            lineNumbers: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            lineWrapping: true
+        });
+    }
+    
+    function editarNomPestanya(contenidor, tipus, index) {
+        let fitxers = tipus === 'html' ? projecte.html_files : (tipus === 'css' ? projecte.css_files : projecte.js_files);
+        const anticNom = fitxers[index].nom;
+        contenidor.innerHTML = '';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = anticNom;
+        input.className = "tab-edit-input";
+        const finalitzarEdicio = () => {
+            const nouNom = input.value.trim();
+            if (nouNom && nouNom !== anticNom && !fitxers.some((f, idx) => idx !== index && f.nom === nouNom)) {
+                fitxers[index].nom = nouNom;
+            }
+            renderAllTabs();
+            actualitzarVistaPrevia();
+        };
+        input.onblur = finalitzarEdicio;
+        input.onkeydown = (e) => { if (e.key === 'Enter') finalitzarEdicio(); if (e.key === 'Escape') contenidor.textContent = anticNom; };
+        contenidor.appendChild(input);
+        input.focus();
+        input.select();
+    }
+    
+    function eliminarFitxer(tipus, index) {
+        let fitxers = tipus === 'html' ? projecte.html_files : (tipus === 'css' ? projecte.css_files : projecte.js_files);
+        if (fitxers.length <= 1) return alert(`Mínim 1 fitxer ${tipus.toUpperCase()}`);
+        if (confirm(`Eliminar ${fitxers[index].nom}?`)) {
+            fitxers.splice(index, 1);
+            renderAllTabs();
+            actualitzarVistaPrevia();
+        }
+    }
+    
+    function afegirFitxerHTML() { projecte.html_files.push({ nom: `pagina_${projecte.html_files.length+1}.html`, contingut: "<!-- nou document -->\n<h1>Nova pàgina</h1>" }); renderAllTabs(); actualitzarVistaPrevia(); setTimeout(() => { const idx = projecte.html_files.length-1; showTab(`html-tab-${idx}`); showHtmlInPreview(idx); }, 50); }
+    function afegirFitxerCSS() { projecte.css_files.push({ nom: `estil_${projecte.css_files.length+1}.css`, contingut: "/* nou estil */\n.element { opacity: 1; }" }); renderAllTabs(); actualitzarVistaPrevia(); }
+    function afegirFitxerJS() { projecte.js_files.push({ nom: `script_${projecte.js_files.length+1}.js`, contingut: "// nou mòdul\nconsole.log('modul actiu');" }); renderAllTabs(); actualitzarVistaPrevia(); }
+    
+    function showHtmlInPreview(htmlIndex) { currentHtmlPreview = htmlIndex; actualitzarVistaPrevia(); }
+    
+    function renderAllTabs() {
+        const htmlTabs = document.getElementById('htmlTabsContainer');
+        const cssTabs = document.getElementById('cssTabsContainer');
+        const jsTabs = document.getElementById('jsTabsContainer');
+        const htmlContents = document.getElementById('htmlContentsContainer');
+        const cssContents = document.getElementById('cssContentsContainer');
+        const jsContents = document.getElementById('jsContentsContainer');
+        if (!htmlTabs) return;
+        htmlTabs.innerHTML = ''; cssTabs.innerHTML = ''; jsTabs.innerHTML = '';
+        htmlContents.innerHTML = ''; cssContents.innerHTML = ''; jsContents.innerHTML = '';
+        htmlEditors = []; cssEditors = []; jsEditors = [];
+        const temaActual = localStorage.getItem('preferencia_tema') === 'dark' ? "monokai" : "default";
+        
+        projecte.html_files.forEach((file, i) => {
+            const tabId = `html-tab-${i}`;
+            const tab = document.createElement('div'); tab.className = 'tab'; tab.setAttribute('data-tab', tabId);
+            const label = document.createElement('span'); label.textContent = file.nom; label.className = "tab-label";
+            tab.onclick = () => { showTab(tabId); showHtmlInPreview(i); };
+            label.ondblclick = (e) => { e.stopPropagation(); editarNomPestanya(label, 'html', i); };
+            const closeBtn = document.createElement('span'); closeBtn.innerHTML = '✕'; closeBtn.className = "close-btn";
+            closeBtn.onclick = (e) => { e.stopPropagation(); eliminarFitxer('html', i); };
+            tab.appendChild(label); if (projecte.html_files.length > 1) tab.appendChild(closeBtn);
+            htmlTabs.appendChild(tab);
+            const content = document.createElement('div'); content.id = tabId; content.className = 'tab-content';
+            content.innerHTML = `<textarea id="html-input-${i}"></textarea>`; htmlContents.appendChild(content);
+            const editor = crearEditor(`html-input-${i}`, 'htmlmixed', temaActual);
+            editor.setValue(file.contingut);
+            editor.on('change', () => { projecte.html_files[i].contingut = editor.getValue(); if (currentHtmlPreview === i) actualitzarVistaPrevia(); desarALocalStorage(); });
+            htmlEditors.push(editor);
+        });
+        projecte.css_files.forEach((file, i) => {
+            const tabId = `css-tab-${i}`; const tab = document.createElement('div'); tab.className = 'tab'; tab.setAttribute('data-tab', tabId);
+            const label = document.createElement('span'); label.textContent = file.nom; label.className = "tab-label";
+            tab.onclick = () => showTab(tabId);
+            label.ondblclick = (e) => { e.stopPropagation(); editarNomPestanya(label, 'css', i); };
+            const closeBtn = document.createElement('span'); closeBtn.innerHTML = '✕'; closeBtn.className = "close-btn";
+            closeBtn.onclick = (e) => { e.stopPropagation(); eliminarFitxer('css', i); };
+            tab.appendChild(label); if (projecte.css_files.length > 1) tab.appendChild(closeBtn);
+            cssTabs.appendChild(tab);
+            const content = document.createElement('div'); content.id = tabId; content.className = 'tab-content';
+            content.innerHTML = `<textarea id="css-input-${i}"></textarea>`; cssContents.appendChild(content);
+            const editor = crearEditor(`css-input-${i}`, 'css', temaActual);
+            editor.setValue(file.contingut);
+            editor.on('change', () => { projecte.css_files[i].contingut = editor.getValue(); actualitzarVistaPrevia(); desarALocalStorage(); });
+            cssEditors.push(editor);
+        });
+        projecte.js_files.forEach((file, i) => {
+            const tabId = `js-tab-${i}`; const tab = document.createElement('div'); tab.className = 'tab'; tab.setAttribute('data-tab', tabId);
+            const label = document.createElement('span'); label.textContent = file.nom; label.className = "tab-label";
+            tab.onclick = () => showTab(tabId);
+            label.ondblclick = (e) => { e.stopPropagation(); editarNomPestanya(label, 'js', i); };
+            const closeBtn = document.createElement('span'); closeBtn.innerHTML = '✕'; closeBtn.className = "close-btn";
+            closeBtn.onclick = (e) => { e.stopPropagation(); eliminarFitxer('js', i); };
+            tab.appendChild(label); if (projecte.js_files.length > 1) tab.appendChild(closeBtn);
+            jsTabs.appendChild(tab);
+            const content = document.createElement('div'); content.id = tabId; content.className = 'tab-content';
+            content.innerHTML = `<textarea id="js-input-${i}"></textarea>`; jsContents.appendChild(content);
+            const editor = crearEditor(`js-input-${i}`, 'javascript', temaActual);
+            editor.setValue(file.contingut);
+            editor.on('change', () => { projecte.js_files[i].contingut = editor.getValue(); actualitzarVistaPrevia(); desarALocalStorage(); });
+            jsEditors.push(editor);
+        });
+        if (projecte.html_files.length && !document.querySelector('.tab.active')) { showTab('html-tab-0'); showHtmlInPreview(0); }
+        
+        actualitzarLlistaImatges();
+    }
+    
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        const targetContent = document.getElementById(tabId); if (targetContent) targetContent.classList.add('active');
+        const targetTab = document.querySelector(`.tab[data-tab="${tabId}"]`); if (targetTab) targetTab.classList.add('active');
+        setTimeout(() => { htmlEditors.forEach(e => e.refresh()); cssEditors.forEach(e => e.refresh()); jsEditors.forEach(e => e.refresh()); }, 50);
+    }
+    
+    function actualitzarVistaPrevia() {
+        let htmlIndex = currentHtmlPreview !== null ? currentHtmlPreview : 0;
+        let htmlPrincipal = projecte.html_files[htmlIndex]?.contingut || "<h1>Error</h1>";
+        let totCSS = projecte.css_files.map(css => `\n/* ${css.nom} */\n${css.contingut}\n`).join('');
+        let totJS = projecte.js_files.map(js => `\n/* ${js.nom} */\n${js.contingut}\n`).join('');
+        const resultat = `<!DOCTYPE html><html><head>${scriptConsola}<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Vista Prèvia</title><style>${totCSS}</style></head><body>${htmlPrincipal}<script>${totJS}<\/script></body></html>`;
+        const iframe = document.getElementById('resultat');
+        iframe.contentWindow.document.open(); iframe.contentWindow.document.write(resultat); iframe.contentWindow.document.close();
+        desarALocalStorage();
+    }
+    
+    window.addEventListener('message', function(event) {
+        const output = document.getElementById('consoleOutput');
+        const div = document.createElement('div'); div.className = event.data.tipus;
+        div.textContent = `[${new Date().toLocaleTimeString()}] ${event.data.missatge}`;
+        output.appendChild(div); output.scrollTop = output.scrollHeight;
+    });
+    
+    function netejarConsola() { document.getElementById('consoleOutput').innerHTML = ''; }
+    function descarregarProjecte() { const a = document.createElement('a'); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projecte, null, 2)); a.download = "projecte.json"; a.click(); mostrarMissatgeTemporal(`✅ Projecte desat`); }
+    function importarProjecte(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = e => { try { const data = JSON.parse(e.target.result); if(data.html_files && data.css_files && data.js_files) { projecte = data; if (!projecte.imatges) projecte.imatges = []; renderAllTabs(); actualitzarVistaPrevia(); mostrarMissatgeTemporal(`✅ Projecte importat`); } else throw new Error(); } catch(err) { alert("JSON invàlid"); } }; reader.readAsText(file); input.value = ''; }
+    
+    function netejarLocal() { 
+        if(confirm("Reiniciar projecte?")) { 
+            projecte = { 
+                html_files: [{ nom: "index.html", contingut: "<h1>Editor HTML Pro</h1>" }], 
+                css_files: [{ nom: "style.css", contingut: "h1 { color: #3b82f6; }" }], 
+                js_files: [{ nom: "main.js", contingut: "console.log('reiniciat');" }], 
+                imatges: [] 
+            }; 
+            renderAllTabs(); 
+            actualitzarVistaPrevia(); 
+            actualitzarLlistaImatges(); 
+            mostrarMissatgeTemporal(`🗑️ Projecte reiniciat`);
+        } 
+    }
+    
+    function exportarAHTMLUnic() { 
+        let htmlIndex = currentHtmlPreview !== null ? currentHtmlPreview : 0; 
+        let htmlPrincipal = projecte.html_files[htmlIndex]?.contingut || ""; 
+        let totCSS = projecte.css_files.map(css => css.contingut).join('\n'); 
+        let totJS = projecte.js_files.map(js => js.contingut).join('\n'); 
+        const blob = new Blob([`<!DOCTYPE html><html><head>${scriptConsola}<meta charset="UTF-8"><style>${totCSS}</style></head><body>${htmlPrincipal}<script>${totJS}<\/script></body></html>`], { type: 'text/html' }); 
+        const a = document.createElement('a'); 
+        a.href = URL.createObjectURL(blob); 
+        a.download = "index.html"; 
+        a.click(); 
+        URL.revokeObjectURL(a.href); 
+        mostrarMissatgeTemporal(`🚀 HTML exportat`);
+    }
+    
+    function toggleDarkMode() { 
+        const isDark = document.body.classList.toggle('dark-mode'); 
+        const tema = isDark ? "monokai" : "default"; 
+        [...htmlEditors, ...cssEditors, ...jsEditors].forEach(e => e.setOption("theme", tema)); 
+        document.getElementById('darkModeBtn').innerHTML = isDark ? "☀️ mode clar" : "🌙 mode fosc"; 
+        localStorage.setItem('preferencia_tema', isDark ? 'dark' : 'light'); 
+    }
+    
+    function setBottomMode(mode) {
+        const consoleOut = document.getElementById('consoleOutput');
+        const notesArea = document.getElementById('notesArea');
+        const imgConverter = document.getElementById('imageConverter');
+        const consoleSection = document.getElementById('consoleSection');
+        const reopenBtn = document.getElementById('reopenConsole');
+        const tabs = document.querySelectorAll('.btn-console');
+
+        consoleSection.style.display = 'flex';
+        reopenBtn.style.display = 'none';
+        
+        if (consoleOut) consoleOut.style.display = 'none';
+        if (notesArea) notesArea.style.display = 'none';
+        if (imgConverter) imgConverter.style.display = 'none';
+        
+        tabs.forEach(t => t.classList.remove('active'));
+
+        if (mode === 'console') {
+            if (consoleOut) consoleOut.style.display = 'block';
+            if (tabs[0]) tabs[0].classList.add('active');
+            consoleSection.style.height = '160px';
+        } else if (mode === 'notes') {
+            if (notesArea) notesArea.style.display = 'block';
+            if (tabs[1]) tabs[1].classList.add('active');
+            consoleSection.style.height = '160px';
+        } else if (mode === 'images') {
+            if (imgConverter) {
+                imgConverter.style.display = 'block';
+            }
+            if (tabs[2]) tabs[2].classList.add('active');
+            consoleSection.style.height = '160px';
+            actualitzarLlistaImatges();
+        } else if (mode === 'hidden') {
+            consoleSection.style.display = 'none';
+            reopenBtn.style.display = 'block';
+        }
+    }
+
+    function convertirABase64(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            alert('❌ Selecciona una imatge vàlida');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64String = e.target.result;
+            projecte.imatges.push({
+                nom: file.name,
+                data: base64String
+            });
+            mostrarMissatgeTemporal(`✅ Imatge afegida: ${file.name}`);
+            actualitzarLlistaImatges();
+            desarALocalStorage();
+        };
+        
+        reader.onerror = function() {
+            alert('❌ Error en llegir la imatge');
+        };
+        
+        reader.readAsDataURL(file);
+        input.value = '';
+    }
+
+    function copiarB64Directe(index) {
+        const img = projecte.imatges[index];
+        if (!img) return;
+        const snippet = `<img src="${img.data}" alt="${img.nom}">`;
+        navigator.clipboard.writeText(snippet);
+        mostrarMissatgeTemporal(`✅ Codi de ${img.nom} copiat`);
+    }
+    
+    function eliminarImatge(index) {
+        if (confirm(`Eliminar ${projecte.imatges[index].nom}?`)) {
+            projecte.imatges.splice(index, 1);
+            actualitzarLlistaImatges();
+            desarALocalStorage();
+            mostrarMissatgeTemporal(`🗑️ Imatge eliminada`);
+        }
+    }
+    
+    function actualitzarLlistaImatges() {
+        const container = document.getElementById('imageConverter');
+        if (!container) return;
+
+        if (projecte.imatges.length === 0) {
+            container.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <div style="margin-bottom: 16px;">
+                        <button class="btn" onclick="document.getElementById('imgInput').click()">➕ afegeix imatge</button>
+                    </div>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none;" onchange="convertirABase64(this)">
+                    <p style="opacity: 0.5; font-size: 13px;">No hi ha imatges al projecte<br>Importa una carpeta o afegeix-ne una</p>
+                </div>`;
+            return;
+        }
+
+        let html = `
+            <div style="margin-bottom: 16px;">
+                <button class="btn" onclick="document.getElementById('imgInput').click()">➕ afegeix imatge</button>
+            </div>
+            <input type="file" id="imgInput" accept="image/*" style="display:none;" onchange="convertirABase64(this)">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;">`;
+
+        projecte.imatges.forEach((img, index) => {
+            html += `
+                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center;">
+                    <img src="${img.data}" style="width: 100%; height: 70px; object-fit: cover; border-radius: 6px;">
+                    <div style="font-size: 10px; margin: 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${img.nom}">${img.nom}</div>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="btn" style="font-size: 11px; padding: 6px 12px; flex: 1;" onclick="copiarB64Directe(${index})">📋 html</button>
+                        <button class="btn" style="font-size: 11px; padding: 6px 12px; flex: 1; color: #ef4444;" onclick="eliminarImatge(${index})">🗑️</button>
+                    </div>
+                </div>`;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+    
+    async function importarCarpeta(input) {
+        const files = Array.from(input.files);
+        if (files.length === 0) return;
+
+        mostrarMissatgeTemporal(`📁 Important ${files.length} fitxers...`);
+        
+        projecte = { html_files: [], css_files: [], js_files: [], imatges: [] };
+
+        for (let file of files) {
+            const nomComplet = file.webkitRelativePath || file.name;
+            const nomFitxer = nomComplet.split('/').pop();
+            const extensio = nomFitxer.split('.').pop().toLowerCase();
+
+            try {
+                if (['html', 'htm'].includes(extensio)) {
+                    projecte.html_files.push({ nom: nomFitxer, contingut: await file.text() });
+                } else if (extensio === 'css') {
+                    projecte.css_files.push({ nom: nomFitxer, contingut: await file.text() });
+                } else if (extensio === 'js') {
+                    projecte.js_files.push({ nom: nomFitxer, contingut: await file.text() });
+                } else if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'ico'].includes(extensio)) {
+                    const b64 = await toBase64(file);
+                    projecte.imatges.push({ nom: nomFitxer, data: b64 });
+                }
+            } catch (err) {
+                console.warn(`Error: ${nomFitxer}`, err);
+            }
+        }
+
+        if (projecte.html_files.length === 0) {
+            projecte.html_files.push({ nom: "index.html", contingut: "<h1>Projecte importat</h1><p>Cap fitxer HTML trobat</p>" });
+        }
+        
+        renderAllTabs();
+        actualitzarLlistaImatges();
+        actualitzarVistaPrevia();
+        setBottomMode('images');
+        
+        mostrarMissatgeTemporal(`✅ Importats: ${projecte.html_files.length} HTML, ${projecte.css_files.length} CSS, ${projecte.js_files.length} JS, ${projecte.imatges.length} imatges`);
+        input.value = ''; 
+    }
+    
+    function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    function setupNotesPersistence() {
+        const notesArea = document.getElementById('notesArea');
+        if (notesArea) {
+            notesArea.addEventListener('input', (e) => {
+                localStorage.setItem('editor_notes', e.target.value);
+            });
+        }
+    }
+
+    function carregarNotes() {
+        const notesDesades = localStorage.getItem('editor_notes');
+        const notesArea = document.getElementById('notesArea');
+        if (notesDesades && notesArea) {
+            notesArea.value = notesDesades;
+        }
+    }
+    
+    function inicialitzar() {
+        if (localStorage.getItem('preferencia_tema') === 'dark') { 
+            document.body.classList.add('dark-mode'); 
+            document.getElementById('darkModeBtn').innerHTML = "☀️ mode clar"; 
+        }
+        carregarDeLocalStorage();
+        renderAllTabs();
+        actualitzarVistaPrevia();
+        setupDragAndDrop();
+        setupNotesPersistence();
+        carregarNotes();
+        actualitzarLlistaImatges();
+        setBottomMode('console');
+    }
+    
+    window.addEventListener('beforeunload', (e) => { e.preventDefault(); e.returnValue = ''; });
+    window.onload = inicialitzar;
+</script>
+</body>
+</html>
