@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversor d'Imatges a Base64</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; color: #333; }
+        #drop-zone {
+            border: 2px dashed #007bff;
+            padding: 40px;
+            text-align: center;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        #drop-zone.hover { background: #e7f1ff; }
+        #result-container { margin-top: 20px; }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: monospace;
+            background: #fafafa;
+        }
+        img { max-width: 300px; display: block; margin-top: 10px; border: 1px solid #ddd; }
+        .label { font-weight: bold; margin-top: 15px; display: block; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <h2>Conversor d'Imatges a Etiqueta HTML (Base64)</h2>
+    
+    <div id="drop-zone">Arrossega una imatge aquí o fes clic per seleccionar-la</div>
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+    <div id="result-container" style="display: none;">
+        <span class="label">Vista prèvia:</span>
+        <img id="preview" src="" alt="Vista prèvia">
+
+        <span class="label">Codi HTML generat:</span>
+        <textarea id="html-output" readonly></textarea>
+        <button onclick="copyToClipboard()">Copiar Codi</button>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const output = document.getElementById('html-output');
+        const preview = document.getElementById('preview');
+        const resultContainer = document.getElementById('result-container');
+
+        // Obrir selector de fitxers en fer clic
+        dropZone.onclick = () => fileInput.click();
+
+        // Gestionar arrossegament
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('hover');
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('hover');
+            processFile(e.dataTransfer.files[0]);
+        };
+
+        fileInput.onchange = (e) => processFile(e.target.files[0]);
+
+        function processFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                const fileName = file.name.split('.')[0]; // Nom del fitxer per a l'alt
+                
+                // Generem l'etiqueta HTML completa
+                const htmlTag = `<img src="${base64}" alt="${fileName}">`;
+                
+                // Mostrem resultats
+                output.value = htmlTag;
+                preview.src = base64;
+                resultContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function copyToClipboard() {
+            output.select();
+            document.execCommand('copy');
+            alert('Codi copiat al porta-retalls!');
+        }
+    </script>
+
+</body>
+</html>
