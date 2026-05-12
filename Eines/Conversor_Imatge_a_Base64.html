@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -98,6 +97,12 @@
             justify-content: space-between;
         }
         
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
         button {
             background-color: #3b82f6;
             color: white;
@@ -106,10 +111,18 @@
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
+            flex: 1;
+            transition: all 0.3s ease;
         }
         button:hover { background-color: #2563eb; }
+        button:active { transform: scale(0.98); }
+        
+        button.secondary {
+            background-color: #64748b;
+        }
+        button.secondary:hover {
+            background-color: #475569;
+        }
         
         .info-box {
             margin-top: 30px;
@@ -118,6 +131,25 @@
             border-left: 4px solid #f59e0b;
             padding: 15px;
             color: #92400e;
+        }
+        
+        .format-badge {
+            display: inline-block;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 8pt;
+            margin-top: 5px;
+        }
+
+        /* Animació per al drop zone */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .drop-zone-reset {
+            animation: pulse 0.3s ease;
         }
     </style>
 </head>
@@ -152,15 +184,22 @@
                     <span id="orig-size">Mida original: -</span>
                     <span id="new-size">Mida Base64: -</span>
                 </div>
+                <div class="stats">
+                    <span id="format-info">Format: -</span>
+                </div>
             </div>
 
             <label>Codi HTML per incrustar:</label>
             <textarea id="output-text" readonly></textarea>
-            <button onclick="copyCode()">Copiar etiqueta &lt;img&gt;</button>
+            <div class="button-group">
+                <button id="copy-button">Copiar etiqueta &lt;img&gt;</button>
+                <button class="secondary" onclick="resetConverter()">Nova imatge</button>
+            </div>
         </div>
 
         <div class="info-box">
-            <strong>Nota de rendiment:</strong> Aquesta eina utilitza un <code>&lt;canvas&gt;</code> invisible per processar la imatge abans de convertir-la. Això evita que el teu projecte es bloquegi amb milers de línies de text innecessàries.
+            <strong>Nota de rendiment:</strong> Aquesta eina utilitza un <code>&lt;canvas&gt;</code> invisible per processar la imatge abans de convertir-la. Això evita que el teu projecte es bloquegi amb milers de línies de text innecessàries.<br>
+            <strong>Nota de transparència:</strong> Les imatges PNG mantenen la transparència original, mentre que JPEG no suporta transparència però té millor compressió.
         </div>
     </div>
 
@@ -172,6 +211,7 @@
         const outputText = document.getElementById('output-text');
         const maxWidthInput = document.getElementById('max-width');
         const qualityInput = document.getElementById('quality');
+        const copyButton = document.getElementById('copy-button');
 
         dropZone.onclick = () => fileInput.click();
         fileInput.onchange = (e) => processImage(e.target.files[0]);
@@ -183,10 +223,94 @@
             processImage(e.dataTransfer.files[0]);
         };
 
+        // Funció millorada per copiar al portaretalls utilitzant Clipboard API
+        async function copyCode() {
+            try {
+                await navigator.clipboard.writeText(outputText.value);
+                
+                // Canviar el text del botó temporalment en lloc d'un alert
+                const originalText = copyButton.innerText;
+                copyButton.innerText = '✓ Copiat!';
+                copyButton.style.backgroundColor = '#10b981';
+                
+                setTimeout(() => {
+                    copyButton.innerText = originalText;
+                    copyButton.style.backgroundColor = '#3b82f6';
+                }, 2000);
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+                // Fallback per a navegadors antics
+                outputText.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = copyButton.innerText;
+                    copyButton.innerText = '✓ Copiat!';
+                    copyButton.style.backgroundColor = '#10b981';
+                    setTimeout(() => {
+                        copyButton.innerText = originalText;
+                        copyButton.style.backgroundColor = '#3b82f6';
+                    }, 2000);
+                } catch (fallbackErr) {
+                    alert('No s\'ha pogut copiar el codi. Si us plau, copia manualment.');
+                }
+            }
+        }
+
+        // Funció per reiniciar el conversor (Nova imatge)
+        function resetConverter() {
+            // Netejar l'input de fitxer - permet tornar a triar el mateix fitxer
+            fileInput.value = "";
+            
+            // Buidar el codi Base64 del textarea
+            outputText.value = "";
+            
+            // Treure la imatge de la pantalla
+            preview.src = "";
+            
+            // Amagar els resultats
+            resultArea.style.display = 'none';
+            
+            // Assegurar que la zona de càrrega és visible i la restablim
+            dropZone.style.display = 'block';
+            dropZone.style.borderColor = '#3b82f6';
+            
+            // Reiniciar les estadístiques
+            document.getElementById('orig-size').innerText = 'Mida original: -';
+            document.getElementById('new-size').innerText = 'Mida Base64: -';
+            document.getElementById('format-info').innerText = 'Format: -';
+            
+            // Opcional: afegir una petita animació a la zona de càrrega
+            dropZone.classList.add('drop-zone-reset');
+            setTimeout(() => {
+                dropZone.classList.remove('drop-zone-reset');
+            }, 300);
+            
+            // Opcional: fer scroll cap a dalt per veure la zona de càrrega
+            dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Assignar l'esdeveniment al botó de copiar
+        copyButton.onclick = copyCode;
+
         function processImage(file) {
             if (!file || !file.type.startsWith('image/')) return;
 
-            document.getElementById('orig-size').innerText = `Original: ${(file.size / 1024).toFixed(1)} KB`;
+            // Mostrar informació del format original
+            const formatInfo = document.getElementById('format-info');
+            const fileType = file.type;
+            let formatText = '';
+            if (fileType === 'image/png') {
+                formatText = 'Format: PNG (amb transparència)';
+            } else if (fileType === 'image/jpeg') {
+                formatText = 'Format: JPEG (sense transparència)';
+            } else if (fileType === 'image/webp') {
+                formatText = 'Format: WebP (amb transparència opcional)';
+            } else {
+                formatText = `Format: ${fileType.split('/')[1].toUpperCase()}`;
+            }
+            formatInfo.innerText = formatText;
+
+            document.getElementById('orig-size').innerText = `Mida original: ${(file.size / 1024).toFixed(1)} KB`;
 
             const reader = new FileReader();
             reader.onload = (event) => {
@@ -207,29 +331,52 @@
                     canvas.height = height;
 
                     const ctx = canvas.getContext('2d');
+                    
+                    // Per PNG, assegurar que el context suporta transparència
+                    if (file.type === 'image/png') {
+                        ctx.clearRect(0, 0, width, height);
+                    }
+                    
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Conversió a Base64 amb qualitat ajustada
-                    const base64 = canvas.toDataURL('image/jpeg', parseFloat(qualityInput.value));
+                    // Detecta el tipus original o usa png per seguretat si vols transparències
+                    let mimeType;
+                    const quality = parseFloat(qualityInput.value);
                     
-                    preview.src = base64;
-                    const finalTag = `<img src="${base64}" alt="${file.name.split('.')[0]}">`;
-                    outputText.value = finalTag;
-                    
-                    const b64Size = Math.round((base64.length * 3) / 4 / 1024);
-                    document.getElementById('new-size').innerText = `Base64 aprox: ${b64Size} KB`;
-                    
-                    resultArea.style.display = 'block';
+                    // Mantenir transparència per PNG, usar JPEG per altres formats (més compacte)
+                    if (file.type === 'image/png') {
+                        mimeType = 'image/png';
+                        // La qualitat no afecta PNG, però mantenim la variable per consistència
+                        const base64 = canvas.toDataURL(mimeType);
+                        processBase64Result(base64, file);
+                    } else if (file.type === 'image/webp') {
+                        mimeType = 'image/webp';
+                        const base64 = canvas.toDataURL(mimeType, quality);
+                        processBase64Result(base64, file);
+                    } else {
+                        mimeType = 'image/jpeg';
+                        const base64 = canvas.toDataURL(mimeType, quality);
+                        processBase64Result(base64, file);
+                    }
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
-
-        function copyCode() {
-            outputText.select();
-            document.execCommand('copy');
-            alert('Codi copiat!');
+        
+        function processBase64Result(base64, file) {
+            preview.src = base64;
+            const finalTag = `<img src="${base64}" alt="${file.name.split('.')[0]}">`;
+            outputText.value = finalTag;
+            
+            // Càlcul més precís de la mida Base64
+            const b64Size = Math.round((base64.length * 3) / 4 / 1024);
+            document.getElementById('new-size').innerText = `Mida Base64: ${b64Size} KB`;
+            
+            resultArea.style.display = 'block';
+            
+            // Scroll suau cap als resultats
+            resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 </body>
