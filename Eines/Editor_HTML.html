@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor HTML Offline - Múltiples Fitxers (Vista Apilada)</title>
+    
+    <style>
+        :root {
+            --bg-header: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            --bg-main: #f5f7fb;
+            --bg-panel: #ffffff;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --console-bg: #1e1e2e;
+            --console-text: #cdd6f4;
+            --console-border: #313244;
+            --tab-active-bg: #ffffff;
+            --tab-inactive-bg: #f1f5f9;
+            --editor-font: 'Courier New', 'SF Mono', 'Fira Code', monospace;
+        }
+        
+        body.dark-mode {
+            --bg-header: linear-gradient(135deg, #0f1117 0%, #090b10 100%);
+            --bg-main: #0f1117;
+            --bg-panel: #1a1c23;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --border-color: #2d3240;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --console-bg: #0a0c10;
+            --console-text: #cdd6f4;
+            --console-border: #1e2128;
+            --tab-active-bg: #1a1c23;
+            --tab-inactive-bg: #13151c;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg-main);
+            color: var(--text-main);
+        }
+        
+        header { 
+            background: var(--bg-header);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .main-container { 
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .gutter {
+            background-color: var(--border-color);
+            cursor: col-resize;
+            width: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .gutter:hover {
+            background-color: var(--accent);
+        }
+        
+        .editor-panel {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-panel);
+            min-width: 0;
+        }
+        
+        #split-left {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        #split-right {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .tabs-header {
+            display: flex;
+            align-items: center;
+            background: var(--tab-inactive-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 12px;
+            height: 44px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            flex-shrink: 0;
+            gap: 4px;
+        }
+        
+        .tab {
+            padding: 0 16px;
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .tab.active {
+            background: var(--tab-active-bg);
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .tab-label {
+            cursor: pointer;
+        }
+        
+        .tab-edit-input {
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 4px 8px;
+            font-size: 11px;
+            width: 120px;
+            outline: none;
+            border-radius: 4px;
+        }
+        
+        .close-btn {
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 4px;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+            color: #ef4444;
+        }
+        
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .toolbar { 
+            padding: 8px 16px; 
+            background: var(--bg-panel); 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            align-items: center;
+        }
+        
+        .separator {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 4px;
+        }
+        
+        /* ===== MODIFICACIÓ: EDITORS FLEXIBLES I AMB SCROLL INDEPENDENT ===== */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column; 
+            overflow: hidden;      /* Evitem l'scroll general per usar el dels editors */
+            gap: 0;               /* Eliminem el gap per a que encaixin millor */
+            padding: 0;           /* Aprofitem tot l'espai */
+            background: var(--bg-main);
+        }
+
+        /* Canvi per permetre scroll independent */
+        .tab-content.visible {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 200px; /* Permet que creixin i s'encongeixin amb un mínim */
+            min-height: 0;   /* CRUCIAL: permet que el contingut interior s'encongeixi */
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--bg-panel);
+            overflow: hidden;
+        }
+
+        /* Afegim una nansa per redimensionar manualment (opcional) */
+        .tab-content:not(:last-child) {
+            resize: vertical;
+            overflow: auto;
+        }
+
+        .editor-label-bar {
+            background: var(--tab-inactive-bg);
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-main);
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+        
+        .editor-label-bar span:first-child {
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-action-btn {
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .editor-action-btn:hover {
+            background: rgba(0,0,0,0.1);
+            color: var(--accent);
+        }
+
+        .editor-textarea {
+            flex: 1;
+            width: 100%;
+            padding: 14px;
+            font-family: var(--editor-font);
+            font-size: 13px;
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: none;
+            resize: none;
+            outline: none;
+            tab-size: 4;
+            overflow-y: auto; /* Força l'aparició de l'scroll vertical quan calgui */
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            background: var(--bg-panel);
+        }
+        
+        iframe { 
+            flex: 1; 
+            border: none; 
+            background: white; 
+            width: 100%;
+            height: 100%;
+        }
+        
+        #consoleSection { 
+            flex-shrink: 0;
+            background: var(--console-bg); 
+            color: var(--console-text); 
+            overflow: hidden;
+            font-family: var(--editor-font); 
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            transition: height 0.2s ease;
+        }
+        
+        #consoleOutput {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        
+        #consoleOutput div {
+            padding: 4px 8px;
+            border-bottom: 1px solid var(--console-border);
+            font-family: var(--editor-font);
+            font-size: 11px;
+        }
+        
+        #consoleOutput .log { color: #a5d6ff; }
+        #consoleOutput .error { color: #f98c8c; }
+        #consoleOutput .warn { color: #fde68a; }
+        
+        .console-header {
+            padding: 6px 12px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--console-border);
+        }
+        
+        .console-tabs { display: flex; gap: 8px; }
+        
+        .btn-console {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .btn-console:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .btn-console.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        #notesArea {
+            flex: 1;
+            background: var(--console-bg);
+            color: var(--console-text);
+            border: none;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 12px;
+            resize: none;
+            outline: none;
+        }
+        
+        .drag-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .drag-info.visible {
+            opacity: 1;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--border-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 4px;
+        }
+        
+        .add-tab-btn {
+            color: var(--accent);
+            font-size: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0 12px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            opacity: 0.7;
+        }
+        
+        .add-tab-btn:hover {
+            opacity: 1;
+        }
+        
+        .right-panel-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+        }
+        
+        /* Vista prèvia activa des de qualsevol editor */
+        .preview-info {
+            font-size: 11px;
+            background: var(--accent);
+            padding: 2px 8px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📄 Editor HTML Offline (Vista Apilada)</h1>
+    <button id="darkModeBtn" class="btn" onclick="toggleDarkMode()">🌙 mode fosc</button>
+</header>
+
+<div class="main-container">
+    <div id="split-left" class="editor-panel">
+        <div class="toolbar">
+            <button class="btn" onclick="nouFitxerHTML()">➕ Nou HTML</button>
+            <button class="btn" onclick="descarregarTotsVisibles()">📥 Descarregar visibles</button>
+            <button class="btn" onclick="descarregarProjecte()">📦 Descarregar tot (JSON)</button>
+            <button class="btn" onclick="obrirSelectorFitxers()">📂 Importar HTML</button>
+            <input type="file" id="importHTMLInput" accept=".html,.htm" style="display: none;" multiple>
+            <button class="btn" onclick="obrirSelectorCarpeta()">📁 Importar carpeta</button>
+            <input type="file" id="importFolderInput" webkitdirectory directory style="display: none;">
+            <div class="separator"></div>
+            <button class="btn" onclick="netejarTot()">🗑️ Reiniciar</button>
+        </div>
+        
+        <div class="tabs-header" id="tabsHeader"></div>
+        
+        <div class="editor-container" id="editorContainer"></div>
+    </div>
+    
+    <div id="split-right" class="editor-panel">
+        <div class="right-panel-content">
+            <iframe id="resultat" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+            
+            <div id="consoleSection">
+                <div class="console-header">
+                    <div class="console-tabs">
+                        <button class="btn-console active" onclick="setBottomMode('console')">💻 Consola</button>
+                        <button class="btn-console" onclick="setBottomMode('notes')">📝 Notes</button>
+                    </div>
+                    <div class="console-actions">
+                        <button class="btn" style="padding: 2px 10px; font-size: 11px;" onclick="toggleConsole()">_</button>
+                        <button class="btn" style="padding: 2px 10px; font-size: 11px;" onclick="netejarConsola()">Netejar</button>
+                    </div>
+                </div>
+                <div id="consoleOutput"></div>
+                <textarea id="notesArea" placeholder="Escriu les teves notes aquí..." style="display:none;"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dragInfo" class="drag-info">📄 HTML carregat!</div>
+
+<script>
+    // Estructura de dades: cada fitxer té nom, contingut i propietat 'visible'
+    let htmlFiles = [];
+    let currentPreviewIndex = 0;  // Quin fitxer es mostra a la vista prèvia (per defecte el primer visible)
+    
+    // Script per capturar console.log
+    const scriptConsola = `
+        <script>
+            (function() {
+                const originalLog = console.log;
+                const originalError = console.error;
+                const originalWarn = console.warn;
+                
+                function enviarAlPare(tipus, args) {
+                    const missatge = Array.from(args).map(arg => 
+                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                    ).join(' ');
+                    window.parent.postMessage({ tipus, missatge }, '*');
+                }
+                
+                console.log = function() { enviarAlPare('log', arguments); originalLog.apply(console, arguments); };
+                console.error = function() { enviarAlPare('error', arguments); originalError.apply(console, arguments); };
+                console.warn = function() { enviarAlPare('warn', arguments); originalWarn.apply(console, arguments); };
+                
+                window.onerror = function(msg, url, line) {
+                    enviarAlPare('error', ["Error: " + msg + " (Línia: " + line + ")"]);
+                };
+            })();
+        <\/script>
+    `;
+    
+    // Funció per commutar entre minimitzat i expandit
+    function toggleConsole() {
+        const section = document.getElementById('consoleSection');
+        const actualHeight = section.style.height;
+        
+        if (actualHeight === '35px') {
+            section.style.height = '160px'; // Alçada normal
+            // Quan expandim, assegurem que es veu el contingut actiu
+            setBottomMode(document.querySelector('.btn-console.active')?.innerText.includes('Consola') ? 'console' : 'notes');
+        } else {
+            section.style.height = '35px';  // Alçada de la barra de títol
+            // Amaguem contingut per estalviar espai
+            document.getElementById('consoleOutput').style.display = 'none';
+            document.getElementById('notesArea').style.display = 'none';
+        }
+    }
+    
+    // Modifica la funció setBottomMode existent per assegurar que s'expandeixi al canviar de pestanya
+    function setBottomMode(mode) {
+        const consoleOut = document.getElementById('consoleOutput');
+        const notesArea = document.getElementById('notesArea');
+        const consoleSection = document.getElementById('consoleSection');
+        const tabs = document.querySelectorAll('.btn-console');
+        
+        if (mode === 'hidden') {
+            consoleSection.style.display = 'none';
+            return;
+        }
+        
+        consoleSection.style.display = 'flex';
+        consoleSection.style.height = '160px'; // Forcem expansió en canviar de mode
+        
+        if (consoleOut) consoleOut.style.display = mode === 'console' ? 'block' : 'none';
+        if (notesArea) notesArea.style.display = mode === 'notes' ? 'block' : 'none';
+        
+        tabs.forEach(t => t.classList.remove('active'));
+        if (mode === 'console' && tabs[0]) tabs[0].classList.add('active');
+        if (mode === 'notes' && tabs[1]) tabs[1].classList.add('active');
+    }
+    
+    // Inicialitzar amb un fitxer per defecte
+    function inicialitzar() {
+        if (localStorage.getItem('html_editor_projecte_v2')) {
+            try {
+                const desat = JSON.parse(localStorage.getItem('html_editor_projecte_v2'));
+                if (desat.htmlFiles && desat.htmlFiles.length > 0) {
+                    htmlFiles = desat.htmlFiles;
+                    // Assegurar que tots tenen propietat visible (per compatibilitat)
+                    htmlFiles.forEach(file => {
+                        if (file.visible === undefined) file.visible = true;
+                    });
+                    currentPreviewIndex = desat.currentPreviewIndex || 0;
+                    if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = 0;
+                    renderizarTabs();
+                    actualitzarVistaPrevia();
+                    carregarNotes();
+                    return;
+                }
+            } catch(e) { console.warn(e); }
+        }
+        
+        // Fitxer per defecte
+        htmlFiles = [{
+            nom: "index.html",
+            contingut: `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>La meva pàgina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>✨ Editor HTML Offline ✨</h1>
+    <p>Pots editar aquest codi o carregar els teus propis fitxers HTML. Ara amb vista apilada!</p>
+    <button onclick="alert('Hola! Això funciona offline!')">Fes clic</button>
+    <button onclick="document.body.style.background='linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'">Canvia color</button>
+</body>
+</html>`,
+            visible: true
+        }];
+        currentPreviewIndex = 0;
+        renderizarTabs();
+        actualitzarVistaPrevia();
+        desarLocalStorage();
+    }
+    
+    function renderizarTabs() {
+        const tabsHeader = document.getElementById('tabsHeader');
+        const editorContainer = document.getElementById('editorContainer');
+        
+        if (!tabsHeader) return;
+        
+        // Renderitzar pestanyes (toggles)
+        tabsHeader.innerHTML = '';
+        htmlFiles.forEach((file, index) => {
+            const tab = document.createElement('div');
+            // Si el fitxer és visible, la pestanya es veu "activa"
+            tab.className = 'tab' + (file.visible ? ' active' : '');
+            tab.setAttribute('data-index', index);
+            
+            const label = document.createElement('span');
+            label.textContent = file.nom;
+            label.className = 'tab-label';
+            label.ondblclick = (e) => {
+                e.stopPropagation();
+                editarNomPestanya(index);
+            };
+            
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '✕';
+            closeBtn.className = 'close-btn';
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                tancarPestanya(index);
+            };
+            
+            tab.appendChild(label);
+            if (htmlFiles.length > 1) tab.appendChild(closeBtn);
+            
+            // Al fer clic, commuta la visibilitat d'aquest editor concret
+            tab.onclick = (e) => {
+                // Evitar que si es fa clic a la creu es tanqui i commuti alhora
+                if (e.target !== closeBtn) {
+                    file.visible = !file.visible;
+                    renderizarTabs();
+                    desarLocalStorage();
+                    // Si amaguem l'últim visible, la preview canvia al primer visible
+                    actualitzarPreviewSegonsVisibles();
+                }
+            };
+            tabsHeader.appendChild(tab);
+        });
+        
+        // Botó afegir
+        const addBtn = document.createElement('button');
+        addBtn.textContent = '+';
+        addBtn.className = 'add-tab-btn';
+        addBtn.title = 'Nou fitxer HTML';
+        addBtn.onclick = () => nouFitxerHTML();
+        tabsHeader.appendChild(addBtn);
+        
+        // Renderitzar els editors en vertical (targetes)
+        editorContainer.innerHTML = '';
+        htmlFiles.forEach((file, index) => {
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'tab-content' + (file.visible ? ' visible' : '');
+            contentDiv.id = `editor-card-${index}`;
+            
+            // Barra superior amb nom i controls
+            const labelBar = document.createElement('div');
+            labelBar.className = 'editor-label-bar';
+            
+            const fileNameSpan = document.createElement('span');
+            fileNameSpan.textContent = file.nom;
+            
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'editor-actions';
+            
+            // Botó per fer preview directa d'aquest fitxer
+            const previewBtn = document.createElement('button');
+            previewBtn.textContent = '👁️ Vista prèvia';
+            previewBtn.className = 'editor-action-btn';
+            previewBtn.title = 'Mostra aquest fitxer a la vista prèvia';
+            previewBtn.onclick = (e) => {
+                e.stopPropagation();
+                currentPreviewIndex = index;
+                actualitzarVistaPrevia();
+                mostrarMissatge(`🖥️ Vista prèvia: ${file.nom}`);
+            };
+            
+            // Botó per descarregar aquest fitxer individual
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = '💾 Descarregar';
+            downloadBtn.className = 'editor-action-btn';
+            downloadBtn.onclick = (e) => {
+                e.stopPropagation();
+                descarregarFitxer(index);
+            };
+            
+            actionsDiv.appendChild(downloadBtn);
+            actionsDiv.appendChild(previewBtn);
+            
+            // NOUS BOTONS: Desfer i Refer
+            const undoBtn = document.createElement('button');
+            undoBtn.innerHTML = '↩️';
+            undoBtn.className = 'editor-action-btn';
+            undoBtn.title = 'Desfer (Ctrl+Z)';
+            undoBtn.onclick = () => {
+                textarea.focus();
+                document.execCommand('undo', false, null);
+            };
+
+            const redoBtn = document.createElement('button');
+            redoBtn.innerHTML = '↪️';
+            redoBtn.className = 'editor-action-btn';
+            redoBtn.title = 'Refer (Ctrl+Y)';
+            redoBtn.onclick = () => {
+                textarea.focus();
+                document.execCommand('redo', false, null);
+            };
+            
+            actionsDiv.appendChild(undoBtn);
+            actionsDiv.appendChild(redoBtn);
+            
+            labelBar.appendChild(fileNameSpan);
+            labelBar.appendChild(actionsDiv);
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'editor-textarea';
+            textarea.value = file.contingut;
+            textarea.oninput = (e) => {
+                file.contingut = e.target.value;
+                // Si aquest fitxer és el que es mostra a la vista prèvia, actualitzar
+                if (currentPreviewIndex === index) {
+                    actualitzarVistaPrevia();
+                }
+                desarLocalStorage();
+            };
+            
+            // Atall de teclat per desar (Ctrl+S)
+            textarea.onkeydown = (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    desarLocalStorage();
+                    mostrarMissatge('💾 Projecte desat automàticament');
+                }
+            };
+            
+            contentDiv.appendChild(labelBar);
+            contentDiv.appendChild(textarea);
+            editorContainer.appendChild(contentDiv);
+        });
+        
+        // Actualitzar indicador de preview actual si cal
+        actualitzarIndicadorPreview();
+    }
+    
+    function actualitzarPreviewSegonsVisibles() {
+        if (htmlFiles.length === 0) return;
+        // Si l'índex actual de preview ja no és visible o no existeix, assignar el primer visible
+        const visibleIndices = htmlFiles.map((f, idx) => f.visible ? idx : -1).filter(i => i !== -1);
+        if (visibleIndices.length === 0) {
+            // Si no hi ha cap visible, fer visible el primer fitxer
+            htmlFiles[0].visible = true;
+            renderizarTabs();
+            currentPreviewIndex = 0;
+            actualitzarVistaPrevia();
+        } else if (!htmlFiles[currentPreviewIndex] || !htmlFiles[currentPreviewIndex].visible) {
+            currentPreviewIndex = visibleIndices[0];
+            actualitzarVistaPrevia();
+        }
+        desarLocalStorage();
+    }
+    
+    function actualitzarIndicadorPreview() {
+        // No necessari visualment, però podria actualitzar títol, no ho fem per simplicitat.
+    }
+    
+    function editarNomPestanya(index) {
+        const anticNom = htmlFiles[index].nom;
+        const nouNom = prompt("Edita el nom del fitxer (ha d'acabar amb .html):", anticNom);
+        if (!nouNom || nouNom === anticNom) return;
+        let nomFinal = nouNom.trim();
+        if (!nomFinal.endsWith('.html') && !nomFinal.endsWith('.htm')) nomFinal += '.html';
+        if (!htmlFiles.some(f => f.nom === nomFinal)) {
+            htmlFiles[index].nom = nomFinal;
+            renderizarTabs();
+            desarLocalStorage();
+            mostrarMissatge(`📝 Renombrat a ${nomFinal}`);
+        } else {
+            mostrarMissatge('❌ Aquest nom ja existeix');
+        }
+    }
+    
+    function tancarPestanya(index) {
+        if (htmlFiles.length <= 1) {
+            mostrarMissatge('❌ Ha d\'haver com a mínim un fitxer');
+            return;
+        }
+        const nomFitxer = htmlFiles[index].nom;
+        if (confirm(`Eliminar ${nomFitxer}?`)) {
+            htmlFiles.splice(index, 1);
+            if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = 0;
+            if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = htmlFiles.length - 1;
+            renderizarTabs();
+            actualitzarVistaPrevia();
+            desarLocalStorage();
+            mostrarMissatge(`✅ ${nomFitxer} eliminat`);
+        }
+    }
+    
+    function nouFitxerHTML() {
+        let baseName = `pagina_${htmlFiles.length + 1}.html`;
+        let counter = 1;
+        while (htmlFiles.some(f => f.nom === baseName)) {
+            baseName = `pagina_${htmlFiles.length + counter}.html`;
+            counter++;
+        }
+        
+        htmlFiles.push({
+            nom: baseName,
+            contingut: `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>${baseName}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f0;
+        }
+        h1 {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nova pàgina</h1>
+    <p>Edita aquest contingut (vista apilada)</p>
+</body>
+</html>`,
+            visible: true   // Per defecte visible
+        });
+        
+        // Per defecte el posem visible i l'establirem com a preview
+        currentPreviewIndex = htmlFiles.length - 1;
+        renderizarTabs();
+        actualitzarVistaPrevia();
+        desarLocalStorage();
+        mostrarMissatge(`✅ Creat ${baseName}`);
+    }
+    
+    // Descarregar un fitxer específic
+    function descarregarFitxer(index) {
+        if (!htmlFiles[index]) return;
+        const fitxer = htmlFiles[index];
+        const blob = new Blob([fitxer.contingut], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fitxer.nom;
+        a.click();
+        URL.revokeObjectURL(url);
+        mostrarMissatge(`💾 Descarregat: ${fitxer.nom}`);
+    }
+    
+    function descarregarTotsVisibles() {
+        const visibles = htmlFiles.filter(f => f.visible);
+        if (visibles.length === 0) {
+            mostrarMissatge("No hi ha fitxers visibles per descarregar");
+            return;
+        }
+        // Descarregar cada visible en una petita seqüència
+        visibles.forEach((fitxer, idx) => {
+            setTimeout(() => {
+                const blob = new Blob([fitxer.contingut], {type: 'text/html'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fitxer.nom;
+                a.click();
+                URL.revokeObjectURL(url);
+                if (idx === visibles.length - 1) mostrarMissatge(`✅ Descarregats ${visibles.length} fitxers`);
+            }, idx * 200);
+        });
+    }
+    
+    function obrirSelectorFitxers() {
+        const input = document.getElementById('importHTMLInput');
+        input.onchange = () => importarHTML(input);
+        input.click();
+    }
+    
+    function obrirSelectorCarpeta() {
+        const input = document.getElementById('importFolderInput');
+        input.onchange = () => importarCarpeta(input);
+        input.click();
+    }
+    
+    function importarHTML(input) {
+        const files = Array.from(input.files);
+        if (files.length === 0) return;
+        let importats = 0;
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let nom = file.name;
+                let counter = 1;
+                while (htmlFiles.some(f => f.nom === nom)) {
+                    const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
+                    const ext = file.name.match(/\.(html|htm)$/)[0];
+                    nom = `${nomSenseExt}_${counter}${ext}`;
+                    counter++;
+                }
+                htmlFiles.push({
+                    nom: nom,
+                    contingut: e.target.result,
+                    visible: true
+                });
+                importats++;
+                if (importats === files.length) {
+                    mostrarMissatge(`✅ Importats ${importats} fitxers HTML`);
+                    renderizarTabs();
+                    actualitzarPreviewSegonsVisibles();
+                    actualitzarVistaPrevia();
+                    desarLocalStorage();
+                }
+            };
+            reader.readAsText(file);
+        });
+        input.value = '';
+    }
+    
+    async function importarCarpeta(input) {
+        const files = Array.from(input.files);
+        if (files.length === 0) return;
+        let importats = 0;
+        for (let file of files) {
+            if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+                const contingut = await file.text();
+                let nom = file.name;
+                let counter = 1;
+                while (htmlFiles.some(f => f.nom === nom)) {
+                    const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
+                    const ext = file.name.match(/\.(html|htm)$/)[0];
+                    nom = `${nomSenseExt}_${counter}${ext}`;
+                    counter++;
+                }
+                htmlFiles.push({ nom: nom, contingut: contingut, visible: true });
+                importats++;
+            }
+        }
+        if (importats > 0) {
+            renderizarTabs();
+            actualitzarPreviewSegonsVisibles();
+            actualitzarVistaPrevia();
+            desarLocalStorage();
+            mostrarMissatge(`📁 Importats ${importats} fitxers HTML`);
+        } else {
+            mostrarMissatge('❌ No s\'han trobat fitxers HTML');
+        }
+        input.value = '';
+    }
+    
+    function descarregarProjecte() {
+        const projecte = {
+            htmlFiles: htmlFiles,
+            currentPreviewIndex: currentPreviewIndex,
+            version: '2.0'
+        };
+        const dataStr = JSON.stringify(projecte, null, 2);
+        const blob = new Blob([dataStr], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `projecte_html_apilat_${new Date().toISOString().slice(0,19)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        mostrarMissatge('📦 Projecte complet desat');
+    }
+    
+    function netejarTot() {
+        if (confirm('🚨 Això eliminarà TOTS els fitxers. Continuar?')) {
+            htmlFiles = [{
+                nom: 'index.html',
+                contingut: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Nou projecte</title><style>body{font-family:Arial;margin:40px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;}h1{text-align:center;}</style></head><body><h1>Editor HTML Offline</h1><p>Comença a editar!</p></body></html>`,
+                visible: true
+            }];
+            currentPreviewIndex = 0;
+            renderizarTabs();
+            actualitzarVistaPrevia();
+            desarLocalStorage();
+            localStorage.removeItem('editor_notes');
+            document.getElementById('notesArea').value = '';
+            mostrarMissatge('🗑️ Projecte reiniciat');
+        }
+    }
+    
+    function actualitzarVistaPrevia() {
+        if (!htmlFiles[currentPreviewIndex]) return;
+        let contingutHTML = htmlFiles[currentPreviewIndex].contingut;
+        if (!contingutHTML.includes('enviarAlPare')) {
+            if (contingutHTML.includes('</head>')) {
+                contingutHTML = contingutHTML.replace('</head>', `${scriptConsola}</head>`);
+            } else if (contingutHTML.includes('<body')) {
+                contingutHTML = contingutHTML.replace('<body', `${scriptConsola}<body`);
+            } else {
+                contingutHTML = scriptConsola + contingutHTML;
+            }
+        }
+        const iframe = document.getElementById('resultat');
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(contingutHTML);
+        iframe.contentWindow.document.close();
+    }
+    
+    window.addEventListener('message', function(event) {
+        const output = document.getElementById('consoleOutput');
+        if (output && event.data && event.data.tipus) {
+            const div = document.createElement('div');
+            div.className = event.data.tipus;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${event.data.missatge}`;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+    });
+    
+    function netejarConsola() {
+        document.getElementById('consoleOutput').innerHTML = '';
+    }
+    
+    function desarLocalStorage() {
+        const projecte = {
+            htmlFiles: htmlFiles,
+            currentPreviewIndex: currentPreviewIndex
+        };
+        localStorage.setItem('html_editor_projecte_v2', JSON.stringify(projecte));
+        const notesArea = document.getElementById('notesArea');
+        if (notesArea) localStorage.setItem('editor_notes', notesArea.value);
+    }
+    
+    function carregarNotes() {
+        const notesDesades = localStorage.getItem('editor_notes');
+        const notesArea = document.getElementById('notesArea');
+        if (notesDesades && notesArea) notesArea.value = notesDesades;
+        if (notesArea) notesArea.oninput = () => desarLocalStorage();
+    }
+    
+    function mostrarMissatge(msg) {
+        const dragInfo = document.getElementById('dragInfo');
+        dragInfo.textContent = msg;
+        dragInfo.classList.add('visible');
+        setTimeout(() => dragInfo.classList.remove('visible'), 2000);
+    }
+    
+    function toggleDarkMode() {
+        const isDark = document.body.classList.toggle('dark-mode');
+        const btn = document.getElementById('darkModeBtn');
+        if (btn) btn.innerHTML = isDark ? '☀️ mode clar' : '🌙 mode fosc';
+        localStorage.setItem('dark_mode', isDark);
+    }
+    
+    function setupDragAndDrop() {
+        const dropZone = document.getElementById('split-left');
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.outline = '3px solid var(--accent)'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.outline = ''; });
+        dropZone.addEventListener('drop', async (e) => {
+            e.preventDefault(); dropZone.style.outline = '';
+            const files = e.dataTransfer.files;
+            let importats = 0;
+            for (let file of files) {
+                if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+                    const contingut = await file.text();
+                    let nom = file.name;
+                    let counter = 1;
+                    while (htmlFiles.some(f => f.nom === nom)) {
+                        const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
+                        const ext = file.name.match(/\.(html|htm)$/)[0];
+                        nom = `${nomSenseExt}_${counter}${ext}`;
+                        counter++;
+                    }
+                    htmlFiles.push({ nom: nom, contingut: contingut, visible: true });
+                    importats++;
+                }
+            }
+            if (importats > 0) {
+                renderizarTabs();
+                actualitzarPreviewSegonsVisibles();
+                actualitzarVistaPrevia();
+                desarLocalStorage();
+                mostrarMissatge(`📁 Importats ${importats} fitxers`);
+            } else mostrarMissatge('❌ Arrossega fitxers HTML');
+        });
+    }
+    
+    function initSplit() {
+        const leftPanel = document.getElementById('split-left');
+        const rightPanel = document.getElementById('split-right');
+        const container = document.querySelector('.main-container');
+        const gutter = document.createElement('div');
+        gutter.className = 'gutter';
+        container.insertBefore(gutter, rightPanel);
+        let isDragging = false, startX = 0, startLeftWidth = 0;
+        gutter.addEventListener('mousedown', (e) => {
+            isDragging = true; startX = e.clientX; startLeftWidth = leftPanel.offsetWidth;
+            document.body.style.cursor = 'col-resize'; document.body.style.userSelect = 'none'; e.preventDefault();
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const delta = e.clientX - startX, newLeftWidth = startLeftWidth + delta;
+            const percent = (newLeftWidth / container.offsetWidth) * 100;
+            if (percent >= 20 && percent <= 80) { leftPanel.style.flex = `${percent}%`; rightPanel.style.flex = `${100 - percent}%`; }
+        });
+        document.addEventListener('mouseup', () => { isDragging = false; document.body.style.cursor = ''; document.body.style.userSelect = ''; });
+    }
+    
+    if (localStorage.getItem('dark_mode') === 'true') {
+        document.body.classList.add('dark-mode');
+        const btn = document.getElementById('darkModeBtn');
+        if (btn) btn.innerHTML = '☀️ mode clar';
+    }
+    
+    window.onload = () => {
+        initSplit();
+        setupDragAndDrop();
+        inicialitzar();
+        setBottomMode('console');
+    };
+    
+    window.addEventListener('beforeunload', (e) => { e.preventDefault(); e.returnValue = ''; });
+</script>
+</body>
+</html>
