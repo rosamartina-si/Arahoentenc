@@ -1,1 +1,66 @@
-quan un Estat necessita recórrer de manera constant a la judicatura, a la policia, a la suspensió de l'autonomia o a serveis d'intel·ligència per mantenir un territori dins de les seves fronteres, s'anomena integració per via de la coacció o asimetria punitiva. Es governa a través de l'autoritat i el control, no del consens.
+<section class="colonialisme-intern">
+  <h1>Què és el colonialisme intern?</h1>
+
+  <p>
+    El concepte de <strong>colonialisme intern</strong>, popularitzat pel sociòleg
+    <strong>Michael Hechter</strong>, descriu una situació en què un Estat aparentment
+    modern i democràtic manté una relació d’asimetria i dominació sobre una de les
+    seves regions, que té una identitat nacional, lingüística o cultural diferenciada.
+  </p>
+
+  <p>
+    A diferència del colonialisme clàssic —com el d’Anglaterra a l’Índia—, no hi ha
+    una separació geogràfica per mars o oceans, sinó que es dona dins de les mateixes
+    fronteres de l’Estat. El centre polític, o <em>metròpoli interna</em>, utilitza
+    l’aparell estatal per subordinar la perifèria, explotar-ne els recursos econòmics
+    i limitar-ne l’autogovern, recorrent a la coacció judicial o policial si el
+    territori intenta moure’s.
+  </p>
+
+  <h2>Exemples d’aquesta dinàmica a Catalunya</h2>
+
+  <p>
+    Si analitzem la relació de l’Estat espanyol amb Catalunya sota el prisma d’aquesta
+    teoria, s’acostumen a posar sobre la taula diversos exemples:
+  </p>
+
+  <article>
+    <h3>1. El dèficit fiscal: l’espoli econòmic</h3>
+    <p>
+      És l’argument econòmic central del colonialisme intern: Catalunya funciona com
+      el motor industrial i econòmic de l’Estat, generant una gran quantitat
+      d’impostos, però una part molt important d’aquests diners marxa a Madrid i no
+      torna en forma d’inversions equivalents. És el que s’anomena
+      <strong>dèficit fiscal crònic</strong>.
+    </p>
+    <p>
+      Això es tradueix en una manca d’inversió constant en infraestructures bàsiques,
+      com els trens de Rodalies, mentre el territori veu limitada la seva capacitat de
+      creixement.
+    </p>
+  </article>
+
+  <article>
+    <h3>2. La subordinació lingüística i judicial</h3>
+    <p>
+      L’Estat utilitza el Tribunal Suprem o el Tribunal Constitucional per rebaixar o
+      tombar lleis aprovades pel Parlament de Catalunya, com ara lleis d’habitatge,
+      mesures contra la pobresa energètica o normes de protecció del català a l’escola.
+    </p>
+    <p>
+      Així es crea una dinàmica en què la voluntat popular de la
+      <em>perifèria</em> queda supeditada al control legal del <em>centre</em>.
+    </p>
+  </article>
+
+  <article>
+    <h3>3. La “pacificació” per la via de la seguretat</h3>
+    <p>
+      Quan el conflicte polític s’agreuja, l’Estat respon com una metròpoli: enviant
+      milers de policies des de fora, com en el referèndum de l’1 d’octubre; aplicant
+      l’article 155 per destituir el govern autònom; o utilitzant serveis
+      d’intel·ligència i espionatge polític, com en el cas Pegasus, per controlar
+      líders i activistes del país.
+    </p>
+  </article>
+</section>
