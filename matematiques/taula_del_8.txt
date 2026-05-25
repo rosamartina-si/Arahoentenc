@@ -1,0 +1,45 @@
+La lògica del 8 (versió amb lletres)
+(Inici)
+Anem a preguntar, anem a raonar,
+la taula del vuit es pot endevinar!
+
+Quant és vuit per u?
+Vuit! Exacte! Una vegada vuit és vuit.
+
+Quant és vuit per dos?
+Setze! Exacte! Dues vegades vuit: vuit i vuit fan setze.
+
+Quant és vuit per tres?
+Vint-i-quatre! Exacte! Si sumes vuit a setze és vint-i-quatre:
+setze més quatre = vint, i vint més quatre = vint-i-quatre.
+
+Quant és vuit per quatre?
+Trenta-dos! Exacte! Dues vegades setze.
+Vuit i vuit = setze, setze i setze = trenta-dos.
+
+Quant és vuit per cinc?
+Quaranta! Exacte! La meitat de vuitanta.
+Vuit per deu = vuitanta, la meitat = quaranta.
+
+Quant és vuit per sis?
+Quaranta-vuit! Exacte! El doble de vint-i-quatre.
+Vuit per tres = vint-i-quatre, el doble = quaranta-vuit.
+
+Quant és vuit per set?
+Cinquanta-sis! Exacte! Mira set per quatre.
+Set per quatre = vint-i-vuit, i el doble = cinquanta-sis.
+
+Quant és vuit per vuit?
+Seixanta-quatre! Exacte! Vuit per quatre = trenta-dos.
+El doble = seixanta-quatre.
+
+Quant és vuit per nou?
+Setanta-dos! Exacte! Restem vuit a vuitanta.
+Vuit per deu = vuitanta, menys vuit = setanta-dos.
+
+Quant és vuit per deu?
+Vuitanta! Exacte! Un zero al vuit i llestos.
+
+(Final)
+Ja la tens, la taula del vuit!
+Pregunta, respon, i trobaràs l'encert.
