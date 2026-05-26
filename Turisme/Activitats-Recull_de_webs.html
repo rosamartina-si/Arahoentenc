@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activitats - Llista d'adreces web</title>
+    <title>El Racó de les Activitats - Gestor d'adreces web</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .activity-link {
             transition: all 0.2s ease;
         }
         .activity-link:hover {
             transform: translateX(4px);
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        .toast-notification {
+            animation: fadeOut 2.5s ease forwards;
         }
     </style>
 </head>
@@ -24,15 +31,28 @@
             <div class="flex items-center justify-between flex-wrap gap-4 border-b border-gray-200 pb-5">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
-                        📍 Activitats
+                        📍 El Racó de les Activitats
                     </h1>
-                    <p class="text-gray-500 mt-1 text-sm">Llista d'adreces web d'interès cultural i d'activitats</p>
+                    <p class="text-gray-500 mt-1 text-sm">Gestiona les teves adreces web culturals i d'activitats</p>
                 </div>
-                <div class="bg-white px-4 py-2 rounded-full shadow-sm text-sm text-gray-600">
-                    🌐 <span id="totalComptador">0</span> adreces guardades
+                <div class="flex gap-2 flex-wrap">
+                    <button id="btnExportar" 
+                            class="bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 px-3 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-1">
+                        📤 Exportar
+                    </button>
+                    <button id="btnImportar" 
+                            class="bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50 px-3 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-1">
+                        📥 Importar
+                    </button>
+                    <div class="bg-white px-3 py-2 rounded-full shadow-sm text-sm text-gray-600 flex items-center gap-1">
+                        🌐 <span id="totalComptador">0</span> adreces
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Input d'importació (amagat) -->
+        <input type="file" id="fitxerImportacio" accept=".json" class="hidden">
 
         <!-- Caixa per afegir nova adreça -->
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-5 mb-8">
@@ -49,31 +69,33 @@
                     Afegir
                 </button>
             </div>
-            <p class="text-xs text-gray-400 mt-3">💡 Les adreces es guarden automàticament al teu navegador (localStorage).</p>
+            <p class="text-xs text-gray-400 mt-3">💡 Les adreces es guarden automàticament. Pots exportar-les com a JSON per fer còpies de seguretat.</p>
         </div>
 
         <!-- Llista d'adreces -->
         <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
             <div class="bg-gray-50 px-5 py-3 border-b border-gray-200 flex justify-between items-center">
-                <span class="text-sm font-medium text-gray-600">🌿 Adreces disponibles</span>
+                <span class="text-sm font-medium text-gray-600">🌿 Les teves adreces</span>
                 <button id="btnNetejar" 
                         class="text-xs text-red-500 hover:text-red-700 transition px-2 py-1 rounded hover:bg-red-50">
                     🗑️ Netejar totes
                 </button>
             </div>
             <div id="llistaUrls" class="divide-y divide-gray-100">
-                <!-- Aquí es renderitzaran les adreces -->
                 <div class="p-8 text-center text-gray-400 text-sm">
                     Encara no hi ha cap adreça. Afegeix-ne una a dalt.
                 </div>
             </div>
         </div>
 
-        <!-- Peu amb informació -->
+        <!-- Peu -->
         <div class="mt-6 text-center text-xs text-gray-400">
-            Pots gestionar totes les teves adreces d'activitats. Els enllaços s'obren en una pestanya nova.
+            Pots importar o exportar la llista completa en format JSON. Les dades es guarden al teu navegador.
         </div>
     </div>
+
+    <!-- Toast per a notificacions -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm opacity-0 transition-opacity duration-300 pointer-events-none z-50"></div>
 
     <script>
         // ---------- GESTIÓ DE LA LLISTA D'URLS ----------
@@ -81,6 +103,26 @@
 
         // Clau per a localStorage
         const STORAGE_KEY = 'actividades_webs';
+
+        // Mostrar notificació temporal
+        function mostrarMissatge(missatge, esError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = missatge;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            if (esError) {
+                toast.classList.add('bg-red-600');
+                setTimeout(() => {
+                    toast.classList.remove('bg-red-600');
+                }, 2500);
+            } else {
+                toast.classList.add('bg-gray-800');
+            }
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+            }, 2500);
+        }
 
         // Carregar dades guardades
         function carregarUrls() {
@@ -92,7 +134,7 @@
                     urls = [];
                 }
             } else {
-                // Dades d'exemple si no n'hi ha
+                // Dades d'exemple
                 urls = [
                     { nom: "Ajuntament de Bellcaire", url: "https://bellcaire.cat/agenda/" },
                     { nom: "AstroGirona - Cursos i tallers", url: "https://astrogirona.cat/category/cursos-i-tallers/" },
@@ -118,7 +160,7 @@
             }
         }
 
-        // Renderitzar la llista d'adreces a l'HTML
+        // Renderitzar la llista d'adreces
         function renderitzarLlista() {
             const contenidor = document.getElementById('llistaUrls');
             if (!contenidor) return;
@@ -126,7 +168,7 @@
             if (urls.length === 0) {
                 contenidor.innerHTML = `
                     <div class="p-8 text-center text-gray-400 text-sm">
-                        📭 No hi ha cap adreça. Afegeix-ne una a dalt.
+                        📭 No hi ha cap adreça. Afegeix-ne una a dalt o importa'n des d'un fitxer.
                     </div>
                 `;
                 return;
@@ -159,21 +201,25 @@
             });
         }
 
-        // Funció per esborrar una URL
+        // Esborrar una URL
         function esborrarUrl(index) {
             if (index >= 0 && index < urls.length) {
+                const nomEsborrat = urls[index].nom;
                 urls.splice(index, 1);
                 guardarUrls();
                 renderitzarLlista();
+                mostrarMissatge(`🗑️ S'ha esborrat "${nomEsborrat}"`);
             }
         }
 
-        // Funció per netejar totes
+        // Netejar totes
         function netejarTotes() {
-            if (confirm('Segur que vols eliminar TOTES les adreces?')) {
+            if (confirm('⚠️ Segur que vols eliminar TOTES les adreces? Aquesta acció no es pot desfer.')) {
+                const quantitat = urls.length;
                 urls = [];
                 guardarUrls();
                 renderitzarLlista();
+                mostrarMissatge(`🗑️ S'han esborrat ${quantitat} adreces`);
             }
         }
 
@@ -186,15 +232,15 @@
             let url = urlInput.value.trim();
 
             if (!nom) {
-                alert('Si us plau, escriu un nom per a l\'activitat o el lloc.');
+                mostrarMissatge('⚠️ Escriu un nom per a l\'activitat', true);
                 return;
             }
             if (!url) {
-                alert('Si us plau, escriu una adreça web completa (ex: https://...).');
+                mostrarMissatge('⚠️ Escriu una adreça web completa', true);
                 return;
             }
 
-            // Validar format d'URL bàsic
+            // Validar format d'URL
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 url = 'https://' + url;
             }
@@ -202,13 +248,112 @@
             urls.push({ nom: nom, url: url });
             guardarUrls();
             renderitzarLlista();
+            mostrarMissatge(`✅ S'ha afegit "${nom}"`);
 
             // Netejar camps
             nomInput.value = '';
             urlInput.value = '';
+            nomInput.focus();
         }
 
-        // Funció senzilla per escapar HTML i evitar injeccions
+        // ---------- EXPORTAR ----------
+        function exportarDades() {
+            if (urls.length === 0) {
+                mostrarMissatge('⚠️ No hi ha dades per exportar', true);
+                return;
+            }
+
+            const dades = {
+                versio: "1.0",
+                dataExportacio: new Date().toISOString(),
+                totalAdreces: urls.length,
+                adreces: urls
+            };
+
+            const blob = new Blob([JSON.stringify(dades, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `activitats_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            mostrarMissatge(`📤 S'han exportat ${urls.length} adreces correctament`);
+        }
+
+        // ---------- IMPORTAR ----------
+        function importarDades() {
+            const inputFitxer = document.getElementById('fitxerImportacio');
+            inputFitxer.click();
+            
+            inputFitxer.onchange = (event) => {
+                const fitxer = event.target.files[0];
+                if (!fitxer) return;
+
+                const lector = new FileReader();
+                lector.onload = (e) => {
+                    try {
+                        const contingut = JSON.parse(e.target.result);
+                        
+                        // Suporta tant l'array directe com l'objecte amb estructura { adreces: [...] }
+                        let novesAdreces = null;
+                        
+                        if (Array.isArray(contingut)) {
+                            novesAdreces = contingut;
+                        } else if (contingut.adreces && Array.isArray(contingut.adreces)) {
+                            novesAdreces = contingut.adreces;
+                        } else if (contingut.urls && Array.isArray(contingut.urls)) {
+                            novesAdreces = contingut.urls;
+                        }
+                        
+                        if (novesAdreces && novesAdreces.length > 0) {
+                            // Validar que cada element té nom i url
+                            const valides = novesAdreces.filter(item => 
+                                item.nom && typeof item.nom === 'string' && 
+                                item.url && typeof item.url === 'string'
+                            );
+                            
+                            if (valides.length === 0) {
+                                throw new Error('El fitxer no conté adreces vàlides (calen camps "nom" i "url")');
+                            }
+                            
+                            // Preguntar si vols substituir o afegir
+                            const accio = confirm(`El fitxer conté ${valides.length} adreces.\n\nVols SUBSTITUIR la llista actual? (Cancel·la = afegir a les existents)`);
+                            
+                            if (accio) {
+                                urls = valides;
+                                mostrarMissatge(`📥 S'han importat ${valides.length} adreces (substitució completa)`);
+                            } else {
+                                urls = [...urls, ...valides];
+                                mostrarMissatge(`📥 S'han afegit ${valides.length} adreces a la llista existent`);
+                            }
+                            
+                            guardarUrls();
+                            renderitzarLlista();
+                        } else {
+                            mostrarMissatge('❌ El fitxer no conté adreces vàlides', true);
+                        }
+                    } catch (error) {
+                        console.error('Error important:', error);
+                        mostrarMissatge('❌ Error en llegir el fitxer. Assegura\'t que és un JSON vàlid.', true);
+                    }
+                    
+                    // Netejar l'input per poder importar el mateix fitxer una altra vegada
+                    inputFitxer.value = '';
+                };
+                
+                lector.onerror = () => {
+                    mostrarMissatge('❌ Error en llegir el fitxer', true);
+                    inputFitxer.value = '';
+                };
+                
+                lector.readAsText(fitxer);
+            };
+        }
+
+        // Escapar HTML
         function escapeHtml(str) {
             if (!str) return '';
             return str
@@ -219,33 +364,25 @@
                 .replace(/'/g, '&#39;');
         }
 
-        // Inicialitzar events quan el DOM estigui llest
+        // Inicialitzar events
         document.addEventListener('DOMContentLoaded', () => {
             carregarUrls();
 
-            const btnAfegir = document.getElementById('btnAfegir');
-            if (btnAfegir) {
-                btnAfegir.addEventListener('click', afegirUrl);
-            }
+            document.getElementById('btnAfegir').addEventListener('click', afegirUrl);
+            document.getElementById('btnNetejar').addEventListener('click', netejarTotes);
+            document.getElementById('btnExportar').addEventListener('click', exportarDades);
+            document.getElementById('btnImportar').addEventListener('click', importarDades);
 
-            const btnNetejar = document.getElementById('btnNetejar');
-            if (btnNetejar) {
-                btnNetejar.addEventListener('click', netejarTotes);
-            }
-
-            // Permetre afegir amb la tecla Enter
+            // Permetre afegir amb Enter
             const urlInput = document.getElementById('urlWeb');
-            if (urlInput) {
-                urlInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') afegirUrl();
-                });
-            }
             const nomInput = document.getElementById('nomWeb');
-            if (nomInput) {
-                nomInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') afegirUrl();
-                });
-            }
+            
+            urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') afegirUrl();
+            });
+            nomInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') afegirUrl();
+            });
         });
     </script>
 </body>
