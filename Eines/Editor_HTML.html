@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor HTML Offline - Múltiples Fitxers (Vista Apilada)</title>
+    <title>Editor HTML Offline - Múltiples Fitxers (Vista Apilada amb Números de Línia)</title>
     
     <style>
         :root {
@@ -21,6 +21,8 @@
             --tab-active-bg: #ffffff;
             --tab-inactive-bg: #f1f5f9;
             --editor-font: 'Courier New', 'SF Mono', 'Fira Code', monospace;
+            --line-numbers-bg: #f8fafc;
+            --line-numbers-color: #94a3b8;
         }
         
         body.dark-mode {
@@ -37,6 +39,8 @@
             --console-border: #1e2128;
             --tab-active-bg: #1a1c23;
             --tab-inactive-bg: #13151c;
+            --line-numbers-bg: #11131a;
+            --line-numbers-color: #5b6e8c;
         }
         
         * {
@@ -210,36 +214,77 @@
             margin: 0 4px;
         }
         
-        /* ===== MODIFICACIÓ: EDITORS FLEXIBLES I AMB SCROLL INDEPENDENT ===== */
+        /* Contenidor d'editor amb números de línia */
         .editor-container {
             flex: 1;
             display: flex;
             flex-direction: column; 
-            overflow: hidden;      /* Evitem l'scroll general per usar el dels editors */
-            gap: 0;               /* Eliminem el gap per a que encaixin millor */
-            padding: 0;           /* Aprofitem tot l'espai */
+            overflow-y: auto;
+            overflow-x: hidden;
+            gap: 0;
             background: var(--bg-main);
         }
-
-        /* Canvi per permetre scroll independent */
+        
         .tab-content.visible {
             display: flex;
             flex-direction: column;
-            flex: 1 1 200px; /* Permet que creixin i s'encongeixin amb un mínim */
-            min-height: 0;   /* CRUCIAL: permet que el contingut interior s'encongeixi */
+            flex: 1 1 200px;
+            min-height: 180px;
             border: none;
             border-bottom: 1px solid var(--border-color);
-            border-radius: 0;
             background: var(--bg-panel);
             overflow: hidden;
+            margin-bottom: 0px;
         }
-
-        /* Afegim una nansa per redimensionar manualment (opcional) */
-        .tab-content:not(:last-child) {
-            resize: vertical;
-            overflow: auto;
+        
+        /* Contenidor per l'editor amb línies */
+        .code-editor-wrapper {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            background: var(--bg-panel);
         }
-
+        
+        .line-numbers {
+            background: var(--line-numbers-bg);
+            color: var(--line-numbers-color);
+            text-align: right;
+            padding: 14px 8px 14px 12px;
+            font-family: var(--editor-font);
+            font-size: 13px;
+            line-height: 1.5;
+            border-right: 1px solid var(--border-color);
+            user-select: none;
+            overflow-y: hidden;
+            white-space: pre-wrap;
+            word-wrap: normal;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+        
+        .editor-textarea {
+            flex: 1;
+            width: 100%;
+            padding: 14px;
+            font-family: var(--editor-font);
+            font-size: 13px;
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: none;
+            resize: none;
+            outline: none;
+            tab-size: 4;
+            overflow-y: auto;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            background: var(--bg-panel);
+        }
+        
         .editor-label-bar {
             background: var(--tab-inactive-bg);
             padding: 6px 16px;
@@ -277,26 +322,6 @@
         .editor-action-btn:hover {
             background: rgba(0,0,0,0.1);
             color: var(--accent);
-        }
-
-        .editor-textarea {
-            flex: 1;
-            width: 100%;
-            padding: 14px;
-            font-family: var(--editor-font);
-            font-size: 13px;
-            background: var(--bg-panel);
-            color: var(--text-main);
-            border: none;
-            resize: none;
-            outline: none;
-            tab-size: 4;
-            overflow-y: auto; /* Força l'aparició de l'scroll vertical quan calgui */
-        }
-        
-        .editor-textarea:focus {
-            outline: none;
-            background: var(--bg-panel);
         }
         
         iframe { 
@@ -439,13 +464,6 @@
             width: 100%;
         }
         
-        iframe {
-            width: 100%;
-            height: 100%;
-            flex: 1;
-        }
-        
-        /* Vista prèvia activa des de qualsevol editor */
         .preview-info {
             font-size: 11px;
             background: var(--accent);
@@ -459,7 +477,7 @@
 <body>
 
 <header>
-    <h1>📄 Editor HTML Offline (Vista Apilada)</h1>
+    <h1>📄 Editor HTML Offline (Vista Apilada + Números de Línia)</h1>
     <button id="darkModeBtn" class="btn" onclick="toggleDarkMode()">🌙 mode fosc</button>
 </header>
 
@@ -509,9 +527,8 @@
 <script>
     // Estructura de dades: cada fitxer té nom, contingut i propietat 'visible'
     let htmlFiles = [];
-    let currentPreviewIndex = 0;  // Quin fitxer es mostra a la vista prèvia (per defecte el primer visible)
+    let currentPreviewIndex = 0;  // Quin fitxer es mostra a la vista prèvia
     
-    // Script per capturar console.log
     const scriptConsola = `
         <script>
             (function() {
@@ -537,24 +554,19 @@
         <\/script>
     `;
     
-    // Funció per commutar entre minimitzat i expandit
     function toggleConsole() {
         const section = document.getElementById('consoleSection');
         const actualHeight = section.style.height;
-        
         if (actualHeight === '35px') {
-            section.style.height = '160px'; // Alçada normal
-            // Quan expandim, assegurem que es veu el contingut actiu
+            section.style.height = '160px';
             setBottomMode(document.querySelector('.btn-console.active')?.innerText.includes('Consola') ? 'console' : 'notes');
         } else {
-            section.style.height = '35px';  // Alçada de la barra de títol
-            // Amaguem contingut per estalviar espai
+            section.style.height = '35px';
             document.getElementById('consoleOutput').style.display = 'none';
             document.getElementById('notesArea').style.display = 'none';
         }
     }
     
-    // Modifica la funció setBottomMode existent per assegurar que s'expandeixi al canviar de pestanya
     function setBottomMode(mode) {
         const consoleOut = document.getElementById('consoleOutput');
         const notesArea = document.getElementById('notesArea');
@@ -565,29 +577,40 @@
             consoleSection.style.display = 'none';
             return;
         }
-        
         consoleSection.style.display = 'flex';
-        consoleSection.style.height = '160px'; // Forcem expansió en canviar de mode
-        
+        consoleSection.style.height = '160px';
         if (consoleOut) consoleOut.style.display = mode === 'console' ? 'block' : 'none';
         if (notesArea) notesArea.style.display = mode === 'notes' ? 'block' : 'none';
-        
         tabs.forEach(t => t.classList.remove('active'));
         if (mode === 'console' && tabs[0]) tabs[0].classList.add('active');
         if (mode === 'notes' && tabs[1]) tabs[1].classList.add('active');
     }
     
-    // Inicialitzar amb un fitxer per defecte
+    // Funció per actualitzar números de línia d'un editor específic
+    function updateLineNumbers(textarea, lineNumbersDiv) {
+        if (!textarea || !lineNumbersDiv) return;
+        const lines = textarea.value.split('\n');
+        const lineCount = lines.length;
+        let lineNumbersHtml = '';
+        for (let i = 1; i <= lineCount; i++) {
+            lineNumbersHtml += i + '<br>';
+        }
+        lineNumbersDiv.innerHTML = lineNumbersHtml;
+        // Sincronitzar scroll
+        lineNumbersDiv.scrollTop = textarea.scrollTop;
+    }
+    
+    function syncScroll(textarea, lineNumbersDiv) {
+        if (lineNumbersDiv) lineNumbersDiv.scrollTop = textarea.scrollTop;
+    }
+    
     function inicialitzar() {
         if (localStorage.getItem('html_editor_projecte_v2')) {
             try {
                 const desat = JSON.parse(localStorage.getItem('html_editor_projecte_v2'));
                 if (desat.htmlFiles && desat.htmlFiles.length > 0) {
                     htmlFiles = desat.htmlFiles;
-                    // Assegurar que tots tenen propietat visible (per compatibilitat)
-                    htmlFiles.forEach(file => {
-                        if (file.visible === undefined) file.visible = true;
-                    });
+                    htmlFiles.forEach(file => { if (file.visible === undefined) file.visible = true; });
                     currentPreviewIndex = desat.currentPreviewIndex || 0;
                     if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = 0;
                     renderizarTabs();
@@ -597,8 +620,6 @@
                 }
             } catch(e) { console.warn(e); }
         }
-        
-        // Fitxer per defecte
         htmlFiles = [{
             nom: "index.html",
             contingut: `<!DOCTYPE html>
@@ -634,7 +655,7 @@
 </head>
 <body>
     <h1>✨ Editor HTML Offline ✨</h1>
-    <p>Pots editar aquest codi o carregar els teus propis fitxers HTML. Ara amb vista apilada!</p>
+    <p>Pots editar aquest codi o carregar els teus propis fitxers HTML. Ara amb vista apilada i números de línia!</p>
     <button onclick="alert('Hola! Això funciona offline!')">Fes clic</button>
     <button onclick="document.body.style.background='linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'">Canvia color</button>
 </body>
@@ -650,51 +671,34 @@
     function renderizarTabs() {
         const tabsHeader = document.getElementById('tabsHeader');
         const editorContainer = document.getElementById('editorContainer');
-        
         if (!tabsHeader) return;
         
-        // Renderitzar pestanyes (toggles)
         tabsHeader.innerHTML = '';
         htmlFiles.forEach((file, index) => {
             const tab = document.createElement('div');
-            // Si el fitxer és visible, la pestanya es veu "activa"
             tab.className = 'tab' + (file.visible ? ' active' : '');
             tab.setAttribute('data-index', index);
-            
             const label = document.createElement('span');
             label.textContent = file.nom;
             label.className = 'tab-label';
-            label.ondblclick = (e) => {
-                e.stopPropagation();
-                editarNomPestanya(index);
-            };
-            
+            label.ondblclick = (e) => { e.stopPropagation(); editarNomPestanya(index); };
             const closeBtn = document.createElement('span');
             closeBtn.innerHTML = '✕';
             closeBtn.className = 'close-btn';
-            closeBtn.onclick = (e) => {
-                e.stopPropagation();
-                tancarPestanya(index);
-            };
-            
+            closeBtn.onclick = (e) => { e.stopPropagation(); tancarPestanya(index); };
             tab.appendChild(label);
             if (htmlFiles.length > 1) tab.appendChild(closeBtn);
-            
-            // Al fer clic, commuta la visibilitat d'aquest editor concret
             tab.onclick = (e) => {
-                // Evitar que si es fa clic a la creu es tanqui i commuti alhora
                 if (e.target !== closeBtn) {
                     file.visible = !file.visible;
                     renderizarTabs();
                     desarLocalStorage();
-                    // Si amaguem l'últim visible, la preview canvia al primer visible
                     actualitzarPreviewSegonsVisibles();
                 }
             };
             tabsHeader.appendChild(tab);
         });
         
-        // Botó afegir
         const addBtn = document.createElement('button');
         addBtn.textContent = '+';
         addBtn.className = 'add-tab-btn';
@@ -702,108 +706,92 @@
         addBtn.onclick = () => nouFitxerHTML();
         tabsHeader.appendChild(addBtn);
         
-        // Renderitzar els editors en vertical (targetes)
         editorContainer.innerHTML = '';
         htmlFiles.forEach((file, index) => {
             const contentDiv = document.createElement('div');
             contentDiv.className = 'tab-content' + (file.visible ? ' visible' : '');
             contentDiv.id = `editor-card-${index}`;
             
-            // Barra superior amb nom i controls
             const labelBar = document.createElement('div');
             labelBar.className = 'editor-label-bar';
-            
             const fileNameSpan = document.createElement('span');
             fileNameSpan.textContent = file.nom;
-            
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'editor-actions';
             
-            // Botó per fer preview directa d'aquest fitxer
             const previewBtn = document.createElement('button');
             previewBtn.textContent = '👁️ Vista prèvia';
             previewBtn.className = 'editor-action-btn';
-            previewBtn.title = 'Mostra aquest fitxer a la vista prèvia';
             previewBtn.onclick = (e) => {
                 e.stopPropagation();
                 currentPreviewIndex = index;
                 actualitzarVistaPrevia();
                 mostrarMissatge(`🖥️ Vista prèvia: ${file.nom}`);
             };
-            
-            // Botó per descarregar aquest fitxer individual
             const downloadBtn = document.createElement('button');
             downloadBtn.textContent = '💾 Descarregar';
             downloadBtn.className = 'editor-action-btn';
-            downloadBtn.onclick = (e) => {
-                e.stopPropagation();
-                descarregarFitxer(index);
-            };
+            downloadBtn.onclick = (e) => { e.stopPropagation(); descarregarFitxer(index); };
+            const undoBtn = document.createElement('button');
+            undoBtn.innerHTML = '↩️';
+            undoBtn.title = 'Desfer';
+            const redoBtn = document.createElement('button');
+            redoBtn.innerHTML = '↪️';
+            redoBtn.title = 'Refer';
             
             actionsDiv.appendChild(downloadBtn);
             actionsDiv.appendChild(previewBtn);
-            
-            // NOUS BOTONS: Desfer i Refer
-            const undoBtn = document.createElement('button');
-            undoBtn.innerHTML = '↩️';
-            undoBtn.className = 'editor-action-btn';
-            undoBtn.title = 'Desfer (Ctrl+Z)';
-            undoBtn.onclick = () => {
-                textarea.focus();
-                document.execCommand('undo', false, null);
-            };
-
-            const redoBtn = document.createElement('button');
-            redoBtn.innerHTML = '↪️';
-            redoBtn.className = 'editor-action-btn';
-            redoBtn.title = 'Refer (Ctrl+Y)';
-            redoBtn.onclick = () => {
-                textarea.focus();
-                document.execCommand('redo', false, null);
-            };
-            
             actionsDiv.appendChild(undoBtn);
             actionsDiv.appendChild(redoBtn);
-            
             labelBar.appendChild(fileNameSpan);
             labelBar.appendChild(actionsDiv);
+            
+            // Wrapper per editor amb línies
+            const editorWrapper = document.createElement('div');
+            editorWrapper.className = 'code-editor-wrapper';
+            
+            const lineNumbersDiv = document.createElement('div');
+            lineNumbersDiv.className = 'line-numbers';
+            lineNumbersDiv.style.fontFamily = "var(--editor-font)";
+            lineNumbersDiv.style.lineHeight = "1.5";
             
             const textarea = document.createElement('textarea');
             textarea.className = 'editor-textarea';
             textarea.value = file.contingut;
+            textarea.spellcheck = false;
+            
+            const updateLines = () => updateLineNumbers(textarea, lineNumbersDiv);
             textarea.oninput = (e) => {
                 file.contingut = e.target.value;
-                // Si aquest fitxer és el que es mostra a la vista prèvia, actualitzar
-                if (currentPreviewIndex === index) {
-                    actualitzarVistaPrevia();
-                }
+                updateLines();
+                if (currentPreviewIndex === index) actualitzarVistaPrevia();
                 desarLocalStorage();
             };
-            
-            // Atall de teclat per desar (Ctrl+S)
+            textarea.onscroll = () => syncScroll(textarea, lineNumbersDiv);
             textarea.onkeydown = (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     desarLocalStorage();
-                    mostrarMissatge('💾 Projecte desat automàticament');
+                    mostrarMissatge('💾 Projecte desat');
                 }
             };
+            undoBtn.onclick = () => { textarea.focus(); document.execCommand('undo'); updateLines(); };
+            redoBtn.onclick = () => { textarea.focus(); document.execCommand('redo'); updateLines(); };
             
+            editorWrapper.appendChild(lineNumbersDiv);
+            editorWrapper.appendChild(textarea);
             contentDiv.appendChild(labelBar);
-            contentDiv.appendChild(textarea);
+            contentDiv.appendChild(editorWrapper);
             editorContainer.appendChild(contentDiv);
+            
+            updateLines(); // inicialitzar línies
         });
-        
-        // Actualitzar indicador de preview actual si cal
-        actualitzarIndicadorPreview();
     }
     
     function actualitzarPreviewSegonsVisibles() {
         if (htmlFiles.length === 0) return;
-        // Si l'índex actual de preview ja no és visible o no existeix, assignar el primer visible
         const visibleIndices = htmlFiles.map((f, idx) => f.visible ? idx : -1).filter(i => i !== -1);
         if (visibleIndices.length === 0) {
-            // Si no hi ha cap visible, fer visible el primer fitxer
             htmlFiles[0].visible = true;
             renderizarTabs();
             currentPreviewIndex = 0;
@@ -813,10 +801,6 @@
             actualitzarVistaPrevia();
         }
         desarLocalStorage();
-    }
-    
-    function actualitzarIndicadorPreview() {
-        // No necessari visualment, però podria actualitzar títol, no ho fem per simplicitat.
     }
     
     function editarNomPestanya(index) {
@@ -830,63 +814,31 @@
             renderizarTabs();
             desarLocalStorage();
             mostrarMissatge(`📝 Renombrat a ${nomFinal}`);
-        } else {
-            mostrarMissatge('❌ Aquest nom ja existeix');
-        }
+        } else { mostrarMissatge('❌ Aquest nom ja existeix'); }
     }
     
     function tancarPestanya(index) {
-        if (htmlFiles.length <= 1) {
-            mostrarMissatge('❌ Ha d\'haver com a mínim un fitxer');
-            return;
-        }
-        const nomFitxer = htmlFiles[index].nom;
-        if (confirm(`Eliminar ${nomFitxer}?`)) {
+        if (htmlFiles.length <= 1) { mostrarMissatge('❌ Ha d\'haver com a mínim un fitxer'); return; }
+        if (confirm(`Eliminar ${htmlFiles[index].nom}?`)) {
             htmlFiles.splice(index, 1);
             if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = 0;
             if (currentPreviewIndex >= htmlFiles.length) currentPreviewIndex = htmlFiles.length - 1;
             renderizarTabs();
             actualitzarVistaPrevia();
             desarLocalStorage();
-            mostrarMissatge(`✅ ${nomFitxer} eliminat`);
+            mostrarMissatge(`✅ Fitxer eliminat`);
         }
     }
     
     function nouFitxerHTML() {
         let baseName = `pagina_${htmlFiles.length + 1}.html`;
         let counter = 1;
-        while (htmlFiles.some(f => f.nom === baseName)) {
-            baseName = `pagina_${htmlFiles.length + counter}.html`;
-            counter++;
-        }
-        
+        while (htmlFiles.some(f => f.nom === baseName)) { baseName = `pagina_${htmlFiles.length + counter}.html`; counter++; }
         htmlFiles.push({
             nom: baseName,
-            contingut: `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>${baseName}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f0f0f0;
-        }
-        h1 {
-            color: #3b82f6;
-        }
-    </style>
-</head>
-<body>
-    <h1>Nova pàgina</h1>
-    <p>Edita aquest contingut (vista apilada)</p>
-</body>
-</html>`,
-            visible: true   // Per defecte visible
+            contingut: `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${baseName}</title><style>body{font-family:Arial;margin:40px;background:#f0f0f0;}h1{color:#3b82f6;}</style></head><body><h1>Nova pàgina</h1><p>Edita aquest contingut (vista apilada + números de línia)</p></body></html>`,
+            visible: true
         });
-        
-        // Per defecte el posem visible i l'establirem com a preview
         currentPreviewIndex = htmlFiles.length - 1;
         renderizarTabs();
         actualitzarVistaPrevia();
@@ -894,81 +846,46 @@
         mostrarMissatge(`✅ Creat ${baseName}`);
     }
     
-    // Descarregar un fitxer específic
     function descarregarFitxer(index) {
         if (!htmlFiles[index]) return;
-        const fitxer = htmlFiles[index];
-        const blob = new Blob([fitxer.contingut], {type: 'text/html'});
+        const blob = new Blob([htmlFiles[index].contingut], {type: 'text/html'});
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fitxer.nom;
-        a.click();
+        const a = document.createElement('a'); a.href = url; a.download = htmlFiles[index].nom; a.click();
         URL.revokeObjectURL(url);
-        mostrarMissatge(`💾 Descarregat: ${fitxer.nom}`);
+        mostrarMissatge(`💾 Descarregat: ${htmlFiles[index].nom}`);
     }
     
     function descarregarTotsVisibles() {
         const visibles = htmlFiles.filter(f => f.visible);
-        if (visibles.length === 0) {
-            mostrarMissatge("No hi ha fitxers visibles per descarregar");
-            return;
-        }
-        // Descarregar cada visible en una petita seqüència
+        if (visibles.length === 0) { mostrarMissatge("No hi ha fitxers visibles"); return; }
         visibles.forEach((fitxer, idx) => {
             setTimeout(() => {
                 const blob = new Blob([fitxer.contingut], {type: 'text/html'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fitxer.nom;
-                a.click();
-                URL.revokeObjectURL(url);
-                if (idx === visibles.length - 1) mostrarMissatge(`✅ Descarregats ${visibles.length} fitxers`);
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fitxer.nom; a.click();
+                URL.revokeObjectURL(a.href);
             }, idx * 200);
         });
+        mostrarMissatge(`✅ Descarregats ${visibles.length} fitxers`);
     }
     
-    function obrirSelectorFitxers() {
-        const input = document.getElementById('importHTMLInput');
-        input.onchange = () => importarHTML(input);
-        input.click();
-    }
-    
-    function obrirSelectorCarpeta() {
-        const input = document.getElementById('importFolderInput');
-        input.onchange = () => importarCarpeta(input);
-        input.click();
-    }
+    function obrirSelectorFitxers() { document.getElementById('importHTMLInput').click(); }
+    function obrirSelectorCarpeta() { document.getElementById('importFolderInput').click(); }
     
     function importarHTML(input) {
-        const files = Array.from(input.files);
-        if (files.length === 0) return;
-        let importats = 0;
-        files.forEach(file => {
+        Array.from(input.files).forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 let nom = file.name;
                 let counter = 1;
                 while (htmlFiles.some(f => f.nom === nom)) {
-                    const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
                     const ext = file.name.match(/\.(html|htm)$/)[0];
-                    nom = `${nomSenseExt}_${counter}${ext}`;
+                    nom = `${file.name.replace(/\.(html|htm)$/, '')}_${counter}${ext}`;
                     counter++;
                 }
-                htmlFiles.push({
-                    nom: nom,
-                    contingut: e.target.result,
-                    visible: true
-                });
-                importats++;
-                if (importats === files.length) {
-                    mostrarMissatge(`✅ Importats ${importats} fitxers HTML`);
-                    renderizarTabs();
-                    actualitzarPreviewSegonsVisibles();
-                    actualitzarVistaPrevia();
-                    desarLocalStorage();
-                }
+                htmlFiles.push({ nom, contingut: e.target.result, visible: true });
+                renderizarTabs();
+                actualitzarPreviewSegonsVisibles();
+                desarLocalStorage();
             };
             reader.readAsText(file);
         });
@@ -976,67 +893,41 @@
     }
     
     async function importarCarpeta(input) {
-        const files = Array.from(input.files);
-        if (files.length === 0) return;
         let importats = 0;
-        for (let file of files) {
+        for (let file of Array.from(input.files)) {
             if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
                 const contingut = await file.text();
                 let nom = file.name;
                 let counter = 1;
                 while (htmlFiles.some(f => f.nom === nom)) {
-                    const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
                     const ext = file.name.match(/\.(html|htm)$/)[0];
-                    nom = `${nomSenseExt}_${counter}${ext}`;
+                    nom = `${file.name.replace(/\.(html|htm)$/, '')}_${counter}${ext}`;
                     counter++;
                 }
-                htmlFiles.push({ nom: nom, contingut: contingut, visible: true });
+                htmlFiles.push({ nom, contingut, visible: true });
                 importats++;
             }
         }
-        if (importats > 0) {
-            renderizarTabs();
-            actualitzarPreviewSegonsVisibles();
-            actualitzarVistaPrevia();
-            desarLocalStorage();
-            mostrarMissatge(`📁 Importats ${importats} fitxers HTML`);
-        } else {
-            mostrarMissatge('❌ No s\'han trobat fitxers HTML');
-        }
+        if (importats) { renderizarTabs(); actualitzarPreviewSegonsVisibles(); desarLocalStorage(); mostrarMissatge(`📁 Importats ${importats} fitxers`); }
+        else mostrarMissatge('❌ No s\'han trobat fitxers HTML');
         input.value = '';
     }
     
     function descarregarProjecte() {
-        const projecte = {
-            htmlFiles: htmlFiles,
-            currentPreviewIndex: currentPreviewIndex,
-            version: '2.0'
-        };
-        const dataStr = JSON.stringify(projecte, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `projecte_html_apilat_${new Date().toISOString().slice(0,19)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const projecte = { htmlFiles, currentPreviewIndex, version: '2.0' };
+        const blob = new Blob([JSON.stringify(projecte, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `projecte_apilat.json`; a.click();
+        URL.revokeObjectURL(a.href);
         mostrarMissatge('📦 Projecte complet desat');
     }
     
     function netejarTot() {
         if (confirm('🚨 Això eliminarà TOTS els fitxers. Continuar?')) {
-            htmlFiles = [{
-                nom: 'index.html',
-                contingut: `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Nou projecte</title><style>body{font-family:Arial;margin:40px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;}h1{text-align:center;}</style></head><body><h1>Editor HTML Offline</h1><p>Comença a editar!</p></body></html>`,
-                visible: true
-            }];
+            htmlFiles = [{ nom: 'index.html', contingut: '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nou projecte</title></head><body><h1>Editor HTML Offline</h1></body></html>', visible: true }];
             currentPreviewIndex = 0;
             renderizarTabs();
             actualitzarVistaPrevia();
             desarLocalStorage();
-            localStorage.removeItem('editor_notes');
-            document.getElementById('notesArea').value = '';
             mostrarMissatge('🗑️ Projecte reiniciat');
         }
     }
@@ -1045,13 +936,9 @@
         if (!htmlFiles[currentPreviewIndex]) return;
         let contingutHTML = htmlFiles[currentPreviewIndex].contingut;
         if (!contingutHTML.includes('enviarAlPare')) {
-            if (contingutHTML.includes('</head>')) {
-                contingutHTML = contingutHTML.replace('</head>', `${scriptConsola}</head>`);
-            } else if (contingutHTML.includes('<body')) {
-                contingutHTML = contingutHTML.replace('<body', `${scriptConsola}<body`);
-            } else {
-                contingutHTML = scriptConsola + contingutHTML;
-            }
+            if (contingutHTML.includes('</head>')) contingutHTML = contingutHTML.replace('</head>', `${scriptConsola}</head>`);
+            else if (contingutHTML.includes('<body')) contingutHTML = contingutHTML.replace('<body', `${scriptConsola}<body`);
+            else contingutHTML = scriptConsola + contingutHTML;
         }
         const iframe = document.getElementById('resultat');
         iframe.contentWindow.document.open();
@@ -1061,49 +948,17 @@
     
     window.addEventListener('message', function(event) {
         const output = document.getElementById('consoleOutput');
-        if (output && event.data && event.data.tipus) {
-            const div = document.createElement('div');
-            div.className = event.data.tipus;
-            div.textContent = `[${new Date().toLocaleTimeString()}] ${event.data.missatge}`;
-            output.appendChild(div);
-            output.scrollTop = output.scrollHeight;
+        if (output && event.data?.tipus) {
+            const div = document.createElement('div'); div.className = event.data.tipus; div.textContent = `[${new Date().toLocaleTimeString()}] ${event.data.missatge}`;
+            output.appendChild(div); output.scrollTop = output.scrollHeight;
         }
     });
     
-    function netejarConsola() {
-        document.getElementById('consoleOutput').innerHTML = '';
-    }
-    
-    function desarLocalStorage() {
-        const projecte = {
-            htmlFiles: htmlFiles,
-            currentPreviewIndex: currentPreviewIndex
-        };
-        localStorage.setItem('html_editor_projecte_v2', JSON.stringify(projecte));
-        const notesArea = document.getElementById('notesArea');
-        if (notesArea) localStorage.setItem('editor_notes', notesArea.value);
-    }
-    
-    function carregarNotes() {
-        const notesDesades = localStorage.getItem('editor_notes');
-        const notesArea = document.getElementById('notesArea');
-        if (notesDesades && notesArea) notesArea.value = notesDesades;
-        if (notesArea) notesArea.oninput = () => desarLocalStorage();
-    }
-    
-    function mostrarMissatge(msg) {
-        const dragInfo = document.getElementById('dragInfo');
-        dragInfo.textContent = msg;
-        dragInfo.classList.add('visible');
-        setTimeout(() => dragInfo.classList.remove('visible'), 2000);
-    }
-    
-    function toggleDarkMode() {
-        const isDark = document.body.classList.toggle('dark-mode');
-        const btn = document.getElementById('darkModeBtn');
-        if (btn) btn.innerHTML = isDark ? '☀️ mode clar' : '🌙 mode fosc';
-        localStorage.setItem('dark_mode', isDark);
-    }
+    function netejarConsola() { document.getElementById('consoleOutput').innerHTML = ''; }
+    function desarLocalStorage() { localStorage.setItem('html_editor_projecte_v2', JSON.stringify({ htmlFiles, currentPreviewIndex })); localStorage.setItem('editor_notes', document.getElementById('notesArea')?.value || ''); }
+    function carregarNotes() { const notes = localStorage.getItem('editor_notes'); if(notes && document.getElementById('notesArea')) document.getElementById('notesArea').value = notes; if(document.getElementById('notesArea')) document.getElementById('notesArea').oninput = () => desarLocalStorage(); }
+    function mostrarMissatge(msg) { const dragInfo = document.getElementById('dragInfo'); dragInfo.textContent = msg; dragInfo.classList.add('visible'); setTimeout(() => dragInfo.classList.remove('visible'), 2000); }
+    function toggleDarkMode() { const isDark = document.body.classList.toggle('dark-mode'); document.getElementById('darkModeBtn').innerHTML = isDark ? '☀️ mode clar' : '🌙 mode fosc'; localStorage.setItem('dark_mode', isDark); }
     
     function setupDragAndDrop() {
         const dropZone = document.getElementById('split-left');
@@ -1116,62 +971,29 @@
             for (let file of files) {
                 if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
                     const contingut = await file.text();
-                    let nom = file.name;
-                    let counter = 1;
-                    while (htmlFiles.some(f => f.nom === nom)) {
-                        const nomSenseExt = file.name.replace(/\.(html|htm)$/, '');
-                        const ext = file.name.match(/\.(html|htm)$/)[0];
-                        nom = `${nomSenseExt}_${counter}${ext}`;
-                        counter++;
-                    }
-                    htmlFiles.push({ nom: nom, contingut: contingut, visible: true });
+                    let nom = file.name, counter = 1;
+                    while (htmlFiles.some(f => f.nom === nom)) { const ext = file.name.match(/\.(html|htm)$/)[0]; nom = `${file.name.replace(/\.(html|htm)$/, '')}_${counter}${ext}`; counter++; }
+                    htmlFiles.push({ nom, contingut, visible: true });
                     importats++;
                 }
             }
-            if (importats > 0) {
-                renderizarTabs();
-                actualitzarPreviewSegonsVisibles();
-                actualitzarVistaPrevia();
-                desarLocalStorage();
-                mostrarMissatge(`📁 Importats ${importats} fitxers`);
-            } else mostrarMissatge('❌ Arrossega fitxers HTML');
+            if (importats) { renderizarTabs(); actualitzarPreviewSegonsVisibles(); desarLocalStorage(); mostrarMissatge(`📁 Importats ${importats} fitxers`); }
+            else mostrarMissatge('❌ Arrossega fitxers HTML');
         });
     }
     
     function initSplit() {
-        const leftPanel = document.getElementById('split-left');
-        const rightPanel = document.getElementById('split-right');
-        const container = document.querySelector('.main-container');
-        const gutter = document.createElement('div');
-        gutter.className = 'gutter';
+        const leftPanel = document.getElementById('split-left'), rightPanel = document.getElementById('split-right'), container = document.querySelector('.main-container');
+        const gutter = document.createElement('div'); gutter.className = 'gutter';
         container.insertBefore(gutter, rightPanel);
         let isDragging = false, startX = 0, startLeftWidth = 0;
-        gutter.addEventListener('mousedown', (e) => {
-            isDragging = true; startX = e.clientX; startLeftWidth = leftPanel.offsetWidth;
-            document.body.style.cursor = 'col-resize'; document.body.style.userSelect = 'none'; e.preventDefault();
-        });
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const delta = e.clientX - startX, newLeftWidth = startLeftWidth + delta;
-            const percent = (newLeftWidth / container.offsetWidth) * 100;
-            if (percent >= 20 && percent <= 80) { leftPanel.style.flex = `${percent}%`; rightPanel.style.flex = `${100 - percent}%`; }
-        });
-        document.addEventListener('mouseup', () => { isDragging = false; document.body.style.cursor = ''; document.body.style.userSelect = ''; });
+        gutter.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; startLeftWidth = leftPanel.offsetWidth; document.body.style.cursor = 'col-resize'; e.preventDefault(); });
+        document.addEventListener('mousemove', (e) => { if(!isDragging) return; const delta = e.clientX - startX, newLeftWidth = startLeftWidth + delta; const percent = (newLeftWidth / container.offsetWidth) * 100; if(percent>=20 && percent<=80){ leftPanel.style.flex = `${percent}%`; rightPanel.style.flex = `${100 - percent}%`; } });
+        document.addEventListener('mouseup', () => { isDragging = false; document.body.style.cursor = ''; });
     }
     
-    if (localStorage.getItem('dark_mode') === 'true') {
-        document.body.classList.add('dark-mode');
-        const btn = document.getElementById('darkModeBtn');
-        if (btn) btn.innerHTML = '☀️ mode clar';
-    }
-    
-    window.onload = () => {
-        initSplit();
-        setupDragAndDrop();
-        inicialitzar();
-        setBottomMode('console');
-    };
-    
+    if (localStorage.getItem('dark_mode') === 'true') { document.body.classList.add('dark-mode'); document.getElementById('darkModeBtn').innerHTML = '☀️ mode clar'; }
+    window.onload = () => { initSplit(); setupDragAndDrop(); inicialitzar(); setBottomMode('console'); };
     window.addEventListener('beforeunload', (e) => { e.preventDefault(); e.returnValue = ''; });
 </script>
 </body>
