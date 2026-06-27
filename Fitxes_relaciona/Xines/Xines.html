@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relaciona: Xinès Pràctic</title>
+<style>
+/* ===== ESTILS GLOBALS ===== */
+body {
+  font-family: 'Georgia', serif;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 2rem 2rem 2rem;
+  background: #fafcff;
+  color: #1a1a2e;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #003366;
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 1px;
+}
+h1 small {
+  display: block;
+  font-size: 1rem;
+  color: #4a6a8a;
+  font-weight: normal;
+  margin-top: 4px;
+}
+
+/* ===== IMATGE ===== */
+.image {
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+.image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.image.left {
+  text-align: left;
+}
+.image.right {
+  text-align: right;
+}
+.image.center {
+  text-align: center;
+}
+
+/* ===== SELECTOR DE TEMA ===== */
+#tema-selector {
+  margin-bottom: 28px;
+  background: #eef4fa;
+  padding: 20px 28px;
+  border-radius: 12px;
+  border-left: 6px solid #003366;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 20px;
+  font-size: 1.05rem;
+}
+#tema-selector label {
+  font-weight: bold;
+  color: #003366;
+}
+#tema-selector select {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: 1px solid #b0c4de;
+  border-radius: 8px;
+  background: white;
+  min-width: 200px;
+  flex: 1 1 220px;
+  cursor: pointer;
+}
+#tema-selector button {
+  padding: 10px 28px;
+  font-size: 1rem;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.25s;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+#tema-selector button:hover {
+  background-color: #1a4f7a;
+}
+
+/* ===== INSTRUCCIONS ===== */
+.instruccions {
+  background: #f4f8ff;
+  padding: 14px 24px;
+  border-radius: 10px;
+  border-left: 5px solid #4a7a9c;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+.instruccions strong {
+  color: #003366;
+}
+.instruccions .llegenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  margin-top: 8px;
+}
+.instruccions .llegenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.instruccions .llegenda .color-box {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+.color-box.verd { background: #b7e4b7; border-color: #2d7a2d; }
+.color-box.groc { background: #fff7b0; border-color: #b8960f; }
+.color-box.vermell { background: #f8c5c5; border-color: #b33b3b; }
+
+/* ===== CONTAINER DE L'EXERCICI ===== */
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 20px 0 30px 0;
+  min-height: 450px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.col h3 {
+  text-align: center;
+  color: #003366;
+  border-bottom: 3px solid #003366;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  font-size: 1.7rem;
+  letter-spacing: 2px;
+}
+
+/* ===== ITEMS ===== */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border: 2px solid #ccd9e9;
+  margin-bottom: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease, transform 0.1s;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  gap: 16px;
+}
+.item:hover {
+  background-color: #eaf2fb;
+  transform: scale(1.005);
+  border-color: #8aadc9;
+}
+
+/* ===== CARÀCTERS XINESOS ===== */
+.item .chinese-char {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  color: #002244;
+  flex-shrink: 0;
+}
+
+/* ===== TRANSCRIPCIÓ (PINYIN) AL COSTAT ===== */
+.item .pinyin {
+  font-size: 1.2rem;
+  color: #4a6a8a;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-style: italic;
+  flex-shrink: 0;
+  margin-left: auto;
+  background: #f0f5fc;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid #d0dcec;
+}
+
+/* ===== TEXT CATALÀ ===== */
+.item .cat-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+/* ===== ESTATS ===== */
+.selected {
+  background-color: #c5dff5 !important;
+  border: 3px solid #003366 !important;
+  box-shadow: 0 0 0 3px rgba(0,51,102,0.15);
+}
+.matched {
+  border: 3px solid #1f8b1f !important;
+  background-color: #dff0df !important;
+}
+.fixed-chinese {
+  border: 3px solid #d49c1a !important;
+  background-color: #fcf6d0 !important;
+}
+.fixed-cat {
+  border: 3px solid #d49c1a !important;
+  background-color: #fcf6d0 !important;
+  pointer-events: none;
+}
+.incorrect-chinese, .incorrect-cat {
+  border: 3px solid #c0392b !important;
+  background-color: #fadbd8 !important;
+}
+
+/* ===== COMENTARIS CULTURALS A L'ENCAPÇALAMENT ===== */
+.cultural-header {
+  background: #fef9e7;
+  border-left: 4px solid #d4a017;
+  padding: 12px 20px;
+  margin: 0 0 16px 0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #5a4a1a;
+  display: none;
+}
+.cultural-header.visible {
+  display: block;
+}
+.cultural-header strong {
+  color: #8a6a0a;
+}
+.cultural-header .icon {
+  font-size: 1.3rem;
+  margin-right: 8px;
+}
+
+/* ===== PUNTUACIÓ ===== */
+#score {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #003366;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 16px;
+  background: #eef4fa;
+  border-radius: 12px;
+  border: 1px solid #c5d5e8;
+}
+
+/* ===== CONTROLS ===== */
+#controls {
+  margin-top: 28px;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 20px;
+}
+#controls button {
+  padding: 14px 32px;
+  font-size: 1.15rem;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.25s, transform 0.1s;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+#controls button:hover {
+  background-color: #1a4f7a;
+  transform: scale(1.02);
+}
+#controls button:active {
+  transform: scale(0.97);
+}
+
+/* ===== PANELL PINYIN ===== */
+.panell-pinyin {
+  margin-top: 32px;
+  padding: 20px 28px;
+  background: #eaf0f8;
+  border-radius: 12px;
+  border-left: 6px solid #4a7a9c;
+  font-size: 1.05rem;
+}
+.panell-pinyin h4 {
+  margin: 0 0 8px 0;
+  color: #003366;
+  font-size: 1.3rem;
+}
+.panell-pinyin strong {
+  color: #003366;
+}
+.panell-pinyin .exemple {
+  background: #ffffffd0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  border: 1px solid #b8cfe0;
+}
+.panell-pinyin .exemple .chinese-char {
+  font-size: 1.8rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  body {
+    padding: 0 1rem 1.5rem 1rem;
+    font-size: 16px;
+  }
+  .match-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .item {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .item .chinese-char {
+    font-size: 1.6rem;
+  }
+  .item .pinyin {
+    font-size: 1rem;
+    padding: 2px 10px;
+    margin-left: 0;
+  }
+  .item .cat-text {
+    font-size: 1.1rem;
+  }
+  #tema-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #tema-selector select {
+    min-width: unset;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .col h3 {
+    font-size: 1.4rem;
+  }
+  #score {
+    font-size: 1.2rem;
+  }
+  #controls button {
+    padding: 12px 22px;
+    font-size: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>🇨🇳 Relaciona en xinès <small>Aprèn jugant! Vocabulari pràctic</small></h1>
+
+<!-- IMATGE (opció: left, center, right) -->
+<div class="image left">
+  <img src="Xina.jpg" alt="Xina">
+</div>
+
+<!-- SELECTOR DE TEMA (AMB CANVI AUTOMÀTIC) -->
+<div id="tema-selector">
+  <label for="tema">📚 Tria un tema:</label>
+  <select id="tema" onchange="canviaTema()">
+    <option value="colors">🎨 Colors</option>
+    <option value="fruites">🍎 Fruites</option>
+    <option value="animals">🐾 Animals</option>
+    <option value="cortesia">🥇 Frases de cortesia</option>
+    <option value="dies">📅 Dies de la setmana</option>
+    <option value="numeros">🔢 Números (1-10)</option>
+    <option value="cos">🧍 Parts del cos</option>
+    <option value="familia">👨‍👩‍👧 Família</option>
+    <option value="verb_ser">📝 Verb ser (ésser)</option>
+    <option value="pronoms">🗣️ Pronoms personals</option>
+    <option value="paisatge">🏞️ Paisatge i natura</option>
+    <option value="transport">🚗 Transport</option>
+    <option value="menjar">🍽️ Menjar i begudes</option>
+    <option value="temps">⛅ Temps atmosfèric</option>
+    <option value="ciutat">🏙️ Ciutat i serveis</option>
+    <option value="verb_tenir">📝 Verb tenir (posseir)</option>
+    <option value="adjectius">📝 Adjectius bàsics</option>
+    <option value="interrogatius">❓ Paraules interrogatives</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+<!-- INSTRUCCIONS + LLEGENDA -->
+<div class="instruccions">
+  <p style="margin: 0 0 6px 0;">
+    <strong>🎯 Com jugar:</strong> Fes clic a una paraula en <strong>xinès</strong> i després a la seva traducció en <strong>català</strong>.
+  </p>
+  <div class="llegenda">
+    <span><span class="color-box verd"></span> Encert a la primera</span>
+    <span><span class="color-box groc"></span> Encert després d'errors (es repeteix)</span>
+    <span><span class="color-box vermell"></span> Error</span>
+    <span>🔊 Clica un caràcter xinès per escoltar-lo</span>
+  </div>
+</div>
+
+<!-- COMENTARI CULTURAL (ES MOSTRA SEGONS EL TEMA) -->
+<div id="cultural-header" class="cultural-header">
+  <span class="icon">📌</span> <span id="cultural-text"></span>
+</div>
+
+<!-- EXERCICI -->
+<div class="match-container">
+  <svg class="match-lines"></svg>
+  <div class="col">
+    <h3>🀄 Xinès</h3>
+    <div id="xines"></div>
+  </div>
+  <div class="col">
+    <h3>📖 Català</h3>
+    <div id="catala"></div>
+  </div>
+</div>
+
+<div id="score">✅ Encerts: 0 / 10</div>
+
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+  <button onclick="pronunciaSeleccionat()">🔊 Pronuncia seleccionat</button>
+</div>
+
+<!-- PANELL EXPLICATIU DEL PINYIN -->
+<div class="panell-pinyin">
+  <h4>📖 Què és el <em>pinyin</em>?</h4>
+  <p>
+    El <strong>pinyin</strong> és el sistema oficial de transcripció fonètica del xinès a l'alfabet llatí.
+    T'ajuda a saber <strong>com es pronuncia</strong> cada caràcter. Cada síl·laba té un <strong>to</strong>
+    (marcat amb accents: ā, á, ǎ, à) que canvia el significat de la paraula.
+  </p>
+  <p style="margin-bottom: 4px;">
+    <strong>Exemple:</strong> 
+    <span class="exemple"><span class="chinese-char">好</span> hǎo</span> 
+    — es llegeix <em>"hao"</em> amb to descendent-ascendent, i significa <em>"bo / bé"</em>.
+  </p>
+  <p style="font-size:0.95rem; color:#3a5a7a; margin-top: 6px;">
+    💡 Quan facis clic a un caràcter xinès, el sentiràs pronunciar en veu alta (amb la veu del teu navegador).
+  </p>
+</div>
+
+<script>
+// ============================================================
+//  VOCABULARI AMB 10+ TERMES PER CATEGORIA + COMENTARIS CULTURALS
+// ============================================================
+const TOTAL_PER_RONDA = 10;
+
+// Diccionari de comentaris culturals per categoria
+const CULTURAL_NOTES = {
+  colors: "🎨 A la Xina, el vermell (红色, hóngsè) simbolitza la bona sort i la felicitat. El blanc (白色, báisè) s'associa al dol. El groc (黄色, huángsè) era el color de l'emperador.",
+  fruites: "🍎 La fruita és molt important a la Xina. Les pomes (苹果, píngguǒ) simbolitzen la pau. Les taronges (橙子, chéngzi) es regalen per l'Any Nou Xinès per desitjar bona sort.",
+  animals: "🐉 L'animal més important a la Xina és el drac (龙, lóng), que simbolitza poder i bona fortuna. El zodíac xinès té 12 animals, i cada any es repeteix en cicle.",
+  cortesia: "🤝 A la Xina, és molt important saludar correctament. Un somriure i un 'Nǐ hǎo' (hola) obren moltes portes! Evita preguntar 'Com estàs?' a algú que no coneixes, és massa personal.",
+  dies: "📅 Els xinesos utilitzen el calendari lunar per a festes tradicionals. L'Any Nou Xinès (春節, Chūn Jié) és la festa més important: les famílies es reuneixen, es regalen sobres vermells (hongbao) i es mengen dumplings.",
+  numeros: "🔢 El número 4 (四, sì) es considera de mala sort perquè sona com 'mort' (死). En canvi, el 8 (八, bā) és molt afortunat perquè sona com 'prosperitat'. Per això els xinesos trien dates i números amb 8!",
+  cos: "🧍 La medicina tradicional xinesa associa cada part del cos amb elements i energies. Per exemple, el 'cor' (心, xīn) no només és l'òrgan sinó també la seu de les emocions i la ment.",
+  familia: "👨‍👩‍👧 A la Xina, els cognoms es posen primer (ex: Wang Xiaoming: Wang és el cognom). Es valora molt el respecte als avis i a la família gran. Preguntar per la família és una manera comuna de mostrar interès.",
+  verb_ser: "📝 El xinès no conjuga verbs! 'Wǒ shì' (jo sóc), 'Nǐ shì' (tu ets) — el verb no canvia. També s'omet el subjecte si és evident. Per exemple, per dir 'Sóc a casa' dius '在家' (zài jiā) sense dir 'jo'.",
+  pronoms: "🗣️ Els pronoms en xinès són molt senzills: 我 (wǒ) = jo, 你 (nǐ) = tu, 他 (tā) = ell, 她 (tā) = ella. Fixa't que 'ell' i 'ella' es pronuncien igual però s'escriuen diferent!",
+  paisatge: "🏞️ La Xina té paisatges impressionants: muntanyes (山, shān), rius (河, hé) i llacs (湖, hú). La Gran Muralla (长城, Chángchéng) és una de les meravelles del món!",
+  transport: "🚗 El transport públic a la Xina és excel·lent: el tren d'alta velocitat (高铁, gāotiě) connecta tot el país. A les grans ciutats, el metro és ràpid i econòmic.",
+  menjar: "🥢 A la Xina, es menja amb bastonets (筷子, kuàizi). Mai els clavis verticalment al bol d'arròs, recorda als encens funeraris! Compartir plats és habitual.",
+  temps: "⛅ El clima a la Xina varia molt: al nord fa molt fred a l'hivern, al sud és tropical. La primavera és la millor estació per visitar el país, amb flors de cirerer (樱花, yīnghuā) a tot arreu.",
+  ciutat: "🏙️ Les ciutats xineses tenen noms que sovint signifiquen coses boniques: 北京 (Běijīng) = 'Capital del Nord', 上海 (Shànghǎi) = 'Sobre el mar'. Cada ciutat té el seu propi caràcter i gastronomia!",
+  verb_tenir: "📝 Per dir 'tenir' en xinès s'utilitza 有 (yǒu). No es conjuga! 'Wǒ yǒu' = jo tinc, 'Nǐ yǒu' = tu tens. Per dir 'no tinc' es diu 没有 (méi yǒu).",
+  adjectius: "📝 Els adjectius en xinès poden funcionar com a verbs. Per exemple, '好' (hǎo) significa 'bo' i també 'ser bo'. Per dir 'És molt bonic' dius '很漂亮' (hěn piào liang) — el 很 (hěn) suavitza l'adjectiu.",
+  interrogatius: "❓ Les paraules interrogatives en xinès es col·loquen a la mateixa posició que la resposta. Per exemple: '你是谁？' (Nǐ shì shéi?) = 'Qui ets tu?' — '我是...' (Wǒ shì...) = 'Jo sóc...'."
+};
+
+const TEMES = {
+  // ---- COLORS ----
+  colors: [
+    {"id":1,"chinese":"白色","cat":"blanc","pron":"bái sè"},
+    {"id":2,"chinese":"黑色","cat":"negre","pron":"hēi sè"},
+    {"id":3,"chinese":"红色","cat":"vermell","pron":"hóng sè"},
+    {"id":4,"chinese":"蓝色","cat":"blau","pron":"lán sè"},
+    {"id":5,"chinese":"绿色","cat":"verd","pron":"lǜ sè"},
+    {"id":6,"chinese":"黄色","cat":"groc","pron":"huáng sè"},
+    {"id":7,"chinese":"橙色","cat":"taronja","pron":"chéng sè"},
+    {"id":8,"chinese":"紫色","cat":"lila","pron":"zǐ sè"},
+    {"id":9,"chinese":"棕色","cat":"marró","pron":"zōng sè"},
+    {"id":10,"chinese":"灰色","cat":"gris","pron":"huī sè"},
+    {"id":11,"chinese":"粉色","cat":"rosa","pron":"fěn sè"},
+    {"id":12,"chinese":"深蓝色","cat":"blau fosc","pron":"shēn lán sè"}
+  ],
+
+  // ---- FRUITES ----
+  fruites: [
+    {"id":1,"chinese":"苹果","cat":"poma","pron":"píng guǒ"},
+    {"id":2,"chinese":"梨","cat":"pera","pron":"lí"},
+    {"id":3,"chinese":"香蕉","cat":"plàtan","pron":"xiāng jiāo"},
+    {"id":4,"chinese":"橙子","cat":"taronja","pron":"chéng zi"},
+    {"id":5,"chinese":"柠檬","cat":"llimona","pron":"níng méng"},
+    {"id":6,"chinese":"葡萄","cat":"raïm","pron":"pú tao"},
+    {"id":7,"chinese":"草莓","cat":"maduixa","pron":"cǎo méi"},
+    {"id":8,"chinese":"樱桃","cat":"cirera","pron":"yīng táo"},
+    {"id":9,"chinese":"树莓","cat":"gerd","pron":"shù méi"},
+    {"id":10,"chinese":"甜瓜","cat":"meló","pron":"tián guā"},
+    {"id":11,"chinese":"菠萝","cat":"pinya","pron":"bō luó"},
+    {"id":12,"chinese":"桃子","cat":"préssec","pron":"táo zi"}
+  ],
+
+  // ---- ANIMALS ----
+  animals: [
+    {"id":1,"chinese":"狗","cat":"gos","pron":"gǒu"},
+    {"id":2,"chinese":"猫","cat":"gat","pron":"māo"},
+    {"id":3,"chinese":"马","cat":"cavall","pron":"mǎ"},
+    {"id":4,"chinese":"牛","cat":"vaca","pron":"niú"},
+    {"id":5,"chinese":"羊","cat":"ovella","pron":"yáng"},
+    {"id":6,"chinese":"山羊","cat":"cabra","pron":"shān yáng"},
+    {"id":7,"chinese":"鸟","cat":"ocell","pron":"niǎo"},
+    {"id":8,"chinese":"鱼","cat":"peix","pron":"yú"},
+    {"id":9,"chinese":"老鼠","cat":"ratolí","pron":"lǎo shǔ"},
+    {"id":10,"chinese":"狐狸","cat":"guineu","pron":"hú li"}
+  ],
+
+  // ---- CORTESIA ----
+  cortesia: [
+    {"id":1,"chinese":"是","cat":"sí","pron":"shì"},
+    {"id":2,"chinese":"不","cat":"no","pron":"bù"},
+    {"id":3,"chinese":"谢谢","cat":"gràcies","pron":"xiè xie"},
+    {"id":4,"chinese":"不客气","cat":"de res","pron":"bú kè qi"},
+    {"id":5,"chinese":"对不起","cat":"perdó","pron":"duì bu qǐ"},
+    {"id":6,"chinese":"你好","cat":"hola","pron":"nǐ hǎo"},
+    {"id":7,"chinese":"再见","cat":"adéu","pron":"zài jiàn"},
+    {"id":8,"chinese":"早上好","cat":"bon dia","pron":"zǎo shang hǎo"},
+    {"id":9,"chinese":"晚上好","cat":"bona tarda / vespre","pron":"wǎn shang hǎo"},
+    {"id":10,"chinese":"晚安","cat":"bona nit","pron":"wǎn ān"},
+    {"id":11,"chinese":"欢迎","cat":"benvingut/da","pron":"huān yíng"},
+    {"id":12,"chinese":"干杯","cat":"salut (brindis)","pron":"gān bēi"}
+  ],
+
+  // ---- DIES ----
+  dies: [
+    {"id":1,"chinese":"星期一","cat":"dilluns","pron":"xīng qī yī"},
+    {"id":2,"chinese":"星期二","cat":"dimarts","pron":"xīng qī èr"},
+    {"id":3,"chinese":"星期三","cat":"dimecres","pron":"xīng qī sān"},
+    {"id":4,"chinese":"星期四","cat":"dijous","pron":"xīng qī sì"},
+    {"id":5,"chinese":"星期五","cat":"divendres","pron":"xīng qī wǔ"},
+    {"id":6,"chinese":"星期六","cat":"dissabte","pron":"xīng qī liù"},
+    {"id":7,"chinese":"星期日","cat":"diumenge","pron":"xīng qī rì"},
+    {"id":8,"chinese":"今天","cat":"avui","pron":"jīn tiān"},
+    {"id":9,"chinese":"明天","cat":"demà","pron":"míng tiān"},
+    {"id":10,"chinese":"昨天","cat":"ahir","pron":"zuó tiān"}
+  ],
+
+  // ---- NÚMEROS ----
+  numeros: [
+    {"id":1,"chinese":"一","cat":"1","pron":"yī"},
+    {"id":2,"chinese":"二","cat":"2","pron":"èr"},
+    {"id":3,"chinese":"三","cat":"3","pron":"sān"},
+    {"id":4,"chinese":"四","cat":"4","pron":"sì"},
+    {"id":5,"chinese":"五","cat":"5","pron":"wǔ"},
+    {"id":6,"chinese":"六","cat":"6","pron":"liù"},
+    {"id":7,"chinese":"七","cat":"7","pron":"qī"},
+    {"id":8,"chinese":"八","cat":"8","pron":"bā"},
+    {"id":9,"chinese":"九","cat":"9","pron":"jiǔ"},
+    {"id":10,"chinese":"十","cat":"10","pron":"shí"}
+  ],
+
+  // ---- COS ----
+  cos: [
+    {"id":1,"chinese":"头","cat":"cap","pron":"tóu"},
+    {"id":2,"chinese":"手","cat":"mà","pron":"shǒu"},
+    {"id":3,"chinese":"腿","cat":"cama","pron":"tuǐ"},
+    {"id":4,"chinese":"眼睛","cat":"ull","pron":"yǎn jing"},
+    {"id":5,"chinese":"耳朵","cat":"orella","pron":"ěr duo"},
+    {"id":6,"chinese":"鼻子","cat":"nas","pron":"bí zi"},
+    {"id":7,"chinese":"嘴","cat":"boca","pron":"zuǐ"},
+    {"id":8,"chinese":"心","cat":"cor","pron":"xīn"},
+    {"id":9,"chinese":"背","cat":"esquena","pron":"bèi"},
+    {"id":10,"chinese":"牙齿","cat":"dents","pron":"yá chǐ"}
+  ],
+
+  // ---- FAMÍLIA ----
+  familia: [
+    {"id":1,"chinese":"母亲","cat":"mare","pron":"mǔ qīn"},
+    {"id":2,"chinese":"父亲","cat":"pare","pron":"fù qīn"},
+    {"id":3,"chinese":"姐姐/妹妹","cat":"germana","pron":"jiě jie / mèi mei"},
+    {"id":4,"chinese":"哥哥/弟弟","cat":"germà","pron":"gē ge / dì di"},
+    {"id":5,"chinese":"女儿","cat":"filla","pron":"nǚ ér"},
+    {"id":6,"chinese":"儿子","cat":"fill","pron":"ér zi"},
+    {"id":7,"chinese":"奶奶/外婆","cat":"àvia","pron":"nǎi nai / wài pó"},
+    {"id":8,"chinese":"爷爷/外公","cat":"avi","pron":"yé ye / wài gōng"},
+    {"id":9,"chinese":"叔叔","cat":"oncle","pron":"shū shu"},
+    {"id":10,"chinese":"阿姨","cat":"tia","pron":"ā yí"}
+  ],
+
+  // ---- VERB SER ----
+  verb_ser: [
+    {"id":1,"chinese":"我是","cat":"jo sóc","pron":"wǒ shì"},
+    {"id":2,"chinese":"你是","cat":"tu ets","pron":"nǐ shì"},
+    {"id":3,"chinese":"他是","cat":"ell és","pron":"tā shì"},
+    {"id":4,"chinese":"她是","cat":"ella és","pron":"tā shì"},
+    {"id":5,"chinese":"我们是","cat":"nosaltres som","pron":"wǒ men shì"},
+    {"id":6,"chinese":"你们是","cat":"vosaltres sou","pron":"nǐ men shì"},
+    {"id":7,"chinese":"他们/她们是","cat":"ells/elles són","pron":"tā men shì"},
+    {"id":8,"chinese":"我不是","cat":"jo no sóc","pron":"wǒ bú shì"},
+    {"id":9,"chinese":"你是吗？","cat":"ets tu...?","pron":"nǐ shì ma"},
+    {"id":10,"chinese":"他不是吗？","cat":"no és ell...?","pron":"tā bú shì ma"}
+  ],
+
+  // ---- PRONOMS ----
+  pronoms: [
+    {"id":1,"chinese":"我","cat":"jo","pron":"wǒ"},
+    {"id":2,"chinese":"你","cat":"tu","pron":"nǐ"},
+    {"id":3,"chinese":"他","cat":"ell","pron":"tā"},
+    {"id":4,"chinese":"她","cat":"ella","pron":"tā"},
+    {"id":5,"chinese":"我们","cat":"nosaltres","pron":"wǒ men"},
+    {"id":6,"chinese":"你们","cat":"vosaltres","pron":"nǐ men"},
+    {"id":7,"chinese":"他们/她们","cat":"ells/elles","pron":"tā men"},
+    {"id":8,"chinese":"我","cat":"a mi","pron":"wǒ"},
+    {"id":9,"chinese":"你","cat":"a tu","pron":"nǐ"},
+    {"id":10,"chinese":"他们/她们","cat":"a ells/elles","pron":"tā men"}
+  ],
+
+  // ---- PAISATGE ----
+  paisatge: [
+    {"id":1,"chinese":"山","cat":"muntanya","pron":"shān"},
+    {"id":2,"chinese":"河","cat":"riu","pron":"hé"},
+    {"id":3,"chinese":"湖","cat":"llac","pron":"hú"},
+    {"id":4,"chinese":"海","cat":"mar","pron":"hǎi"},
+    {"id":5,"chinese":"森林","cat":"bosc","pron":"sēn lín"},
+    {"id":6,"chinese":"田野","cat":"camp","pron":"tián yě"},
+    {"id":7,"chinese":"海滩","cat":"platja","pron":"hǎi tān"},
+    {"id":8,"chinese":"岛","cat":"illa","pron":"dǎo"},
+    {"id":9,"chinese":"山谷","cat":"vall","pron":"shān gǔ"},
+    {"id":10,"chinese":"小山","cat":"turó","pron":"xiǎo shān"}
+  ],
+
+  // ---- TRANSPORT ----
+  transport: [
+    {"id":1,"chinese":"汽车","cat":"cotxe","pron":"qì chē"},
+    {"id":2,"chinese":"公共汽车","cat":"autobús","pron":"gōng gòng qì chē"},
+    {"id":3,"chinese":"火车","cat":"tren","pron":"huǒ chē"},
+    {"id":4,"chinese":"自行车","cat":"bicicleta","pron":"zì xíng chē"},
+    {"id":5,"chinese":"船","cat":"vaixell","pron":"chuán"},
+    {"id":6,"chinese":"飞机","cat":"avió","pron":"fēi jī"},
+    {"id":7,"chinese":"车站","cat":"estació","pron":"chē zhàn"},
+    {"id":8,"chinese":"机场","cat":"aeroport","pron":"jī chǎng"},
+    {"id":9,"chinese":"桥","cat":"pont","pron":"qiáo"},
+    {"id":10,"chinese":"路","cat":"carretera","pron":"lù"}
+  ],
+
+  // ---- MENJAR ----
+  menjar: [
+    {"id":1,"chinese":"面包","cat":"pa","pron":"miàn bāo"},
+    {"id":2,"chinese":"黄油","cat":"mantega","pron":"huáng yóu"},
+    {"id":3,"chinese":"水","cat":"aigua","pron":"shuǐ"},
+    {"id":4,"chinese":"牛奶","cat":"llet","pron":"niú nǎi"},
+    {"id":5,"chinese":"肉","cat":"carn","pron":"ròu"},
+    {"id":6,"chinese":"鱼","cat":"peix","pron":"yú"},
+    {"id":7,"chinese":"蔬菜","cat":"verdures","pron":"shū cài"},
+    {"id":8,"chinese":"水果","cat":"fruita","pron":"shuǐ guǒ"},
+    {"id":9,"chinese":"咖啡","cat":"cafè","pron":"kā fēi"},
+    {"id":10,"chinese":"茶","cat":"te","pron":"chá"}
+  ],
+
+  // ---- TEMPS ----
+  temps: [
+    {"id":1,"chinese":"太阳","cat":"sol","pron":"tài yáng"},
+    {"id":2,"chinese":"天空","cat":"cel","pron":"tiān kōng"},
+    {"id":3,"chinese":"云","cat":"núvol","pron":"yún"},
+    {"id":4,"chinese":"雨","cat":"pluja","pron":"yǔ"},
+    {"id":5,"chinese":"雪","cat":"neu","pron":"xuě"},
+    {"id":6,"chinese":"风","cat":"vent","pron":"fēng"},
+    {"id":7,"chinese":"雷","cat":"tro","pron":"léi"},
+    {"id":8,"chinese":"雾","cat":"boira","pron":"wù"},
+    {"id":9,"chinese":"热","cat":"calent","pron":"rè"},
+    {"id":10,"chinese":"冷","cat":"fred","pron":"lěng"}
+  ],
+
+  // ---- CIUTAT ----
+  ciutat: [
+    {"id":1,"chinese":"城市","cat":"ciutat","pron":"chéng shì"},
+    {"id":2,"chinese":"街道","cat":"carrer","pron":"jiē dào"},
+    {"id":3,"chinese":"商店","cat":"botiga","pron":"shāng diàn"},
+    {"id":4,"chinese":"银行","cat":"banc","pron":"yín háng"},
+    {"id":5,"chinese":"医院","cat":"hospital","pron":"yī yuàn"},
+    {"id":6,"chinese":"学校","cat":"escola","pron":"xué xiào"},
+    {"id":7,"chinese":"图书馆","cat":"biblioteca","pron":"tú shū guǎn"},
+    {"id":8,"chinese":"公园","cat":"parc","pron":"gōng yuán"},
+    {"id":9,"chinese":"邮局","cat":"oficina de correus","pron":"yóu jú"},
+    {"id":10,"chinese":"酒店","cat":"hotel","pron":"jiǔ diàn"}
+  ],
+
+  // ---- VERB TENIR ----
+  verb_tenir: [
+    {"id":1,"chinese":"我有","cat":"jo tinc","pron":"wǒ yǒu"},
+    {"id":2,"chinese":"你有","cat":"tu tens","pron":"nǐ yǒu"},
+    {"id":3,"chinese":"他有","cat":"ell té","pron":"tā yǒu"},
+    {"id":4,"chinese":"她有","cat":"ella té","pron":"tā yǒu"},
+    {"id":5,"chinese":"我们有","cat":"nosaltres tenim","pron":"wǒ men yǒu"},
+    {"id":6,"chinese":"你们有","cat":"vosaltres teniu","pron":"nǐ men yǒu"},
+    {"id":7,"chinese":"他们/她们有","cat":"ells/elles tenen","pron":"tā men yǒu"},
+    {"id":8,"chinese":"我没有","cat":"jo no tinc","pron":"wǒ méi yǒu"},
+    {"id":9,"chinese":"你有吗？","cat":"tens tu...?","pron":"nǐ yǒu ma"},
+    {"id":10,"chinese":"他没有吗？","cat":"no té ell...?","pron":"tā méi yǒu ma"}
+  ],
+
+  // ---- ADJECTIUS ----
+  adjectius: [
+    {"id":1,"chinese":"大","cat":"gran","pron":"dà"},
+    {"id":2,"chinese":"小","cat":"petit","pron":"xiǎo"},
+    {"id":3,"chinese":"漂亮","cat":"bonic","pron":"piào liang"},
+    {"id":4,"chinese":"坏","cat":"dolent","pron":"huài"},
+    {"id":5,"chinese":"好","cat":"bo","pron":"hǎo"},
+    {"id":6,"chinese":"新","cat":"nou","pron":"xīn"},
+    {"id":7,"chinese":"老","cat":"vell","pron":"lǎo"},
+    {"id":8,"chinese":"舒服","cat":"agradable","pron":"shū fu"},
+    {"id":9,"chinese":"恶毒","cat":"dolent (maliciós)","pron":"è dú"},
+    {"id":10,"chinese":"干","cat":"sec","pron":"gān"}
+  ],
+
+  // ---- INTERROGATIUS ----
+  interrogatius: [
+    {"id":1,"chinese":"谁","cat":"qui","pron":"shéi"},
+    {"id":2,"chinese":"什么","cat":"què","pron":"shén me"},
+    {"id":3,"chinese":"什么时候","cat":"quan","pron":"shén me shí hou"},
+    {"id":4,"chinese":"为什么","cat":"per què","pron":"wèi shén me"},
+    {"id":5,"chinese":"怎么样","cat":"com","pron":"zěn me yàng"},
+    {"id":6,"chinese":"哪里","cat":"on","pron":"nǎ lǐ"},
+    {"id":7,"chinese":"多少","cat":"quant","pron":"duō shǎo"},
+    {"id":8,"chinese":"哪个","cat":"quin/quina","pron":"nǎ ge"},
+    {"id":9,"chinese":"哪一个","cat":"quin dels dos","pron":"nǎ yí ge"},
+    {"id":10,"chinese":"你好吗？","cat":"com estàs?","pron":"nǐ hǎo ma"}
+  ]
+};
+
+// ============================================================
+//  LÒGICA DEL JOC
+// ============================================================
+let paraulesActuals = TEMES.colors;
+let encerts = 0;
+let selectedChinese = null;
+let currentAttempts = {};
+let temaActual = "colors";
+
+function canviaTema() {
+  const tema = document.getElementById("tema").value;
+  temaActual = tema;
+  paraulesActuals = TEMES[tema] || TEMES.colors;
+  
+  // Mostrar comentari cultural
+  const culturalDiv = document.getElementById("cultural-header");
+  const culturalText = document.getElementById("cultural-text");
+  if (CULTURAL_NOTES[tema]) {
+    culturalText.textContent = CULTURAL_NOTES[tema];
+    culturalDiv.classList.add("visible");
+  } else {
+    culturalDiv.classList.remove("visible");
+  }
+  
+  novaRonda();
+}
+
+function barreja(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function speakChinese(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function pronunciaSeleccionat() {
+  if (selectedChinese) {
+    const text = selectedChinese.querySelector(".chinese-char")?.textContent || selectedChinese.textContent;
+    speakChinese(text);
+  } else {
+    alert("Selecciona primer una paraula en xinès");
+  }
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `✅ Encerts: ${encerts} / ${TOTAL_PER_RONDA}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-chinese").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = paraulesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = paraulesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-chinese, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-chinese", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const xinesContainer = document.getElementById("xines");
+  const catContainer = document.getElementById("catala");
+
+  const matchedChinese = xinesContainer.querySelectorAll(".matched, .fixed-chinese");
+  matchedChinese.forEach(chinese => {
+    const chineseId = chinese.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${chineseId}"], .fixed-cat[data-id="${chineseId}"]`);
+    if (cat) {
+      const chineseRect = chinese.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = chineseRect.right - containerRect.left;
+      const y1 = chineseRect.top + chineseRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#2a5f7a");
+      line.setAttribute("stroke-width", "2.5");
+      line.setAttribute("stroke-dasharray", "5,4");
+      line.setAttribute("opacity", "0.7");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const xinesContainer = document.getElementById("xines");
+  const catContainer = document.getElementById("catala");
+  xinesContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedChinese = null;
+  actualitzaPuntuacio();
+
+  const xinesFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  xinesFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+
+    const charDiv = document.createElement("div");
+    charDiv.className = "chinese-char";
+    charDiv.textContent = f.chinese;
+
+    const pinyinDiv = document.createElement("div");
+    pinyinDiv.className = "pinyin";
+    pinyinDiv.textContent = f.pron;
+
+    div.appendChild(charDiv);
+    div.appendChild(pinyinDiv);
+
+    div.addEventListener("click", () => {
+      speakChinese(f.chinese);
+      if (div.classList.contains("matched") || div.classList.contains("fixed-chinese")) return;
+      netejaErrors();
+      document.querySelectorAll("#xines .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedChinese = div;
+    });
+
+    xinesContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+
+    const catDiv = document.createElement("div");
+    catDiv.className = "cat-text";
+    catDiv.textContent = f.cat;
+
+    div.appendChild(catDiv);
+
+    div.addEventListener("click", () => {
+      if (!selectedChinese) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const chineseId = selectedChinese.dataset.id;
+      const catId = div.dataset.id;
+
+      if (chineseId === catId) {
+        if (currentAttempts[chineseId] && currentAttempts[chineseId].attempts > 0) {
+          selectedChinese.classList.add("fixed-chinese");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedChinese.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedChinese);
+        mouAlTop(div);
+        dibuixaLinies();
+      } else {
+        selectedChinese.classList.add("incorrect-chinese");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[chineseId]) currentAttempts[chineseId] = { attempts: 0 };
+        currentAttempts[chineseId].attempts++;
+      }
+
+      selectedChinese.classList.remove("selected");
+      selectedChinese = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+</body>
+</html>
