@@ -400,21 +400,27 @@ h1 small {
   <select id="tema" onchange="canviaTema()">
     <option value="colors">🎨 Colors</option>
     <option value="fruites">🍎 Fruites</option>
+    <option value="menjar">🍽️ Menjar i begudes</option>
     <option value="animals">🐾 Animals</option>
     <option value="cortesia">🥇 Frases de cortesia</option>
     <option value="dies">📅 Dies de la setmana</option>
     <option value="numeros">🔢 Números (1-10)</option>
     <option value="cos">🧍 Parts del cos</option>
     <option value="familia">👨‍👩‍👧 Família</option>
-    <option value="verb_ser">📝 Verb ser (ésser)</option>
-    <option value="pronoms">🗣️ Pronoms personals</option>
-    <option value="paisatge">🏞️ Paisatge i natura</option>
+    <option value="llocs_turistics">🏯 Llocs turístics</option>
+    <option value="senyals">🪧 Senyals i rètols</option>
+    <option value="aeroport">✈️ Aeroport</option>
     <option value="transport">🚗 Transport</option>
-    <option value="menjar">🍽️ Menjar i begudes</option>
+    <option value="hotel">🏨 Hotel</option>
+    <option value="restaurant">🍽️ Restaurant</option>
+    <option value="compres">🛍️ Comprar</option>
+    <option value="paisatge">🏞️ Paisatge i natura</option>
     <option value="temps">⛅ Temps atmosfèric</option>
     <option value="ciutat">🏙️ Ciutat i serveis</option>
-    <option value="verb_tenir">📝 Verb tenir (posseir)</option>
     <option value="adjectius">📝 Adjectius bàsics</option>
+    <option value="verb_ser">📝 Verb ser (ésser)</option>
+    <option value="verb_tenir">📝 Verb tenir (posseir)</option>
+    <option value="pronoms">🗣️ Pronoms personals</option>
     <option value="interrogatius">❓ Paraules interrogatives</option>
   </select>
   <button onclick="canviaTema()">✅ Carrega tema</button>
@@ -537,6 +543,22 @@ const TEMES = {
     {"id":12,"chinese":"桃子","cat":"préssec","pron":"táo zi"}
   ],
 
+  // ---- MENJAR ----
+  menjar: [
+    {"id":1,"chinese":"面包","cat":"pa","pron":"miàn bāo"},
+    {"id":2,"chinese":"黄油","cat":"mantega","pron":"huáng yóu"},
+    {"id":3,"chinese":"水","cat":"aigua","pron":"shuǐ"},
+    {"id":4,"chinese":"牛奶","cat":"llet","pron":"niú nǎi"},
+    {"id":5,"chinese":"肉","cat":"carn","pron":"ròu"},
+    {"id":6,"chinese":"鱼","cat":"peix","pron":"yú"},
+    {"id":7,"chinese":"蔬菜","cat":"verdures","pron":"shū cài"},
+    {"id":8,"chinese":"水果","cat":"fruita","pron":"shuǐ guǒ"},
+    {"id":9,"chinese":"咖啡","cat":"cafè","pron":"kā fēi"},
+    {"id":10,"chinese":"茶","cat":"te","pron":"chá"}
+  ],
+
+
+
   // ---- ANIMALS ----
   animals: [
     {"id":1,"chinese":"狗","cat":"gos","pron":"gǒu"},
@@ -623,6 +645,116 @@ const TEMES = {
     {"id":10,"chinese":"阿姨","cat":"tia","pron":"ā yí"}
   ],
 
+// ---- LLOCS TURÍSTICS ----
+llocs_turistics: [
+  {"id":1,"chinese":"北京","cat":"Pequín","pron":"Běijīng"},
+  {"id":2,"chinese":"上海","cat":"Xangai","pron":"Shànghǎi"},
+  {"id":3,"chinese":"香港","cat":"Hong Kong","pron":"Xiānggǎng"},
+  {"id":4,"chinese":"西安","cat":"Xi'an","pron":"Xī'ān"},
+  {"id":5,"chinese":"广州","cat":"Canton (Guangzhou)","pron":"Guǎngzhōu"},
+  {"id":6,"chinese":"深圳","cat":"Shenzhen","pron":"Shēnzhèn"},
+  {"id":7,"chinese":"长城","cat":"Gran Muralla","pron":"Chángchéng"},
+  {"id":8,"chinese":"故宫","cat":"Ciutat Prohibida","pron":"Gùgōng"},
+  {"id":9,"chinese":"天安门","cat":"Plaça de Tian'anmen","pron":"Tiān'ānmén"},
+  {"id":10,"chinese":"兵马俑","cat":"Guerrers de Terracota","pron":"Bīngmǎyǒng"}
+],
+
+// ---- SENYALS I RÈTOLS ----
+senyals: [
+  {"id":1,"chinese":"入口","cat":"Entrada","pron":"rùkǒu"},
+  {"id":2,"chinese":"出口","cat":"Sortida","pron":"chūkǒu"},
+  {"id":3,"chinese":"男","cat":"Homes","pron":"nán"},
+  {"id":4,"chinese":"女","cat":"Dones","pron":"nǚ"},
+  {"id":5,"chinese":"营业中","cat":"Obert","pron":"yíngyè zhōng"},
+  {"id":6,"chinese":"关闭","cat":"Tancat","pron":"guānbì"},
+  {"id":7,"chinese":"信息","cat":"Informació","pron":"xìnxī"},
+  {"id":8,"chinese":"禁止","cat":"Prohibit","pron":"jìnzhǐ"},
+  {"id":9,"chinese":"危险","cat":"Perill","pron":"wēixiǎn"},
+  {"id":10,"chinese":"禁止吸烟","cat":"No fumar","pron":"jìnzhǐ xīyān"},
+  {"id":11,"chinese":"电梯","cat":"Ascensor","pron":"diàntī"},
+  {"id":12,"chinese":"楼梯","cat":"Escales","pron":"lóutī"}
+],
+
+// ---- AEROPORT ----
+aeroport: [
+  {"id":1,"chinese":"护照","cat":"Passaport","pron":"hùzhào"},
+  {"id":2,"chinese":"登机","cat":"Embarcament","pron":"dēngjī"},
+  {"id":3,"chinese":"登机口","cat":"Porta d'embarcament","pron":"dēngjīkǒu"},
+  {"id":4,"chinese":"行李","cat":"Equipatge","pron":"xíngli"},
+  {"id":5,"chinese":"安检","cat":"Control de seguretat","pron":"ānjiǎn"},
+  {"id":6,"chinese":"海关","cat":"Duana","pron":"hǎiguān"},
+  {"id":7,"chinese":"到达","cat":"Arribades","pron":"dàodá"},
+  {"id":8,"chinese":"出发","cat":"Sortides","pron":"chūfā"},
+  {"id":9,"chinese":"航班","cat":"Vol","pron":"hángbān"},
+  {"id":10,"chinese":"值机","cat":"Facturació","pron":"zhíjī"},
+  {"id":11,"chinese":"候机室","cat":"Sala d'embarcament","pron":"hòujīshì"},
+  {"id":12,"chinese":"登机牌","cat":"Targeta d'embarcament","pron":"dēngjīpái"}
+],
+
+// ---- TRANSPORT ----
+transport: [
+  {"id":1,"chinese":"地铁","cat":"Metro","pron":"dìtiě"},
+  {"id":2,"chinese":"火车","cat":"Tren","pron":"huǒchē"},
+  {"id":3,"chinese":"出租车","cat":"Taxi","pron":"chūzūchē"},
+  {"id":4,"chinese":"公共汽车","cat":"Autobús","pron":"gōnggòng qìchē"},
+  {"id":5,"chinese":"车站","cat":"Estació","pron":"chēzhàn"},
+  {"id":6,"chinese":"车票","cat":"Bitllet","pron":"chēpiào"},
+  {"id":7,"chinese":"站台","cat":"Andana","pron":"zhàntái"},
+  {"id":8,"chinese":"入口","cat":"Entrada","pron":"rùkǒu"},
+  {"id":9,"chinese":"出口","cat":"Sortida","pron":"chūkǒu"},
+  {"id":10,"chinese":"换乘","cat":"Transbord","pron":"huànchéng"},
+  {"id":11,"chinese":"下一站","cat":"Pròxima parada","pron":"xià yī zhàn"},
+  {"id":12,"chinese":"高铁","cat":"Tren d'alta velocitat","pron":"gāotiě"}
+],
+
+// ---- HOTEL ----
+hotel: [
+  {"id":1,"chinese":"我有预订","cat":"Tinc una reserva","pron":"wǒ yǒu yùdìng"},
+  {"id":2,"chinese":"一晚","cat":"Una nit","pron":"yī wǎn"},
+  {"id":3,"chinese":"两晚","cat":"Dues nits","pron":"liǎng wǎn"},
+  {"id":4,"chinese":"护照","cat":"Passaport","pron":"hùzhào"},
+  {"id":5,"chinese":"房间","cat":"Habitació","pron":"fángjiān"},
+  {"id":6,"chinese":"钥匙","cat":"Clau","pron":"yàoshi"},
+  {"id":7,"chinese":"早餐","cat":"Esmorzar","pron":"zǎocān"},
+  {"id":8,"chinese":"无线网络","cat":"Wifi","pron":"wúxiàn wǎngluò"},
+  {"id":9,"chinese":"退房","cat":"Sortida (check-out)","pron":"tuìfáng"},
+  {"id":10,"chinese":"前台","cat":"Recepció","pron":"qiántái"},
+  {"id":11,"chinese":"电梯","cat":"Ascensor","pron":"diàntī"},
+  {"id":12,"chinese":"房卡","cat":"Targeta de l'habitació","pron":"fángkǎ"}
+],
+
+// ---- RESTAURANT ----
+restaurant: [
+  {"id":1,"chinese":"两位","cat":"Una taula per a dues persones","pron":"liǎng wèi"},
+  {"id":2,"chinese":"菜单","cat":"La carta","pron":"càidān"},
+  {"id":3,"chinese":"你推荐什么？","cat":"Què recomaneu?","pron":"nǐ tuījiàn shénme"},
+  {"id":4,"chinese":"不要辣","cat":"Sense picant","pron":"bú yào là"},
+  {"id":5,"chinese":"我是素食者","cat":"Sóc vegetarià","pron":"wǒ shì sùshízhě"},
+  {"id":6,"chinese":"买单","cat":"El compte, si us plau","pron":"mǎidān"},
+  {"id":7,"chinese":"很好吃","cat":"Està molt bo","pron":"hěn hǎochī"},
+  {"id":8,"chinese":"请","cat":"Si us plau","pron":"qǐng"},
+  {"id":9,"chinese":"谢谢","cat":"Gràcies","pron":"xièxie"},
+  {"id":10,"chinese":"水","cat":"Aigua","pron":"shuǐ"},
+  {"id":11,"chinese":"茶","cat":"Te","pron":"chá"},
+  {"id":12,"chinese":"米饭","cat":"Arròs","pron":"mǐfàn"}
+],
+
+// ---- COMPRES ----
+compres: [
+  {"id":1,"chinese":"多少钱？","cat":"Quant costa?","pron":"duōshǎo qián"},
+  {"id":2,"chinese":"太贵了","cat":"Massa car","pron":"tài guì le"},
+  {"id":3,"chinese":"便宜一点","cat":"Més barat?","pron":"piányi yìdiǎn"},
+  {"id":4,"chinese":"我只是看看","cat":"Només miro","pron":"wǒ zhǐshì kànkan"},
+  {"id":5,"chinese":"我要这个","cat":"Ho compro","pron":"wǒ yào zhège"},
+  {"id":6,"chinese":"银行卡","cat":"Targeta","pron":"yínhángkǎ"},
+  {"id":7,"chinese":"现金","cat":"Efectiu","pron":"xiànjīn"},
+  {"id":8,"chinese":"二维码","cat":"Codi QR","pron":"èrwéimǎ"},
+  {"id":9,"chinese":"微信支付","cat":"WeChat Pay","pron":"Wēixìn Zhīfù"},
+  {"id":10,"chinese":"支付宝","cat":"Alipay","pron":"Zhīfùbǎo"},
+  {"id":11,"chinese":"发票","cat":"Rebut / factura","pron":"fāpiào"},
+  {"id":12,"chinese":"刷卡","cat":"Pagar amb targeta","pron":"shuākǎ"}
+],
+
   // ---- VERB SER ----
   verb_ser: [
     {"id":1,"chinese":"我是","cat":"jo sóc","pron":"wǒ shì"},
@@ -679,19 +811,7 @@ const TEMES = {
     {"id":10,"chinese":"路","cat":"carretera","pron":"lù"}
   ],
 
-  // ---- MENJAR ----
-  menjar: [
-    {"id":1,"chinese":"面包","cat":"pa","pron":"miàn bāo"},
-    {"id":2,"chinese":"黄油","cat":"mantega","pron":"huáng yóu"},
-    {"id":3,"chinese":"水","cat":"aigua","pron":"shuǐ"},
-    {"id":4,"chinese":"牛奶","cat":"llet","pron":"niú nǎi"},
-    {"id":5,"chinese":"肉","cat":"carn","pron":"ròu"},
-    {"id":6,"chinese":"鱼","cat":"peix","pron":"yú"},
-    {"id":7,"chinese":"蔬菜","cat":"verdures","pron":"shū cài"},
-    {"id":8,"chinese":"水果","cat":"fruita","pron":"shuǐ guǒ"},
-    {"id":9,"chinese":"咖啡","cat":"cafè","pron":"kā fēi"},
-    {"id":10,"chinese":"茶","cat":"te","pron":"chá"}
-  ],
+
 
   // ---- TEMPS ----
   temps: [
