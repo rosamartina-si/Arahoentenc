@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerador de línies</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 30px;
+            max-width: 950px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .input-row textarea {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            background: #f8fafc;
+            transition: border 0.2s;
+        }
+        .input-row textarea:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .buttons button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.05s;
+        }
+        .buttons button:hover {
+            background: #2563eb;
+        }
+        .buttons button:active {
+            transform: scale(0.96);
+        }
+        .buttons button.secondary {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .buttons button.secondary:hover {
+            background: #cbd5e1;
+        }
+        .file-label {
+            background: #e2e8f0;
+            color: #1e293b;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .file-label:hover {
+            background: #cbd5e1;
+        }
+        .file-label input {
+            display: none;
+        }
+        .output-section {
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .output-header {
+            background: #f1f5f9;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .output-header span {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 13px;
+        }
+        .output-wrapper {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 500px;
+            overflow: auto;
+            padding: 0;
+        }
+        .code-line {
+            display: flex;
+            padding: 0;
+            border-bottom: 1px solid #1e293b;
+            min-height: 26px;
+        }
+        .code-line:last-child {
+            border-bottom: none;
+        }
+        .line-number {
+            background: #1e293b;
+            color: #94a3b8;
+            text-align: right;
+            user-select: none;
+            padding: 2px 16px 2px 12px;
+            min-width: 50px;
+            flex-shrink: 0;
+            border-right: 1px solid #334155;
+            font-weight: 500;
+        }
+        .line-content {
+            padding: 2px 16px;
+            white-space: pre;
+            overflow-x: auto;
+            flex: 1;
+            color: #e2e8f0;
+        }
+        .line-content.empty {
+            color: #64748b;
+            font-style: italic;
+        }
+        .empty-message {
+            padding: 30px;
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .stats {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .stats strong {
+            color: #1e293b;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #94a3b8;
+            color: #94a3b8;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #94a3b8;
+            color: #0f172a;
+        }
+        .copy-btn.copied {
+            background: #22c55e;
+            border-color: #22c55e;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            .input-row textarea { min-height: 80px; }
+            .output-wrapper { font-size: 12px; }
+            .line-number { padding: 2px 10px 2px 8px; min-width: 36px; font-size: 11px; }
+            .line-content { padding: 2px 10px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧾 Numerador de línies</h1>
+        <div class="subtitle">Carrega un fitxer o enganxa codi per veure el número de cada línia</div>
+
+        <div class="input-section">
+            <div class="input-row">
+                <textarea id="codeInput" placeholder="Enganxa aquí el teu codi o text..."></textarea>
+            </div>
+            <div class="buttons">
+                <button id="showBtn">📊 Mostrar numerat</button>
+                <label class="file-label">
+                    📂 Carregar fitxer
+                    <input type="file" id="fileInput" accept=".txt,.js,.py,.java,.html,.css,.c,.cpp,.go,.rs,.sh,.json,.xml,.csv,.log,*">
+                </label>
+                <button id="clearBtn" class="secondary">Netejar</button>
+                <button id="copyBtn" class="copy-btn">📋 Copiar codi</button>
+            </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <div class="output-header">
+                <span>📄 Sortida</span>
+                <span id="lineCount">0 línies</span>
+            </div>
+            <div class="output-wrapper" id="outputWrapper">
+                <!-- Aquí es generaran les línies dinàmicament -->
+                <div class="empty-message">El teu codi es mostrarà aquí amb números de línia.</div>
+            </div>
+        </div>
+
+        <div class="stats">
+            💡 Escriu, enganxa o carrega un fitxer i prem <strong>«Mostrar numerat»</strong>.
+        </div>
+    </div>
+
+    <script>
+        const codeInput = document.getElementById('codeInput');
+        const showBtn = document.getElementById('showBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const fileInput = document.getElementById('fileInput');
+        const outputWrapper = document.getElementById('outputWrapper');
+        const lineCount = document.getElementById('lineCount');
+        const copyBtn = document.getElementById('copyBtn');
+
+        function renderNumberedLines(text) {
+            // Normalitzem salts de línia
+            const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            const lines = normalized.split('\n');
+
+            // Si no hi ha text
+            if (text.trim() === '' && lines.length === 0) {
+                outputWrapper.innerHTML = '<div class="empty-message">El teu codi es mostrarà aquí amb números de línia.</div>';
+                lineCount.textContent = '0 línies';
+                return;
+            }
+
+            // Cas especial: text buit però amb salts de línia
+            if (text === '') {
+                outputWrapper.innerHTML = '<div class="empty-message">El teu codi es mostrarà aquí amb números de línia.</div>';
+                lineCount.textContent = '0 línies';
+                return;
+            }
+
+            let html = '';
+            let visibleLines = 0;
+
+            for (let i = 0; i < lines.length; i++) {
+                const lineContent = lines[i];
+                // Comptem només les línies que tenen contingut o que són buides però mostrem totes
+                visibleLines++;
+                const displayContent = lineContent === '' ? ' ' : lineContent;
+                const emptyClass = lineContent === '' ? ' empty' : '';
+                html += `
+                    <div class="code-line">
+                        <div class="line-number">${i + 1}</div>
+                        <div class="line-content${emptyClass}">${escapeHtml(displayContent)}</div>
+                    </div>
+                `;
+            }
+
+            outputWrapper.innerHTML = html;
+            lineCount.textContent = visibleLines + ' línies';
+        }
+
+        // Funció per escapar caràcters HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function processText(text) {
+            renderNumberedLines(text);
+        }
+
+        function getCurrentText() {
+            return codeInput.value;
+        }
+
+        showBtn.addEventListener('click', () => {
+            const text = getCurrentText();
+            processText(text);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            codeInput.value = '';
+            outputWrapper.innerHTML = '<div class="empty-message">El teu codi es mostrarà aquí amb números de línia.</div>';
+            lineCount.textContent = '0 línies';
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const content = ev.target.result;
+                codeInput.value = content;
+                processText(content);
+            };
+            reader.readAsText(file);
+            fileInput.value = '';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const text = codeInput.value;
+            if (!text) {
+                alert('No hi ha codi per copiar.');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                copyBtn.classList.add('copied');
+                copyBtn.textContent = '✅ Copiat!';
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.textContent = '📋 Copiar codi';
+                }, 2000);
+            }).catch(() => {
+                // Fallback: seleccionar i copiar manualment
+                const textarea = codeInput;
+                textarea.select();
+                document.execCommand('copy');
+                alert('Copiat! (mètode alternatiu)');
+            });
+        });
+
+        // Ctrl+Enter per mostrar
+        codeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                showBtn.click();
+            }
+        });
+
+        // Mostrar automàticament en enganxar (opcional)
+        codeInput.addEventListener('paste', () => {
+            setTimeout(() => {
+                showBtn.click();
+            }, 50);
+        });
+
+        // Inicialitzar amb text d'exemple
+        const sampleCode = `def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+for i in range(10):
+    print(fibonacci(i))`;
+
+        codeInput.value = sampleCode;
+        processText(sampleCode);
+    </script>
+</body>
+</html>
