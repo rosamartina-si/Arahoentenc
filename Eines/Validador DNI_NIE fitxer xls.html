@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de DNI/NIE - Detecció automàtica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .upload-area.dragover {
+            background: #e8ebff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+
+        .controls label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .controls select {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 200px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .controls select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .controls select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-success:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #2563eb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-card.total .stat-number { color: #667eea; }
+        .stat-card.valid .stat-number { color: #10b981; }
+        .stat-card.invalid .stat-number { color: #ef4444; }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f8f9ff;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        tr:hover {
+            background: #fafbff;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-danger {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-purple {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f0f2ff;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .file-info .remove {
+            cursor: pointer;
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .detection-info {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #065f46;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detection-info .icon {
+            font-size: 20px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #1e40af;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-box code {
+            background: #dbeafe;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .highlight-zero {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .controls { flex-direction: column; }
+            .controls select { width: 100%; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .upload-area { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span>🔐</span>
+            Validador de DNI / NIE
+        </h1>
+        <p class="subtitle">Puja un fitxer Excel (.xlsx) i el programa detectarà automàticament la columna amb DNI/NIE</p>
+
+        <!-- Info sobre els zeros -->
+        <div class="info-box">
+            <strong>📌 Regla de neteja de zeros:</strong>
+            El programa només elimina <strong>UN</strong> zero a l'esquerra del número.
+            <br>
+            Exemples:
+            <br>
+            • <code>012345678Z</code> → es neteja a <code>12345678Z</code> <span style="color:#10b981;">✅</span>
+            <br>
+            • <code>0012345678Z</code> → es neteja a <code>012345678Z</code> <span style="color:#f59e0b;">⚠️</span> (només s'elimina el primer zero)
+            <br>
+            • <code>00012345678Z</code> → es neteja a <code>0012345678Z</code> <span style="color:#f59e0b;">⚠️</span>
+        </div>
+
+        <!-- Àrea de pujada -->
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📤</div>
+            <div class="upload-text">Arrossega el fitxer aquí o fes clic per seleccionar-lo</div>
+            <div class="upload-hint">Suporta fitxers .xlsx (Excel)</div>
+            <input type="file" id="fileInput" accept=".xlsx">
+        </div>
+
+        <!-- Informació del fitxer -->
+        <div id="fileInfo" class="hidden file-info">
+            <span>📄</span>
+            <span id="fileName">fitxer.xlsx</span>
+            <span id="fileSize" style="color:#999;"></span>
+            <span class="remove" id="removeFile">✕</span>
+        </div>
+
+        <!-- Detecció automàtica -->
+        <div id="detectionInfo" class="hidden detection-info">
+            <span class="icon">🤖</span>
+            <span id="detectionText">Columna detectada automàticament</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <label for="colSelect">Columna amb DNI/NIE:</label>
+            <select id="colSelect" disabled>
+                <option value="">-- Carregant columnes --</option>
+            </select>
+            <button class="btn btn-primary" id="validateBtn" disabled>✅ Validar</button>
+            <button class="btn btn-info" id="autoDetectBtn">🔍 Detectar automàticament</button>
+        </div>
+
+        <!-- Estadístiques -->
+        <div id="statsContainer" class="hidden">
+            <div class="stats">
+                <div class="stat-card total">
+                    <div class="stat-number" id="totalCount">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card valid">
+                    <div class="stat-number" id="validCount">0</div>
+                    <div class="stat-label">✅ Vàlids</div>
+                </div>
+                <div class="stat-card invalid">
+                    <div class="stat-number" id="invalidCount">0</div>
+                    <div class="stat-label">❌ Invàlids</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-success" id="downloadBtn" disabled>📥 Descarregar Excel</button>
+                <button class="btn btn-danger" id="clearBtn">🗑️ Netejar</button>
+            </div>
+        </div>
+
+        <!-- Taula de resultats -->
+        <div id="tableContainer" class="hidden table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Valor original</th>
+                        <th>Valor netejat</th>
+                        <th>Zeros eliminats</th>
+                        <th>Tipus</th>
+                        <th>Estat</th>
+                        <th>Missatge</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+            <div class="icon">📊</div>
+            <p>Puja un Excel per començar la validació</p>
+        </div>
+    </div>
+
+    <!-- Carregar llibreries externes -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        // ============================================================
+        // 1. FUNCIÓ PER NETEJAR NOMÉS UN ZERO A L'ESQUERRA
+        // ============================================================
+        function netejarUnZeroDavant(valor) {
+            if (!valor && valor !== 0) return { netejat: valor, zerosEliminats: 0 };
+            
+            let s = String(valor).trim();
+            if (s === '') return { netejat: s, zerosEliminats: 0 };
+            
+            let zerosEliminats = 0;
+            // Només eliminar el primer caràcter si és un zero
+            if (s.length > 0 && s[0] === '0') {
+                s = s.slice(1);
+                zerosEliminats = 1;
+            }
+            
+            return { netejat: s, zerosEliminats: zerosEliminats };
+        }
+
+        // ============================================================
+        // 2. VALIDACIÓ DE DNI / NIE (AMB NETEJA D'UN SOL ZERO)
+        // ============================================================
+        function validarDNI_NIE(valor) {
+            if (!valor && valor !== 0) {
+                return { 
+                    valid: false, 
+                    type: '', 
+                    message: 'Valor buit', 
+                    original: valor, 
+                    netejat: '',
+                    zerosEliminats: 0
+                };
+            }
+
+            let original = String(valor).trim();
+            if (original === '') {
+                return { 
+                    valid: false, 
+                    type: '', 
+                    message: 'Valor buit', 
+                    original: '', 
+                    netejat: '',
+                    zerosEliminats: 0
+                };
+            }
+
+            // NETEJAR NOMÉS UN ZERO A L'ESQUERRA
+            const resultatNeteja = netejarUnZeroDavant(original);
+            let netejat = resultatNeteja.netejat;
+            let zerosEliminats = resultatNeteja.zerosEliminats;
+            
+            // Si després de netejar queda buit, és que era només "0"
+            if (netejat === '') {
+                return { 
+                    valid: false, 
+                    type: '', 
+                    message: 'Número no vàlid (només un zero)', 
+                    original: original, 
+                    netejat: netejat,
+                    zerosEliminats: zerosEliminats
+                };
+            }
+
+            let s = netejat.toUpperCase();
+
+            // Comprovar format: 8 dígits + lletra O X/Y/Z + 7 dígits + lletra
+            const regex = /^[XYZ]?\d{7,8}[A-Z]$/;
+            if (!regex.test(s)) {
+                return { 
+                    valid: false, 
+                    type: '', 
+                    message: 'Format incorrecte', 
+                    original: original, 
+                    netejat: netejat,
+                    zerosEliminats: zerosEliminats
+                };
+            }
+
+            const lletra = s.slice(-1);
+            let numeros = s.slice(0, -1);
+            let tipus = '';
+
+            // Convertir NIE (X,Y,Z) a número
+            if (numeros[0] === 'X') {
+                numeros = '0' + numeros.slice(1);
+                tipus = 'NIE';
+            } else if (numeros[0] === 'Y') {
+                numeros = '1' + numeros.slice(1);
+                tipus = 'NIE';
+            } else if (numeros[0] === 'Z') {
+                numeros = '2' + numeros.slice(1);
+                tipus = 'NIE';
+            } else {
+                tipus = 'DNI';
+            }
+
+            if (numeros.length !== 8) {
+                return { 
+                    valid: false, 
+                    type: tipus, 
+                    message: 'Longitud incorrecta (8 dígits)', 
+                    original: original, 
+                    netejat: netejat,
+                    zerosEliminats: zerosEliminats
+                };
+            }
+
+            const lletres = 'TRWAGMYFPDXBNJZSQVHLCKE';
+            const numInt = parseInt(numeros, 10);
+            const lletraCalc = lletres[numInt % 23];
+
+            if (lletra === lletraCalc) {
+                return { 
+                    valid: true, 
+                    type: tipus, 
+                    message: 'Vàlid', 
+                    original: original, 
+                    netejat: netejat,
+                    zerosEliminats: zerosEliminats
+                };
+            } else {
+                return { 
+                    valid: false, 
+                    type: tipus, 
+                    message: `Lletra incorrecta (esperada: ${lletraCalc})`, 
+                    original: original, 
+                    netejat: netejat,
+                    zerosEliminats: zerosEliminats
+                };
+            }
+        }
+
+        // ============================================================
+        // 3. DETECCIÓ AUTOMÀTICA DE LA COLUMNA
+        // ============================================================
+        function detectarColumnaDNI(data, headers) {
+            if (!data || data.length === 0 || !headers || headers.length === 0) {
+                return null;
+            }
+
+            console.log('🔍 Detectant columna DNI/NIE...');
+            console.log('Columnes:', headers);
+
+            // Mètode 1: Buscar per nom de columna (paraules clau)
+            const keywords = [
+                'dni', 'nie', 'document', 'identificacion', 'identitat', 
+                'nif', 'cif', 'passaport', 'id', 'identificador',
+                'documento', 'identidad', 'numero', 'num'
+            ];
+
+            for (const keyword of keywords) {
+                for (const header of headers) {
+                    const headerLower = header.toLowerCase().trim();
+                    if (headerLower === keyword || headerLower.includes(keyword) || keyword.includes(headerLower)) {
+                        console.log(`✅ Columna trobada per nom: "${header}"`);
+                        return header;
+                    }
+                }
+            }
+
+            // Mètode 2: Analitzar el contingut de cada columna
+            console.log('🔍 Analitzant contingut de les columnes...');
+            let bestColumn = null;
+            let bestScore = 0;
+
+            for (const header of headers) {
+                let score = 0;
+                let validCount = 0;
+                let totalChecked = 0;
+                let sampleSize = Math.min(20, data.length);
+
+                for (let i = 0; i < sampleSize; i++) {
+                    const value = data[i][header];
+                    if (value && String(value).trim() !== '') {
+                        totalChecked++;
+                        const result = validarDNI_NIE(value);
+                        if (result.valid) {
+                            validCount++;
+                            score += 2;
+                        } else if (result.message !== 'Valor buit' && result.message !== 'Format incorrecte' && result.message !== 'Número no vàlid (només un zero)') {
+                            score += 0.5;
+                        }
+                    }
+                }
+
+                if (totalChecked > 0) {
+                    const validRatio = validCount / totalChecked;
+                    score = score + (validRatio * 10);
+                }
+
+                console.log(`📊 Columna "${header}": score=${score.toFixed(2)}, vàlids=${validCount}/${totalChecked}`);
+
+                if (score > bestScore && totalChecked > 0) {
+                    bestScore = score;
+                    bestColumn = header;
+                }
+            }
+
+            if (!bestColumn) {
+                for (const header of headers) {
+                    let hasData = false;
+                    for (let i = 0; i < Math.min(5, data.length); i++) {
+                        if (data[i][header] && String(data[i][header]).trim() !== '') {
+                            hasData = true;
+                            break;
+                        }
+                    }
+                    if (hasData) {
+                        bestColumn = header;
+                        console.log(`⚠️ Usant primera columna amb dades: "${header}"`);
+                        break;
+                    }
+                }
+            }
+
+            return bestColumn;
+        }
+
+        // ============================================================
+        // 4. GESTIÓ DE L'EXCEL
+        // ============================================================
+        let workbookData = null;
+        let workbookHeaders = [];
+        let validatedData = [];
+        let fileName = '';
+        let selectedColumn = '';
+
+        // Elements DOM
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileNameEl = document.getElementById('fileName');
+        const fileSizeEl = document.getElementById('fileSize');
+        const removeFileBtn = document.getElementById('removeFile');
+        const colSelect = document.getElementById('colSelect');
+        const validateBtn = document.getElementById('validateBtn');
+        const autoDetectBtn = document.getElementById('autoDetectBtn');
+        const statsContainer = document.getElementById('statsContainer');
+        const tableContainer = document.getElementById('tableContainer');
+        const emptyState = document.getElementById('emptyState');
+        const resultsBody = document.getElementById('resultsBody');
+        const totalCount = document.getElementById('totalCount');
+        const validCount = document.getElementById('validCount');
+        const invalidCount = document.getElementById('invalidCount');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const detectionInfo = document.getElementById('detectionInfo');
+        const detectionText = document.getElementById('detectionText');
+
+        // ============================================================
+        // 5. PUJADA DE FITXER
+        // ============================================================
+        function handleFile(file) {
+            if (!file) return;
+
+            const validTypes = [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel'
+            ];
+            if (!validTypes.includes(file.type) && !file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+                alert('Si us plau, puja un fitxer Excel vàlid (.xlsx o .xls)');
+                return;
+            }
+
+            fileName = file.name;
+            fileNameEl.textContent = fileName;
+            fileSizeEl.textContent = `(${(file.size / 1024).toFixed(1)} KB)`;
+            fileInfo.classList.remove('hidden');
+            uploadArea.style.display = 'none';
+
+            validatedData = [];
+            statsContainer.classList.add('hidden');
+            tableContainer.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            detectionInfo.classList.add('hidden');
+            downloadBtn.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+
+                    if (jsonData.length === 0) {
+                        alert('El fitxer està buit o no té dades vàlides.');
+                        resetFile();
+                        return;
+                    }
+
+                    workbookHeaders = Object.keys(jsonData[0]);
+                    workbookData = jsonData;
+
+                    colSelect.innerHTML = '';
+                    workbookHeaders.forEach(header => {
+                        const option = document.createElement('option');
+                        option.value = header;
+                        option.textContent = header;
+                        colSelect.appendChild(option);
+                    });
+                    colSelect.disabled = false;
+
+                    detectAndSelectColumn();
+                    validateBtn.disabled = false;
+                    autoDetectBtn.disabled = false;
+
+                } catch (error) {
+                    alert('Error al llegir el fitxer: ' + error.message);
+                    resetFile();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function detectAndSelectColumn() {
+            if (!workbookData || workbookData.length === 0) return;
+
+            const detected = detectarColumnaDNI(workbookData, workbookHeaders);
+            
+            if (detected) {
+                colSelect.value = detected;
+                selectedColumn = detected;
+                detectionInfo.classList.remove('hidden');
+                detectionText.innerHTML = `🤖 Columna detectada automàticament: <strong>"${detected}"</strong> (basat en anàlisi de noms i contingut)`;
+                detectionInfo.style.background = '#f0fdf4';
+                detectionInfo.style.borderColor = '#86efac';
+                detectionInfo.style.color = '#065f46';
+            } else if (workbookHeaders.length > 0) {
+                colSelect.value = workbookHeaders[0];
+                selectedColumn = workbookHeaders[0];
+                detectionInfo.classList.remove('hidden');
+                detectionText.innerHTML = `⚠️ No s'ha pogut detectar automàticament, s'ha seleccionat la primera columna: <strong>"${workbookHeaders[0]}"</strong>`;
+                detectionInfo.style.background = '#fef3c7';
+                detectionInfo.style.borderColor = '#f59e0b';
+                detectionInfo.style.color = '#92400e';
+            }
+        }
+
+        function resetFile() {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            uploadArea.style.display = 'block';
+            workbookData = null;
+            workbookHeaders = [];
+            validatedData = [];
+            colSelect.innerHTML = '<option value="">-- Cap fitxer carregat --</option>';
+            colSelect.disabled = true;
+            validateBtn.disabled = true;
+            autoDetectBtn.disabled = true;
+            statsContainer.classList.add('hidden');
+            tableContainer.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            detectionInfo.classList.add('hidden');
+            downloadBtn.disabled = true;
+            selectedColumn = '';
+            detectionInfo.style.background = '#f0fdf4';
+            detectionInfo.style.borderColor = '#86efac';
+            detectionInfo.style.color = '#065f46';
+        }
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        removeFileBtn.addEventListener('click', resetFile);
+
+        // ============================================================
+        // 6. DETECCIÓ MANUAL
+        // ============================================================
+        autoDetectBtn.addEventListener('click', function() {
+            if (!workbookData || workbookData.length === 0) {
+                alert('Primer puja un fitxer Excel.');
+                return;
+            }
+            detectAndSelectColumn();
+        });
+
+        // ============================================================
+        // 7. VALIDACIÓ
+        // ============================================================
+        validateBtn.addEventListener('click', function() {
+            if (!workbookData || workbookData.length === 0) {
+                alert('No hi ha dades per validar.');
+                return;
+            }
+
+            const colName = colSelect.value;
+            if (!colName) {
+                alert('Si us plau, selecciona una columna.');
+                return;
+            }
+
+            validatedData = [];
+            let validCountNum = 0;
+            let invalidCountNum = 0;
+
+            workbookData.forEach((row, index) => {
+                const valor = row[colName];
+                const result = validarDNI_NIE(valor);
+                const rowData = {
+                    index: index + 1,
+                    valor: valor !== '' && valor !== undefined ? String(valor) : '',
+                    netejat: result.netejat || '',
+                    zerosEliminats: result.zerosEliminats || 0,
+                    tipus: result.type,
+                    valid: result.valid,
+                    message: result.message
+                };
+                validatedData.push(rowData);
+                if (result.valid) validCountNum++;
+                else invalidCountNum++;
+            });
+
+            totalCount.textContent = validatedData.length;
+            validCount.textContent = validCountNum;
+            invalidCount.textContent = invalidCountNum;
+            statsContainer.classList.remove('hidden');
+
+            renderTable(validatedData);
+            tableContainer.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            downloadBtn.disabled = false;
+        });
+
+        // ============================================================
+        // 8. RENDERITZAR TAULA
+        // ============================================================
+        function renderTable(data) {
+            resultsBody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                const badgeClass = row.valid ? 'badge-success' : 'badge-danger';
+                const badgeText = row.valid ? '✅ Vàlid' : '❌ Invàlid';
+
+                // Mostrar el valor netejat només si és diferent de l'original
+                let valorNetejat = row.netejat;
+                if (row.valor === row.netejat || !row.netejat) {
+                    valorNetejat = '-';
+                }
+
+                // Mostrar quants zeros s'han eliminat
+                let zerosText = row.zerosEliminats > 0 ? `✅ ${row.zerosEliminats} zero eliminat` : '-';
+
+                tr.innerHTML = `
+                    <td>${row.index}</td>
+                    <td><strong>${row.valor || '(buit)'}</strong></td>
+                    <td>${valorNetejat}</td>
+                    <td>${zerosText}</td>
+                    <td>${row.tipus ? `<span class="badge badge-info">${row.tipus}</span>` : '-'}</td>
+                    <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+                    <td style="color:${row.valid ? '#065f46' : '#991b1b'}">${row.message}</td>
+                `;
+                resultsBody.appendChild(tr);
+            });
+        }
+
+        // ============================================================
+        // 9. DESCARREGAR EXCEL
+        // ============================================================
+        downloadBtn.addEventListener('click', function() {
+            if (validatedData.length === 0) {
+                alert('No hi ha dades validades per descarregar.');
+                return;
+            }
+
+            const exportData = validatedData.map(row => ({
+                'Fila': row.index,
+                'Valor original': row.valor,
+                'Valor netejat': row.netejat || row.valor,
+                'Zeros eliminats': row.zerosEliminats,
+                'Tipus': row.tipus,
+                'Vàlid': row.valid ? 'Sí' : 'No',
+                'Missatge': row.message
+            }));
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Validació');
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+            const blob = new Blob([wbout], { type: 'application/octet-stream' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName.replace(/\.(xlsx|xls)$/, '') + '_validat.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        });
+
+        // ============================================================
+        // 10. NETEJAR
+        // ============================================================
+        clearBtn.addEventListener('click', function() {
+            resetFile();
+            validatedData = [];
+            statsContainer.classList.add('hidden');
+            tableContainer.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+        });
+
+        // ============================================================
+        // 11. CANVI DE COLUMNA MANUAL
+        // ============================================================
+        colSelect.addEventListener('change', function() {
+            selectedColumn = this.value;
+            if (this.value) {
+                detectionInfo.classList.remove('hidden');
+                detectionText.innerHTML = `👤 Columna seleccionada manualment: <strong>"${this.value}"</strong>`;
+                detectionInfo.style.background = '#f0fdf4';
+                detectionInfo.style.borderColor = '#86efac';
+                detectionInfo.style.color = '#065f46';
+            }
+        });
+
+        console.log('✅ Validador de DNI/NIE amb neteja d\'UN SOL zero davanter carregat');
+        console.log('📌 Exemple: "012345678Z" → "12345678Z" (s\'elimina només el primer zero)');
+        console.log('📌 Exemple: "0012345678Z" → "012345678Z" (només s\'elimina el primer zero)');
+    </script>
+</body>
+</html>
