@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor de TXT/CSV a Excel</title>
+    <style>
+        :root {
+            --blau: #2457a6;
+            --blau-fosc: #173b73;
+            --fons: #f4f7fb;
+            --vora: #d8e1ec;
+            --text: #1f2937;
+            --muted: #667085;
+            --verd: #18794e;
+            --vermell: #b42318;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            background: var(--fons);
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            line-height: 1.15;
+        }
+        .contenidor {
+            width: min(1200px, 94%);
+            margin: 28px auto;
+        }
+        h1 {
+            margin: 0 0 7px;
+            color: var(--blau-fosc);
+            font-size: 28px;
+        }
+        .intro {
+            margin: 0 0 20px;
+            color: var(--muted);
+        }
+        .targeta {
+            background: #fff;
+            border: 1px solid var(--vora);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, .05);
+        }
+        .zona {
+            display: block;
+            border: 2px dashed #91a9ca;
+            border-radius: 12px;
+            padding: 30px 18px;
+            text-align: center;
+            background: #f8fbff;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .zona.arrossega {
+            background: #edf5ff;
+            border-color: var(--blau);
+        }
+        .zona strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+        input[type=file] {
+            display: none;
+        }
+        .botons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 15px;
+        }
+        button {
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--blau);
+            color: #fff;
+            transition: background 0.15s;
+        }
+        button:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+        button.secundari {
+            background: #e7eef8;
+            color: var(--blau-fosc);
+        }
+        button.perill {
+            background: #fee4e2;
+            color: var(--vermell);
+        }
+        button.copiar {
+            background: #e8f5e9;
+            color: #1e7e34;
+        }
+        button.ajuda {
+            background: #f0f4f8;
+            color: var(--blau-fosc);
+        }
+        button.guia {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        button:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+        .estat {
+            margin-left: auto;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .fitxers {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 13px;
+        }
+        .fitxer {
+            background: #eef3f9;
+            border: 1px solid var(--vora);
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 13px;
+        }
+        .avis {
+            display: none;
+            margin-top: 14px;
+            padding: 11px 13px;
+            border-radius: 9px;
+            background: #eef8f2;
+            color: var(--verd);
+        }
+        .avis.error {
+            background: #fff1f0;
+            color: var(--vermell);
+        }
+        .taula-wrap {
+            overflow: auto;
+            max-height: 520px;
+            border: 1px solid var(--vora);
+            border-radius: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            min-width: 2500px;
+            width: 100%;
+            font-size: 12px;
+        }
+        th, td {
+            padding: 7px 8px;
+            border-right: 1px solid #edf0f4;
+            border-bottom: 1px solid #e3e8ef;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th {
+            position: sticky;
+            top: 0;
+            background: #eaf1fb;
+            color: var(--blau-fosc);
+            z-index: 2;
+        }
+        tr:nth-child(even) td {
+            background: #fafbfd;
+        }
+        .nota {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.45;
+            margin-top: 12px;
+        }
+        .opcions-copia {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 8px 0 4px;
+            padding: 8px 12px;
+            background: #f8faff;
+            border-radius: 8px;
+            border: 1px solid var(--vora);
+        }
+        .opcions-copia label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        .opcions-copia input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--blau);
+        }
+
+        /* Finestres Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-contingut {
+            background: #fff;
+            padding: 28px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            position: relative;
+            line-height: 1.6;
+        }
+        .modal h2 {
+            margin-top: 0;
+            color: var(--blau-fosc);
+            font-size: 22px;
+            border-bottom: 2px solid var(--fons);
+            padding-bottom: 10px;
+        }
+        .modal h3 {
+            font-size: 16px;
+            color: var(--blau-fosc);
+            margin: 18px 0 6px;
+        }
+        .modal p, .modal li {
+            font-size: 14px;
+            color: var(--text);
+        }
+        .modal ul {
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+        .modal li {
+            margin-bottom: 6px;
+        }
+        .tancar-modal {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: 0;
+            color: var(--muted);
+            font-weight: bold;
+            padding: 5px;
+            line-height: 1;
+        }
+        .tancar-modal:hover {
+            color: var(--text);
+        }
+        .boto-tancar-ajuda {
+            display: block;
+            margin-top: 24px;
+            width: 100%;
+            text-align: center;
+            background: var(--blau-fosc);
+        }
+
+        /* Indicador de passos visuals per a la posada en marxa */
+        .pas-guia {
+            background: #f8faff;
+            border-left: 4px solid #0284c7;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        @media(max-width: 700px) {
+            button { width: 100%; }
+            .estat { width: 100%; margin-left: 0; }
+            .opcions-copia { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+<div class="contenidor">
+    <h1>Convertidor de diversos TXT i CSV a Excel</h1>
+    <p class="intro">Carrega un o més fitxers TXT (amplada fixa) o CSV del mateix format, uneix-ne tots els registres i descarrega un únic fitxer Excel.</p>
+    
+    <section class="targeta">
+        <label class="zona" id="zona" for="entrada">
+            <strong>Arrossega aquí els fitxers TXT o CSV</strong>
+            o fes clic per seleccionar-los
+        </label>
+        <input id="entrada" type="file" accept=".txt,.csv,text/plain,text/csv" multiple>
+        <div class="fitxers" id="fitxers"></div>
+        
+        <div class="botons">
+            <button id="baixar" disabled>Descarrega l’Excel (.xls)</button>
+            <button id="csv" class="secundari" disabled>Descarrega en CSV</button>
+            <button id="copiar" class="copiar" disabled>📋 Copia les dades</button>
+            <button id="netejar" class="perill" disabled>Neteja</button>
+            <button id="ajuda" class="ajuda">ℹ️ Preguntes freqüents</button>
+            <button id="botoGuia" class="guia">📖 Guia d'ús ràpid</button>
+            <span class="estat" id="estat">Cap fitxer carregat</span>
+        </div>
+        
+        <div class="opcions-copia">
+            <label><input type="checkbox" id="incloureCapcaleres" checked> Incloure capçaleres (primera fila)</label>
+            <label><input type="checkbox" id="copiarSeparador" checked> Copiar amb tabuladors (per enganxar a Excel)</label>
+        </div>
+        
+        <div id="avis" class="avis"></div>
+        <p class="nota">Per a fitxers TXT, les línies de control que comencen per <strong>0000</strong> o <strong>9999</strong> s’ignoren. El procés es fa íntegrament al navegador i els fitxers no s’envien a Internet.</p>
+    </section>
+    
+    <section class="targeta">
+        <h2 style="margin-top:0">Previsualització</h2>
+        <div class="taula-wrap">
+            <table id="taula">
+                <thead>
+                    <tr><th>Encara no hi ha dades</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<!-- Finestra modal de Preguntes freqüents -->
+<div class="modal" id="modalAjuda">
+    <div class="modal-contingut">
+        <button class="tancar-modal" id="tancarModal" aria-label="Tanca">&times;</button>
+        <h2>❓ Preguntes freqüents i detalls tècnics</h2>
+        
+        <h3>📂 Puc carregar fitxers diferents alhora?</h3>
+        <p><strong>Sí!</strong> Pots seleccionar molts fitxers de cop. La condició és que tinguin el mateix format de columnes (per exemple, un grup de fitxers de notes de la mateixa convocatòria). L'eina els fusionarà tots automàticament en una única llista.</p>
+        
+        <h3>🧹 Es netegen les línies de capçalera o els títols repetits?</h3>
+        <p>Sí. Si puges diversos fitxers CSV que tenen capçaleres a la primera fila, l'aplicació només mantindrà la capçalera principal del primer fitxer i eliminarà la dels altres per evitar línies de títol repetides enmig de les dades.</p>
+        
+        <h3>🔒 S'envien les dades a algun lloc?</h3>
+        <p><strong>No, en absolut.</strong> Tot es processa localment al teu ordinador (dins del navegador Chrome, Edge o Firefox). Com que no s'envia res a cap servidor extern, és completament segur per treballar amb dades personals i de gestió interna de forma totalment confidencial.</p>
+        
+        <h3>📁 Com sé de quin fitxer ve cada fila?</h3>
+        <p>A l'extrem dret de la previsualització (i al document que et descarreguis) s'afegeix de forma automàtica una última columna anomenada <strong>"Fitxer d'origen"</strong> que t'indica el nom exacte del fitxer d'on hem extret aquelles files.</p>
+        
+        <button class="boto-tancar-ajuda" id="botoTancarAjuda">Entesos, tanca</button>
+    </div>
+</div>
+
+<!-- Finestra modal de Guia d'ús ràpid (Com fer-lo funcionar des de zero) -->
+<div class="modal" id="modalGuia">
+    <div class="modal-contingut">
+        <button class="tancar-modal" id="tancarModalGuia" aria-label="Tanca">&times;</button>
+        <h2>📖 Guia d'ús per a l'usuari</h2>
+        <p>Aquest convertidor t'ajuda a ajuntar fàcilment diversos llistats de dades en un sol llibre de treball d'Excel. Segueix aquests tres passos bàsics:</p>
+        
+        <div class="pas-guia">
+            <strong>1. Carrega els fitxers de text (.txt o .csv)</strong>
+            <p style="margin: 4px 0 0; font-size: 13px;">Obre la teva carpeta de fitxers, selecciona els arxius de dades que vulguis unificar i arrossega'ls directament dins de la <strong>zona blava de punts</strong>. També pots fer clic sobre aquesta zona per triar els fitxers manualment de l'ordinador.</p>
+        </div>
+        
+        <div class="pas-guia">
+            <strong>2. Revisa la previsualització de dades</strong>
+            <p style="margin: 4px 0 0; font-size: 13px;">A l'instant es generarà una graella a la part inferior amb els camps separats (noms, codis, notes, etc.). Un missatge en verd a dalt t'indicarà quants fitxers s'han llegit de forma correcta.</p>
+        </div>
+        
+        <div class="pas-guia">
+            <strong>3. Exporta les dades cap al teu Excel</strong>
+            <p style="margin: 4px 0 0; font-size: 13px;">Tens dues opcions per treballar-hi:</p>
+            <ul style="margin: 5px 0; font-size: 13px; padding-left: 15px;">
+                <li><strong>Descarregar fitxer:</strong> Fes clic a <strong>"Descarrega l'Excel"</strong> per obtenir un fitxer editable a l'instant.</li>
+                <li><strong>Copiar i Enganxar (Més ràpid):</strong> Fes clic a <strong>"📋 Copia les dades"</strong>, obre un llibre buit que ja tinguis obert d'Excel o LibreOffice i prem <strong>Ctrl+V (Enganxa)</strong>. Tot quedarà perfectament col·locat a les seves columnes!</li>
+            </ul>
+        </div>
+        
+        <button class="boto-tancar-ajuda" id="botoTancarGuia" style="background: #0284c7;">Entesos, tanca</button>
+    </div>
+</div>
+
+<script>
+(() => {
+    'use strict';
+
+    const camps = [
+        ['Número de registre', 0, 4],
+        ['Codi del centre', 4, 12],
+        ['Centre', 12, 52],
+        ['Codi d’idioma', 52, 60],
+        ['Convocatòria', 60, 88],
+        ['Codi de candidat/a', 88, 108],
+        ['Nom', 108, 138],
+        ['Primer cognom', 138, 168],
+        ['Segon cognom', 168, 198],
+        ['Data de naixement', 198, 208],
+        ['Sexe', 208, 209],
+        ['Codi municipi naixement', 209, 217],
+        ['Municipi de naixement', 217, 267],
+        ['Codi tipus de via', 267, 270],
+        ['Adreça', 270, 370],
+        ['Codi postal', 370, 375],
+        ['Municipi', 375, 475],
+        ['Telèfon', 475, 505],
+        ['Correu electrònic', 505, 600],
+        ['Indicador', 600, 606],
+        ['Prova 1', 606, 611],
+        ['Prova 2', 611, 616],
+        ['Prova 3', 616, 621],
+        ['Prova 4', 621, 626],
+        ['Prova 5', 626, 631],
+        ['Nota final', 631, 637],
+        ['Resultat', 637, 657]
+    ];
+
+    const capçaleres = [
+        'Número de registre', 'Codi del centre', 'Centre', 'Codi d’idioma', 'Convocatòria',
+        'Document', 'Nom i cognoms', 'Data de naixement', 'Sexe', 'Codi municipi naixement',
+        'Municipi de naixement', 'Codi tipus de via', 'Adreça', 'Codi postal', 'Municipi',
+        'Telèfon', 'Correu electrònic', 'Indicador', 'Prova 1', 'Prova 2', 'Prova 3',
+        'Prova 4', 'Prova 5', 'Nota final', 'Resultat', 'Fitxer d’origen'
+    ];
+
+    let dades = [], noms = [];
+
+    const entrada = document.getElementById('entrada');
+    const zona = document.getElementById('zona');
+    const fitxers = document.getElementById('fitxers');
+    const baixar = document.getElementById('baixar');
+    const csv = document.getElementById('csv');
+    const netejar = document.getElementById('netejar');
+    const estat = document.getElementById('estat');
+    const avis = document.getElementById('avis');
+    const taula = document.getElementById('taula');
+    const copiar = document.getElementById('copiar');
+    const incloureCapcaleres = document.getElementById('incloureCapcaleres');
+    const copiarSeparador = document.getElementById('copiarSeparador');
+
+    // Modals
+    const ajuda = document.getElementById('ajuda');
+    const modalAjuda = document.getElementById('modalAjuda');
+    const tancarModal = document.getElementById('tancarModal');
+    const botoTancarAjuda = document.getElementById('botoTancarAjuda');
+
+    const botoGuia = document.getElementById('botoGuia');
+    const modalGuia = document.getElementById('modalGuia');
+    const tancarModalGuia = document.getElementById('tancarModalGuia');
+    const botoTancarGuia = document.getElementById('botoTancarGuia');
+
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[m]));
+
+    function mostraAvis(text, error = false) {
+        avis.textContent = text;
+        avis.className = 'avis' + (error ? ' error' : '');
+        avis.style.display = 'block';
+    }
+
+    function registre(linia, origen) {
+        const p = linia.padEnd(657, ' ');
+        const v = camps.map(c => p.slice(c[1], c[2]).trim());
+        const documentVal = v[5].slice(6);
+        const nomComplet = [v[7], v[8]].filter(Boolean).join(' ') + (v[6] ? `, ${v[6]}` : '');
+        return [
+            v[0], v[1], v[2], v[3], v[4], documentVal, nomComplet,
+            v[9], v[10], v[11], v[12], v[13], v[14], v[15], v[16],
+            v[17], v[18], v[19], v[20], v[21], v[22], v[23], v[24],
+            v[25], v[26], origen
+        ];
+    }
+
+    function parseCSV(text) {
+        const lines = [];
+        let row = [];
+        let col = "";
+        let inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const nextChar = text[i+1];
+            if (char === '"') {
+                if (inQuotes && nextChar === '"') {
+                    col += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if ((char === ',' || char === ';' || char === '\t') && !inQuotes) {
+                row.push(col.trim());
+                col = "";
+            } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                row.push(col.trim());
+                if (row.length > 1 || (row[0] !== undefined && row[0] !== "")) {
+                    lines.push(row);
+                }
+                row = [];
+                col = "";
+                if (char === '\r' && nextChar === '\n') {
+                    i++;
+                }
+            } else {
+                col += char;
+            }
+        }
+        if (col !== "" || row.length > 0) {
+            row.push(col.trim());
+            lines.push(row);
+        }
+        return lines;
+    }
+
+    function control(linia) {
+        const t = linia.trim();
+        return !t || t.startsWith('0000') || t.startsWith('9999');
+    }
+
+    async function llegirTextAmbCodificacio(f) {
+        const buffer = await f.arrayBuffer();
+        try {
+            const decoderUTF8 = new TextDecoder('utf-8', { fatal: true });
+            return decoderUTF8.decode(buffer);
+        } catch (e) {
+            const decoderANSI = new TextDecoder('windows-1252');
+            return decoderANSI.decode(buffer);
+        }
+    }
+
+    async function carregar(llista) {
+        const seleccionats = [...llista].filter(f => 
+            f.name.toLowerCase().endsWith('.txt') || 
+            f.name.toLowerCase().endsWith('.csv') || 
+            f.type === 'text/plain' || 
+            f.type === 'text/csv' || 
+            !f.type
+        );
+        if (!seleccionats.length) {
+            mostraAvis('No s’ha seleccionat cap fitxer TXT o CSV vàlid.', true);
+            return;
+        }
+        dades = [];
+        noms = [];
+        let ignorades = 0, curtes = 0;
+
+        for (const f of seleccionats) {
+            const text = await llegirTextAmbCodificacio(f);
+            noms.push(f.name);
+            const esCSV = f.name.toLowerCase().endsWith('.csv') || f.type === 'text/csv';
+
+            if (esCSV) {
+                const files = parseCSV(text);
+                if (files.length > 0) {
+                    const teCapçalera = files[0].some(cell => 
+                        capçaleres.slice(0, 10).some(h => 
+                            String(cell).toLowerCase().includes(h.toLowerCase().slice(0, 10))
+                        )
+                    );
+                    const inici = teCapçalera ? 1 : 0;
+                    for (let i = inici; i < files.length; i++) {
+                        const fila = files[i];
+                        if (fila.length === 0 || (fila.length === 1 && fila[0] === "")) continue;
+                        const filaAdaptada = Array(capçaleres.length - 1).fill('');
+                        for (let colIdx = 0; colIdx < Math.min(fila.length, capçaleres.length - 1); colIdx++) {
+                            filaAdaptada[colIdx] = fila[colIdx];
+                        }
+                        filaAdaptada.push(f.name);
+                        dades.push(filaAdaptada);
+                    }
+                }
+            } else {
+                for (const linia of text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n')) {
+                    if (control(linia)) {
+                        if (linia.trim()) ignorades++;
+                        continue;
+                    }
+                    if (linia.length < 657) curtes++;
+                    dades.push(registre(linia, f.name));
+                }
+            }
+        }
+
+        fitxers.innerHTML = noms.map(n => `<span class="fitxer">${esc(n)}</span>`).join('');
+        estat.textContent = `${dades.length} registres de ${noms.length} fitxer(s)`;
+        baixar.disabled = csv.disabled = netejar.disabled = copiar.disabled = !dades.length;
+        previsualitza();
+        mostraAvis(`S’han importat ${dades.length} registres i s’han ignorat ${ignorades} línies de control.${curtes ? ' Hi ha ' + curtes + ' línia/es més curtes del que s’esperava; revisa-les.' : ''}`, curtes > 0);
+    }
+
+    function previsualitza() {
+        const th = taula.querySelector('thead');
+        const tb = taula.querySelector('tbody');
+        if (!dades.length) {
+            th.innerHTML = '<tr><th>Encara no hi ha dades</th></tr>';
+            tb.innerHTML = '';
+            return;
+        }
+        th.innerHTML = '<tr>' + capçaleres.map(h => `<th>${esc(h)}</th>`).join('') + '</tr>';
+        tb.innerHTML = dades.slice(0, 200).map(r => 
+            '<tr>' + r.map(v => `<td>${esc(v)}</td>`).join('') + '</tr>'
+        ).join('') + (dades.length > 200 ? `<tr><td colspan="${capçaleres.length}">Es mostren els primers 200 registres de ${dades.length}.</td></tr>` : '');
+    }
+
+    function descarrega(blob, nom) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nom;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            URL.revokeObjectURL(a.href);
+            a.remove();
+        }, 500);
+    }
+
+    function excel() {
+        const estil = `<style>
+            table{border-collapse:collapse;font-family:Arial;font-size:10pt}
+            th{background:#d9eaf7;font-weight:bold}
+            th,td{border:1px solid #999;padding:4px}
+            td{mso-number-format:'\\@'}
+        </style>`;
+        const contingut = '<table><thead><tr>' + capçaleres.map(h => `<th>${esc(h)}</th>`).join('') + '</tr></thead><tbody>' + dades.map(r => '<tr>' + r.map(v => `<td>${esc(v)}</td>`).join('') + '</tr>').join('') + '</tbody></table>';
+        const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8">${estil}</head><body>${contingut}</body></html>`;
+        descarrega(new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8' }), 'resultats_unificats.xls');
+    }
+
+    function csvBaixa() {
+        const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+        const text = [capçaleres, ...dades].map(r => r.map(q).join(';')).join('\r\n');
+        descarrega(new Blob(['\ufeff', text], { type: 'text/csv;charset=utf-8' }), 'resultats_unificats.csv');
+    }
+
+    function copiarDades() {
+        if (!dades.length) {
+            mostraAvis('No hi ha dades per copiar.', true);
+            return;
+        }
+        const separador = copiarSeparador.checked ? '\t' : ';';
+        let text = '';
+        if (incloureCapcaleres.checked) {
+            text += capçaleres.join(separador) + '\n';
+        }
+        text += dades.map(r => r.join(separador)).join('\n');
+        
+        navigator.clipboard.writeText(text).then(() => {
+            mostraAvis('📋 Dades copiades al portapapers!');
+        }).catch(() => {
+            try {
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                area.remove();
+                mostraAvis('📋 Dades copiades al portapapers!');
+            } catch (e) {
+                mostraAvis('No s’ha pogut copiar. Prova a seleccionar la taula manualment.', true);
+            }
+        });
+    }
+
+    function netejaTot() {
+        dades = [];
+        noms = [];
+        entrada.value = '';
+        fitxers.innerHTML = '';
+        estat.textContent = 'Cap fitxer carregat';
+        avis.style.display = 'none';
+        baixar.disabled = csv.disabled = netejar.disabled = copiar.disabled = true;
+        previsualitza();
+    }
+
+    // Gestió de la Modal de Preguntes freqüents
+    const obrirAjuda = () => modalAjuda.style.display = 'flex';
+    const tancarAjuda = () => modalAjuda.style.display = 'none';
+
+    ajuda.addEventListener('click', obrirAjuda);
+    tancarModal.addEventListener('click', tancarAjuda);
+    botoTancarAjuda.addEventListener('click', tancarAjuda);
+    modalAjuda.addEventListener('click', e => {
+        if (e.target === modalAjuda) tancarAjuda();
+    });
+
+    // Gestió de la Modal de Guia d'ús
+    const obrirGuia = () => modalGuia.style.display = 'flex';
+    const tancarGuia = () => modalGuia.style.display = 'none';
+
+    botoGuia.addEventListener('click', obrirGuia);
+    tancarModalGuia.addEventListener('click', tancarGuia);
+    botoTancarGuia.addEventListener('click', tancarGuia);
+    modalGuia.addEventListener('click', e => {
+        if (e.target === modalGuia) tancarGuia();
+    });
+
+    // Controladors d'esdeveniments per arrossegar fitxers
+    entrada.addEventListener('change', e => carregar(e.target.files));
+    
+    ['dragenter', 'dragover'].forEach(ev => {
+        zona.addEventListener(ev, e => {
+            e.preventDefault();
+            zona.classList.add('arrossega');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(ev => {
+        zona.addEventListener(ev, e => {
+            e.preventDefault();
+            zona.classList.remove('arrossega');
+        });
+    });
+
+    zona.addEventListener('drop', e => carregar(e.dataTransfer.files));
+    baixar.addEventListener('click', excel);
+    csv.addEventListener('click', csvBaixa);
+    copiar.addEventListener('click', copiarDades);
+    netejar.addEventListener('click', netejaTot);
+})();
+</script>
+</body>
+</html>
