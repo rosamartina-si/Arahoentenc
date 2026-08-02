@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<title>Relaciona: Alemany</title>
+<style>
+body {
+  font-family: 'Georgia', serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+  text-align: center;
+}
+#tema-selector {
+  margin-bottom: 20px;
+  background: #f4f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #003366;
+}
+#tema-selector select {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  padding: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.col h3 {
+  text-align: center;
+  color: #003366;
+  border-bottom: 2px solid #003366;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.item {
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.item:hover {
+  background-color: #f0f8ff;
+}
+.selected {
+  background-color: #d0ebff;
+  border: 2px solid #003366;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+}
+.fixed-german {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.incorrect-german, .incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  background: #f4f8ff;
+  border-radius: 8px;
+}
+#controls {
+  margin-top: 2em;
+  text-align: center;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+  border-radius: 0 8px 8px 0;
+}
+.pronuncia {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<h1>🇩🇪 Relaciona en alemany</h1>
+
+  <!-- Pots triar: center (per defecte), left o right -->
+<div class="image left">
+  <img src="Alemanya.jpg" alt="Alemanya">
+</div> 
+  
+<div id="tema-selector">
+  <label for="tema">Tria un tema: </label>
+  <select id="tema">
+    <option value="colors">Colors</option>
+    <option value="fruites">Fruites</option>
+    <option value="animals">Animals</option>
+    <option value="cortesia">Frases de cortesia</option>
+    <option value="dies">Dies de la setmana</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="cos">Parts del cos</option>
+    <option value="familia">Família</option>
+    <option value="verb_ser">Verb ser (sein)</option>
+    <option value="pronoms">Pronoms personals</option>
+    <option value="paisatge">Paisatge i natura</option>
+    <option value="transport">Transport</option>
+    <option value="menjar">Menjar i begudes</option>
+    <option value="temps">Temps atmosfèric</option>
+    <option value="ciutat">Ciutat i serveis</option>
+    <option value="verb_tenir">Verb tenir (haben)</option>
+    <option value="adjectius">Adjectius bàsics</option>
+    <option value="interrogatius">Paraules interrogatives</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+  
+<p>Fes clic a una paraula en <strong>alemany</strong> i després a la traducció en català.<br></p>
+<p><strong>Verd</strong> = encert a la primera | <strong>Groc</strong> = encert després d'errors (es repetirà a la següent ronda) | <strong>Vermell</strong> = error.<br></p>
+
+<div class="match-container">
+  <svg class="match-lines"></svg>
+
+  <div class="col">
+    <h3>Alemany</h3>
+    <div id="alemany"></div>
+  </div>
+
+  <div class="col">
+    <h3>Català</h3>
+    <div id="catala"></div>
+  </div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+  <button onclick="pronunciaSeleccionat()">🔊 Pronuncia seleccionat</button>
+</div>
+
+
+
+<script>
+const TOTAL_PER_RONDA = 10;
+
+const TEMES = {
+  "colors": [
+    {
+      "id": 1,
+      "german": "weiß",
+      "cat": "blanc",
+      "pron": "vais"
+    },
+    {
+      "id": 2,
+      "german": "schwarz",
+      "cat": "negre",
+      "pron": "xvarts"
+    },
+    {
+      "id": 3,
+      "german": "rot",
+      "cat": "vermell",
+      "pron": "rot"
+    },
+    {
+      "id": 4,
+      "german": "blau",
+      "cat": "blau",
+      "pron": "blau"
+    },
+    {
+      "id": 5,
+      "german": "grün",
+      "cat": "verd",
+      "pron": "grün"
+    },
+    {
+      "id": 6,
+      "german": "gelb",
+      "cat": "groc",
+      "pron": "gelp"
+    },
+    {
+      "id": 7,
+      "german": "orange",
+      "cat": "taronja",
+      "pron": "orànge"
+    },
+    {
+      "id": 8,
+      "german": "lila",
+      "cat": "lila",
+      "pron": "lila"
+    },
+    {
+      "id": 9,
+      "german": "braun",
+      "cat": "marró",
+      "pron": "braun"
+    },
+    {
+      "id": 10,
+      "german": "grau",
+      "cat": "gris",
+      "pron": "grau"
+    },
+    {
+      "id": 11,
+      "german": "rosa",
+      "cat": "rosa",
+      "pron": "rosa"
+    },
+    {
+      "id": 12,
+      "german": "dunkelblau",
+      "cat": "blau fosc",
+      "pron": "dúnkel-blau"
+    }
+  ],
+  "fruites": [
+    {
+      "id": 1,
+      "german": "der Apfel",
+      "cat": "poma",
+      "pron": "dea àpfel"
+    },
+    {
+      "id": 2,
+      "german": "die Birne",
+      "cat": "pera",
+      "pron": "di bírne"
+    },
+    {
+      "id": 3,
+      "german": "die Banane",
+      "cat": "plàtan",
+      "pron": "di banàne"
+    },
+    {
+      "id": 4,
+      "german": "die Orange",
+      "cat": "taronja",
+      "pron": "di orànge"
+    },
+    {
+      "id": 5,
+      "german": "die Zitrone",
+      "cat": "llimona",
+      "pron": "di tsitróne"
+    },
+    {
+      "id": 6,
+      "german": "die Traube",
+      "cat": "raïm",
+      "pron": "di tràube"
+    },
+    {
+      "id": 7,
+      "german": "die Erdbeere",
+      "cat": "maduixa",
+      "pron": "di ért-beere"
+    },
+    {
+      "id": 8,
+      "german": "die Kirsche",
+      "cat": "cirera",
+      "pron": "di quírxe"
+    },
+    {
+      "id": 9,
+      "german": "die Himbeere",
+      "cat": "gerd",
+      "pron": "di hím-beere"
+    },
+    {
+      "id": 10,
+      "german": "die Melone",
+      "cat": "meló",
+      "pron": "di melóne"
+    },
+    {
+      "id": 11,
+      "german": "die Ananas",
+      "cat": "pinya",
+      "pron": "di ànanas"
+    },
+    {
+      "id": 12,
+      "german": "der Pfirsich",
+      "cat": "préssec",
+      "pron": "dea pfírsix"
+    }
+  ],
+  "animals": [
+    {
+      "id": 1,
+      "german": "der Hund",
+      "cat": "gos",
+      "pron": "dea hunt"
+    },
+    {
+      "id": 2,
+      "german": "die Katze",
+      "cat": "gat",
+      "pron": "di kàtse"
+    },
+    {
+      "id": 3,
+      "german": "das Pferd",
+      "cat": "cavall",
+      "pron": "das pfert"
+    },
+    {
+      "id": 4,
+      "german": "die Kuh",
+      "cat": "vaca",
+      "pron": "di ku"
+    },
+    {
+      "id": 5,
+      "german": "das Schaf",
+      "cat": "ovella",
+      "pron": "das xaaf"
+    },
+    {
+      "id": 6,
+      "german": "die Ziege",
+      "cat": "cabra",
+      "pron": "di tsígue"
+    },
+    {
+      "id": 7,
+      "german": "der Vogel",
+      "cat": "ocell",
+      "pron": "dea fóguuel"
+    },
+    {
+      "id": 8,
+      "german": "der Fisch",
+      "cat": "peix",
+      "pron": "dea fix"
+    },
+    {
+      "id": 9,
+      "german": "die Maus",
+      "cat": "ratolí",
+      "pron": "di maus"
+    },
+    {
+      "id": 10,
+      "german": "der Fuchs",
+      "cat": "guineu",
+      "pron": "dea fuks"
+    }
+  ],
+  "cortesia": [
+    {
+      "id": 1,
+      "german": "ja",
+      "cat": "sí",
+      "pron": "ia"
+    },
+    {
+      "id": 2,
+      "german": "nein",
+      "cat": "no",
+      "pron": "nain"
+    },
+    {
+      "id": 3,
+      "german": "danke",
+      "cat": "gràcies",
+      "pron": "dànke"
+    },
+    {
+      "id": 4,
+      "german": "bitte",
+      "cat": "si us plau / de res",
+      "pron": "bíte"
+    },
+    {
+      "id": 5,
+      "german": "Entschuldigung",
+      "cat": "perdó",
+      "pron": "ent-xúldigun"
+    },
+    {
+      "id": 6,
+      "german": "hallo",
+      "cat": "hola",
+      "pron": "haló"
+    },
+    {
+      "id": 7,
+      "german": "auf Wiedersehen",
+      "cat": "adéu",
+      "pron": "auf víder-seen"
+    },
+    {
+      "id": 8,
+      "german": "guten Morgen",
+      "cat": "bon dia",
+      "pron": "gúten mórguen"
+    },
+    {
+      "id": 9,
+      "german": "guten Abend",
+      "cat": "bona tarda / vespre",
+      "pron": "gúten àbent"
+    },
+    {
+      "id": 10,
+      "german": "gute Nacht",
+      "cat": "bona nit",
+      "pron": "gúte najt"
+    },
+    {
+      "id": 11,
+      "german": "willkommen",
+      "cat": "benvingut/da",
+      "pron": "vilkómen"
+    },
+    {
+      "id": 12,
+      "german": "Prost!",
+      "cat": "salut! (en brindar)",
+      "pron": "prost"
+    }
+  ],
+  "dies": [
+    {
+      "id": 1,
+      "german": "Montag",
+      "cat": "dilluns",
+      "pron": "móntag"
+    },
+    {
+      "id": 2,
+      "german": "Dienstag",
+      "cat": "dimarts",
+      "pron": "dínstag"
+    },
+    {
+      "id": 3,
+      "german": "Mittwoch",
+      "cat": "dimecres",
+      "pron": "mítvoj"
+    },
+    {
+      "id": 4,
+      "german": "Donnerstag",
+      "cat": "dijous",
+      "pron": "dóners-tag"
+    },
+    {
+      "id": 5,
+      "german": "Freitag",
+      "cat": "divendres",
+      "pron": "fráitag"
+    },
+    {
+      "id": 6,
+      "german": "Samstag",
+      "cat": "dissabte",
+      "pron": "sàmstag"
+    },
+    {
+      "id": 7,
+      "german": "Sonntag",
+      "cat": "diumenge",
+      "pron": "sóntag"
+    },
+    {
+      "id": 8,
+      "german": "heute",
+      "cat": "avui",
+      "pron": "hóite"
+    },
+    {
+      "id": 9,
+      "german": "morgen",
+      "cat": "demà",
+      "pron": "mórguen"
+    },
+    {
+      "id": 10,
+      "german": "gestern",
+      "cat": "ahir",
+      "pron": "guésteren"
+    }
+  ],
+  "numeros": [
+    {
+      "id": 1,
+      "german": "eins",
+      "cat": "1",
+      "pron": "ains"
+    },
+    {
+      "id": 2,
+      "german": "zwei",
+      "cat": "2",
+      "pron": "tsvai"
+    },
+    {
+      "id": 3,
+      "german": "drei",
+      "cat": "3",
+      "pron": "drai"
+    },
+    {
+      "id": 4,
+      "german": "vier",
+      "cat": "4",
+      "pron": "fia"
+    },
+    {
+      "id": 5,
+      "german": "fünf",
+      "cat": "5",
+      "pron": "fünf"
+    },
+    {
+      "id": 6,
+      "german": "sechs",
+      "cat": "6",
+      "pron": "zeks"
+    },
+    {
+      "id": 7,
+      "german": "sieben",
+      "cat": "7",
+      "pron": "zíben"
+    },
+    {
+      "id": 8,
+      "german": "acht",
+      "cat": "8",
+      "pron": "ajt"
+    },
+    {
+      "id": 9,
+      "german": "neun",
+      "cat": "9",
+      "pron": "noin"
+    },
+    {
+      "id": 10,
+      "german": "zehn",
+      "cat": "10",
+      "pron": "tseen"
+    }
+  ],
+  "cos": [
+    {
+      "id": 1,
+      "german": "der Kopf",
+      "cat": "cap",
+      "pron": "dea kopf"
+    },
+    {
+      "id": 2,
+      "german": "die Hand",
+      "cat": "mà",
+      "pron": "di hant"
+    },
+    {
+      "id": 3,
+      "german": "das Bein",
+      "cat": "cama",
+      "pron": "das bain"
+    },
+    {
+      "id": 4,
+      "german": "das Auge",
+      "cat": "ull",
+      "pron": "das àugue"
+    },
+    {
+      "id": 5,
+      "german": "das Ohr",
+      "cat": "orella",
+      "pron": "das oa"
+    },
+    {
+      "id": 6,
+      "german": "die Nase",
+      "cat": "nas",
+      "pron": "di nàze"
+    },
+    {
+      "id": 7,
+      "german": "der Mund",
+      "cat": "boca",
+      "pron": "dea munt"
+    },
+    {
+      "id": 8,
+      "german": "das Herz",
+      "cat": "cor",
+      "pron": "das herts"
+    },
+    {
+      "id": 9,
+      "german": "der Rücken",
+      "cat": "esquena",
+      "pron": "dea rúquen"
+    },
+    {
+      "id": 10,
+      "german": "die Zähne",
+      "cat": "dents",
+      "pron": "di tséne"
+    }
+  ],
+  "familia": [
+    {
+      "id": 1,
+      "german": "die Mutter",
+      "cat": "mare",
+      "pron": "di múter"
+    },
+    {
+      "id": 2,
+      "german": "der Vater",
+      "cat": "pare",
+      "pron": "dea fàter"
+    },
+    {
+      "id": 3,
+      "german": "die Schwester",
+      "cat": "germana",
+      "pron": "di xvèster"
+    },
+    {
+      "id": 4,
+      "german": "der Bruder",
+      "cat": "germà",
+      "pron": "dea brúder"
+    },
+    {
+      "id": 5,
+      "german": "die Tochter",
+      "cat": "filla",
+      "pron": "di tójter"
+    },
+    {
+      "id": 6,
+      "german": "der Sohn",
+      "cat": "fill",
+      "pron": "dea zoon"
+    },
+    {
+      "id": 7,
+      "german": "die Großmutter",
+      "cat": "àvia",
+      "pron": "di grós-múter"
+    },
+    {
+      "id": 8,
+      "german": "der Großvater",
+      "cat": "avi",
+      "pron": "dea grós-fàter"
+    },
+    {
+      "id": 9,
+      "german": "der Onkel",
+      "cat": "oncle",
+      "pron": "dea ónkel"
+    },
+    {
+      "id": 10,
+      "german": "die Tante",
+      "cat": "tia",
+      "pron": "di tànte"
+    }
+  ],
+  "verb_ser": [
+    {
+      "id": 1,
+      "german": "ich bin",
+      "cat": "jo sóc",
+      "pron": "ij bin"
+    },
+    {
+      "id": 2,
+      "german": "du bist",
+      "cat": "tu ets",
+      "pron": "du bist"
+    },
+    {
+      "id": 3,
+      "german": "er ist",
+      "cat": "ell és",
+      "pron": "ea ist"
+    },
+    {
+      "id": 4,
+      "german": "sie ist",
+      "cat": "ella és",
+      "pron": "zi ist"
+    },
+    {
+      "id": 5,
+      "german": "wir sind",
+      "cat": "nosaltres som",
+      "pron": "via zint"
+    },
+    {
+      "id": 6,
+      "german": "ihr seid",
+      "cat": "vosaltres sou",
+      "pron": "ia zait"
+    },
+    {
+      "id": 7,
+      "german": "sie sind",
+      "cat": "ells/elles són",
+      "pron": "zi zint"
+    },
+    {
+      "id": 8,
+      "german": "ich bin nicht",
+      "cat": "jo no sóc",
+      "pron": "ij bin nijt"
+    },
+    {
+      "id": 9,
+      "german": "bist du...?",
+      "cat": "ets tu...?",
+      "pron": "bist du"
+    },
+    {
+      "id": 10,
+      "german": "ist er nicht...?",
+      "cat": "no és ell...?",
+      "pron": "ist ea nijt"
+    }
+  ],
+  "pronoms": [
+    {
+      "id": 1,
+      "german": "ich",
+      "cat": "jo",
+      "pron": "ij"
+    },
+    {
+      "id": 2,
+      "german": "du",
+      "cat": "tu",
+      "pron": "du"
+    },
+    {
+      "id": 3,
+      "german": "er",
+      "cat": "ell",
+      "pron": "ea"
+    },
+    {
+      "id": 4,
+      "german": "sie",
+      "cat": "ella",
+      "pron": "zi"
+    },
+    {
+      "id": 5,
+      "german": "wir",
+      "cat": "nosaltres",
+      "pron": "via"
+    },
+    {
+      "id": 6,
+      "german": "ihr",
+      "cat": "vosaltres",
+      "pron": "ia"
+    },
+    {
+      "id": 7,
+      "german": "sie",
+      "cat": "ells/elles",
+      "pron": "zi"
+    },
+    {
+      "id": 8,
+      "german": "mich",
+      "cat": "a mi / em",
+      "pron": "mij"
+    },
+    {
+      "id": 9,
+      "german": "dich",
+      "cat": "a tu / et",
+      "pron": "dij"
+    },
+    {
+      "id": 10,
+      "german": "sie",
+      "cat": "a ells/elles",
+      "pron": "zi"
+    }
+  ],
+  "paisatge": [
+    {
+      "id": 1,
+      "german": "der Berg",
+      "cat": "muntanya",
+      "pron": "dea berk"
+    },
+    {
+      "id": 2,
+      "german": "der Fluss",
+      "cat": "riu",
+      "pron": "dea flus"
+    },
+    {
+      "id": 3,
+      "german": "der See",
+      "cat": "llac",
+      "pron": "dea zee"
+    },
+    {
+      "id": 4,
+      "german": "das Meer",
+      "cat": "mar",
+      "pron": "das mea"
+    },
+    {
+      "id": 5,
+      "german": "der Wald",
+      "cat": "bosc",
+      "pron": "dea valt"
+    },
+    {
+      "id": 6,
+      "german": "das Feld",
+      "cat": "camp",
+      "pron": "das felt"
+    },
+    {
+      "id": 7,
+      "german": "der Strand",
+      "cat": "platja",
+      "pron": "dea xtrant"
+    },
+    {
+      "id": 8,
+      "german": "die Insel",
+      "cat": "illa",
+      "pron": "di ínzel"
+    },
+    {
+      "id": 9,
+      "german": "das Tal",
+      "cat": "vall",
+      "pron": "das taal"
+    },
+    {
+      "id": 10,
+      "german": "der Hügel",
+      "cat": "turó",
+      "pron": "dea hüguel"
+    }
+  ],
+  "transport": [
+    {
+      "id": 1,
+      "german": "das Auto",
+      "cat": "cotxe",
+      "pron": "das àuto"
+    },
+    {
+      "id": 2,
+      "german": "der Bus",
+      "cat": "autobús",
+      "pron": "dea bus"
+    },
+    {
+      "id": 3,
+      "german": "der Zug",
+      "cat": "tren",
+      "pron": "dea tsuk"
+    },
+    {
+      "id": 4,
+      "german": "das Fahrrad",
+      "cat": "bicicleta",
+      "pron": "das fàrrat"
+    },
+    {
+      "id": 5,
+      "german": "das Schiff",
+      "cat": "vaixell",
+      "pron": "das xif"
+    },
+    {
+      "id": 6,
+      "german": "das Flugzeug",
+      "cat": "avió",
+      "pron": "das flúk-tsoik"
+    },
+    {
+      "id": 7,
+      "german": "der Bahnhof",
+      "cat": "estació",
+      "pron": "dea bànhof"
+    },
+    {
+      "id": 8,
+      "german": "der Flughafen",
+      "cat": "aeroport",
+      "pron": "dea flúk-hàfen"
+    },
+    {
+      "id": 9,
+      "german": "die Brücke",
+      "cat": "pont",
+      "pron": "di brúque"
+    },
+    {
+      "id": 10,
+      "german": "die Straße",
+      "cat": "carretera",
+      "pron": "di xtràse"
+    }
+  ],
+  "menjar": [
+    {
+      "id": 1,
+      "german": "das Brot",
+      "cat": "pa",
+      "pron": "das brot"
+    },
+    {
+      "id": 2,
+      "german": "die Butter",
+      "cat": "mantega",
+      "pron": "di búter"
+    },
+    {
+      "id": 3,
+      "german": "das Wasser",
+      "cat": "aigua",
+      "pron": "das vàser"
+    },
+    {
+      "id": 4,
+      "german": "die Milch",
+      "cat": "llet",
+      "pron": "di milj"
+    },
+    {
+      "id": 5,
+      "german": "das Fleisch",
+      "cat": "carn",
+      "pron": "das flaix"
+    },
+    {
+      "id": 6,
+      "german": "der Fisch",
+      "cat": "peix",
+      "pron": "dea fix"
+    },
+    {
+      "id": 7,
+      "german": "das Gemüse",
+      "cat": "verdures",
+      "pron": "das guemüze"
+    },
+    {
+      "id": 8,
+      "german": "das Obst",
+      "cat": "fruita",
+      "pron": "das opst"
+    },
+    {
+      "id": 9,
+      "german": "der Kaffee",
+      "cat": "cafè",
+      "pron": "dea kafé"
+    },
+    {
+      "id": 10,
+      "german": "der Tee",
+      "cat": "te",
+      "pron": "dea tee"
+    }
+  ],
+  "temps": [
+    {
+      "id": 1,
+      "german": "die Sonne",
+      "cat": "sol",
+      "pron": "di zóne"
+    },
+    {
+      "id": 2,
+      "german": "der Himmel",
+      "cat": "cel",
+      "pron": "dea hímmel"
+    },
+    {
+      "id": 3,
+      "german": "die Wolke",
+      "cat": "núvol",
+      "pron": "di vólque"
+    },
+    {
+      "id": 4,
+      "german": "der Regen",
+      "cat": "pluja",
+      "pron": "dea réguen"
+    },
+    {
+      "id": 5,
+      "german": "der Schnee",
+      "cat": "neu",
+      "pron": "dea xnee"
+    },
+    {
+      "id": 6,
+      "german": "der Wind",
+      "cat": "vent",
+      "pron": "dea vint"
+    },
+    {
+      "id": 7,
+      "german": "der Donner",
+      "cat": "tro",
+      "pron": "dea dóner"
+    },
+    {
+      "id": 8,
+      "german": "der Nebel",
+      "cat": "boira",
+      "pron": "dea nébel"
+    },
+    {
+      "id": 9,
+      "german": "warm",
+      "cat": "calent",
+      "pron": "varm"
+    },
+    {
+      "id": 10,
+      "german": "kalt",
+      "cat": "fred",
+      "pron": "kalt"
+    }
+  ],
+  "ciutat": [
+    {
+      "id": 1,
+      "german": "die Stadt",
+      "cat": "ciutat",
+      "pron": "di xtat"
+    },
+    {
+      "id": 2,
+      "german": "die Straße",
+      "cat": "carrer",
+      "pron": "di xtràse"
+    },
+    {
+      "id": 3,
+      "german": "das Geschäft",
+      "cat": "botiga",
+      "pron": "das guexéft"
+    },
+    {
+      "id": 4,
+      "german": "die Bank",
+      "cat": "banc",
+      "pron": "di bank"
+    },
+    {
+      "id": 5,
+      "german": "das Krankenhaus",
+      "cat": "hospital",
+      "pron": "das krànken-haus"
+    },
+    {
+      "id": 6,
+      "german": "die Schule",
+      "cat": "escola",
+      "pron": "di xúle"
+    },
+    {
+      "id": 7,
+      "german": "die Bibliothek",
+      "cat": "biblioteca",
+      "pron": "di biblioték"
+    },
+    {
+      "id": 8,
+      "german": "der Park",
+      "cat": "parc",
+      "pron": "dea park"
+    },
+    {
+      "id": 9,
+      "german": "die Post",
+      "cat": "oficina de correus",
+      "pron": "di post"
+    },
+    {
+      "id": 10,
+      "german": "das Hotel",
+      "cat": "hotel",
+      "pron": "das hotèl"
+    }
+  ],
+  "verb_tenir": [
+    {
+      "id": 1,
+      "german": "ich habe",
+      "cat": "jo tinc",
+      "pron": "ij hàbe"
+    },
+    {
+      "id": 2,
+      "german": "du hast",
+      "cat": "tu tens",
+      "pron": "du hast"
+    },
+    {
+      "id": 3,
+      "german": "er hat",
+      "cat": "ell té",
+      "pron": "ea hat"
+    },
+    {
+      "id": 4,
+      "german": "sie hat",
+      "cat": "ella té",
+      "pron": "zi hat"
+    },
+    {
+      "id": 5,
+      "german": "wir haben",
+      "cat": "nosaltres tenim",
+      "pron": "via hàben"
+    },
+    {
+      "id": 6,
+      "german": "ihr habt",
+      "cat": "vosaltres teniu",
+      "pron": "ia hapt"
+    },
+    {
+      "id": 7,
+      "german": "sie haben",
+      "cat": "ells/elles tenen",
+      "pron": "zi hàben"
+    },
+    {
+      "id": 8,
+      "german": "ich habe nicht",
+      "cat": "jo no tinc",
+      "pron": "ij hàbe nijt"
+    },
+    {
+      "id": 9,
+      "german": "hast du...?",
+      "cat": "tens tu...?",
+      "pron": "hast du"
+    },
+    {
+      "id": 10,
+      "german": "hat er nicht...?",
+      "cat": "no té ell...?",
+      "pron": "hat ea nijt"
+    }
+  ],
+  "adjectius": [
+    {
+      "id": 1,
+      "german": "groß",
+      "cat": "gran",
+      "pron": "gros"
+    },
+    {
+      "id": 2,
+      "german": "klein",
+      "cat": "petit",
+      "pron": "klain"
+    },
+    {
+      "id": 3,
+      "german": "schön",
+      "cat": "bonic",
+      "pron": "xön"
+    },
+    {
+      "id": 4,
+      "german": "schlecht",
+      "cat": "dolent",
+      "pron": "xlejt"
+    },
+    {
+      "id": 5,
+      "german": "gut",
+      "cat": "bo",
+      "pron": "gut"
+    },
+    {
+      "id": 6,
+      "german": "neu",
+      "cat": "nou",
+      "pron": "noi"
+    },
+    {
+      "id": 7,
+      "german": "alt",
+      "cat": "vell",
+      "pron": "alt"
+    },
+    {
+      "id": 8,
+      "german": "angenehm",
+      "cat": "agradable",
+      "pron": "ànguenem"
+    },
+    {
+      "id": 9,
+      "german": "böse",
+      "cat": "dolent (maliciós)",
+      "pron": "böze"
+    },
+    {
+      "id": 10,
+      "german": "trocken",
+      "cat": "sec",
+      "pron": "tróquen"
+    }
+  ],
+  "interrogatius": [
+    {
+      "id": 1,
+      "german": "wer",
+      "cat": "qui",
+      "pron": "vea"
+    },
+    {
+      "id": 2,
+      "german": "was",
+      "cat": "què",
+      "pron": "vas"
+    },
+    {
+      "id": 3,
+      "german": "wann",
+      "cat": "quan",
+      "pron": "van"
+    },
+    {
+      "id": 4,
+      "german": "warum",
+      "cat": "per què",
+      "pron": "varúm"
+    },
+    {
+      "id": 5,
+      "german": "wie",
+      "cat": "com",
+      "pron": "vii"
+    },
+    {
+      "id": 6,
+      "german": "wo",
+      "cat": "on",
+      "pron": "vo"
+    },
+    {
+      "id": 7,
+      "german": "wie viel",
+      "cat": "quant",
+      "pron": "vii fiil"
+    },
+    {
+      "id": 8,
+      "german": "welcher / welche / welches",
+      "cat": "quin / quina",
+      "pron": "vèljea / vèlje / vèljes"
+    },
+    {
+      "id": 9,
+      "german": "welche",
+      "cat": "quins / quines",
+      "pron": "vèlje"
+    },
+    {
+      "id": 10,
+      "german": "Wie geht es dir?",
+      "cat": "com estàs?",
+      "pron": "vii gueet es dia"
+    }
+  ]
+};
+
+let paraulesActuals = TEMES.colors;
+let encerts = 0;
+let selectedGerman = null;
+let currentAttempts = {};
+
+function canviaTema() {
+  paraulesActuals = TEMES[document.getElementById("tema").value];
+  novaRonda();
+}
+
+function barreja(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function speakGerman(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  utterance.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function pronunciaSeleccionat() {
+  if (selectedGerman) {
+    const text = selectedGerman.querySelector("div")?.textContent || selectedGerman.textContent;
+    speakGerman(text);
+  } else {
+    alert("Selecciona primer una paraula en alemany");
+  }
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `Encerts: ${encerts} / ${TOTAL_PER_RONDA}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-german").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = paraulesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = paraulesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-german, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-german", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const alemanyContainer = document.getElementById("alemany");
+  const catContainer = document.getElementById("catala");
+
+  const matchedGerman = alemanyContainer.querySelectorAll(".matched, .fixed-german");
+  matchedGerman.forEach(german => {
+    const germanId = german.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${germanId}"], .fixed-cat[data-id="${germanId}"]`);
+    if (cat) {
+      const germanRect = german.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = germanRect.right - containerRect.left;
+      const y1 = germanRect.top + germanRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#003366");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-dasharray", "5,3");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const alemanyContainer = document.getElementById("alemany");
+  const catContainer = document.getElementById("catala");
+  alemanyContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedGerman = null;
+  actualitzaPuntuacio();
+
+  const alemanyFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  alemanyFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+
+    const textDiv = document.createElement("div");
+    textDiv.textContent = f.german;
+
+    const pronDiv = document.createElement("div");
+    pronDiv.className = "pronuncia";
+    pronDiv.textContent = `Pronúncia (aprox.): ${f.pron}`;
+
+    div.appendChild(textDiv);
+    div.appendChild(pronDiv);
+
+    div.addEventListener("click", () => {
+      speakGerman(f.german);
+      if (div.classList.contains("matched") || div.classList.contains("fixed-german")) return;
+      netejaErrors();
+      document.querySelectorAll("#alemany .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedGerman = div;
+    });
+
+    alemanyContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.cat;
+
+    div.addEventListener("click", () => {
+      if (!selectedGerman) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const germanId = selectedGerman.dataset.id;
+      const catId = div.dataset.id;
+
+      if (germanId === catId) {
+        if (currentAttempts[germanId] && currentAttempts[germanId].attempts > 0) {
+          selectedGerman.classList.add("fixed-german");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedGerman.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedGerman);
+        mouAlTop(div);
+        dibuixaLinies();
+      } else {
+        selectedGerman.classList.add("incorrect-german");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[germanId]) currentAttempts[germanId] = { attempts: 0 };
+        currentAttempts[germanId].attempts++;
+      }
+
+      selectedGerman.classList.remove("selected");
+      selectedGerman = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+</body>
+</html>
