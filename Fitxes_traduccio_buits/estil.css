@@ -95,3 +95,55 @@ button:hover {
   border-left: 4px solid #003366;
   font-size: 14px;
 }
+
+    /* Estils addicionals per a les taules */
+    .verb-table {
+      width: 100%;
+      max-width: 700px;
+      border-collapse: collapse;
+      margin: 20px auto;
+      font-size: 15px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .verb-table th, .verb-table td {
+      border: 2px solid #003366;
+      padding: 10px 12px;
+    }
+    .verb-table th {
+      background-color: #003366;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .verb-table tr:nth-child(even) {
+      background-color: #f8f9fc;
+    }
+    .verb-table tr:hover {
+      background-color: #e6edf5;
+    }
+    .verb-table .infinitive {
+      font-weight: bold;
+      color: #003366;
+    }
+    .verb-table .past {
+      color: #c0392b;
+    }
+    .verb-table .participle {
+      color: #27ae60;
+    }
+    .verb-table .meaning {
+      color: #8e44ad;
+      font-style: italic;
+    }
+    .table-container {
+      margin: 20px 0 30px 0;
+      overflow-x: auto;
+    }
+    .table-title {
+      text-align: center;
+      color: #003366;
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
