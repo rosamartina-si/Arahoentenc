@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lliçó 3 — No aprofito el que m'explica per corregir-lo</title>
+  <style>
+    :root{
+      --bg:#f7f4ee;
+      --card:#ffffff;
+      --text:#2f3136;
+      --muted:#6d6f73;
+      --accent:#7a8b6f;
+      --accent-soft:#e8eee3;
+      --warm:#f2e7d8;
+      --border:#ded8cf;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.65;
+    }
+    .wrap{
+      max-width:860px;
+      margin:0 auto;
+      padding:40px 20px 64px;
+    }
+    .hero{
+      background:linear-gradient(135deg,var(--accent-soft),#fff);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:34px;
+      margin-bottom:24px;
+    }
+    h1,h2{line-height:1.2}
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem,5vw,3.2rem);
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:1.1rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:26px;
+      margin:18px 0;
+      box-shadow:0 4px 16px rgba(0,0,0,.035);
+    }
+    h2{
+      font-size:1.35rem;
+      margin:0 0 14px;
+    }
+    .dialogue{
+      background:var(--warm);
+      border-left:5px solid #c69d6d;
+      padding:18px 20px;
+      border-radius:12px;
+      margin:16px 0;
+    }
+    .key{
+      background:var(--accent-soft);
+      border-radius:14px;
+      padding:20px;
+      font-size:1.25rem;
+      text-align:center;
+      font-weight:700;
+      margin:18px 0;
+    }
+    .sequence{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      margin-top:14px;
+      font-weight:650;
+    }
+    .pill{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:8px 13px;
+    }
+    .arrow{color:var(--muted)}
+    .note{
+      color:var(--muted);
+      font-size:.96rem;
+    }
+    .badge{
+      display:inline-block;
+      background:var(--accent);
+      color:#fff;
+      border-radius:999px;
+      padding:2px 14px;
+      font-size:.8rem;
+      font-weight:600;
+      letter-spacing:.03em;
+      margin-bottom:6px;
+    }
+    footer{
+      margin-top:32px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <p class="subtitle">Relació mare-fill · una sola idea cada dia</p>
+      <h1>🌱 Lliçó 3 — No aprofito el que m'explica per corregir-lo</h1>
+      <p class="subtitle">Avui no converteixes les seves explicacions en una lliçó. Només l'escoltes.</p>
+    </section>
+
+    <section class="card">
+      <h2>🎬 L'escena d'avui</h2>
+      <p>El teu fill et diu:</p>
+      <div class="dialogue">
+        <strong>Ell:</strong> —Avui gairebé arribo tard a classe perquè ens hem quedat parlant al pati.
+      </div>
+      <p>Et podria sortir automàticament:</p>
+      <div class="dialogue" style="border-left-color:#b0b0b0; background:#f0f0f0;">
+        <em style="color:var(--muted);">—Ja t'ho dic sempre, has d'estar més pendent de l'hora.</em>
+      </div>
+      <p>Avui assagem una resposta diferent:</p>
+      <div class="dialogue">
+        <strong>Tu:</strong> —Ah, sí?
+      </div>
+      <p>I deixes que continuï.</p>
+      <p>Potser et diu:</p>
+      <div class="dialogue">
+        <strong>Ell:</strong> —Sí, perquè l'Èric m'estava explicant una cosa i no hem sentit el timbre...
+      </div>
+      <p>Tu continues escoltant.</p>
+      <p><strong>No aprofites la informació que t'ha donat per educar-lo en aquell mateix moment.</strong></p>
+      <p class="note">Això no significa que mai no hagis de parlar-li de puntualitat. Significa que <strong>aquest moment</strong> és un moment en què ell ha vingut espontàniament a explicar-te una cosa.</p>
+    </section>
+
+    <section class="card">
+      <h2>🧠 La frase interior</h2>
+      <p>Quan notis que apareix la correcció, pensa:</p>
+      <div class="key">«Ara m'està deixant entrar una mica en el seu món.»</div>
+      <p>I tornes a escoltar.</p>
+    </section>
+
+    <section class="card">
+      <h2>🎥 Assaig mental</h2>
+      <p>Visualitza només això:</p>
+      <div class="dialogue">
+        <strong>Ell:</strong> —Gairebé arribo tard perquè...
+      </div>
+      <p>Tu notes dins teu la frase que voldries dir-li.</p>
+      <p>No la dius.</p>
+      <p>Una petita pausa.</p>
+      <div class="dialogue">
+        <strong>Tu:</strong> —Ah, sí?
+      </div>
+      <p>I ell continua.</p>
+      <div class="sequence">
+        <span class="pill">Ell explica</span>
+        <span class="arrow">→</span>
+        <span class="pill">Tu notes la correcció</span>
+        <span class="arrow">→</span>
+        <span class="pill">Pausa</span>
+        <span class="arrow">→</span>
+        <span class="pill">«Ah, sí?»</span>
+        <span class="arrow">→</span>
+        <span class="pill">Ell continua</span>
+      </div>
+      <p class="note">Repeteix mentalment l'escena tres vegades, fins que comencis a associar el fet que t'expliqui una cosa amb <strong>curiositat</strong>, i no necessàriament amb l'obligació d'aprofitar-la per ensenyar-li alguna cosa.</p>
+    </section>
+
+    <section class="card">
+      <h2>⚓ Àncora</h2>
+      <p>Ajunta suaument el polze i l'índex mentre penses:</p>
+      <div class="key">«Curiositat, no correcció.»</div>
+      <p>El gest et recorda que el que ell t'explica no és una oportunitat per intervenir, sinó una finestra al seu món.</p>
+    </section>
+
+    <section class="card">
+      <h2>🌙 Imatge final</h2>
+      <p>Imagina que, al cap d'un temps, el teu fill pensa inconscientment:</p>
+      <div class="key" style="font-size:1.1rem;">«A la mare li puc explicar coses.»</div>
+      <p>No perquè sempre estigui d'acord amb ell.</p>
+      <p>Sinó perquè explicar-li una cosa <strong>no desencadena automàticament una lliçó</strong>.</p>
+      <div class="sequence">
+        <span class="pill">Ell explica</span>
+        <span class="arrow">→</span>
+        <span class="pill">Tu escoltes</span>
+        <span class="arrow">→</span>
+        <span class="pill">Ell se sent escoltat</span>
+        <span class="arrow">→</span>
+        <span class="pill">Torna a explicar-t'ho un altre dia</span>
+      </div>
+    </section>
+
+    <footer>Lliçó 3 · Curiositat, no correcció</footer>
+  </main>
+</body>
+</html>
