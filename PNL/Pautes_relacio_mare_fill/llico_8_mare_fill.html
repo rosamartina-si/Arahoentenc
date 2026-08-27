@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lliçó 8 — Primer escolto</title>
+  <style>
+    :root{
+      --bg:#f7f4ee;
+      --card:#ffffff;
+      --text:#2f3136;
+      --muted:#6d6f73;
+      --accent:#7a8b6f;
+      --accent-soft:#e8eee3;
+      --warm:#f2e7d8;
+      --border:#ded8cf;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.65;
+    }
+    .wrap{
+      max-width:860px;
+      margin:0 auto;
+      padding:40px 20px 64px;
+    }
+    .hero{
+      background:linear-gradient(135deg,var(--accent-soft),#fff);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:34px;
+      margin-bottom:24px;
+    }
+    h1,h2{line-height:1.2}
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem,5vw,3.2rem);
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:1.1rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:26px;
+      margin:18px 0;
+      box-shadow:0 4px 16px rgba(0,0,0,.035);
+    }
+    h2{
+      font-size:1.35rem;
+      margin:0 0 14px;
+    }
+    .dialogue{
+      background:var(--warm);
+      border-left:5px solid #c69d6d;
+      padding:18px 20px;
+      border-radius:12px;
+      margin:16px 0;
+    }
+    .key{
+      background:var(--accent-soft);
+      border-radius:14px;
+      padding:20px;
+      font-size:1.2rem;
+      text-align:center;
+      font-weight:700;
+      margin:18px 0;
+    }
+    .quote{
+      background:#fbfaf7;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:18px 20px;
+      font-size:1.08rem;
+      margin:16px 0;
+    }
+    .sequence{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      margin-top:14px;
+      font-weight:650;
+    }
+    .pill{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:8px 13px;
+    }
+    .arrow{color:var(--muted)}
+    .note{
+      color:var(--muted);
+      font-size:.96rem;
+    }
+    footer{
+      margin-top:32px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <p class="subtitle">Relació mare-fill · una sola idea cada dia</p>
+      <h1>🌱 Lliçó 8 — Quan m’explica un problema, no busco immediatament la solució</h1>
+      <p class="subtitle">Si t’explica un problema, no pressuposes que t’està demanant que el resolguis.</p>
+    </section>
+
+    <section class="card">
+      <h2>🎬 L'escena d'avui</h2>
+      <p>El teu fill arriba i diu:</p>
+
+      <div class="dialogue">
+        <strong>Ell:</strong> —Demà hem de presentar el treball i els del meu grup no han fet gairebé res.
+      </div>
+
+      <p>Immediatament et poden venir solucions:</p>
+
+      <div class="quote">
+        <em>«Doncs escriu-los ara.»</em><br><br>
+        <em>«Parla amb el professor.»</em><br><br>
+        <em>«Hauríeu d'haver-vos organitzat abans.»</em><br><br>
+        <em>«Fes tu aquesta part i...»</em>
+      </div>
+
+      <p>Avui no fas res d'això.</p>
+
+      <div class="dialogue">
+        <strong>Tu:</strong> —<strong>Ostres...</strong>
+      </div>
+
+      <p>I l'escoltes.</p>
+
+      <div class="dialogue">
+        <strong>Ell:</strong> —És que sempre fan igual. Al final ho acabaré fent jo.<br>
+        <strong>Tu:</strong> —<strong>Ja...</strong>
+      </div>
+
+      <p>I deixes que continuï.</p>
+
+      <p>Potser al cap d'una estona <strong>ell mateix troba què farà</strong>. Potser et demana:</p>
+
+      <div class="dialogue">
+        <strong>Ell:</strong> —Tu què faries?
+      </div>
+
+      <p>Llavors sí: <strong>ara t'ha demanat ajuda.</strong></p>
+
+      <div class="key">No confonc «m'explica un problema» amb «em demana una solució».</div>
+    </section>
+
+    <section class="card">
+      <h2>🧠 La frase interior</h2>
+      <div class="key">«Primer l'acompanyo; si vol ajuda, ja me la demanarà.»</div>
+    </section>
+
+    <section class="card">
+      <h2>🎥 Assaig mental</h2>
+      <p>Visualitza:</p>
+
+      <div class="dialogue">
+        <strong>Ell:</strong> —Els del meu grup no han fet res.
+      </div>
+
+      <p>Nota com apareix dins teu una solució.</p>
+      <p>Però imagina que <strong>la deixes aparcada</strong>.</p>
+
+      <div class="dialogue">
+        <strong>Tu:</strong> —Ostres...
+      </div>
+
+      <p>Ell continua parlant.</p>
+      <p>Tu escoltes.</p>
+
+      <div class="key">«Primer l'acompanyo.»</div>
+
+      <p>Ara imagina dues possibles continuacions.</p>
+
+      <div class="quote">
+        <strong>Opció 1:</strong> ell continua explicant-se → tu continues escoltant.<br><br>
+        <strong>Opció 2:</strong> ell et diu «Què faries tu?» → ara sí que podeu pensar plegats.
+      </div>
+
+      <p>L'objectiu de l'assaig és canviar aquesta associació automàtica:</p>
+
+      <div class="sequence">
+        <span class="pill">problema</span>
+        <span class="arrow">→</span>
+        <span class="pill">he de solucionar-lo</span>
+      </div>
+
+      <p>per aquesta altra:</p>
+
+      <div class="sequence">
+        <span class="pill">problema</span>
+        <span class="arrow">→</span>
+        <span class="pill">primer escolto</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>⚓ L'àncora d'avui</h2>
+      <p>Quan sentis un problema i et vingui una solució al cap:</p>
+
+      <div class="key">«Encara no.»</div>
+
+      <p>No vol dir que no l'ajudaràs.</p>
+      <p>Vol dir: <strong>encara no sé si vol ajuda.</strong></p>
+    </section>
+
+    <footer>Lliçó 8 · Primer escolto</footer>
+  </main>
+</body>
+</html>
