@@ -59,6 +59,75 @@
             color: #1e1b1a;
         }
 
+        /* BLOC: Presuposició lingüística suau + clau PNL integrada */
+        .box-presuposicio {
+            background: #f7f2ee;
+            padding: 1.2rem 1.8rem;
+            border-radius: 1.8rem;
+            border-left: 5px solid #c4a88a;
+            margin-bottom: 1.8rem;
+        }
+
+        .box-presuposicio strong.titol {
+            font-weight: 600;
+            display: block;
+            font-size: 1.05rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .box-presuposicio p {
+            color: #2b2522;
+            margin-bottom: 0.6rem;
+        }
+
+        .box-presuposicio p:last-child {
+            margin-bottom: 0;
+        }
+
+        .box-presuposicio .exemple {
+            display: inline-block;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 0.2rem 1.2rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid #d5c6bc;
+            margin: 0.3rem 0.2rem 0 0;
+            color: #1e1b1a;
+        }
+
+        .box-presuposicio .clau-pnl {
+            background: #ffffff;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1.2rem;
+            margin-top: 0.8rem;
+            border: 1px solid #d5c6bc;
+            font-size: 0.95rem;
+            color: #2b2522;
+        }
+
+        .box-presuposicio .clau-pnl strong {
+            font-weight: 600;
+            color: #1e1b1a;
+        }
+
+        /* FRASE D'ENLLAÇ */
+        .box-enllac {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a3f3a;
+            margin-bottom: 1.2rem;
+            padding: 0.2rem 0.5rem;
+            background: #fcf9f7;
+            border-radius: 40px;
+            border: 1px dashed #d5c6bc;
+        }
+
+        .box-enllac span {
+            font-size: 1.1rem;
+        }
+
         .box-repeticio {
             background: #faf7f5;
             border-radius: 1.5rem;
@@ -74,26 +143,6 @@
         }
 
         .box-repeticio p:last-child {
-            margin-bottom: 0;
-        }
-
-        .cita-clau {
-            background: #f2ede9;
-            padding: 1.2rem 1.8rem;
-            border-radius: 1.8rem;
-            border-left: 5px solid #b7a69b;
-            margin-bottom: 2rem;
-        }
-
-        .cita-clau strong {
-            font-weight: 600;
-            display: block;
-            font-size: 1.05rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .cita-clau p {
-            color: #2b2522;
             margin-bottom: 0;
         }
 
@@ -140,7 +189,7 @@
             margin-bottom: 0;
         }
 
-        /* NOU BLOC: acceptació dels altres */
+        /* Bloc acceptació dels altres */
         .box-altres {
             margin-top: 2.2rem;
             background: #f7f2ee;
@@ -204,6 +253,29 @@
         <!-- Frase destacada -->
         <div class="frase-mantra">“Hi ha coses de mi que m'agraden”</div>
 
+        <!-- BLOC: Presuposició lingüística suau + clau PNL integrada -->
+        <div class="box-presuposicio">
+            <strong class="titol">🧩 Presuposició lingüística suau</strong>
+            <p>
+                En lloc de forçar un missatge absolutista com <span class="exemple">«Soc perfecte/a»</span> (que la ment crítica tendeix a rebutjar), 
+                aquesta afirmació <strong>pressuposa</strong> que ja existeixen aspectes positius en tu sense generar resistència interna. 
+                No et demana que t'ho creguis del tot, només que acceptis la <strong>possibilitat</strong> que hi ha coses bones. I això és prou perquè el cervell comenci a treballar.
+            </p>
+
+            <!-- Clau PNL integrada dins del mateix bloc -->
+            <div class="clau-pnl">
+                <strong>🔑 La clau PNL: cercar proves ja és el fet</strong>
+                <p style="margin-bottom: 0; margin-top: 0.2rem;">
+                    Quan et dius «Hi ha coses de mi que m'agraden», el cervell comença a buscar proves que ho confirmin. El simple fet de posar el cervell en mode recerca ja canvia el patró mental.
+                </p>
+            </div>
+        </div>
+
+        <!-- FRASE D'ENLLAÇ (connecta amb el bloc de repetició) -->
+        <div class="box-enllac">
+            <span>⬇️</span> I un cop el cervell està en mode recerca, la repetició el consolida. Vegem com... <span>⬇️</span>
+        </div>
+
         <!-- Bloc repetició -->
        <div class="box-repeticio">
             <p style="font-weight: 500; font-size: 1.05rem; margin-bottom: 0.5rem;">
@@ -215,12 +287,6 @@
             <p style="font-size: 0.95rem; color: #3d3532; margin-top: 0.3rem;">
                 <strong>Quant:</strong> <strong>durant diversos dies seguits</strong>. La clau és la constància, no la intensitat.
             </p>
-        </div>
-
-        <!-- Clau PNL: cercar proves -->
-        <div class="cita-clau">
-            <strong>🔑 La clau PNL: cercar proves ja és el fet</strong>
-            <p>Quan et dius «Hi ha coses de mi que m'agraden», el cervell comença a buscar proves que ho confirmin. El simple fet de posar el cervell en mode recerca ja canvia el patró mental.</p>
         </div>
 
         <!-- Per què funciona el mantra (6 punts complets) -->
@@ -253,7 +319,7 @@
             </div>
         </div>
 
-        <!-- NOU BLOC: acceptació dels altres -->
+        <!-- Bloc acceptació dels altres -->
         <div class="box-altres">
             <h3>💛 I per ajudar a acceptar els altres…</h3>
             <p>El mateix mecanisme funciona quan apliques la frase a una altra persona:</p>
@@ -271,6 +337,7 @@
             <span class="tag">autoacceptació</span>
             <span class="tag">atenció plena</span>
             <span class="tag">acceptació dels altres</span>
+            <span class="tag">presuposició lingüística</span>
         </div>
 
         <div class="footer-note">
