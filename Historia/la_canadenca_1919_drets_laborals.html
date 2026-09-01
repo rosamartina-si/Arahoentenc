@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ca" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Vaga de La Canadenca (1919) i els Drets dels Treballadors</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sepia: {
+                            50: '#fefcf8',
+                            100: '#fcf8f2',
+                            200: '#f7f0e3',
+                            300: '#eddcc4',
+                            800: '#4a3b2c',
+                            900: '#2d2218',
+                        },
+                        industrial: {
+                            red: '#c0392b',
+                            darkred: '#962d22',
+                            gold: '#d4ac0d',
+                            slate: '#2c3e50',
+                            charcoal: '#1a252f',
+                            rust: '#a04000'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fcf8f2;
+            color: #2c3e50;
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(#e5d8c5 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+        }
+        .vintage-border {
+            border: 2px solid #2c3e50;
+            box-shadow: 4px 4px 0px 0px #c0392b;
+        }
+        .vintage-card {
+            background: #ffffff;
+            border: 1px solid #e2d1bc;
+            box-shadow: 0 4px 20px -2px rgba(44, 62, 80, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .vintage-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -4px rgba(192, 57, 43, 0.15);
+        }
+        .text-glow {
+            text-shadow: 0 0 12px rgba(212, 172, 13, 0.4);
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #c0392b;
+            transform: translateX(-50%);
+        }
+        @media (max-width: 768px) {
+            .timeline-line::before {
+                left: 24px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f7f0e3;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c0392b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="sticky top-0 z-40 bg-industrial-charcoal/95 backdrop-blur-md text-sepia-100 border-b-2 border-industrial-gold shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="w-10 h-10 rounded-full bg-industrial-red flex items-center justify-center text-white text-xl font-bold shadow">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading text-xl sm:text-2xl tracking-wider font-bold block text-industrial-gold">LA CANADENCA</span>
+                        <span class="text-xs text-sepia-300 font-serif tracking-widest uppercase">Barcelona, 1919</span>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex space-x-6 font-medium text-sm">
+                    <a href="#linia-temps" class="hover:text-industrial-gold transition-colors py-1">Línia del Temps</a>
+                    <a href="#abans-despres" class="hover:text-industrial-gold transition-colors py-1">Abans i Després</a>
+                    <a href="#protagonistes" class="hover:text-industrial-gold transition-colors py-1">Protagonistes</a>
+                    <a href="#discurs" class="hover:text-industrial-gold transition-colors py-1">El Discurs</a>
+                    <a href="#quiz" class="hover:text-industrial-gold transition-colors py-1">Quiz</a>
+                    <a href="#llegat" class="hover:text-industrial-gold transition-colors py-1">El Llegat Avui</a>
+                </nav>
+
+                <div class="flex md:hidden">
+                    <button id="mobile-menu-btn" class="text-sepia-200 hover:text-white p-2 text-xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-industrial-charcoal border-t border-gray-700 px-4 pt-2 pb-4 space-y-2">
+            <a href="#linia-temps" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">Línia del Temps</a>
+            <a href="#abans-despres" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">Abans i Després</a>
+            <a href="#protagonistes" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">Protagonistes</a>
+            <a href="#discurs" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">El Discurs</a>
+            <a href="#quiz" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">Quiz</a>
+            <a href="#llegat" class="mobile-link block py-2 text-sepia-200 hover:text-industrial-gold">El Llegat Avui</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="relative bg-industrial-charcoal text-sepia-100 overflow-hidden py-16 lg:py-24 border-b-4 border-industrial-red">
+            <div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+                <i class="fa-solid fa-industry text-[24rem]"></i>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-4xl mx-auto">
+                    <span class="inline-block px-4 py-1.5 bg-industrial-red/20 border border-industrial-red text-industrial-gold rounded-full text-xs font-semibold tracking-widest uppercase mb-6">
+                        <i class="fa-solid fa-landmark mr-2"></i>Fita Històrica del Moviment Obrer
+                    </span>
+                    <h1 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                        La Vaga de La Canadenca (1919) i els Drets dels Treballadors
+                    </h1>
+                    <p class="font-serif text-lg sm:text-xl text-sepia-200 mb-10 leading-relaxed">
+                        Com la determinació de la classe treballadora a Barcelona va aconseguir la jornada laboral de <span class="text-industrial-gold font-bold underline decoration-industrial-red underline-offset-4">8 hores diàries</span> per primer cop a Espanya i va marcar la història del sindicalisme mundial.
+                    </p>
+
+                    <div class="flex flex-wrap justify-center gap-4 mb-12">
+                        <a href="#linia-temps" class="bg-industrial-red hover:bg-industrial-darkred text-white font-bold py-3.5 px-8 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center space-x-2">
+                            <span>Explora la Història</span>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                        <a href="#quiz" class="bg-transparent border-2 border-industrial-gold text-industrial-gold hover:bg-industrial-gold/10 font-bold py-3.5 px-8 rounded-lg transition flex items-center space-x-2">
+                            <span>Posa't a Prova (Quiz)</span>
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Impact Counters -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12 pt-10 border-t border-gray-800">
+                    <div class="bg-industrial-slate/60 p-6 rounded-xl border border-gray-700/50 text-center">
+                        <div class="text-4xl lg:text-5xl font-extrabold font-heading text-industrial-gold mb-2" id="counter-1">44</div>
+                        <div class="text-xs uppercase tracking-wider text-sepia-300 font-medium">Dies de vaga continuada</div>
+                        <div class="text-xs text-gray-400 mt-1">Del 5 de febrer al 19 de març</div>
+                    </div>
+                    <div class="bg-industrial-slate/60 p-6 rounded-xl border border-gray-700/50 text-center">
+                        <div class="text-4xl lg:text-5xl font-extrabold font-heading text-industrial-gold mb-2" id="counter-2">8 h</div>
+                        <div class="text-xs uppercase tracking-wider text-sepia-300 font-medium">Jornada Màxima Legal</div>
+                        <div class="text-xs text-gray-400 mt-1">De 10-12h a 8 hores diàries</div>
+                    </div>
+                    <div class="bg-industrial-slate/60 p-6 rounded-xl border border-gray-700/50 text-center">
+                        <div class="text-4xl lg:text-5xl font-extrabold font-heading text-industrial-gold mb-2" id="counter-3">100%</div>
+                        <div class="text-xs uppercase tracking-wider text-sepia-300 font-medium">Ciutat Aturada</div>
+                        <div class="text-xs text-gray-400 mt-1">Sense llum, tramvies ni aigua</div>
+                    </div>
+                    <div class="bg-industrial-slate/60 p-6 rounded-xl border border-gray-700/50 text-center">
+                        <div class="text-4xl lg:text-5xl font-extrabold font-heading text-industrial-gold mb-2">1r</div>
+                        <div class="text-xs uppercase tracking-wider text-sepia-300 font-medium">Decret Estatal d'Europa</div>
+                        <div class="text-xs text-gray-400 mt-1">Llei de les 8h del 3 d'abril</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="linia-temps" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-industrial-red font-semibold uppercase tracking-widest text-xs">Cronologia del Conflicte</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-industrial-slate mt-1">Línia del Temps Interactiva</h2>
+                <p class="text-sepia-800 font-serif mt-2 max-w-2xl mx-auto">Viu pas a pas la cronologia dels 44 dies que van paralitzar Barcelona i van canviar la història del treball.</p>
+
+                <!-- Phase Filters -->
+                <div class="flex flex-wrap justify-center gap-2 mt-8">
+                    <button onclick="filterTimeline('all')" class="timeline-filter active-filter px-4 py-2 rounded-full text-sm font-semibold transition border border-industrial-red bg-industrial-red text-white shadow" data-phase="all">
+                        Totes les Fases
+                    </button>
+                    <button onclick="filterTimeline('fase1')" class="timeline-filter px-4 py-2 rounded-full text-sm font-semibold transition border border-sepia-300 bg-white text-industrial-slate hover:bg-sepia-100" data-phase="fase1">
+                        1. El Spark Inicial (Feb 5-17)
+                    </button>
+                    <button onclick="filterTimeline('fase2')" class="timeline-filter px-4 py-2 rounded-full text-sm font-semibold transition border border-sepia-300 bg-white text-industrial-slate hover:bg-sepia-100" data-phase="fase2">
+                        2. L'Escalada i l'Estat de Guerra (Feb 21-Març 13)
+                    </button>
+                    <button onclick="filterTimeline('fase3')" class="timeline-filter px-4 py-2 rounded-full text-sm font-semibold transition border border-sepia-300 bg-white text-industrial-slate hover:bg-sepia-100" data-phase="fase3">
+                        3. L'Assemblea de les Arenes i Victòria (Març 19-Abril 3)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timeline items container -->
+            <div class="relative timeline-line space-y-8" id="timeline-container">
+                <!-- Timeline Event 1 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase1">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 text-left md:text-right mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-industrial-red">
+                            <span class="inline-block px-3 py-1 bg-sepia-200 text-industrial-red font-bold text-xs rounded-md mb-2">5 de Febrer de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">Inici del Conflicte a La Canadenca</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                La companyia elèctrica *Riegos y Fuerzas del Ebro* (coneguda com *La Canadenca*) redueix els sous del personal de facturació. Vuit treballadors protesten i s'afilien al Sindicat Únic de la CNT. La direcció els acomiada immediatament.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">1</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 hidden md:block"></div>
+                </div>
+
+                <!-- Timeline Event 2 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase1">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 hidden md:block"></div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">2</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 text-left mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-industrial-gold">
+                            <span class="inline-block px-3 py-1 bg-sepia-200 text-industrial-rust font-bold text-xs rounded-md mb-2">8 - 17 de Febrer de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">La Solidaritat Obrera s'activa</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                Els companys dels acomiadats es declaren en vaga de zel i solidaritat. El 8 de febrer la vaga s'estén a la divisió de producció elèctrica. Barcelona es queda a les fosques i s'atura el servei de tramvies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Event 3 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase2">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 text-left md:text-right mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-industrial-red">
+                            <span class="inline-block px-3 py-1 bg-sepia-200 text-industrial-red font-bold text-xs rounded-md mb-2">21 de Febrer de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">Vaga General de Transports i Serveis</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                Es sumen els treballadors de la Companyia d'Aigües, el gas, els tramvies i la premsa. El 70% de la indústria catalana s'atura per complet. La paralització de Barcelona és absoluta.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">3</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 hidden md:block"></div>
+                </div>
+
+                <!-- Timeline Event 4 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase2">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 hidden md:block"></div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">4</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 text-left mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-industrial-slate">
+                            <span class="inline-block px-3 py-1 bg-sepia-200 text-industrial-slate font-bold text-xs rounded-md mb-2">27 de Febrer - 13 de Març de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">Estat de Guerra i Militarització</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                El governador civil i el capità general Joaquín Milans del Bosch declaren l'Estat de Guerra. El govern mobilitza militarment els treballadors elèctrics, però molts s'hi neguen i són empresonats al castell de Montjuïc (més de 3.000 detinguts).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Event 5 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase3">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 text-left md:text-right mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-industrial-gold">
+                            <span class="inline-block px-3 py-1 bg-sepia-200 text-industrial-rust font-bold text-xs rounded-md mb-2">19 de Març de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">L'Assemblea Històrica de la Plaça de les Arenes</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                Salvador Seguí ("El Noi del Sucre") parla davant de 20.000 treballadors a la Plaça de les Arenes. Amb la seva oratòria persuasiva, convenç l'assemblea per ratificar l'acord negociat: fi de la vaga, jornada de 8 hores, augment de sous i llibertat per als presos.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">5</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 hidden md:block"></div>
+                </div>
+
+                <!-- Timeline Event 6 -->
+                <div class="timeline-item relative flex flex-col md:flex-row items-center" data-phase="fase3">
+                    <div class="w-full md:w-1/2 pr-0 md:pr-12 hidden md:block"></div>
+                    <div class="absolute left-6 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-industrial-red border-4 border-white text-white flex items-center justify-center font-bold shadow z-10">6</div>
+                    <div class="w-full md:w-1/2 pl-0 md:pl-12 text-left mb-4 md:mb-0">
+                        <div class="vintage-card p-6 rounded-xl border-l-4 border-green-600">
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 font-bold text-xs rounded-md mb-2">3 d'Abril de 1919</span>
+                            <h3 class="font-heading text-xl font-bold text-industrial-slate">Decret Reial de la Jornada de 8 Hores</h3>
+                            <p class="text-sm text-sepia-800 font-serif mt-2">
+                                El Govern d'Espanya, presidit pel Comte de Romanones, publica el Reial Decret que fixa en 8 hores la jornada laboral diària màxima a tot l'Estat. Espanya es converteix en el primer país del món en instaurar-ho per llei general.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="abans-despres" class="py-20 bg-sepia-200 border-y border-sepia-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-industrial-red font-semibold uppercase tracking-widest text-xs">Transformació Social</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-industrial-slate mt-1">Abans i Després de la Canadenca</h2>
+                    <p class="text-sepia-800 font-serif mt-2 max-w-2xl mx-auto">Compara com era la vida de la classe treballadora abans del 1919 i la conquesta històrica aconseguida després del conflicte.</p>
+                </div>
+
+                <!-- Matrix / Toggle Switch -->
+                <div class="max-w-4xl mx-auto mb-8 flex justify-center">
+                    <div class="bg-white p-1 rounded-xl border border-sepia-300 shadow flex text-sm font-semibold">
+                        <button id="toggle-split" onclick="switchCompareMode('split')" class="px-5 py-2 rounded-lg bg-industrial-slate text-white transition">Vista Paral·lela</button>
+                        <button id="toggle-slider" onclick="switchCompareMode('slider')" class="px-5 py-2 rounded-lg text-industrial-slate hover:bg-sepia-100 transition">Vista Interactiva</button>
+                    </div>
+                </div>
+
+                <!-- Side by Side View Container -->
+                <div id="compare-split-view" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Before 1919 Card -->
+                    <div class="vintage-card p-6 rounded-2xl border-t-8 border-red-700 bg-red-50/40">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-red-700 text-white flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-hourglass-start"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading text-2xl font-bold text-red-900">Abans de 1919</h3>
+                                <p class="text-xs text-red-700 font-semibold uppercase">L'era de l'explotació sense límit</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4 text-sm font-serif text-sepia-900">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-xmark text-red-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Jornada Laboral:</strong> De 10 a 14 hores diàries, sis o set dies a la setmana (fins a 70h/setmana).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-xmark text-red-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Sindicació i Vaga:</strong> Considerada un delicte o motiu d'acomiadament immediat i llista negra.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-xmark text-red-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Condicions i Seguretat:</strong> Cap dret a baixa per malaltia o accident laboral. Precaris sous de subsistència.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-xmark text-red-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Vida Personal:</strong> Inexistència de temps lliure, educació o descans per a la conciliació familiar.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- After 1919 Card -->
+                    <div class="vintage-card p-6 rounded-2xl border-t-8 border-emerald-600 bg-emerald-50/40">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-hourglass-end"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading text-2xl font-bold text-emerald-900">Després de 1919</h3>
+                                <p class="text-xs text-emerald-700 font-semibold uppercase">La conquesta de la jornada de 8 hores</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4 text-sm font-serif text-sepia-900">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-emerald-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Jornada Laboral:</strong> 8 hores diàries com a límit màxim legal (48 hores setmanals).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-emerald-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Reconeixement Sindicat:</strong> Reconeixement de facto de la CNT i la negociació col·lectiva obrera.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-emerald-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Millores Salarials:</strong> Augments salarials negociats i readmissió de tots els treballadors acomiadats.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-emerald-600 mt-1 mr-3 text-base"></i>
+                                <span><strong>Regla de les 3 Vuits:</strong> 8 hores de treball, 8 hores de descans i 8 hores d'oci i educació.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Interactive Slider View (Hidden by default) -->
+                <div id="compare-slider-view" class="hidden max-w-4xl mx-auto">
+                    <div class="vintage-card p-8 rounded-2xl">
+                        <div class="mb-6 text-center">
+                            <label for="comp-slider" class="block font-heading text-lg font-bold text-industrial-slate mb-2">Desplaça per comparar la transformació:</label>
+                            <input type="range" id="comp-slider" min="0" max="100" value="50" class="w-full accent-industrial-red cursor-pointer" oninput="updateCompareSlider(this.value)">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                            <div class="p-4 rounded-xl bg-sepia-100 border border-sepia-300">
+                                <h4 class="font-bold text-industrial-slate text-sm uppercase">Tema</h4>
+                                <div id="slider-topic" class="font-heading text-xl text-industrial-red font-bold mt-2">Jornada Laboral</div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-red-100/60 border border-red-300">
+                                <h4 class="font-bold text-red-900 text-sm uppercase">Abans (1918)</h4>
+                                <div id="slider-before" class="font-serif text-sm text-red-950 mt-2">10-14 hores diàries sense cap límit legal.</div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-emerald-100/60 border border-emerald-300">
+                                <h4 class="font-bold text-emerald-900 text-sm uppercase">Després (1919)</h4>
+                                <div id="slider-after" class="font-serif text-sm text-emerald-950 mt-2">Màxim 8 hores diàries garantides per Reial Decret.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="protagonistes" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-industrial-red font-semibold uppercase tracking-widest text-xs">Biografies i Figures Clau</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-industrial-slate mt-1">Protagonistes de la Història</h2>
+                <p class="text-sepia-800 font-serif mt-2 max-w-2xl mx-auto">Fes clic a les targetes per veure el paper clau de cadascuna d'aquestes personalitats en el conflicte.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Salvador Seguí -->
+                <div onclick="openPersonModal('segui')" class="vintage-card rounded-xl overflow-hidden cursor-pointer group">
+                    <div class="h-48 bg-industrial-slate relative flex items-center justify-center text-white overflow-hidden">
+                        <div class="absolute inset-0 bg-industrial-red/20 group-hover:bg-industrial-red/40 transition"></div>
+                        <i class="fa-solid fa-user-ninja text-7xl text-sepia-300 opacity-80 group-hover:scale-110 transition duration-300"></i>
+                        <span class="absolute bottom-3 left-3 bg-industrial-red text-white text-xs font-bold px-2.5 py-1 rounded">CNT / Líder Sindical</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate group-hover:text-industrial-red transition">Salvador Seguí</h3>
+                        <p class="text-xs font-bold text-industrial-gold uppercase tracking-wider mb-2">"El Noi del Sucre"</p>
+                        <p class="text-xs text-sepia-800 font-serif line-clamp-3">
+                            Secretari general de la CNT a Catalunya, orador d'un carisma excepcional i arquitecte de la victòria al Miting de les Arenes.
+                        </p>
+                        <span class="mt-4 text-xs font-semibold text-industrial-red inline-flex items-center space-x-1 group-hover:translate-x-1 transition">
+                            <span>Llegir biografia completa</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Francesc Layret -->
+                <div onclick="openPersonModal('layret')" class="vintage-card rounded-xl overflow-hidden cursor-pointer group">
+                    <div class="h-48 bg-industrial-slate relative flex items-center justify-center text-white overflow-hidden">
+                        <div class="absolute inset-0 bg-industrial-gold/20 group-hover:bg-industrial-gold/40 transition"></div>
+                        <i class="fa-solid fa-scale-balanced text-7xl text-sepia-300 opacity-80 group-hover:scale-110 transition duration-300"></i>
+                        <span class="absolute bottom-3 left-3 bg-industrial-slate text-white text-xs font-bold px-2.5 py-1 rounded">Advocat Laboralista</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate group-hover:text-industrial-red transition">Francesc Layret</h3>
+                        <p class="text-xs font-bold text-industrial-gold uppercase tracking-wider mb-2">Defensor dels Treballadors</p>
+                        <p class="text-xs text-sepia-800 font-serif line-clamp-3">
+                            Advocat i polític republicà que va defensar legalment els milers de vaguistes empresonats i va pressionar les autoritats per a la seva llibertat.
+                        </p>
+                        <span class="mt-4 text-xs font-semibold text-industrial-red inline-flex items-center space-x-1 group-hover:translate-x-1 transition">
+                            <span>Llegir biografia completa</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Simó Piera -->
+                <div onclick="openPersonModal('piera')" class="vintage-card rounded-xl overflow-hidden cursor-pointer group">
+                    <div class="h-48 bg-industrial-slate relative flex items-center justify-center text-white overflow-hidden">
+                        <div class="absolute inset-0 bg-industrial-rust/20 group-hover:bg-industrial-rust/40 transition"></div>
+                        <i class="fa-solid fa-people-group text-7xl text-sepia-300 opacity-80 group-hover:scale-110 transition duration-300"></i>
+                        <span class="absolute bottom-3 left-3 bg-industrial-rust text-white text-xs font-bold px-2.5 py-1 rounded">Comitè de Vaga</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate group-hover:text-industrial-red transition">Simó Piera</h3>
+                        <p class="text-xs font-bold text-industrial-gold uppercase tracking-wider mb-2">President Comissió de Vaga</p>
+                        <p class="text-xs text-sepia-800 font-serif line-clamp-3">
+                            Dirigent sindical de la construcció i president de la comissió de vaga que va mantenir la cohesió i la resistència dels diferents sectors.
+                        </p>
+                        <span class="mt-4 text-xs font-semibold text-industrial-red inline-flex items-center space-x-1 group-hover:translate-x-1 transition">
+                            <span>Llegir biografia completa</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Joaquín Milans del Bosch -->
+                <div onclick="openPersonModal('milans')" class="vintage-card rounded-xl overflow-hidden cursor-pointer group">
+                    <div class="h-48 bg-industrial-slate relative flex items-center justify-center text-white overflow-hidden">
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition"></div>
+                        <i class="fa-solid fa-shield-halved text-7xl text-sepia-300 opacity-80 group-hover:scale-110 transition duration-300"></i>
+                        <span class="absolute bottom-3 left-3 bg-gray-800 text-white text-xs font-bold px-2.5 py-1 rounded">Capità General</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate group-hover:text-industrial-red transition">Milans del Bosch</h3>
+                        <p class="text-xs font-bold text-industrial-gold uppercase tracking-wider mb-2">Capità General de Catalunya</p>
+                        <p class="text-xs text-sepia-800 font-serif line-clamp-3">
+                            Representant de la línia dura de les autoritats militars que va declarar l'Estat de Guerra i va ordenar les detencions massives de treballadors.
+                        </p>
+                        <span class="mt-4 text-xs font-semibold text-industrial-red inline-flex items-center space-x-1 group-hover:translate-x-1 transition">
+                            <span>Llegir biografia completa</span>
+                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="discurs" class="py-20 bg-industrial-charcoal text-sepia-100 border-y-4 border-industrial-gold">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <span class="text-industrial-gold font-semibold uppercase tracking-widest text-xs">Plaça de les Arenes (19 de Març de 1919)</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white mt-1">El Discurs Històric de Salvador Seguí</h2>
+                    <p class="text-sepia-300 font-serif mt-2">Llegeix i escolta el moment culminant on es va acceptar la conquesta de les 8 hores davant de 20.000 treballadors.</p>
+                </div>
+
+                <div class="bg-industrial-slate/80 p-8 rounded-2xl border border-gray-700 shadow-2xl relative">
+                    <div class="flex items-center justify-between border-b border-gray-700 pb-4 mb-6">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-bullhorn text-industrial-gold text-2xl"></i>
+                            <div>
+                                <h4 class="font-heading text-lg font-bold text-white">Salvador Seguí a la Plaça de Braus de les Arenes</h4>
+                                <p class="text-xs text-gray-400">Ratificació de l'acord i fi de la vaga general</p>
+                            </div>
+                        </div>
+
+                        <!-- Audio Controls -->
+                        <div class="flex items-center space-x-3">
+                            <button id="speech-play-btn" onclick="toggleSpeechAudio()" class="bg-industrial-red hover:bg-industrial-darkred text-white p-3 rounded-full transition shadow-lg">
+                                <i class="fa-solid fa-play" id="speech-icon"></i>
+                            </button>
+                            <span id="speech-status" class="text-xs font-mono text-industrial-gold hidden sm:inline">Prem per escoltar</span>
+                        </div>
+                    </div>
+
+                    <!-- Speech Text Container -->
+                    <div id="speech-text-content" class="font-serif text-lg leading-relaxed text-sepia-100 space-y-4 max-h-96 overflow-y-auto custom-scrollbar p-4 bg-industrial-charcoal/50 rounded-xl border border-gray-800">
+                        <p class="italic text-industrial-gold font-bold">
+                            "Camarades, hem guanyat! Però la nostra victòria no radica només en haver reduït a vuit hores la nostra jornada de treball..."
+                        </p>
+                        <p>
+                            "Radica en haver demostrat a la burgesia i als poders públics la força invencible de la solidaritat i la disciplina de la classe treballadora. Avui no només hem conquerit el dret al descans; hem conquerit el respecte de tot el país."
+                        </p>
+                        <p>
+                            "Ara cal que sapiguem gestionar aquesta victòria amb intel·ligència. Ens demanen que tornem a la feina. I ho farem amb el cap ben alt, sabent que si intenten treure'ns el que hem guanyat amb el nostre suor i la nostra unió, tornarem a aturar cada fàbrica, cada tren i cada llum d'aquesta ciutat."
+                        </p>
+                        <p class="italic font-bold text-sepia-200">
+                            "Visca la solidaritat dels treballadors! Visca la jornada de vuit hores!"
+                        </p>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap items-center justify-between text-xs text-gray-400 border-t border-gray-700/60 pt-4 gap-2">
+                        <span><i class="fa-solid fa-users mr-1"></i> Asistents: +20.000 treballadors en assemblea</span>
+                        <span><i class="fa-solid fa-location-dot mr-1"></i> Plaça de les Arenes, Barcelona</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-industrial-red font-semibold uppercase tracking-widest text-xs">Avaluació Interactiva</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-industrial-slate mt-1">Quiz de Coneixements</h2>
+                <p class="text-sepia-800 font-serif mt-2">Posa a prova el que has après sobre La Canadenca i la jornada de 8 hores.</p>
+            </div>
+
+            <!-- Quiz Card -->
+            <div class="vintage-card p-8 rounded-2xl relative" id="quiz-card">
+                <div class="flex items-center justify-between border-b border-sepia-300 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-industrial-red" id="quiz-progress-label">Pregunta 1 de 5</span>
+                    <span class="text-xs font-bold bg-industrial-slate text-white px-3 py-1 rounded-full" id="quiz-score-badge">Puntuació: 0</span>
+                </div>
+
+                <div id="quiz-question-container">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold text-industrial-slate mb-6" id="quiz-question">
+                        Carregant pregunta...
+                    </h3>
+                    <div class="space-y-3" id="quiz-options">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+                <div id="quiz-feedback" class="hidden mt-6 p-4 rounded-xl border text-sm font-serif">
+                    <!-- Feedback message -->
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuestion()" class="hidden bg-industrial-red hover:bg-industrial-darkred text-white font-bold py-2.5 px-6 rounded-lg transition">
+                        Següent Pregunta <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Results Modal / Card (Hidden initially) -->
+            <div id="quiz-result-card" class="hidden vintage-card p-8 rounded-2xl text-center border-2 border-industrial-gold">
+                <div class="w-20 h-20 mx-auto rounded-full bg-industrial-gold text-industrial-charcoal flex items-center justify-center text-4xl mb-4 shadow-lg">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h3 class="font-heading text-3xl font-bold text-industrial-slate">Resultat del Quiz!</h3>
+                <p class="text-lg font-serif text-sepia-800 mt-2" id="quiz-final-score-text"></p>
+                <div id="quiz-badge-container" class="my-6 p-4 bg-sepia-100 rounded-xl border border-sepia-300 font-bold text-industrial-red"></div>
+                <button onclick="resetQuiz()" class="bg-industrial-slate hover:bg-industrial-charcoal text-white font-bold py-3 px-8 rounded-lg transition">
+                    Tornar a intentar <i class="fa-solid fa-rotate-right ml-2"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="llegat" class="py-20 bg-sepia-200 border-t border-sepia-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-industrial-red font-semibold uppercase tracking-widest text-xs">De 1919 al Segle XXI</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-industrial-slate mt-1">El Llegat de La Canadenca Avui</h2>
+                    <p class="text-sepia-800 font-serif mt-2 max-w-2xl mx-auto">Com la vaga de 1919 continua inspirant els debats actuals sobre la jornada laboral i els drets del treball.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Legacy Card 1 -->
+                    <div class="vintage-card p-6 rounded-2xl border-t-4 border-industrial-red">
+                        <div class="w-12 h-12 rounded-xl bg-industrial-red/10 text-industrial-red flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate mb-2">Impacte Internacional (OIT)</h3>
+                        <p class="text-sm font-serif text-sepia-800">
+                            El 1919 es va fundar l'Organització Internacional del Treball (OIT). La victòria de Barcelona va servir d'exemple per al Conveni núm. 1 de l'OIT que establia les 8 hores a nivell global.
+                        </p>
+                    </div>
+
+                    <!-- Legacy Card 2 -->
+                    <div class="vintage-card p-6 rounded-2xl border-t-4 border-industrial-gold">
+                        <div class="w-12 h-12 rounded-xl bg-industrial-gold/10 text-industrial-rust flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-business-time"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate mb-2">Debat de les 37,5 Hores i 4 Dies</h3>
+                        <p class="text-sm font-serif text-sepia-800">
+                            Igual que el 1919 es va lluitar per les 8 hores, avui el debat centra la reducció a 37,5 hores setmanals i la setmana laboral de 4 dies per millorar la meva productivitat i qualitat de vida.
+                        </p>
+                    </div>
+
+                    <!-- Legacy Card 3 -->
+                    <div class="vintage-card p-6 rounded-2xl border-t-4 border-industrial-slate">
+                        <div class="w-12 h-12 rounded-xl bg-industrial-slate/10 text-industrial-slate flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-industrial-slate mb-2">Desconnexió Digital i Salut Mental</h3>
+                        <p class="text-sm font-serif text-sepia-800">
+                            En l'era digital, el dret al descans evoluciona cap a la desconnexió digital de correus i missatges fora de l'horari laboral, garantint la salut mental del treballador.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="person-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="vintage-card bg-white max-w-2xl w-full rounded-2xl overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col">
+            <button onclick="closePersonModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content" class="p-6 sm:p-8 overflow-y-auto custom-scrollbar">
+                <!-- Modal content dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-industrial-charcoal text-sepia-300 py-10 border-t-2 border-industrial-gold text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <div class="flex items-center justify-center space-x-2 text-industrial-gold font-heading text-lg font-bold">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Memòria Històrica i Drets Laborals</span>
+            </div>
+            <p class="font-serif text-xs text-gray-400 max-w-xl mx-auto">
+                Aplicació educativa interactiva dedicada a la memòria de la vaga de La Canadenca ( Barcelona, 1919 ), un referent del moviment obrer universal.
+            </p>
+            <div class="text-xs text-gray-500">
+                © 1919 - 2026 | Desenvolupat amb rigor històric i finalitat divulgativa.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const personData = {
+            segui: {
+                name: "Salvador Seguí i Rubinat",
+                title: "El Noi del Sucre (1887 - 1923)",
+                role: "Secretari General de la CNT a Catalunya",
+                bio: "Salvador Seguí va ser un dels líders anarcosindicalistes més influents de la història de Catalunya i Espanya. Conegut per la seva intel·ligència política, oratòria captivadora i visió pragmàtica del sindicalisme, va defensar la necessitat de la formació cultural de la classe treballadora.",
+                impact: "Durant la vaga de La Canadenca, Seguí va ser l'estrateg principal. El 19 de març de 1919, en l'històric miting de la Plaça de les Arenes, va aconseguir convèncer 20.000 treballadors d'acceptar la fi de la vaga després d'haver conquerit la jornada de 8 hores i l'alliberament dels companys empresonats.",
+                quote: "«El nostre moviment no busca la destrucció, sinó la construcció d'una societat justa de treballadors lliures i cultivats.»"
+            },
+            layret: {
+                name: "Francesc Layret i Foix",
+                title: "Advocat i Polític Republicà (1880 - 1920)",
+                role: "Defensor dels Drets dels Vaguistes",
+                bio: "Francesc Layret va ser un prestigiós advocat laboralista i polític republicà compromès amb les causes populars i la defensa legal de la classe treballadora davant la repressió estatal.",
+                impact: "Durant el conflicte de La Canadenca i la posterior declaració de l'Estat de Guerra, Layret va treballar incansablement per a la defensa jurídica dels milers de treballadors empresonats a la presó Model i al Castell de Montjuïc, esdevenint la veu legal del moviment.",
+                quote: "«La justícia no pot ser mai un privilegi dels poderosos; ha de ser el pilar de la llibertat dels treballadors.»"
+            },
+            piera: {
+                name: "Simó Piera i Pagès",
+                title: "Dirigent Sindical (1892 - 1979)",
+                role: "President de la Comissió de Vaga",
+                bio: "Simó Piera va ser un destacat dirigent del Sindicat de la Construcció de la CNT i president del comitè d'organització de la vaga durant el conflicte de La Canadenca.",
+                impact: "Va coordinar la solidaritat entre els diferents sectors industrials i va assegurar que el moviment de vaga mantingués una disciplina pacífica però inflexible davant la pressió de les autoritats militars.",
+                quote: "«La nostra única força és la unió inquebrantable de tots els oficisi sectors de la ciutat.»"
+            },
+            milans: {
+                name: "Joaquín Milans del Bosch",
+                title: "Capità General de Catalunya (1854 - 1936)",
+                role: "Autoritat Militar i Repressió",
+                bio: "Militar de línia dura i conservadora, Capità General de Catalunya durant el regnat d'Alfons XIII.",
+                impact: "Va decretar l'Estat de Guerra a Barcelona, va empresonar més de 3.000 treballadors i va intentar forçar el retorn a la feina mitjançant la militarització dels serveis públics d'electricitat i aigua.",
+                quote: "«L'ordre públic i l'autoritat de l'Estat s'imposaran per qualsevol mitjà necessari.»"
+            }
+        };
+
+        const quizData = [
+            {
+                question: "1. Quin va ser el motiu inicial que va desencadenar la Vaga de La Canadenca el febrer de 1919?",
+                options: [
+                    "L'acomiadament de 8 treballadors administratius que van formar un sindicat de la CNT",
+                    "Un augment del preu del pa a la ciutat de Barcelona",
+                    "Un accident greu a la central hidroelèctrica del Segre",
+                    "La prohibició general de tots els partits polítics"
+                ],
+                correct: 0,
+                explanation: "El conflicte va començar quan la direcció de Riegos y Fuerzas del Ebro va acomiadar 8 treballadors de la secció de facturació per haver-se afiliat al Sindicat Únic de la CNT."
+            },
+            {
+                question: "2. Quina conquesta laboral històrica es va obtenir gràcies a aquesta vaga per primer cop a Espanya?",
+                options: [
+                    "El dret a 30 dies de vacances pagades",
+                    "La jornada laboral màxima legal de 8 hores diàries",
+                    "La jubilació obligatòria als 50 anys",
+                    "El pagament del salari en monedes d'or"
+                ],
+                correct: 1,
+                explanation: "El Reial Decret del 3 d'abril de 1919 va fixar la jornada màxima en 8 hores diàries (48h setmanals), convertint Espanya en un dels primers països del món en decretar-ho."
+            },
+            {
+                question: "3. Qui va pronunciar el decisiu discurs a la Plaça de les Arenes per convèncer els treballadors d'acceptar l'acord?",
+                options: [
+                    "Francesc Layret",
+                    "El Comte de Romanones",
+                    "Salvador Seguí ('El Noi del Sucre')",
+                    "Joaquín Milans del Bosch"
+                ],
+                correct: 2,
+                explanation: "Salvador Seguí va parlar davant de 20.000 treballadors a la Plaça de les Arenes el 19 de març de 1919 per ratificar l'acord de pau social amb les 8 hores garantides."
+            },
+            {
+                question: "4. Quants dies va durar aproximadament la Vaga de La Canadenca?",
+                options: [
+                    "10 dies",
+                    "44 dies",
+                    "100 dies",
+                    "Un any sencer"
+                ],
+                correct: 1,
+                explanation: "La vaga va durar 44 dies consecutius (del 5 de febrer al 19 de març de 1919), paralitzant completament la indústria i els serveis de Barcelona."
+            },
+            {
+                question: "5. Quin nom popular tenia l'empresa elèctrica 'Riegos y Fuerzas del Ebro'?",
+                options: [
+                    "La Catalana de Gas",
+                    "La Canadenca",
+                    "Fuerza Eléctrica del Besòs",
+                    "Hidroelèctrica Espanyola"
+                ],
+                correct: 1,
+                explanation: "Es coneixia popularment com 'La Canadenca' perquè la majoria del seu capital financer provenia de la Canadian Bank of Commerce de Toronto."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let score = 0;
+        let quizAnswered = false;
+
+        function filterTimeline(phase) {
+            const items = document.querySelectorAll('.timeline-item');
+            const buttons = document.querySelectorAll('.timeline-filter');
+
+            buttons.forEach(btn => {
+                if(btn.dataset.phase === phase) {
+                    btn.classList.add('bg-industrial-red', 'text-white');
+                    btn.classList.remove('bg-white', 'text-industrial-slate');
+                } else {
+                    btn.classList.remove('bg-industrial-red', 'text-white');
+                    btn.classList.add('bg-white', 'text-industrial-slate');
+                }
+            });
+
+            items.forEach(item => {
+                if (phase === 'all' || item.dataset.phase === phase) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function switchCompareMode(mode) {
+            const splitView = document.getElementById('compare-split-view');
+            const sliderView = document.getElementById('compare-slider-view');
+            const btnSplit = document.getElementById('toggle-split');
+            const btnSlider = document.getElementById('toggle-slider');
+
+            if (mode === 'split') {
+                splitView.classList.remove('hidden');
+                sliderView.classList.add('hidden');
+                btnSplit.classList.add('bg-industrial-slate', 'text-white');
+                btnSplit.classList.remove('text-industrial-slate');
+                btnSlider.classList.remove('bg-industrial-slate', 'text-white');
+            } else {
+                splitView.classList.add('hidden');
+                sliderView.classList.remove('hidden');
+                btnSlider.classList.add('bg-industrial-slate', 'text-white');
+                btnSlider.classList.remove('text-industrial-slate');
+                btnSplit.classList.remove('bg-industrial-slate', 'text-white');
+            }
+        }
+
+        const sliderTopics = [
+            { val: 0, topic: "Jornada Laboral", before: "10-14 hores/dia sense límit legal", after: "Màxim 8 hores/dia (48h/setmana)" },
+            { val: 33, topic: "Sindicació i Negociació", before: "Acomiadaments i llistes negres", after: "Reconeixement de la CNT i acords de vaga" },
+            { val: 66, topic: "Presos i Repressió", before: " Empresonament al Castell de Montjuïc", after: "Amnistia i llibertat per als detinguts" },
+            { val: 100, topic: "Qualitat de Vida", before: "Exhaustivitat i manca de descans", after: "Regla de les 3 Vuits (Treball, Descans, Oci)" }
+        ];
+
+        function updateCompareSlider(val) {
+            let closest = sliderTopics.reduce((prev, curr) => 
+                Math.abs(curr.val - val) < Math.abs(prev.val - val) ? curr : prev
+            );
+            document.getElementById('slider-topic').innerText = closest.topic;
+            document.getElementById('slider-before').innerText = closest.before;
+            document.getElementById('slider-after').innerText = closest.after;
+        }
+
+        function openPersonModal(key) {
+            const p = personData[key];
+            if (!p) return;
+
+            const content = `
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-14 h-14 rounded-full bg-industrial-red text-white flex items-center justify-center font-bold text-2xl">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading text-2xl font-bold text-industrial-slate">${p.name}</h3>
+                        <p class="text-xs font-bold text-industrial-gold uppercase tracking-wider">${p.title}</p>
+                    </div>
+                </div>
+                <div class="space-y-4 text-sm font-serif text-sepia-900 border-t border-sepia-300 pt-4">
+                    <p><strong>Càrrec / Papel:</strong> ${p.role}</p>
+                    <p>${p.bio}</p>
+                    <div class="p-4 bg-sepia-100 rounded-xl border border-sepia-300">
+                        <h4 class="font-bold text-industrial-slate text-xs uppercase mb-1">Paper a La Canadenca:</h4>
+                        <p>${p.impact}</p>
+                    </div>
+                    <blockquote class="italic text-industrial-red font-semibold border-l-4 border-industrial-red pl-3 my-2">
+                        ${p.quote}
+                    </blockquote>
+                </div>
+            `;
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('person-modal').classList.remove('hidden');
+        }
+
+        function closePersonModal() {
+            document.getElementById('person-modal').classList.add('hidden');
+        }
+
+        let isSpeaking = false;
+        function toggleSpeechAudio() {
+            const btn = document.getElementById('speech-play-btn');
+            const icon = document.getElementById('speech-icon');
+            const status = document.getElementById('speech-status');
+
+            if ('speechSynthesis' in window) {
+                if (isSpeaking) {
+                    window.speechSynthesis.cancel();
+                    isSpeaking = false;
+                    icon.className = "fa-solid fa-play";
+                    status.innerText = "Prem per escoltar";
+                } else {
+                    window.speechSynthesis.cancel();
+                    const text = "Camarades, hem guanyat! Però la nostra victòria no radica només en haver reduït a vuit hores la nostra jornada de treball; radica en haver demostrat a la burgesia i als poders públics la força invencible de la solidaritat i la disciplina de la classe treballadora.";
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'ca-ES';
+                    utterance.rate = 0.95;
+
+                    utterance.onend = function() {
+                        isSpeaking = false;
+                        icon.className = "fa-solid fa-play";
+                        status.innerText = "Reentrega finalitzada";
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                    isSpeaking = true;
+                    icon.className = "fa-solid fa-pause";
+                    status.innerText = "Reproduint discurs...";
+                }
+            } else {
+                status.innerText = "Navegador sense àudio síntesi";
+            }
+        }
+
+        function loadQuizQuestion() {
+            quizAnswered = false;
+            const q = quizData[currentQuizIndex];
+            document.getElementById('quiz-progress-label').innerText = `Pregunta ${currentQuizIndex + 1} de ${quizData.length}`;
+            document.getElementById('quiz-score-badge').innerText = `Puntuació: ${score}`;
+            document.getElementById('quiz-question').innerText = q.question;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border border-sepia-300 bg-white hover:bg-sepia-100 transition font-serif text-sm text-industrial-slate flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-gray-400 group-hover:text-industrial-red"></i>
+                `;
+                btn.onclick = () => selectQuizOption(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectQuizOption(selectedIdx) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = quizData[currentQuizIndex];
+            const options = document.getElementById('quiz-options').children;
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (selectedIdx === q.correct) {
+                score += 20;
+                options[selectedIdx].classList.remove('bg-white', 'border-sepia-300');
+                options[selectedIdx].classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-950');
+                feedback.className = "mt-6 p-4 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-900 text-sm font-serif";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-check mr-2"></i>Correcte!</strong> ${q.explanation}`;
+            } else {
+                options[selectedIdx].classList.remove('bg-white', 'border-sepia-300');
+                options[selectedIdx].classList.add('bg-red-100', 'border-red-500', 'text-red-950');
+                options[q.correct].classList.add('bg-emerald-100', 'border-emerald-500');
+                feedback.className = "mt-6 p-4 rounded-xl border bg-red-50 border-red-300 text-red-900 text-sm font-serif";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-xmark mr-2"></i>Incorrecte.</strong> ${q.explanation}`;
+            }
+
+            feedback.classList.remove('hidden');
+            document.getElementById('quiz-score-badge').innerText = `Puntuació: ${score}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizData.length) {
+                loadQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-card').classList.add('hidden');
+            const resCard = document.getElementById('quiz-result-card');
+            resCard.classList.remove('hidden');
+
+            document.getElementById('quiz-final-score-text').innerText = `Has aconseguit ${score} de 100 punts possible!`;
+
+            let badge = "";
+            if (score === 100) {
+                badge = "<i class='fa-solid fa-medal mr-2'></i>Insignia d'Or: Historiador/a Expert de La Canadenca!";
+            } else if (score >= 60) {
+                badge = "<i class='fa-solid fa-award mr-2'></i>Insignia d'Argent: Coneixedor/a dels Drets Laborals!";
+            } else {
+                badge = "<i class='fa-solid fa-book-open mr-2'></i>Insignia de Bronze: Segueix explorant la història!";
+            }
+            document.getElementById('quiz-badge-container').innerHTML = badge;
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            score = 0;
+            document.getElementById('quiz-result-card').classList.add('hidden');
+            document.getElementById('quiz-card').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        window.onload = function() {
+            loadQuizQuestion();
+        };
+    </script>
+</body>
+</html>
