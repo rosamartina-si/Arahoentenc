@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ca" class="h-full bg-stone-950">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Els Trastàmara i el Canvi de Dinastia (Segles XV-XVI)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Medieval & Renaissance Aesthetics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700;900&family=Cinzel:wght@500;700;900&family=IM+Fell+English:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: {
+              DEFAULT: '#f5edd6',
+              dark: '#e5d7b5',
+              light: '#fbf7ee',
+              deep: '#d6c298'
+            },
+            gold: {
+              DEFAULT: '#d4af37',
+              light: '#f4e3a3',
+              dark: '#947514',
+              glow: '#ffe27a'
+            },
+            vermilion: {
+              DEFAULT: '#b91c1c',
+              dark: '#7f1d1d'
+            },
+            regal: {
+              DEFAULT: '#1c1917',
+              surface: '#262320',
+              border: '#44403c'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            cinzelDeco: ['Cinzel Decorative', 'serif'],
+            manuscript: ['IM Fell English', 'Georgia', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .bg-parchment-texture {
+      background-color: #f5edd6;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(214, 194, 152, 0.5) 100%),
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    }
+
+    .gold-glow {
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    }
+
+    .gold-border-box {
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.08);
+    }
+
+    .dropcap::first-letter {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 3.5rem;
+      float: left;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 12px;
+      color: #b91c1c;
+      font-weight: 900;
+    }
+
+    /* Term mark highlighting in manuscript text */
+    .term-highlight {
+      background-color: rgba(212, 175, 55, 0.25);
+      border-bottom: 2px solid #d4af37;
+      color: #7f1d1d;
+      font-weight: 600;
+      padding: 0 4px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .term-highlight:hover, .term-highlight.active-term {
+      background-color: #d4af37;
+      color: #0c0a09;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1c1917;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #44403c;
+      border-radius: 4px;
+      border: 1px solid #d4af37;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-stone-200 antialiased flex flex-col select-none overflow-x-hidden">
+
+  <header class="bg-stone-900 border-b border-gold/40 relative z-30 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Title & Crest -->
+      <div class="flex items-center space-x-3 text-center lg:text-left">
+        <div class="w-12 h-12 rounded-full border-2 border-gold flex items-center justify-center bg-stone-950 shadow-inner">
+          <i data-lucide="crown" class="w-6 h-6 text-gold"></i>
+        </div>
+        <div>
+          <h1 class="font-cinzelDeco text-lg sm:text-xl font-bold tracking-wider text-gold gold-glow">
+            ELS TRASTÀMARA ALS PAÏSOS CATALANS
+          </h1>
+          <p class="text-xs text-stone-400 font-cinzel tracking-widest uppercase">
+            Canvi de dinastia, autoritarisme i resistència institucional (S. XV - XVI)
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex flex-wrap justify-center items-center gap-1.5 bg-stone-950 p-1.5 rounded-xl border border-stone-800">
+        <button id="nav-reader" onclick="switchView('reader')" class="nav-btn px-3 py-2 rounded-lg text-xs font-cinzel font-semibold transition flex items-center gap-2 bg-gold text-stone-950 shadow-md">
+          <i data-lucide="scroll" class="w-4 h-4"></i>
+          <span>Text & Lector</span>
+        </button>
+        <button id="nav-timeline" onclick="switchView('timeline')" class="nav-btn px-3 py-2 rounded-lg text-xs font-cinzel font-semibold text-stone-300 hover:text-gold hover:bg-stone-800 transition flex items-center gap-2">
+          <i data-lucide="hourglass" class="w-4 h-4"></i>
+          <span>Línia de Temps</span>
+        </button>
+        <button id="nav-characters" onclick="switchView('characters')" class="nav-btn px-3 py-2 rounded-lg text-xs font-cinzel font-semibold text-stone-300 hover:text-gold hover:bg-stone-800 transition flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Protagonistes</span>
+        </button>
+        <button id="nav-glossary" onclick="switchView('glossary')" class="nav-btn px-3 py-2 rounded-lg text-xs font-cinzel font-semibold text-stone-300 hover:text-gold hover:bg-stone-800 transition flex items-center gap-2">
+          <i data-lucide="book-marked" class="w-4 h-4"></i>
+          <span>Glossari</span>
+        </button>
+        <button id="nav-quiz" onclick="switchView('quiz')" class="nav-btn px-3 py-2 rounded-lg text-xs font-cinzel font-semibold text-stone-300 hover:text-gold hover:bg-stone-800 transition flex items-center gap-2">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+          <span>Qüestionari</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col">
+
+    <!-- VIEW 1: HISTORICAL TEXT READER & INTERACTIVE CONCEPT INSPECTOR -->
+    <div id="view-reader" class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+      
+      <!-- Manuscript Text Column -->
+      <section class="lg:col-span-7 bg-regal-surface rounded-2xl gold-border-box p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div>
+          <!-- Text Controls Bar -->
+          <div class="flex items-center justify-between border-b border-stone-800 pb-4 mb-6">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-gold/10 text-gold border border-gold/30 font-cinzel text-xs font-bold">
+                Document Històric
+              </span>
+              <span class="text-stone-400 text-xs font-cinzel">Fes clic als conceptes ressaltats</span>
+            </div>
+
+            <!-- Speech Audio Controls -->
+            <button id="tts-btn" onclick="toggleAudioSpeech()" class="px-3 py-1.5 bg-vermilion hover:bg-vermilion-dark text-white rounded-lg text-xs font-cinzel font-semibold flex items-center gap-2 shadow-lg transition">
+              <i data-lucide="volume-2" class="w-4 h-4" id="tts-icon"></i>
+              <span id="tts-label">Escolta el Text</span>
+            </button>
+          </div>
+
+          <!-- Manuscript Paragraph Presentation -->
+          <div class="bg-parchment-texture text-stone-950 p-6 sm:p-8 rounded-xl shadow-2xl border border-amber-900/40 space-y-4 font-manuscript text-lg leading-relaxed">
+            
+            <p class="dropcap">
+              Al començament del segle XV va haver-hi un canvi de dinastia als Països Catalans. De tenir uns reis respectuosos amb les lleis i la manera de fer dels catalans van passar als <span class="term-highlight" onclick="inspectTerm('trastamara')">Trastàmara</span>, gens respectuosos, <span class="term-highlight" onclick="inspectTerm('absolutisme')">absolutistes</span> i no <span class="term-highlight" onclick="inspectTerm('pactisme')">pactistes</span>.
+            </p>
+
+            <p>
+              El primer d'ells, <span class="term-highlight" onclick="inspectTerm('ferran1')">Ferran I d'Aragó</span>, i la seva família robava a les botigues, va fugir de sobte una nit de Barcelona i va ser trobat mort l'endemà a Igualada. El seu fill <span class="term-highlight" onclick="inspectTerm('alfons')">Alfons el Magnànim</span> no va ni voler viure a Barcelona, va deixar la seva dona de <span class="term-highlight" onclick="inspectTerm('virreina')">virreina</span> i es va establir a Nàpols. Li va succeir el seu germà <span class="term-highlight" onclick="inspectTerm('joan2')">Joan II</span>, a qui la <span class="term-highlight" onclick="inspectTerm('generalitat')">Generalitat</span> va declarar la guerra.
+            </p>
+
+            <p>
+              Posteriorment, <span class="term-highlight" onclick="inspectTerm('ferran2')">Ferran el Catòlic</span> va patir un atemptat en què li van clavar un ganivet al coll i va passar dies entre la vida i la mort. Va sobreviure i llavors va portar a la Corona d'Aragó la <span class="term-highlight" onclick="inspectTerm('inquisicio')">Inquisició castellana</span>, una eina de repressió que controlava qualsevol cosa que no li agradés, fins i tot allò català.
+            </p>
+
+            <p>
+              Per exemple, Ferran el Catòlic va treure tots els <span class="term-highlight" onclick="inspectTerm('montserrat')">monjos de Montserrat</span> i hi va portar els de Valladolid, que s'hi van quedar fins a la <span class="term-highlight" onclick="inspectTerm('segadors')">revolta dels segadors</span>. La Inquisició va seguir fent aquesta feina al llarg dels segles XV i XVI, com quan ja a l'època de <span class="term-highlight" onclick="inspectTerm('felip2')">Felip II</span> va posar tots els diputats de la Generalitat a la presó.
+            </p>
+
+          </div>
+        </div>
+
+        <div class="text-xs text-stone-400 font-cinzel italic text-center">
+          💡 Selecciona qualsevol terme daurat per desglossar-ne l'anàlisi rigorosa i el context històric.
+        </div>
+      </section>
+
+      <!-- Context Inspector Panel Column -->
+      <section id="inspector-card" class="lg:col-span-5 bg-stone-900 rounded-2xl gold-border-box p-6 flex flex-col justify-between shadow-2xl relative">
+        <div class="space-y-4">
+          
+          <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+            <span id="inspector-tag" class="px-2.5 py-0.5 rounded text-xs font-cinzel font-bold bg-gold/20 text-gold border border-gold/40">
+              Concepte Clau
+            </span>
+            <span id="inspector-era" class="text-xs font-mono text-stone-400">
+              S. XV - XVI
+            </span>
+          </div>
+
+          <div>
+            <h2 id="inspector-title" class="font-cinzel text-2xl font-bold text-gold gold-glow">
+              La Dinastia Trastàmara
+            </h2>
+            <p id="inspector-subtitle" class="text-xs font-cinzel text-stone-400 mt-1 italic">
+              Canvi de casal reial i nova concepció del poder monàrquic
+            </p>
+          </div>
+
+          <hr class="border-stone-800 my-2">
+
+          <div class="space-y-3">
+            <h4 class="text-xs font-cinzel font-bold text-vermilion uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="feather" class="w-4 h-4"></i> Explicació i Context Històric
+            </h4>
+            <p id="inspector-body" class="text-sm text-stone-300 leading-relaxed font-sans">
+              La casa de Trastàmara, d'origen castellà, va accedir al tron de la Corona d'Aragó l'any 1412 mitjançant el Compromís de Casp. A diferència dels antics reis de la casa de Barcelona, els Trastàmara aportaven una visió centralista i absolutista, provocant continus enfrontaments amb el sistema pactista català.
+            </p>
+          </div>
+
+          <div class="bg-stone-950/80 p-4 rounded-xl border border-stone-800 space-y-2">
+            <h4 class="text-xs font-cinzel font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-gold"></i> Conseqüència Política
+            </h4>
+            <p id="inspector-impact" class="text-xs text-stone-400 leading-relaxed">
+              Inici de greus friccions entre la monarquia autoritària i les institucions pròpies (Corts i Generalitat), culminant en guerres civils i persecucions institucionals.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="pt-4 border-t border-stone-800 flex items-center justify-between text-xs text-stone-400 font-cinzel">
+          <span>Catalunya Moderns / Edat Moderna</span>
+          <button onclick="copyInspectorText()" class="hover:text-gold flex items-center gap-1 transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Resum
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- VIEW 2: CRONOLOGICAL TIMELINE (1412 - 1640) -->
+    <div id="view-timeline" class="hidden space-y-6 flex-1">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">
+          Cronologia del Conflicte (1412 - 1640)
+        </h2>
+        <p class="text-xs font-cinzel text-stone-400">
+          Des de l'arribada dels Trastàmara fins a la Revolta dels Segadors
+        </p>
+      </div>
+
+      <div class="relative border-l-2 border-gold/40 ml-4 sm:ml-32 space-y-8 my-8 pr-4">
+        
+        <!-- Timeline Event 1 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            1
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1412
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1412</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Compromís de Casp: Inici Trastàmara</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              S'elegeix Ferran I com a monarca de la Corona d'Aragó després de la mort sense descendència de Martí l'Humà (1410). S'inicia la dinastia castellana dels Trastàmara.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 2 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-vermilion flex items-center justify-center text-vermilion text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            2
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1416
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1416</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Tensions i Mort de Ferran I a Igualada</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Després d'uns anys marcats per deutes, incidents amb el municipi de Barcelona i desavenències amb les Corts, Ferran I fuig de la ciutat i mor de sobte a Igualada.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 3 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            3
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1416 - 1458
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1416 - 1458</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Alfons el Magnànim i la Cort a Nàpols</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Alfons V conquereix Nàpols i hi fixa la seva residència permanent. Desatén la política catalana directament i deixa la seva muller, la reina Maria de Castella, com a virreina / lloctinent general.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 4 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-vermilion flex items-center justify-center text-vermilion text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            4
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1462 - 1472
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1462 - 1472</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Guerra Civil Catalana contra Joan II</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              L'autoritarisme de Joan II i la violació de les legals constitucionals porten a la Generalitat de Catalunya a declarar la guerra oberta al rei, provocant una dècada de devastació social i econòmica.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 5 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            5
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1492 - 1493
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1492 - 1493</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Atemptat a Ferran el Catòlic i Repressió a Montserrat</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Ferran II sobreviu a una punyalada al coll realitzada per Joan de Canyamars a Barcelona. Poc després, introdueix la Inquisició castellana i expulsa els monjos catalans de Montserrat per substituir-los per religiosos de Valladolid.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 6 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-vermilion flex items-center justify-center text-vermilion text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            6
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1591
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1591</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Felip II Empresona els Diputats de la Generalitat</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Mitjançant la Inquisició com a braç executiu, el rei Felip II deté i tanca a la presó els diputats de la Generalitat (encapçalats per Joan Granollers) per haver defensat les Constitucions contra els abusos reials.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Event 7 -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-stone-900 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            7
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1640
+          </div>
+          <div class="bg-regal-surface p-5 rounded-xl gold-border-box space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1640</div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100">Revolta dels Segadors i Retorn de Montserrat</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              L'esclat de la Revolta dels Segadors aconsegueix, entre altres reaccions, la fi de la tutela dels monjos castellans a Montserrat i el retorn de la comunitat monàstica autòctona.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 3: CHARACTERS AND INSTITUTIONS GALLERY -->
+    <div id="view-characters" class="hidden space-y-6 flex-1">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">
+          Galeria de Protagonistes i Organismes
+        </h2>
+        <p class="text-xs font-cinzel text-stone-400">
+          Personatges claus citats al text històric i el seu paper polític
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Card 1: Ferran I -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1412 - 1416</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Monarca</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Ferran I d'Aragó</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"El d'Antequera"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Primer rei Trastàmara. El text destaca l'actitud conflictiva de la seva família, els robatoris a botigues, la seva fugida nocturna de Barcelona i la mort sobtada a Igualada.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Trencament del clima de cordialitat tradicional amb el municipi de Barcelona.
+          </div>
+        </div>
+
+        <!-- Card 2: Alfons V -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1416 - 1458</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Monarca</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Alfons V el Magnànim</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"Rei de Nàpols"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Va decidir no residir a Barcelona i va establir la cort reial a Nàpols. Va deixar la seva dona, Maria de Castella, com a virreina i lloctinent a Catalunya.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Absència reial prolongada i delegació permanent del poder executiu.
+          </div>
+        </div>
+
+        <!-- Card 3: Joan II -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-vermilion">1458 - 1479</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Monarca</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Joan II el Sense Fe</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"Rei Autoritari"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Germà d'Alfons V. El seu tarannà despòtic i la violació dels pactes van provocar que la Generalitat de Catalunya li declarés formalment la guerra.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Enfrontament armat de 10 anys (Guerra Civil Catalana).
+          </div>
+        </div>
+
+        <!-- Card 4: Ferran II -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1479 - 1516</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Monarca</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Ferran II el Catòlic</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"Introductor de la Inquisició"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Va sobreviure a un atemptat amb ganivet a Barcelona (1492). Va imposar la Inquisició castellana a la Corona d'Aragó i va substituir els monjos autòctons de Montserrat per monjos de Valladolid.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Repressió politico-religiosa i ingerència als centres religiosos catalans.
+          </div>
+        </div>
+
+        <!-- Card 5: Felip II -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-vermilion">1556 - 1598</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Hàbsburg</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Felip II de Castella</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"Monarca Absolutista"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Va continuar utilitzant la Inquisició com a instrument de control absolut. L'any 1591 va ordenat l'empresonament dels diputats de la Generalitat.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Detenció directa dels representants de la màxima institució catalana.
+          </div>
+        </div>
+
+        <!-- Card 6: La Generalitat -->
+        <div class="bg-regal-surface rounded-xl gold-border-box p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">Institució</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 font-mono">Diputació del General</span>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-stone-100 mt-2">Generalitat de Catalunya</h3>
+            <p class="text-xs text-stone-400 font-cinzel italic">"Defensora de les Constitucions"</p>
+            <p class="text-xs text-stone-300 mt-3 leading-relaxed">
+              Organisme encarregat de vetllar per l'obeeix-se de les lleis i constitucions catalanes. Va declarar la guerra a Joan II i patí persecució sota Felip II.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-stone-800 text-[11px] text-stone-400">
+            <strong>Impacte:</strong> Principal frena al projecte d'absolutisme reial centralitzador.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 4: KEY CONCEPTS GLOSSARY -->
+    <div id="view-glossary" class="hidden space-y-6 flex-1">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">
+          Glossari de Conceptes Clau
+        </h2>
+        <p class="text-xs font-cinzel text-stone-400">
+          Comprendre el vocabulari polític i institucional de l'Edat Moderna
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Concept 1 -->
+        <div class="bg-regal-surface p-6 rounded-xl gold-border-box space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <h3 class="font-cinzel text-xl font-bold text-gold">Pactisme vs. Absolutisme</h3>
+            <span class="p-1.5 rounded-lg bg-gold/10 text-gold"><i data-lucide="scale" class="w-5 h-5"></i></span>
+          </div>
+          <p class="text-xs text-stone-300 leading-relaxed font-sans">
+            El <strong>pactisme</strong> era la tradició política pròpia de la Corona d'Aragó: el rei no podia dictar lleis ni recaptar impostos sense pactar prèviament amb les Corts. L'<strong>absolutisme</strong>, predominant a Castella, considerava que l'autoritat del monarca estava per sobre de qualsevol llei o institució territorial.
+          </p>
+        </div>
+
+        <!-- Concept 2 -->
+        <div class="bg-regal-surface p-6 rounded-xl gold-border-box space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <h3 class="font-cinzel text-xl font-bold text-gold">Inquisició Castellana</h3>
+            <span class="p-1.5 rounded-lg bg-vermilion/20 text-vermilion"><i data-lucide="shield-alert" class="w-5 h-5"></i></span>
+          </div>
+          <p class="text-xs text-stone-300 leading-relaxed font-sans">
+            Tribunal religiós creat el 1478 que depenia directament dels Reis i no dels bisbes ni de les Corts. Es va convertir en un òrgan de control polític i de repressió ideològica capaç d'atemptar contra els drets i constitucions catalanes sense cap oposició legal.
+          </p>
+        </div>
+
+        <!-- Concept 3 -->
+        <div class="bg-regal-surface p-6 rounded-xl gold-border-box space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <h3 class="font-cinzel text-xl font-bold text-gold">Virregnat / Lloctinència</h3>
+            <span class="p-1.5 rounded-lg bg-gold/10 text-gold"><i data-lucide="crown" class="w-5 h-5"></i></span>
+          </div>
+          <p class="text-xs text-stone-300 leading-relaxed font-sans">
+            Figura d'origen medieval per la qual el rei delegava les seves funcions executives en un representant directe (virrei o lloctinent general) durant les seves absències del territori, com va fer Alfons el Magnànim amb la reina Maria de Castella.
+          </p>
+        </div>
+
+        <!-- Concept 4 -->
+        <div class="bg-regal-surface p-6 rounded-xl gold-border-box space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <h3 class="font-cinzel text-xl font-bold text-gold">Intervenció a Montserrat (1493)</h3>
+            <p class="p-1.5 rounded-lg bg-gold/10 text-gold"><i data-lucide="church" class="w-5 h-5"></i></p>
+          </div>
+          <p class="text-xs text-stone-300 leading-relaxed font-sans">
+            Estratègia de Ferran el Catòlic per sotmetre la jerarquia eclesiàstica catalana. Va desplaçar els monjos benedictins de la comunitat autòctona de Montserrat i hi va imposar monks provinents del monestir de San Benito de Valladolid fins al 1640.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 5: INTERACTIVE COMPREHENSION QUIZ -->
+    <div id="view-quiz" class="hidden max-w-3xl mx-auto w-full space-y-6 flex-1 flex flex-col justify-center">
+      
+      <div class="text-center space-y-2">
+        <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">
+          Qüestionari de Comprensió Històrica
+        </h2>
+        <p class="text-xs font-cinzel text-stone-400">
+          Posa a prova els teus coneixements basats estrictament en el text rebut
+        </p>
+      </div>
+
+      <!-- Quiz Card Container -->
+      <div class="bg-regal-surface p-6 sm:p-8 rounded-2xl gold-border-box shadow-2xl space-y-6 relative">
+        
+        <!-- Progress Indicator -->
+        <div class="flex items-center justify-between text-xs font-cinzel text-stone-400 border-b border-stone-800 pb-3">
+          <span id="quiz-progress-text">Pregunta 1 de 5</span>
+          <span id="quiz-score-badge" class="text-gold font-bold">Puntuació: 0 / 5</span>
+        </div>
+
+        <!-- Question Title -->
+        <h3 id="quiz-question-title" class="font-cinzel text-lg sm:text-xl font-bold text-stone-100">
+          Carregant pregunta...
+        </h3>
+
+        <!-- Options Container -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Dynamically generated via JS -->
+        </div>
+
+        <!-- Feedback Banner -->
+        <div id="quiz-feedback" class="hidden p-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Next / Restart Controls -->
+        <div class="flex justify-end pt-2">
+          <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-5 py-2.5 bg-gold hover:bg-gold-light text-stone-950 rounded-lg font-cinzel font-bold text-xs shadow-lg transition">
+            Següent Pregunta ➔
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="bg-stone-950 border-t border-stone-800 py-4 text-center text-xs text-stone-500 font-cinzel">
+    <p>Aplicació Educativa d'Història • Els Trastàmara als Països Catalans (S. XV - XVI)</p>
+  </footer>
+
+  <script>
+    /* ========================================================================
+       DATASET OF HISTORICAL TERMS FOR INSPECTOR
+       ======================================================================== */
+    const TERMS_DATA = {
+      trastamara: {
+        tag: "Dinastia Reial",
+        title: "La Dinastia dels Trastàmara",
+        subtitle: "Llinatge d'origen castellà instal·lat l'any 1412",
+        body: "Dinastia originària de Castella que va accedir al tron de la Corona d'Aragó a través del Compromís de Casp de 1412. Els seus monarques van impulsar una visió centralista i absolutista del poder, enfrontant-se sovint a les lleis i institucions catalanes.",
+        impact: "Desenllaç en tensions contínues, retallada d'autonomies locals i la Guerra Civil Catalana del segle XV."
+      },
+      absolutisme: {
+        tag: "Doctrina Polític-Regia",
+        title: "L'Absolutisme",
+        subtitle: "Poder reial sense límits parlamentaris ni constitucionals",
+        body: "Model de govern on tota la sobirania i autoritat recauen en la figura del monarca. El rei absolutista no considera estar sotmès a les constitucions o lleis aprovades per les Corts del país.",
+        impact: "Contrast directe amb el model català tradicional, basat en el respecte mutu entre el rei i les lleis de la terra."
+      },
+      pactisme: {
+        tag: "Sistema Constitucional",
+        title: "El Pactisme Català",
+        subtitle: "El rei governa d'acord amb les Constitucions",
+        body: "Sistema polític característic de la Corona d'Aragó i Catalunya. Estableix que el rei no pot legislar ni demanar tributs de manera unilateral: necessita sempre el pacte i l'aprovació de les Corts.",
+        impact: "Garantia de les llibertats i lleis autòctones davant dels abusos de la corona."
+      },
+      ferran1: {
+        tag: "Monarca (1412 - 1416)",
+        title: "Ferran I d'Aragó",
+        subtitle: "Primer rei de la casa de Trastàmara",
+        body: "Anomenat 'el d'Antequera'. Va trobar una forta oposició a les seves pretensions fiscals a Barcelona. El text al·ludeix als abusaments cometuts per la seva família, la seva fugida nocturna de Barcelona i la seva mort a Igualada el 1416.",
+        impact: "Marcar el primer gran xoc entre el centralisme castellà i les institucions catalanes."
+      },
+      alfons: {
+        tag: "Monarca (1416 - 1458)",
+        title: "Alfons V el Magnànim",
+        subtitle: "El rei conqueridor establert a Itàlia",
+        body: "Fill de Ferran I. Va desentendre's de la vida quotidiana a Catalunya per centrar-se en l'expansió pel Mediterrani. Després de conquerir Nàpols hi va fixar la cort permanentment, sense voler tornar a residir a Barcelona.",
+        impact: "Govern indirecte a través de virreis i distanciament de la realitat social del país."
+      },
+      virreina: {
+        tag: "Càrrec Polític",
+        title: "Maria de Castella (Virreina)",
+        subtitle: "Lloctinent general durant les absències del rei",
+        body: "Muller d'Alfons el Magnànim. Va assumir la governació de Catalunya com a lloctinent general mentre el seu marit residia i governava des del Regne de Nàpols.",
+        impact: "Consolidació de la institució del virregnat com a representació permanent de la corona."
+      },
+      joan2: {
+        tag: "Monarca (1458 - 1479)",
+        title: "Joan II el Sense Fe",
+        subtitle: "Enfrontament directe contra les institucions",
+        body: "Germà d'Alfons V. La seva política autoritària, les intromissions judicials i la violació de les legals constitucionals van provocar la declaració formal de guerra per part de la Generalitat de Catalunya.",
+        impact: "Guerra Civil Catalana (1462-1472) i un profund empobriment del Principat."
+      },
+      generalitat: {
+        tag: "Institució de Govern",
+        title: "Diputació del General (Generalitat)",
+        subtitle: "Representació permanent de les Corts Catalanes",
+        body: "Òrgan encarregat de recaptar els impostos aprovats en Corts i de vetllar per l'estricte compliment de les Constitucions de Catalunya davant qualsevol abús, fins i tot reial.",
+        impact: "Principal pilar de resistència institucional davant les temptatives absolutistes."
+      },
+      ferran2: {
+        tag: "Monarca (1479 - 1516)",
+        title: "Ferran II el Catòlic",
+        subtitle: "Atemptat a Barcelona i implantació de la Inquisició",
+        body: "Rei que va patir un atemptat amb ganivet al coll el 1492 a Barcelona per part de Joan de Canyamars. Un cop recuperat, va introduir la Inquisició castellana a la Corona d'Aragó i va desallotjar els monjos catalans de Montserrat.",
+        impact: "Implantació d'un rigorós aparell de repressió i control ideològic dependent de la corona."
+      },
+      inquisicio: {
+        tag: "Organisme Repressiu",
+        title: "La Inquisició Castellana",
+        subtitle: "Eina de control ideològic i persecució política",
+        body: "Tribunal religiós sotmès directament al control del monarca. Va ser utilitzada per perseguir la dissidència, controlar publicacions i reprimir les institucions o ciutadans que s'oposessin a la voluntat reial.",
+        impact: "Erosió continuada de les Constitucions catalanes durant els segles XV, XVI i XVII."
+      },
+      montserrat: {
+        tag: "Simbologia i Religió",
+        title: "Monjos de Montserrat",
+        subtitle: "Substitució de la comunitat autòctona per monjos de Valladolid",
+        body: "El 1493, Ferran el Catòlic va expulsar els monjos autòctons del Monestir de Montserrat i hi va imposar monjos castellans provinents de Valladolid. Aquesta situació es va mantenir fins a la Revolta dels Segadors.",
+        impact: "Pèrdua del control autòcton sobre un dels principals centres espirituals i culturals de Catalunya."
+      },
+      segadors: {
+        tag: "Insurrecció Històrica",
+        title: "Revolta dels Segadors (1640)",
+        subtitle: "Aixecament generalitzat contra els abusos de la monarquia",
+        body: "Conflicte bélic que va enfrontar Catalunya contra la monarquia dels Hàbsburg (Corpus de Sang de 1640). Aquest esdeveniment va permetre la fi de la tutela castellana al Monestir de Montserrat.",
+        impact: "Retorn dels monjos autòctons a Montserrat i reobertura del conflicte per la sobritat i les constitucions."
+      },
+      felip2: {
+        tag: "Monarca (1556 - 1598)",
+        title: "Felip II de Castella",
+        subtitle: "Empresonament de la Generalitat l'any 1591",
+        body: "Rei de la casa d'Àustria (Hàbsburg). Va continuar utilitzant la Inquisició per sotmetre la resistència institucional. L'any 1591 va empresonar els diputats de la Generalitat per haver-se oposat a les ordres reials il·legals.",
+        impact: "Culminació de la repressió contra la Diputació del General a finals del segle XVI."
+      }
+    };
+
+    /* ========================================================================
+       QUIZ DATASET
+       ======================================================================== */
+    const QUIZ_QUESTIONS = [
+      {
+        question: "Quin canvi de fons es va produir als Països Catalans a l'inici del segle XV segons el text?",
+        options: [
+          "L'arribada d'una dinastia de reis absolutistes i no pactistes (els Trastàmara).",
+          "L'establiment d'una república parlamentària independent.",
+          "La desaparició de la Inquisició i de les institucions religioses.",
+          "L'elecció pacífica d'un monarca autòcton respectuós amb les lleis."
+        ],
+        correct: 0,
+        explanation: "El text explica clarament que es va passar de reis respectuosos amb les lleis catalanes als Trastàmara, monarques absolutistes i gens pactistes."
+      },
+      {
+        question: "On es va establir el rei Alfons el Magnànim, deixant la seva dona de virreina a Catalunya?",
+        options: [
+          "A Valladolid.",
+          "A Nàpols.",
+          "A Igualada.",
+          "A Madrid."
+        ],
+        correct: 1,
+        explanation: "Alfons el Magnànim no va ni voler viure a Barcelona: va conquerir Nàpols, s'hi va establir i va deixar la seva esposa com a virreina."
+      },
+      {
+        question: "Quina institució va declarar la guerra al rei Joan II per la seva actitud autoritària?",
+        options: [
+          "El Monestir de Montserrat.",
+          "La Inquisició de Valladolid.",
+          "La Generalitat de Catalunya.",
+          "El Consell de Nàpols."
+        ],
+        correct: 2,
+        explanation: "Davant dels abusos i la violació constitucional de Joan II, la Generalitat de Catalunya li va declarar formalment la guerra."
+      },
+      {
+        question: "Quina mesura repressiva va aplicar Ferran el Catòlic al Monestir de Montserrat?",
+        options: [
+          "Va enderrocar el monestir per construir-hi una fortalesa.",
+          "Va treure els monjos autòctons i hi va portar els de Valladolid.",
+          "Va convertir el monestir en la seu de la Generalitat.",
+          "Va nomenar un diputat de la Generalitat com a abat suprem."
+        ],
+        correct: 1,
+        explanation: "Ferran el Catòlic va extreure tots els monjos de Montserrat i hi va instal·lar religiosos de Valladolid, situació que durà fins a la Revolta dels Segadors."
+      },
+      {
+        question: "Què va fer la Inquisició durant el regnat de Felip II contra la Generalitat?",
+        options: [
+          "Va perdonar tots els impostos als ciutadans de Barcelona.",
+          "Va donar el control de Montserrat als monjos catalans.",
+          "Va posar tots els diputats de la Generalitat a la presó.",
+          "Va traslladar la cort reial de tornada a Barcelona."
+        ],
+        correct: 2,
+        explanation: "El text especifica que durant l'època de Felip II, la Inquisició va servir per posar tots els diputats de la Generalitat a la presó."
+      }
+    ];
+
+    /* ========================================================================
+       STATE VARIABLES
+       ======================================================================== */
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let isSpeechSpeaking = false;
+
+    /* Initialize UI on load */
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      inspectTerm('trastamara'); // Default inspected term
+      loadQuizQuestion();
+    });
+
+    function switchView(viewName) {
+      // Reset active state on nav buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-gold', 'text-stone-950', 'shadow-md');
+        btn.classList.add('text-stone-300');
+      });
+
+      const activeBtn = document.getElementById(`nav-${viewName}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-gold', 'text-stone-950', 'shadow-md');
+        activeBtn.classList.remove('text-stone-300');
+      }
+
+      // Hide all view sections
+      ['reader', 'timeline', 'characters', 'glossary', 'quiz'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Show targeted view
+      const targetView = document.getElementById(`view-${viewName}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      // Stop speech if moving away from reader
+      if (viewName !== 'reader' && isSpeechSpeaking) {
+        toggleAudioSpeech();
+      }
+    }
+
+    function inspectTerm(termKey) {
+      const data = TERMS_DATA[termKey];
+      if (!data) return;
+
+      // Update inspector card text content
+      document.getElementById('inspector-tag').innerText = data.tag;
+      document.getElementById('inspector-title').innerText = data.title;
+      document.getElementById('inspector-subtitle').innerText = data.subtitle;
+      document.getElementById('inspector-body').innerText = data.body;
+      document.getElementById('inspector-impact').innerText = data.impact;
+
+      // Highlight corresponding term span in reader text
+      document.querySelectorAll('.term-highlight').forEach(el => {
+        el.classList.remove('active-term');
+      });
+
+      event?.target?.classList.add('active-term');
+    }
+
+    function copyInspectorText() {
+      const title = document.getElementById('inspector-title').innerText;
+      const body = document.getElementById('inspector-body').innerText;
+      const textToCopy = `${title}: ${body}`;
+      
+      const el = document.createElement('textarea');
+      el.value = textToCopy;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      const btn = event.currentTarget;
+      btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Copiat!`;
+      lucide.createIcons();
+      setTimeout(() => {
+        btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Resum`;
+        lucide.createIcons();
+      }, 2000);
+    }
+
+    function toggleAudioSpeech() {
+      if (!('speechSynthesis' in window)) {
+        alert("El teu navegador no és compatible amb la lectura per veu.");
+        return;
+      }
+
+      const btnLabel = document.getElementById('tts-label');
+      const btnIcon = document.getElementById('tts-icon');
+
+      if (isSpeechSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeechSpeaking = false;
+        btnLabel.innerText = "Escolta el Text";
+        btnIcon.setAttribute('data-lucide', 'volume-2');
+        lucide.createIcons();
+        return;
+      }
+
+      const fullText = "Al començament del segle XV va haver-hi un canvi de dinastia als Països Catalans. De tenir uns reis respectuosos amb les lleis i la manera de fer dels catalans van passar als Trastàmara, gens respectuosos, absolutistes i no pactistes. El primer d'ells, Ferran I d'Aragó, i la seva família robava a les botigues, va fugir de sobte una nit de Barcelona i va ser trobat mort l'endemà a Igualada. El seu fill Alfons el Magnànim no va ni voler viure a Barcelona, va deixar la seva dona de virreina i es va establir a Nàpols. Li va succeir el seu germà Joan II, a qui la Generalitat va declarar la guerra. Posteriorment, Ferran el Catòlic va patir un atemptat en què li van clavar un ganivet al coll i va passar dies entre la vida i la mort. Va sobreviure i llavors va portar a la Corona d'Aragó la Inquisició castellana, una eina de repressió que controlava qualsevol cosa que no li agradés, fins i tot allò català. Per exemple Ferran el Catòlic va treure tots els monjos de Montserrat i hi va portar els de Valladolid, que s'hi van quedar fins a la revolta dels segadors. La Inquisició va seguir fent aquesta feina al llarg dels segles XV i XVI, com quan ja a l'època de Felip II va posar tots els diputats de la Generalitat a la presó.";
+
+      const utterance = new SpeechSynthesisUtterance(fullText);
+      utterance.lang = 'ca-ES';
+      utterance.rate = 0.9;
+
+      // Match Catalan voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const caVoice = voices.find(v => v.lang.startsWith('ca'));
+      if (caVoice) utterance.voice = caVoice;
+
+      utterance.onend = () => {
+        isSpeechSpeaking = false;
+        btnLabel.innerText = "Escolta el Text";
+        btnIcon.setAttribute('data-lucide', 'volume-2');
+        lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(utterance);
+      isSpeechSpeaking = true;
+      btnLabel.innerText = "Aturar Lectura";
+      btnIcon.setAttribute('data-lucide', 'square');
+      lucide.createIcons();
+    }
+
+    function loadQuizQuestion() {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      document.getElementById('quiz-progress-text').innerText = `Pregunta ${currentQuizIndex + 1} de ${QUIZ_QUESTIONS.length}`;
+      document.getElementById('quiz-score-badge').innerText = `Puntuació: ${quizScore} / ${QUIZ_QUESTIONS.length}`;
+      document.getElementById('quiz-question-title').innerText = q.question;
+
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.className = 'hidden p-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed';
+      document.getElementById('quiz-next-btn').classList.add('hidden');
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 rounded-xl bg-stone-900 border border-stone-800 text-stone-200 text-xs sm:text-sm font-sans hover:border-gold hover:bg-stone-800 transition flex items-center gap-3";
+        btn.onclick = () => checkQuizAnswer(idx);
+        btn.innerHTML = `
+          <span class="w-6 h-6 rounded-full border border-stone-700 bg-stone-950 flex items-center justify-center font-cinzel font-bold text-xs text-gold flex-shrink-0">
+            ${String.fromCharCode(65 + idx)}
+          </span>
+          <span>${opt}</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedIdx) {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const isCorrect = selectedIdx === q.correct;
+      const feedback = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('quiz-next-btn');
+
+      // Disable all option buttons
+      const buttons = document.querySelectorAll('#quiz-options-container button');
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-200');
+        } else if (idx === selectedIdx) {
+          btn.classList.add('border-red-500', 'bg-red-950/40', 'text-red-200');
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      if (isCorrect) {
+        quizScore++;
+        feedback.className = "p-4 rounded-xl bg-emerald-950/80 border border-emerald-600 text-emerald-200 text-xs sm:text-sm font-sans space-y-1 block";
+        feedback.innerHTML = `<strong>✨ Correcte!</strong> <p>${q.explanation}</p>`;
+      } else {
+        feedback.className = "p-4 rounded-xl bg-red-950/80 border border-red-600 text-red-200 text-xs sm:text-sm font-sans space-y-1 block";
+        feedback.innerHTML = `<strong>❌ Incorrecte.</strong> <p>${q.explanation}</p>`;
+      }
+
+      document.getElementById('quiz-score-badge').innerText = `Puntuació: ${quizScore} / ${QUIZ_QUESTIONS.length}`;
+
+      if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+        nextBtn.innerText = "Següent Pregunta ➔";
+      } else {
+        nextBtn.innerText = "Veure Resultats Finals 🏆";
+      }
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+        currentQuizIndex++;
+        loadQuizQuestion();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      const container = document.getElementById('view-quiz');
+      const percentage = Math.round((quizScore / QUIZ_QUESTIONS.length) * 100);
+
+      container.innerHTML = `
+        <div class="bg-regal-surface p-8 rounded-2xl gold-border-box text-center space-y-6 max-w-xl mx-auto shadow-2xl">
+          <div class="w-20 h-20 mx-auto rounded-full border-2 border-gold bg-stone-950 flex items-center justify-center text-gold">
+            <i data-lucide="award" class="w-10 h-10"></i>
+          </div>
+          <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">Resultat del Qüestionari</h2>
+          <p class="text-stone-300 text-sm font-sans">
+            Has encertat <strong>${quizScore}</strong> de <strong>${QUIZ_QUESTIONS.length}</strong> preguntes (${percentage}% d'encert).
+          </p>
+          <div class="p-4 rounded-xl bg-stone-950 border border-stone-800 text-xs text-stone-400 font-cinzel">
+            ${percentage >= 80 ? "excel·lent domini del context històric dels Trastàmara!" : "Et recomanem revisar de nou el text interactiu i el glossari per consolidar els conceptes."}
+          </div>
+          <button onclick="resetQuiz()" class="px-6 py-3 bg-gold hover:bg-gold-light text-stone-950 font-cinzel font-bold text-xs rounded-xl shadow-lg transition">
+            🔄 Torna a Intentar
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function resetQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
