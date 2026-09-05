@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ca" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torre de Bellesguard: De Palau Medieval a Joia de Gaudí</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Medieval Neogothic & Modernist Aesthetics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700;900&family=Cinzel:wght@500;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Tailwind Color Scheme Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            stone: {
+              collserola: '#4a443f',
+              slate: '#2d3748',
+              sand: '#e2d9cc'
+            },
+            gold: {
+              DEFAULT: '#d4af37',
+              light: '#f3e5ab',
+              dark: '#a38018',
+              glow: '#ffe58f'
+            },
+            vermilion: {
+              DEFAULT: '#b91c1c',
+              dark: '#7f1d1d'
+            },
+            modernist: {
+              blue: '#1e3a8a',
+              terracotta: '#c2410c',
+              slate: '#0f172a',
+              card: '#1e293b'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            cinzelDeco: ['Cinzel Decorative', 'serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .bg-trencadis-pattern {
+      background-color: #0f172a;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(194, 65, 12, 0.08) 0%, transparent 40%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l30 30L0 60zM60 0L30 30l30 30z' fill='%23334155' fill-opacity='0.07'/%3E%3C/svg%3E");
+    }
+
+    .gold-glow {
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    }
+
+    .card-border-gold {
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(212, 175, 55, 0.05);
+    }
+
+    .card-border-gold:hover {
+      border-color: rgba(212, 175, 55, 0.7);
+      box-shadow: 0 15px 35px -5px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(212, 175, 55, 0.1);
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+      border: 1px solid #d4af37;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+
+    /* Catenary Arch CSS Illustration Effect */
+    .catenary-arch {
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+  </style>
+</head>
+<body class="h-full bg-trencadis-pattern font-sans text-slate-200 antialiased flex flex-col min-h-screen select-none">
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-gold/30 sticky top-0 z-50 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Title & Crest -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('hero')">
+        <div class="w-11 h-11 rounded-xl border border-gold/60 flex items-center justify-center bg-slate-950 shadow-inner group">
+          <i data-lucide="castle" class="w-6 h-6 text-gold group-hover:scale-110 transition-transform"></i>
+        </div>
+        <div>
+          <h1 class="font-cinzelDeco text-lg sm:text-xl font-bold tracking-wider text-gold gold-glow">
+            TORRE DE BELLESGUARD
+          </h1>
+          <p class="text-[10px] sm:text-xs text-slate-400 font-cinzel tracking-widest uppercase">
+            De Palau Reial de Martí I a Joia de Gaudí (1408–1909)
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <nav class="flex flex-wrap justify-center items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+        <button id="nav-hero" onclick="switchTab('hero')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold transition flex items-center gap-1.5 bg-gold text-slate-950 shadow-md">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+          <span>Inici</span>
+        </button>
+        <button id="nav-timeline" onclick="switchTab('timeline')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-slate-300 hover:text-gold hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i data-lucide="hourglass" class="w-3.5 h-3.5"></i>
+          <span>Cronologia</span>
+        </button>
+        <button id="nav-architecture" onclick="switchTab('architecture')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-slate-300 hover:text-gold hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
+          <span>Arquitectura</span>
+        </button>
+        <button id="nav-characters" onclick="switchTab('characters')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-slate-300 hover:text-gold hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          <span>Personatges</span>
+        </button>
+        <button id="nav-symbolism" onclick="switchTab('symbolism')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-slate-300 hover:text-gold hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+          <span>Simbologia</span>
+        </button>
+        <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-slate-300 hover:text-gold hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+          <span>Qüestionari</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: HERO & EXECUTIVE OVERVIEW -->
+    <!-- =================================================================== -->
+    <div id="view-hero" class="space-y-8 animate-fadeIn">
+      
+      <!-- Hero Banner -->
+      <div class="relative bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-950 p-6 sm:p-10 lg:p-12 rounded-3xl card-border-gold overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+        
+        <div class="space-y-6 max-w-2xl z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-cinzel font-bold">
+            <i data-lucide="crown" class="w-3.5 h-3.5"></i>
+            <span>Bé Cultural d'Interès Nacional • Barcelona</span>
+          </div>
+
+          <h2 class="font-cinzelDeco text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gold leading-tight gold-glow">
+            ON LA HISTÒRIA MEDIEVAL I GAUDÍ ES TENSEN I S'ABRACEN
+          </h2>
+
+          <p class="text-slate-300 font-serif text-base sm:text-lg leading-relaxed">
+            Als peus de Collserola s'alça la <strong class="text-gold">Torre de Bellesguard</strong> (Casa Figueras), un indret carregat de simbolisme on el 1408 l'últim rei del Casal de Barcelona, <strong class="text-amber-200">Martí I l'Humà</strong>, va bastir el seu palau. Cinc-cents anys després (1900–1909), <strong class="text-gold">Antoni Gaudí</strong> hi va erigir un monument neogòtic únic que ret homenatge a la història medieval de Catalunya.
+          </p>
+
+          <!-- Audio Speech & Fast CTAs -->
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <button onclick="switchTab('timeline')" class="px-6 py-3 bg-gold hover:bg-gold-light text-slate-950 rounded-xl font-cinzel font-bold text-xs sm:text-sm shadow-xl hover:shadow-gold/20 transition flex items-center gap-2">
+              <i data-lucide="hourglass" class="w-4 h-4"></i>
+              Explora la Cronologia
+            </button>
+
+            <button id="tts-btn" onclick="toggleAudioNarration()" class="px-5 py-3 bg-vermilion hover:bg-vermilion-dark text-white rounded-xl font-cinzel font-bold text-xs sm:text-sm shadow-xl transition flex items-center gap-2">
+              <i data-lucide="volume-2" class="w-4 h-4" id="tts-icon"></i>
+              <span id="tts-label">Escolta el Resum Auditiu</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Decorative Interactive Badge Display -->
+        <div class="relative z-10 grid grid-cols-2 gap-4 w-full lg:w-auto">
+          <div class="bg-slate-950/80 p-5 rounded-2xl border border-gold/30 text-center space-y-1">
+            <div class="font-cinzelDeco text-3xl font-black text-gold">1408</div>
+            <div class="text-[11px] font-cinzel text-slate-400">Palau de Martí I</div>
+          </div>
+          <div class="bg-slate-950/80 p-5 rounded-2xl border border-gold/30 text-center space-y-1">
+            <div class="font-cinzelDeco text-3xl font-black text-gold">1909</div>
+            <div class="text-[11px] font-cinzel text-slate-400">Reconstrucció de Gaudí</div>
+          </div>
+          <div class="bg-slate-950/80 p-5 rounded-2xl border border-gold/30 text-center space-y-1">
+            <div class="font-cinzelDeco text-3xl font-black text-gold">33 m</div>
+            <div class="text-[11px] font-cinzel text-slate-400">Alçada de la Torre</div>
+          </div>
+          <div class="bg-slate-950/80 p-5 rounded-2xl border border-gold/30 text-center space-y-1">
+            <div class="font-cinzelDeco text-3xl font-black text-gold">4 Braços</div>
+            <div class="text-[11px] font-cinzel text-slate-400">Creu Gaudiniana</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Thematic Highlight Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div onclick="switchTab('timeline')" class="bg-slate-900/80 p-6 rounded-2xl card-border-gold cursor-pointer group space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:scale-110 transition">
+            <i data-lucide="crown" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-cinzel text-lg font-bold text-gold">El Palau Reial Medieval</h3>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            El nom "Bell Esguard" prové de la vista panoràmica sobre Barcelona i el mar. Aquí es van celebrar les reials nuptials de Martí I amb Margarida de Prades el 1409.
+          </p>
+          <div class="text-xs text-gold font-cinzel flex items-center gap-1 pt-2">
+            Llegir més <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </div>
+
+        <div onclick="switchTab('architecture')" class="bg-slate-900/80 p-6 rounded-2xl card-border-gold cursor-pointer group space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:scale-110 transition">
+            <i data-lucide="hammer" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-cinzel text-lg font-bold text-gold">El Neogòtic Reinventat</h3>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            Gaudí va integrar les runes de les muralles medievals de 1408 i va fer servir pedra local de Collserola, creant un contrast fascinant entre línies rectes gòtiques i arcs catenaris.
+          </p>
+          <div class="text-xs text-gold font-cinzel flex items-center gap-1 pt-2">
+            Descobrir arquitectura <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </div>
+
+        <div onclick="switchTab('symbolism')" class="bg-slate-900/80 p-6 rounded-2xl card-border-gold cursor-pointer group space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:scale-110 transition">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-cinzel text-lg font-bold text-gold">Simbologia Catalana i Drac</h3>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            Des del perfil d'un drac amagat al teulat de la torre fins als trencadís amb el sol i la lluna als bancs del jardí, cada racó ret homenatge a la Corona d'Aragó.
+          </p>
+          <div class="text-xs text-gold font-cinzel flex items-center gap-1 pt-2">
+            Descodificar secrets <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: INTERACTIVE HISTORICAL TIMELINE -->
+    <!-- =================================================================== -->
+    <div id="view-timeline" class="hidden space-y-8 animate-fadeIn">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl sm:text-3xl font-bold text-gold gold-glow">
+          CRONOLOGIA HISTÒRICA (1408 – PRESENT)
+        </h2>
+        <p class="text-xs font-cinzel text-slate-400">
+          De la residència del darrer rei del Casal de Barcelona a la metamorfosi arquitectònica de Gaudí
+        </p>
+      </div>
+
+      <!-- Timeline Filter / Category Selectors -->
+      <div class="flex justify-center gap-2">
+        <button onclick="filterTimeline('all')" class="tl-filter-btn px-3 py-1.5 rounded-lg text-xs font-cinzel bg-gold text-slate-950 font-bold" id="tl-btn-all">Tota la Història</button>
+        <button onclick="filterTimeline('medieval')" class="tl-filter-btn px-3 py-1.5 rounded-lg text-xs font-cinzel text-slate-300 hover:bg-slate-800" id="tl-btn-medieval">Època Medieval (S. XV)</button>
+        <button onclick="filterTimeline('gaudi')" class="tl-filter-btn px-3 py-1.5 rounded-lg text-xs font-cinzel text-slate-300 hover:bg-slate-800" id="tl-btn-gaudi">Època Modernista (1900-1909)</button>
+      </div>
+
+      <!-- Vertical Interactive Timeline -->
+      <div class="relative border-l-2 border-gold/40 ml-4 sm:ml-32 space-y-8 my-8 pr-2" id="timeline-container">
+        
+        <!-- Timeline Item 1 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="medieval">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            1
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1408
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1408</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Martí I l'Humà construeix Bell Esguard</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">Medieval</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              El rei Martí I adquireix el territori situat a Sarrià (als peus de la serra de Collserola). Hi fa construir la seva residència d'estiu i palau reial, batejant-lo com <em>"Bell Esguard"</em> per les seves impressionants vistes sobre Barcelona i la mar Mediterrània.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="medieval">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-vermilion flex items-center justify-center text-vermilion text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            2
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1409
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1409</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Bodes Reials: Martí I i Margarida de Prades</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-vermilion/20 text-vermilion border border-vermilion/40">Nuptials</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Després de la tràgica mort del seu fill i únic hereu (Martí el Jove, rei de Sardenya), el rei Martí I es casa a Bellesguard amb la jove Margarida de Prades per tal d'assegurar descendència. La cerimònia comptà amb la presència del Papa Luna (Benet XIII) i de Sant Vicent Ferrer.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="medieval">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            3
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1410
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1410</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Mort de Martí I i fi de la Casa de Barcelona</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">Ocupació</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Martí I l'Humà mor sense descendència legítima directa. S'extingeix així la línia masculina del Casal de Barcelona iniciada per Guifré el Pilós, fet que conduirà al Compromís de Casp (1412) i l'arribada dels Trastàmara.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="medieval">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-500 flex items-center justify-center text-slate-300 text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            4
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            S. XVII - XIX
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">Segles XVII - XIX</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Ruïnes i la Llegenda de Joan de Serrallonga</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Decadència</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Amb el pas dels segles, el palau medieval queda parcialment en ruïnes. La llegenda popular diu que el famós bandoler català Joan de Serrallonga utilitzava les ruïnes de Bellesguard i els seus amagatalls per amagar-se de les autoritats.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 5 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="gaudi">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            5
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1900
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1900</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Encàrrec a Antoni Gaudí (Maria Sagués)</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">Modernisme</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Maria Sagués, vídua de l'industrial Jaume Figueras, adquireix la finca. Gran admirador de la història catalana, Antoni Gaudí accepta l'encàrrec de dissenyar un xalet-torre (Casa Figueras) respectant i integrant els vestigis del palau reial medieval.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 6 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="gaudi">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-vermilion flex items-center justify-center text-vermilion text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            6
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1909
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1909</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Culminació de la Torre i la Creu de 4 Braços</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-vermilion/20 text-vermilion border border-vermilion/40">Obra Mestra</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Finalitzen les obres principals de la torre, culminada amb una punxa vertical rematada amb la creu gaudiniana de quatre braços decorada amb trencadís roig i groc (la Senyera). Domènec Sugrañes completa els bancs de trencadís del jardí.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 7 -->
+        <div class="tl-item relative pl-6 sm:pl-8 group" data-category="gaudi">
+          <span class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-950 border-2 border-gold flex items-center justify-center text-gold text-xs font-bold group-hover:scale-110 transition shadow-lg">
+            7
+          </span>
+          <div class="hidden sm:block absolute -left-28 top-2 text-xs font-cinzel font-bold text-gold tracking-widest">
+            1969 - 2013
+          </div>
+          <div class="bg-slate-900/90 p-5 rounded-2xl card-border-gold space-y-2">
+            <div class="sm:hidden text-xs font-cinzel font-bold text-gold">1969 & 2013</div>
+            <h3 class="font-cinzel text-lg font-bold text-slate-100 flex items-center justify-between">
+              <span>Reconeixement BCIN i Obertura Pública</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">Patrimoni</span>
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              El 1969 la Torre de Bellesguard és declarada Bé Cultural d'Interès Nacional (BCIN). L'any 2013, la família Guilera (propietaris de la finca des de 1944) obre les portes del monument al públic general per primer cop en la història.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: ARCHITECTURAL & KEY ELEMENTS EXPLORER -->
+    <!-- =================================================================== -->
+    <div id="view-architecture" class="hidden space-y-8 animate-fadeIn">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl sm:text-3xl font-bold text-gold gold-glow">
+          EXPLORADOR ARQUITECTÒNIC
+        </h2>
+        <p class="text-xs font-cinzel text-slate-400">
+          La síntesi entre la solidesa de la muralla medieval i l'enginy estructurals de Gaudí
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Interactive Elements List / Selector -->
+        <div class="lg:col-span-5 space-y-3">
+          <h3 class="font-cinzel text-sm font-bold text-gold uppercase tracking-wider mb-2">
+            Selecciona un Element de Bellesguard:
+          </h3>
+
+          <div onclick="inspectArchElement('creu')" id="arch-btn-creu" class="arch-item p-4 rounded-xl bg-slate-900 border border-gold/40 hover:border-gold cursor-pointer transition flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-gold/10 text-gold flex-shrink-0">
+              <i data-lucide="cross" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="font-cinzel text-sm font-bold text-slate-100">La Creu i el Drac a la Torre</h4>
+              <p class="text-[11px] text-slate-400">Punxa de 33 m, creu de 4 braços i teulat simulat</p>
+            </div>
+          </div>
+
+          <div onclick="inspectArchElement('golfes')" id="arch-btn-golfes" class="arch-item p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-gold cursor-pointer transition flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-gold/10 text-gold flex-shrink-0">
+              <i data-lucide="arch" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="font-cinzel text-sm font-bold text-slate-100">Les Golfes d'Arcs Catenaris</h4>
+              <p class="text-[11px] text-slate-400">Estructura lleugera de maó vist sense columnes</p>
+            </div>
+          </div>
+
+          <div onclick="inspectArchElement('bancs')" id="arch-btn-bancs" class="arch-item p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-gold cursor-pointer transition flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-gold/10 text-gold flex-shrink-0">
+              <i data-lucide="grid" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="font-cinzel text-sm font-bold text-slate-100">Bancs de Trencadís (Sugrañes)</h4>
+              <p class="text-[11px] text-slate-400">Inscripcions 1409 / 1909, el Sol i la Lluna</p>
+            </div>
+          </div>
+
+          <div onclick="inspectArchElement('muralles')" id="arch-btn-muralles" class="arch-item p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-gold cursor-pointer transition flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-gold/10 text-gold flex-shrink-0">
+              <i data-lucide="shield" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="font-cinzel text-sm font-bold text-slate-100">Restes de la Muralla Medieval</h4>
+              <p class="text-[11px] text-slate-400">Pedra de Collserola i fonaments de Martí I</p>
+            </div>
+          </div>
+
+          <div onclick="inspectArchElement('portal')" id="arch-btn-portal" class="arch-item p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-gold cursor-pointer transition flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-gold/10 text-gold flex-shrink-0">
+              <i data-lucide="door-closed" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="font-cinzel text-sm font-bold text-slate-100">Portal d'Entrada "Siau de Déu Feal"</h4>
+              <p class="text-[11px] text-slate-400">Inscripció gòtica i reixa de ferro forjat</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Architectural Element Display Inspector Card -->
+        <div class="lg:col-span-7 bg-slate-900 p-6 sm:p-8 rounded-3xl card-border-gold space-y-6 relative overflow-hidden" id="arch-display-card">
+          
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <span id="arch-tag" class="px-3 py-1 rounded-full text-xs font-cinzel font-bold bg-gold/10 text-gold border border-gold/30">
+              Element Simbòlic i Estructural
+            </span>
+            <span id="arch-period" class="text-xs font-mono text-slate-400">
+              Modernisme (1900-1909)
+            </span>
+          </div>
+
+          <div>
+            <h3 id="arch-title" class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">
+              La Creu i el Drac a la Torre
+            </h3>
+            <p id="arch-subtitle" class="text-xs font-cinzel text-slate-400 mt-1 italic">
+              Rematada de 33 metres d'alçada amb visió panoràmica sobre Barcelona
+            </p>
+          </div>
+
+          <!-- Graphic Schematic Box -->
+          <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col items-center justify-center text-center space-y-3 relative">
+            <div id="arch-graphic-icon" class="w-16 h-16 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center text-gold">
+              <i data-lucide="cross" class="w-8 h-8"></i>
+            </div>
+            <p id="arch-graphic-text" class="text-xs text-slate-300 font-serif max-w-md">
+              Gaudí remata la torre piramidal amb la seva emblemàtica creu de quatre braços. La base de la creu està recoberta de trencadís vermell i groc, simulant la Senyera catalana sobre la corona reial.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="text-xs font-cinzel font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="info" class="w-4 h-4"></i> Anàlisi Tècnica i Innovació
+            </h4>
+            <p id="arch-body" class="text-sm text-slate-300 leading-relaxed font-serif">
+              Gaudí utilitza una estructura de maó i pedra de Collserola per aconseguir una torre esvelta de 33 metres. El teulat de la fàbrica té una inclinació especial que, vist des d'un angle determinat, dibuixa la silueta del cap d'un drac amb ulls de finestres i escates de teules, prefigurant la famosa façana de la Casa Batlló.
+            </p>
+          </div>
+
+          <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex items-center justify-between text-xs font-cinzel text-slate-400">
+            <span>Material Principal: <strong id="arch-material" class="text-slate-200">Pedra de Collserola / Trencadís</strong></span>
+            <span>Ubicació: <strong id="arch-location" class="text-slate-200">Cim de la Torre</strong></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 4: HISTORICAL CHARACTERS GALLERY -->
+    <!-- =================================================================== -->
+    <div id="view-characters" class="hidden space-y-8 animate-fadeIn">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl sm:text-3xl font-bold text-gold gold-glow">
+          PROTAGONISTES DE BELLESGUARD
+        </h2>
+        <p class="text-xs font-cinzel text-slate-400">
+          Reis, reines, papes, bandolers, arquitectes i mecenes que van forjar la llegenda del lloc
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Character 1: Martí I l'Humà -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1356 – 1410</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono">Rei d'Aragó</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Martí I l'Humà</h3>
+            <p class="text-xs text-gold font-cinzel italic">"Últim monarca del Casal de Barcelona"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Rei de la Corona d'Aragó, home d'alta cultura i gran col·leccionista. Va construir el palau de Bellesguard el 1408 com a refugi de pau. La seva mort sense hereus va posar fi a 500 anys de dinastia autòctona.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Creador del palau reial medieval original.
+          </div>
+        </div>
+
+        <!-- Character 2: Margarida de Prades -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1388 – 1429</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-vermilion/20 text-vermilion font-mono">Reina Consort</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Margarida de Prades</h3>
+            <p class="text-xs text-gold font-cinzel italic">"La Jove Reina de Bellesguard"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Dama de la riquesa i bellesa catalana. Es va casar amb Martí I a Bellesguard el 1409 quan ella tenia uns 21 anys i el rei 53, en un intent desesperat d'engendrar un successor per a la corona.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Protagonista de les nuptials reials de 1409.
+          </div>
+        </div>
+
+        <!-- Character 3: Papa Luna (Benet XIII) -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1328 – 1423</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 font-mono">Pontífex d'Avinyó</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Papa Luna (Benet XIII)</h3>
+            <p class="text-xs text-gold font-cinzel italic">"El Papa d'Avinyó a Bellesguard"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Pedro Martínez de Luna, figura clau del Cisma d'Occident. Amic personal de Martí I, va residir temporalment a Bellesguard el 1409 i hi va oficiar la unió matrimonial reial.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Húspede il·lustre i oficiant del casament reial.
+          </div>
+        </div>
+
+        <!-- Character 4: Joan de Serrallonga -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1594 – 1634</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">Bandoler</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Joan Sala i Ferrer (Serrallonga)</h3>
+            <p class="text-xs text-gold font-cinzel italic">"El Bandoler de la Llegenda"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Mític bandoler català del segle XVII. Segons la tradició popular, feia servir les ruïnes abandonades del palau de Bellesguard com a amagatall estratègic en les seves incursions a la plaça de Barcelona.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Llegenda popular dels amagatalss de les ruïnes.
+          </div>
+        </div>
+
+        <!-- Character 5: Antoni Gaudí -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">1852 – 1926</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-gold/20 text-gold font-mono">Arquitecte Geni</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Antoni Gaudí i Cornet</h3>
+            <p class="text-xs text-gold font-cinzel italic">"El Recreador del Neogòtic"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Màxim exponent del modernisme català. Apassionat per la història medieval de Catalunya, va dissenyar la Torre de Bellesguard (1900-1909) com un homenatge directe a Martí I i la Corona d'Aragó.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Dissenyador i arquitecte de la Casa Figueras.
+          </div>
+        </div>
+
+        <!-- Character 6: Maria Sagués -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-xs font-cinzel font-bold text-gold">S. XIX – XX</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-mono">Mecenes</span>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-slate-100">Maria Sagués</h3>
+            <p class="text-xs text-gold font-cinzel italic">"La Promotora de la Reconstrucció"</p>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif">
+              Vídua de l'industrial Jaume Figueras. Va comprar la meitat de la finca històrica el 1900 i va atorgar plena llibertat creativa a Gaudí per construir una nova residència familiar carregada d'història.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-cinzel">
+            <strong>Vincle amb Bellesguard:</strong> Mecenes que va encarregar l'obra a Gaudí.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 5: GAUDÍ SYMBOLISM DECODER -->
+    <!-- =================================================================== -->
+    <div id="view-symbolism" class="hidden space-y-8 animate-fadeIn">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="font-cinzelDeco text-2xl sm:text-3xl font-bold text-gold gold-glow">
+          DESCODIFICADOR DE SIMBOLOGIA GAUDINIANA
+        </h2>
+        <p class="text-xs font-cinzel text-slate-400">
+          Els missatges secrets, patriotisme i elements còsmics que Gaudí va camuflar en la pedra
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Symbol 1: La Senyera a la Creu -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <div class="p-2 rounded-lg bg-vermilion/20 text-vermilion">
+              <i data-lucide="flag" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-cinzel text-lg font-bold text-gold">La Senyera a la Creu de 4 Braços</h3>
+              <p class="text-[11px] text-slate-400 font-cinzel">Identitat i Fe Catalana</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            Al cim de la torre de 33 metres, la creu de quatre braços descansa sobre una estructura globular recoberta de trencadís roig i groc. Gaudí va disposar les peces formant les quatre barres de la Senyera catalana, simbolitzant el triomf de la fe i la història de la regió.
+          </p>
+        </div>
+
+        <!-- Symbol 2: El Drac de Bellesguard -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <div class="p-2 rounded-lg bg-gold/20 text-gold">
+              <i data-lucide="eye" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-cinzel text-lg font-bold text-gold">El Drac Camuflat al Teulat</h3>
+              <p class="text-[11px] text-slate-400 font-cinzel">Llegenda de Sant Jordi</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            L'angle de la fusta i la teula del teulat superior de la torre dibuixa de forma òptica el perfil del cap d'un drac. Les finestres actuen com els ulls i la textura de la pedra com les escates de la bèstia, prefigurant la famosa teulada del drac de la Casa Batlló.
+          </p>
+        </div>
+
+        <!-- Symbol 3: El Sol i la Lluna als Bancs -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <div class="p-2 rounded-lg bg-indigo-500/20 text-indigo-300">
+              <i data-lucide="sun-moon" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-cinzel text-lg font-bold text-gold">El Sol i la Lluna (Trencadís)</h3>
+              <p class="text-[11px] text-slate-400 font-cinzel">Les Nuptials de 1409</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            Als bancs exteriors dissenyats per Domènec Sugrañes sota supervisió de Gaudí, hi ha representats al trencadís un Sol amb ulleres de sol i una Lluna. Aquest duel astral al·ludeix a l'enllaç entre el rei Martí I (Sol de ponent) i Margarida de Prades (Lluna nova).
+          </p>
+        </div>
+
+        <!-- Symbol 4: 1409 / 1909 -->
+        <div class="bg-slate-900 p-6 rounded-2xl card-border-gold space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-300">
+              <i data-lucide="calendar" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-cinzel text-lg font-bold text-gold">Inscripcions Aniversari: 1409 i 1909</h3>
+              <p class="text-[11px] text-slate-400 font-cinzel">Diàleg de Cinc Segles</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed font-serif">
+            Mosaics ceràmics marquen exactament l'any de les nuptials de Martí I (1409) i l'any de finalització de les obres principals de Gaudí (1909). Aquestes xifres agermanen els dos moments històrics d'esplendor de la finca Bellesguard.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 6: KNOWLEDGE QUIZ -->
+    <!-- =================================================================== -->
+    <div id="view-quiz" class="hidden max-w-3xl mx-auto w-full space-y-6 animate-fadeIn my-auto">
+      
+      <div class="text-center space-y-2">
+        <h2 class="font-cinzelDeco text-2xl sm:text-3xl font-bold text-gold gold-glow">
+          QÜESTIONARI INTERACTIU DE BELLESGUARD
+        </h2>
+        <p class="text-xs font-cinzel text-slate-400">
+          Demostra els teus coneixements sobre la història i arquitectura de la Casa Figueras
+        </p>
+      </div>
+
+      <!-- Quiz Main Card -->
+      <div class="bg-slate-900 p-6 sm:p-8 rounded-3xl card-border-gold space-y-6 relative shadow-2xl">
+        
+        <!-- Progress Bar & Score -->
+        <div class="flex items-center justify-between text-xs font-cinzel text-slate-400 border-b border-slate-800 pb-3">
+          <span id="quiz-progress">Pregunta 1 de 5</span>
+          <span id="quiz-score" class="text-gold font-bold">Puntuació: 0 / 5</span>
+        </div>
+
+        <!-- Question Title -->
+        <h3 id="quiz-question-title" class="font-cinzel text-lg sm:text-xl font-bold text-slate-100 leading-snug">
+          Carregant pregunta...
+        </h3>
+
+        <!-- Options Grid -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Dynamically inserted options -->
+        </div>
+
+        <!-- Explanation Feedback Banner -->
+        <div id="quiz-feedback" class="hidden p-4 rounded-xl text-xs sm:text-sm font-serif leading-relaxed">
+          <!-- Dynamically inserted feedback -->
+        </div>
+
+        <!-- Next Button -->
+        <div class="flex justify-end pt-2">
+          <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-5 py-2.5 bg-gold hover:bg-gold-light text-slate-950 rounded-xl font-cinzel font-bold text-xs shadow-lg transition">
+            Següent Pregunta ➔
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-cinzel flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>Torre de Bellesguard (Casa Figueras) • Projecte Educatiu i Cultural</p>
+      <p>Història Medieval (1408) & Modernisme de Gaudí (1900–1909)</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    /* ========================================================================
+       DATASET 1: ARCHITECTURAL ELEMENTS INSPECTOR DATA
+       ======================================================================== */
+    const ARCH_DATA = {
+      creu: {
+        tag: "Element Simbòlic i Estructural",
+        period: "Modernisme (1900-1909)",
+        title: "La Creu i el Drac a la Torre",
+        subtitle: "Rematada de 33 metres d'alçada amb visió panoràmica sobre Barcelona",
+        icon: "cross",
+        graphicText: "Gaudí remata la torre piramidal amb la seva emblemàtica creu de quatre braços. La base de la creu està recoberta de trencadís vermell i groc, simulant la Senyera catalana sobre la corona reial.",
+        body: "Gaudí utilitza una estructura de maó i pedra de Collserola per aconseguir una torre esvelta de 33 metres. El teulat de la fàbrica té una inclinació especial que, vist des d'un angle determinat, dibuixa la silueta del cap d'un drac amb ulls de finestres i escates de teules, prefigurant la famosa façana de la Casa Batlló.",
+        material: "Pedra de Collserola / Trencadís",
+        location: "Cim de la Torre"
+      },
+      golfes: {
+        tag: "Enginy Estructural",
+        period: "Modernisme (1900-1909)",
+        title: "Les Golfes d'Arcs Catenaris",
+        subtitle: "Sostre de maó vist lleuger que sosté la terrassa superior",
+        icon: "arch",
+        graphicText: "Estructura interna formada per successius arcs catenaris de maó de pla. Aquest sistema distribueix les càrregues de manera òptima sense necessitat de columnes interiors ni murs gruixuts.",
+        body: "A les golfes de Bellesguard, Gaudí va aplicar la seva cèlebre solució d'arcs catenaris. Aquestes estructures parabòliques de maó vermell combinen una lleugeresa visual sorprenent amb una resistència mecànica impecable, permetent crear un espai diàfan que sosté la terrassa del teulat.",
+        material: "Maó de pla (Ceràmica)",
+        location: "Planta Superior / Golfes"
+      },
+      bancs: {
+        tag: "Mosaic i Ornamentació",
+        period: "Col·laboració Sugrañes (1916)",
+        title: "Bancs de Trencadís (Sugrañes)",
+        subtitle: "Mosaics acolorits als jardins amb motius astrològics i data de les nuptials",
+        icon: "grid",
+        graphicText: "Els bancs exteriors estan decorats amb ceràmica de trencadís dissenyats per Domènec Sugrañes. Hi destaquen motius del Sol i la Lluna, així com les dates 1409 i 1909.",
+        body: "Els bancs situats a l'entrada de la finca ofereixen un diàleg cromàtic fantàstic. El Sol representa el rei Martí I i la Lluna la jove reina Margarida de Prades. A més, s'hi representen vaixells medievals i la corona d'Aragó en honor al passat marítim del casal català.",
+        material: "Ceràmica de Trencadís",
+        location: "Jardins de la Finca"
+      },
+      muralles: {
+        tag: "Patrimoni Medieval",
+        period: "Gòtic Medieval (1408)",
+        title: "Restes de la Muralla Medieval",
+        subtitle: "Conservació directa dels fonaments del palau de Martí I l'Humà",
+        icon: "shield",
+        graphicText: "Gaudí va integrar amb profund respecte les pedres i fragments de la muralla original de 1408 dins del nou edifici neogòtic.",
+        body: "En lloc d'enderrocar les velles runes del palau de Martí I, Gaudí les va restaurar i utilitzar com a fonament i tanca del jardí. Va integrar la pedra fosca de la serra de Collserola per tal que el nou edifici modernista sembli sorgir directament de la història medieval.",
+        material: "Pedra de Collserola i Morter",
+        location: "Perímetre exterior i Base"
+      },
+      portal: {
+        tag: "Inscripció i Fe",
+        period: "Neogòtic Modernista (1900)",
+        title: "Portal d'Entrada 'Siau de Déu Feal'",
+        subtitle: "Porta d'accés principal amb inscripció gòtica i forja de ferro",
+        icon: "door-closed",
+        graphicText: "Damunt de la porta d'accés figura la inscripció en lletres gòtiques: 'Ave Maria Puríssima, sen pecat concebuda', acompanyada de la salutació 'Siau de Déu Feal'.",
+        body: "La porta principal de la Casa Figueras és una joia de la forja i la picapedreria neogòtica. Gaudí hi va fer gravar frases de salutació tradicionals catalanes en caràcters gòtics que recorden l'origen reial de la finca i la devoció religiosa de la família.",
+        material: "Pedra picada i Ferro forjat",
+        location: "Façana Principal"
+      }
+    };
+
+    /* ========================================================================
+       DATASET 2: QUIZ QUESTIONS
+       ======================================================================== */
+    const QUIZ_QUESTIONS = [
+      {
+        question: "Quin rei de la Corona d'Aragó va construir el palau medieval de Bellesguard l'any 1408?",
+        options: [
+          "Jaume I el Conqueridor",
+          "Martí I l'Humà",
+          "Pere III el Cerimoniós",
+          "Alfons el Magnànim"
+        ],
+        correct: 1,
+        explanation: "Martí I l'Humà va construir el palau de Bell Esguard el 1408 com a residència reial d'estiu per les seves vistes excepcionals."
+      },
+      {
+        question: "Quin esdeveniment històric de gran rellevància es va celebrar a Bellesguard l'any 1409?",
+        options: [
+          "La signatura del Compromís de Casp",
+          "Les nuptials de Martí I amb Margarida de Prades",
+          "La coronació de Jaume d'Urgell",
+          "La proclamació de les Corts Catalanes"
+        ],
+        correct: 1,
+        explanation: "El 1409, Martí I es va casar a Bellesguard amb la jove Margarida de Prades per intentar assegurar un successor al tron."
+      },
+      {
+        question: "Qui va ser la mecenes que va encarregar la reconstrucció de la torre a Antoni Gaudí l'any 1900?",
+        options: [
+          "Eusebi Güell",
+          "Maria Sagués (vídua de Jaume Figueras)",
+          "Mercè de Prades",
+          "Isabel de Requesens"
+        ],
+        correct: 1,
+        explanation: "Maria Sagués, vídua de l'industrial Jaume Figueras, va adquirir la finca i va encarregar la nova casa-torre a Antoni Gaudí."
+      },
+      {
+        question: "Quina alçada té la torre de Bellesguard culminada amb la creu de quatre braços?",
+        options: [
+          "15 metres",
+          "33 metres",
+          "50 metres",
+          "75 metres"
+        ],
+        correct: 1,
+        explanation: "La torre esvelta dissenyada per Gaudí fa exactament 33 metres d'alçada, coronada per la creu gaudiniana."
+      },
+      {
+        question: "Quin animal mític es dibuixa de manera subliminar al teulat de la torre de Bellesguard?",
+        options: [
+          "Un Lleó coronat",
+          "Un Àliga reial",
+          "Un Drac",
+          "Un Fènix"
+        ],
+        correct: 2,
+        explanation: "La disposició de la teulada i les finestres forma el cap d'un drac, element que Gaudí tornaria a utilitzar a la Casa Batlló."
+      }
+    ];
+
+    /* ========================================================================
+       APPLICATION STATE
+       ======================================================================== */
+    let currentTab = 'hero';
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let isSpeaking = false;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      loadQuizQuestion();
+    });
+
+    /* Tab Switching Logic */
+    function switchTab(tabId) {
+      currentTab = tabId;
+
+      // Update Navigation Button Active States
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-gold', 'text-slate-950', 'shadow-md');
+        btn.classList.add('text-slate-300');
+      });
+
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-gold', 'text-slate-950', 'shadow-md');
+        activeBtn.classList.remove('text-slate-300');
+      }
+
+      // Hide all view panels
+      ['hero', 'timeline', 'architecture', 'characters', 'symbolism', 'quiz'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Show selected view panel
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      // Stop audio speech if changing tab
+      if (tabId !== 'hero' && isSpeaking) {
+        toggleAudioNarration();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Timeline Filtering */
+    function filterTimeline(category) {
+      document.querySelectorAll('.tl-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-gold', 'text-slate-950', 'font-bold');
+        btn.classList.add('text-slate-300');
+      });
+
+      const activeBtn = document.getElementById(`tl-btn-${category}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-gold', 'text-slate-950', 'font-bold');
+        activeBtn.classList.remove('text-slate-300');
+      }
+
+      document.querySelectorAll('.tl-item').forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    /* Architectural Inspector Logic */
+    function inspectArchElement(key) {
+      const data = ARCH_DATA[key];
+      if (!data) return;
+
+      // Update active selection button style
+      document.querySelectorAll('.arch-item').forEach(el => {
+        el.classList.remove('bg-slate-900', 'border-gold/40');
+        el.classList.add('bg-slate-900/60', 'border-slate-800');
+      });
+
+      const activeBtn = document.getElementById(`arch-btn-${key}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-slate-900', 'border-gold/40');
+        activeBtn.classList.remove('bg-slate-900/60', 'border-slate-800');
+      }
+
+      // Populate Display Card
+      document.getElementById('arch-tag').innerText = data.tag;
+      document.getElementById('arch-period').innerText = data.period;
+      document.getElementById('arch-title').innerText = data.title;
+      document.getElementById('arch-subtitle').innerText = data.subtitle;
+      document.getElementById('arch-graphic-text').innerText = data.graphicText;
+      document.getElementById('arch-body').innerText = data.body;
+      document.getElementById('arch-material').innerText = data.material;
+      document.getElementById('arch-location').innerText = data.location;
+
+      // Update Icon
+      const iconContainer = document.getElementById('arch-graphic-icon');
+      iconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i>`;
+      lucide.createIcons();
+    }
+
+    /* Quiz Engine Logic */
+    function loadQuizQuestion() {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      document.getElementById('quiz-progress').innerText = `Pregunta ${currentQuizIndex + 1} de ${QUIZ_QUESTIONS.length}`;
+      document.getElementById('quiz-score').innerText = `Puntuació: ${quizScore} / ${QUIZ_QUESTIONS.length}`;
+      document.getElementById('quiz-question-title').innerText = q.question;
+
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.className = 'hidden p-4 rounded-xl text-xs sm:text-sm font-serif leading-relaxed';
+      document.getElementById('quiz-next-btn').classList.add('hidden');
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 text-xs sm:text-sm font-sans hover:border-gold hover:bg-slate-800/80 transition flex items-center gap-3";
+        btn.onclick = () => checkQuizAnswer(idx);
+        btn.innerHTML = `
+          <span class="w-6 h-6 rounded-full border border-slate-700 bg-slate-900 flex items-center justify-center font-cinzel font-bold text-xs text-gold flex-shrink-0">
+            ${String.fromCharCode(65 + idx)}
+          </span>
+          <span>${opt}</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedIdx) {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const isCorrect = selectedIdx === q.correct;
+      const feedback = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('quiz-next-btn');
+
+      const buttons = document.querySelectorAll('#quiz-options-container button');
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-950/40', 'text-emerald-200');
+        } else if (idx === selectedIdx) {
+          btn.classList.add('border-red-500', 'bg-red-950/40', 'text-red-200');
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      if (isCorrect) {
+        quizScore++;
+        feedback.className = "p-4 rounded-xl bg-emerald-950/80 border border-emerald-600 text-emerald-200 text-xs sm:text-sm font-serif space-y-1 block";
+        feedback.innerHTML = `<strong>✨ Correcte!</strong> <p>${q.explanation}</p>`;
+      } else {
+        feedback.className = "p-4 rounded-xl bg-red-950/80 border border-red-600 text-red-200 text-xs sm:text-sm font-serif space-y-1 block";
+        feedback.innerHTML = `<strong>❌ Incorrecte.</strong> <p>${q.explanation}</p>`;
+      }
+
+      document.getElementById('quiz-score').innerText = `Puntuació: ${quizScore} / ${QUIZ_QUESTIONS.length}`;
+
+      if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+        nextBtn.innerText = "Següent Pregunta ➔";
+      } else {
+        nextBtn.innerText = "Veure Resultats Finals 🏆";
+      }
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+        currentQuizIndex++;
+        loadQuizQuestion();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      const container = document.getElementById('view-quiz');
+      const percentage = Math.round((quizScore / QUIZ_QUESTIONS.length) * 100);
+
+      container.innerHTML = `
+        <div class="bg-slate-900 p-8 rounded-3xl card-border-gold text-center space-y-6 max-w-xl mx-auto shadow-2xl">
+          <div class="w-20 h-20 mx-auto rounded-full border-2 border-gold bg-slate-950 flex items-center justify-center text-gold">
+            <i data-lucide="award" class="w-10 h-10"></i>
+          </div>
+          <h2 class="font-cinzelDeco text-2xl font-bold text-gold gold-glow">RESULTAT DEL QÜESTIONARI</h2>
+          <p class="text-slate-300 text-sm font-serif">
+            Has encertat <strong>${quizScore}</strong> de <strong>${QUIZ_QUESTIONS.length}</strong> preguntes (${percentage}% d'èxit).
+          </p>
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-400 font-cinzel">
+            ${percentage >= 80 ? "Enhorabona! Tens un domini excel·lent de la història i arquitectura de Bellesguard." : "Et recomanem revisar la cronologia i els detalls arquitectònics per consolidar els teus coneixements."}
+          </div>
+          <button onclick="window.location.reload()" class="px-6 py-3 bg-gold hover:bg-gold-light text-slate-950 font-cinzel font-bold text-xs rounded-xl shadow-lg transition">
+            🔄 Torna a Intentar
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    /* Catalan Audio Speech Narration */
+    function toggleAudioNarration() {
+      if (!('speechSynthesis' in window)) {
+        alert("El teu navegador no suporta la síntesi de veu.");
+        return;
+      }
+
+      const label = document.getElementById('tts-label');
+      const icon = document.getElementById('tts-icon');
+
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        label.innerText = "Escolta el Resum Auditiu";
+        icon.setAttribute('data-lucide', 'volume-2');
+        lucide.createIcons();
+        return;
+      }
+
+      const textToRead = "La Torre de Bellesguard, o Casa Figueras, és una joia arquitectònica situada als peus de la serra de Collserola a Barcelona. L'any 1408, el rei Martí I l'Humà hi va bastir el seu palau reial medieval, batejat com Bell Esguard per les seves vistes excepcionals sobre la mar i la ciutat. Després de la mort de Martí I i el pas dels segles, l'any 1900 la vídua Maria Sagués va encarregar a l'arquitecte Antoni Gaudí la construcció d'un monument neogòtic que ret homenatge a la història medieval de Catalunya. Destaca per la seva torre de 33 metres coronada per la creu de quatre braços amb la Senyera, les golfes d'arcs catenaris i la simbologia del drac camuflat al teulat.";
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'ca-ES';
+      utterance.rate = 0.9;
+
+      const voices = window.speechSynthesis.getVoices();
+      const caVoice = voices.find(v => v.lang.startsWith('ca'));
+      if (caVoice) utterance.voice = caVoice;
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        label.innerText = "Escolta el Resum Auditiu";
+        icon.setAttribute('data-lucide', 'volume-2');
+        lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(utterance);
+      isSpeaking = true;
+      label.innerText = "Aturar Lectura Auditiva";
+      icon.setAttribute('data-lucide', 'square');
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
