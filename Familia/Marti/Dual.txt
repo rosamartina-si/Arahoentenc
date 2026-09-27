@@ -1,0 +1,4 @@
+To monitor the student's progress in the program, an account has been created for you.  Once the student starts the program next month, 
+you can access the system at https://ave-sis.azurewebsites.net/ with the credentials below:
+Username: evasunyerplanes@gmail.com
+Password: welcome123
