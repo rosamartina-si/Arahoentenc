@@ -3,6 +3,8 @@ you can access the system at https://ave-sis.azurewebsites.net/ with the credent
 Username: evasunyerplanes@gmail.com
 Password: welcome123
 
+Student ID#. Your Student ID# is 284297
+
 Diploma Dual – Inici de curs 2026-2027
 Dilluns 12 d’octubre – Inici del semestre
 Accés als cursos i inici de les activitats a la plataforma.
@@ -10,12 +12,14 @@ Accés als cursos i inici de les activitats a la plataforma.
 Dimarts 13 d’octubre – Reunió OBLIGATÒRIA
 - Hora: 18.00 h
 - Plataforma: Zoom
-- Enllaç: al correu de Colegia de cada alumne
+- Enllaç: https://ave.zoom.us/j/99229464624
 - Necessari: càmera i micròfon
 - Recomanable: connectar-se uns minuts abans
 
+
 Professora de referència: Elizabeth Mott ( AIS Global Teacher)
 Global Teacher. Contacte per a dubtes acadèmics, assignatures i plataforma.
+> You will include Your Student ID# is 284297 in your emails when contacting me.
 
 Student ID
 Número identificatiu que cal indicar als correus dirigits a la professora.
