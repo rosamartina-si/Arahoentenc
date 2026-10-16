@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<title>Relaciona: Panjabi</title>
+<style>
+body {
+  font-family: Georgia, "Noto Sans Gurmukhi", sans-serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+h1 {
+  color: #003366;
+  text-align: center;
+}
+#tema-selector {
+  margin-bottom: 20px;
+  background: #f4f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #003366;
+}
+#tema-selector select {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.match-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  padding: 20px 0;
+  min-height: 400px;
+  position: relative;
+}
+.match-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.col h3 {
+  text-align: center;
+  color: #003366;
+  border-bottom: 2px solid #003366;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.item {
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, border 0.2s ease;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.item:hover {
+  background-color: #f0f8ff;
+}
+.selected {
+  background-color: #d0ebff;
+  border: 2px solid #003366;
+}
+.matched {
+  border: 2px solid green;
+  background-color: #e8fbe8;
+}
+.fixed-punjabi {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+}
+.fixed-cat {
+  border: 2px solid orange;
+  background-color: #fffacc !important;
+  pointer-events: none;
+}
+.incorrect-punjabi, .incorrect-cat {
+  border: 2px solid red;
+  background-color: #ffeaea !important;
+}
+#score {
+  font-weight: bold;
+  margin-top: 1em;
+  color: #003366;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  background: #f4f8ff;
+  border-radius: 8px;
+}
+#controls {
+  margin-top: 2em;
+  text-align: center;
+}
+#controls button {
+  margin: 5px 5px 15px 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+#controls button:hover {
+  background-color: #005599;
+}
+.nota {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f4f8ff;
+  border-left: 4px solid #003366;
+  font-size: 14px;
+  border-radius: 0 8px 8px 0;
+}
+.pronuncia {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<h1>🇮🇳 Relaciona en panjabi</h1>
+
+  <!-- Pots triar: center (per defecte), left o right -->
+<p style="text-align:center;font-size:32px" lang="pa">ਪੰਜਾਬੀ</p> 
+  
+<div id="tema-selector">
+  <label for="tema">Tria un tema: </label>
+  <select id="tema">
+    <option value="colors">Colors</option>
+    <option value="fruites">Fruites</option>
+    <option value="animals">Animals</option>
+    <option value="cortesia">Frases de cortesia</option>
+    <option value="dies">Dies de la setmana</option>
+    <option value="numeros">Números (1-10)</option>
+    <option value="cos">Parts del cos</option>
+    <option value="familia">Família</option>
+    <option value="verb_ser">Verb ser (at være)</option>
+    <option value="pronoms">Pronoms personals</option>
+    <option value="paisatge">Paisatge i natura</option>
+    <option value="transport">Transport</option>
+    <option value="menjar">Menjar i begudes</option>
+    <option value="temps">Temps atmosfèric</option>
+    <option value="ciutat">Ciutat i serveis</option>
+    <option value="verb_tenir">Verb tenir (at have)</option>
+    <option value="adjectius">Adjectius bàsics</option>
+    <option value="interrogatius">Paraules interrogatives</option>
+  </select>
+  <button onclick="canviaTema()">✅ Carrega tema</button>
+</div>
+
+  
+<p>Fes clic a una paraula en <strong>panjabi</strong> i després a la traducció en català.<br></p>
+<p><strong>Verd</strong> = encert a la primera | <strong>Groc</strong> = encert després d'errors (es repetirà a la següent ronda) | <strong>Vermell</strong> = error.<br></p>
+
+<div class="match-container">
+  <svg class="match-lines"></svg>
+
+  <div class="col">
+    <h3>Panjabi</h3>
+    <div id="panjabi"></div>
+  </div>
+
+  <div class="col">
+    <h3>Català</h3>
+    <div id="catala"></div>
+  </div>
+</div>
+
+<div id="score">Encerts: 0 / 10</div>
+
+<div id="controls">
+  <button onclick="novaRonda()">🔁 Torna a començar</button>
+  <button onclick="pronunciaSeleccionat()">🔊 Pronuncia seleccionat</button>
+</div>
+
+
+
+<script>
+const TOTAL_PER_RONDA = 10;
+
+const TEMES = {
+  "colors": [
+    {
+      "id": 1,
+      "punjabi": "ਚਿੱਟਾ",
+      "cat": "blanc",
+      "pron": "chitta"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਕਾਲਾ",
+      "cat": "negre",
+      "pron": "kala"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਲਾਲ",
+      "cat": "vermell",
+      "pron": "lal"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਨੀਲਾ",
+      "cat": "blau",
+      "pron": "nila"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਹਰਾ",
+      "cat": "verd",
+      "pron": "hara"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਪੀਲਾ",
+      "cat": "groc",
+      "pron": "pila"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸੰਤਰੀ",
+      "cat": "taronja",
+      "pron": "santari"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਜਾਮਨੀ",
+      "cat": "lila",
+      "pron": "jamni"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਭੂਰਾ",
+      "cat": "marró",
+      "pron": "bhura"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਸਲੇਟੀ",
+      "cat": "gris",
+      "pron": "saleti"
+    },
+    {
+      "id": 11,
+      "punjabi": "ਗੁਲਾਬੀ",
+      "cat": "rosa",
+      "pron": "gulabi"
+    },
+    {
+      "id": 12,
+      "punjabi": "ਗੂੜ੍ਹਾ ਨੀਲਾ",
+      "cat": "blau fosc",
+      "pron": "gurha nila"
+    }
+  ],
+  "fruites": [
+    {
+      "id": 1,
+      "punjabi": "ਸੇਬ",
+      "cat": "poma",
+      "pron": "seb"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਨਾਸ਼ਪਾਤੀ",
+      "cat": "pera",
+      "pron": "nashpati"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਕੇਲਾ",
+      "cat": "plàtan",
+      "pron": "kela"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਸੰਤਰਾ",
+      "cat": "taronja",
+      "pron": "santara"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਨਿੰਬੂ",
+      "cat": "llimona",
+      "pron": "nimbu"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਅੰਗੂਰ",
+      "cat": "raïm",
+      "pron": "angur"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸਟ੍ਰਾਬੇਰੀ",
+      "cat": "maduixa",
+      "pron": "straberi"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਚੈਰੀ",
+      "cat": "cirera",
+      "pron": "chairi"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਰਸਭਰੀ",
+      "cat": "gerd",
+      "pron": "rasbhari"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਖਰਬੂਜਾ",
+      "cat": "meló",
+      "pron": "kharbuja"
+    },
+    {
+      "id": 11,
+      "punjabi": "ਅਨਾਨਾਸ",
+      "cat": "pinya",
+      "pron": "ananas"
+    },
+    {
+      "id": 12,
+      "punjabi": "ਆੜੂ",
+      "cat": "préssec",
+      "pron": "aru"
+    }
+  ],
+  "animals": [
+    {
+      "id": 1,
+      "punjabi": "ਕੁੱਤਾ",
+      "cat": "gos",
+      "pron": "kutta"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਬਿੱਲੀ",
+      "cat": "gat",
+      "pron": "billi"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਘੋੜਾ",
+      "cat": "cavall",
+      "pron": "ghora"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਗਾਂ",
+      "cat": "vaca",
+      "pron": "gan"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਭੇਡ",
+      "cat": "ovella",
+      "pron": "bhed"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਬੱਕਰੀ",
+      "cat": "cabra",
+      "pron": "bakkri"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਪੰਛੀ",
+      "cat": "ocell",
+      "pron": "panchhi"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਮੱਛੀ",
+      "cat": "peix",
+      "pron": "machhi"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਚੂਹਾ",
+      "cat": "ratolí",
+      "pron": "chuha"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਲੂੰਬੜੀ",
+      "cat": "guineu",
+      "pron": "lumbri"
+    }
+  ],
+  "cortesia": [
+    {
+      "id": 1,
+      "punjabi": "ਹਾਂ",
+      "cat": "sí",
+      "pron": "han"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਨਹੀਂ",
+      "cat": "no",
+      "pron": "nahin"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਧੰਨਵਾਦ",
+      "cat": "gràcies",
+      "pron": "dhannvad"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਕੋਈ ਗੱਲ ਨਹੀਂ",
+      "cat": "de res",
+      "pron": "koi gall nahin"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਮਾਫ਼ ਕਰਨਾ",
+      "cat": "perdó",
+      "pron": "maf karna"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ",
+      "cat": "hola",
+      "pron": "sat sri akal"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਅਲਵਿਦਾ",
+      "cat": "adéu",
+      "pron": "alvida"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਸ਼ੁਭ ਸਵੇਰ",
+      "cat": "bon dia",
+      "pron": "shubh saver"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਸ਼ੁਭ ਸ਼ਾਮ",
+      "cat": "bona tarda / vespre",
+      "pron": "shubh sham"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਸ਼ੁਭ ਰਾਤ",
+      "cat": "bona nit",
+      "pron": "shubh rat"
+    },
+    {
+      "id": 11,
+      "punjabi": "ਜੀ ਆਇਆਂ ਨੂੰ",
+      "cat": "benvingut/da",
+      "pron": "ji aian nu"
+    },
+    {
+      "id": 12,
+      "punjabi": "ਤੁਹਾਡੀ ਸਿਹਤ ਲਈ",
+      "cat": "salut (en brindar)",
+      "pron": "tuhadi sehat lai"
+    }
+  ],
+  "dies": [
+    {
+      "id": 1,
+      "punjabi": "ਸੋਮਵਾਰ",
+      "cat": "dilluns",
+      "pron": "somvar"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਮੰਗਲਵਾਰ",
+      "cat": "dimarts",
+      "pron": "mangalvar"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਬੁੱਧਵਾਰ",
+      "cat": "dimecres",
+      "pron": "buddhvar"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਵੀਰਵਾਰ",
+      "cat": "dijous",
+      "pron": "virvar"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਸ਼ੁੱਕਰਵਾਰ",
+      "cat": "divendres",
+      "pron": "shukkarvar"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਸ਼ਨੀਵਾਰ",
+      "cat": "dissabte",
+      "pron": "shanivar"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਐਤਵਾਰ",
+      "cat": "diumenge",
+      "pron": "aitvar"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਅੱਜ",
+      "cat": "avui",
+      "pron": "ajj"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਕੱਲ੍ਹ (ਭਲਕੇ)",
+      "cat": "demà",
+      "pron": "kall (bhalke)"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਕੱਲ੍ਹ (ਬੀਤਿਆ)",
+      "cat": "ahir",
+      "pron": "kall (bitia)"
+    }
+  ],
+  "numeros": [
+    {
+      "id": 1,
+      "punjabi": "ਇੱਕ",
+      "cat": "1",
+      "pron": "ikk"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਦੋ",
+      "cat": "2",
+      "pron": "do"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਤਿੰਨ",
+      "cat": "3",
+      "pron": "tinn"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਚਾਰ",
+      "cat": "4",
+      "pron": "char"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਪੰਜ",
+      "cat": "5",
+      "pron": "panj"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਛੇ",
+      "cat": "6",
+      "pron": "chhe"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸੱਤ",
+      "cat": "7",
+      "pron": "satt"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਅੱਠ",
+      "cat": "8",
+      "pron": "atth"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਨੌਂ",
+      "cat": "9",
+      "pron": "naun"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਦਸ",
+      "cat": "10",
+      "pron": "das"
+    }
+  ],
+  "cos": [
+    {
+      "id": 1,
+      "punjabi": "ਸਿਰ",
+      "cat": "cap",
+      "pron": "sir"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਹੱਥ",
+      "cat": "mà",
+      "pron": "hatth"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਲੱਤ",
+      "cat": "cama",
+      "pron": "latt"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਅੱਖ",
+      "cat": "ull",
+      "pron": "akkh"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਕੰਨ",
+      "cat": "orella",
+      "pron": "kann"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਨੱਕ",
+      "cat": "nas",
+      "pron": "nakk"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਮੂੰਹ",
+      "cat": "boca",
+      "pron": "munh"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਦਿਲ",
+      "cat": "cor",
+      "pron": "dil"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਪਿੱਠ",
+      "cat": "esquena",
+      "pron": "pitth"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਦੰਦ",
+      "cat": "dents",
+      "pron": "dand"
+    }
+  ],
+  "familia": [
+    {
+      "id": 1,
+      "punjabi": "ਮਾਂ",
+      "cat": "mare",
+      "pron": "man"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਪਿਤਾ",
+      "cat": "pare",
+      "pron": "pita"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਭੈਣ",
+      "cat": "germana",
+      "pron": "bhain"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਭਰਾ",
+      "cat": "germà",
+      "pron": "bhra"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਧੀ",
+      "cat": "filla",
+      "pron": "dhi"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਪੁੱਤਰ",
+      "cat": "fill",
+      "pron": "puttar"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਦਾਦੀ",
+      "cat": "àvia paterna",
+      "pron": "dadi"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਦਾਦਾ",
+      "cat": "avi patern",
+      "pron": "dada"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਚਾਚਾ",
+      "cat": "oncle patern",
+      "pron": "chacha"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਮਾਸੀ",
+      "cat": "tia materna",
+      "pron": "masi"
+    }
+  ],
+  "verb_ser": [
+    {
+      "id": 1,
+      "punjabi": "ਮੈਂ ਹਾਂ",
+      "cat": "jo soc",
+      "pron": "main han"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਤੂੰ ਹੈਂ",
+      "cat": "tu ets",
+      "pron": "tun hain"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਉਹ ਹੈ (ਮਰਦ)",
+      "cat": "ell és",
+      "pron": "uh hai"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਉਹ ਹੈ (ਇਸਤਰੀ)",
+      "cat": "ella és",
+      "pron": "uh hai"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਅਸੀਂ ਹਾਂ",
+      "cat": "nosaltres som",
+      "pron": "asin han"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਤੁਸੀਂ ਹੋ",
+      "cat": "vosaltres sou",
+      "pron": "tusin ho"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਉਹ ਹਨ",
+      "cat": "ells/elles són",
+      "pron": "uh han"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਮੈਂ ਨਹੀਂ ਹਾਂ",
+      "cat": "jo no soc",
+      "pron": "main nahin han"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਕੀ ਤੂੰ ਹੈਂ...?",
+      "cat": "ets tu...?",
+      "pron": "ki tun hain"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਕੀ ਉਹ ਨਹੀਂ ਹੈ...?",
+      "cat": "no és ell...?",
+      "pron": "ki uh nahin hai"
+    }
+  ],
+  "pronoms": [
+    {
+      "id": 1,
+      "punjabi": "ਮੈਂ",
+      "cat": "jo",
+      "pron": "main"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਤੂੰ",
+      "cat": "tu",
+      "pron": "tun"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਉਹ (ਮਰਦ)",
+      "cat": "ell",
+      "pron": "uh"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਉਹ (ਔਰਤ)",
+      "cat": "ella",
+      "pron": "uh"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਅਸੀਂ",
+      "cat": "nosaltres",
+      "pron": "asin"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਤੁਸੀਂ",
+      "cat": "vosaltres",
+      "pron": "tusin"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਉਹ (ਬਹੁਵਚਨ)",
+      "cat": "ells/elles",
+      "pron": "uh"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਮੈਨੂੰ",
+      "cat": "a mi",
+      "pron": "mainu"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਤੈਨੂੰ",
+      "cat": "a tu",
+      "pron": "tainu"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਉਨ੍ਹਾਂ ਨੂੰ",
+      "cat": "a ells/elles",
+      "pron": "unhan nu"
+    }
+  ],
+  "paisatge": [
+    {
+      "id": 1,
+      "punjabi": "ਪਹਾੜ",
+      "cat": "muntanya",
+      "pron": "pahar"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਦਰਿਆ",
+      "cat": "riu",
+      "pron": "daria"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਝੀਲ",
+      "cat": "llac",
+      "pron": "jhil"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਸਮੁੰਦਰ",
+      "cat": "mar",
+      "pron": "samundar"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਜੰਗਲ",
+      "cat": "bosc",
+      "pron": "jangal"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਖੇਤ",
+      "cat": "camp",
+      "pron": "khet"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸਮੁੰਦਰੀ ਕੰਢਾ",
+      "cat": "platja",
+      "pron": "samundari kandha"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਟਾਪੂ",
+      "cat": "illa",
+      "pron": "tapu"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਘਾਟੀ",
+      "cat": "vall",
+      "pron": "ghati"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਪਹਾੜੀ",
+      "cat": "turó",
+      "pron": "pahari"
+    }
+  ],
+  "transport": [
+    {
+      "id": 1,
+      "punjabi": "ਕਾਰ",
+      "cat": "cotxe",
+      "pron": "kar"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਬੱਸ",
+      "cat": "autobús",
+      "pron": "bass"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਰੇਲਗੱਡੀ",
+      "cat": "tren",
+      "pron": "relgaddi"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਸਾਈਕਲ",
+      "cat": "bicicleta",
+      "pron": "saikal"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਕਿਸ਼ਤੀ",
+      "cat": "vaixell",
+      "pron": "kishti"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਹਵਾਈ ਜਹਾਜ਼",
+      "cat": "avió",
+      "pron": "havai jahaz"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸਟੇਸ਼ਨ",
+      "cat": "estació",
+      "pron": "steshan"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਹਵਾਈ ਅੱਡਾ",
+      "cat": "aeroport",
+      "pron": "havai adda"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਪੁਲ",
+      "cat": "pont",
+      "pron": "pul"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਸੜਕ",
+      "cat": "carretera",
+      "pron": "sarak"
+    }
+  ],
+  "menjar": [
+    {
+      "id": 1,
+      "punjabi": "ਰੋਟੀ",
+      "cat": "pa",
+      "pron": "roti"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਮੱਖਣ",
+      "cat": "mantega",
+      "pron": "makkhan"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਪਾਣੀ",
+      "cat": "aigua",
+      "pron": "pani"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਦੁੱਧ",
+      "cat": "llet",
+      "pron": "duddh"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਮਾਸ",
+      "cat": "carn",
+      "pron": "mas"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਮੱਛੀ",
+      "cat": "peix",
+      "pron": "machhi"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਸਬਜ਼ੀਆਂ",
+      "cat": "verdures",
+      "pron": "sabzian"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਫਲ",
+      "cat": "fruita",
+      "pron": "phal"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਕੌਫ਼ੀ",
+      "cat": "cafè",
+      "pron": "kauphi"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਚਾਹ",
+      "cat": "te",
+      "pron": "chah"
+    }
+  ],
+  "temps": [
+    {
+      "id": 1,
+      "punjabi": "ਸੂਰਜ",
+      "cat": "sol",
+      "pron": "suraj"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਅਸਮਾਨ",
+      "cat": "cel",
+      "pron": "asman"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਬੱਦਲ",
+      "cat": "núvol",
+      "pron": "baddal"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਮੀਂਹ",
+      "cat": "pluja",
+      "pron": "minh"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਬਰਫ਼",
+      "cat": "neu",
+      "pron": "baraf"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਹਵਾ",
+      "cat": "vent",
+      "pron": "hava"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਗਰਜ",
+      "cat": "tro",
+      "pron": "garaj"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਧੁੰਦ",
+      "cat": "boira",
+      "pron": "dhund"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਗਰਮ",
+      "cat": "calent",
+      "pron": "garam"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਠੰਢਾ",
+      "cat": "fred",
+      "pron": "thandha"
+    }
+  ],
+  "ciutat": [
+    {
+      "id": 1,
+      "punjabi": "ਸ਼ਹਿਰ",
+      "cat": "ciutat",
+      "pron": "shahir"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਗਲੀ",
+      "cat": "carrer",
+      "pron": "gali"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਦੁਕਾਨ",
+      "cat": "botiga",
+      "pron": "dukan"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਬੈਂਕ",
+      "cat": "banc",
+      "pron": "baink"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਹਸਪਤਾਲ",
+      "cat": "hospital",
+      "pron": "haspatal"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਸਕੂਲ",
+      "cat": "escola",
+      "pron": "sakul"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਲਾਇਬ੍ਰੇਰੀ",
+      "cat": "biblioteca",
+      "pron": "laibreri"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਪਾਰਕ",
+      "cat": "parc",
+      "pron": "park"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਡਾਕਘਰ",
+      "cat": "oficina de correus",
+      "pron": "dakghar"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਹੋਟਲ",
+      "cat": "hotel",
+      "pron": "hotel"
+    }
+  ],
+  "verb_tenir": [
+    {
+      "id": 1,
+      "punjabi": "ਮੇਰੇ ਕੋਲ ਹੈ",
+      "cat": "jo tinc",
+      "pron": "mere kol hai"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਤੇਰੇ ਕੋਲ ਹੈ",
+      "cat": "tu tens",
+      "pron": "tere kol hai"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਉਸ ਕੋਲ ਹੈ (ਮਰਦ)",
+      "cat": "ell té",
+      "pron": "us kol hai"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਉਸ ਕੋਲ ਹੈ (ਇਸਤਰੀ)",
+      "cat": "ella té",
+      "pron": "us kol hai"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਸਾਡੇ ਕੋਲ ਹੈ",
+      "cat": "nosaltres tenim",
+      "pron": "sade kol hai"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਤੁਹਾਡੇ ਕੋਲ ਹੈ",
+      "cat": "vosaltres teniu",
+      "pron": "tuhade kol hai"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਉਨ੍ਹਾਂ ਕੋਲ ਹੈ",
+      "cat": "ells/elles tenen",
+      "pron": "unhan kol hai"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਮੇਰੇ ਕੋਲ ਨਹੀਂ ਹੈ",
+      "cat": "jo no tinc",
+      "pron": "mere kol nahin hai"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਕੀ ਤੇਰੇ ਕੋਲ ਹੈ...?",
+      "cat": "tens tu...?",
+      "pron": "ki tere kol hai"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਕੀ ਉਸ ਕੋਲ ਨਹੀਂ ਹੈ...?",
+      "cat": "no té ell...?",
+      "pron": "ki us kol nahin hai"
+    }
+  ],
+  "adjectius": [
+    {
+      "id": 1,
+      "punjabi": "ਵੱਡਾ",
+      "cat": "gran",
+      "pron": "vadda"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਛੋਟਾ",
+      "cat": "petit",
+      "pron": "chhota"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਸੋਹਣਾ",
+      "cat": "bonic",
+      "pron": "sohna"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਮਾੜਾ",
+      "cat": "dolent",
+      "pron": "mara"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਚੰਗਾ",
+      "cat": "bo",
+      "pron": "changa"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਨਵਾਂ",
+      "cat": "nou",
+      "pron": "navan"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਪੁਰਾਣਾ",
+      "cat": "vell",
+      "pron": "purana"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਸੁਹਾਵਣਾ",
+      "cat": "agradable",
+      "pron": "suhavna"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਦੁਸ਼ਟ",
+      "cat": "dolent (maliciós)",
+      "pron": "dusht"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਸੁੱਕਾ",
+      "cat": "sec",
+      "pron": "sukka"
+    }
+  ],
+  "interrogatius": [
+    {
+      "id": 1,
+      "punjabi": "ਕੌਣ",
+      "cat": "qui",
+      "pron": "kaun"
+    },
+    {
+      "id": 2,
+      "punjabi": "ਕੀ",
+      "cat": "què",
+      "pron": "ki"
+    },
+    {
+      "id": 3,
+      "punjabi": "ਕਦੋਂ",
+      "cat": "quan",
+      "pron": "kadon"
+    },
+    {
+      "id": 4,
+      "punjabi": "ਕਿਉਂ",
+      "cat": "per què",
+      "pron": "kiun"
+    },
+    {
+      "id": 5,
+      "punjabi": "ਕਿਵੇਂ",
+      "cat": "com",
+      "pron": "kiven"
+    },
+    {
+      "id": 6,
+      "punjabi": "ਕਿੱਥੇ",
+      "cat": "on",
+      "pron": "kitthe"
+    },
+    {
+      "id": 7,
+      "punjabi": "ਕਿੰਨਾ",
+      "cat": "quant",
+      "pron": "kinna"
+    },
+    {
+      "id": 8,
+      "punjabi": "ਕਿਹੜਾ",
+      "cat": "quin/quina",
+      "pron": "kihra"
+    },
+    {
+      "id": 9,
+      "punjabi": "ਦੋਵਾਂ ਵਿੱਚੋਂ ਕਿਹੜਾ",
+      "cat": "quin dels dos",
+      "pron": "dovan vichon kihra"
+    },
+    {
+      "id": 10,
+      "punjabi": "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
+      "cat": "com estàs?",
+      "pron": "tusin kiven ho"
+    }
+  ]
+};
+
+let paraulesActuals = TEMES.colors;
+let encerts = 0;
+let selectedPunjabi = null;
+let currentAttempts = {};
+
+function canviaTema() {
+  paraulesActuals = TEMES[document.getElementById("tema").value];
+  novaRonda();
+}
+
+function barreja(array) {
+  const a = array.slice();
+  for (let i=a.length-1;i>0;i--) {const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function speakPunjabi(text) {
+  if (!("speechSynthesis" in window)) { alert("Aquest navegador no ofereix síntesi de veu."); return; }
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "pa-IN";
+  utterance.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
+}
+
+function pronunciaSeleccionat() {
+  if (selectedPunjabi) {
+    const text = selectedPunjabi.querySelector("div")?.textContent || selectedPunjabi.textContent;
+    speakPunjabi(text);
+  } else {
+    alert("Selecciona primer una paraula en panjabi");
+  }
+}
+
+function actualitzaPuntuacio() {
+  document.getElementById("score").textContent = `Encerts a la primera: ${encerts} / ${Math.min(TOTAL_PER_RONDA, paraulesActuals.length)}`;
+}
+
+function novaRonda() {
+  const grogues = [];
+  document.querySelectorAll(".fixed-punjabi").forEach(el => {
+    grogues.push(parseInt(el.dataset.id));
+  });
+
+  const restants = paraulesActuals.filter(f => !grogues.includes(f.id));
+  const seleccionades = [];
+
+  grogues.forEach(id => {
+    const paraula = paraulesActuals.find(f => f.id === id);
+    if (paraula) seleccionades.push(paraula);
+  });
+
+  const addicionals = barreja(restants).slice(0, TOTAL_PER_RONDA - seleccionades.length);
+  seleccionades.push(...addicionals);
+
+  currentAttempts = {};
+  generaExercici(seleccionades);
+  dibuixaLinies();
+}
+
+function netejaErrors() {
+  document.querySelectorAll(".incorrect-punjabi, .incorrect-cat").forEach(el => {
+    el.classList.remove("incorrect-punjabi", "incorrect-cat");
+  });
+}
+
+function mouAlTop(element) {
+  const parent = element.parentNode;
+  parent.insertBefore(element, parent.firstChild);
+}
+
+function dibuixaLinies() {
+  const svg = document.querySelector(".match-lines");
+  svg.innerHTML = "";
+  const panjabiContainer = document.getElementById("panjabi");
+  const catContainer = document.getElementById("catala");
+
+  const matchedPunjabi = panjabiContainer.querySelectorAll(".matched, .fixed-punjabi");
+  matchedPunjabi.forEach(punjabi => {
+    const punjabiId = punjabi.dataset.id;
+    const cat = catContainer.querySelector(`.matched[data-id="${punjabiId}"], .fixed-cat[data-id="${punjabiId}"]`);
+    if (cat) {
+      const punjabiRect = punjabi.getBoundingClientRect();
+      const catRect = cat.getBoundingClientRect();
+      const containerRect = svg.getBoundingClientRect();
+
+      const x1 = punjabiRect.right - containerRect.left;
+      const y1 = punjabiRect.top + punjabiRect.height / 2 - containerRect.top;
+      const x2 = catRect.left - containerRect.left;
+      const y2 = catRect.top + catRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#003366");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-dasharray", "5,3");
+      svg.appendChild(line);
+    }
+  });
+}
+
+function generaExercici(frases) {
+  const panjabiContainer = document.getElementById("panjabi");
+  const catContainer = document.getElementById("catala");
+  panjabiContainer.innerHTML = "";
+  catContainer.innerHTML = "";
+  encerts = 0;
+  selectedPunjabi = null;
+  actualitzaPuntuacio();
+
+  const panjabiFrases = barreja(frases);
+  const catFrases = barreja(frases);
+
+  panjabiFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+
+    const textDiv = document.createElement("div");
+    textDiv.textContent = f.punjabi;
+
+    const pronDiv = document.createElement("div");
+    pronDiv.className = "pronuncia";
+    pronDiv.textContent = `Pronunciació orientativa: ${f.pron}`;
+
+    textDiv.lang = "pa";
+    textDiv.style.fontSize = "20px";
+    div.appendChild(textDiv);
+    div.appendChild(pronDiv);
+
+    div.addEventListener("click", () => {
+      speakPunjabi(f.punjabi);
+      if (div.classList.contains("matched") || div.classList.contains("fixed-punjabi")) return;
+      netejaErrors();
+      document.querySelectorAll("#panjabi .item").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedPunjabi = div;
+    });
+
+    panjabiContainer.appendChild(div);
+  });
+
+  catFrases.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = f.id;
+    div.textContent = f.cat;
+
+    div.addEventListener("click", () => {
+      if (!selectedPunjabi) return;
+      if (div.classList.contains("matched") || div.classList.contains("fixed-cat")) return;
+
+      const punjabiId = selectedPunjabi.dataset.id;
+      const catId = div.dataset.id;
+
+      if (punjabiId === catId) {
+        if (currentAttempts[punjabiId] && currentAttempts[punjabiId].attempts > 0) {
+          selectedPunjabi.classList.add("fixed-punjabi");
+          div.classList.add("fixed-cat");
+        } else {
+          selectedPunjabi.classList.add("matched");
+          div.classList.add("matched");
+          encerts++;
+          actualitzaPuntuacio();
+        }
+        mouAlTop(selectedPunjabi);
+        mouAlTop(div);
+        requestAnimationFrame(dibuixaLinies);
+      } else {
+        selectedPunjabi.classList.add("incorrect-punjabi");
+        div.classList.add("incorrect-cat");
+        if (!currentAttempts[punjabiId]) currentAttempts[punjabiId] = { attempts: 0 };
+        currentAttempts[punjabiId].attempts++;
+      }
+
+      selectedPunjabi.classList.remove("selected");
+      selectedPunjabi = null;
+    });
+
+    catContainer.appendChild(div);
+  });
+}
+
+window.addEventListener("resize", dibuixaLinies);
+if (document.fonts) document.fonts.ready.then(dibuixaLinies);
+window.onload = () => canviaTema();
+</script>
+<p class="nota">El panjabi es presenta en alfabet gurmukhi. La transcripció és orientativa; la veu depèn de les veus instal·lades al dispositiu. En panjabi, algunes formes gramaticals varien segons el gènere i el context.</p>
+</body>
+</html>
