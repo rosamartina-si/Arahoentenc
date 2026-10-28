@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="ca"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Faristol · Lliçó 5 · Què vol dir «tan»?</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Nunito:wght@400;600;700;800&amp;family=Special+Elite&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{--paper:#fffdf7;--ink:#263143;--brown:#43331e;--green:#2d6a4f;--gold:#d9a34c;--line:#e6d8b9}*{box-sizing:border-box}body{margin:0;background:#f3ecdd;background-image:radial-gradient(#dfd3bb 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font:17px/1.67 Nunito,system-ui,sans-serif}main{max-width:950px;margin:25px auto 70px;padding:0 16px}.page{background:var(--paper);padding:27px 31px;margin:0 0 22px;border:1px solid #e3d4b7;border-radius:18px;box-shadow:0 10px 30px #48351a12,inset 0 0 75px #e4d4ad22}h1,h2{font-family:'Special Elite',monospace;color:var(--brown);line-height:1.27}h1{font-size:clamp(27px,4vw,43px);margin:12px 0}h1 em{font:700 clamp(45px,7vw,70px) Caveat,cursive;color:var(--green);font-style:normal}h2{font-size:clamp(22px,3vw,30px);margin:2px 0 18px}h3{font-size:20px;color:#453523;margin:0 0 6px}p{margin:9px 0 13px}.eyebrow{background:var(--green);border-radius:30px;padding:6px 13px;color:#fff;font:12px 'Special Elite',monospace;letter-spacing:1px;display:inline-block}.lead{font-size:19px}.border-stamp{background:#f8f2e6;border:3px double #4c3b25;padding:19px;border-radius:10px}.definition{font-size:21px;font-weight:800}.small{font-size:14px;color:#625e56}.phrase{font-size:clamp(19px,3vw,26px);font-weight:800}.note{border-left:5px solid #d8a148;background:#faf2dc;padding:13px 16px;border-radius:5px}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}.column{flex:1;min-width:240px}.tile{background:#fffefa;border:1px solid #e3d4b7;padding:17px;border-radius:12px}.sentence-list{padding-left:27px}.sentence-list li{padding:3px 4px}.synth{padding:13px 16px;background:#e9f1e4;border:1px solid #bbd3b7;border-radius:10px;font-weight:800;font-size:20px}.arrow{text-align:center;font-size:27px;font-weight:800;color:var(--green)}.pill{font-weight:800;font-size:13px;border-radius:7px;padding:5px 10px;display:inline-block}.compar{background:#dceafa;color:#1a4f84}.emfas{background:#fce0d2;color:#853c2d}.conseq{background:#e4efdc;color:#315d36}.comparison{width:100%;border-collapse:collapse;margin-top:13px}.comparison th,.comparison td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.comparison th{background:#f0e7d5}a{color:#21674e}.sourcebox{background:#f7f2e8;border-radius:10px;padding:14px;font-size:14px}.foot{font-size:13px;color:#625d52}blockquote{margin:12px 0;padding-left:17px;border-left:3px solid var(--gold);font-size:19px;font-style:italic}.warn{background:#fff0d9;border:1px solid #eab76c;padding:13px 17px;border-radius:11px}.dot{background:#dc803b;color:white;display:inline-grid;place-items:center;border-radius:50%;width:25px;height:25px;font-weight:900}.meter{height:18px;display:flex;gap:3px;margin:10px 0}.meter span{flex:1;border-radius:3px;background:#8eb89a}.meter span:nth-child(n+5){background:#e6ba67}.meter span:nth-child(n+8){background:#da8768}.num{font-weight:800;color:var(--green)}@media(max-width:600px){.page{padding:21px 18px}.comparison{font-size:14px}.comparison td,.comparison th{padding:8px 5px}}@media print{body{background:white}.page{box-shadow:none;break-inside:avoid}a{color:inherit}}
+
+/* Subapartats per remarcar una característica */
+section.page h3 + .border-stamp{margin-top:10px}section.page .synth + p{margin-bottom:22px}section.page h3:not(:first-child){margin-top:24px}
+
+/* Una paraula enfocada i una possible reacció representada amb una emoticona */
+.example{margin-top:25px;padding-top:5px}
+.example+.example{border-top:1px dashed #decfae;margin-top:30px;padding-top:25px}
+.example h3{font-size:21px;margin:0 0 12px}
+.example h4{font-size:17px;margin:16px 0 5px;color:#453523}
+.example-note{font-size:16px;color:#425164;margin-top:13px}
+.example .synth+p{margin-bottom:4px}
+.scene-rail{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;margin-top:16px}
+.scene-card{min-width:0;text-align:center;background:#fffefa;border:1px solid #e2d8c3;border-radius:12px;padding:13px 12px 11px;align-self:stretch}
+.scene-card:last-child{background:#f2f7ee;border-color:#c6d9c0}
+.scene-label{display:inline-block;padding:4px 10px;border-radius:50px;font-size:12px;font-weight:800;letter-spacing:.2px;background:#f3ebdb;color:#614f34}
+.scene-card:last-child .scene-label{background:#dcebdd;color:#285b47}
+.scene-visual{min-height:95px;display:grid;place-items:center}
+
+.scene-card p{font-size:15px;font-weight:700;line-height:1.4;margin:0 auto 3px;max-width:220px}
+.scene-arrow{color:#2d6a4f;font-size:28px;font-weight:900;line-height:1}
+.expression-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.expression-grid .phrase{color:#2d6a4f;margin:3px 0 6px}
+.expression-grid .small{margin-top:9px}
+@media(max-width:600px){.scene-rail{grid-template-columns:minmax(0,1fr);gap:6px}.scene-arrow{transform:rotate(90deg);text-align:center}.scene-visual{min-height:80px}.scene-card{padding:10px}.expression-grid{grid-template-columns:1fr}}
+@media print{.page{break-inside:auto}.scene-rail,.border-stamp,.synth{break-inside:avoid}.example{break-inside:auto}}
+
+/* Emoticones i focus: no representen una escala d’intensitat */
+.focus-word{display:inline-block;border-radius:12px;border-bottom:4px solid var(--gold);background:#fff1d0;padding:9px 15px;font-size:clamp(21px,3vw,27px);font-weight:800;color:#4b3821;line-height:1.35}
+.emoji-face{display:block;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;font-size:68px;line-height:1.2;padding:5px}
+.illustration-note{padding:11px 15px;background:#f7f2e8;border-left:4px solid var(--gold);border-radius:6px;font-size:15px;color:#554d40}
+.scene-card .scene-visual{min-height:96px}
+@media (max-width:600px){.scene-card .scene-visual{min-height:76px}.emoji-face{font-size:58px}}
+/* Comparar informació i mirada del parlant */
+.contrast-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0 12px}
+.contrast-card{min-width:0;border-radius:12px;border:1px solid #dfd4bd;background:#fffefa;padding:16px 17px}
+.contrast-card.expressive{background:#f1f7ed;border-color:#bed7bd}
+.contrast-card .phrase{font-size:clamp(18px,2.4vw,23px);margin:12px 0 8px}
+.contrast-card p:last-child{margin-bottom:0}
+.contrast-caption{font-weight:800;font-size:13px;letter-spacing:.2px;color:#6b573a}
+.contrast-card.expressive .contrast-caption{color:#286247}
+.reflections{border-left:4px solid var(--gold);background:#f8f2e5;padding:11px 15px;border-radius:6px;margin:14px 0}
+.reflections p{margin:4px 0}
+.consequence-rail{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:12px;align-items:stretch;margin:14px 0}
+.consequence-card{background:#fffefa;border:1px solid #ded4bc;border-radius:11px;padding:14px;text-align:center}
+.consequence-card.result{background:#eff5ea;border-color:#bbd7bb}
+.consequence-card .pill{margin-bottom:9px}
+.consequence-card p{font-size:17px;font-weight:800;line-height:1.45;margin:5px 0}
+.consequence-arrow{display:grid;place-items:center;color:var(--green);font-size:30px;font-weight:800}
+@media(max-width:620px){.contrast-grid{grid-template-columns:1fr}.consequence-rail{grid-template-columns:1fr;gap:5px}.consequence-arrow{transform:rotate(90deg)}}
+@media print{.contrast-card,.consequence-card{break-inside:avoid}}
+</style></head><body><main>
+<header class="page"><span class="eyebrow">FARISTOL · LLENGUA CATALANA · LÈXIC I SEMÀNTICA</span><h1>LLIÇÓ 5 <em>Què vol dir «tan»?</em></h1><p class="lead">Una paraula molt petita que pot servir per comparar, per posar en relleu una característica o per relacionar-la amb una conseqüència.</p></header>
+<section class="page"><h2>01 · Una paraula, diferents usos</h2><p>Compara aquestes frases. Què expressa <strong>tan</strong> en cadascuna?</p><div class="row"><div class="tile column"><span class="pill compar">Comparació</span><p class="phrase">En Joan és <u>tan</u> alt com en Pere.</p><p>L'alçada d'una persona es compara amb la d'una altra.</p></div><div class="tile column"><span class="pill emfas">Característica en relleu</span><p class="phrase">Estic <u>tan</u> content!</p><p>Qui parla destaca l’alegria que sent i ens convida a fixar-nos-hi.</p></div><div class="tile column"><span class="pill conseq">Conseqüència</span><p class="phrase">Parles <u>tan</u> baix que no et sento.</p><p>La manera de parlar explica per què l’altra persona no el sent.</p></div></div></section>
+<section class="page"><h2>02 · «Tan» per comparar</h2><div class="border-stamp"><p class="phrase">La Maria corre tan de pressa com en Joan.</p><p>Les dues velocitats es presenten com a iguals.</p><div class="row"><div class="column"><strong>La Maria</strong><div class="meter"><span></span><span></span><span></span><span></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span></div></div><div class="column"><strong>En Joan</strong><div class="meter"><span></span><span></span><span></span><span></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span><span style="background:#eee5d3"></span></div></div></div></div><h3>Descomposició</h3><ol class="sentence-list"><li>La Maria corre.</li><li>En Joan corre.</li><li>La Maria corre a una velocitat determinada.</li><li>En Joan corre a una velocitat determinada.</li><li>Presentem aquestes dues velocitats com a iguals.</li></ol><div class="arrow">↓</div><div class="synth">La Maria corre tan de pressa com en Joan.</div></section>
+<section class="page" id="remarcar">
+<h2>03 · «Tan» i la mirada de qui parla</h2>
+<div class="note"><p><strong>«Tan» pot fer que una característica deixi de ser una simple informació i esdevingui objecte d’una apreciació de qui parla o escriu: ens la mostra a través de la seva mirada.</strong></p>
+<p>En aquests usos expressius, «tan» posa la característica en relleu i ens convida a preguntar-nos <strong>per què la destaca i què representa per a ell o ella</strong>. La resposta no sempre es diu: l’hem d’interpretar segons el context. Pot haver-hi admiració, sorpresa, satisfacció, frustració, desaprovació o altres impressions.</p></div>
+<h3>Abans dels exemples · Andorra és un país tan petit!</h3>
+<p>Compara aquestes dues maneres de parlar d’Andorra:</p>
+<div class="contrast-grid">
+ <div class="contrast-card"><span class="contrast-caption">Una descripció</span><p class="phrase">Andorra és un país petit.</p><p>Es descriu Andorra com un país de poca extensió en relació amb altres països. No ens cal buscar cap reacció especial.</p></div>
+ <div class="contrast-card expressive"><span class="contrast-caption">La mirada del parlant</span><p class="phrase">Andorra és un país <u>tan</u> petit! <span role="img" aria-label="Pensatiu">🤔</span></p><p>Es posa en relleu la petitesa. Ens preguntem: <strong>per què qui parla la destaca?</strong> Què representa per a ell o ella?</p></div>
+</div>
+<div class="reflections"><strong>Podria estar pensant, per exemple:</strong><p>«Tothom s’hi deu conèixer!» · «Te’l pots recórrer de seguida!» · «Potser hi ha menys oportunitats de feina!»</p><p class="small">Són interpretacions possibles, no pas significats que «tan» expressi tot sol.</p></div>
+<p class="illustration-note"><strong>Fixa-t’hi:</strong> les emoticones dels exemples il·lustren una reacció possible de qui parla; no volen dir que «tan» expressi aquella emoció per si mateix.</p>
+<article class="example" id="exemple-a">
+<h3>A · No vagis tan de pressa!</h3>
+<div class="border-stamp"><p class="phrase">No vagis <u>tan</u> de pressa!</p>
+<p>Qui parla posa en relleu la velocitat de l’altra persona perquè la troba excessiva en aquella situació.</p><div aria-label="Una característica en relleu i una possible interpretació segons el context" class="scene-rail" role="group"><div class="scene-card"><span class="scene-label">En què ens fixem?</span><div class="scene-visual"><span class="focus-word">de pressa</span></div><p>La velocitat de l’altra persona.</p></div><div aria-hidden="true" class="scene-arrow">→</div><div class="scene-card"><span class="scene-label">Com s’interpreta aquí?</span><div class="scene-visual"><span aria-hidden="true" class="emoji-face">😟</span></div><p>Qui parla considera que va massa de pressa.</p></div></div></div>
+<h4>Descomposició</h4><ol class="sentence-list"><li>Una persona es desplaça.</li><li>Aquesta persona va de pressa.</li><li>Amb «tan», qui parla centra l’atenció en la velocitat.</li><li>En aquesta situació, considera que la velocitat és excessiva.</li><li>Vol que l’altra persona vagi més a poc a poc.</li></ol>
+<div aria-hidden="true" class="arrow">↓</div><div class="synth">No vagis tan de pressa!</div>
+<p class="example-note">«Tan» destaca la velocitat; el fet de trobar-la excessiva es desprèn de l’ordre i de la situació.</p>
+</article>
+<article class="example" id="exemple-b">
+<h3>B · I tu tan tranquil!</h3>
+<div class="border-stamp"><p class="phrase">I tu <u>tan</u> tranquil!</p><p>«Tan» dirigeix l’atenció cap a la tranquil·litat de l’altra persona. Segons la situació, això pot expressar sorpresa, admiració o retret.</p><div aria-label="Una característica en relleu i una possible interpretació segons el context" class="scene-rail" role="group"><div class="scene-card"><span class="scene-label">En què ens fixem?</span><div class="scene-visual"><span class="focus-word">tranquil</span></div><p>La tranquil·litat de l’altra persona.</p></div><div aria-hidden="true" class="scene-arrow">→</div><div class="scene-card"><span class="scene-label">Com s’interpreta aquí?</span><div class="scene-visual"><span aria-hidden="true" class="emoji-face">😮</span></div><p>En aquesta situació, qui parla se’n sorprèn.</p></div></div></div>
+<h4>Descomposició</h4><ol class="sentence-list"><li>Ha passat alguna cosa en una situació concreta.</li><li>Una persona està tranquil·la.</li><li>Amb «tan», qui parla posa aquesta tranquil·litat en relleu.</li><li>Segons el context, la tranquil·litat li pot semblar sorprenent, admirable o inadequada.</li></ol>
+<div aria-hidden="true" class="arrow">↓</div><div class="synth">I tu tan tranquil!</div>
+<p class="example-note">La tranquil·litat és el centre de l’atenció. L’emoció o la valoració de qui parla depèn del context: no és sempre negativa.</p>
+</article>
+<article class="example" id="exemple-c">
+<h3>C · Estic tan content!</h3>
+<div class="border-stamp"><p class="phrase">Estic <u>tan</u> content!</p><p>«Tan» destaca l’alegria que sent qui parla i convida l’interlocutor a fixar-s’hi.</p><div aria-label="Una característica en relleu i una possible interpretació segons el context" class="scene-rail" role="group"><div class="scene-card"><span class="scene-label">En què ens fixem?</span><div class="scene-visual"><span class="focus-word">content</span></div><p>L’alegria de qui parla.</p></div><div aria-hidden="true" class="scene-arrow">→</div><div class="scene-card"><span class="scene-label">Com s’interpreta aquí?</span><div class="scene-visual"><span aria-hidden="true" class="emoji-face">😄</span></div><p>Qui parla fa notar l’alegria que sent.</p></div></div></div>
+<h4>Descomposició</h4><ol class="sentence-list"><li>Qui parla està content.</li><li>Vol que l’altra persona es fixi en aquesta alegria.</li><li>Amb «tan», posa en relleu com n’està, de content.</li><li>En aquest context, expressa alegria amb entusiasme.</li></ol>
+<div aria-hidden="true" class="arrow">↓</div><div class="synth">Estic tan content!</div>
+<p class="example-note">«Tan» posa en relleu el fet d’estar content; l’alegria i l’entusiasme s’interpreten per la frase i pel context.</p>
+</article>
+<article class="example" id="exemple-d">
+<h3>D · És una expressió tan seva!</h3>
+<div class="border-stamp"><p class="phrase">És una expressió <u>tan</u> seva!</p><p>Qui parla destaca que l’expressió li sembla especialment característica d’una persona, sense que calgui expressar cap emoció concreta.</p><div aria-label="Una característica en relleu i una possible interpretació segons el context" class="scene-rail" role="group"><div class="scene-card"><span class="scene-label">En què ens fixem?</span><div class="scene-visual"><span class="focus-word">seva</span></div><p>Com n’és, de característica, d’aquella persona.</p></div><div aria-hidden="true" class="scene-arrow">→</div><div class="scene-card"><span class="scene-label">Com s’interpreta aquí?</span><div class="scene-visual"><span aria-hidden="true" class="emoji-face">🙂</span></div><p>Qui parla hi reconeix una manera de ser o de parlar.</p></div></div></div>
+<h4>Descomposició</h4><ol class="sentence-list"><li>Hi ha una expressió.</li><li>Una persona la diu o la fa servir.</li><li>L’expressió encaixa amb la seva manera de parlar o de ser.</li><li>Amb «tan», qui parla posa en relleu que aquesta expressió li és molt característica.</li><li>Segons el context, pot fer-ho amb afecte, admiració, ironia o sense una emoció especial.</li></ol>
+<div aria-hidden="true" class="arrow">↓</div><div class="synth">És una expressió tan seva!</div>
+<p class="example-note">«Seva» no indica necessàriament propietat, sinó una característica pròpia d’algú. «Tan» fa que ens hi fixem; la valoració s’interpreta pel context.</p>
+</article>
+</section>
+<section class="page">
+<h2>04 · «Tan»: el grau i la conseqüència</h2>
+<p>De vegades, «tan» destaca fins a quin punt es manifesta una característica <strong>per explicar-ne la conseqüència</strong>. La relació es pot expressar amb <em>tan… que</em> o amb altres construccions.</p>
+<h3>A · Parles tan baix que no et sento.</h3>
+<div class="border-stamp"><p class="phrase">Parles <u>tan</u> baix que no et sento.</p><span class="pill emfas">Grau destacat</span> <span class="pill conseq">Conseqüència</span></div>
+<h3>Descomposició</h3><ol class="sentence-list"><li>Tu parles.</li><li>El volum de la teva veu és molt baix.</li><li>Aquest volum té una conseqüència.</li><li>Jo no et sento.</li></ol><div class="arrow">↓</div><div class="synth">Parles tan baix que no et sento.</div>
+<p>Aquesta és una <strong>construcció consecutiva ponderativa</strong>: <em>tan</em> destaca el grau i <em>que</em> introdueix una conseqüència.</p>
+<h3>B · Amb un diàmetre tan petit, cal utilitzar un microscopi.</h3>
+<div class="border-stamp"><p class="phrase">Amb un diàmetre <u>tan</u> petit, cal utilitzar un microscopi.</p><p>És una explicació de tipus científic. La petitesa del diàmetre és important perquè <strong>té una conseqüència pràctica</strong>: cal utilitzar un microscopi.</p>
+<div class="consequence-rail" aria-label="Relació entre la petitesa del diàmetre i la necessitat del microscopi"><div class="consequence-card"><span class="pill emfas">Grau</span><p>El diàmetre és molt petit.</p></div><div class="consequence-arrow" aria-hidden="true">→</div><div class="consequence-card result"><span class="pill conseq">Conseqüència</span><p>Cal utilitzar un microscopi.</p></div></div></div>
+<h3>Descomposició</h3><ol class="sentence-list"><li>Hi ha un objecte amb un diàmetre petit.</li><li>El diàmetre és tan petit que no n’hi ha prou amb observar-lo a simple vista.</li><li>Per aquest motiu, cal utilitzar un microscopi.</li></ol>
+<div class="arrow">↓</div><div class="synth">Amb un diàmetre tan petit, cal utilitzar un microscopi.</div>
+<p><strong>Ho podem dir també així:</strong> «El diàmetre és <strong>tan petit que</strong> cal utilitzar un microscopi.»</p>
+<p class="illustration-note"><strong>La diferència amb l’ús expressiu:</strong> aquí no cal imaginar admiració ni frustració. El grau de petitesa serveix per explicar per què es necessita un instrument.</p></section>
+<section class="page" id="diccionari">
+<h2>05 · Proposta per a un diccionari escolar</h2>
+<div class="border-stamp">
+<p class="definition">tan <span class="small">Adverbi quantitatiu</span></p>
+<p><strong>1. Comparació.</strong> Davant d’un adjectiu, un adverbi o una expressió equivalent, indica que dues persones, coses o situacions presenten el mateix grau d’una propietat.</p>
+<p><em>La Laia és tan alta com la seva germana.</em></p>
+<p><strong>2. Ús expressiu o valoratiu.</strong> Pot fer que una característica deixi de ser una simple informació i esdevingui objecte d’una apreciació personal: ens la mostra a través de la mirada de qui parla o escriu. «Tan» la posa en relleu i convida a preguntar-nos per què la destaca. El context ens ajuda a entendre què representa per a aquesta persona.</p>
+<p><em>Andorra és un país tan petit!</em><br/><em>És tan bonic!</em><br/><em>I tu tan tranquil!</em><br/><em>És una expressió tan seva!</em></p>
+<p><strong>3. Conseqüència.</strong> Destaca fins a quin punt es manifesta una característica per explicar un resultat. Sovint apareix en la construcció <em>tan… que</em>, però també pot relacionar-se amb una conseqüència expressada d’una altra manera.</p>
+<p><em>Plovia tan fort que no podíem sortir.</em><br/><em>Amb un diàmetre tan petit, cal utilitzar un microscopi.</em></p>
+<p class="small"><strong>Recorda:</strong> «tan» no significa per si mateix «sorpresa» ni «desaprovació»; aquestes interpretacions depenen de la situació.</p></div>
+</section>
+<section class="page" id="expressions">
+<h2>06 · Expressions que tenen un sentit propi</h2>
+<p><strong>«Tan»</strong> també apareix en expressions que cal entendre com un conjunt. No s’expliquen només amb els usos anteriors.</p>
+<div class="expression-grid">
+<div class="tile"><p class="phrase">tan sols</p><p>Vol dir <strong>només</strong>.</p><p class="small">Tan sols volia fer una pregunta.</p></div>
+<div class="tile"><p class="phrase">ni tan sols</p><p>Vol dir <strong>ni això</strong>, que seria el mínim esperable.</p><p class="small">Ni tan sols em va saludar.</p></div>
+<div class="tile"><p class="phrase">tan bon punt</p><p>Vol dir <strong>immediatament després que</strong>.</p><p class="small">Tan bon punt arribi, t’avisaré.</p></div>
+</div>
+</section></main></body></html>
