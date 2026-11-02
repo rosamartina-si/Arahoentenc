@@ -1,5 +1,5 @@
 TAN
-«tan» posa en relleu una característica i el que segueix ens ajuda a entendre el grau.
+«tan» posa en relleu una característica i el que segueix ens ajuda a entendre el grau. 
 cas 1 la comparació: 
       **La Maria corre «tan» de pressa «com» en Joan.**
 cas 2 la conseqüència com a prova del grau (Construcció consecutiva ponderativa): 
@@ -7,36 +7,34 @@ cas 2 la conseqüència com a prova del grau (Construcció consecutiva ponderati
       (= **Imagina't com devia cridar de fort, que el va sentir tota l'oficina!**
        = **Mira si va cridar fort, que el va sentir tota l'oficina!**)
       **És «tan» petit «que» cal un microscopi per veure'l.**
+      **No és possible fer grup amb «tan» poc personal.**
+      (= **Amb tan poc personal, no és possible fer un grup**)
 cas 3 l'exemple com a prova de grau (Construcció exemplificativa ponderativa): 
       **Vam fer coses «tan» divertides «com» saltar en un inflable.**
       (= **Imagina't quines coses més divertides vam fer! Per exemple, vam saltar en un inflable.**)
       **Vam menjar coses «tan» diverses «com» cargols a la llauna**
-
-«tan» destaca l'adjectiu per algun motiu, perquè segons el parlant mereix una atenció especial, pot ser sorpresa, admiració, entusiasme (el «tan» posa el focus en l'adjectiu que segueix. ës un marcador d'èmfasi. Té un component de construcció exclamativa. Expressa una emoció del parlant davant d'allò que valora. El «tan» té una funció intensificadora i emocional.
 cas 4 exclamació (Construcció exclamativa ponderativa):
+      «tan» posa en relleu una característica i pren un valor expressiu, la funció emocional passa a primer terme. Hi ha implicita una continuació del tipus 'del que m'esperava' o 'del que voldria'. El «tan» té una funció intensificadora (o d'èmfasi) i emocional.
+En les frases exclamatives, el valor consecutiu o exemplificador es debilita o es perd i la paraula s'aproxima al funcionalment d'una particula expressiva, la funció emocional passa a primer terme. **Que bonic!** vs **És tan bonic!** Comparteixen la part emocional, però **És tan bonic!** afegeix 'més del que m'esperava'
       **És tan bonic!** 
       (=**És més bonic del que m'esperava!**)
       **És tan discreta!**
       (Es més del que m'esperava, per bé o per mal. Pel context sovint es pot deduir si és per bé o per mal)
       **El sofà és tan gran!**
       («tan» no indica necessàriament un grau objectivament molt elevat. En el cas de **El sofà és tan gran!** ho pot ser en relació a la mida del pis, que és molt petit, però el sofà podria ser petit en relació els sofàs habituals; aquí seria equivalent a dir **El sofà és més gran del que voldria** o **El sofà és tan gran que no hi cap al menjador**.)
+      **No vagis tan de pressa!**
+      (= **Vas més de pressa del que m'agradaria**, pot expressar indignació. I podria continuar amb una conseqüència: 'que podríem tenir un accident')
+      **Andorra és un país tan petit!** 
+      (pot voler dir és més petit del que voldria i pot expressar una valoració positiva o negativa. Podria continuar amb 'que tothom es coneix')
 
 
-
-
-
-
-En les frases exclamatives, el valor consecutiu es debilita o es perd i la paraula s'aproxima al funcionalment d'una particula expressiva, la funció emocional passa a primer terme. Que bonic! vs És tan bonic! Comparteixen la part emocional, però 'És tan bonic!' afegeix 'més del que m'esperava'
-
-'No vagis tan de pressa!': vas més de pressa del que m'agradaria, pot expressar indignació. I podria continuar amb una conseqüència: 'que podríem tenir un accident'
-
-'Andorra és un país tan petit!' pot voler dir és més petit del que voldria i pot expressar una valoració positiva o negativa. Podria continuar amb 'que tothom es coneix'
 
 - subcas: 'No és tan difícil d'entendre' - Aquí «tan» acostuma a remetre a **un grau de dificultat que algú ha imaginat, expressat o donat per suposat**. I hi ha una part emocional que pot ser d'indignació&#x20;
 - subcas: I tan tranquil! I tan amics! - equivalent a 'com si no hagués passat res'. Més tranquil del que m'esperava, o és d'esperar
-  - subcas: com és que arribes tan aviat! o No t'esperava tan aviat! Aquí hi ha ambigüitat: Arribes més aviat del que esperava i això pot ser bo o dolent, pot ser que vulgui dir 'del que voldria'. IL·lustrable amb el fragment de Calders: —I ara! Què hi fas aquí, tan aviat? —digué ella.
+  - subcas: com és que arribes tan aviat! o No t'esperava tan aviat! Aquí hi ha ambigüitat: Arribes més aviat del que esperava i això pot ser bo o dolent, pot ser que vulgui dir 'del que voldria'. IL·lustrable amb el 
 
-    L’Albert s’imaginà aquest **tan aviat** de lletra cursiva, o entre cometes, o realçat d’alguna manera que li donava una significació catastròfica.&#x20;
+fragment de Calders: —I ara! Què hi fas aquí, tan aviat? —digué ella.
+    L’Albert s’imaginà aquest **tan aviat** de lletra cursiva, o entre cometes, o realçat d’alguna manera que li donava una significació catastròfica.;
 
 * cas 4 el 'molt' en interrogatiu. És molt lent - Com és que és tan lent?
 
