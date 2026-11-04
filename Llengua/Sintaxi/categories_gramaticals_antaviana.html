@@ -51,6 +51,20 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
 
 .feedback-optional{margin-top:10px;padding:10px 12px;background:#eef7ee;border-left:4px solid #2d6a4f;border-radius:6px;color:#24553b;font-size:.94rem;line-height:1.6}
 .feedback-optional p+p{margin-top:7px}
+
+/* En les formes contretes o apostrofades, només destaquem la preposició. */
+body.faristol-prep-mode .noun-token.prep-compound.noun-marked{background:transparent}
+body.faristol-prep-mode .noun-token.prep-compound.noun-marked::before{content:none !important}
+.noun-token .prep-prefix{position:relative}
+body.faristol-prep-mode .noun-token.prep-compound.noun-marked .prep-prefix{background:#ebdcb9;border-radius:3px}
+body.faristol-prep-mode .noun-token.prep-compound.noun-marked .prep-prefix::before{
+ content:var(--marker, '');position:absolute;left:50%;top:-1.12em;transform:translateX(-50%);
+ font-size:.95em;line-height:1;color:var(--marker-color,#171717);pointer-events:none
+}
+
+/* Les dues unitats són clicables per separat, però s'escriuen sense espai. */
+.noun-token.compound-prefix{padding-right:0;margin-right:0;border-top-right-radius:0;border-bottom-right-radius:0}
+.noun-token.compound-suffix{padding-left:0;margin-left:0;border-top-left-radius:0;border-bottom-left-radius:0}
 </style></head>
 <body class="font-sans text-slate-800 min-h-screen py-6 px-3 sm:px-6">
 <div class="max-w-4xl mx-auto">
@@ -98,12 +112,12 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
     "hint": "<strong>Com pots reconèixer un adverbi?</strong> Fixa’t si explica <em>quan</em>, <em>on</em>, <em>com</em> o <em>quant</em> passa alguna cosa. <strong>Les locucions adverbials</strong> són grups de paraules que, juntes, fan la funció d’un adverbi: <em>de sobte</em> (≈ <em>sobtadament</em>), <em>de seguida</em> (≈ <em>immediatament</em>), <em>de moment</em> (≈ <em>ara per ara</em>) i <em>de bon matí</em> (≈ <em>ben d’hora</em>). Quan analitzem la <strong>funció del conjunt</strong>, la locució es considera una unitat: no hem de tractar <em>de</em> com una preposició independent i <em>sobte</em> com un adverbi independent. Moltes locucions comencen amb una preposició, sovint sense article, però <strong>no és una regla universal</strong>. Prova de substituir tota l’expressió per un adverbi o per una altra expressió equivalent: és una pista, no una prova infal·lible. <strong>En aquests exercicis es marquen els adverbis d’una sola paraula.</strong> Les locucions s’expliquen com a grups; no cal marcar-ne les paraules una per una per trobar un adverbi."
   },
   "prep": {
-    "label": "Preposició",
-    "plural": "preposicions",
+    "label": "Preposició feble",
+    "plural": "preposicions febles",
     "symbol": "☾",
     "color": "#538c66",
-    "def": "La <strong>preposició</strong> és un tipus de paraula que serveix per relacionar una paraula o un grup de paraules amb un altre element de la frase. A <em>jugar a futbol</em>, la preposició <em>a</em> introdueix <em>futbol</em>; a <em>pollastre a l’ast</em>, relaciona <em>l’ast</em> amb <em>pollastre</em>. Algunes de les preposicions més habituals són <em>a, amb, de, en, per, contra, segons</em> i <em>sense</em>. Les preposicions són <strong>invariables</strong>, però es poden combinar amb articles (<em>de + el = del</em>; <em>a + els = als</em>) o apostrofar davant de vocal (<em>d’una</em>). A vegades, diverses paraules formen una locució prepositiva, com <em>des de</em>.",
-    "hint": "Observa paraules com <em>a, de, amb, per</em> i <em>sense</em>. Les formes <em>del</em> i <em>d’una</em> contenen una preposició combinada amb un article. <strong>Atenció:</strong> en una locució adverbial com <em>de sobte</em> o <em>de seguida</em>, el conjunt funciona com un adverbi; en aquesta activitat no comptem el <em>de</em> inicial com una preposició independent."
+    "def": "Les <strong>preposicions febles</strong> són cinc paraules molt habituals: <strong>a, amb, de, en</strong> i <strong>per</strong>. Serveixen per relacionar elements d’una frase. Per exemple: <em>vaig a casa</em>, <em>escric amb llapis</em>, <em>un llibre de contes</em>, <em>viu en una ciutat</em> i <em>passegem per la plaça</em>. Són paraules <strong>invariables</strong>. Algunes es poden unir amb articles (<em>de + el = del</em>, <em>a + els = als</em>, <em>per + el = pel</em>) o apostrofar (<em>d’un</em>, <em>d’aquella</em>). Altres preposicions, com <em>sense</em>, <em>contra</em> o <em>segons</em>, no són preposicions febles.",
+    "hint": "Busca només <strong>a, amb, de, en</strong> i <strong>per</strong>. Si una preposició va unida a una altra paraula, marca només la preposició: <em>d’</em> a <em>d’una</em>, <em>d</em> a <em>del</em> i <em>a</em> a <em>al</em>. Les parts següents són seleccionables per separat. No marquis <em>sense</em> ni <em>des</em>: no són cap de les cinc preposicions febles. <strong>Atenció:</strong> quan <em>de</em> forma part de locucions adverbials com <em>de sobte</em>, <em>de seguida</em> o <em>de bon matí</em>, també es marca la preposició <em>de</em>."
   }
 };
 </script><script>window.FARISTOL_PARAULES = {
@@ -322,7 +336,7 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": false
+      "prep": true
     },
     "original_category": "Preposició",
     "original_explain": "«de» relaciona elements de la frase; no és un substantiu."
@@ -567,7 +581,7 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": false
+      "prep": true
     },
     "original_category": "Preposició",
     "original_explain": "«de» relaciona elements de la frase; no és un substantiu."
@@ -666,7 +680,7 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": false
+      "prep": true
     },
     "original_category": "Preposició",
     "original_explain": "A «de bon matí», «de» introdueix una expressió de temps; el substantiu és «matí»."
@@ -1339,7 +1353,7 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": false
+      "prep": true
     },
     "original_category": "Preposició",
     "original_explain": "«de» relaciona elements de la frase; no és un substantiu.",
@@ -1794,11 +1808,11 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": true
+      "prep": false
     },
     "original_category": "Preposició",
     "original_explain": "«des» relaciona elements de la frase; no és un substantiu.",
-    "note": "«Des del» és una combinació prepositiva que indica el punt d’origen («des de» + «el»)."
+    "note": "«des» és una preposició, però no és una de les cinc preposicions febles (a, amb, de, en, per)."
   },
   "3-12": {
     "word": "del",
@@ -1874,10 +1888,11 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": true
+      "prep": false
     },
     "original_category": "Preposició",
-    "original_explain": "«sense» relaciona elements de la frase; no és un substantiu."
+    "original_explain": "«sense» relaciona elements de la frase; no és un substantiu.",
+    "note": "«sense» és una preposició, però no és una de les cinc preposicions febles (a, amb, de, en, per)."
   },
   "3-19": {
     "word": "pensar-s’hi",
@@ -1984,7 +1999,7 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "nom": false,
       "adj": false,
       "adv": false,
-      "prep": false
+      "prep": true
     },
     "original_category": "Preposició",
     "original_explain": "«de» relaciona elements de la frase; no és un substantiu."
@@ -2439,8 +2454,8 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
       "adv": false,
       "prep": true
     },
-    "original_category": "Pronom feble",
-    "original_explain": "«en» és un pronom feble, que fa referència a un element de l’oració sense anomenar-lo."
+    "original_category": "Preposició",
+    "original_explain": "«en» introdueix el grup «forma d’arc» i és una preposició feble."
   },
   "3-70": {
     "word": "forma",
@@ -2546,6 +2561,85 @@ body{background-color:#f4efe4;background-image:radial-gradient(#e5dcbe 1px,trans
 </script><script>(()=>{
 'use strict';
 const C=window.FARISTOL_CATEGORIES, M=window.FARISTOL_PARAULES;
+// Explicacions contrastives per als homògrafs de preposicions febles.
+// Només s'apliquen a les aparicions que realment NO són preposicions.
+const prepConfusions={
+ '3-2': 'A «Si ell en descobrís un de semblant», «en» és un pronom feble, no una preposició. Substitueix una cosa de què ja s’ha parlat: «Si ell descobrís un secret semblant» → «Si ell en descobrís un de semblant». En canvi, a «en forma d’arc», «en» sí que és una preposició: introdueix «forma d’arc». La mateixa paraula pot tenir funcions diferents segons la frase.'
+};
+function specificPrepExplanation(t){
+ const info=getInfo(t),word=info.word.toLocaleLowerCase('ca');
+ if(prepConfusions[t.dataset.token])return prepConfusions[t.dataset.token];
+ if(word==='en' && /pronom/i.test(info.original_category||'')){
+   return 'Aquí «en» és un pronom feble: substitueix un element que ja coneixem, en lloc d’introduir un complement. Compara-ho amb «en forma d’arc», on «en» és una preposició.';
+ }
+ if(word==='a' && !info.correct.prep)return 'Aquí «a» no relaciona paraules com una preposició: cal interpretar-la segons la seva funció dins la frase.';
+ if(word==='per' && !info.correct.prep)return 'Aquí «per» no fa la funció de preposició: observa la construcció completa i com s’uneixen les paraules.';
+ return null;
+}
+
+// En lloc d'un sol botó per a "d’una" o "del", cada unitat
+// gramatical té el seu propi botó i la seva pròpia correcció.
+function meta(word,category,explain,correct){
+ return {word,correct:{nom:false,adj:false,adv:false,prep:false,...correct},
+         original_category:category,original_explain:explain};
+}
+function splitCompound(t,prefix,rest,restCategory){
+ const id=t.dataset.token;
+ const original=M[id];
+ if(!original||!rest)return;
+ // El botó original passa a representar només la preposició.
+ t.textContent=prefix;
+ t.classList.add('compound-prefix');
+ t.dataset.category='Preposició feble';
+ t.dataset.explain='«'+prefix+'» és la preposició feble «'+(prefix.toLowerCase().startsWith('d')?'de':prefix.toLowerCase()==='p'?'per':'a')+'».';
+ M[id]=meta(prefix,'Preposició feble',t.dataset.explain,{prep:true});
+ // La paraula següent és seleccionable de manera independent.
+ const suffix=t.cloneNode(false);
+ suffix.textContent=rest;
+ suffix.classList.remove('compound-prefix');
+ suffix.classList.add('compound-suffix');
+ suffix.dataset.token=id+'-seg';
+ suffix.dataset.category=restCategory;
+ suffix.dataset.explain='«'+rest+'» és '+restCategory.toLowerCase()+'; no forma part de la preposició.';
+ M[suffix.dataset.token]=meta(rest,restCategory,suffix.dataset.explain,{});
+ t.after(suffix);
+}
+document.querySelectorAll('button.noun-token').forEach(t=>{
+ const word=t.textContent;
+ let prefix='',rest='',kind='Article o determinant';
+ if(/^d[’']/i.test(word)){
+   prefix=word.slice(0,2);rest=word.slice(2);
+   if(/^anar$/i.test(rest))kind='Verb';
+   else if(/^aquell/i.test(rest)||/^aquest/i.test(rest))kind='Determinant demostratiu';
+ }else if(/^dels?$/i.test(word)){
+   prefix=word.slice(0,1);rest=word.slice(1);
+ }else if(/^als?$/i.test(word)){
+   prefix=word.slice(0,1);rest=word.slice(1);
+ }else if(/^pels?$/i.test(word)){
+   prefix=word.slice(0,1);rest=word.slice(1);
+ }
+ if(prefix)splitCompound(t,prefix,rest,kind);
+});
+// "en forma d’arc": el text d’ era fora de qualsevol botó,
+// de manera que no es podia seleccionar i la correcció el perdia.
+const arc=document.querySelector('button.noun-token[data-token="3-71"]');
+if(arc){
+ const node=arc.previousSibling;
+ if(node&&node.nodeType===Node.TEXT_NODE){
+   const match=node.textContent.match(/^(.*?)(d[’'])$/s);
+   if(match){
+     node.textContent=match[1];
+     const pre=document.createElement('button');
+     pre.type='button';pre.className='noun-token';
+     pre.setAttribute('aria-pressed','false');
+     pre.dataset.token='3-71-prep';pre.dataset.category='Preposició feble';
+     pre.dataset.explain='«d’» és la preposició feble «de», apostrofada davant d’«arc».';
+     pre.textContent=match[2];
+     M[pre.dataset.token]=meta(match[2],'Preposició feble',pre.dataset.explain,{prep:true});
+     arc.before(pre);
+   }
+ }
+}
 const order=['nom','adj','adv','prep'];
 const roots=['reading-text','reading-text-2','reading-text-3'];
 const configs=[
@@ -2581,13 +2675,14 @@ function labelFallback(t){
 }
 function whyNot(t){
  const i=getInfo(t),word=i.word;
+ if(category==='prep'){const detail=specificPrepExplanation(t);if(detail)return detail;}
  if(i.note)return i.note;
  if(category==='nom' && i.original_explain)return i.original_explain;
  const other=order.find(c=>c!==category && i.correct[c]);
  if(other){
    return 'En aquest fragment, «'+word+'» s’ha classificat com a '+C[other].label.toLowerCase()+', no com a '+C[category].label.toLowerCase()+'.';
  }
- if(category==='prep')return '«'+word+'» no introdueix aquí un complement com ho faria una preposició. Observa les paraules que relacionen els grups de la frase.';
+ if(category==='prep')return '«'+word+'» no funciona aquí com a preposició feble. Cal mirar què fa aquesta paraula en aquesta frase, no només com s’escriu.';
  if(category==='adj')return 'En aquest context, «'+word+'» no expressa una característica d’un substantiu com ho fa un adjectiu.';
  if(category==='adv')return 'En aquest context, «'+word+'» no funciona com un adverbi que modifica un verb, un adjectiu o un altre adverbi.';
  return 'En aquest fragment, «'+word+'» no s’utilitza com a substantiu.';
@@ -2598,6 +2693,7 @@ function clearAndRestore(g){
  clearFeedback(g);updateSummary(g);
 }
 function showCategory(){
+ document.body.classList.toggle('faristol-prep-mode',category==='prep');
  const info=C[category];
  const nav=document.getElementById('category-buttons');nav.replaceChildren();
  order.forEach(key=>{
@@ -2614,7 +2710,7 @@ function showCategory(){
  document.documentElement.style.setProperty('--marker',"'"+info.symbol+"'");
  document.documentElement.style.setProperty('--marker-color',info.color);
  groups.forEach(g=>{
-   g.instructions.innerHTML='<strong style="color:'+info.color+'">'+info.symbol+'</strong> Quan trobeu '+(category==='prep'?'una preposició':category==='adj'?'un adjectiu':category==='adv'?'un adverbi':'un substantiu')+' en el fragment, toqueu la paraula. Hi apareixerà el símbol corresponent.';
+   g.instructions.innerHTML='<strong style="color:'+info.color+'">'+info.symbol+'</strong> Quan trobeu '+(category==='prep'?'una preposició feble':category==='adj'?'un adjectiu':category==='adv'?'un adverbi':'un substantiu')+' en el fragment, toqueu '+(category==='prep'?'la preposició (també si està apostrofada o contreta)':'la paraula')+'. Hi apareixerà el símbol corresponent.';
    clearAndRestore(g);
  });
 }
