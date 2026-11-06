@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ca" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El laboratori natural del Montseny-Guilleries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0b0f19',
+                            card: '#161e31',
+                            border: '#243049',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            purple: '#a855f7',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0b0f19; color: #f1f5f9; }
+        .glass-panel {
+            background: rgba(22, 30, 49, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-brand-emerald selection:text-brand-dark min-h-screen flex flex-col justify-between">
+
+    <!-- Navegació -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-brand-border/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-emerald to-brand-cyan flex items-center justify-center text-brand-dark font-black text-xl shadow-lg">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <span class="font-display font-extrabold text-2xl tracking-tight bg-gradient-to-r from-brand-emerald via-brand-cyan to-blue-400 bg-clip-text text-transparent">
+                    MONTSENY EXPLORA
+                </span>
+            </div>
+            <nav class="hidden md:flex items-center gap-5 font-medium text-sm text-slate-300">
+                <a href="#diversitat" class="hover:text-brand-emerald transition-colors">La diversitat</a>
+                <a href="#clima" class="hover:text-brand-cyan transition-colors">El clima</a>
+                <a href="#reproduccio" class="hover:text-brand-amber transition-colors">Reproducció i evolució</a>
+                <a href="#usos" class="hover:text-brand-purple transition-colors">Els usos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="relative py-16 md:py-24 overflow-hidden border-b border-brand-border/40">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900/20 via-brand-dark to-brand-dark -z-10"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 text-xs font-bold uppercase tracking-wider mb-4">
+                🌿 Biologia i Paisatge
+            </span>
+            <h1 class="font-display text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 leading-tight">
+                El laboratori natural del Montseny-Guilleries
+            </h1>
+            <p class="text-slate-300 text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed mb-8">
+                Un resum pràcticament de tot Europa Occidental. Descobreix la riquesa d'un territori on la natura ha desplegat tota la seva intel·ligència evolutiva.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#diversitat" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-emerald to-brand-cyan text-brand-dark font-bold font-display tracking-wide shadow-lg hover:opacity-95 transition-all">
+                    Començar l'exploració <i class="fa-solid fa-arrow-down ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 1: DIVERSITAT -->
+    <section id="diversitat" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-mountain-sun text-brand-emerald"></i>
+            1. Un resum de tot Europa en un sol massís
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            El Montseny és un espai d'una gran singularitat, on es pot veure pràcticament un resum de tot Europa Occidental gràcies a l'alçada:
+        </p>
+
+        <div class="space-y-4 mb-8">
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-emerald mt-1"><i class="fa-solid fa-arrow-down"></i></div>
+                <div>
+                    <strong class="text-white">De la cota 900 cap avall</strong>
+                    <p class="text-sm text-slate-300">Hi ha representants de tot el Mediterrani: alzines, pinedes...</p>
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-amber mt-1"><i class="fa-solid fa-arrows-up-down"></i></div>
+                <div>
+                    <strong class="text-white">De la cota 900 a la 1.600</strong>
+                    <p class="text-sm text-slate-300">És com si estiguéssim a Txèquia o Polònia. Són les fagedes.</p>
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-cyan mt-1"><i class="fa-solid fa-arrow-up"></i></div>
+                <div>
+                    <strong class="text-white">A dalt de tot</strong>
+                    <p class="text-sm text-slate-300">Hi ha el paisatge subalpí, que és el que trobaríem a Escandinàvia.</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed mb-6">
+            Aquesta gran diversitat fa que sigui una zona molt rica. No és estrany que gastrònoms i metges de temps antics hi vinguessin a buscar remeis i ingredients.
+        </p>
+
+        <!-- REQUADRE DE DADES CLAU -->
+        <div class="my-8 p-6 rounded-2xl bg-brand-card border border-brand-border relative overflow-hidden group hover:border-brand-emerald/50 transition-all">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-brand-emerald/10 rounded-full blur-2xl group-hover:bg-brand-emerald/20 transition-all"></div>
+            <h3 class="font-display text-xl font-bold text-white mb-4">Les xifres de la biodiversitat</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl bg-brand-dark/60 border border-brand-border flex items-center gap-4">
+                    <div class="text-brand-emerald text-3xl"><i class="fa-solid fa-seedling"></i></div>
+                    <div>
+                        <span class="block text-2xl font-black text-white">1.600</span>
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Espècies de plantes</span>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl bg-brand-dark/60 border border-brand-border flex items-center gap-4">
+                    <div class="text-brand-amber text-3xl"><i class="fa-solid fa-tree"></i></div>
+                    <div>
+                        <span class="block text-2xl font-black text-white">900</span>
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Espècies de bolets</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-slate-400 mt-4">
+                Per fer-nos una idea: té 1.600 plantes diferents, mentre que a tot Anglaterra en tenen 1.200.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 2: EL CLIMA I L'AIGUA -->
+    <section id="clima" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-cloud-showers-heavy text-brand-cyan"></i>
+            2. L'aigua i el clima
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Un dels secrets del Montseny és la pluja. La muntanya actua com una barrera que reté els núvols carregats d'humitat que venen del mar. Quan aquests núvols xoquen amb el cim, es refreden i descarreguen l'aigua. Aquest fenomen es coneix com a efecte foehn.
+        </p>
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Les dades són molt clares: <strong>per cada 200 metres que puges, la mitjana tèrmica baixa un grau i la pluviometria puja uns 100 litres l'any.</strong> Això fa que hi hagi boscos extraordinàriament verds i que hi visquin espècies que necessiten molta humitat.
+        </p>
+    </section>
+
+    <!-- SECCIÓ 3: REPRODUCCIÓ I EVOLUCIÓ -->
+    <section id="reproduccio" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-dna text-brand-amber"></i>
+            3. Parlant de les estratègies de reproducció
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-6">
+            Des del punt de vista del disseny evolutiu, la natura és increïble. Tota la informació que necessita una planta des que neix fins que mor (al cap de 200 o 300 anys) està guardada allà dins, a la llavor. És el que s'anomena <strong>intel·ligència evolutiva</strong>. Amb els canvis climàtics i d'usos, les espècies s'han d'adaptar de la millor manera possible. Les que s'equivoquen d'estratègia acaben desapareixent.
+        </p>
+
+        <div class="space-y-6 mt-8">
+            <!-- Plantes: La dispersió -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-brand-emerald flex items-center justify-center font-bold text-2xl">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">El repte de la dispersió</h3>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                    Per a les plantes, l'important és aconseguir una bona dispersió. Si la llavor cau verticalment just sota la planta mare, no té cap futur perquè no tindrà prou energia lumínica per créixer. Per evitar-ho, fan servir diferents estratègies:
+                </p>
+                <ul class="space-y-3 text-sm text-slate-300">
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-arrow-right text-brand-emerald mt-1"></i>
+                        <span><strong>Atractius i suculents:</strong> Alguns arbres, com el cirerer, opten per fer-se atractius i suculents.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-arrow-right text-brand-emerald mt-1"></i>
+                        <span><strong>Amb "ales":</strong> D'altres, com alguns pins, tenen unes llavors amb ales que els permeten expandir-se amb el vent.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-arrow-right text-brand-emerald mt-1"></i>
+                        <span><strong>El cas del gaig:</strong> Aquest ocell recull les aglans i les enterra en llocs allunyats. Les que s'oblida i no es menja, queden enterrades i poden néixer com un arbre nou.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Animals: La cria -->
+            <div class="bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-brand-amber/10 text-brand-amber flex items-center justify-center font-bold text-2xl">
+                        <i class="fa-solid fa-paw"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">La criança dels animals</h3>
+                </div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    En els animals passa una cosa semblant. Per a la cria dels polls, els ocells necessiten proteïna. Encara que l'espècie sigui granívora, les cries depenen de les erugues i els cucs. Per això, han d'adaptar l'època de criança a aquesta circumstància perquè puguin sobreviure.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 4: ELS USOS HUMANS -->
+    <section id="usos" class="py-16 max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="bg-gradient-to-br from-brand-card to-slate-900 border border-brand-border rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+            <span class="px-3 py-1 rounded-full bg-brand-purple/10 text-brand-purple border border-brand-purple/40 text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+                Aprofitament
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-black text-white mb-6">
+                4. Aprofitaments dels arbres
+            </h2>
+            <p class="text-slate-300 text-base leading-relaxed mb-6">
+                La versatilitat dels arbres és extraordinària: poden produir fins a <strong>700 productes diferents</strong> com àcid acètic, quitrà, acetats o alcohols.
+            </p>
+            
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-purple/20 text-brand-purple flex items-center justify-center font-black flex-shrink-0">
+                        <i class="fa-solid fa-ship"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">L'extracció de la pega</h4>
+                        <p class="text-sm text-slate-400 mt-1">La pega s'extreia dels arbres i durant molts segles es va fer servir, entre altres coses, per <strong>impermeabilitzar el casc dels vaixells</strong>. Sovint els botànics semblen carrinclons amb aquests temes, però demostren que les estratègies de supervivència i adaptació (com la impermeabilització) són fonamentals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-brand-border/60 py-8 bg-brand-dark text-slate-500 text-xs text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 Montseny Explora. Fitxa didàctica sobre la biodiversitat del Montseny-Guilleries.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
