@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ca" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexandre Deulofeu: La Matemàtica de la Història</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0b0f19',
+                            card: '#161e31',
+                            border: '#243049',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            purple: '#a855f7',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0b0f19; color: #f1f5f9; }
+        .glass-panel {
+            background: rgba(22, 30, 49, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-brand-amber selection:text-brand-dark min-h-screen flex flex-col justify-between">
+
+    <!-- Navegació -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-brand-border/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-amber to-brand-rose flex items-center justify-center text-brand-dark font-black text-xl shadow-lg">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <span class="font-display font-extrabold text-2xl tracking-tight bg-gradient-to-r from-brand-amber via-brand-rose to-brand-purple bg-clip-text text-transparent">
+                    DEULOFEU EXPLORA
+                </span>
+            </div>
+            <nav class="hidden md:flex items-center gap-5 font-medium text-sm text-slate-300">
+                <a href="#teoria" class="hover:text-brand-amber transition-colors">La teoria</a>
+                <a href="#cicles" class="hover:text-brand-rose transition-colors">Els cicles</a>
+                <a href="#catalunya" class="hover:text-brand-purple transition-colors">El paper de Catalunya</a>
+                <a href="#futur" class="hover:text-brand-cyan transition-colors">El futur d'Europa</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="relative py-16 md:py-24 overflow-hidden border-b border-brand-border/40">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/20 via-brand-dark to-brand-dark -z-10"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-brand-amber/10 text-brand-amber border border-brand-amber/30 text-xs font-bold uppercase tracking-wider mb-4">
+                📜 Història i Filosofia
+            </span>
+            <h1 class="font-display text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 leading-tight">
+                Alexandre Deulofeu:<br>La Matemàtica de la Història
+            </h1>
+            <p class="text-slate-300 text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed mb-8">
+                Una entrevista reveladora on l'autor explica per què els imperis neixen, creixen i cauen seguint un patró matemàtic exacte... i què li espera a Catalunya.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#teoria" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-amber to-brand-rose text-brand-dark font-bold font-display tracking-wide shadow-lg hover:opacity-95 transition-all">
+                    Descobrir la teoria <i class="fa-solid fa-arrow-down ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 1: LA TEORIA -->
+    <section id="teoria" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-calculator text-brand-amber"></i>
+            1. La història es pot predir?
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Alexandre Deulofeu defensava que la història no és un seguit d'atzars, sinó que segueix una <strong>matemàtica exacta</strong>. Igual que els planetes giren al voltant del sol seguint unes lleis, les societats humanes i els imperis també segueixen uns cicles predictibles.
+        </p>
+        
+        <div class="my-6 p-5 rounded-2xl bg-brand-card border border-brand-border">
+            <h3 class="font-display text-lg font-bold text-white mb-2">Per a què serveix conèixer aquesta "matemàtica"?</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Ell estava convençut que si els governants del món coneguessin aquestes lleis, es podrien <strong>evitar guerres i catàstrofes</strong>. Si saps que una crisi és inevitable, pots preparar-te per minimitzar-ne els danys i evitar lluites internes que no porten enlloc.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 2: ELS CICLES DELS IMPERIS -->
+    <section id="cicles" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-arrows-spin text-brand-rose"></i>
+            2. Com es comporten els imperis?
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-6">
+            Segons Deulofeu, tots els imperis (l'espanyol, el francès, l'anglès o l'alemany) duren exactament el mateix i passen per les mateixes fases. Ell ho anomenava el procés dels cicles de 5.100 anys per a les cultures, on els imperis tenen una vida d'uns 550 anys.
+        </p>
+
+        <div class="space-y-4">
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-emerald mt-1"><i class="fa-solid fa-arrow-up"></i></div>
+                <div>
+                    <strong class="text-white">Fase d'expansió i plenitud</strong>
+                    <p class="text-sm text-slate-300">L'imperi s'estén, conquereix, i comença a acumular molta riquesa. És una època de gran creació cultural i de benestar.</p>
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-amber mt-1"><i class="fa-solid fa-arrow-down"></i></div>
+                <div>
+                    <strong class="text-white">La gran depressió</strong>
+                    <p class="text-sm text-slate-300">La riquesa s'acumula en mans d'una minoria (capitalisme) mentre la classe mitjana s'empobreix. Això genera revoltes socials i el desig dels pobles d'alliberar-se del poder central.</p>
+                </div>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-card border border-brand-border flex items-start gap-4">
+                <div class="text-brand-purple mt-1"><i class="fa-solid fa-rotate-right"></i></div>
+                <div>
+                    <strong class="text-white">El "miracle" i el desastre</strong>
+                    <p class="text-sm text-slate-300">Sembla que l'imperi desapareixerà, però apareix un líder (Napoleó, Hitler...) que el torna a aixecar. Aquest líder sol acabar patint un gran desastre militar (Waterloo, la Segona Guerra Mundial...).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 3: CATALUNYA -->
+    <section id="catalunya" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 border-b border-brand-border/40">
+        <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white flex items-center gap-3 mb-6">
+            <i class="fa-solid fa-mountain-sun text-brand-purple"></i>
+            3. El bressol de la cultura europea
+        </h2>
+
+        <p class="text-slate-300 leading-relaxed mb-4">
+            Deulofeu estava convençut que la península ibèrica i, en concret, Catalunya, tenia un paper central en el món. Ell va demostrar que <strong>l'art romànic no va venir d'Itàlia</strong> (com es pensava), sinó que va néixer a Catalunya (a l'Empordà i el Rosselló) i des d'aquí es va estendre cap a França i la resta d'Europa. 
+        </p>
+
+        <div class="my-6 p-5 rounded-2xl bg-brand-card border border-brand-border relative overflow-hidden group hover:border-brand-purple/50 transition-all">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-brand-purple/10 rounded-full blur-2xl group-hover:bg-brand-purple/20 transition-all"></div>
+            <h3 class="font-display text-lg font-bold text-white mb-2">El futur és magnífic (però lent)</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Segons la seva teoria, Catalunya està destinada a ser el centre d'un gran <strong>"renaixement" cultural europeu</strong> (el tercer cicle). Però no passarà demà: segons els seus càlculs, això arribarà d'aquí a uns <strong>300 anys</strong>.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 4: EL FUTUR I EUROPA -->
+    <section id="futur" class="py-16 max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="bg-gradient-to-br from-brand-card to-slate-900 border border-brand-border rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+            <span class="px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/40 text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+                Geopolítica
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-black text-white mb-6">
+                4. Cap a on va el món?
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-cyan/20 text-brand-cyan flex items-center justify-center font-black flex-shrink-0">
+                        <i class="fa-solid fa-euro-sign"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">L'hegemonia alemanya</h4>
+                        <p class="text-sm text-slate-400 mt-1">A Europa, deia que els imperis anglès i francès caurien, i que <strong>Alemanya dominaria tot el continent</strong>. Primer a nivell econòmic i després a nivell polític, creant un gran imperi federal.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-cyan/20 text-brand-cyan flex items-center justify-center font-black flex-shrink-0">
+                        <i class="fa-solid fa-dragon"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">La força de la Xina i Rússia</h4>
+                        <p class="text-sm text-slate-400 mt-1">Pel que fa a la resta del món, parlava que els Estats Units entrarien en depressió, i que la Xina es convertiria en un imperi invencible durant dos segles, absorbint part de Rússia.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-cyan/20 text-brand-cyan flex items-center justify-center font-black flex-shrink-0">
+                        <i class="fa-solid fa-landmark"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">Els egipcis i la Gran Piràmide</h4>
+                        <p class="text-sm text-slate-400 mt-1">Una de les seves grans conviccions era que els antics egipcis ja coneixien aquesta "matemàtica de la història" i que ho van deixar escrit i codificat en les mesures i proporcions de la Gran Piràmide de Keops.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-brand-border/60 py-8 bg-brand-dark text-slate-500 text-xs text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 Deulofeu Explora. Fitxa didàctica basada en l'entrevista a Alexandre Deulofeu (1975).</p>
+        </div>
+    </footer>
+
+</body>
+</html>
