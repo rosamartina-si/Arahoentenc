@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+<html lang="ca">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Efecte papallona: Calders, Lorenz i la predicció del temps</title>
+<style>
+:root{--ink:#17352e;--muted:#52685f;--green:#23644e;--mint:#e6f3e9;--cream:#faf8ef;--orange:#bd5b32;--line:#dbe6dc;--white:#fff;--shadow:0 14px 35px #1c403018}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.68 system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}a{color:var(--green)}
+.shell{max-width:1120px;margin:auto;padding:0 22px}
+.top{background:#143a31;color:#fff;position:relative;overflow:hidden}
+.top:before{content:'🦋';position:absolute;right:4%;top:-80px;font-size:280px;opacity:.14;transform:rotate(-20deg)}
+.hero{position:relative;padding:68px 0 72px}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:.75rem;font-weight:750;color:#a8dfb7}
+.hero h1{font:700 clamp(2.65rem,6vw,5.1rem)/1.07 Georgia,serif;max-width:740px;margin:16px 0}
+.hero p{max-width:680px;color:#d9e9df;font-size:1.18rem}
+.pill{display:inline-flex;border:1px solid #8fae9f;border-radius:99px;padding:5px 14px;margin:5px 8px 0 0;font-size:.85rem}
+.nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.navin{display:flex;gap:16px;overflow:auto;white-space:nowrap;padding-top:12px;padding-bottom:12px}
+.nav a{text-decoration:none;font-size:.86rem;font-weight:700}
+.section{padding:65px 0 12px}
+.section h2{font:700 clamp(1.9rem,3vw,2.65rem)/1.2 Georgia,serif;margin:0 0 12px}
+.lead{font-size:1.1rem;color:var(--muted);max-width:810px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:25px}
+.panel,.paper{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.panel h3{font-size:1.16rem;margin:0 0 8px}
+.panel p{margin:8px 0}
+.note{background:#edf5ec;border-left:5px solid #5b9d72;border-radius:10px;padding:18px 22px;margin:24px 0}
+.warning{background:#fff5e7;border-left-color:#db9248}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:25px 0}
+.step{border-radius:16px;background:#fff;border:1px solid var(--line);text-align:center;padding:18px 10px;font-size:.94rem}
+.step .emoji{display:block;font-size:2.2rem;margin-bottom:9px}
+.step small{display:block;color:var(--muted);line-height:1.4;margin-top:7px}
+.reading{max-width:1080px;margin:24px auto}
+.reading-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:22px;align-items:start}
+.reading-side{position:sticky;top:83px}
+.reading-side .gloss{margin:0;background:#e4eeea;border:1px solid #cad9d2;border-radius:12px;padding:20px;min-height:168px}
+.reading-side h4{margin:0 0 11px;font:700 20px/1.3 Georgia,serif;color:#193d41}
+.reading-side .gloss p{font:14px/1.65 Arial,sans-serif;color:#415956}
+.reading-side .gloss strong{font:700 18px Georgia,serif;color:#193d41}
+.reading-side .smallbtn{margin-top:14px}
+.word.active{background:#ead9b8!important}
+.story.large p{font-size:22px}
+.story.large{line-height:2.05}
+.paper{padding:clamp(24px,5vw,55px);background:#fffefa}
+.paper h3{text-align:center;font:700 1.5rem Georgia,serif;letter-spacing:.05em}
+.byline{text-align:center;color:var(--muted)}
+.story{font:1.14rem/1.93 Georgia,serif;text-align:left}
+.story p{margin:1.1em 0}
+.word{border:0;border-bottom:2px dotted #b48754;background:#f3eadb78;color:inherit;border-radius:2px;padding:0 2px;font:inherit;text-align:left}
+.word:hover,.word:focus-visible{background:#ead9b8;outline:2px solid transparent}
+.gloss{margin:15px 0;padding:18px 22px;background:#edf4ee;border-radius:13px;min-height:80px}
+.gloss strong{color:var(--green)}
+.gloss p{margin:5px 0}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;justify-content:space-between;align-items:center;margin:12px 0}
+.smallbtn{background:#fff;border:1px solid #b9cfbf;border-radius:9px;color:var(--green);padding:8px 13px;font-weight:700}
+.primary{border:none;background:var(--green);color:#fff;border-radius:10px;font-weight:700;padding:11px 18px}
+.primary:hover{background:#164936}
+.controls{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin:20px 0}
+.controls label{font-weight:700}
+.controls input{accent-color:var(--green);width:210px}
+.chart{width:100%;height:310px;display:block;background:#fbfdfb;border:1px solid var(--line);border-radius:12px}
+.legend{display:flex;flex-wrap:wrap;gap:15px;margin:13px 0;color:var(--muted);font-size:.92rem}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px}
+.qa{border-bottom:1px solid var(--line);padding:19px 0}
+.qa:last-child{border-bottom:0}
+.qa fieldset{padding:0;border:0}
+.qa legend{font-weight:750;margin-bottom:10px}
+.option{display:block;background:#f8fbf8;border:1px solid var(--line);border-radius:9px;margin:7px 0;padding:9px 12px;cursor:pointer}
+.option:has(input:checked){border-color:#318665;background:#ecf7ee}
+.option input{accent-color:var(--green);margin-right:8px}
+.feedback{margin:10px 0;font-weight:600;min-height:25px}
+.feedback.ok{color:#146449}
+.feedback.bad{color:#a44b26}
+.prompt{background:#fff;border:1px solid var(--line);padding:20px;border-radius:13px;margin:14px 0}
+.prompt textarea{display:block;width:100%;min-height:105px;margin-top:12px;border-radius:9px;border:1px solid #afc6b8;padding:12px;resize:vertical}
+.footer{margin-top:60px;background:#143a31;color:#d7e8dd;padding:38px 0;font-size:.91rem}
+.footer a{color:#ccf1d5}
+.muted{color:var(--muted);font-size:.9rem}
+.score{font-size:1.2rem;font-weight:750;margin:12px 0}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:10px;top:10px;z-index:50;background:#fff;padding:10px}
+@media(max-width:760px){.two{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.flow .step:last-child{grid-column:1/-1}.hero{padding:45px 0}.story{font-size:1.06rem}.paper{padding:23px}.section{padding-top:45px}}
+@media(max-width:790px){.reading-layout{grid-template-columns:1fr}.reading-side{position:static}.reading-side .gloss{min-height:120px}}
+@media print{.nav,.toolbar,.controls button,.primary,.reading-side{display:none!important}.section{break-inside:avoid}.paper,.panel{box-shadow:none}.top{background:#fff;color:#000}.hero p{color:#333}.reading-layout{display:block}.word{background:none!important;border:0!important}}
+
+#marc{max-width:1050px;margin:auto}
+.three-worlds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+.world{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.world .world-icon{font-size:2.2rem;display:block;margin-bottom:6px}
+.world h3{margin:4px 0 8px;font-size:1.1rem}
+.world p{font-size:.95rem;color:var(--muted);margin:6px 0}
+.world .tag{display:inline-block;font-size:.72rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;margin-top:8px}
+.tag-lit{background:#fbe9de;color:#9a4a22}
+.tag-sci{background:#e0f0e6;color:#1c5a44}
+.tag-met{background:#e8e6f5;color:#4a3d8a}
+.bridge{text-align:center;font-size:1.05rem;font-weight:700;color:var(--green);margin:6px 0 0}
+.formula{font:700 clamp(1.2rem,2.6vw,1.7rem) Georgia,serif;text-align:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin:20px auto;max-width:640px}
+.steps-sci{counter-reset:pas;list-style:none;padding:0;margin:24px 0}
+.steps-sci li{counter-increment:pas;position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px 20px 70px;margin:14px 0;box-shadow:var(--shadow)}
+.steps-sci li:before{content:counter(pas);position:absolute;left:18px;top:18px;width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;font:700 1.15rem/38px Georgia,serif;text-align:center}
+.steps-sci h4{margin:0 0 6px;font-size:1.05rem}
+.steps-sci p{margin:6px 0;color:var(--muted);font-size:.97rem}
+.compare-table{width:100%;border-collapse:collapse;margin:22px 0;background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);font-size:.96rem}
+.compare-table th,.compare-table td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.compare-table thead th{background:#e6f3e9;font-size:.92rem}
+.compare-table thead th.yes{color:#146449}
+.compare-table thead th.no{color:#a44b26}
+.compare-table tr:last-child td{border-bottom:0}
+.summary-lesson{background:#e5f0e7;border:1px solid #b8d3c2;border-radius:15px;padding:25px 28px;margin:30px 0}
+.summary-lesson h3{margin:0 0 12px;font:700 1.3rem Georgia,serif}
+.summary-lesson li{margin:8px 0}
+.lesson-next{font-weight:700;color:var(--green)}
+.sim-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}
+.sim-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);position:relative}
+.sim-card h4{margin:0 0 4px;font-size:1.08rem}
+.sim-card .sim-year{font:700 1.6rem Georgia,serif;color:var(--green);display:block;margin-bottom:6px}
+.sim-card ul{padding-left:18px;margin:10px 0 0;font-size:.95rem;color:var(--muted)}
+.sim-card li{margin:6px 0}
+.sim-card .badge{position:absolute;top:18px;right:18px;font-size:.72rem;font-weight:750;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:#e0f0e6;color:#1c5a44}
+.badge.alt{background:#fbe9de;color:#9a4a22}
+.metaphor-box{background:#fdf6f0;border:2px solid #e8c9b0;border-radius:16px;padding:26px;margin:24px 0}
+.metaphor-box h3{margin:0 0 14px;font:700 1.2rem Georgia,serif;color:#8a4a28}
+.metaphor-box p{margin:10px 0;font-size:.98rem}
+.metaphor-box .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.metaphor-box .vs>div{background:#fff;border-radius:12px;padding:16px 18px;border:1px solid #eeddcc}
+.metaphor-box .vs h4{margin:0 0 6px;font-size:.95rem}
+.metaphor-box .vs p{margin:4px 0;font-size:.92rem;color:var(--muted)}
+@media(max-width:760px){.three-worlds,.sim-compare,.metaphor-box .vs{grid-template-columns:1fr}.steps-sci li{padding-left:22px;padding-top:60px}.steps-sci li:before{top:16px;left:16px}}
+
+.first-thought{font-size:1.08rem}.principle-check{background:#f6f4e8;border-left:4px solid #bd924e;padding:18px 22px;border-radius:10px;margin:18px 0} .panel p strong{color:#164b3b} @media print{.section{break-inside:auto}}
+.chaos-choices{display:grid;gap:10px;margin:16px 0}.chaos-choices button{text-align:left;white-space:normal}.chaos-choices button.selected{background:#e0f0e6;border-color:#23644e}.chaos-quiz .feedback{line-height:1.5}.chaos-quiz .feedback.ok{color:#146449}.chaos-quiz .feedback.bad{color:#9b4e2d}
+</style>
+</head>
+<body>
+<a class="skip" href="#comenca">Ves al contingut</a>
+<header class="top">
+<div class="shell hero">
+<div class="eyebrow">Ciència + literatura · 15 anys</div>
+<h1>L’efecte papallona, des de zero</h1>
+<p>Comencem per una història de Pere Calders. Després oblidarem per un moment la papallona i reconstruirem la idea científica des de les preguntes més senzilles: què és predir, què són les dades inicials i com pot créixer un error minúscul?</p>
+<span class="pill">🦋 Teoria del caos</span>
+<span class="pill">📖 Lectura interactiva</span>
+<span class="pill">🧪 Experiment</span>
+<span class="pill">🧠 Repte final</span>
+</div>
+</header>
+<nav aria-label="Seccions" class="nav">
+<div class="shell navin"><a href="#conte">01 · El conte</a><a href="#pregunta">02 · La pregunta</a><a href="#principis">03 · Primers principis</a><a href="#comparacio">04 · Dos tipus de sistemes</a><a href="#caos">05 · Què és un sistema caòtic?</a><a href="#lorenz">06 · El descobriment</a><a href="#meteo">07 · Predir el temps</a><a href="#experiment">08 · Experimenta</a><a href="#altres-ambits">09 · Altres àmbits</a><a href="#quees">10 · Què no és</a><a href="#reptes">11 · Activitats</a></div>
+</nav>
+<main class="shell" id="comenca"><section class="section" id="conte">
+<div class="eyebrow" style="color:var(--green)">01 · La lectura</div>
+<h2>Un conte per pensar-hi</h2>
+<p class="lead">Llegeix primer el relat sense buscar-hi encara una explicació científica. Què et sorprèn? On hi ha humor? Les expressions subratllades tenen una definició al requadre lateral.</p>
+<div class="reading">
+<div class="toolbar">
+<span class="muted">Paraules subratllades = vocabulari interactiu</span>
+<button class="smallbtn" id="toggleMarks" type="button">Amaga les marques</button>
+</div>
+<div class="reading-layout">
+<article class="paper">
+<h3>ATENCIÓ: ALARMA VERDA</h3>
+<p class="byline">Pere Calders</p>
+<div class="story" id="story">
+<p>Som tossuts, no serveix de gaire que ens avisin. Ens han advertit que desequilibrem perillosament la naturalesa, però continuem fent l’orni. Fa poc, en un d’aquests indrets que hi ha pel sud d’Europa, i cap a mitjan estiu, un nen en va fer una com un cove. No fou culpa d’ell, perquè la veritat és que tenim molts dubtes a l’hora d’educar-los. Anem a cegues. La família havia aprofitat dues festes seguides per sortir a fora, fugint d’una concentració urbana.</p>
+<p>Mentre els pares paraven les tovalles a terra, amb el trasbals que suposa allunyar-se dels formiguers, el nen se la campava entre la flora i la fauna. Va descobrir una papallona petita, inquieta, d’aquestes que fan l’efecte que si no existissin tampoc no hi perdríem res. El nen va contemplar-la una estona amb un posat de meravella i, de cop i volta, va esclafar-la amb un picar de mans ràpid com la llengua d’un camaleó. Fou un gest instintiu sota el signe de la crueltat de la innocència, però l’insecte se’n va fer l’estella. I va resultar que la papallona era la clau d’un microsistema ecològic, una peça importantíssima per molt que no ho semblés. Potser ni ella mateixa no ho sabia. El cas és que la seva desaparició del món dels vius va desencadenar una sèrie de fallides, meitat subterrànies, meitat de superfície, i una esquerda nova de trinca va obrir-se pas tot serpentejant. Avançà fins a un poblat de poques cases, gairebé totes abandonades, i, en topar amb pedra bastida, va provocar un terratrèmol. O qui sap si no era tant com això, però sí que bastà per ensorrar un campanar romànic que fins aleshores havia aguantat gallardament el pas dels segles.</p>
+<p>—Anem-nos-en tu —va dir el pare a la mare—. Són capaços de dir que hem estat nosaltres.</p>
+<p>Van recollir a corre-cuita el parament de l’excursió, mentre estireganyaven la criatura per un braç. Sort van tenir de la ràpida represa del motor del seu cotxe. Providencialment, el pare l’havia fet ajustar tres dies abans.</p>
+</div>
+</article>
+<aside class="reading-side">
+<div aria-live="polite" class="gloss" id="gloss" role="status">
+<h4>Vocabulari del text</h4>
+<p>Selecciona una paraula subratllada del relat per veure’n la definició.</p>
+</div>
+<button aria-pressed="false" class="smallbtn" id="fontSize" type="button">A↔ Augmenta la lletra</button>
+</aside>
+</div>
+</div>
+<div class="note" style="margin-top:30px">
+<strong>Tornem al conte amb el marc al cap:</strong> Calders imagina una cadena de causes inventada. És una <strong>hipèrbole</strong> (exageració) i una <strong>ironia</strong>: una acció mínima acaba en un desastre enorme, mentre que el pare es preocupa sobretot perquè no els en culpin. És literatura, no un experiment. La connexió amb la ciència és <strong>metafòrica</strong>, no demostrativa.
+  </div>
+<div class="flow">
+<div class="step"><span class="emoji">🧒</span><strong>1 · El gest</strong><small>El nen esclafa la papallona</small></div>
+<div class="step"><span class="emoji">🦋</span><strong>2 · La pèrdua</strong><small>Desapareix una peça d’un microsistema</small></div>
+<div class="step"><span class="emoji">🌱</span><strong>3 · El desequilibri</strong><small>Es desencadenen fallides</small></div>
+<div class="step"><span class="emoji">🌍</span><strong>4 · L’esquerda</strong><small>Avança pel terreny</small></div>
+<div class="step"><span class="emoji">⛪</span><strong>5 · El desenllaç</strong><small>S’ensorra el campanar</small></div>
+</div>
+</section>
+<section class="section" id="pregunta">
+<div class="eyebrow" style="color:var(--green)">02 · Pensar des dels primers principis</div>
+<h2>Deixem de banda la papallona: què volem entendre?</h2>
+
+<div class="note warning"><strong>La pregunta fonamental no és</strong> «Com pot una papallona causar un tornado?». <strong>És</strong> «Si coneixem les lleis que governen un fenomen, per què pot ser tan difícil predir exactament què passarà?»</div>
+<div class="two"><div class="panel"><h3>Què ja sabem?</h3><p>Quan llancem una pilota, podem anticipar aproximadament on caurà perquè la gravetat i el moviment segueixen unes lleis. També l'atmosfera segueix lleis físiques.</p></div><div class="panel"><h3>Què encara hem de demostrar?</h3><p>Que seguir unes lleis no garanteix que nosaltres puguem calcular el futur amb precisió indefinidament. Hem de descobrir <em>on</em> apareix la dificultat.</p></div></div>
+</section>
+<section class="section" id="principis">
+<div class="eyebrow" style="color:var(--green)">03 · Construïm el raonament</div><h2>Cinc peces bàsiques, una darrere l'altra</h2>
+<ol class="steps-sci">
+<li><h4>Per fer una predicció necessitem un punt de partida</h4><p>Imagina que vols saber on serà una pilota al cap de dos segons. Necessites saber on és ara, cap on es mou i a quina velocitat. A l'atmosfera, el punt de partida és molt més complicat: temperatura, pressió, humitat, vents i altres variables repartides per tot el planeta. Aquest conjunt de dades s'anomena <strong>estat inicial</strong>.</p></li>
+<li><h4>Necessitem unes regles per passar del present al futur</h4><p>La gravetat permet calcular la trajectòria de la pilota. En meteorologia fem servir equacions de la física que descriuen com es mou l'aire i com intercanvia energia. Les matemàtiques indiquen com evoluciona el sistema des de l'estat inicial.</p></li>
+<li><h4>Les mesures mai no són perfectes</h4><p>Un termòmetre, un satèl·lit o una estació meteorològica proporcionen informació, però cap instrument mesura tots els punts de l'atmosfera amb exactitud infinita. Si la temperatura real és 18,376... °C, potser la representem aproximadament. I en molts llocs no tenim observacions directes. <strong>Una predicció comença inevitablement amb certa incertesa.</strong></p></li>
+<li><h4>La qüestió decisiva: què fa el sistema amb aquesta petita incertesa?</h4><p>En alguns sistemes, dues situacions inicials molt semblants continuen semblant-se. En d'altres, les diferències poden créixer ràpidament: un moviment altera el següent, i aquest el següent. No és suficient dir que les dades eren lleugerament diferents: ens cal comprovar <strong>com evoluciona la distància</strong> entre els dos resultats.</p></li>
+<li><h4>Si les diferències creixen prou, el detall de la predicció deixa de ser fiable</h4><p>Si dues versions igualment plausibles de l'estat inicial acaben pronosticant situacions meteorològiques diferents, ja no podem afirmar amb certesa quin dels dos futurs concrets es produirà. Les lleis físiques no han deixat de funcionar: <strong>ha crescut la incertesa que teníem al començament.</strong></p></li>
+</ol>
+<div class="summary-lesson"><h3>Una fórmula conceptual</h3><p style="font-size:1.15rem"><strong>Predicció = estat inicial aproximat + regles del sistema + càlcul de l'evolució.</strong></p><p>I ara la pregunta important: <strong>com d'estable és la predicció davant petits errors inicials?</strong> Aquesta és la porta d'entrada a l'efecte papallona.</p></div>
+</section>
+<section class="section" id="comparacio">
+<div class="eyebrow" style="color:var(--green)">04 · No tots els sistemes es comporten igual</div><h2>Per què a vegades un error petit importa poc i a vegades importa molt?</h2>
+<p>Considera dues regles matemàtiques senzilles. No són models de la meteorologia: serveixen per veure quina propietat hem de buscar.</p>
+<div class="two">
+<div class="panel"><h3>Cas A · La diferència es conserva</h3><p>Regla: <strong>suma 2 a cada pas</strong>.</p><p>Comença amb 10,000 o amb 10,001. Després de cinc passos tens 20,000 o 20,001.</p><p><strong>La diferència continua sent 0,001.</strong> L'error inicial no s'ha amplificat.</p></div>
+<div class="panel"><h3>Cas B · La diferència s'amplifica</h3><p>Regla: <strong>multiplica per 2 a cada pas</strong>.</p><p>Comença amb 10,000 o amb 10,001. Després de cinc passos tens 320,000 o 320,032.</p><p><strong>La diferència ara és 0,032.</strong> L'error inicial ha crescut 32 vegades.</p></div>
+</div>
+<div class="note warning"><strong>Important:</strong> el segon exemple <em>encara no demostra el caos</em>. Només mostra que una regla pot amplificar diferències. El caos és una propietat més específica de certs sistemes dinàmics, que poden continuar dins una regió limitada i presentar evolucions complexes i sensibles a les condicions inicials. Ho veurem als experiments.</div>
+<h3>El detall que fa especial la meteorologia</h3><p>L'atmosfera no funciona com una única operació de sumar o multiplicar: hi interactuen vents, temperatures, humitat i moviments a moltes escales. Aquests elements s'influeixen mútuament. Les equacions inclouen relacions <strong>no lineals</strong>: per exemple, el resultat d'una interacció depèn també de l'estat de les altres variables.</p><p>Per això dos estats molt propers poden seguir trajectòries cada vegada més diferents. <strong>Però «no lineal» no vol dir automàticament «caòtic»</strong>; cal estudiar el comportament del sistema.</p>
+<div class="note"><strong>Determinista no vol dir fàcil de predir.</strong> Un sistema matemàtic és determinista quan les mateixes regles, aplicades exactament al mateix estat inicial, produeixen la mateixa evolució. El problema pràctic és que nosaltres no podem saber l'estat real amb precisió infinita. Això és compatible amb un sistema determinista i caòtic.</div>
+</section>
+<section class="section" id="caos">
+<div class="eyebrow" style="color:var(--green)">05 · Entenem què vol dir «caòtic»</div>
+<h2>Un sistema caòtic no és un sistema sense regles</h2>
+<p class="lead">La paraula <em>caos</em> ens fa pensar en desordre i confusió. En matemàtiques significa una cosa diferent. Partim de les idees més senzilles.</p>
+<h3>Primer: què és un sistema?</h3>
+<p>Un <strong>sistema</strong> és un conjunt d'elements que es relacionen i canvien amb el temps. L'atmosfera n'és un: els vents transporten aire calent o fred, això modifica les temperatures i pressions, i aquests canvis influeixen en els vents següents.</p>
+<p>Les interaccions segueixen lleis físiques. La qüestió no és si hi ha regles, sinó <strong>què passa amb dues situacions inicials gairebé iguals</strong>.</p>
+<h3>Un cas senzill: dos trens a velocitat constant</h3>
+<p>Imagina dos trens que surten del mateix punt en vies paral·leles. El tren A viatja a <strong>100 km/h</strong> i el B, a <strong>100,001 km/h</strong>. La diferència és molt petita: tan sols un metre de recorregut per hora.</p>
+<div class="panel">
+<svg aria-label="Dues vies paral·leles: dos trens avancen gairebé a la mateixa velocitat" role="img" style="width:100%;height:auto;display:block" viewbox="0 0 740 185" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#f5faf6" height="185" rx="12" width="740" x="0" y="0"></rect>
+<text fill="#17352e" font-size="17" font-weight="bold" x="18" y="35">Tren A · 100 km/h</text><text fill="#17352e" font-size="17" font-weight="bold" x="18" y="109">Tren B · 100,001 km/h</text>
+<path d="M25 68 H711 M25 82 H711 M25 141 H711 M25 155 H711" stroke="#80998e" stroke-width="3"></path>
+<g stroke="#b4c8bc" stroke-width="2"><path d="M80 63v24 M155 63v24 M230 63v24 M305 63v24 M380 63v24 M455 63v24 M530 63v24 M605 63v24 M680 63v24 M80 136v24 M155 136v24 M230 136v24 M305 136v24 M380 136v24 M455 136v24 M530 136v24 M605 136v24 M680 136v24"></path></g>
+<rect fill="#23644e" height="29" rx="7" width="114" x="405" y="47"></rect><rect fill="#cf7643" height="29" rx="7" width="114" x="409" y="120"></rect><g fill="#fff"><rect height="11" rx="2" width="18" x="420" y="53"></rect><rect height="11" rx="2" width="18" x="447" y="53"></rect><rect height="11" rx="2" width="18" x="424" y="126"></rect><rect height="11" rx="2" width="18" x="451" y="126"></rect></g>
+</svg>
+<div class="two"><div><p><strong>Després d'1 hora:</strong> el tren B ha recorregut 1 metre més.</p></div><div><p><strong>Després de 10 hores:</strong> el tren B ha recorregut 10 metres més.</p></div></div>
+<p>La distància creix de manera regular. És fàcil de calcular. <strong>Aquest exemple no és caòtic.</strong></p>
+</div>
+<h3>Un experiment que pots fer: les boles i els camins a la sorra</h3>
+<p>Imagina que uns nens construeixen dos camins amb sorra. Fan baixar una bola per un pendent i, enmig del recorregut, col·loquen un petit turonet que separa el camí en dues sortides: esquerra i dreta.</p>
+<div class="panel">
+<svg aria-label="Una bola baixa per una pista de sorra i pot passar a l'esquerra o a la dreta d'un petit turonet segons la posició inicial" role="img" style="width:100%;height:auto;display:block" viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg">
+<rect width="740" height="300" rx="16" fill="#fcf6e8"/>
+<path d="M250 14 Q225 78 278 135 Q306 166 253 210 Q220 250 152 288" fill="none" stroke="#d8bd8e" stroke-width="64" stroke-linecap="round"/>
+<path d="M490 14 Q515 78 462 135 Q434 166 487 210 Q520 250 588 288" fill="none" stroke="#d8bd8e" stroke-width="64" stroke-linecap="round"/>
+<path d="M250 14 Q225 78 278 135 Q306 166 253 210 Q220 250 152 288" fill="none" stroke="#f6e6c5" stroke-width="48" stroke-linecap="round"/>
+<path d="M490 14 Q515 78 462 135 Q434 166 487 210 Q520 250 588 288" fill="none" stroke="#f6e6c5" stroke-width="48" stroke-linecap="round"/>
+<path d="M370 22 L370 112" stroke="#f6e6c5" stroke-width="95" stroke-linecap="round"/>
+<ellipse cx="370" cy="152" rx="46" ry="37" fill="#c69d64" stroke="#a87b40" stroke-width="3"/>
+<path d="M367 33 C348 86 313 106 292 150 C260 196 225 234 175 275" stroke="#23644e" stroke-width="4" fill="none" stroke-dasharray="8 6" stroke-linecap="round"/>
+<path d="M373 33 C392 86 427 106 448 150 C480 196 515 234 565 275" stroke="#c36b38" stroke-width="4" fill="none" stroke-dasharray="8 6" stroke-linecap="round"/>
+<circle cx="367" cy="33" r="10" fill="#23644e" stroke="white" stroke-width="2"/>
+<circle cx="373" cy="33" r="5" fill="#c36b38" stroke="white" stroke-width="1.5"/>
+<text x="370" y="18" fill="#17352e" font-size="16" text-anchor="middle" font-weight="bold">Sortides gairebé iguals</text>
+<text x="370" y="158" text-anchor="middle" fill="#4b3520" font-weight="bold" font-size="13">Turonet</text>
+<text x="144" y="287" fill="#23644e" font-size="16" font-weight="bold" text-anchor="end">Esquerra</text>
+<text x="598" y="287" fill="#a45225" font-size="16" font-weight="bold">Dreta</text>
+</svg>
+<p class="muted">Esquema conceptual: el pendent, els obstacles, el fregament i la manera de deixar anar la bola determinen el recorregut. No representa una simulació física exacta.</p>
+</div>
+<p>Si una bola surt uns mil·límetres més a l'esquerra, pot passar pel costat esquerre del turonet; si surt una mica més a la dreta, pot anar a l'altra sortida. <strong>Un canvi molt petit a l'inici pot conduir a dos resultats clarament diferents.</strong></p>
+<div class="note warning"><strong>Però compte:</strong> això <em>encara no demostra</em> un sistema caòtic. En aquest cas, pot ser simplement que hi hagi una frontera entre dos recorreguts possibles. Si hi afegim moltes bifurcacions i obstacles, podem imaginar com les diferències es propaguen, però només una anàlisi del sistema permetria saber si realment és caòtic.</div>
+<div class="panel"><h3>Prova-ho amb dues boles</h3><ol><li>Construeix un pendent de sorra amb un turonet que divideixi el camí.</li><li>Deixa anar una bola des de dos punts tan propers com puguis, intentant mantenir la mateixa velocitat inicial.</li><li>Observa si segueix el mateix camí o canvia de sortida.</li><li>Repeteix-ho diverses vegades. Pensa si els canvis provenen de la posició, de l'empenta inicial o de petites irregularitats de la sorra.</li></ol><p><strong>Pregunta:</strong> veure dos camins diferents és suficient per afirmar que hi ha caos? <strong>No.</strong> Ens mostra sensibilitat del resultat a les condicions de sortida; falta comprovar quin tipus de dinàmica segueix.</p></div>
+<h3>Un altre cas: una bola que rebota entre obstacles corbats</h3>
+<p>Ara pensa en una bola que es mou i rebota contra obstacles. Cada xoc obeeix una llei precisa: l'angle de sortida depèn de l'angle d'entrada i de la superfície que toca.</p>
+<p>Si llances dues boles amb direccions <strong>gairebé</strong> iguals, el primer rebot pot variar una mica. Aquesta diferència pot modificar el segon rebot, i després el tercer. Amb una disposició adequada dels obstacles, les trajectòries poden acabar essent molt diferents.</p>
+<div class="panel">
+<svg aria-label="Esquema conceptual de dues trajectòries que comencen properes i se separen després dels rebots" role="img" style="width:100%;height:auto;display:block" viewbox="0 0 740 270" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#f8fbf8" height="254" rx="15" stroke="#bacbbf" stroke-width="3" width="724" x="8" y="8"></rect>
+<g fill="#e4ede6" stroke="#8aa99a" stroke-width="2"><circle cx="246" cy="124" r="53"></circle><circle cx="440" cy="179" r="48"></circle><circle cx="570" cy="79" r="39"></circle></g>
+<path d="M38 225 L201 150 L280 46 L390 138 L528 228 L685 130" fill="none" stroke="#23644e" stroke-dasharray="9 5" stroke-linejoin="round" stroke-width="4"></path>
+<path d="M38 229 L202 153 L298 233 L390 85 L518 40 L685 214" fill="none" stroke="#cf7643" stroke-dasharray="9 5" stroke-linejoin="round" stroke-width="4"></path>
+<circle cx="38" cy="225" fill="#23644e" r="7"></circle><circle cx="38" cy="229" fill="#cf7643" r="4"></circle>
+<text fill="#52685f" font-size="13" x="20" y="24">Inici gairebé idèntic</text><text fill="#52685f" font-size="13" x="552" y="251">Camins separats</text>
+</svg>
+<p class="muted">Esquema conceptual, no una simulació física de rebots. En determinades geometries, un sistema de rebots pot tenir comportament caòtic.</p>
+</div>
+<div class="note"><strong>Observa el que és sorprenent:</strong> cap bola no ha desobeït les lleis físiques. Les regles són iguals en tots dos casos. El que s'amplifica és una diferència minúscula a l'inici.</div>
+<h3>Per tant, què significa «caòtic»?</h3>
+<p>En un <strong>sistema caòtic determinista</strong>, l'evolució segueix regles fixes, però pot ser molt sensible a les condicions inicials. Aquesta sensibilitat fa que, si no sabem exactament com ha començat, les prediccions detallades a llarg termini perdin fiabilitat.</p>
+<div class="two">
+<div class="panel"><h3>Determinista</h3><p>Les <strong>mateixes regles</strong> i <strong>exactament el mateix inici</strong> produeixen la mateixa evolució.</p></div>
+<div class="panel"><h3>Caòtic</h3><p>Dos inicis <strong>molt pròxims però no iguals</strong> poden conduir a trajectòries molt diferents amb el pas del temps.</p></div>
+</div>
+<p>Això no significa que qualsevol sistema complicat sigui caòtic, ni que la distància entre trajectòries hagi de créixer a cada instant. Tampoc no significa que tot sigui imprevisible: sovint podem conèixer patrons generals o probabilitats, encara que no el detall exacte d'un dia llunyà.</p>
+<h3>I per què ens interessa per predir el temps?</h3>
+<p>L'atmosfera és un sistema dinàmic amb moltes interaccions. Les nostres mesures inicials sempre tenen una incertesa. Si una part d'aquesta incertesa s'amplifica, <strong>dues prediccions que comencen gairebé iguals poden acabar separant-se</strong>. Aquest és el problema que Lorenz va ajudar a comprendre.</p>
+<div class="panel chaos-quiz"><h3>Comprova si ho has entès</h3><p><strong>Si un sistema és caòtic, significa que no segueix cap llei física?</strong></p>
+<div aria-label="Pregunta sobre sistemes caòtics" class="chaos-choices" role="group">
+<button class="smallbtn" data-answer="a" type="button">A · Sí, perquè els moviments són aleatoris.</button>
+<button class="smallbtn" data-answer="b" type="button">B · No: segueix lleis precises, però les trajectòries poden divergir.</button>
+<button class="smallbtn" data-answer="c" type="button">C · No: només significa que té molts elements.</button>
+</div><p aria-live="polite" class="feedback" id="chaos-feedback">Tria una resposta per veure l'explicació.</p></div>
+<div class="summary-lesson"><h3>Queda't amb aquesta idea</h3><p><strong>«Caòtic» no vol dir «sense ordre».</strong> Vol dir que, fins i tot coneixent les regles, una petita incertesa sobre el present pot transformar-se en una gran incertesa sobre el futur.</p></div>
+</section><section class="section" id="lorenz">
+<div class="eyebrow" style="color:var(--green)">06 · Ara sí: Edward Lorenz</div><h2>Què va descobrir amb un ordinador?</h2>
+<p class="lead">Edward Lorenz estudiava models matemàtics simplificats de l'atmosfera. Volia entendre la possibilitat de preveure com evolucionava el temps.</p>
+<div class="two"><div class="panel"><h3>El detall aparentment insignificant</h3><p>En reprendre una simulació, va utilitzar valors arrodonits de la impressió del seu ordinador. Un exemple famós és <strong>0,506127</strong>, que al paper apareixia com <strong>0,506</strong>.</p><p>La diferència és de només <strong>0,000127</strong>. Podia semblar que el resultat seria el mateix.</p></div><div class="panel"><h3>El resultat sorprenent</h3><p>Inicialment les dues simulacions evolucionaven de manera semblant. Amb el temps, però, els resultats van divergir molt.</p><p><strong>La regla del model no havia canviat:</strong> havia canviat lleugerament l'estat de partida.</p></div></div>
+<p>Lorenz va donar una explicació científica d'aquesta sensibilitat. El 1963 va publicar un model més senzill, de tres equacions, que il·lustrava un comportament caòtic. El segon experiment d'aquesta pàgina fa servir aquestes equacions, no el programa original del descobriment.</p>
+<div class="note"><strong>La definició que ens interessa:</strong> l'«efecte papallona» és el nom popular de la <strong>sensibilitat a les condicions inicials</strong> en sistemes caòtics: dues evolucions que surten d'estats gairebé iguals poden acabar molt separades malgrat seguir les mateixes lleis.</div>
+</section>
+<section class="section" id="meteo">
+<div class="eyebrow" style="color:var(--green)">07 · De les matemàtiques al pronòstic</div><h2>Per què encara podem preveure el temps?</h2>
+<p>Si l'atmosfera és sensible a les condicions inicials, això no significa que les previsions no serveixin. Significa que <strong>la precisió disminueix generalment quan augmenta l'horitzó de predicció</strong>, i que la incertesa varia segons la situació meteorològica.</p>
+<div class="two"><div class="panel"><h3>Predicció única</h3><p>Un ordinador calcula què pot passar a partir d'un estat inicial estimat. El resultat és una evolució possible, però les dades de partida i el model tenen incerteses.</p></div><div class="panel"><h3>Predicció per conjunts</h3><p>Els meteoròlegs executen diferents simulacions amb petites variacions de les condicions inicials i, de vegades, del model. Si els resultats s'assemblen, hi ha més confiança en alguns aspectes de la previsió; si es dispersen, la incertesa és més gran.</p></div></div>
+<p>Per exemple, en lloc de limitar-se a dir «plourà exactament a les 17.00», podem estudiar la probabilitat de pluja en una franja horària. Això no elimina el caos, però ajuda a <strong>prendre decisions amb una incertesa coneguda</strong>.</p>
+<div class="note warning"><strong>Una distinció essencial:</strong> «és difícil predir quin temps farà un dia concret d'aquí a molts dies» no és el mateix que «és impossible estudiar el clima». La meteorologia prediu estats atmosfèrics concrets; la climatologia estudia estadístiques, patrons i tendències al llarg del temps.</div>
+</section>
+<section class="section" id="experiment">
+<div class="eyebrow" style="color:var(--green)">08 · Laboratori interactiu</div>
+<h2>Dos experiments: observar la divergència</h2>
+<p class="lead">Aquí posem a prova una sola idea: les mateixes regles, aplicades a condicions inicials gairebé iguals, poden produir trajectòries que se separen. El primer model és el mapa logístic i el segon, les equacions de Lorenz de 1963.</p>
+<div class="panel">
+<h3>Experiment A · Canvia la diferència inicial</h3>
+<p>Dues trajectòries segueixen <strong>exactament la mateixa regla</strong>. Només canvia el valor inicial, per un marge minúscul. Observa com se separen.</p>
+<div class="controls">
+<label for="diff">Diferència inicial:</label>
+<input id="diff" max="5" min="1" step="1" type="range" value="3"/>
+<output id="diffValue">0,0001</output>
+<button class="primary" id="run" type="button">▶ Mostra l’evolució</button>
+<button class="smallbtn" id="reset" type="button">Reinicia</button>
+</div>
+<canvas aria-label="Gràfic de les trajectòries de dos sistemes matemàtics amb condicions inicials lleugerament diferents" class="chart" id="plot" role="img"></canvas>
+<div class="legend"><span><span class="dot" style="background:#23644e"></span>Sistema A</span><span><span class="dot" style="background:#cf7643"></span>Sistema B</span></div>
+<p aria-live="polite" id="result">Prem «Mostra l’evolució» per veure què passa després de 24 passos.</p>
+<p class="muted">Model didàctic: mapa logístic x<sub>n+1</sub> = 3,9 × x<sub>n</sub> × (1 − x<sub>n</sub>). No és una simulació real del temps ni d’un ecosistema. Les dues línies compleixen sempre la mateixa regla.</p>
+</div>
+<div class="panel" style="margin-top:24px">
+<h3>Experiment B · El sistema de Lorenz (1963)</h3>
+<p>Compararem dues simulacions de les mateixes tres equacions. La primera comença amb <strong>(x, y, z) = (1, 1, 1)</strong>. La segona només canvia una mica el valor inicial de x. Aquests nombres són <strong>variables abstractes del model</strong>, no una previsió meteorològica real ni dades mesurades en una ciutat.</p>
+<div class="controls">
+<label for="lorenzDelta">Canvi inicial en x:</label>
+<input id="lorenzDelta" max="4" min="1" step="1" type="range" value="2"/>
+<output id="lorenzDeltaOut">0,001</output>
+<button class="primary" id="lorenzRun" type="button">Calcula les trajectòries</button>
+</div>
+<div class="diagram-title" style="font-weight:800;margin-bottom:12px">Gràfic 1 · Evolució de x en els dos càlculs</div>
+<canvas aria-label="Dues trajectòries x del model de Lorenz amb condicions inicials properes" class="chart" id="lorenzX" role="img"></canvas>
+<div class="legend"><span><span class="dot" style="background:#23644e"></span>Simulació A</span><span><span class="dot" style="background:#cf7643"></span>Simulació B</span></div>
+<div class="diagram-title" style="font-weight:800;margin-bottom:12px">Gràfic 2 · Distància entre les trajectòries</div>
+<canvas aria-label="Gràfic de la distància entre dos estats simulats del model de Lorenz" class="chart" id="lorenzDistance" role="img"></canvas>
+<p aria-live="polite" id="lorenzResult"></p>
+<p class="muted">Equacions: dx/dt = 10(y − x), dy/dt = x(28 − z) − y, dz/dt = xy − (8/3)z. Integració numèrica amb Runge–Kutta de quart ordre i pas 0,01; temps del model de 0 a 35. És un laboratori didàctic, no una previsió del temps.</p>
+</div>
+</section>
+<section class="section" id="altres-ambits">
+<div class="eyebrow" style="color:var(--green)">09 · Més enllà de la meteorologia</div>
+<h2>On més podem trobar sistemes caòtics?</h2>
+<p class="lead">No és una propietat exclusiva de l'atmosfera. El mateix tipus de sensibilitat pot aparèixer en sistemes d'altres àmbits. En alguns casos es pot observar en dispositius físics; en altres, apareix en <strong>models matemàtics</strong> que descriuen situacions reals.</p>
+<div class="two">
+<div class="panel"><h3>🕰️ Un pèndol doble · Mecànica</h3><p>Penja un segon pèndol de l'extrem del primer. Quan es mou amb prou energia, dues posicions inicials gairebé idèntiques poden donar moviments molt diferents al cap d'una estona. <strong>Les lleis de Newton són les mateixes.</strong> No tots els moviments del pèndol doble són caòtics.</p></div>
+<div class="panel"><h3>🪐 Tres cossos celestes · Astronomia</h3><p>Quan tres cossos s'atrauen gravitacionalment, algunes configuracions produeixen moviments molt sensibles a les condicions inicials. Això fa que predir les trajectòries detallades a molt llarg termini pugui ser difícil. <strong>No totes les òrbites de tres cossos són caòtiques.</strong></p></div>
+<div class="panel"><h3>🐇 Poblacions d'animals · Ecologia matemàtica</h3><p>Alguns models simples de reproducció i competència, com el <em>mapa logístic</em> en determinats paràmetres, poden passar de poblacions estables a oscil·lacions i caos. És justament el model simplificat de l'experiment A. <strong>Això no significa que totes les poblacions reals siguin caòtiques</strong> ni que una mutació genètica sigui automàticament efecte papallona.</p></div>
+<div class="panel"><h3>⚡ Circuits electrònics · Enginyeria</h3><p>Hi ha circuits no lineals, com el <em>circuit de Chua</em>, en què els voltatges evolucionen de manera irregular i sensible al punt de partida. Aquí el caos no és una metàfora: es pot estudiar amb mesures i equacions. <strong>Un circuit convencional no és necessàriament caòtic.</strong></p></div>
+</div>
+<h3>La mateixa pregunta a tots els àmbits</h3>
+<p>No preguntis només si una cosa petita pot tenir un gran efecte. Pregunta't: <strong>si repetíssim el sistema amb les mateixes regles i amb un estat inicial només una mica diferent, les seves trajectòries s'anirien separant de manera característica d'un sistema caòtic?</strong></p>
+<div class="note"><strong>Una idea que canvia la societat o una mutació que s'estén per selecció natural</strong> poden tenir conseqüències enormes, però això, tot sol, no és una prova de caos. Són processos de causalitat social o d'evolució biològica. Cal un model i una anàlisi addicional per poder-hi parlar d'efecte papallona científic.</div>
+<p class="muted">Per ampliar: <a href="https://plato.stanford.edu/entries/chaos/" target="_blank" rel="noopener">Stanford Encyclopedia of Philosophy · Chaos</a> · <a href="https://www.societyforchaostheory.org/resources/" target="_blank" rel="noopener">Society for Chaos Theory · Demostracions</a>.</p>
+</section>
+<section class="section" id="quees"><div class="eyebrow" style="color:var(--green)">10 · Tornem a la papallona</div><h2>Què podem afirmar i què seria anar massa lluny?</h2>
+<table class="compare-table"><thead><tr><th>Situació</th><th>És efecte papallona, en sentit científic?</th></tr></thead><tbody>
+<tr><td>Un model caòtic evoluciona de manera molt diferent si modifiquem una mica les dades inicials.</td><td><strong>Sí.</strong> Això és la sensibilitat a les condicions inicials.</td></tr>
+<tr><td>Una fila de fitxes de dòmino cau després d'empènyer la primera.</td><td><strong>No necessàriament.</strong> És una reacció en cadena; no hem demostrat sensibilitat caòtica.</td></tr>
+<tr><td>Una mutació genètica es fa més habitual al llarg de les generacions.</td><td><strong>No per aquest sol fet.</strong> És un procés evolutiu. Alguns models de poblacions poden ser caòtics, però l'evolució no equival a l'efecte papallona.</td></tr>
+<tr><td>Una bola baixa per un pendent de sorra i acaba a la sortida dreta en lloc de l'esquerra.</td><td><strong>No necessàriament.</strong> Pot ser una bifurcació entre dos camins, sense caos.</td></tr>
+<tr><td>Un nen mata una papallona i s'ensorra un campanar, en el conte.</td><td><strong>No és una prova científica.</strong> És una cadena de conseqüències imaginada amb intenció literària.</td></tr>
+</tbody></table>
+<h3>Per què el nom «efecte papallona»?</h3><p>La imatge popular d'una papallona que bat les ales i d'un tornado llunyà fa pensar que una influència minúscula podria canviar l'evolució de l'atmosfera. És una <strong>metàfora</strong>, no l'afirmació que qualsevol papallona provoqui tempestes ni que el tornado sigui una conseqüència necessària.</p>
+<h3>Què ens aporta Calders, aleshores?</h3><p>El relat planteja una pregunta que desperta curiositat: <em>una cosa aparentment insignificant pot tenir conseqüències inesperades?</em> Sí, a vegades. Però això, per si sol, és una idea molt general sobre la causalitat. El pas científic de Lorenz és molt més precís: <strong>en certs sistemes, un error minúscul en les dades de partida pot créixer prou per limitar la capacitat de predir-ne l'evolució.</strong></p>
+<div class="summary-lesson"><h3>La idea final, reconstruïda</h3><p>1. Per predir cal conèixer l'estat inicial i les regles. 2. L'estat inicial mai no es coneix perfectament. 3. Alguns sistemes amplifiquen aquestes diferències. 4. Per això, fins i tot seguint lleis precises, les prediccions detallades poden perdre fiabilitat amb el temps. <strong>Aquest és el nucli de l'efecte papallona.</strong></p></div>
+</section><section class="section" id="reptes">
+<div class="eyebrow" style="color:var(--green)">11 · Comprova què has après</div>
+<h2>Posa’t a prova</h2>
+<p class="lead">Marca una resposta per pregunta i prem «Corregeix». Rebràs una explicació de cada resposta.</p>
+<div class="panel">
+<div id="quiz"></div>
+<button class="primary" id="check" type="button">Corregeix les respostes</button>
+<button class="smallbtn" id="again" type="button">Torna a començar</button>
+<div aria-live="polite" class="score" id="score"></div>
+</div>
+<h3 style="margin-top:35px">✍️ Pensa i argumenta</h3>
+<div class="prompt">
+<strong>1. Per què creus que el pare vol marxar de seguida? Què ens diu això del seu caràcter?</strong>
+<textarea aria-label="Resposta sobre el pare" placeholder="Escriu la teva interpretació..."></textarea>
+</div>
+<div class="prompt">
+<strong>2. Pensa en dues prediccions meteorològiques que comencen amb dades gairebé iguals. Explica per què podrien separar-se, sense recórrer a una cadena de dòminos.</strong>
+<textarea aria-label="Història d'una petita decisió" placeholder="Al principi semblava insignificant, però..."></textarea>
+</div>
+<div class="prompt">
+<strong>3. Explica amb paraules teves per què el conte de Calders és una bona introducció literària, però no una demostració de la teoria del caos.</strong>
+<textarea aria-label="Reflexió sobre la metàfora" placeholder="Crec que agrada perquè..."></textarea>
+</div>
+<div class="summary-lesson"><h3>Comprova que ho saps explicar</h3><p>Intenta respondre sense utilitzar la paraula «papallona»: <strong>per què dues previsions fetes amb les mateixes equacions poden acabar donant resultats diferents?</strong> Si pots respondre amb els conceptes d'estat inicial, precisió limitada i amplificació de diferències, has entès la idea essencial.</p></div>
+</section></main>
+<footer class="footer">
+<div class="shell">
+<strong>Aprendre a predir: dels primers principis a Lorenz</strong>
+<p>Text literari facilitat per a l’activitat: <em>Atenció: alarma verda</em>, Pere Calders. Explicació científica de referència: <a href="https://www.aps.org/apsnews/2003/01/lorenz-butterfly-effect-1961" rel="noopener" target="_blank">American Physical Society, sobre Edward Lorenz</a>. El text i el laboratori es poden utilitzar sense connexió a Internet.</p>
+<p>Per ampliar la recerca: <a href="https://www.ecmwf.int/en/learning/training/introduction-chaos-predictability-and-ensemble-forecasts" rel="noopener" target="_blank">ECMWF · Caos i predicció per conjunts</a> · <a href="https://docs.dart.ucar.edu/en/v11.18.0/guide/lorenz-63-model.html" rel="noopener" target="_blank">NCAR · Model Lorenz-63</a> · <a href="https://nap.nationalacademies.org/read/25515/" rel="noopener" target="_blank">National Academies · Predicció numèrica del temps</a>.</p>
+</div>
+</footer>
+<script>
+'use strict';
+
+const dictionary=[
+['fer l’orni','Fer veure que no sents o no t’adones d’allò que passa.'],
+['en va fer una com un cove','Va fer una malifeta o una cosa molt grossa.'],
+['Anem a cegues','Actuem sense saber prou bé què fem.'],
+['trasbals','Enrenou, desordre o canvi que altera la situació habitual.'],
+['formiguers','Aquí és una imatge de les ciutats plenes de gent i activitat.'],
+['se la campava','Es movia lliurement, al seu aire.'],
+['posat de meravella','Expressió de sorpresa i admiració.'],
+['se’n va fer l’estella','Expressió figurada: va quedar feta malbé, destruïda.'],
+['microsistema ecològic','Conjunt petit d’éssers vius i elements del medi que es relacionen.'],
+['desencadenar','Provocar l’inici d’una successió de fets.'],
+['fallides','Errors, trencaments o alteracions del funcionament d’un sistema.'],
+['nova de trinca','Completament nova.'],
+['serpentejant','Avançant fent corbes, com una serp.'],
+['pedra bastida','Pedra que forma part d’una construcció feta per persones.'],
+['gallardament','Amb fermesa, valentia o dignitat.'],
+['a corre-cuita','Molt de pressa, amb precipitació.'],
+['parament','Estris i objectes preparats per a una activitat.'],
+['estireganyaven','Estiraven bruscament o repetidament.'],
+['Providencialment','De manera molt oportuna, com si fos gràcies a la sort.']
+];
+
+const story=document.getElementById('story');
+const pattern=new RegExp(dictionary.map(([word])=>word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).sort((a,b)=>b.length-a.length).join('|'),'gi');
+const walker=document.createTreeWalker(story,NodeFilter.SHOW_TEXT);
+const nodes=[];
+while(walker.nextNode())nodes.push(walker.currentNode);
+for(const node of nodes){
+  const txt=node.nodeValue;
+  if(!pattern.test(txt)){pattern.lastIndex=0;continue}
+  pattern.lastIndex=0;
+  const frag=document.createDocumentFragment();
+  let end=0;
+  for(const m of txt.matchAll(pattern)){
+    frag.append(document.createTextNode(txt.slice(end,m.index)));
+    const b=document.createElement('button');
+    b.className='word';b.type='button';b.textContent=m[0];
+    const entry=dictionary.find(([w])=>w.toLocaleLowerCase('ca')===m[0].toLocaleLowerCase('ca'));
+    b.addEventListener('click',()=>{
+      story.querySelectorAll('.word').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      document.getElementById('gloss').innerHTML='<h4>Vocabulari del text</h4><strong>'+entry[0]+'</strong><p>'+entry[1]+'</p>';
+      if(window.innerWidth<791)document.getElementById('gloss').scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+    frag.append(b);
+    end=m.index+m[0].length;
+  }
+  frag.append(document.createTextNode(txt.slice(end)));
+  node.replaceWith(frag);
+}
+
+document.getElementById('fontSize').addEventListener('click',e=>{
+  const large=story.classList.toggle('large');
+  e.currentTarget.setAttribute('aria-pressed',String(large));
+  e.currentTarget.textContent=large?'A↔ Mida de lletra normal':'A↔ Augmenta la lletra';
+});
+let marks=true;
+document.getElementById('toggleMarks').addEventListener('click',e=>{
+  marks=!marks;
+  story.querySelectorAll('.word').forEach(b=>{
+    b.style.background=marks?'':'transparent';
+    b.style.borderBottom=marks?'':'none';
+    b.style.color='inherit';
+  });
+  e.currentTarget.textContent=marks?'Amaga les marques':'Mostra les marques';
+});
+
+const canvas=document.getElementById('plot'),ctx=canvas.getContext('2d');
+let shown=0,anim=null;
+const diff=document.getElementById('diff'),val=document.getElementById('diffValue');
+const deltas={1:1e-2,2:1e-3,3:1e-4,4:1e-5,5:1e-6};
+const fmt=n=>n.toLocaleString('ca-ES',{maximumFractionDigits:6,minimumFractionDigits:0});
+function series(x){const a=[x];for(let i=0;i<24;i++)a.push(3.9*a.at(-1)*(1-a.at(-1)));return a}
+let arrA=series(.4),arrB=series(.4+deltas[3]);
+function update(){
+  val.textContent=fmt(deltas[diff.value]);
+  arrB=series(.4+deltas[diff.value]);
+  shown=0;draw();
+  document.getElementById('result').textContent='Prem «Mostra l’evolució» per veure les dues trajectòries.';
+}
+diff.addEventListener('input',()=>{cancelAnimationFrame(anim);update()});
+function draw(){
+  const w=canvas.clientWidth,h=canvas.clientHeight,dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const left=43,right=w-18,top=18,bottom=h-38;
+  ctx.strokeStyle='#d5e4d8';ctx.lineWidth=1;ctx.font='12px system-ui';ctx.fillStyle='#52685f';
+  for(let i=0;i<=4;i++){
+    const y=top+(bottom-top)*i/4;
+    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.stroke();
+    ctx.fillText((1-i/4).toLocaleString('ca-ES'),7,y+4);
+  }
+  for(let i=0;i<=24;i+=4){
+    const x=left+(right-left)*i/24;
+    ctx.fillText(''+i,x-5,h-13);
+  }
+  ctx.fillText('Passos →',right-62,h-2);
+  const drawLine=(arr,color)=>{
+    ctx.strokeStyle=color;ctx.lineWidth=2.6;ctx.beginPath();
+    for(let i=0;i<=shown;i++){
+      const x=left+(right-left)*i/24,y=bottom-(bottom-top)*arr[i];
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+  };
+  drawLine(arrA,'#23644e');drawLine(arrB,'#cf7643');
+}
+document.getElementById('run').addEventListener('click',()=>{
+  cancelAnimationFrame(anim);shown=0;let last=0;
+  function tick(ts){
+    if(ts-last>75){shown=Math.min(shown+1,24);draw();last=ts}
+    if(shown<24){anim=requestAnimationFrame(tick)}
+    else{
+      let d=Math.abs(arrA[24]-arrB[24]);
+      document.getElementById('result').innerHTML='<strong>Després de 24 passos:</strong> la distància entre les dues trajectòries és de '+fmt(d)+'. Encara que hagin començat molt a prop, el resultat pot ser força diferent.';
+    }
+  }
+  anim=requestAnimationFrame(tick);
+});
+document.getElementById('reset').addEventListener('click',()=>{
+  cancelAnimationFrame(anim);diff.value='3';update();
+});
+window.addEventListener('resize',draw);update();
+
+const questions=[
+{q:'Què estudia la teoria del caos?',a:['Sistemes sense cap regla.','Sistemes deterministes que, tot i tenir regles fixes, són impredictibles a llarg termini perquè amplifiquen errors inicials.','Sistemes que sempre es poden predir amb precisió infinita.'],right:1,why:'La teoria del caos estudia sistemes amb regles fixes que amplifiquen diferències minúscules en les condicions inicials.'},
+{q:'Què vol dir «efecte papallona» en sentit científic?',a:['Que qualsevol papallona pot causar un terratrèmol.','Que alguns sistemes són molt sensibles a diferències petites al començament.','Que tots els fets es poden predir amb exactitud.'],right:1,why:'És la sensibilitat a les condicions inicials d’alguns sistemes dinàmics.'},
+{q:'En quina simulació va observar Lorenz la divergència entre càlculs?',a:['En el sistema de tres equacions de 1963.','En un model atmosfèric simplificat de moltes variables, el 1961.','En una previsió real del temps d\'una ciutat.'],right:1,why:'El 1961 treballava amb un model atmosfèric de moltes variables. El sistema de tres equacions és de 1963.'},
+{q:'Per què es fa servir la imatge d’una papallona?',a:['Perquè demostra que totes les papallones causen tornados.','Perquè és una metàfora per parlar de la sensibilitat a les condicions inicials.','Perquè Lorenz va estudiar els insectes.'],right:1,why:'La papallona és una imatge per divulgar la idea; no és una demostració sobre papallones reals.'},
+{q:'Quina diferència hi ha entre «una idea pot canviar el món» i l\'efecte papallona?',a:['Cap: són el mateix concepte.','La primera és una afirmació sobre causalitat humana; la segona és sobre sensibilitat en sistemes dinàmics.','La segona és literatura i la primera és ciència.'],right:1,why:'Són conceptes diferents. La metàfora ha fet que es confonguin, però la ciència no diu res sobre idees o accions humanes.'},
+{q:'Per què el conte no és una demostració científica de l\'efecte papallona?',a:['Perquè no apareix un científic al relat.','Perquè només passa a l\'estiu.','Perquè inventa i exagera una cadena de causes que no verifica.'],right:2,why:'Calders crea ficció literària; no presenta un experiment ni proves de causalitat.'},
+{q:'Què resulta irònic en la reacció del pare?',a:['Que es preocupa sobretot de no ser acusat, en lloc del campanar caigut.','Que vol comprar una altra papallona.','Que s’alegra que el cotxe no arrenqui.'],right:0,why:'La preocupació egoista del pare contrasta amb la magnitud del que acaba de passar.'},
+{q:'En l\'experiment A, què canvia entre els dos sistemes?',a:['La regla matemàtica.','Només el valor inicial.','El nombre de passos.'],right:1,why:'La mateixa regla aplicada a condicions inicials gairebé idèntiques produeix trajectòries diferents.'},
+{q:'Què vol dir que un sistema és determinista?',a:['Que no hi ha regles.','Que sempre en podem predir el futur amb qualsevol precisió.','Que les mateixes regles i exactament el mateix estat inicial determinen la mateixa evolució.'],right:2,why:'La dificultat de predicció sorgeix perquè no coneixem amb precisió infinita les condicions inicials.'},
+{q:'Per què els meteoròlegs calculen conjunts de prediccions?',a:['Per comparar possibles evolucions i estimar la incertesa.','Perquè les equacions no serveixen.','Per garantir el mateix temps a tots els llocs.'],right:0,why:'Les previsions en conjunt exploren diferents condicions inicials i, de vegades, diferents models.'}
+];
+const quiz=document.getElementById('quiz');
+function renderQuiz(){
+  quiz.innerHTML='';
+  questions.forEach((q,i)=>{
+    const el=document.createElement('div');
+    el.className='qa';
+    el.innerHTML='<fieldset><legend>'+(i+1)+'. '+q.q+'</legend>'+q.a.map((s,j)=>'<label class="option"><input type="radio" name="q'+i+'" value="'+j+'">'+s+'</label>').join('')+'</fieldset><div class="feedback" id="f'+i+'"></div>';
+    quiz.append(el);
+  });
+  document.getElementById('score').textContent='';
+}
+renderQuiz();
+document.getElementById('check').addEventListener('click',()=>{
+  let right=0,answered=0;
+  questions.forEach((q,i)=>{
+    const picked=document.querySelector('input[name="q'+i+'"]:checked');
+    const f=document.getElementById('f'+i);
+    if(!picked){f.className='feedback bad';f.textContent='Encara no has respost aquesta pregunta.';return}
+    answered++;
+    const ok=Number(picked.value)===q.right;
+    right+=ok?1:0;
+    f.className='feedback '+(ok?'ok':'bad');
+    f.textContent=(ok?'✓ Correcte. ':'✗ Revisa-ho. ')+q.why;
+  });
+  document.getElementById('score').textContent='Resultat: '+right+' de '+questions.length+' respostes correctes'+(answered<questions.length?' ('+(questions.length-answered)+' sense respondre)':'');
+});
+document.getElementById('again').addEventListener('click',renderQuiz);
+
+(function(){
+  const control=document.getElementById('lorenzDelta'),output=document.getElementById('lorenzDeltaOut');
+  const changes={1:0.01,2:0.001,3:0.0001,4:0.00001};
+  function deriv(s){const [x,y,z]=s;return [10*(y-x), x*(28-z)-y, x*y-(8/3)*z]}
+  function advance(s,h){
+    const k1=deriv(s);
+    const add=(a,k,f)=>a.map((v,i)=>v+f*k[i]);
+    const k2=deriv(add(s,k1,h/2));
+    const k3=deriv(add(s,k2,h/2));
+    const k4=deriv(add(s,k3,h));
+    return s.map((v,i)=>v+h*(k1[i]+2*k2[i]+2*k3[i]+k4[i])/6);
+  }
+  function simulate(delta){
+    let a=[1,1,1],b=[1+delta,1,1],all=[];
+    const h=0.01;
+    for(let i=0;i<=3500;i++){
+      if(i%5===0){
+        const d=Math.hypot(...a.map((v,j)=>v-b[j]));
+        all.push({t:i*h,a:a[0],b:b[0],dist:d});
+      }
+      a=advance(a,h);b=advance(b,h);
+    }
+    return all;
+  }
+  function graph(id,values,keyA,keyB,yMin,yMax,isLog){
+    const c=document.getElementById(id),ct=c.getContext('2d');
+    const w=c.clientWidth,h=c.clientHeight,dpr=window.devicePixelRatio||1;
+    c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);
+    ct.setTransform(dpr,0,0,dpr,0,0);ct.clearRect(0,0,w,h);
+    const left=51,right=w-15,top=19,bottom=h-39;
+    ct.font='12px system-ui';ct.fillStyle='#52685f';ct.strokeStyle='#e0e9e1';ct.lineWidth=1;
+    const tmax=values[values.length-1].t;
+    for(let i=0;i<=4;i++){
+      let ypos=top+(bottom-top)*i/4;
+      ct.beginPath();ct.moveTo(left,ypos);ct.lineTo(right,ypos);ct.stroke();
+      let v=yMax-(yMax-yMin)*i/4;
+      ct.fillText(isLog?'10^'+v.toFixed(0):v.toFixed(0),4,ypos+4);
+    }
+    for(let i=0;i<=5;i++){
+      let t=i*tmax/5;
+      ct.fillText(t.toFixed(0),left+(right-left)*i/5-5,h-14);
+    }
+    ct.fillText('Temps del model →',Math.max(left,right-125),h-2);
+    function line(k,color){
+      ct.strokeStyle=color;ct.lineWidth=2;ct.beginPath();
+      for(let i=0;i<values.length;i++){
+        const v=isLog?Math.log10(Math.max(values[i][k],1e-12)):values[i][k];
+        const x=left+(right-left)*values[i].t/tmax;
+        const y=bottom-(bottom-top)*(v-yMin)/(yMax-yMin);
+        i?ct.lineTo(x,y):ct.moveTo(x,y);
+      }
+      ct.stroke();
+    }
+    line(keyA,'#23644e');
+    if(keyB)line(keyB,'#cf7643');
+  }
+  let cached=[];
+  function redraw(){
+    if(!cached.length)return;
+    graph('lorenzX',cached,'a','b',-24,24,false);
+    graph('lorenzDistance',cached,'dist',null,-5,2,true);
+  }
+  function update(){
+    const d=changes[control.value];
+    output.textContent=d.toLocaleString('ca-ES',{maximumFractionDigits:5});
+    cached=simulate(d);redraw();
+    const first=cached[0].dist,last=cached[cached.length-1].dist;
+    document.getElementById('lorenzResult').textContent='Distància inicial: '+first.toLocaleString('ca-ES',{maximumFractionDigits:5})+'. Distància al temps 35: '+last.toLocaleString('ca-ES',{maximumFractionDigits:3})+'. Observa com la distància creix i oscil·la: no cal que augmenti en cada instant.';
+  }
+  control.addEventListener('input',update);
+  document.getElementById('lorenzRun').addEventListener('click',update);
+  window.addEventListener('resize',redraw);
+  update();
+})();
+</script>
+<script>
+document.querySelectorAll('.chaos-choices button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.chaos-choices button').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});
+ b.classList.add('selected');b.setAttribute('aria-pressed','true');
+ const fb=document.getElementById('chaos-feedback');const correct=b.dataset.answer==='b';
+ fb.className='feedback '+(correct?'ok':'bad');
+ fb.textContent=correct?'✓ Exacte! Les regles són fixes, però els petits errors de partida poden ampliar-se fins a limitar la predicció.':'Revisa-ho: la característica essencial no és l’absència de regles ni la quantitat d’elements, sinó la sensibilitat a les condicions inicials.';
+}));
+</script></body>
+</html>
